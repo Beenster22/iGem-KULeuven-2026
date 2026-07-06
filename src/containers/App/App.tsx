@@ -1,5 +1,5 @@
-import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import { getPathMapping, stringToSlug } from "../../utils";
 import { useEffect } from "react";
@@ -7,6 +7,7 @@ import { Navbar } from "../../components/Navbar";
 import { Header } from "../../components/Header";
 import { NotFound } from "../../components/NotFound";
 import { Footer } from "../../components/Footer";
+import { applyTheme, readStoredTheme } from "../../theme";
 
 const App = () => {
   const pathMapping = getPathMapping();
@@ -23,6 +24,12 @@ const App = () => {
     document.title = `${title || ""} | ${import.meta.env.VITE_TEAM_NAME} - iGEM ${import.meta.env.VITE_TEAM_YEAR}`;
   }, [title]);
 
+  // Reapply any saved theme preview (see ThemeCustomizer) on every page load,
+  // since it's only ever rendered on the Home page.
+  useEffect(() => {
+    applyTheme(readStoredTheme());
+  }, []);
+
   return (
     <>
       {/* Navigation */}
@@ -38,9 +45,11 @@ const App = () => {
               element={
                 <>
                   <Header title={title || ""} lead={lead || ""} />
-                  <div className="container">
-                    <Component />
-                  </div>
+                  <main className="page-body">
+                    <div className="container">
+                      <Component />
+                    </div>
+                  </main>
                 </>
               }
             />
@@ -54,7 +63,9 @@ const App = () => {
                 title="Not Found"
                 lead="The requested URL was not found on this server."
               />
-              <NotFound />
+              <main className="page-body">
+                <NotFound />
+              </main>
             </>
           }
         />

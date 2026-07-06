@@ -40,10 +40,15 @@ export function Navbar() {
   });
 
   return (
-    <BootstrapNavbar expand="lg" className="bg-body-tertiary" fixed="top">
+    <BootstrapNavbar expand="lg" className="navbar-empower" fixed="top">
       <Container>
-        <BootstrapNavbar.Brand>
-          {import.meta.env.VITE_TEAM_NAME}
+        <BootstrapNavbar.Brand className="d-flex align-items-center gap-2">
+          <img
+            className="navbar-logo"
+            src="https://static.igem.wiki/teams/6299/wiki/logo-wo-the-background-3.avif"
+            alt={import.meta.env.VITE_TEAM_NAME}
+          />
+          <h1 className="navbar-brand-text">Empower</h1>
         </BootstrapNavbar.Brand>
         <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
         <BootstrapNavbar.Collapse id="basic-navbar-nav">

@@ -1,0 +1,29 @@
+export const links = [
+  { year: 2025, teamName: "Heidelberg", pageName: "experiments" },
+  { year: 2025, teamName: "McGill", pageName: "experiments" },
+  { year: 2025, teamName: "EPFL", pageName: "experiments" },
+];
+
+<PageLayout links={links}>
+
+## What Should this Page Contain?
+
+Provide comprehensive, step-by-step protocols for all experiments conducted. Include a list of materials, reagents, and equipment used. Specify concentrations, volumes, incubation times, temperatures, and other critical parameters. Document any modifications or optimizations made to standard protocols.
+
+Explain the purpose of each experiment and its relevance to your project goals. Describe the experimental design, including controls and replicates. Provide a clear rationale for the chosen methods and approaches.
+
+Document any troubleshooting steps taken and optimizations made during the experimental process. Share any lessons learned that could benefit future teams.
+
+## Writing Protocols with MDX
+
+This page is written in **MDX**, so you can mix Markdown prose with React components. The `ProtocolBox` component below (and `PageLayout`, which handles the two-column layout and Inspirations sidebar for you) is available on every content page without an import — see `src/mdx-components.ts`. Reuse them, `TeamMember`, or your own components for other pages.
+
+<ProtocolBox
+  title="Example: Plasmid Transformation into Competent E. coli"
+  materials={["50 µL chemically competent E. coli", "1-5 µL plasmid DNA (10-100 ng)", "SOC or LB media", "LB agar plates with selective antibiotic"]}
+  steps={["Thaw competent cells on ice for 10 minutes.", "Add plasmid DNA to the cells and mix gently.", "Incubate on ice for 30 minutes.", "Heat shock at 42°C for 45 seconds, then return to ice for 2 minutes.", "Add 950 µL SOC media and recover at 37°C for 1 hour, shaking.", "Plate on selective LB agar and incubate overnight at 37°C."]}
+/>
+
+Replace the example above with your own protocols, one `ProtocolBox` per procedure.
+
+</PageLayout>

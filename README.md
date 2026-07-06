@@ -56,6 +56,44 @@ for web development.
 5. Once you are done, save the changes by **committing** them to the _main branch_ of the repository
 6. An automated script will build, test and deploy your wiki to the iGEM server
 
+### Writing a content page
+
+Pages in `src/contents/*.mdx` are plain [Markdown](https://www.markdownguide.org/basic-syntax/) (headings,
+paragraphs, `- ` lists, `[link text](https://...)`) wrapped in a `<PageLayout>`. You don't need to import
+anything — `PageLayout`, `Callout`, `ProtocolBox`, and `TeamMember` are available on every page automatically
+(see `src/mdx-components.ts`).
+
+```mdx
+export const links = [{ year: 2025, teamName: "SomeTeam", pageName: "some-page" }];
+
+<PageLayout links={links}>
+
+## What Should this Page Contain?
+
+Plain paragraph text, and a list:
+
+- First point
+- Second point, with a [link](https://competition.igem.org)
+
+<Callout title="Award Name">
+
+Award description text.
+
+---
+
+Visit the [Special Awards page](https://competition.igem.org/judging/awards/special) for more information.
+
+</Callout>
+
+</PageLayout>
+```
+
+- Drop `links={links}` (and the `links` export) if the page doesn't need the Inspirations sidebar — the content
+  column then spans the full width.
+- Stick to Markdown syntax for text, links, and lists rather than raw `<p>`/`<a>`/`<li>` HTML tags. MDX mixes
+  Markdown and JSX, and raw multi-line HTML tags can get mis-parsed (e.g. split into extra `<p>` elements) —
+  Markdown syntax avoids that entirely.
+
 ## About This Template
 
 ### Files

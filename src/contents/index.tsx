@@ -1,24 +1,24 @@
-export { Home } from "./home.tsx";
+export { default as Home } from "./home.mdx";
 // Team
-export { Members } from "./members.tsx";
+export { default as Members } from "./members.mdx";
 // Project
-export { Description } from "./description.tsx";
-export { Engineering } from "./engineering.tsx";
-export { Results } from "./results.tsx";
-export { Contribution } from "./contribution.tsx";
+export { default as Description } from "./description.mdx";
+export { default as Engineering } from "./engineering.mdx";
+export { default as Results } from "./results.mdx";
+export { default as Contribution } from "./contribution.mdx";
 // Wet Lab
-export { Experiments } from "./experiments.tsx";
-export { Notebook } from "./notebook.tsx";
-export { Measurement } from "./measurement.tsx";
-export { AlternativePlatform } from "./alternative-platform.tsx";
-export { SafetyAndSecurity } from "./safety-and-security.tsx";
+export { default as Experiments } from "./experiments.mdx";
+export { default as Notebook } from "./notebook.mdx";
+export { default as Measurement } from "./measurement.mdx";
+export { default as AlternativePlatform } from "./alternative-platform.mdx";
+export { default as SafetyAndSecurity } from "./safety-and-security.mdx";
 // Dry Lab
-export { Model } from "./model.tsx";
-export { Software } from "./software.tsx";
-export { Hardware } from "./hardware.tsx";
+export { default as Model } from "./model.mdx";
+export { default as Software } from "./software.mdx";
+export { default as Hardware } from "./hardware.mdx";
 // Engagement
-export { Entrepreneurship } from "./entrepreneurship.tsx";
-export { HumanPractices } from "./human-practices.tsx";
-export { Education } from "./education.tsx";
-export { Inclusivity } from "./inclusivity.tsx";
-export { Sustainability } from "./sustainability.tsx";
+export { default as Entrepreneurship } from "./entrepreneurship.mdx";
+export { default as HumanPractices } from "./human-practices.mdx";
+export { default as Education } from "./education.mdx";
+export { default as Inclusivity } from "./inclusivity.mdx";
+export { default as Sustainability } from "./sustainability.mdx";

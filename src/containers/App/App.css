@@ -1,17 +1,88 @@
+:root {
+  --color-page-bg: #eaf4f5;
+  --color-body-bg: #c9bde8;
+  --color-text: #33283f;
+  --color-header-bg: #33283f;
+  --color-header-text: #eaf4f5;
+  --color-footer-bg: #33283f;
+  --color-footer-text: #c9bde8;
+  --color-accent: #c9bde8;
+}
+
 body {
-  padding-top: 56px;
+  padding-top: 96px;
+  background-color: var(--color-page-bg);
+  color: var(--color-text);
+}
+
+.page-body {
+  max-width: 1200px;
+  margin: 1.5rem auto 2rem;
+  background-color: var(--color-body-bg);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 1rem 3rem rgba(51, 40, 63, 0.15);
 }
 
 .left-aligned {
   margin-left: auto;
 }
 
-.bg-dark {
-  background-color: #343a40 !important;
+/* PAGE HEADER */
+.page-header-box {
+  max-width: 1200px;
+  background-color: var(--color-header-bg);
+  border-radius: 1rem;
+  margin: 2rem auto 0;
+  padding: 3rem 2rem;
+  box-shadow: 0 1rem 3rem rgba(51, 40, 63, 0.15);
 }
 
-.bg-hero {
-  background-color: #45b06cff;
+.page-header-box h1,
+.page-header-box p {
+  color: var(--color-header-text);
+}
+
+/* NAVBAR */
+.navbar-empower {
+  background-color: var(--color-page-bg);
+  top: 1rem;
+  right: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 2rem);
+  max-width: 1200px;
+  border-radius: 1rem;
+  box-shadow: 0 1rem 3rem rgba(51, 40, 63, 0.15);
+}
+
+.navbar-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.navbar-empower .navbar-brand-text {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--color-text);
+}
+
+.navbar-empower .nav-link {
+  color: var(--color-text);
+}
+
+.navbar-empower .nav-link:hover,
+.navbar-empower .nav-link:focus,
+.navbar-empower .nav-link.show {
+  color: var(--color-accent);
+}
+
+.navbar-empower .dropdown-item:hover,
+.navbar-empower .dropdown-item:focus {
+  color: var(--color-text);
+  background-color: var(--color-accent);
 }
 
 /* CALLOUT */
@@ -53,13 +124,18 @@ body {
 }
 
 /* footer */
+.footer-empower {
+  background-color: var(--color-footer-bg);
+  color: var(--color-footer-text);
+}
+
 footer a {
-  color: white;
+  color: var(--color-footer-text);
   font-weight: bold;
   text-decoration: none;
 }
 
 footer a:hover {
-  color: white;
+  color: var(--color-footer-text);
   text-decoration: underline;
 }
