@@ -7,7 +7,7 @@ import Pages from "../pages.ts";
 
 export function Navbar() {
   const [openMenu, setOpenMenu] = useState<number | null>(null);
-  const closeTimer = useRef<ReturnType<typeof setTimeout>>();
+  const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const cancelClose = () => clearTimeout(closeTimer.current);
   const scheduleClose = () => {
