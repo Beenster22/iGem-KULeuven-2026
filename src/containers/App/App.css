@@ -298,6 +298,220 @@ body {
   }
 }
 
+/* TAB SWITCHER */
+.tab-switcher {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.tab-switcher-btn {
+  flex: 1 1 0;
+  border: 2px solid rgba(51, 40, 63, 0.25);
+  background-color: transparent;
+  color: var(--color-text);
+  padding: 1.75rem 1rem;
+  border-radius: 1rem;
+  font-weight: 700;
+  font-size: 1.75rem;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.tab-switcher-btn:hover {
+  border-color: var(--color-accent);
+}
+
+.tab-switcher-btn.active {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.tab-switcher-content {
+  margin-top: 2rem;
+}
+
+@media (max-width: 576px) {
+  .tab-switcher {
+    flex-direction: column;
+  }
+
+  .tab-switcher-btn {
+    font-size: 1.25rem;
+    padding: 1.25rem 1rem;
+  }
+}
+
+/* WHEEL SELECTOR */
+.wheel-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.wheel-selector-svg {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+}
+
+.wheel-selector-wedge path {
+  fill: var(--color-body-bg);
+  stroke: var(--color-text);
+  stroke-width: 2;
+  cursor: pointer;
+  transition: fill 0.15s ease;
+}
+
+.wheel-selector-wedge:hover path {
+  fill: rgba(201, 189, 232, 0.6);
+}
+
+.wheel-selector-wedge.active path {
+  fill: var(--color-accent);
+}
+
+.wheel-selector-wedge text {
+  fill: var(--color-text);
+  font-weight: 700;
+  pointer-events: none;
+  user-select: none;
+}
+
+.wheel-selector-content {
+  width: 100%;
+}
+
+/* SEGMENTED SELECTOR */
+.segmented-selector-bar {
+  display: flex;
+  flex-wrap: wrap;
+  border: 2px solid rgba(51, 40, 63, 0.25);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.segmented-selector-segment {
+  flex: 1 1 0;
+  border: none;
+  border-right: 2px solid rgba(51, 40, 63, 0.25);
+  background-color: transparent;
+  color: var(--color-text);
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.segmented-selector-segment:last-child {
+  border-right: none;
+}
+
+.segmented-selector-segment:hover {
+  background-color: rgba(201, 189, 232, 0.35);
+}
+
+.segmented-selector-segment.active {
+  background-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.segmented-selector-content {
+  margin-top: 1.5rem;
+}
+
+/* NOTEBOOK TIMELINE */
+.notebook-timeline {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 2rem 0;
+  padding: 0;
+}
+
+.notebook-timeline::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: rgba(51, 40, 63, 0.15);
+}
+
+.notebook-timeline li {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 100px;
+}
+
+.notebook-timeline button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  background: none;
+  color: var(--color-text);
+  width: 100%;
+  padding: 0;
+}
+
+.notebook-timeline-dot {
+  z-index: 1;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: var(--color-page-bg);
+  border: 2px solid rgba(51, 40, 63, 0.35);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.notebook-timeline li.active .notebook-timeline-dot {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.notebook-timeline-label {
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.notebook-timeline li.active .notebook-timeline-label {
+  font-weight: 600;
+}
+
+.notebook-entry-pdf {
+  margin-top: 1.5rem;
+}
+
+.notebook-entry-pdf iframe {
+  width: 100%;
+  height: 70vh;
+  border: 1px solid rgba(51, 40, 63, 0.25);
+  border-radius: 0.5rem;
+}
+
+.notebook-entry-download {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-weight: 600;
+}
+
+.notebook-entry-pdf-placeholder {
+  margin-top: 1.5rem;
+  font-style: italic;
+  opacity: 0.7;
+}
+
 /* footer */
 .footer-empower {
   background-color: var(--color-footer-bg);

@@ -1,23 +1,87 @@
-export const links = [
-  { year: 2025, teamName: "EPFL", pageName: "notebook" },
-  { year: 2025, teamName: "WageningenUR", pageName: "notebook" },
-  { year: 2024, teamName: "JU-Krakow", pageName: "notebook" },
-];
+<PageLayout>
 
-<PageLayout links={links}>
+<TabbedSections>
 
-## What Should this Page Contain?
+<TabSection label="1">
 
----
+<NotebookTimeline>
 
-- Record all activities in chronological order, with each entry clearly dated.
-- Provide sufficient detail for each activity, including:
-  - Purpose of the activity.
-  - Methods and procedures used.
-  - Results obtained.
-  - Observations and notes.
-- Document all experiments, protocols, data analysis, meetings, brainstorming sessions, and other project-related activities.
-- Include photos, videos, and diagrams to illustrate your progress.
-- Indicate which team members participated in each activity.
+<NotebookEntry label="Entry 1">
+
+**Goal** — Replace this with the goal of this notebook entry, then upload the
+corresponding PDF via [the uploads tool](https://teams.igem.org/go/deliverables/wiki/uploads)
+and pass its URL as `pdfUrl` on this `NotebookEntry`.
+
+</NotebookEntry>
+
+<NotebookEntry label="Entry 2">
+
+**Goal** — Replace this with the goal of this notebook entry.
+
+</NotebookEntry>
+
+<NotebookEntry label="Entry 3">
+
+**Goal** — Replace this with the goal of this notebook entry.
+
+</NotebookEntry>
+
+</NotebookTimeline>
+
+</TabSection>
+
+<TabSection label="2">
+
+<NotebookTimeline>
+
+<NotebookEntry label="Entry 1">
+
+**Goal** — Replace this with the goal of this notebook entry.
+
+</NotebookEntry>
+
+<NotebookEntry label="Entry 2">
+
+**Goal** — Replace this with the goal of this notebook entry.
+
+</NotebookEntry>
+
+<NotebookEntry label="Entry 3">
+
+**Goal** — Replace this with the goal of this notebook entry.
+
+</NotebookEntry>
+
+</NotebookTimeline>
+
+</TabSection>
+
+<TabSection label="3">
+
+<NotebookTimeline>
+
+<NotebookEntry label="Entry 1">
+
+**Goal** — Replace this with the goal of this notebook entry.
+
+</NotebookEntry>
+
+<NotebookEntry label="Entry 2">
+
+**Goal** — Replace this with the goal of this notebook entry.
+
+</NotebookEntry>
+
+<NotebookEntry label="Entry 3">
+
+**Goal** — Replace this with the goal of this notebook entry.
+
+</NotebookEntry>
+
+</NotebookTimeline>
+
+</TabSection>
+
+</TabbedSections>
 
 </PageLayout>

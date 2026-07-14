@@ -1,30 +1,93 @@
-export const links = [
-  { year: 2025, teamName: "Heidelberg", pageName: "experiments" },
-  { year: 2025, teamName: "McGill", pageName: "experiments" },
-  { year: 2025, teamName: "EPFL", pageName: "experiments" },
-];
+<PageLayout>
 
-<PageLayout links={links} sectionNav>
+<TabbedSections>
 
-## What Should this Page Contain?
+<TabSection label="1">
 
-Hi Im writing in the first block of text now
-Provide comprehensive, step-by-step protocols for all experiments conducted. Include a list of materials, reagents, and equipment used. Specify concentrations, volumes, incubation times, temperatures, and other critical parameters. Document any modifications or optimizations made to standard protocols.
+<WheelSelector>
 
-Explain the purpose of each experiment and its relevance to your project goals. Describe the experimental design, including controls and replicates. Provide a clear rationale for the chosen methods and approaches.
+<SectionItem label="Design">
 
-Document any troubleshooting steps taken and optimizations made during the experimental process. Share any lessons learned that could benefit future teams.
+## Design
 
-## Writing Protocols with MDX
+- x
+- y
+- z
 
-This page is written in **MDX**, so you can mix Markdown prose with React components. The `ProtocolBox` component below (and `PageLayout`, which handles the two-column layout and Inspirations sidebar for you) is available on every content page without an import — see `src/mdx-components.ts`. Reuse them, `TeamMember`, or your own components for other pages.
+</SectionItem>
 
-<ProtocolBox
-  title="Example: Plasmid Transformation into Competent E. coli"
-  materials={["50 µL chemically competent E. coli", "1-5 µL plasmid DNA (10-100 ng)", "SOC or LB media", "LB agar plates with selective antibiotic"]}
-  steps={["Thaw competent cells on ice for 10 minutes.", "Add plasmid DNA to the cells and mix gently.", "Incubate on ice for 30 minutes.", "Heat shock at 42°C for 45 seconds, then return to ice for 2 minutes.", "Add 950 µL SOC media and recover at 37°C for 1 hour, shaking.", "Plate on selective LB agar and incubate overnight at 37°C."]}
-/>
+<SectionItem label="xyz">
 
-Replace the example above with your own protocols, one `ProtocolBox` per procedure.
+## xyz
+
+Replace this with your own content for this wheel section.
+
+</SectionItem>
+
+<SectionItem label="...">
+
+## ...
+
+Replace this with your own content for this wheel section.
+
+</SectionItem>
+
+</WheelSelector>
+
+</TabSection>
+
+<TabSection label="2">
+
+<SegmentedSelector>
+
+<SectionItem label="Part A">
+
+Replace this with your own content for Section 2, Part A.
+
+</SectionItem>
+
+<SectionItem label="Part B">
+
+Replace this with your own content for Section 2, Part B.
+
+</SectionItem>
+
+<SectionItem label="Part C">
+
+Replace this with your own content for Section 2, Part C.
+
+</SectionItem>
+
+</SegmentedSelector>
+
+</TabSection>
+
+<TabSection label="3">
+
+<SegmentedSelector>
+
+<SectionItem label="Part A">
+
+Replace this with your own content for Section 3, Part A.
+
+</SectionItem>
+
+<SectionItem label="Part B">
+
+Replace this with your own content for Section 3, Part B.
+
+</SectionItem>
+
+<SectionItem label="Part C">
+
+Replace this with your own content for Section 3, Part C.
+
+</SectionItem>
+
+</SegmentedSelector>
+
+</TabSection>
+
+</TabbedSections>
 
 </PageLayout>
