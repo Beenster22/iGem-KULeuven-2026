@@ -8,6 +8,7 @@ export { default as Results } from "./results.mdx";
 export { default as Contribution } from "./contribution.mdx";
 // Wet Lab
 export { default as Experiments } from "./experiments.mdx";
+export { default as Protocols } from "./protocols.mdx";
 export { default as Notebook } from "./notebook.mdx";
 export { default as Measurement } from "./measurement.mdx";
 export { default as AlternativePlatform } from "./alternative-platform.mdx";

@@ -7,6 +7,7 @@ import { SectionItem } from "./components/SectionItem";
 import { WheelSelector } from "./components/WheelSelector";
 import { SegmentedSelector } from "./components/SegmentedSelector";
 import { NotebookTimeline, NotebookEntry } from "./components/NotebookTimeline";
+import { ExpandableText } from "./components/Expandable-Text";
 
 export const mdxComponents = {
   TeamMember,
@@ -20,4 +21,5 @@ export const mdxComponents = {
   SegmentedSelector,
   NotebookTimeline,
   NotebookEntry,
+  ExpandableText,
 };

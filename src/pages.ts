@@ -3,6 +3,7 @@ import {
   Description,
   Engineering,
   Experiments,
+  Protocols,
   Home,
   HumanPractices,
   Notebook,
@@ -94,6 +95,13 @@ const Pages: (Page | Folder)[] = [
         path: "/experiments",
         component: Experiments,
         lead: "Describe the research, experiments, and protocols you used in your project. It is designed to provide sufficient information for other teams to replicate our work.",
+      },
+      {
+        name: "Protocols",
+        title: "Protocols",
+        path: "/protocols",
+        component: Protocols,
+        lead: "Detailed, step-by-step protocols used throughout the project so other teams can replicate our work.",
       },
       {
         name: "Notebook",
