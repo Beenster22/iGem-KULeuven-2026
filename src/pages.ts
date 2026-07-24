@@ -12,6 +12,7 @@ import {
   Members,
   Education,
   Entrepreneurship,
+  Events,
   Hardware,
   Inclusivity,
   Measurement,
@@ -162,6 +163,13 @@ const Pages: (Page | Folder)[] = [
   {
     name: "Engagement",
     folder: [
+      {
+        name: "Events",
+        title: "Events",
+        path: "/events",
+        component: Events,
+        lead: "A timeline of the talks, workshops, meetups, and outreach activities our team took part in throughout the season.",
+      },
       {
         name: "Entrepreneurship",
         title: "Entrepreneurship",

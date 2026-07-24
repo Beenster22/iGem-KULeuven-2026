@@ -8,6 +8,7 @@ import { WheelSelector } from "./components/WheelSelector";
 import { SegmentedSelector } from "./components/SegmentedSelector";
 import { NotebookTimeline, NotebookEntry } from "./components/NotebookTimeline";
 import { ExpandableText } from "./components/Expandable-Text";
+import { EventsTimeline, EventEntry } from "./components/EventsTimeline";
 
 export const mdxComponents = {
   TeamMember,
@@ -22,4 +23,6 @@ export const mdxComponents = {
   NotebookTimeline,
   NotebookEntry,
   ExpandableText,
+  EventsTimeline,
+  EventEntry,
 };

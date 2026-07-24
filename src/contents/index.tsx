@@ -18,6 +18,7 @@ export { default as Model } from "./model.mdx";
 export { default as Software } from "./software.mdx";
 export { default as Hardware } from "./hardware.mdx";
 // Engagement
+export { default as Events } from "./events.mdx";
 export { default as Entrepreneurship } from "./entrepreneurship.mdx";
 export { default as HumanPractices } from "./human-practices.mdx";
 export { default as Education } from "./education.mdx";
