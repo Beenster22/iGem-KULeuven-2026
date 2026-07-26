@@ -35,6 +35,8 @@ const App = () => {
     <>
       {/* Navigation */}
       <Navbar />
+      {/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26 */}
+      {/* Purpose: DNA-styled scroll progress rail replacing the native scrollbar. */}
       <ScrollProgressDna />
 
       {/* Header and PageContent */}

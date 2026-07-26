@@ -5,6 +5,8 @@ interface ExpandableTextProps {
   children: ReactNode;
 }
 // Component translated from Astro to React, taken from 2025 Munich team's repo. Original Astro component can be found here: https://gitlab.igem.org/2025/munich/-/blob/1665a99ba477fe5f9ca6e8c41f79ca5d31a1a71e/src/components/ExpandableText.astro
+// Generated with Claude Sonnet 5 (Anthropic), 2026-07-17
+// Purpose: performed the Astro-to-React translation above.
 export function ExpandableText({ title, children }: ExpandableTextProps) {
   const [isOpen, setIsOpen] = useState(false);
 

@@ -1,3 +1,5 @@
+// Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
+// Purpose: DNA-styled scroll progress rail replacing the native scrollbar.
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 

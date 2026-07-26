@@ -1,3 +1,5 @@
+// Generated with Claude Sonnet 5 (Anthropic), 2026-07-06
+// Purpose: profile card for a team member on the Team page.
 import { ReactNode } from "react";
 
 interface TeamMemberProps {

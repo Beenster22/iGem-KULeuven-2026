@@ -1,3 +1,6 @@
+// Generated with Claude Sonnet 5 (Anthropic), 2026-07-06 (extended 2026-07-13)
+// Purpose: shared page shell laying out main content alongside optional
+// inspiration links and the section-progress rail.
 import { ReactNode, useMemo, useRef } from "react";
 import { Inspirations, InspirationLink } from "./Inspirations";
 import { SectionProgress } from "./SectionProgress";

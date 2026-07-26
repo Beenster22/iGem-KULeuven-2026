@@ -1,3 +1,5 @@
+// Generated with Claude Sonnet 5 (Anthropic), 2026-07-14
+// Purpose: tab switcher for browsing labeled content sections.
 import { ReactNode, useMemo, useState } from "react";
 import { extractLabeledChildren } from "../utils/extractLabeledChildren";
 

@@ -15,8 +15,9 @@ body {
   color: var(--color-text);
 }
 
-/* Hide the native scrollbar in favor of the DNA scroll rail; only above the
-   1400px breakpoint where that rail is actually shown (see below). */
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
+   Purpose: hide the native scrollbar in favor of the DNA scroll rail; only
+   above the 1400px breakpoint where that rail is actually shown (see below). */
 @media (min-width: 1400.02px) {
   html {
     scrollbar-width: none;
@@ -311,6 +312,8 @@ body {
 }
 
 /* DNA SCROLL PROGRESS */
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
+   Purpose: DNA-styled scroll progress rail replacing the native scrollbar. */
 .dna-scroll-progress {
   position: fixed;
   top: 50%;

@@ -1,3 +1,5 @@
+// Generated with Claude Sonnet 5 (Anthropic), 2026-07-14
+// Purpose: tabbed timeline for browsing dated notebook entries and their PDFs.
 import { Children, ReactElement, ReactNode, isValidElement, useMemo, useState } from "react";
 
 interface NotebookEntryProps {

@@ -1,3 +1,5 @@
+// Generated with Claude Sonnet 5 (Anthropic), 2026-07-24
+// Purpose: expandable timeline of dated events with a cross-fading photo preview.
 import {
   Children,
   ReactElement,

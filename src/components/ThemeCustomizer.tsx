@@ -1,3 +1,5 @@
+// Generated with Claude Sonnet 5 (Anthropic), 2026-07-06
+// Purpose: live palette customizer for previewing site color themes.
 import { useEffect, useState } from "react";
 import {
   applyTheme,

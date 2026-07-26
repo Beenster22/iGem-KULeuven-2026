@@ -1,3 +1,5 @@
+// Generated with Claude Sonnet 5 (Anthropic), 2026-07-06
+// Purpose: simple bordered callout box for highlighting MDX content.
 import { ReactNode } from "react";
 
 interface CalloutProps {

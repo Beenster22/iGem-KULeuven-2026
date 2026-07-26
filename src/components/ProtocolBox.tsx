@@ -1,3 +1,5 @@
+// Generated with Claude Sonnet 5 (Anthropic), 2026-07-06
+// Purpose: formatted materials/steps box for documenting wetlab protocols.
 import { ReactNode } from "react";
 
 interface ProtocolBoxProps {

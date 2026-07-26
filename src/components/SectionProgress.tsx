@@ -1,3 +1,5 @@
+// Generated with Claude Sonnet 5 (Anthropic), 2026-07-13
+// Purpose: floating dot rail tracking scroll position through page sections.
 import { MouseEvent, RefObject, useEffect, useState } from "react";
 import { HeadingEntry } from "../utils/extractHeadings";
 

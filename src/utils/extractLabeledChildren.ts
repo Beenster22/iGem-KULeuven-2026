@@ -1,3 +1,6 @@
+// Generated with Claude Sonnet 5 (Anthropic), 2026-07-14
+// Purpose: shared helper reading label/children off compound-component slots
+// for SegmentedSelector, TabbedSections, and WheelSelector.
 import { Children, ReactElement, ReactNode, isValidElement } from "react";
 
 export interface LabeledChild {

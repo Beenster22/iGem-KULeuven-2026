@@ -1,3 +1,5 @@
+// Generated with Claude Sonnet 5 (Anthropic), 2026-07-13
+// Purpose: extract h2/h3 headings from rendered MDX children for SectionProgress.
 import { Children, ReactElement, ReactNode, isValidElement } from "react";
 import { stringToSlug } from "./stringToSlug";
 

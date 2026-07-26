@@ -1,3 +1,5 @@
+// Generated with Claude Sonnet 5 (Anthropic), 2026-07-14
+// Purpose: pie/donut wedge selector for switching between labeled content panes.
 import { ReactNode, useMemo, useState } from "react";
 import { extractLabeledChildren } from "../utils/extractLabeledChildren";
 
