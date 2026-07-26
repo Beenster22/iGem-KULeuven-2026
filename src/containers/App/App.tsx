@@ -8,7 +8,7 @@ import { Header } from "../../components/Header";
 import { NotFound } from "../../components/NotFound";
 import { Footer } from "../../components/Footer";
 import { ScrollProgressDna } from "../../components/ScrollProgressDna";
-import { applyTheme, readStoredTheme } from "../../theme";
+import { ThemeModeProvider } from "../../ThemeModeContext";
 
 const App = () => {
   const pathMapping = getPathMapping();
@@ -25,14 +25,8 @@ const App = () => {
     document.title = `${title || ""} | ${import.meta.env.VITE_TEAM_NAME} - iGEM ${import.meta.env.VITE_TEAM_YEAR}`;
   }, [title]);
 
-  // Reapply any saved theme preview (see ThemeCustomizer) on every page load,
-  // since it's only ever rendered on the Home page.
-  useEffect(() => {
-    applyTheme(readStoredTheme());
-  }, []);
-
   return (
-    <>
+    <ThemeModeProvider>
       {/* Navigation */}
       <Navbar />
       {/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26 */}
@@ -78,7 +72,7 @@ const App = () => {
       {/* Footer */}
       {/* MUST mention license AND have a link to team wiki's repository on gitlab.igem.org */}
       <Footer />
-    </>
+    </ThemeModeProvider>
   );
 };
 

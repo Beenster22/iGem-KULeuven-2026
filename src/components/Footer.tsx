@@ -1,5 +1,15 @@
 import { stringToSlug } from "../utils";
 import { SponsorCarousel, SponsorLogo } from "./SponsorCarousel";
+import { useThemeMode } from "../ThemeModeContext";
+
+// Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
+// Purpose: the wordmark logo variant, swapped per theme so its ink color
+// always contrasts with the light/dark logo-circle badge behind it.
+const FOOTER_LOGO_BY_MODE = {
+  light:
+    "https://static.igem.wiki/teams/6299/wiki/icons/logo-dark-purple-text.avif",
+  dark: "https://static.igem.wiki/teams/6299/wiki/icons/logo-light-purple-text.avif",
+} as const;
 
 const SOCIAL_LINKS = [
   {
@@ -57,6 +67,7 @@ export function Footer() {
   const teamYear = import.meta.env.VITE_TEAM_YEAR;
   const teamName = import.meta.env.VITE_TEAM_NAME;
   const teamSlug = stringToSlug(teamName);
+  const { mode } = useThemeMode();
 
   return (
     // Layout/typography/hover styling below is inspired by the 2025 Heidelberg
@@ -68,8 +79,8 @@ export function Footer() {
           <div className="col-lg-auto col-12 d-flex justify-content-center justify-content-lg-start footer-logo-container">
             <div className="footer-logo-circle">
               <img
-                className="footer-logo-img"
-                src="https://static.igem.wiki/teams/6299/wiki/icons/logo-dark-purple-text.avif"
+                className={`footer-logo-img footer-logo-img-${mode}`}
+                src={FOOTER_LOGO_BY_MODE[mode]}
                 alt={teamName}
               />
             </div>

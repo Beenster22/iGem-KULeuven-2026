@@ -1,77 +1,89 @@
-export interface ThemeRegion {
-  key: string;
-  label: string;
-  cssVar: string;
-  default: string;
+// Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
+// Purpose: fixed light/dark palettes (replacing the old free-form per-region
+// color picker) and the CSS-variable application logic behind the dark
+// mode toggle.
+export type ThemeMode = "light" | "dark";
+
+interface ThemeColors {
+  pageBg: string;
+  bodyBg: string;
+  text: string;
+  headerBg: string;
+  headerText: string;
+  footerBg: string;
+  footerText: string;
+  accent: string;
+  logoCircleBg: string;
 }
 
-export const THEME_REGIONS: ThemeRegion[] = [
-  {
-    key: "pageBg",
-    label: "Page background (sides & navbar)",
-    cssVar: "--color-page-bg",
-    default: "#EAF4F5",
-  },
-  {
-    key: "bodyBg",
-    label: "Body background (content card)",
-    cssVar: "--color-body-bg",
-    default: "#C9BDE8",
-  },
-  {
-    key: "text",
-    label: "General text",
-    cssVar: "--color-text",
-    default: "#33283F",
-  },
-  {
-    key: "headerBg",
-    label: "Header background",
-    cssVar: "--color-header-bg",
-    default: "#33283F",
-  },
-  {
-    key: "headerText",
-    label: "Header text",
-    cssVar: "--color-header-text",
-    default: "#EAF4F5",
-  },
-  {
-    key: "footerBg",
-    label: "Footer background",
-    cssVar: "--color-footer-bg",
-    default: "#33283F",
-  },
-  {
-    key: "footerText",
-    label: "Footer text",
-    cssVar: "--color-footer-text",
-    default: "#C9BDE8",
-  },
-  {
-    key: "accent",
-    label: "Accent (hover highlights)",
-    cssVar: "--color-accent",
-    default: "#C9BDE8",
-  },
-];
+const CSS_VARS: Record<keyof ThemeColors, string> = {
+  pageBg: "--color-page-bg",
+  bodyBg: "--color-body-bg",
+  text: "--color-text",
+  headerBg: "--color-header-bg",
+  headerText: "--color-header-text",
+  footerBg: "--color-footer-bg",
+  footerText: "--color-footer-text",
+  accent: "--color-accent",
+  logoCircleBg: "--color-logo-circle-bg",
+};
 
-export const THEME_STORAGE_KEY = "empower-theme-preview";
+const LIGHT_THEME: ThemeColors = {
+  pageBg: "#EAF4F5",
+  bodyBg: "#C9BDE8",
+  text: "#33283F",
+  headerBg: "#33283F",
+  headerText: "#EAF4F5",
+  footerBg: "#33283F",
+  footerText: "#C9BDE8",
+  accent: "#C9BDE8",
+  logoCircleBg: "#C9BDE8",
+};
 
-export function readStoredTheme(): Record<string, string> {
+// A genuine dark theme: page-bg is a deep near-black purple (darker than any
+// existing swatch, but derived from Dark Purple) so the body/card — which
+// keeps the existing Dark Purple swatch — reads as an elevated surface on
+// top of it, the way GitHub/Discord-style dark themes separate surfaces.
+const DARK_THEME: ThemeColors = {
+  pageBg: "#221B2B",
+  bodyBg: "#33283F",
+  text: "#EAF4F5",
+  headerBg: "#2FA4A9",
+  headerText: "#33283F",
+  footerBg: "#C9BDE8",
+  footerText: "#33283F",
+  accent: "#C9BDE8",
+  logoCircleBg: "#33283F",
+};
+
+const THEME_MODE_STORAGE_KEY = "empower-theme-mode";
+
+export function getSystemPrefersDark(): boolean {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches;
+}
+
+export function readStoredThemeMode(): ThemeMode | null {
   try {
-    const raw = localStorage.getItem(THEME_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
+    const raw = localStorage.getItem(THEME_MODE_STORAGE_KEY);
+    return raw === "light" || raw === "dark" ? raw : null;
   } catch {
-    return {};
+    return null;
   }
 }
 
-export function applyTheme(theme: Record<string, string>) {
-  THEME_REGIONS.forEach((region) => {
-    document.documentElement.style.setProperty(
-      region.cssVar,
-      theme[region.key] || region.default,
-    );
+export function writeStoredThemeMode(mode: ThemeMode) {
+  try {
+    localStorage.setItem(THEME_MODE_STORAGE_KEY, mode);
+  } catch {
+    // Storage may be unavailable (e.g. disabled/private browsing) — the
+    // toggle still works for the session, it just won't persist.
+  }
+}
+
+export function applyThemeMode(mode: ThemeMode) {
+  const colors = mode === "dark" ? DARK_THEME : LIGHT_THEME;
+  (Object.keys(colors) as (keyof ThemeColors)[]).forEach((key) => {
+    document.documentElement.style.setProperty(CSS_VARS[key], colors[key]);
   });
+  document.documentElement.setAttribute("data-theme", mode);
 }

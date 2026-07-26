@@ -7,12 +7,23 @@
   --color-footer-bg: #33283f;
   --color-footer-text: #c9bde8;
   --color-accent: #c9bde8;
+  --color-logo-circle-bg: #c9bde8;
 }
 
 body {
   padding-top: 96px;
   background-color: var(--color-page-bg);
   color: var(--color-text);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
+   Purpose: extra edge definition for the elevated card in dark mode, on top
+   of the page-bg/body-bg color difference itself. */
+[data-theme="dark"] .page-body {
+  border: 1px solid rgba(201, 189, 232, 0.15);
 }
 
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
@@ -69,11 +80,31 @@ body {
   box-shadow: 0 1rem 3rem rgba(51, 40, 63, 0.15);
 }
 
-.navbar-logo {
-  width: 32px;
-  height: 32px;
-  object-fit: cover;
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
+   Purpose: circular light/dark logo-circle badge behind the navbar's
+   icon-only logo mark, matching the footer's circular logo treatment. */
+.navbar-logo-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex: none;
   border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--color-logo-circle-bg);
+  transition: background-color 0.2s ease;
+}
+
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
+   Purpose: the no-text logo marks span ~85% of their own canvas width
+   (almost no built-in margin), so even object-fit: contain let them butt up
+   against the circle's edge. Capping width/height well below 100% forces
+   real breathing room regardless of how tightly any given file is cropped. */
+.navbar-logo-img {
+  max-width: 78%;
+  max-height: 78%;
+  object-fit: contain;
 }
 
 .navbar-empower .navbar-brand-text {
@@ -94,11 +125,59 @@ body {
 
 .navbar-empower .dropdown-item:hover,
 .navbar-empower .dropdown-item:focus {
-  color: var(--color-text);
+  /* --color-accent stays the same light purple in both themes, so this
+     needs a fixed dark color rather than the theme-varying --color-text. */
+  color: #33283f;
   background-color: var(--color-accent);
 }
 
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
+   Purpose: light/dark mode toggle button in the navbar. */
+.navbar-theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  margin-left: 0.25rem;
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+  color: var(--color-text);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.navbar-theme-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.navbar-theme-toggle:hover {
+  background-color: rgba(51, 40, 63, 0.08);
+  color: var(--color-accent);
+}
+
+[data-theme="dark"] .navbar-theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 /* MEGA MENU */
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
+   Purpose: invisible hover-bridge covering the gap between the navbar and
+   the mega-menu below it, so crossing that gap never counts as "leaving"
+   either element (see Navbar.tsx for the matching mouseenter/leave wiring). */
+.mega-menu-bridge {
+  position: fixed;
+  top: 96px;
+  left: 0;
+  width: 100%;
+  height: 0.5rem;
+  z-index: 1029;
+}
+
 .mega-menu {
   position: fixed;
   top: calc(96px + 0.5rem);
@@ -112,6 +191,20 @@ body {
   border-bottom: 1px solid rgba(51, 40, 63, 0.1);
   box-shadow: 0 1rem 3rem rgba(51, 40, 63, 0.15);
   animation: mega-menu-fade-in 0.15s ease-out;
+}
+
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
+   Purpose: the mega-menu's frosted-glass backdrop was hardcoded to a light
+   blue tint, which looked wrong once the navbar itself goes dark. */
+[data-theme="dark"] .mega-menu {
+  background-color: rgba(51, 40, 63, 0.9);
+  border-top-color: rgba(255, 255, 255, 0.08);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .mega-menu-link:hover,
+[data-theme="dark"] .mega-menu-link:focus {
+  background-color: rgba(201, 189, 232, 0.15);
 }
 
 @keyframes mega-menu-fade-in {
@@ -878,7 +971,21 @@ footer hr {
 }
 
 .footer-social-list a:hover .footer-icon-box svg {
-  color: var(--color-footer-bg);
+  /* --color-accent stays the same light purple in both themes, so this
+     needs a fixed dark color rather than the theme-varying footer text. */
+  color: #33283f;
+}
+
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
+   Purpose: in dark mode the footer bar itself goes light purple, so the
+   icon boxes need to invert to a dark box with light detail instead of the
+   light-tinted-box + dark-icon combo that --color-footer-text now produces. */
+[data-theme="dark"] .footer-icon-box {
+  background-color: rgba(51, 40, 63, 0.15);
+}
+
+[data-theme="dark"] .footer-icon-box svg {
+  color: #eaf4f5;
 }
 
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
@@ -896,22 +1003,38 @@ footer hr {
   flex: none;
   border-radius: 50%;
   overflow: hidden;
-  background-color: var(--color-accent);
+  background-color: var(--color-logo-circle-bg);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color 0.2s ease;
 }
 
 .footer-logo-img {
   width: 100%;
   height: 100%;
+}
+
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
+   Purpose: the two wordmark variants have very different content density on
+   their own canvas, so they need different treatment, not one shared rule.
+   Light mode's logo (logo-dark-purple-text) only fills ~41% of its wide
+   canvas — contain left it tiny, so it uses cover instead: the crop only
+   eats the mostly-empty margin, not the actual artwork (verified by pixel
+   analysis that the visible content stays inside cover's crop window). */
+.footer-logo-img-light {
   object-fit: cover;
-  /* The source file's visible logo mark isn't centered on its own 1920x1080
-     canvas (measured content center ~47.1%/50.5%). Working through the cover
-     crop math for this box/image ratio, that requires an object-position of
-     ~43% (not 47.1% — the offset formula isn't a 1:1 mapping) to land the
-     visible mark in the middle of the circle. */
   object-position: 43% 50%;
+}
+
+/* Dark mode's logo (logo-light-purple-text) fills ~97% of its own canvas
+   (almost no built-in margin), so cover would crop the artwork itself —
+   this one needs contain, capped well below 100% so it still gets real
+   breathing room inside the circle instead of touching the edge. */
+.footer-logo-img-dark {
+  object-fit: contain;
+  max-width: 78%;
+  max-height: 78%;
 }
 
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
