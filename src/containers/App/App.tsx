@@ -7,6 +7,7 @@ import { Navbar } from "../../components/Navbar";
 import { Header } from "../../components/Header";
 import { NotFound } from "../../components/NotFound";
 import { Footer } from "../../components/Footer";
+import { ScrollProgressDna } from "../../components/ScrollProgressDna";
 import { applyTheme, readStoredTheme } from "../../theme";
 
 const App = () => {
@@ -34,6 +35,7 @@ const App = () => {
     <>
       {/* Navigation */}
       <Navbar />
+      <ScrollProgressDna />
 
       {/* Header and PageContent */}
       <Routes>
