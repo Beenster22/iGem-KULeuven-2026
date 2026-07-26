@@ -811,3 +811,171 @@ footer a:hover {
   color: var(--color-footer-text);
   text-decoration: underline;
 }
+
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
+   Purpose: footer layout/typography/hover polish inspired by the 2025
+   Heidelberg iGEM team's wiki footer, kept on our dark purple background. */
+.footer-empower h4 {
+  font-weight: 700;
+  font-size: 1.35rem;
+}
+
+footer hr {
+  border-color: rgba(255, 255, 255, 0.25);
+  opacity: 1;
+}
+
+.footer-social-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-social-list a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.footer-social-handle {
+  font-weight: 400;
+}
+
+.footer-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition:
+    background-color 0.25s ease,
+    transform 0.2s ease;
+}
+
+.footer-icon-box svg {
+  width: 18px;
+  height: 18px;
+  color: var(--color-footer-text);
+  transition: color 0.25s ease;
+}
+
+.footer-social-list a:hover .footer-icon-box {
+  background-color: var(--color-accent);
+  transform: scale(1.08);
+}
+
+.footer-social-list a:hover .footer-icon-box svg {
+  color: var(--color-footer-bg);
+}
+
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
+   Purpose: large circular light-purple badge behind the team logo in the
+   footer's left column. */
+.footer-logo-container {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.footer-logo-circle {
+  width: 210px;
+  height: 210px;
+  max-width: 100%;
+  flex: none;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* The source file's visible logo mark isn't centered on its own 1920x1080
+     canvas (measured content center ~47.1%/50.5%). Working through the cover
+     crop math for this box/image ratio, that requires an object-position of
+     ~43% (not 47.1% — the offset formula isn't a 1:1 mapping) to land the
+     visible mark in the middle of the circle. */
+  object-position: 43% 50%;
+}
+
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
+   Purpose: infinite-scrolling sponsor logo band (see SponsorCarousel.tsx). */
+.sponsor-carousel {
+  overflow: hidden;
+  width: 100%;
+  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 6%,
+    black 94%,
+    transparent
+  );
+}
+
+.sponsor-carousel-track {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: max-content;
+  animation: sponsor-carousel-scroll var(--sponsor-carousel-duration, 25s) linear infinite;
+}
+
+.sponsor-carousel:hover .sponsor-carousel-track {
+  animation-play-state: paused;
+}
+
+.sponsor-carousel-item {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 76px;
+  border-radius: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 0.75rem 1rem;
+  transition: transform 0.2s ease;
+}
+
+.sponsor-carousel-item:hover {
+  transform: scale(1.05);
+}
+
+.sponsor-carousel-item img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.sponsor-carousel-placeholder {
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-align: center;
+  color: var(--color-text);
+  opacity: 0.6;
+}
+
+@keyframes sponsor-carousel-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sponsor-carousel-track {
+    animation: none;
+  }
+}
