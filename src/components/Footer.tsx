@@ -64,7 +64,7 @@ export function Footer() {
     // keep our dark purple background and light text instead of their light theme.
     <footer className="pt-5 pb-5 footer py-5 mt-5 footer-empower">
       <div className="container">
-        <div className="row mb-4 footer-top-row align-items-center g-2">
+        <div className="row mb-4 footer-top-row align-items-center justify-content-between g-2">
           <div className="col-lg-auto col-12 d-flex justify-content-center justify-content-lg-start footer-logo-container">
             <div className="footer-logo-circle">
               <img
@@ -74,7 +74,7 @@ export function Footer() {
               />
             </div>
           </div>
-          <div className="col-lg col-12 mt-4 mt-lg-0">
+          <div className="col-lg-auto col-12 mt-4 mt-lg-0">
             <h4>Follow Us</h4>
             <ul className="footer-social-list">
               {SOCIAL_LINKS.map((social) => (
@@ -91,7 +91,7 @@ export function Footer() {
               ))}
             </ul>
           </div>
-          <div className="col-lg col-12 mt-4 mt-lg-0">
+          <div className="col-lg-auto col-12 mt-4 mt-lg-0">
             <h4 className="mb-3">Contact</h4>
             <p>
               Herestraat 49 Box 1030
