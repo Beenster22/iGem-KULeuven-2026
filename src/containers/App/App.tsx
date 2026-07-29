@@ -7,7 +7,7 @@ import { Navbar } from "../../components/Navbar";
 import { Header } from "../../components/Header";
 import { NotFound } from "../../components/NotFound";
 import { Footer } from "../../components/Footer";
-import { ScrollProgressDna } from "../../components/ScrollProgressDna";
+import { PageShell } from "../../components/PageShell";
 import { ThemeModeProvider } from "../../ThemeModeContext";
 
 const App = () => {
@@ -29,9 +29,6 @@ const App = () => {
     <ThemeModeProvider>
       {/* Navigation */}
       <Navbar />
-      {/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26 */}
-      {/* Purpose: DNA-styled scroll progress rail replacing the native scrollbar. */}
-      <ScrollProgressDna />
 
       {/* Header and PageContent */}
       <Routes>
@@ -44,9 +41,9 @@ const App = () => {
                 <>
                   <Header title={title || ""} lead={lead || ""} />
                   <main className="page-body">
-                    <div className="container">
+                    <PageShell>
                       <Component />
-                    </div>
+                    </PageShell>
                   </main>
                 </>
               }

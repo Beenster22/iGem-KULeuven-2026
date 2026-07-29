@@ -11,7 +11,7 @@
 }
 
 body {
-  padding-top: 96px;
+  padding-top: 64px;
   background-color: var(--color-page-bg);
   color: var(--color-text);
   transition:
@@ -19,33 +19,20 @@ body {
     color 0.2s ease;
 }
 
-/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
-   Purpose: extra edge definition for the elevated card in dark mode, on top
-   of the page-bg/body-bg color difference itself. */
-[data-theme="dark"] .page-body {
-  border: 1px solid rgba(201, 189, 232, 0.15);
-}
-
-/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
-   Purpose: hide the native scrollbar in favor of the DNA scroll rail; only
-   above the 1400px breakpoint where that rail is actually shown (see below). */
-@media (min-width: 1400.02px) {
-  html {
-    scrollbar-width: none;
-  }
-
-  html::-webkit-scrollbar {
-    display: none;
-  }
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-28
+   Purpose: keep section headings clear of the fixed navbar, whether reached
+   via the DNA index's scrollIntoView, a direct #hash link, or back/forward
+   navigation restoring one. */
+h2,
+h3 {
+  scroll-margin-top: 5rem;
 }
 
 .page-body {
-  max-width: 1200px;
-  margin: 1.5rem auto 2rem;
+  width: 100%;
+  margin: 0;
+  padding: 1.5rem 0 2rem;
   background-color: var(--color-body-bg);
-  border-radius: 1.5rem;
-  overflow: hidden;
-  box-shadow: 0 1rem 3rem rgba(51, 40, 63, 0.15);
 }
 
 .left-aligned {
@@ -54,12 +41,10 @@ body {
 
 /* PAGE HEADER */
 .page-header-box {
-  max-width: 1200px;
+  width: 100%;
   background-color: var(--color-header-bg);
-  border-radius: 1rem;
-  margin: 2rem auto 0;
-  padding: 3rem 2rem;
-  box-shadow: 0 1rem 3rem rgba(51, 40, 63, 0.15);
+  margin: 0;
+  padding: 3rem 0;
 }
 
 .page-header-box h1,
@@ -70,14 +55,16 @@ body {
 /* NAVBAR */
 .navbar-empower {
   background-color: var(--color-page-bg);
-  top: 1rem;
+  top: 0;
   left: 0;
   right: 0;
-  width: calc(100% - 2rem);
-  max-width: 1200px;
-  margin: 0 auto;
-  border-radius: 1rem;
-  box-shadow: 0 1rem 3rem rgba(51, 40, 63, 0.15);
+  width: 100%;
+  margin: 0;
+  border-bottom: 1px solid rgba(51, 40, 63, 0.12);
+}
+
+[data-theme="dark"] .navbar-empower {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
@@ -114,13 +101,32 @@ body {
 }
 
 .navbar-empower .nav-link {
+  position: relative;
   color: var(--color-text);
+}
+
+.navbar-empower .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0.5rem;
+  right: 0.5rem;
+  bottom: 0.3rem;
+  height: 2px;
+  background-color: var(--color-accent);
+  transform: scaleX(0);
+  transition: transform 0.15s ease;
 }
 
 .navbar-empower .nav-link:hover,
 .navbar-empower .nav-link:focus,
 .navbar-empower .nav-link.show {
   color: var(--color-accent);
+}
+
+.navbar-empower .nav-link:hover::after,
+.navbar-empower .nav-link:focus::after,
+.navbar-empower .nav-link.show::after {
+  transform: scaleX(1);
 }
 
 .navbar-empower .dropdown-item:hover,
@@ -171,7 +177,7 @@ body {
    either element (see Navbar.tsx for the matching mouseenter/leave wiring). */
 .mega-menu-bridge {
   position: fixed;
-  top: 96px;
+  top: 64px;
   left: 0;
   width: 100%;
   height: 0.5rem;
@@ -180,7 +186,7 @@ body {
 
 .mega-menu {
   position: fixed;
-  top: calc(96px + 0.5rem);
+  top: calc(64px + 0.5rem);
   left: 0;
   width: 100%;
   z-index: 1029;
@@ -317,14 +323,57 @@ body {
   border-left-color: #d9534f;
 }
 
+/* PAGE SHELL */
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-28
+   Purpose: every routed page's content sits in a flex row next to the DNA
+   section index. A generous gap is the separation between the two — the
+   index reserves real column width and the content fills whatever space
+   remains. */
+.page-shell {
+  display: flex;
+  align-items: flex-start;
+  gap: 3rem;
+}
+
+.page-shell-content {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+
 /* SECTION PROGRESS */
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-13 (restyled 2026-07-28)
+   Purpose: boxed, always-expanded page index. A single DNA strand runs
+   straight through each section's dot (ul::before, painted behind the li
+   content) so every title reads as literally threaded onto the strand,
+   rather than a decorative graphic floating beside an unrelated list. */
 .section-progress {
-  position: fixed;
-  left: 1.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  width: max-content;
+  flex: none;
+  width: 250px;
+  position: sticky;
+  top: 5rem;
+  align-self: flex-start;
+}
+
+.section-progress-box {
+  background-color: var(--color-page-bg);
+  border: 1px solid rgba(51, 40, 63, 0.15);
+  border-radius: 1rem;
+  padding: 1.1rem 1.25rem 1.25rem;
+  box-shadow: 0 0.75rem 2rem rgba(51, 40, 63, 0.12);
+  max-height: calc(100vh - 7rem);
+  overflow-y: auto;
+}
+
+.section-progress-heading {
+  margin: 0 0 0.9rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  opacity: 0.55;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(51, 40, 63, 0.15);
 }
 
 .section-progress ul {
@@ -334,17 +383,27 @@ body {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  gap: 1rem;
 }
 
+/* The strand: a beaded gradient standing in for DNA rungs, positioned to
+   run exactly through the center of each dot below. */
 .section-progress ul::before {
   content: "";
   position: absolute;
-  top: 4px;
-  bottom: 4px;
-  left: 3px;
+  top: 6px;
+  bottom: 6px;
+  left: 4px;
   width: 2px;
-  background-color: rgba(51, 40, 63, 0.15);
+  border-radius: 2px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--color-accent) 0,
+    var(--color-accent) 5px,
+    transparent 5px,
+    transparent 11px
+  );
+  opacity: 0.6;
 }
 
 .section-progress li {
@@ -360,10 +419,14 @@ body {
 }
 
 .section-progress-dot {
+  position: relative;
+  z-index: 1;
   flex: none;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
+  /* Matches the box background so an inactive dot reads as a hollow ring;
+     the active state below fills it with the (distinct) accent color. */
   background-color: var(--color-page-bg);
   border: 2px solid rgba(51, 40, 63, 0.35);
   transition:
@@ -379,88 +442,20 @@ body {
 }
 
 .section-progress-label {
-  max-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  opacity: 0;
   font-size: 0.85rem;
-  transition:
-    max-width 0.2s ease,
-    opacity 0.2s ease;
-}
-
-.section-progress:hover .section-progress-label {
-  max-width: 220px;
-  opacity: 1;
+  line-height: 1.3;
 }
 
 .section-progress li.active .section-progress-label {
   font-weight: 600;
 }
 
-@media (max-width: 1400px) {
-  .section-progress {
-    display: none;
+@media (max-width: 991.98px) {
+  .page-shell {
+    display: block;
   }
-}
 
-/* DNA SCROLL PROGRESS */
-/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
-   Purpose: DNA-styled scroll progress rail replacing the native scrollbar. */
-.dna-scroll-progress {
-  position: fixed;
-  top: 50%;
-  right: 1rem;
-  transform: translateY(-50%);
-  height: 70vh;
-  width: 22px;
-  z-index: 10;
-  pointer-events: none;
-}
-
-.dna-scroll-progress-svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.dna-tile-track-shape path {
-  fill: none;
-  stroke: rgba(51, 40, 63, 0.18);
-  stroke-width: 2;
-  stroke-linecap: round;
-}
-
-.dna-tile-track-shape line {
-  stroke: rgba(51, 40, 63, 0.18);
-  stroke-width: 1.5;
-  stroke-linecap: round;
-}
-
-.dna-tile-track-shape circle {
-  fill: rgba(51, 40, 63, 0.18);
-}
-
-.dna-tile-active-shape path {
-  fill: none;
-  stroke: var(--color-accent);
-  stroke-width: 2;
-  stroke-linecap: round;
-}
-
-.dna-tile-active-shape line {
-  stroke: var(--color-accent);
-  stroke-width: 1.5;
-  stroke-linecap: round;
-}
-
-.dna-tile-active-shape circle {
-  fill: var(--color-accent);
-}
-
-@media (max-width: 1400px) {
-  .dna-scroll-progress {
+  .section-progress {
     display: none;
   }
 }
@@ -1015,22 +1010,7 @@ footer hr {
   height: 100%;
 }
 
-/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
-   Purpose: the two wordmark variants have very different content density on
-   their own canvas, so they need different treatment, not one shared rule.
-   Light mode's logo (logo-dark-purple-text) only fills ~41% of its wide
-   canvas — contain left it tiny, so it uses cover instead: the crop only
-   eats the mostly-empty margin, not the actual artwork (verified by pixel
-   analysis that the visible content stays inside cover's crop window). */
-.footer-logo-img-light {
-  object-fit: cover;
-  object-position: 43% 50%;
-}
-
-/* Dark mode's logo (logo-light-purple-text) fills ~97% of its own canvas
-   (almost no built-in margin), so cover would crop the artwork itself —
-   this one needs contain, capped well below 100% so it still gets real
-   breathing room inside the circle instead of touching the edge. */
+.footer-logo-img-light,
 .footer-logo-img-dark {
   object-fit: contain;
   max-width: 78%;

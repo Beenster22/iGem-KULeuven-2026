@@ -13,7 +13,7 @@ interface InspirationsProps {
 export function Inspirations({ inspirationLinkList }: InspirationsProps) {
   return (
     <div className="col-lg-4">
-      <h2>Inspirations</h2>
+      <h2 data-toc-ignore="true">Inspirations</h2>
       <hr />
       <ul>
         {inspirationLinkList.map((inspirationLink) => {

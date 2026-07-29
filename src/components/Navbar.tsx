@@ -116,6 +116,7 @@ export function Navbar() {
     <div ref={navRef}>
       <BootstrapNavbar
         expand="lg"
+        variant={mode === "dark" ? "dark" : "light"}
         className="navbar-empower"
         fixed="top"
         onMouseLeave={scheduleClose}
