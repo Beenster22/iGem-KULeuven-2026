@@ -1089,3 +1089,155 @@ footer hr {
     animation: none;
   }
 }
+
+/* HOME PAGE FULLSCREEN CHROME */
+body.home-fullscreen {
+  padding-top: 0;
+}
+
+.home-nav-reveal-btn {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 1050;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--color-header-bg);
+  color: var(--color-header-text);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.home-nav-reveal-btn:hover {
+  transform: scale(1.08);
+}
+
+.home-nav-reveal-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* HOME HERO */
+.home-hero {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--color-header-bg);
+}
+
+.home-hero-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, opacity;
+}
+
+.home-hero-layer svg,
+.home-hero-layer > img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.home-hero-logo-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.home-hero-logo-stage img {
+  width: min(40vmin, 320px);
+  height: min(40vmin, 320px);
+  object-fit: contain;
+}
+
+/* PMOS OVERVIEW (stat counter + globe) */
+.pmos-overview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.pmos-counter-heading {
+  font-size: clamp(1.5rem, 4vw, 2.75rem);
+  font-weight: 700;
+  max-width: 40ch;
+  margin: 0;
+}
+
+.pmos-counter-number {
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+  padding: 0 0.1em;
+  /* --color-header-bg (not --color-accent) — accent is identical to the
+     body background in light mode, which would make this invisible too. */
+  border-bottom: 0.09em solid var(--color-header-bg);
+}
+
+.pmos-globe-loading {
+  opacity: 0.6;
+  padding: 2rem;
+}
+
+.pmos-globe-wrap {
+  width: min(100%, 520px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pmos-globe-info {
+  min-height: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.pmos-globe-info-continent {
+  display: inline-block;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  /* --color-accent is #C9BDE8 in both themes, so the chip's background
+     never changes with dark mode — its text color is a fixed dark ink
+     rather than a theme variable, to always contrast against it. */
+  color: #221b2b;
+  background-color: var(--color-accent);
+  padding: 0.35rem 1.1rem;
+  border-radius: 999px;
+}
+
+.pmos-globe-info-count {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.pmos-globe-info-hint {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.pmos-globe-tooltip {
+  background-color: var(--color-header-bg);
+  color: var(--color-header-text);
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.4rem;
+  font-size: 0.85rem;
+}

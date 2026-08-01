@@ -45,7 +45,7 @@ const LIGHT_THEME: ThemeColors = {
 // keeps the existing Dark Purple swatch — reads as an elevated surface on
 // top of it, the way GitHub/Discord-style dark themes separate surfaces.
 const DARK_THEME: ThemeColors = {
-  pageBg: "#221B2B",
+  pageBg: "#221b2b",
   bodyBg: "#33283F",
   text: "#EAF4F5",
   headerBg: "#2FA4A9",

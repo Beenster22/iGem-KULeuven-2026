@@ -5,12 +5,18 @@
 import { ReactNode, useRef } from "react";
 import { SectionProgress } from "./SectionProgress";
 
-export function PageShell({ children }: { children: ReactNode }) {
+export function PageShell({
+  children,
+  hideIndex = false,
+}: {
+  children: ReactNode;
+  hideIndex?: boolean;
+}) {
   const contentRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className="page-shell">
-      <SectionProgress containerRef={contentRef} />
+      {!hideIndex && <SectionProgress containerRef={contentRef} />}
       <div ref={contentRef} className="container page-shell-content">
         {children}
       </div>

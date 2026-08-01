@@ -9,11 +9,13 @@ import { SegmentedSelector } from "./components/SegmentedSelector";
 import { NotebookTimeline, NotebookEntry } from "./components/NotebookTimeline";
 import { ExpandableText } from "./components/Expandable-Text";
 import { EventsTimeline, EventEntry } from "./components/EventsTimeline";
+import { PmosOverview } from "./components/PmosOverview";
 
 export const mdxComponents = {
   TeamMember,
   ProtocolBox,
   PageLayout,
+  PmosOverview,
   Callout,
   TabbedSections,
   TabSection,
