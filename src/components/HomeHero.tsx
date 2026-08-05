@@ -158,7 +158,49 @@ function layerTarget(index: number, stageIndex: number) {
   return { opacity: 0, scale: entryScale(STAGES[index].direction), transition: { duration: 0 } };
 }
 
+// TEMPORARY — local-only preview of the rendered hero video, while the real
+// upload to iGEM Video Universe is still being sorted out. Points at a file
+// copied into public/temp-preview/ (gitignored, never committed). Once the
+// real static/video.igem.org URL exists, delete this whole block and swap
+// it in below instead — see README.md's asset rules for why it can't stay
+// a local file long-term.
+// import.meta.env.BASE_URL (not a hardcoded leading "/") so this resolves
+// correctly under the "/kuleuven/" base the dev server serves everything
+// from — a plain "/temp-preview/..." 404s because it's missing that prefix.
+const PREVIEW_VIDEO_SRC = `${import.meta.env.BASE_URL}temp-preview/HomePageV1.mp4`;
+
+// The frame the intro video ends on (logo + banner) — once the video
+// finishes playing, it's swapped for this static image instead of looping
+// or sitting idle as a paused <video>, since a plain <img> is cheaper to
+// leave on screen indefinitely and guarantees a crisp result regardless of
+// how the video's own last frame compresses.
+const FINAL_FRAME_SRC =
+  "https://static.igem.wiki/teams/6299/wiki/home-page/homepageempowerbanner.avif";
+
 export function HomeHero() {
+  const [videoEnded, setVideoEnded] = useState(false);
+
+  if (PREVIEW_VIDEO_SRC) {
+    if (videoEnded) {
+      return (
+        <div className="home-hero">
+          <img className="home-hero-video" src={FINAL_FRAME_SRC} alt={`${import.meta.env.VITE_TEAM_NAME} logo`} />
+        </div>
+      );
+    }
+    return (
+      <div className="home-hero">
+        <video className="home-hero-video" autoPlay muted playsInline onEnded={() => setVideoEnded(true)}>
+          <source src={PREVIEW_VIDEO_SRC} />
+        </video>
+      </div>
+    );
+  }
+
+  return <HomeHeroCrossfade />;
+}
+
+function HomeHeroCrossfade() {
   const [stageIndex, setStageIndex] = useState(0);
   const prefersReducedMotion = useReducedMotion();
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);

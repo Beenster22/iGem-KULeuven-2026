@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local-only preview of the hero video before it's uploaded to iGEM Video
+# Universe — never commit this; per README.md, video must be served from
+# iGEM infrastructure, not bundled in the repo.
+/public/temp-preview/

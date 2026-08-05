@@ -227,7 +227,7 @@ h3 {
 .mega-menu-content {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 1.5rem 2rem;
   padding: 1.5rem 1rem;
 }
@@ -1129,6 +1129,13 @@ body.home-fullscreen {
   height: 100dvh;
   overflow: hidden;
   background-color: var(--color-header-bg);
+}
+
+.home-hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .home-hero-layer {
