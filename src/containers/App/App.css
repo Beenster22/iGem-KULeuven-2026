@@ -1177,6 +1177,94 @@ body.home-fullscreen {
   gap: 1.5rem;
   padding: 3rem 1rem;
   text-align: center;
+  background-color: var(--color-page-bg);
+  border-radius: 1rem;
+}
+
+/* HOME PAGE SECTION BANDS
+   Purpose: alternate two of the site's existing theme tokens (not new
+   colors) across the home page's sections, so each reads as a distinct
+   block while staying in sync with light/dark mode automatically. */
+.home-section {
+  border-radius: 1rem;
+  padding: 2.5rem 1.5rem;
+  margin: 2rem 0;
+}
+
+.home-section--page {
+  background-color: var(--color-page-bg);
+}
+
+.home-section--body {
+  background-color: var(--color-body-bg);
+}
+
+/* The body-outline's own fill (#d3bde8) sits too close to --color-body-bg /
+   --color-accent to read against them, so this section gets the one token
+   with real contrast against light purple in both themes: header-bg. */
+.home-section--contrast {
+  background-color: var(--color-header-bg);
+  color: var(--color-header-text);
+}
+
+/* BODY SYMPTOMS SECTION (diagram left, info panel right) */
+.body-symptoms-layout {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.body-symptoms-figure {
+  flex-shrink: 0;
+}
+
+.body-symptoms-info {
+  flex: 1;
+  max-width: 320px;
+}
+
+.body-symptoms-info-heading {
+  margin: 0 0 0.5rem;
+}
+
+.body-symptoms-info-blurb {
+  margin: 0;
+  opacity: 0.9;
+}
+
+@media (max-width: 767.98px) {
+  .body-symptoms-layout {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .body-symptoms-info {
+    max-width: none;
+  }
+}
+
+/* Clickable organs: cursor affordance + the "selected" highlight.
+   #uterus's positioning matrix now lives on an inner <g> (see
+   BodyDiagram.tsx) specifically so this outer, click-targeted <g id="uterus">
+   has no transform of its own — mixing a baked-in SVG matrix with a CSS
+   transform-origin here previously re-anchored the whole matrix around the
+   shape's center instead of (0,0), visibly shifting it out of place. */
+.body-symptoms-figure svg #brain,
+.body-symptoms-figure svg #uterus,
+.body-symptoms-figure svg #pancreas,
+.body-symptoms-figure svg #heart,
+.body-symptoms-figure svg #hair {
+  cursor: pointer;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
+}
+
+.body-organ-selected {
+  transform: scale(1.12);
+  filter: brightness(1.25) saturate(1.3);
 }
 
 .pmos-counter-heading {

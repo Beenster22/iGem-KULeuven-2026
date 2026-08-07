@@ -10,12 +10,14 @@ import { NotebookTimeline, NotebookEntry } from "./components/NotebookTimeline";
 import { ExpandableText } from "./components/Expandable-Text";
 import { EventsTimeline, EventEntry } from "./components/EventsTimeline";
 import { PmosOverview } from "./components/PmosOverview";
+import { BodySymptomsSection } from "./components/BodySymptomsSection";
 
 export const mdxComponents = {
   TeamMember,
   ProtocolBox,
   PageLayout,
   PmosOverview,
+  BodySymptomsSection,
   Callout,
   TabbedSections,
   TabSection,
