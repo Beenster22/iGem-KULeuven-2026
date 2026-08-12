@@ -1201,10 +1201,21 @@ body.home-fullscreen {
 
 /* The body-outline's own fill (#d3bde8) sits too close to --color-body-bg /
    --color-accent to read against them, so this section gets the one token
-   with real contrast against light purple in both themes: header-bg. */
+   with real contrast against light purple in light mode: header-bg. */
 .home-section--contrast {
   background-color: var(--color-header-bg);
   color: var(--color-header-text);
+}
+
+/* In dark mode header-bg/-text repoint to the navbar's teal accent pair
+   (theme.ts DARK_THEME), which was measured at ~1.7:1 contrast against the
+   same light-purple content — nearly invisible. body-bg/text repoint to the
+   dark-purple "elevated surface" pair instead (still ~8:1 against the light
+   purple, matching light mode's ratio) and are semantically the right token
+   here anyway: this is a content card, not the navbar. */
+[data-theme="dark"] .home-section--contrast {
+  background-color: var(--color-body-bg);
+  color: var(--color-text);
 }
 
 /* BODY SYMPTOMS SECTION (diagram left, info panel right) */
@@ -1265,6 +1276,159 @@ body.home-fullscreen {
 .body-organ-selected {
   transform: scale(1.12);
   filter: brightness(1.25) saturate(1.3);
+}
+
+/* INFLAMMATION SLIDER SECTION
+   One vertical slider (left) drives two synced panels: a bacteria cluster
+   (wild-type -> engineered colour) and the BodyDiagram (fading inflammation
+   glow on the organ ids also used by BodySymptomsSection). Sits in a
+   "home-section--contrast" (dark) band — see the comment in
+   InflammationSliderSection.tsx for why the light "home-section--body" band
+   doesn't have enough contrast against this content. */
+.inflammation-section-heading {
+  margin: 0 0 1.5rem;
+  text-align: center;
+}
+
+.inflammation-slider-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+}
+
+.inflammation-slider-track-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.inflammation-slider-tick {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.inflammation-slider-input--vertical {
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 8px;
+  height: 220px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
+.inflammation-slider-panel {
+  flex: 1;
+  max-width: 260px;
+  text-align: center;
+}
+
+.inflammation-slider-panel-heading {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+}
+
+.inflammation-slider-figure {
+  display: flex;
+  justify-content: center;
+}
+
+/* Warm glow around each organ, faded in/out via --inflammation (0-1) set
+   inline per render in InflammationSliderSection.tsx — kept as a CSS custom
+   property rather than React-driven inline filter values so the fade stays
+   a single declarative rule instead of five recomputed filter strings. */
+.inflammation-slider-figure svg #brain,
+.inflammation-slider-figure svg #uterus,
+.inflammation-slider-figure svg #pancreas,
+.inflammation-slider-figure svg #heart,
+.inflammation-slider-figure svg #hair {
+  filter: drop-shadow(0 0 10px rgba(214, 62, 62, var(--inflammation)))
+    drop-shadow(0 0 4px rgba(214, 62, 62, var(--inflammation)));
+}
+
+/* MICROBIOME LENS (magnifying glass into the microbiome: bacteria scattered
+   inside a clipped circle, wild-type -> engineered per-bacterium threshold —
+   see MicrobiomeLens in InflammationSliderSection.tsx) */
+.microbiome-lens-wrap {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+.microbiome-lens {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 6px solid currentColor;
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.microbiome-lens-handle {
+  position: absolute;
+  bottom: 8%;
+  right: 8%;
+  width: 14px;
+  height: 64px;
+  border-radius: 8px;
+  background: currentColor;
+  transform-origin: top center;
+  transform: rotate(45deg);
+}
+
+.microbiome-bacterium {
+  position: absolute;
+  width: 22px;
+  height: auto;
+  /* currentColor (not a specific --color-* token) so the dim, not-yet-
+     engineered bacteria always match whatever pale foreground
+     .home-section--contrast resolved to for the active theme, rather than a
+     token whose meaning flips between themes (see the dark-mode override on
+     .home-section--contrast above). */
+  opacity: 0.4;
+  transition:
+    color 0.25s ease,
+    opacity 0.25s ease,
+    filter 0.25s ease;
+}
+
+.microbiome-bacterium--engineered {
+  color: var(--color-accent);
+  opacity: 1;
+  filter: drop-shadow(0 0 4px rgba(201, 189, 232, 0.7));
+}
+
+.inflammation-slider-blurb {
+  margin: 1.5rem 0 0;
+  text-align: center;
+  opacity: 0.9;
+}
+
+@media (max-width: 767.98px) {
+  .inflammation-slider-section {
+    flex-direction: column;
+  }
+
+  .inflammation-slider-track-col {
+    flex-direction: row-reverse;
+    width: 100%;
+    max-width: 260px;
+  }
+
+  .inflammation-slider-input--vertical {
+    writing-mode: horizontal-tb;
+    direction: ltr;
+    width: 100%;
+    height: 8px;
+  }
+
+  .inflammation-slider-panel {
+    max-width: none;
+  }
 }
 
 .pmos-counter-heading {

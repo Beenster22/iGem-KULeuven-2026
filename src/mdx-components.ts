@@ -11,6 +11,7 @@ import { ExpandableText } from "./components/Expandable-Text";
 import { EventsTimeline, EventEntry } from "./components/EventsTimeline";
 import { PmosOverview } from "./components/PmosOverview";
 import { BodySymptomsSection } from "./components/BodySymptomsSection";
+import { InflammationSliderSection } from "./components/InflammationSliderSection";
 
 export const mdxComponents = {
   TeamMember,
@@ -18,6 +19,7 @@ export const mdxComponents = {
   PageLayout,
   PmosOverview,
   BodySymptomsSection,
+  InflammationSliderSection,
   Callout,
   TabbedSections,
   TabSection,
