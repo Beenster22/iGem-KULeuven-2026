@@ -12,6 +12,7 @@ import { EventsTimeline, EventEntry } from "./components/EventsTimeline";
 import { PmosOverview } from "./components/PmosOverview";
 import { BodySymptomsSection } from "./components/BodySymptomsSection";
 import { InflammationSliderSection } from "./components/InflammationSliderSection";
+import { MicChart } from "./components/MicChart";
 
 export const mdxComponents = {
   TeamMember,
@@ -20,6 +21,7 @@ export const mdxComponents = {
   PmosOverview,
   BodySymptomsSection,
   InflammationSliderSection,
+  MicChart,
   Callout,
   TabbedSections,
   TabSection,

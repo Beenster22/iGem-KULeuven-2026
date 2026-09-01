@@ -836,6 +836,11 @@
   dependencies:
     undici-types "~6.21.0"
 
+"@types/plotly.js@^3.0.13":
+  version "3.0.13"
+  resolved "https://registry.yarnpkg.com/@types/plotly.js/-/plotly.js-3.0.13.tgz#2f3e0a6ebf8b5dd0aef1916a54e42a1517b20e75"
+  integrity sha512-mWI1NZRDHDoiFiPEvUjR0P12fv21kmT8XSLrEjfNwIDahELaXXkSz38n6o+5SYsq0YEGxkK3ANqqM0cRl8uZdg==
+
 "@types/prop-types@^15.7.12":
   version "15.7.15"
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.15.tgz"
@@ -2523,6 +2528,11 @@ picomatch@^4.0.2, picomatch@^4.0.3, picomatch@^4.0.4:
   version "4.0.4"
   resolved "https://registry.npmjs.org/picomatch/-/picomatch-4.0.4.tgz"
   integrity sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==
+
+plotly.js-basic-dist-min@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/plotly.js-basic-dist-min/-/plotly.js-basic-dist-min-4.0.0.tgz#1f16e75d0b6f196b06def2cd60ccbdd3a3393661"
+  integrity sha512-GGhpuikawKAGNQpPAeuvynUSI+BptB0NT6J0ofXfq2frGonhGG3zxrf6OVl/6aZhIeDaj7tP0Hb+de+QKVR08A==
 
 point-in-polygon-hao@^1.1.0:
   version "1.2.4"
