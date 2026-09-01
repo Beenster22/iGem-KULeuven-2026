@@ -1840,7 +1840,7 @@ body.home-fullscreen {
 
 .mic-chart-plot {
   width: 100%;
-  min-height: 420px;
+  min-height: 520px;
   /* Fixed white background: the chart's trace colors are tuned for a light
      canvas and would lose contrast against the site's dark mode. */
   background-color: #ffffff;
@@ -1852,7 +1852,7 @@ body.home-fullscreen {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 420px;
+  min-height: 520px;
   opacity: 0.6;
   color: #33283f;
 }
