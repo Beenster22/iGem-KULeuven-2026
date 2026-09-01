@@ -122,7 +122,12 @@ export function Navbar() {
         onMouseLeave={scheduleClose}
       >
         <Container>
-          <BootstrapNavbar.Brand className="d-flex align-items-center gap-2">
+          <BootstrapNavbar.Brand
+            as={Link}
+            to="/"
+            className="d-flex align-items-center gap-2"
+            onClick={closeNow}
+          >
             <span className="navbar-logo-circle">
               <img
                 className="navbar-logo-img"

@@ -98,6 +98,12 @@ h3 {
   margin: 0;
   font-size: 1.5rem;
   color: var(--color-text);
+  transition: color 0.15s ease;
+}
+
+.navbar-empower .navbar-brand:hover .navbar-brand-text,
+.navbar-empower .navbar-brand:focus .navbar-brand-text {
+  color: var(--color-accent);
 }
 
 .navbar-empower .nav-link {
@@ -698,14 +704,6 @@ h3 {
 .events-timeline-item {
   position: relative;
   padding-left: 4rem;
-  transition:
-    opacity 0.25s ease,
-    transform 0.25s ease;
-}
-
-.events-timeline.has-expanded .events-timeline-item:not(.expanded) {
-  opacity: 0.55;
-  transform: scale(0.98);
 }
 
 .events-timeline-marker {
@@ -718,53 +716,62 @@ h3 {
   border-radius: 50%;
   background-color: var(--color-page-bg);
   border: 2px solid rgba(51, 40, 63, 0.35);
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease;
 }
 
-.events-timeline-item.expanded .events-timeline-marker {
-  background-color: var(--color-accent);
-  border-color: var(--color-accent);
-}
-
+/* The collapsed card is itself a <button> so the whole thing, not just the
+   "Read more" label, is a single click/keyboard target. */
 .events-timeline-card {
-  background-color: var(--color-page-bg);
-  border-radius: 1rem;
-  overflow: hidden;
-  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.12);
-  transition: box-shadow 0.2s ease;
-}
-
-.events-timeline-item.expanded .events-timeline-card {
-  box-shadow: 0 1rem 3rem rgba(51, 40, 63, 0.25);
-}
-
-.events-timeline-summary {
   display: flex;
   align-items: center;
   gap: 1.25rem;
   width: 100%;
   border: none;
-  background: none;
-  padding: 0.75rem;
+  background-color: var(--color-page-bg);
+  border-radius: 1rem;
+  padding: 0.75rem 1.5rem 0.75rem 0.75rem;
   text-align: left;
   cursor: pointer;
   color: var(--color-text);
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.12);
+  transform-origin: left center;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-.events-timeline-media {
+.events-timeline-card:hover,
+.events-timeline-card:focus-visible {
+  transform: scale(1.03);
+  box-shadow: 0 1rem 2.5rem rgba(51, 40, 63, 0.22);
+  z-index: 2;
+}
+
+.events-timeline-card-media {
   position: relative;
   flex: none;
-  width: 96px;
-  height: 96px;
+  width: 88px;
+  height: 88px;
   border-radius: 0.75rem;
   overflow: hidden;
   background-color: var(--color-body-bg);
+  transition: width 0.25s ease, height 0.25s ease;
 }
 
+/* Photos grow on hover — desktop/pointer devices only, since there is no
+   hover state to reveal them on touch. */
+@media (hover: hover) {
+  .events-timeline-card:hover .events-timeline-card-media,
+  .events-timeline-card:focus-visible .events-timeline-card-media {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+.events-timeline-media,
 .events-timeline-media-empty {
   display: block;
+  position: absolute;
+  inset: 0;
 }
 
 .events-timeline-media-img {
@@ -781,11 +788,12 @@ h3 {
   opacity: 1;
 }
 
-.events-timeline-meta {
+.events-timeline-card-body {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
   min-width: 0;
+  flex: 1;
 }
 
 .events-timeline-date {
@@ -801,63 +809,221 @@ h3 {
   font-weight: 700;
 }
 
-.events-timeline-summary::after {
-  content: "+";
-  margin-left: auto;
-  flex: none;
+/* The one-sentence blurb stays hidden until hover/focus on pointer devices,
+   and is simply always visible where there's no hover to reveal it. */
+.events-timeline-summary-text {
+  font-size: 0.9rem;
+  opacity: 0;
+  max-height: 0;
+  margin-top: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.25s ease,
+    opacity 0.2s ease,
+    margin-top 0.25s ease;
+}
+
+@media (hover: hover) {
+  .events-timeline-card:hover .events-timeline-summary-text,
+  .events-timeline-card:focus-visible .events-timeline-summary-text {
+    opacity: 0.85;
+    max-height: 3rem;
+    margin-top: 0.15rem;
+  }
+}
+
+@media (hover: none) {
+  .events-timeline-summary-text {
+    opacity: 0.85;
+    max-height: none;
+    margin-top: 0.15rem;
+  }
+}
+
+.events-timeline-readmore {
+  align-self: flex-start;
+  margin-top: 0.4rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-decoration: underline;
+}
+
+/* Near-full-page event detail view */
+.events-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background-color: rgba(20, 15, 25, 0.72);
+  animation: events-fade-in 0.2s ease;
+}
+
+.events-modal {
+  position: relative;
+  width: min(1000px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
+  background-color: var(--color-page-bg);
+  border-radius: 1.25rem;
+  padding: 2.5rem;
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.35);
+  animation: events-modal-in 0.25s ease;
+}
+
+.events-modal:focus {
+  outline: none;
+}
+
+.events-modal-close {
+  position: sticky;
+  top: 0;
+  float: right;
+  margin-left: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(51, 40, 63, 0.08);
+  color: var(--color-text);
   font-size: 1.5rem;
   line-height: 1;
+  cursor: pointer;
 }
 
-.events-timeline-item.expanded .events-timeline-summary::after {
-  content: "\2212";
-}
-
-.events-timeline-detail {
-  padding: 0 1.5rem 2rem;
-  animation: events-timeline-expand 0.25s ease;
-}
-
-@keyframes events-timeline-expand {
-  from {
-    opacity: 0;
-    transform: translateY(-0.75rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.events-timeline-detail-gallery {
+.events-modal-header {
   display: flex;
-  gap: 0.75rem;
-  overflow-x: auto;
-  margin: 0 0 1.25rem;
-  padding-bottom: 0.25rem;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1.5rem;
 }
 
-.events-timeline-detail-gallery img {
-  width: 180px;
-  height: 130px;
+.events-modal-date {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  opacity: 0.7;
+}
+
+.events-modal-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.events-modal-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.events-modal-gallery-item {
+  border: none;
+  padding: 0;
+  background: none;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  cursor: zoom-in;
+}
+
+.events-modal-gallery-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 0.5rem;
-  flex: none;
+  transition: transform 0.3s ease;
 }
 
-.events-timeline-detail-content :last-child {
+.events-modal-gallery-item:hover img,
+.events-modal-gallery-item:focus-visible img {
+  transform: scale(1.06);
+}
+
+.events-modal-content :last-child {
   margin-bottom: 0;
 }
 
-.events-timeline-collapse {
-  margin-top: 1rem;
+@keyframes events-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes events-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(1rem) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Full-screen image lightbox, opened from the modal gallery */
+.events-lightbox-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: rgba(0, 0, 0, 0.9);
+  animation: events-fade-in 0.2s ease;
+}
+
+.events-lightbox-img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 0.5rem;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.5);
+}
+
+.events-lightbox-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
   border: none;
-  background: none;
-  padding: 0;
-  font-weight: 600;
-  color: var(--color-text);
-  text-decoration: underline;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
   cursor: pointer;
+}
+
+.events-lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3rem;
+  height: 3rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.events-lightbox-prev {
+  left: 1.5rem;
+}
+
+.events-lightbox-next {
+  right: 1.5rem;
 }
 
 @media (max-width: 576px) {
@@ -873,13 +1039,29 @@ h3 {
     left: 8px;
   }
 
-  .events-timeline-summary {
+  .events-timeline-card {
     flex-wrap: wrap;
+    padding: 0.65rem;
   }
 
-  .events-timeline-media {
-    width: 72px;
-    height: 72px;
+  .events-timeline-card-media {
+    width: 64px;
+    height: 64px;
+  }
+
+  .events-modal {
+    padding: 1.5rem;
+    max-height: 96vh;
+  }
+
+  .events-modal-title {
+    font-size: 1.5rem;
+  }
+
+  .events-lightbox-nav {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.5rem;
   }
 }
 
@@ -1169,26 +1351,38 @@ body.home-fullscreen {
   object-fit: contain;
 }
 
-/* PMOS OVERVIEW (stat counter + globe) */
+/* PMOS OVERVIEW (stat counter + globe)
+   Full-bleed like the .home-section bands below (same breakout technique) —
+   this is the home page's first color band. No inner .container needed:
+   the flex column + align-items: center already centers its children
+   (which carry their own max-widths) regardless of the section's width. */
 .pmos-overview {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
   padding: 3rem 1rem;
   text-align: center;
   background-color: var(--color-page-bg);
-  border-radius: 1rem;
 }
 
 /* HOME PAGE SECTION BANDS
    Purpose: alternate two of the site's existing theme tokens (not new
    colors) across the home page's sections, so each reads as a distinct
-   block while staying in sync with light/dark mode automatically. */
+   block while staying in sync with light/dark mode automatically. Each band
+   is full-bleed — breaking out of the page-shell's Bootstrap .container via
+   the standard negative-margin technique (safer than width: 100vw, which
+   double-counts the scrollbar gutter in some browsers) — so the page's own
+   background changes color per section edge-to-edge, rather than sections
+   reading as separate cards floating on top of one background. The
+   .container reintroduced inside each section in home.mdx keeps the actual
+   content (headings, lists, etc.) at the site's normal reading width. */
 .home-section {
-  border-radius: 1rem;
-  padding: 2.5rem 1.5rem;
-  margin: 2rem 0;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  padding: 3rem 0;
 }
 
 .home-section--page {
@@ -1218,20 +1412,47 @@ body.home-fullscreen {
   color: var(--color-text);
 }
 
-/* BODY SYMPTOMS SECTION (diagram left, info panel right) */
+/* BODY SYMPTOMS SECTION
+   Layout is fixed from first paint — text fills the left ~2/3 of the row,
+   the figure sits flush to the right edge via space-between on the two flex
+   items. Once scrolled into view, BodySymptomsSection.tsx mounts the figure
+   after a timer; only the diagram itself animates in (see
+   body-symptoms-figure-in below), the surrounding layout never moves. The
+   info panel keeps showing the overview paragraph throughout — it only
+   switches to a specific organ's blurb once the visitor clicks one. */
 .body-symptoms-layout {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 2rem;
+  min-height: 300px;
+  overflow-x: clip;
+}
+
+.body-symptoms-info {
+  flex: 1 1 auto;
+  max-width: 66%;
 }
 
 .body-symptoms-figure {
   flex-shrink: 0;
 }
 
-.body-symptoms-info {
-  flex: 1;
-  max-width: 320px;
+@media (prefers-reduced-motion: no-preference) {
+  .body-symptoms-figure {
+    animation: body-symptoms-figure-in 1.6s ease both;
+  }
+
+  @keyframes body-symptoms-figure-in {
+    from {
+      opacity: 0;
+      transform: translateX(100vw);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
 }
 
 .body-symptoms-info-heading {
@@ -1251,6 +1472,19 @@ body.home-fullscreen {
 
   .body-symptoms-info {
     max-width: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes body-symptoms-figure-in {
+      from {
+        opacity: 0;
+        transform: translateY(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   }
 }
 
@@ -1458,6 +1692,41 @@ body.home-fullscreen {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  transition:
+    width 0.4s ease,
+    max-width 0.4s ease,
+    gap 0.4s ease;
+}
+
+/* Once a continent has been picked, the globe shifts to the left half of
+   the section and the info panel takes the right half. */
+.pmos-globe-wrap--split {
+  width: 100%;
+  max-width: 900px;
+  flex-direction: row;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.pmos-globe-stage {
+  flex: none;
+  width: min(100%, 520px);
+  transition: width 0.4s ease;
+}
+
+.pmos-globe-wrap--split .pmos-globe-stage {
+  width: min(45%, 340px);
+}
+
+/* Pointer cursor while hovering a clickable country — grab otherwise, since
+   the globe is still draggable to spin. !important guards against three.js/
+   OrbitControls setting an inline cursor style of its own on the canvas. */
+.pmos-globe-stage canvas {
+  cursor: grab !important;
+}
+
+.pmos-globe-stage.is-hovering canvas {
+  cursor: pointer !important;
 }
 
 .pmos-globe-info {
@@ -1466,6 +1735,32 @@ body.home-fullscreen {
   flex-direction: column;
   align-items: center;
   gap: 0.25rem;
+}
+
+.pmos-globe-wrap--split .pmos-globe-info {
+  flex: 1;
+  min-width: 0;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.pmos-globe-info-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: inherit;
+  gap: 0.6rem;
+  animation: pmos-globe-info-in 0.35s ease;
+}
+
+@keyframes pmos-globe-info-in {
+  from {
+    opacity: 0;
+    transform: translateX(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .pmos-globe-info-continent {
@@ -1488,6 +1783,14 @@ body.home-fullscreen {
   color: var(--color-text);
 }
 
+.pmos-globe-info-note {
+  margin: 0;
+  max-width: 40ch;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
 .pmos-globe-info-hint {
   font-size: 0.9rem;
   opacity: 0.7;
@@ -1499,4 +1802,26 @@ body.home-fullscreen {
   padding: 0.25rem 0.6rem;
   border-radius: 0.4rem;
   font-size: 0.85rem;
+  text-align: center;
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .pmos-globe-wrap--split {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .pmos-globe-wrap--split .pmos-globe-stage {
+    width: min(100%, 520px);
+  }
+
+  .pmos-globe-wrap--split .pmos-globe-info {
+    align-items: center;
+    text-align: center;
+  }
+
+  .pmos-globe-info-note {
+    max-width: 32ch;
+  }
 }

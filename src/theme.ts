@@ -48,7 +48,12 @@ const DARK_THEME: ThemeColors = {
   pageBg: "#221b2b",
   bodyBg: "#33283F",
   text: "#EAF4F5",
-  headerBg: "#2FA4A9",
+  // Was the navbar's bright teal accent (#2FA4A9) — swapped for the same
+  // near-white light blue used as pageBg/text elsewhere in the site, so
+  // every page's title card (Header.tsx) reads as a light card rather than
+  // standing out as a saturated teal band. headerText (dark purple) already
+  // contrasts well against it, so it's unchanged.
+  headerBg: "#EAF4F5",
   headerText: "#33283F",
   footerBg: "#C9BDE8",
   footerText: "#33283F",
