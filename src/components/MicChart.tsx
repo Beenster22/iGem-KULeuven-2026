@@ -1,8 +1,7 @@
-// Generated with Claude Sonnet 5 (Anthropic), 2026-09-02
+// Generated with Claude Sonnet 5 (Anthropic), 2026-09-01
 // Purpose: interactive MIC (minimum inhibitory concentration) chart with a
-// toggle between the two growth-inhibition cutoffs used to call MIC (90% vs
-// 85%), rendered from data/layout JSON exported from the team's R/plotly
-// analysis.
+// toggle between the two cutoffs used to call an MIC value, rendered from
+// data/layout JSON exported from the team's R/plotly analysis.
 import { useEffect, useRef, useState } from "react";
 import type { Config, Data, Layout } from "plotly.js";
 import mic90 from "./data/mic-90.json";
@@ -69,24 +68,46 @@ export function MicChart() {
     if (!Plotly || !el) return;
 
     const { data, layout } = DATASETS[threshold];
+    // The R export's side legend needs far more width than this content
+    // column ever has: at any container width Plotly's automargin reserves
+    // whatever space the longest legend label demands, which crushed the
+    // plot itself down to a sliver of its container. A legend below the
+    // chart has a bounded height instead (it wraps onto more lines rather
+    // than eating plot width), so it's used at every width, not just narrow
+    // ones — only the font size/margins scale down further below the
+    // breakpoint.
     // The trace colors (e.g. a near-black bar fill for DSM1447) were chosen
     // for a light plot background — pin paper/plot background to white
     // rather than following the site's dark mode, so bars and legend swatches
     // stay visible instead of blending into a dark page background.
     const themedLayout: Partial<Layout> = {
       ...layout,
-      title: { ...(layout.title as object), font: { size: narrow ? 13 : 20 } },
+      title: {
+        // Plotly titles don't wrap on their own, and the full sentence is
+        // too long to fit on one line at any width this column reaches —
+        // break it manually instead of letting it overflow. The narrow
+        // layout's font/plot are small enough to need a third line too.
+        text: narrow
+          ? `Minimal Inhibitory Concentration<br>of <i>P. vulgatus</i> DSM1447 and RC1806<br>to different antibiotics, at a cutoff of ${threshold}%`
+          : `Minimal Inhibitory Concentration of <i>P. vulgatus</i> DSM1447 and RC1806<br>to different antibiotics, at a cutoff of ${threshold}%`,
+        font: { size: narrow ? 13 : 18 },
+        x: 0.5,
+        xanchor: "center",
+      },
       paper_bgcolor: "#ffffff",
       plot_bgcolor: "#ffffff",
       font: { color: "#33283f" },
       autosize: true,
-      // On a narrow column the side legend crowds out the plot and the
-      // default tick/axis font no longer fits — move the legend under the
-      // chart and shrink text instead of letting labels overlap.
-      margin: narrow ? { l: 45, r: 10, t: 55, b: 130 } : { ...layout.margin, t: 70 },
-      legend: narrow
-        ? { orientation: "h", x: 0, y: -0.55, font: { size: 11 } }
-        : layout.legend,
+      margin: narrow
+        ? { l: 45, r: 10, t: 105, b: 150 }
+        : { l: 60, r: 20, t: 90, b: 110 },
+      legend: {
+        orientation: "h",
+        x: 0.5,
+        xanchor: "center",
+        y: narrow ? -0.5 : -0.3,
+        font: { size: narrow ? 11 : 14 },
+      },
       xaxis: { ...layout.xaxis, tickfont: { size: narrow ? 11 : 18 } },
       yaxis: { ...layout.yaxis, tickfont: { size: narrow ? 11 : 18 } },
     };
@@ -116,7 +137,7 @@ export function MicChart() {
           className={`segmented-selector-segment${threshold === "90" ? " active" : ""}`}
           onClick={() => setThreshold("90")}
         >
-          MIC at 90% cutoff
+          90% cutoff
         </button>
         <button
           type="button"
@@ -125,7 +146,7 @@ export function MicChart() {
           className={`segmented-selector-segment${threshold === "85" ? " active" : ""}`}
           onClick={() => setThreshold("85")}
         >
-          MIC at 85% cutoff
+          85% cutoff
         </button>
       </div>
       <div className="mic-chart-plot" ref={containerRef}>
