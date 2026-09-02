@@ -7,16 +7,20 @@ export const links = [
   { year: 2025, teamName: "Freiburg", pageName: "results" },
 ];
 
-<PageLayout links={links}>
+<PageLayout>
 
 ## Antibiotic susceptibility (MIC)
 
 Minimum inhibitory concentration (MIC) of _P. vulgatus_ DSM1447 (wild-type) and RC1806 against a panel of
 antibiotics. Bars show the determined MIC, individual points are the raw replicate measurements, and hatched
 bars mark antibiotics for which no MIC was found up to the highest concentration tested. Use the toggle to
-switch between the two growth-reduction thresholds used to call an MIC value.
+switch between MIC called at a 90% or 85% growth-inhibition cutoff.
 
 <MicChart />
+
+</PageLayout>
+
+<PageLayout links={links}>
 
 ## What Should this Page Contain?
 

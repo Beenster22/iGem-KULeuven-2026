@@ -1515,7 +1515,7 @@ body.home-fullscreen {
 
 .mic-chart-plot {
   width: 100%;
-  min-height: 420px;
+  min-height: 480px;
   /* Fixed white background: the chart's trace colors are tuned for a light
      canvas and would lose contrast against the site's dark mode. */
   background-color: #ffffff;

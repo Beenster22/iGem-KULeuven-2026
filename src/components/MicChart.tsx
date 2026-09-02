@@ -1,7 +1,8 @@
-// Generated with Claude Sonnet 5 (Anthropic), 2026-09-01
+// Generated with Claude Sonnet 5 (Anthropic), 2026-09-02
 // Purpose: interactive MIC (minimum inhibitory concentration) chart with a
-// toggle between the two growth-reduction thresholds used to define MIC,
-// rendered from data/layout JSON exported from the team's R/plotly analysis.
+// toggle between the two growth-inhibition cutoffs used to call MIC (90% vs
+// 85%), rendered from data/layout JSON exported from the team's R/plotly
+// analysis.
 import { useEffect, useRef, useState } from "react";
 import type { Config, Data, Layout } from "plotly.js";
 import mic90 from "./data/mic-90.json";
@@ -72,13 +73,9 @@ export function MicChart() {
     // for a light plot background — pin paper/plot background to white
     // rather than following the site's dark mode, so bars and legend swatches
     // stay visible instead of blending into a dark page background.
-    // The embedded title is dropped (it's redundant with the surrounding page
-    // copy) since its font size overflows the narrower width of this content
-    // column, on top of which the R export's title already omits the
-    // threshold for the 90% dataset while stating it for the 85% one.
     const themedLayout: Partial<Layout> = {
       ...layout,
-      title: undefined,
+      title: { ...(layout.title as object), font: { size: narrow ? 13 : 20 } },
       paper_bgcolor: "#ffffff",
       plot_bgcolor: "#ffffff",
       font: { color: "#33283f" },
@@ -86,7 +83,7 @@ export function MicChart() {
       // On a narrow column the side legend crowds out the plot and the
       // default tick/axis font no longer fits — move the legend under the
       // chart and shrink text instead of letting labels overlap.
-      margin: narrow ? { l: 45, r: 10, t: 15, b: 130 } : { ...layout.margin, t: 20 },
+      margin: narrow ? { l: 45, r: 10, t: 55, b: 130 } : { ...layout.margin, t: 70 },
       legend: narrow
         ? { orientation: "h", x: 0, y: -0.55, font: { size: 11 } }
         : layout.legend,
@@ -119,7 +116,7 @@ export function MicChart() {
           className={`segmented-selector-segment${threshold === "90" ? " active" : ""}`}
           onClick={() => setThreshold("90")}
         >
-          90% growth reduction
+          MIC at 90% cutoff
         </button>
         <button
           type="button"
@@ -128,7 +125,7 @@ export function MicChart() {
           className={`segmented-selector-segment${threshold === "85" ? " active" : ""}`}
           onClick={() => setThreshold("85")}
         >
-          85% growth reduction
+          MIC at 85% cutoff
         </button>
       </div>
       <div className="mic-chart-plot" ref={containerRef}>
