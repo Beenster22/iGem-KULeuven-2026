@@ -28,6 +28,118 @@ h3 {
   scroll-margin-top: 5rem;
 }
 
+/* REFERENCES */
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-09-03
+   Purpose: [^1]-style citations (remark-gfm footnotes, rewritten into a
+   collapsible panel by src/mdx/rehypeReferences.ts) get the same navbar
+   clearance as headings when a reader jumps to them. */
+[id^="user-content-fn-"],
+[id^="user-content-fnref-"] {
+  scroll-margin-top: 5rem;
+}
+
+/* Inline [n] citation markers. --color-accent is identical to
+   --color-body-bg in light mode (see theme.ts), and page content sits on
+   --color-body-bg, so an accent-colored marker would be invisible there —
+   --color-text is the same fixed-contrast workaround used elsewhere in this
+   file for text sitting directly on that background. */
+a[data-footnote-ref] {
+  color: var(--color-text);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+a[data-footnote-ref]::before {
+  content: "[";
+}
+
+a[data-footnote-ref]::after {
+  content: "]";
+}
+
+a[data-footnote-ref]:hover,
+a[data-footnote-ref]:focus {
+  text-decoration: underline;
+}
+
+/* The collapsible "References" panel itself. */
+.page-references {
+  margin-top: 2.5rem;
+  border: 1px solid rgba(51, 40, 63, 0.15);
+  border-radius: 1rem;
+  background-color: var(--color-page-bg);
+  padding: 0.25rem 1.5rem;
+}
+
+[data-theme="dark"] .page-references {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.page-references-summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 1rem 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-text);
+}
+
+.page-references-summary::-webkit-details-marker {
+  display: none;
+}
+
+.page-references-summary::before {
+  content: "▸";
+  display: inline-block;
+  width: 1em;
+  margin-right: 0.4rem;
+  color: var(--color-text);
+  transition: transform 0.15s ease;
+}
+
+.page-references[open] .page-references-summary::before {
+  transform: rotate(90deg);
+}
+
+.page-references ol {
+  margin: 0 0 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.page-references li {
+  margin-bottom: 0.6rem;
+}
+
+.page-references li::marker {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+/* The "return to text" link remark-gfm attaches to each reference —
+   styled as a small pill button rather than a bare arrow glyph. */
+a[data-footnote-backref] {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.5rem;
+  padding: 0.05rem 0.55rem;
+  border-radius: 999px;
+  background-color: rgba(201, 189, 232, 0.35);
+  color: var(--color-text);
+  font-size: 0.8rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+}
+
+a[data-footnote-backref]::after {
+  content: " Back";
+}
+
+a[data-footnote-backref]:hover,
+a[data-footnote-backref]:focus {
+  background-color: var(--color-accent);
+}
+
 .page-body {
   width: 100%;
   margin: 0;

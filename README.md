@@ -94,6 +94,28 @@ Visit the [Special Awards page](https://competition.igem.org/judging/awards/spec
   Markdown and JSX, and raw multi-line HTML tags can get mis-parsed (e.g. split into extra `<p>` elements) —
   Markdown syntax avoids that entirely.
 
+### Adding references / citations
+
+Drop a `[^some-id]` right after the claim it backs, then define it anywhere in the same file (the bottom of
+the file, after the last `</PageLayout>`, is the easiest place to keep them all together):
+
+```mdx
+Engineered *P. vulgatus* reduced inflammation markers in three independent trials[^smith2024].
+
+</PageLayout>
+
+[^smith2024]: Smith et al. (2024). *Engineered gut bacteria and inflammation*. Nature Microbiology.
+  [DOI: 10.1038/s41564-024-00000-0](https://doi.org/10.1038/s41564-024-00000-0)
+```
+
+Pick any short id you like (`[^smith2024]`, `[^1]`, `[^doi-10-1038]`, ...) — it just has to match between the
+in-text marker and its definition. This renders as a clickable, automatically-numbered `[1]` where you wrote
+it, in the order references first appear on the page. Every page collects its own citations into a
+collapsible **References** panel at the bottom (closed by default, so it stays out of the way); clicking a
+`[1]` opens that panel and jumps to the matching entry, and each entry gets a **Back** link that returns to
+exactly where you were reading. Citing the same source twice (two `[^smith2024]` markers) is fine — the
+References entry gets one Back link per place it was cited.
+
 ## About This Template
 
 ### Files
