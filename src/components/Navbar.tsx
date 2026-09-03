@@ -22,7 +22,17 @@ export function Navbar() {
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
 
-  const closeNow = () => setOpenMenu(null);
+  // Closing must also drop keyboard focus from whatever's focused inside the
+  // navbar — otherwise the clicked dropdown toggle keeps its CSS :focus
+  // highlight (color + underline) after the menu closes, even once the mouse
+  // has moved away.
+  const closeNow = () => {
+    setOpenMenu(null);
+    const active = document.activeElement as HTMLElement | null;
+    if (active && navRef.current?.contains(active)) {
+      active.blur();
+    }
+  };
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -62,7 +72,11 @@ export function Navbar() {
           aria-haspopup="true"
           onClick={(event) => {
             event.preventDefault();
-            setOpenMenu(openMenu === pageIndex ? null : pageIndex);
+            if (openMenu === pageIndex) {
+              closeNow();
+            } else {
+              setOpenMenu(pageIndex);
+            }
           }}
         >
           {item.name}
