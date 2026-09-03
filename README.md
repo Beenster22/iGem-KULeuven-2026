@@ -96,11 +96,32 @@ Visit the [Special Awards page](https://competition.igem.org/judging/awards/spec
 
 ### Adding references / citations
 
-Drop a `[^some-id]` right after the claim it backs, then define it anywhere in the same file (the bottom of
-the file, after the last `</PageLayout>`, is the easiest place to keep them all together):
+The easy way — write the reference right where you use it, no id to invent:
 
 ```mdx
-Engineered *P. vulgatus* reduced inflammation markers in three independent trials[^smith2024].
+Engineered *P. vulgatus* reduced inflammation markers in three independent trials[ref:
+Smith et al. (2024). Engineered gut bacteria and inflammation. Nature Microbiology.
+https://doi.org/10.1038/s41564-024-00000-0].
+```
+
+That's it. It renders as a clickable, automatically-numbered `[1]` right where you wrote it (numbered in the
+order references first appear on the page), and the full text — including any bare `https://...` URL, which
+becomes a clickable link automatically — gets added to that page's **References** panel at the bottom. Two
+things to know: the text inside `[ref: ...]` can't itself contain a `]`, and it's matched per paragraph, so
+don't split one `[ref: ...]` across a blank line.
+
+Every page collects its own citations into a collapsible References panel (closed by default, so it stays
+out of the way); clicking a `[1]` opens that panel and jumps to the matching entry, and each entry gets a
+**Back** link that returns to exactly where you were reading.
+
+For a reference you want to reuse in several places (so citing it twice points to *one* shared entry with a
+Back link for each spot), or one whose text needs its own markdown links/formatting, name it instead: drop a
+`[^some-id]` where it's used, then define it anywhere in the same file — the bottom, after the last
+`</PageLayout>`, is the easiest place to keep them together:
+
+```mdx
+Engineered *P. vulgatus* reduced inflammation markers in three independent trials[^smith2024]. The same
+result held in a follow-up cohort[^smith2024].
 
 </PageLayout>
 
@@ -108,13 +129,9 @@ Engineered *P. vulgatus* reduced inflammation markers in three independent trial
   [DOI: 10.1038/s41564-024-00000-0](https://doi.org/10.1038/s41564-024-00000-0)
 ```
 
-Pick any short id you like (`[^smith2024]`, `[^1]`, `[^doi-10-1038]`, ...) — it just has to match between the
-in-text marker and its definition. This renders as a clickable, automatically-numbered `[1]` where you wrote
-it, in the order references first appear on the page. Every page collects its own citations into a
-collapsible **References** panel at the bottom (closed by default, so it stays out of the way); clicking a
-`[1]` opens that panel and jumps to the matching entry, and each entry gets a **Back** link that returns to
-exactly where you were reading. Citing the same source twice (two `[^smith2024]` markers) is fine — the
-References entry gets one Back link per place it was cited.
+Pick any short id you like (`[^smith2024]`, `[^1]`, ...) — it just has to match between the in-text marker(s)
+and its definition. The two styles number together on the same page in whatever order they appear, and can
+be freely mixed.
 
 ## About This Template
 
