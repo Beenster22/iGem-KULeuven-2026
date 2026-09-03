@@ -9,6 +9,7 @@ import { HomeHero } from "../../components/HomeHero";
 import { NotFound } from "../../components/NotFound";
 import { Footer } from "../../components/Footer";
 import { PageShell } from "../../components/PageShell";
+import { BackToTop } from "../../components/BackToTop";
 import { ThemeModeProvider } from "../../ThemeModeContext";
 
 const HOME_PATH = "/";
@@ -115,6 +116,7 @@ const App = () => {
       {/* Footer */}
       {/* MUST mention license AND have a link to team wiki's repository on gitlab.igem.org */}
       <Footer />
+      <BackToTop />
     </ThemeModeProvider>
   );
 };
