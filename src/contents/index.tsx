@@ -23,11 +23,4 @@ export { default as ProofOfConcept } from "./proof-of-concept.mdx";
 export { default as HumanPractices } from "./human-practices.mdx";
 export { default as Events } from "./events.mdx";
 // Entrepreneurship
-export { default as ProblemAndMission } from "./problem-and-mission.mdx";
-export { default as MarketAndTargetGroup } from "./market-and-target-group.mdx";
-export { default as Stakeholders } from "./stakeholders.mdx";
-export { default as UniqueValueProposition } from "./unique-value-proposition.mdx";
-export { default as ManufacturingPlan } from "./manufacturing-plan.mdx";
-export { default as BusinessPlan } from "./business-plan.mdx";
-export { default as CashFlow } from "./cash-flow.mdx";
-export { default as IpAndRegulatoryStrategy } from "./ip-and-regulatory-strategy.mdx";
+export { default as Entrepreneurship } from "./entrepreneurship.mdx";

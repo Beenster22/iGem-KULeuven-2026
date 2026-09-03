@@ -111,6 +111,22 @@ h3 {
   color: var(--color-text);
 }
 
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-09-03
+   Purpose: small caret next to dropdown topics signaling they expand on
+   click, distinct from plain page links which have no caret. Rotates to
+   point up while its mega-menu is open. */
+.navbar-empower .nav-link-caret {
+  width: 10px;
+  height: 10px;
+  margin-left: 0.3rem;
+  vertical-align: -1px;
+  transition: transform 0.15s ease;
+}
+
+.navbar-empower .nav-link-dropdown.show .nav-link-caret {
+  transform: rotate(-180deg);
+}
+
 .navbar-empower .nav-link::after {
   content: "";
   position: absolute;

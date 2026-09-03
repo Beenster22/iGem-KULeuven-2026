@@ -17,23 +17,12 @@ const NAVBAR_LOGO_BY_MODE = {
 
 export function Navbar() {
   const { mode, toggleMode } = useThemeMode();
+  // Dropdowns open only on click — hovering a topic just highlights it (via
+  // CSS :hover) to signal it's interactive, it no longer opens the menu.
   const [openMenu, setOpenMenu] = useState<number | null>(null);
-  // True once a folder was opened by a click rather than hover — pinned menus
-  // ignore mouse-leave entirely and only close via an explicit click.
-  const [pinned, setPinned] = useState(false);
-  const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const navRef = useRef<HTMLDivElement>(null);
 
-  const cancelClose = () => clearTimeout(closeTimer.current);
-  const scheduleClose = () => {
-    if (pinned) return;
-    closeTimer.current = setTimeout(() => setOpenMenu(null), 250);
-  };
-  const closeNow = () => {
-    cancelClose();
-    setOpenMenu(null);
-    setPinned(false);
-  };
+  const closeNow = () => setOpenMenu(null);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -43,10 +32,10 @@ export function Navbar() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  // A pinned (clicked-open) menu only closes when the user clicks somewhere
+  // An open (clicked-open) menu only closes when the user clicks somewhere
   // outside the navbar/mega-menu, or clicks another category (handled below).
   useEffect(() => {
-    if (!pinned) return;
+    if (openMenu === null) return;
     const onClickOutside = (event: MouseEvent) => {
       if (navRef.current && !navRef.current.contains(event.target as Node)) {
         closeNow();
@@ -54,7 +43,7 @@ export function Navbar() {
     };
     document.addEventListener("mousedown", onClickOutside);
     return () => document.removeEventListener("mousedown", onClickOutside);
-  }, [pinned]);
+  }, [openMenu]);
 
   const activeItem = openMenu !== null ? Pages[openMenu] : undefined;
   const activeFolder =
@@ -68,27 +57,29 @@ export function Navbar() {
         <Nav.Link
           key={`page-${pageIndex}`}
           href="#"
-          className={openMenu === pageIndex ? "show" : ""}
+          className={`nav-link-dropdown ${openMenu === pageIndex ? "show" : ""}`}
           aria-expanded={openMenu === pageIndex}
           aria-haspopup="true"
-          onMouseEnter={() => {
-            if (pinned) return;
-            cancelClose();
-            setOpenMenu(pageIndex);
-          }}
           onClick={(event) => {
             event.preventDefault();
-            cancelClose();
-            if (pinned && openMenu === pageIndex) {
-              setOpenMenu(null);
-              setPinned(false);
-            } else {
-              setOpenMenu(pageIndex);
-              setPinned(true);
-            }
+            setOpenMenu(openMenu === pageIndex ? null : pageIndex);
           }}
         >
           {item.name}
+          <svg
+            className="nav-link-caret"
+            viewBox="0 0 12 8"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M1 1.5L6 6.5L11 1.5"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </Nav.Link>
       );
     } else if ("path" in item && item.path) {
@@ -97,9 +88,6 @@ export function Navbar() {
           key={`page-${pageIndex}`}
           as={Link}
           to={item.path}
-          onMouseEnter={() => {
-            if (!pinned) closeNow();
-          }}
           onClick={closeNow}
         >
           {item.name}
@@ -119,7 +107,6 @@ export function Navbar() {
         variant={mode === "dark" ? "dark" : "light"}
         className="navbar-empower"
         fixed="top"
-        onMouseLeave={scheduleClose}
       >
         <Container>
           <BootstrapNavbar.Brand
@@ -176,21 +163,8 @@ export function Navbar() {
 
         {activeFolder && (
           <>
-            {/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
-                Purpose: invisible strip bridging the visual gap between the
-                navbar and the mega-menu, so hovering across that gap never
-                triggers a close (previously the sole mouseleave/timeout race
-                made the menu disappear if the cursor lingered in the gap). */}
-            <div
-              className="mega-menu-bridge"
-              onMouseEnter={cancelClose}
-              onMouseLeave={scheduleClose}
-            />
-            <div
-              className="mega-menu"
-              onMouseEnter={cancelClose}
-              onMouseLeave={scheduleClose}
-            >
+            <div className="mega-menu-bridge" />
+            <div className="mega-menu">
               <Container className="mega-menu-content">
                 {activeFolder.map((subpage, subpageIndex) =>
                   subpage.path ? (
