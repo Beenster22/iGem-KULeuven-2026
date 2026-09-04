@@ -1,10 +1,12 @@
-// Generated with Claude Sonnet 5 (Anthropic), 2026-07-13 (reworked 2026-07-28)
+// Generated with Claude Sonnet 5 (Anthropic), 2026-07-13 (reworked 2026-07-28, 2026-09-04)
 // Purpose: page-wide left-hand index tracking scroll position through
 // sections, styled as a DNA strand that threads directly through each
 // section's dot (rather than a decorative graphic beside the list), with
 // always-visible titles. Scans the rendered page for h2/h3 directly (content
 // pages compose several PageLayout blocks, so headings can't be read off any
-// single block's props) and re-scans whenever the route changes.
+// single block's props) and re-scans whenever the route changes. h3s are
+// tracked as subsections and rendered indented off the strand (see the
+// "sub" class in App.css) so the hierarchy reads at a glance.
 import { MouseEvent, RefObject, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { stringToSlug } from "../utils/stringToSlug";
@@ -12,6 +14,7 @@ import { stringToSlug } from "../utils/stringToSlug";
 interface Heading {
   id: string;
   text: string;
+  level: 2 | 3;
 }
 
 interface SectionProgressProps {
@@ -29,7 +32,8 @@ function collectHeadings(container: HTMLElement): Heading[] {
     seen.set(slug, count + 1);
     if (count > 0) slug = `${slug}-${count}`;
     element.id = slug;
-    return { id: slug, text };
+    const level: 2 | 3 = element.tagName === "H3" ? 3 : 2;
+    return { id: slug, text, level };
   });
 }
 
@@ -92,7 +96,15 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
         <p className="section-progress-heading">On this page</p>
         <ul>
           {headings.map((heading) => (
-            <li key={heading.id} className={activeId === heading.id ? "active" : undefined}>
+            <li
+              key={heading.id}
+              className={[
+                activeId === heading.id ? "active" : null,
+                heading.level === 3 ? "sub" : null,
+              ]
+                .filter(Boolean)
+                .join(" ") || undefined}
+            >
               <a href={`#${heading.id}`} onClick={(event) => handleClick(event, heading.id)}>
                 <span className="section-progress-dot" />
                 <span className="section-progress-label">{heading.text}</span>
