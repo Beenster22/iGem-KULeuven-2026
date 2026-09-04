@@ -98,10 +98,10 @@ const Pages: (Page | Folder)[] = [
       },
       {
         name: "Promoters and RBSs",
-        title: "Promoters and RBSs",
+        title: "Promoters and Ribosome Binding Sites",
         path: "/promoters-and-rbs",
         component: PromotersAndRbs,
-        lead: "Placeholder page — replace with your promoters and RBSs content.",
+        lead: "Placeholder page — replace with your promoters and ribosome binding sites content.",
       },
     ],
   },
@@ -109,8 +109,8 @@ const Pages: (Page | Folder)[] = [
     name: "Wet Lab",
     folder: [
       {
-        name: "Experiments (DBTL)",
-        title: "Experiments (DBTL)",
+        name: "Experiments",
+        title: "Experiments",
         path: "/experiments",
         component: Experiments,
         lead: "Describe the research, experiments, and protocols you used in your project. It is designed to provide sufficient information for other teams to replicate our work.",
