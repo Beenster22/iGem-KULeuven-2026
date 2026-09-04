@@ -47,6 +47,20 @@
   font-display: swap;
 }
 
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-09-04
+   Purpose: self-hosted Luckiest Guy (Apache License 2.0) for titles/headings.
+   Only ships at one weight, so headings are pinned to font-weight: 400 —
+   forcing a heavier weight on a single-weight display face makes the browser
+   synthesize (fake) bold, which looks smeared on a face this chunky. */
+@font-face {
+  font-family: "Luckiest Guy";
+  src: url("https://static.igem.wiki/teams/6299/wiki/fonts/luckiestguy-regular.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 body {
   padding-top: 64px;
   background-color: var(--color-page-bg);
@@ -55,6 +69,16 @@ body {
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Luckiest Guy", "Poppins", sans-serif;
+  font-weight: 400;
 }
 
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-07-28
