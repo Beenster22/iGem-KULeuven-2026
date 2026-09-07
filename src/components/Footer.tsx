@@ -118,17 +118,82 @@ export function Footer() {
         <div className="row mb-4">
           <div className="col-12">
             <h4 className="mb-3">Our Sponsors</h4>
-            {/* Example usage: copy this SponsorCarousel block and add/remove
-                <SponsorLogo> children — it revolves through whatever you put
-                inside. Pass a real `src` (uploaded via the iGEM uploads tool)
-                and an optional `href` for each sponsor; omit `src` to fall
-                back to a text placeholder like the ones below. */}
             <SponsorCarousel>
-              <SponsorLogo name="Sponsor One" />
-              <SponsorLogo name="Sponsor Two" />
-              <SponsorLogo name="Sponsor Three" />
-              <SponsorLogo name="Sponsor Four" />
-              <SponsorLogo name="Sponsor Five" />
+              <SponsorLogo
+                name="Couleurs de Noir"
+                src="https://static.igem.wiki/teams/6299/wiki/sponsors/couleurs-de-noir.avif"
+                href="https://couleursdenoir.com/fr"
+              />
+              <SponsorLogo
+                name="Eppendorf"
+                src="https://static.igem.wiki/teams/6299/wiki/sponsors/eppendorf.avif"
+                href="https://www.eppendorf.com/be-en/"
+              />
+              <SponsorLogo
+                name="IDT"
+                src="https://static.igem.wiki/teams/6299/wiki/sponsors/idt.avif"
+                href="https://eu.idtdna.com/page"
+              />
+              <SponsorLogo
+                name="Jena Bioscience"
+                src="https://static.igem.wiki/teams/6299/wiki/sponsors/jena-bioscience.avif"
+                href="https://www.jenabioscience.com/"
+              />
+              <SponsorLogo
+                name="KU Leuven Kick"
+                src="https://static.igem.wiki/teams/6299/wiki/sponsors/kul-kick.avif"
+                href="https://lrd.kuleuven.be/kuleuvenkick"
+              />
+              <SponsorLogo
+                name="KU Leuven Group Biomedical Sciences"
+                src="https://static.igem.wiki/teams/6299/wiki/sponsors/leuven-group-biomedical-sciences.avif"
+                href="https://gbiomed.kuleuven.be/english/b"
+              />
+              <SponsorLogo
+                name="KU Leuven Group Science, Engineering & Technology"
+                src="https://static.igem.wiki/teams/6299/wiki/sponsors/leuven-group-set.avif"
+                href="https://set.kuleuven.be/en"
+              />
+              <SponsorLogo
+                name="KU Leuven Research & Development"
+                src="https://static.igem.wiki/teams/6299/wiki/sponsors/leuven-r-d.avif"
+                href="https://lrd.kuleuven.be/"
+              />
+              <SponsorLogo
+                name="New England Biolabs"
+                src="https://static.igem.wiki/teams/6299/wiki/sponsors/neb.avif"
+                href="https://www.neb.com/en"
+              />
+              <SponsorLogo
+                name="Promega"
+                src="https://static.igem.wiki/teams/6299/wiki/sponsors/promega.avif"
+                href="https://be.promega.com/"
+              />
+              <SponsorLogo
+                name="Reshape Biotech"
+                src="https://static.igem.wiki/teams/6299/wiki/sponsors/reshape.avif"
+                href="https://reshapebiotech.com/"
+              />
+              <SponsorLogo
+                name="Sarstedt"
+                src="https://static.igem.wiki/teams/6299/wiki/sponsors/sarstedt.avif"
+                href="https://www.sarstedt.com/en/BE"
+              />
+              <SponsorLogo
+                name="SnapGene"
+                src="https://static.igem.wiki/teams/6299/wiki/sponsors/snapgene.avif"
+                href="https://www.snapgene.com/"
+              />
+              <SponsorLogo
+                name="Sopachem"
+                src="https://static.igem.wiki/teams/6299/wiki/sponsors/sopachem.avif"
+                href="https://sopachem.com/"
+              />
+              <SponsorLogo
+                name="Technovation Hub"
+                src="https://static.igem.wiki/teams/6299/wiki/sponsors/technovation-hub.avif"
+                href="https://lrd.kuleuven.be/kuleuvenkick/technovation-hub"
+              />
             </SponsorCarousel>
           </div>
         </div>
