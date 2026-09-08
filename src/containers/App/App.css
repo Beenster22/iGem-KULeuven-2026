@@ -1483,7 +1483,11 @@ footer hr {
   height: 76px;
   border-radius: 0.75rem;
   background-color: rgba(255, 255, 255, 0.95);
-  padding: 0.75rem 1rem;
+  /* 1rem top/bottom keeps every logo's clear space at >= half the height of
+     the KU Leuven Group SET logomark within it (its brand guideline's
+     minimum), since that's the tallest padding requirement of any sponsor
+     sharing this tile size — bumped from 0.75rem for that reason. */
+  padding: 1rem 1.25rem;
   transition: transform 0.2s ease;
 }
 

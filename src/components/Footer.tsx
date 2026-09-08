@@ -151,7 +151,7 @@ export function Footer() {
               />
               <SponsorLogo
                 name="KU Leuven Group Science, Engineering & Technology"
-                src="https://static.igem.wiki/teams/6299/wiki/sponsors/leuven-group-set.avif"
+                src="https://static.igem.wiki/teams/6299/wiki/sponsors/kuleuven-groepw-t-cymk-logo-eng.avif"
                 href="https://set.kuleuven.be/en"
               />
               <SponsorLogo
