@@ -6,13 +6,14 @@ import { Link } from "react-router-dom";
 import Pages from "../pages.ts";
 import { useThemeMode } from "../ThemeModeContext";
 
-// Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
-// Purpose: the icon-only logo mark, swapped per theme so its ink color
-// always contrasts with the light/dark logo-circle badge behind it.
-const NAVBAR_LOGO_BY_MODE = {
+// Generated with Claude Sonnet 5 (Anthropic), 2026-09-08
+// Purpose: the stylized "Empower" wordmark, swapped per theme — each image
+// already carries its own background block matching that theme's
+// --color-page-bg, so it blends into the navbar without a separate badge.
+const NAVBAR_BRAND_MARK_BY_MODE = {
   light:
-    "https://static.igem.wiki/teams/6299/wiki/icons/logo-dark-purple-no-text.avif",
-  dark: "https://static.igem.wiki/teams/6299/wiki/icons/logo-light-purple-no-text.avif",
+    "https://static.igem.wiki/teams/6299/wiki/icons/empower-stylized-name-light-mode.avif",
+  dark: "https://static.igem.wiki/teams/6299/wiki/icons/empower-stylized-name-dark-mode.avif",
 } as const;
 
 export function Navbar() {
@@ -126,17 +127,14 @@ export function Navbar() {
           <BootstrapNavbar.Brand
             as={Link}
             to="/"
-            className="d-flex align-items-center gap-2"
+            className="d-flex align-items-center"
             onClick={closeNow}
           >
-            <span className="navbar-logo-circle">
-              <img
-                className="navbar-logo-img"
-                src={NAVBAR_LOGO_BY_MODE[mode]}
-                alt={import.meta.env.VITE_TEAM_NAME}
-              />
-            </span>
-            <h1 className="navbar-brand-text">Empower</h1>
+            <img
+              className="navbar-brand-mark"
+              src={NAVBAR_BRAND_MARK_BY_MODE[mode]}
+              alt={import.meta.env.VITE_TEAM_NAME}
+            />
           </BootstrapNavbar.Brand>
           <button
             type="button"

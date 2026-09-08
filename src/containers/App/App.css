@@ -302,43 +302,14 @@ a[data-footnote-ref]:focus {
   border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
-   Purpose: circular light/dark logo-circle badge behind the navbar's
-   icon-only logo mark, matching the footer's circular logo treatment. */
-.navbar-logo-circle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  flex: none;
-  border-radius: 50%;
-  overflow: hidden;
-  background-color: var(--color-logo-circle-bg);
-  transition: background-color 0.2s ease;
-}
-
-/* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
-   Purpose: the no-text logo marks span ~85% of their own canvas width
-   (almost no built-in margin), so even object-fit: contain let them butt up
-   against the circle's edge. Capping width/height well below 100% forces
-   real breathing room regardless of how tightly any given file is cropped. */
-.navbar-logo-img {
-  max-width: 78%;
-  max-height: 78%;
-  object-fit: contain;
-}
-
-.navbar-empower .navbar-brand-text {
-  margin: 0;
-  font-size: 1.5rem;
-  color: var(--color-text);
-  transition: color 0.15s ease;
-}
-
-.navbar-empower .navbar-brand:hover .navbar-brand-text,
-.navbar-empower .navbar-brand:focus .navbar-brand-text {
-  color: var(--color-accent);
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-09-08
+   Purpose: the stylized "Empower" wordmark image — it already carries its
+   own background block and ink color per theme, so it just needs a fixed
+   height (width follows via auto to preserve its aspect ratio). */
+.navbar-brand-mark {
+  height: 38px;
+  width: auto;
+  display: block;
 }
 
 .navbar-empower .nav-link {
