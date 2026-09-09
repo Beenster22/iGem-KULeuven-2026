@@ -2164,3 +2164,167 @@ body.home-fullscreen {
   opacity: 0.6;
   color: #33283f;
 }
+
+/* TEAM MEMBERS
+   Generated with Claude Sonnet 5 (Anthropic), 2026-09-09
+   Purpose: grid of member cards on the Team page, each opening a popup with
+   a bigger photo on the left and details on the right. */
+.team-members-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.team-member-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  border: none;
+  background-color: var(--color-page-bg);
+  border-radius: 1rem;
+  padding: 1.25rem 1rem;
+  cursor: pointer;
+  color: var(--color-text);
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.12);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.team-member-card:hover,
+.team-member-card:focus-visible {
+  transform: translateY(-0.25rem) scale(1.03);
+  box-shadow: 0 1rem 2.5rem rgba(51, 40, 63, 0.22);
+}
+
+.team-member-card-photo {
+  display: block;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--color-body-bg);
+}
+
+.team-member-card-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.team-member-card-name {
+  font-weight: 700;
+  text-align: center;
+}
+
+.team-member-card-role {
+  font-size: 0.85rem;
+  text-align: center;
+  opacity: 0.75;
+}
+
+/* Member detail popup */
+.team-member-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background-color: rgba(20, 15, 25, 0.72);
+  animation: events-fade-in 0.2s ease;
+}
+
+.team-member-modal {
+  position: relative;
+  display: flex;
+  gap: 2rem;
+  width: min(640px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
+  background-color: var(--color-page-bg);
+  border-radius: 1.25rem;
+  padding: 2.5rem;
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.35);
+  animation: events-modal-in 0.25s ease;
+}
+
+.team-member-modal:focus {
+  outline: none;
+}
+
+.team-member-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(51, 40, 63, 0.08);
+  color: var(--color-text);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.team-member-modal-photo {
+  flex: none;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--color-body-bg);
+}
+
+.team-member-modal-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.team-member-modal-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.team-member-modal-name {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.team-member-modal-role {
+  margin: 0;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.team-member-modal-nationality {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.team-member-modal-bio {
+  margin-top: 0.5rem;
+}
+
+.team-member-modal-bio :last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 560px) {
+  .team-member-modal {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1.5rem;
+  }
+}

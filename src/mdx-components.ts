@@ -1,4 +1,4 @@
-import { TeamMember } from "./components/TeamMember";
+import { TeamMembers, TeamMemberCard } from "./components/TeamMembers";
 import { ProtocolBox } from "./components/ProtocolBox";
 import { PageLayout } from "./components/PageLayout";
 import { Callout } from "./components/Callout";
@@ -15,7 +15,8 @@ import { InflammationSliderSection } from "./components/InflammationSliderSectio
 import { MicChart } from "./components/MicChart";
 
 export const mdxComponents = {
-  TeamMember,
+  TeamMembers,
+  TeamMemberCard,
   ProtocolBox,
   PageLayout,
   PmosOverview,
