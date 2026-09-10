@@ -18,21 +18,25 @@ export function ExpandableText({ title, children }: ExpandableTextProps) {
         aria-expanded={isOpen}
         onClick={() => setIsOpen((open) => !open)}
       >
-        <span className="expandable-title">{title}</span>
+        {/* h3 (not a span) so the page-wide left index (SectionProgress, which
+            scans h2/h3) picks up every protocol as a linkable subsection —
+            this component has exactly one consumer (protocols.mdx), so
+            promoting the title to a real heading is safe here. */}
+        <h3 className="expandable-title">{title}</h3>
         <svg
           className="expandable-arrow"
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width="20"
+          height="20"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          style={{ transform: isOpen ? "rotate(90deg)" : undefined }}
+          style={{ transform: isOpen ? "rotate(180deg)" : undefined }}
         >
-          <path d="m9 18 6-6-6-6" />
+          <path d="m6 9 6 6 6-6" />
         </svg>
       </button>
       {isOpen && (

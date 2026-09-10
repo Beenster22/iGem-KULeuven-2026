@@ -513,6 +513,41 @@ a[data-footnote-ref]:focus {
   }
 }
 
+/* FIGURE CAPTIONS
+   Generated with Claude Sonnet 5 (Anthropic), 2026-09-10
+   Purpose: Bootstrap's .figure-caption (and .text-muted, which the
+   entrepreneurship page's photo/figure captions previously used) is a fixed
+   gray that ignores dark mode, so captions went nearly unreadable against
+   the dark page background. Re-point it at the theme-aware text color
+   instead, matching the muted-label pattern used elsewhere (e.g.
+   .section-progress-heading). */
+.figure-caption {
+  color: var(--color-text);
+  opacity: 0.65;
+}
+
+/* TABLES
+   Generated with Claude Sonnet 5 (Anthropic), 2026-09-10
+   Purpose: Bootstrap's table-bordered ships hard, high-contrast gridlines
+   with square corners and text sitting flush against the cell edge.
+   border-radius has no effect on a border-collapsed <table> itself, so
+   rounding happens on the wrapping .table-responsive instead (overflow:
+   hidden clips the corner cells' own borders into the rounded shape). */
+.table-responsive-rounded {
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.table-responsive-rounded .table-bordered {
+  --bs-table-border-color: rgba(51, 40, 63, 0.18);
+  margin-bottom: 0;
+}
+
+.table-responsive-rounded .table-bordered th,
+.table-responsive-rounded .table-bordered td {
+  padding: 0.65rem 0.9rem;
+}
+
 /* CALLOUT */
 .bd-callout {
   padding: 1.25rem;
@@ -549,6 +584,73 @@ a[data-footnote-ref]:focus {
 
 .bd-callout-danger {
   border-left-color: #d9534f;
+}
+
+/* EXPANDABLE TEXT (protocol accordion tabs)
+   Generated with Claude Sonnet 5 (Anthropic), 2026-09-10
+   Purpose: each protocol reads as a page-wide, pill-shaped tab — solid accent
+   fill, generous rounding, a down chevron on the right that flips to point up
+   once expanded. Content drops down beneath in a softer panel that shares the
+   tab's rounded footprint. */
+.expandable-container {
+  margin-bottom: 1rem;
+}
+
+.expandable-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  border: none;
+  border-radius: 1rem;
+  background-color: var(--color-accent);
+  color: var(--color-text);
+  padding: 1rem 1.5rem;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-radius 0.15s ease,
+    filter 0.15s ease;
+}
+
+.expandable-header:hover {
+  filter: brightness(0.96);
+}
+
+.expandable-header[aria-expanded="true"] {
+  border-radius: 1rem 1rem 0 0;
+}
+
+.expandable-title {
+  margin: 0;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.expandable-arrow {
+  flex: none;
+  transition: transform 0.15s ease;
+}
+
+.expandable-content {
+  background-color: var(--color-page-bg);
+  border: 1px solid rgba(51, 40, 63, 0.15);
+  border-top: none;
+  border-radius: 0 0 1rem 1rem;
+}
+
+.expandable-content-inner {
+  padding: 1.25rem 1.5rem;
+}
+
+.expandable-content-inner > :first-child {
+  margin-top: 0;
+}
+
+.expandable-content-inner > :last-child {
+  margin-bottom: 0;
 }
 
 /* PAGE SHELL */
