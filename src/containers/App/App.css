@@ -564,6 +564,38 @@ a[data-footnote-ref]:focus {
   min-width: 140px;
 }
 
+/* COMPETITOR COMPARISON TABLE (entrepreneurship page)
+   Generated with Claude Sonnet 5 (Anthropic), 2026-09-15
+   Purpose: recolor the PMOS-treatment comparison table with the brand
+   palette — dark purple for the header row and row-label column, lavender
+   for competitor data cells, and teal to highlight the EMPOWER column so it
+   stands out from the competition at a glance. */
+.comp-table th,
+.comp-table td {
+  border-color: rgba(234, 244, 245, 0.35);
+}
+
+.comp-table thead th {
+  background-color: #33283f;
+  color: #eaf4f5;
+}
+
+.comp-table tbody td {
+  background-color: #c9bde8;
+  color: #33283f;
+}
+
+.comp-table tbody td:first-child {
+  background-color: #33283f;
+  color: #eaf4f5;
+}
+
+.comp-table thead th:last-child,
+.comp-table tbody td:last-child {
+  background-color: #2fa4a9;
+  color: #eaf4f5;
+}
+
 /* CALLOUT */
 .bd-callout {
   padding: 1.25rem;
