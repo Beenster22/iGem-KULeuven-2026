@@ -586,6 +586,34 @@ a[data-footnote-ref]:focus {
   color: #000000;
 }
 
+/* This table has 10 columns, wider than the base rules above allow for
+   without horizontal scrolling. table-layout: fixed divides the full width
+   evenly (first column gets a little extra for its labels) instead of
+   sizing columns to their content, so all 10 always fit on screen — long
+   cell text wraps onto multiple lines rather than forcing overflow. */
+.comp-table.table-responsive-rounded .table-bordered {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.comp-table.table-responsive-rounded .table-bordered th,
+.comp-table.table-responsive-rounded .table-bordered td {
+  padding: 0.5rem 0.4rem;
+  font-size: 0.75rem;
+  word-wrap: break-word;
+}
+
+.comp-table.table-responsive-rounded .table-bordered th:first-child,
+.comp-table.table-responsive-rounded .table-bordered td:first-child {
+  min-width: 0;
+  width: 13%;
+}
+
+.comp-table.table-responsive-rounded .table-bordered th:not(:first-child),
+.comp-table.table-responsive-rounded .table-bordered td:not(:first-child) {
+  min-width: 0;
+}
+
 /* CALLOUT */
 .bd-callout {
   padding: 1.25rem;
