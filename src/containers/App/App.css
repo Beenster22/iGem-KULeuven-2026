@@ -535,7 +535,8 @@ a[data-footnote-ref]:focus {
    hidden clips the corner cells' own borders into the rounded shape). */
 .table-responsive-rounded {
   border-radius: 0.75rem;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .table-responsive-rounded .table-bordered {
@@ -567,33 +568,22 @@ a[data-footnote-ref]:focus {
 /* COMPETITOR COMPARISON TABLE (entrepreneurship page)
    Generated with Claude Sonnet 5 (Anthropic), 2026-09-15
    Purpose: recolor the PMOS-treatment comparison table with the brand
-   palette — dark purple for the header row and row-label column, lavender
-   for competitor data cells, and teal to highlight the EMPOWER column so it
-   stands out from the competition at a glance. */
-.comp-table th,
-.comp-table td {
-  border-color: rgba(234, 244, 245, 0.35);
-}
-
+   palette — dark purple header row, a lavender row-label column, and a teal
+   EMPOWER column to highlight it against the plain competitor cells. */
 .comp-table thead th {
   background-color: #33283f;
-  color: #eaf4f5;
-}
-
-.comp-table tbody td {
-  background-color: #c9bde8;
-  color: #33283f;
+  color: #ffffff;
 }
 
 .comp-table tbody td:first-child {
-  background-color: #33283f;
-  color: #eaf4f5;
+  background-color: #c9bde8;
+  color: #000000;
 }
 
 .comp-table thead th:last-child,
 .comp-table tbody td:last-child {
   background-color: #2fa4a9;
-  color: #eaf4f5;
+  color: #000000;
 }
 
 /* CALLOUT */
