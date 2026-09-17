@@ -77,6 +77,47 @@ function ImageRotator({ images, alt }: ImageRotatorProps) {
   );
 }
 
+interface PhotoCollageProps {
+  images: string[];
+  alt: string;
+  onOpen: (index: number) => void;
+}
+
+// Fixed-size photo collage for an event's gallery — the grid layout (how many
+// tiles, and which ones span extra rows/columns) is picked automatically from
+// how many photos there are, so every event gets a full, evenly-filled block
+// regardless of photo count. Events with more than 6 photos show the first 6
+// with a "+N" badge on the last tile; the lightbox still cycles through all
+// of them via its arrow keys.
+function PhotoCollage({ images, alt, onOpen }: PhotoCollageProps) {
+  if (images.length === 0) return null;
+
+  const displayCount = Math.min(images.length, 6);
+  const extra = images.length - displayCount;
+  const tiles = images.slice(0, displayCount);
+
+  return (
+    <div className={`events-collage events-collage-${displayCount}`}>
+      {tiles.map((src, index) => (
+        <button
+          key={src}
+          type="button"
+          className="events-collage-item"
+          onClick={() => onOpen(index)}
+          aria-label={`View photo ${index + 1} of ${alt} full size`}
+        >
+          <img src={src} alt="" />
+          {extra > 0 && index === displayCount - 1 && (
+            <span className="events-collage-more" aria-hidden="true">
+              +{extra}
+            </span>
+          )}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 interface LightboxState {
   images: string[];
   index: number;
@@ -188,21 +229,11 @@ export function EventsTimeline({ children }: EventsTimelineProps) {
               </span>
               <h2 className="events-modal-title">{openEvent.title}</h2>
             </div>
-            {openEvent.images.length > 0 && (
-              <div className="events-modal-gallery">
-                {openEvent.images.map((src, index) => (
-                  <button
-                    key={src}
-                    type="button"
-                    className="events-modal-gallery-item"
-                    onClick={() => setLightbox({ images: openEvent.images, index })}
-                    aria-label={`View photo ${index + 1} of ${openEvent.title} full size`}
-                  >
-                    <img src={src} alt="" />
-                  </button>
-                ))}
-              </div>
-            )}
+            <PhotoCollage
+              images={openEvent.images}
+              alt={openEvent.title}
+              onOpen={(index) => setLightbox({ images: openEvent.images, index })}
+            />
             <div className="events-modal-content">{openEvent.content}</div>
           </div>
         </div>
