@@ -115,25 +115,10 @@ export function BodySymptomsSection() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const pinnedRef = useRef<HTMLDivElement>(null);
   const [revealedState, setRevealedState] = useState(0);
-  // Once every symptom has been seen once, the pin/scroll-jack mechanism is
-  // pointless friction — it forces the same long scroll distance every time
-  // the visitor passes back through, whichever direction they're going. So
-  // this flips once (per page visit) and never resets, at which point the
-  // section collapses back to a normal, short, static block (see the effect
-  // below and the wrapper's conditional style/className further down).
-  const [completed, setCompleted] = useState(false);
-  const revealed = prefersReducedMotion || completed ? STEPS : revealedState;
+  const revealed = prefersReducedMotion ? STEPS : revealedState;
 
   useLayoutEffect(() => {
-    if (prefersReducedMotion || completed) {
-      // Drop any tall height a previous (pre-completion) render left on the
-      // wrapper via the imperative recomputeHeight() below — React's own
-      // style prop won't clear it on its own here since, as an object with
-      // the same literal shape every render, React's diffing sees no change
-      // to reconcile (see FALLBACK_WRAPPER_HEIGHT's comment).
-      if (wrapperRef.current) wrapperRef.current.style.height = "";
-      return;
-    }
+    if (prefersReducedMotion) return;
     const wrapper = wrapperRef.current;
     const pinned = pinnedRef.current;
     if (!wrapper || !pinned) return;
@@ -158,7 +143,6 @@ export function BodySymptomsSection() {
       // revealed, scrolling back up must not un-reveal it — only ever raise
       // the count, never lower it.
       setRevealedState((prev) => Math.max(prev, next));
-      if (next >= STEPS) setCompleted(true);
     };
 
     const onScroll = () => {
@@ -178,16 +162,16 @@ export function BodySymptomsSection() {
       window.removeEventListener("resize", onResize);
       if (frame !== null) cancelAnimationFrame(frame);
     };
-  }, [prefersReducedMotion, completed]);
+  }, [prefersReducedMotion]);
 
   return (
     <div
       className="body-symptoms-scroller"
       ref={wrapperRef}
-      style={prefersReducedMotion || completed ? undefined : { height: FALLBACK_WRAPPER_HEIGHT }}
+      style={prefersReducedMotion ? undefined : { height: FALLBACK_WRAPPER_HEIGHT }}
     >
       <div
-        className={`body-symptoms-pinned${!prefersReducedMotion && !completed ? " body-symptoms-pinned--sticky" : ""}`}
+        className={`body-symptoms-pinned${prefersReducedMotion ? "" : " body-symptoms-pinned--sticky"}`}
         ref={pinnedRef}
       >
         <div className="body-symptoms-intro">
@@ -244,7 +228,7 @@ export function BodySymptomsSection() {
           })}
         </div>
 
-        {!prefersReducedMotion && !completed && (
+        {!prefersReducedMotion && (
           <p className={`body-symptoms-hint${revealed >= STEPS ? " body-symptoms-hint--done" : ""}`} aria-hidden="true">
             Keep scrolling to see how PMOS affects the body ↓
           </p>
