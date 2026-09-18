@@ -9,6 +9,7 @@ import { SegmentedSelector } from "./components/SegmentedSelector";
 import { NotebookTimeline, NotebookEntry } from "./components/NotebookTimeline";
 import { ExpandableText } from "./components/Expandable-Text";
 import { EventsTimeline, EventEntry } from "./components/EventsTimeline";
+import { HumanPracticesInterviews, HPSection, Interviewee } from "./components/HumanPracticesInterviews";
 import { PmosOverview } from "./components/PmosOverview";
 import { BodySymptomsSection } from "./components/BodySymptomsSection";
 import { InflammationSliderSection } from "./components/InflammationSliderSection";
@@ -34,4 +35,7 @@ export const mdxComponents = {
   ExpandableText,
   EventsTimeline,
   EventEntry,
+  HumanPracticesInterviews,
+  HPSection,
+  Interviewee,
 };

@@ -2572,3 +2572,281 @@ body.home-fullscreen {
     padding: 2rem 1.5rem;
   }
 }
+
+/* HUMAN PRACTICES INTERVIEWS
+   Generated with Claude Sonnet 5 (Anthropic), 2026-09-18
+   Purpose: each stakeholder category (HPSection) is its own bordered card
+   (title + carousel) so sections read as clearly separate blocks, with a
+   context blurb below the card. The carousel auto-scrolls continuously —
+   same duplicate-the-track technique as the footer's .sponsor-carousel,
+   pausing on hover so a moving target can still be clicked — and clicking a
+   person opens a shared modal (same click-to-open convention as
+   .team-member-card / .events-timeline-card, reusing its fade/scale-in
+   keyframes) with their photo on the left and the full interview write-up
+   on the right. */
+.hp-section {
+  margin: 3rem 0;
+}
+
+.hp-section-card {
+  border: 1px solid rgba(51, 40, 63, 0.15);
+  border-radius: 1.25rem;
+  background-color: var(--color-page-bg);
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.08);
+  padding: 1.5rem 1.5rem 0.5rem;
+}
+
+[data-theme="dark"] .hp-section-card {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.hp-section-title {
+  margin: 0 0 1rem;
+}
+
+.hp-carousel {
+  overflow: hidden;
+  width: 100%;
+  mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+}
+
+.hp-carousel-track {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  width: max-content;
+  padding-bottom: 1rem;
+  animation: hp-carousel-scroll var(--hp-carousel-duration, 20s) linear infinite;
+}
+
+.hp-carousel:hover .hp-carousel-track,
+.hp-carousel:focus-within .hp-carousel-track {
+  animation-play-state: paused;
+}
+
+.hp-carousel-item {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  width: 150px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+.hp-carousel-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 0.9rem;
+  overflow: hidden;
+  background-color: var(--color-body-bg);
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.12);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.hp-carousel-item:hover .hp-carousel-photo,
+.hp-carousel-item:focus-visible .hp-carousel-photo {
+  transform: scale(1.05);
+  box-shadow: 0 1rem 2.5rem rgba(51, 40, 63, 0.22);
+}
+
+.hp-carousel-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hp-carousel-photo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.hp-carousel-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+@keyframes hp-carousel-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Reduced motion: stop the auto-scroll, hide the duplicate tiles it needed
+   for a seamless loop, and let the (now un-doubled) track scroll natively
+   instead — every interviewee stays reachable without relying on motion. */
+@media (prefers-reduced-motion: reduce) {
+  .hp-carousel {
+    overflow-x: auto;
+  }
+
+  .hp-carousel-track {
+    animation: none;
+  }
+
+  .hp-carousel-item[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+.hp-section-context {
+  max-width: 72ch;
+  margin-top: 1.25rem;
+  opacity: 0.9;
+}
+
+.hp-section-context :last-child {
+  margin-bottom: 0;
+}
+
+/* Interview detail popup */
+.hp-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background-color: rgba(20, 15, 25, 0.72);
+  animation: events-fade-in 0.2s ease;
+}
+
+.hp-modal {
+  position: relative;
+  width: min(900px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
+  background-color: var(--color-page-bg);
+  border-radius: 1.25rem;
+  padding: 2.5rem;
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.35);
+  animation: events-modal-in 0.25s ease;
+}
+
+.hp-modal:focus {
+  outline: none;
+}
+
+.hp-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(51, 40, 63, 0.08);
+  color: var(--color-text);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.hp-modal-body {
+  display: flex;
+  gap: 2.5rem;
+}
+
+.hp-modal-photo-col {
+  flex: none;
+  width: 260px;
+}
+
+.hp-modal-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 1rem;
+  overflow: hidden;
+  background-color: var(--color-body-bg);
+}
+
+.hp-modal-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hp-modal-photo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.hp-modal-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-top: 0.75rem;
+}
+
+.hp-modal-caption strong {
+  font-size: 1.1rem;
+}
+
+.hp-modal-caption span {
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+
+.hp-modal-summary-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.hp-modal-summary-label {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.6;
+}
+
+.hp-modal-summary-content :last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 700px) {
+  .hp-modal-body {
+    flex-direction: column;
+  }
+
+  .hp-modal-photo-col {
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto;
+  }
+
+  .hp-modal-caption {
+    align-items: center;
+    text-align: center;
+  }
+}
