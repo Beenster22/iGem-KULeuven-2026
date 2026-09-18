@@ -77,43 +77,75 @@ function ImageRotator({ images, alt }: ImageRotatorProps) {
   );
 }
 
-interface PhotoCollageProps {
+// Hand-tuned CSS grid-template-areas layouts, one per photo count. Each
+// row string is a set of area letters ("a b", "a a b c", ...) that tiles
+// its grid completely — no gaps, no leftover ragged row — so the whole
+// collage always reads as a single clean rectangle with varied tile sizes.
+const MOSAIC_PATTERNS: Record<number, string[]> = {
+  1: ["a"],
+  2: ["a b"],
+  3: ["a a b", "a a c"],
+  4: ["a a b c", "a a b d"],
+  5: ["a a b b", "a a c d", "e e c d"],
+  6: ["a a b c", "a a d c", "e e d f"],
+  7: ["a a b c", "a a d c", "e f d g"],
+};
+const MOSAIC_MAX = 7;
+const AREA_LETTERS = "abcdefg";
+
+function buildMosaic(images: string[]) {
+  const hasOverflow = images.length > MOSAIC_MAX;
+  const shown = images.slice(0, hasOverflow ? MOSAIC_MAX - 1 : MOSAIC_MAX);
+  const overflow = hasOverflow ? images.length - shown.length : 0;
+  const patternKey = shown.length + (overflow > 0 ? 1 : 0);
+  const rows = MOSAIC_PATTERNS[patternKey] ?? MOSAIC_PATTERNS[MOSAIC_MAX];
+  const columns = rows[0].split(" ").length;
+  return { shown, overflow, rows, columns };
+}
+
+interface EventGalleryProps {
   images: string[];
-  alt: string;
   onOpen: (index: number) => void;
 }
 
-// Fixed-size photo collage for an event's gallery — the grid layout (how many
-// tiles, and which ones span extra rows/columns) is picked automatically from
-// how many photos there are, so every event gets a full, evenly-filled block
-// regardless of photo count. Events with more than 6 photos show the first 6
-// with a "+N" badge on the last tile; the lightbox still cycles through all
-// of them via its arrow keys.
-function PhotoCollage({ images, alt, onOpen }: PhotoCollageProps) {
-  if (images.length === 0) return null;
-
-  const displayCount = Math.min(images.length, 6);
-  const extra = images.length - displayCount;
-  const tiles = images.slice(0, displayCount);
+// Renders an event's photos as a mosaic that fills one fixed-size rectangle,
+// mixing tile sizes per buildMosaic's pattern rather than a uniform grid.
+function EventGallery({ images, onOpen }: EventGalleryProps) {
+  const { shown, overflow, rows, columns } = useMemo(() => buildMosaic(images), [images]);
 
   return (
-    <div className={`events-collage events-collage-${displayCount}`}>
-      {tiles.map((src, index) => (
+    <div
+      className="events-modal-gallery"
+      style={{
+        gridTemplateAreas: rows.map((row) => `"${row}"`).join(" "),
+        gridTemplateColumns: `repeat(${columns}, 1fr)`,
+        gridTemplateRows: `repeat(${rows.length}, 1fr)`,
+      }}
+    >
+      {shown.map((src, index) => (
         <button
           key={src}
           type="button"
-          className="events-collage-item"
+          className="events-modal-gallery-item"
+          style={{ gridArea: AREA_LETTERS[index] }}
           onClick={() => onOpen(index)}
-          aria-label={`View photo ${index + 1} of ${alt} full size`}
+          aria-label={`View photo ${index + 1} of ${images.length} full size`}
         >
           <img src={src} alt="" />
-          {extra > 0 && index === displayCount - 1 && (
-            <span className="events-collage-more" aria-hidden="true">
-              +{extra}
-            </span>
-          )}
         </button>
       ))}
+      {overflow > 0 && (
+        <button
+          type="button"
+          className="events-modal-gallery-item events-modal-gallery-more"
+          style={{ gridArea: AREA_LETTERS[shown.length] }}
+          onClick={() => onOpen(shown.length)}
+          aria-label={`View all ${images.length} photos`}
+        >
+          <img src={images[shown.length]} alt="" />
+          <span className="events-modal-gallery-more-label">+{overflow}</span>
+        </button>
+      )}
     </div>
   );
 }
@@ -229,11 +261,12 @@ export function EventsTimeline({ children }: EventsTimelineProps) {
               </span>
               <h2 className="events-modal-title">{openEvent.title}</h2>
             </div>
-            <PhotoCollage
-              images={openEvent.images}
-              alt={openEvent.title}
-              onOpen={(index) => setLightbox({ images: openEvent.images, index })}
-            />
+            {openEvent.images.length > 0 && (
+              <EventGallery
+                images={openEvent.images}
+                onOpen={(index) => setLightbox({ images: openEvent.images, index })}
+              />
+            )}
             <div className="events-modal-content">{openEvent.content}</div>
           </div>
         </div>
