@@ -1386,20 +1386,25 @@ a[data-footnote-ref]:focus {
   font-weight: 800;
 }
 
+/* Fixed-height rectangle — grid-template-areas/-columns/-rows are set
+   inline per event (see EventGallery's buildMosaic), so whatever mix of
+   tile sizes it picks always tiles this one bounding box with no gaps. */
 .events-modal-gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1rem;
+  gap: 0.6rem;
+  height: clamp(220px, 34vw, 420px);
   margin-bottom: 2rem;
 }
 
 .events-modal-gallery-item {
+  position: relative;
+  width: 100%;
+  height: 100%;
   border: none;
   padding: 0;
   background: none;
   border-radius: 0.75rem;
   overflow: hidden;
-  aspect-ratio: 4 / 3;
   cursor: zoom-in;
 }
 
@@ -1414,6 +1419,25 @@ a[data-footnote-ref]:focus {
 .events-modal-gallery-item:hover img,
 .events-modal-gallery-item:focus-visible img {
   transform: scale(1.06);
+}
+
+/* Final tile when there are more photos than the mosaic shows — dims its
+   image and overlays a "+N" count; clicking it opens the lightbox so the
+   rest are reachable via the arrow keys. */
+.events-modal-gallery-more img {
+  filter: brightness(0.45);
+}
+
+.events-modal-gallery-more-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  pointer-events: none;
 }
 
 .events-modal-content :last-child {
@@ -1528,6 +1552,10 @@ a[data-footnote-ref]:focus {
 
   .events-modal-title {
     font-size: 1.5rem;
+  }
+
+  .events-modal-gallery {
+    height: clamp(200px, 60vw, 320px);
   }
 
   .events-lightbox-nav {
@@ -1888,104 +1916,152 @@ body.home-fullscreen {
   color: var(--color-text);
 }
 
-/* BODY SYMPTOMS SECTION
-   Layout is fixed from first paint — text fills the left ~2/3 of the row,
-   the figure sits flush to the right edge via space-between on the two flex
-   items. Once scrolled into view, BodySymptomsSection.tsx mounts the figure
-   after a timer; only the diagram itself animates in (see
-   body-symptoms-figure-in below), the surrounding layout never moves. The
-   info panel keeps showing the overview paragraph throughout — it only
-   switches to a specific organ's blurb once the visitor clicks one. */
-.body-symptoms-layout {
+/* BODY SYMPTOMS SECTION ("What is PMOS?")
+   Heading + overview paragraph centered above a centered body diagram.
+   Scroll-linked reveal: BodySymptomsSection.tsx sizes .body-symptoms-scroller
+   tall enough to hold one scroll "step" per symptom, and
+   .body-symptoms-pinned sticks to the top of the viewport while the visitor
+   scrolls through that height — once the wrapper runs out of extra height,
+   the sticky element scrolls away with the rest of the page and normal
+   scrolling resumes on its own (no wheel-event hijacking involved).
+   prefers-reduced-motion skips the sticky pin (see the component) and this
+   renders as a normal static block with every symptom already shown. */
+.body-symptoms-scroller {
+  position: relative;
+}
+
+.body-symptoms-pinned {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  min-height: 300px;
-  overflow-x: clip;
+  gap: 1.75rem;
+  text-align: center;
+  padding: 2.5rem 0;
 }
 
-.body-symptoms-info {
-  flex: 1 1 auto;
-  max-width: 66%;
+/* top: 5rem matches .section-progress-box's sticky offset elsewhere in this
+   file — enough to clear the 64px fixed navbar with a little breathing room. */
+.body-symptoms-pinned--sticky {
+  position: sticky;
+  top: 5rem;
 }
 
-.body-symptoms-figure {
-  flex-shrink: 0;
+.body-symptoms-intro {
+  max-width: 640px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .body-symptoms-figure {
-    animation: body-symptoms-figure-in 1.6s ease both;
-  }
-
-  @keyframes body-symptoms-figure-in {
-    from {
-      opacity: 0;
-      transform: translateX(100vw);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-}
-
-.body-symptoms-info-heading {
+.body-symptoms-heading {
   margin: 0 0 0.5rem;
 }
 
-.body-symptoms-info-blurb {
+.body-symptoms-blurb {
   margin: 0;
   opacity: 0.9;
 }
 
-@media (max-width: 767.98px) {
-  .body-symptoms-layout {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .body-symptoms-info {
-    max-width: none;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    @keyframes body-symptoms-figure-in {
-      from {
-        opacity: 0;
-        transform: translateY(100px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  }
+.body-symptoms-hint {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
 }
 
-/* Clickable organs: cursor affordance + the "selected" highlight.
-   #uterus's positioning matrix now lives on an inner <g> (see
-   BodyDiagram.tsx) specifically so this outer, click-targeted <g id="uterus">
-   has no transform of its own — mixing a baked-in SVG matrix with a CSS
-   transform-origin here previously re-anchored the whole matrix around the
-   shape's center instead of (0,0), visibly shifting it out of place. */
-.body-symptoms-figure svg #brain,
-.body-symptoms-figure svg #uterus,
-.body-symptoms-figure svg #pancreas,
-.body-symptoms-figure svg #heart,
-.body-symptoms-figure svg #hair {
-  cursor: pointer;
-  transform-box: fill-box;
-  transform-origin: center;
-  transition:
-    transform 0.2s ease,
-    filter 0.2s ease;
+.body-symptoms-hint--done {
+  opacity: 0;
 }
 
-.body-organ-selected {
-  transform: scale(1.12);
-  filter: brightness(1.25) saturate(1.3);
+/* Figure + label row — a fixed 760:400 virtual canvas (see VIRTUAL_W/H in
+   the component) that scales as one unit via aspect-ratio, so every
+   percentage/SVG coordinate the component computes from that canvas still
+   lines up however large or small the row actually renders. container-type
+   lets the labels' font-size (in cqw, below) shrink and grow with it too. */
+.body-symptoms-figure-row {
+  position: relative;
+  width: min(760px, 94vw);
+  aspect-ratio: 760 / 400;
+  margin: 0 auto;
+  container-type: inline-size;
+}
+
+.body-symptoms-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* The bent leader line from each organ out to its label — an infographic
+   pointer, not a tooltip: no box, no shadow, just a line and plain text. */
+.symptom-callout-path {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.symptom-callout-path--visible {
+  opacity: 0.85;
+}
+
+.symptom-callout-dot {
+  fill: var(--color-accent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.symptom-callout-dot--visible {
+  opacity: 1;
+}
+
+.body-symptoms-figure {
+  position: absolute;
+  left: 36.84%;
+  top: 0;
+  width: 26.32%;
+  height: 100%;
+}
+
+.body-symptoms-figure-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Plain floating text (no card/border/background) — label + a short phrase,
+   positioned at its assigned slot and right/left-aligned so it reads toward
+   the leader line that points back at the body. Stays in the DOM once
+   revealed=false (for a smooth fade-in) but is inert until its step hits. */
+.symptom-callout {
+  position: absolute;
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  font-size: clamp(0.6rem, 1.9cqw, 0.95rem);
+  line-height: 1.3;
+  pointer-events: none;
+}
+
+.symptom-callout--visible {
+  opacity: 1;
+}
+
+.symptom-callout--left {
+  text-align: right;
+}
+
+.symptom-callout--right {
+  text-align: left;
+}
+
+.symptom-callout strong {
+  font-size: clamp(0.65rem, 2.1cqw, 1rem);
 }
 
 /* INFLAMMATION SLIDER SECTION
