@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Config, Data, Layout } from "plotly.js";
 import mic90 from "./data/mic-90.json";
 import mic85 from "./data/mic-85.json";
+import { spaceBrackets } from "./micBrackets";
 
 type Threshold = "90" | "85";
 
@@ -30,12 +31,36 @@ const CONFIG: Partial<Config> = {
 // below the chart and text shrinks instead.
 const NARROW_BREAKPOINT = 480;
 
+// Vertical space inside the container that is neither margin nor plot area:
+// the container's padding plus the x-axis title/tick automargin.
+const PLOT_CHROME_ALLOWANCE = 55;
+
+// Legend-only entries explaining the significance stars drawn on the chart.
+// They hold no data (a single empty point) and an invisible marker, so the
+// legend shows just their text.
+const SIGNIFICANCE_LEGEND: Data[] = ["* = p<0.05", "** = p<0.01"].map(
+  (name) => ({
+    type: "scatter",
+    mode: "markers",
+    x: [null],
+    y: [null],
+    name,
+    marker: { size: 0, color: "rgba(0,0,0,0)" },
+    hoverinfo: "skip",
+  }),
+);
+
+// Plotly's computed layout, not part of its public typings.
+type PlotlyElement = HTMLDivElement & {
+  _fullLayout?: { _size: { h: number } };
+};
+
 // Loaded dynamically so the ~1MB plotly bundle only downloads on pages that
 // actually render this chart, instead of bloating every route's bundle.
 export function MicChart() {
   const containerRef = useRef<HTMLDivElement>(null);
   const plotlyRef = useRef<typeof import("plotly.js") | null>(null);
-  const [threshold, setThreshold] = useState<Threshold>("90");
+  const [threshold, setThreshold] = useState<Threshold>("85");
   const [ready, setReady] = useState(false);
   const [narrow, setNarrow] = useState(false);
 
@@ -67,52 +92,90 @@ export function MicChart() {
     const el = containerRef.current;
     if (!Plotly || !el) return;
 
-    const { data, layout } = DATASETS[threshold];
-    // The R export's side legend needs far more width than this content
-    // column ever has: at any container width Plotly's automargin reserves
-    // whatever space the longest legend label demands, which crushed the
-    // plot itself down to a sliver of its container. A legend below the
-    // chart has a bounded height instead (it wraps onto more lines rather
-    // than eating plot width), so it's used at every width, not just narrow
-    // ones — only the font size/margins scale down further below the
-    // breakpoint.
-    // The trace colors (e.g. a near-black bar fill for DSM1447) were chosen
-    // for a light plot background — pin paper/plot background to white
-    // rather than following the site's dark mode, so bars and legend swatches
-    // stay visible instead of blending into a dark page background.
-    const themedLayout: Partial<Layout> = {
-      ...layout,
-      title: {
-        // Plotly titles don't wrap on their own, and the full sentence is
-        // too long to fit on one line at any width this column reaches —
-        // break it manually instead of letting it overflow. The narrow
-        // layout's font/plot are small enough to need a third line too.
-        text: narrow
-          ? `Minimal Inhibitory Concentration<br>of <i>P. vulgatus</i> DSM1447 and RC1806<br>to different antibiotics, at a cutoff of ${threshold}%`
-          : `Minimal Inhibitory Concentration of <i>P. vulgatus</i> DSM1447 and RC1806<br>to different antibiotics, at a cutoff of ${threshold}%`,
-        font: { size: narrow ? 13 : 18 },
-        x: 0.5,
-        xanchor: "center",
-      },
-      paper_bgcolor: "#ffffff",
-      plot_bgcolor: "#ffffff",
-      font: { color: "#33283f" },
-      autosize: true,
-      margin: narrow
-        ? { l: 45, r: 10, t: 105, b: 150 }
-        : { l: 60, r: 20, t: 90, b: 110 },
-      legend: {
-        orientation: "h",
-        x: 0.5,
-        xanchor: "center",
-        y: narrow ? -0.5 : -0.3,
-        font: { size: narrow ? 11 : 14 },
-      },
-      xaxis: { ...layout.xaxis, tickfont: { size: narrow ? 11 : 18 } },
-      yaxis: { ...layout.yaxis, tickfont: { size: narrow ? 11 : 18 } },
+    const margin = narrow
+      ? { l: 45, r: 10, t: 105, b: 150 }
+      : { l: 60, r: 20, t: 90, b: 110 };
+    const { data: rawData, layout: rawLayout } = DATASETS[threshold];
+
+    // `plotHeight` is the plot area's height in px, used to space the
+    // significance brackets so their stars never touch a line.
+    const draw = (plotHeight: number) => {
+      const { data: spacedData, layout } = spaceBrackets(
+        rawData,
+        rawLayout,
+        plotHeight,
+      );
+      // The significance brackets are exported as unnamed line traces; keep
+      // them from producing hover tooltips with meaningless coordinates.
+      const data = [
+        ...spacedData.map((trace) =>
+          trace.type === "scatter" && trace.mode === "lines"
+            ? { ...trace, hoverinfo: "skip" as const }
+            : trace,
+        ),
+        ...SIGNIFICANCE_LEGEND,
+      ];
+      // The R export's side legend needs far more width than this content
+      // column ever has: at any container width Plotly's automargin reserves
+      // whatever space the longest legend label demands, which crushed the
+      // plot itself down to a sliver of its container. A legend below the
+      // chart has a bounded height instead (it wraps onto more lines rather
+      // than eating plot width), so it's used at every width, not just narrow
+      // ones — only the font size/margins scale down further below the
+      // breakpoint.
+      // The trace colors (e.g. a near-black bar fill for DSM1447) were chosen
+      // for a light plot background — pin paper/plot background to white
+      // rather than following the site's dark mode, so bars and legend swatches
+      // stay visible instead of blending into a dark page background.
+      const themedLayout: Partial<Layout> = {
+        ...layout,
+        title: {
+          // Plotly titles don't wrap on their own, and the full sentence is
+          // too long to fit on one line at any width this column reaches —
+          // break it manually instead of letting it overflow. The narrow
+          // layout's font/plot are small enough to need a third line too.
+          text: narrow
+            ? `Minimal Inhibitory Concentration<br>of <i>P. vulgatus</i> DSM1447 and RCC1806<br>to different antibiotics, at a cutoff of ${threshold}%`
+            : `Minimal Inhibitory Concentration of <i>P. vulgatus</i> DSM1447 and RCC1806<br>to different antibiotics, at a cutoff of ${threshold}%`,
+          font: { size: narrow ? 13 : 18 },
+          x: 0.5,
+          xanchor: "center",
+        },
+        paper_bgcolor: "#ffffff",
+        plot_bgcolor: "#ffffff",
+        font: { color: "#33283f" },
+        autosize: true,
+        margin,
+        legend: {
+          orientation: "h",
+          x: 0.5,
+          xanchor: "center",
+          y: narrow ? -0.5 : -0.3,
+          font: { size: narrow ? 11 : 14 },
+        },
+        xaxis: { ...layout.xaxis, tickfont: { size: narrow ? 11 : 18 } },
+        yaxis: { ...layout.yaxis, tickfont: { size: narrow ? 11 : 18 } },
+      };
+
+      return Plotly.react(el, data, themedLayout, CONFIG);
     };
 
-    void Plotly.react(el, data, themedLayout, CONFIG);
+    // The plot area's real height only exists once Plotly has laid the chart
+    // out (automargin depends on the legend and axis titles), so draw with an
+    // estimate first and redraw once with the measured value.
+    let cancelled = false;
+    const estimate = Math.max(
+      el.clientHeight - margin.t - margin.b - PLOT_CHROME_ALLOWANCE,
+      100,
+    );
+    void draw(estimate).then(() => {
+      if (cancelled) return;
+      const measured = (el as PlotlyElement)._fullLayout?._size.h;
+      if (measured && Math.abs(measured - estimate) > 2) void draw(measured);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [ready, threshold, narrow]);
 
   useEffect(() => {
@@ -133,20 +196,20 @@ export function MicChart() {
         <button
           type="button"
           role="tab"
-          aria-selected={threshold === "90"}
-          className={`segmented-selector-segment${threshold === "90" ? " active" : ""}`}
-          onClick={() => setThreshold("90")}
-        >
-          90% cutoff
-        </button>
-        <button
-          type="button"
-          role="tab"
           aria-selected={threshold === "85"}
           className={`segmented-selector-segment${threshold === "85" ? " active" : ""}`}
           onClick={() => setThreshold("85")}
         >
           85% cutoff
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={threshold === "90"}
+          className={`segmented-selector-segment${threshold === "90" ? " active" : ""}`}
+          onClick={() => setThreshold("90")}
+        >
+          90% cutoff
         </button>
       </div>
       <div className="mic-chart-plot" ref={containerRef}>
