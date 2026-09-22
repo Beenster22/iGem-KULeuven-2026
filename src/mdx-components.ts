@@ -13,6 +13,7 @@ import { HumanPracticesInterviews, HPSection, Interviewee } from "./components/H
 import { PmosOverview } from "./components/PmosOverview";
 import { BodySymptomsSection } from "./components/BodySymptomsSection";
 import { InflammationSliderSection } from "./components/InflammationSliderSection";
+import { BshStreamAnimation } from "./components/BshStreamAnimation";
 import { MicChart } from "./components/MicChart";
 
 export const mdxComponents = {
@@ -22,6 +23,7 @@ export const mdxComponents = {
   PageLayout,
   PmosOverview,
   BodySymptomsSection,
+  BshStreamAnimation,
   InflammationSliderSection,
   MicChart,
   Callout,
