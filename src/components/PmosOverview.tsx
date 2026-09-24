@@ -3,6 +3,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { PMOS_TOTAL } from "./pmosContinentStats";
+import { MicrobeBackdrop } from "./MicrobeBackdrop";
 
 // three.js + globe.gl add ~700KB (gzipped) to the bundle — lazy-loaded so
 // that weight is only fetched once a visitor actually scrolls this far,
@@ -59,7 +60,8 @@ export function PmosOverview() {
   const count = useCountUp(PMOS_TOTAL, inView);
 
   return (
-    <section className="pmos-overview">
+    <section className="pmos-overview home-section--wave-top">
+      <MicrobeBackdrop count={4} seed={1} />
       <div className="pmos-counter" ref={headingRef}>
         <h2 className="pmos-counter-heading">
           <span className="pmos-counter-number">{count.toLocaleString()}</span> people are affected

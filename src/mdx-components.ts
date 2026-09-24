@@ -15,6 +15,8 @@ import { BodySymptomsSection } from "./components/BodySymptomsSection";
 import { InflammationSliderSection } from "./components/InflammationSliderSection";
 import { BshStreamAnimation } from "./components/BshStreamAnimation";
 import { MicChart } from "./components/MicChart";
+import { MicrobeBackdrop } from "./components/MicrobeBackdrop";
+import { TwoGutsSection } from "./components/TwoGutsSection";
 
 export const mdxComponents = {
   TeamMembers,
@@ -26,6 +28,8 @@ export const mdxComponents = {
   BshStreamAnimation,
   InflammationSliderSection,
   MicChart,
+  MicrobeBackdrop,
+  TwoGutsSection,
   Callout,
   TabbedSections,
   TabSection,

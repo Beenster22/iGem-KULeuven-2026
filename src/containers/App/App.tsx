@@ -72,7 +72,7 @@ const App = () => {
                 element={
                   <>
                     <HomeHero />
-                    <main className="page-body">
+                    <main className="page-body page-body--home">
                       <PageShell hideIndex>
                         <Component />
                       </PageShell>

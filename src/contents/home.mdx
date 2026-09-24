@@ -1,6 +1,7 @@
 <PmosOverview />
 
-<div className="home-section home-section--contrast">
+<div className="home-section home-section--contrast home-section--wave-top">
+<MicrobeBackdrop count={9} seed={2} />
 <div className="container">
 
 <BodySymptomsSection />
@@ -8,7 +9,26 @@
 </div>
 </div>
 
-<div className="home-section home-section--body">
+<div className="home-section home-section--page home-section--wave-top">
+<MicrobeBackdrop count={6} seed={5} />
+<div className="container">
+
+{/* TODO(team): check the wording below and these three references against
+    the papers themselves (direction of change, which measures, author
+    spelling/years) before publishing — AI-drafted, not yet verified. */}
+<TwoGutsSection heading="PMOS reaches the gut">
+
+Research has linked PMOS to changes in the gut microbiome: the community of bacteria living in the gut tends to be less diverse, and differently balanced, than in people without PMOS. Scroll to see what that looks like.
+
+<p className="two-guts-source">Sources: Lindheim et al., 2017, <em>PLoS ONE</em>; Torres et al., 2018, <em>J Clin Endocrinol Metab</em>; Qi et al., 2019, <em>Nature Medicine</em>.</p>
+
+</TwoGutsSection>
+
+</div>
+</div>
+
+<div className="home-section home-section--body home-section--wave-top">
+<MicrobeBackdrop count={4} seed={4} />
 <div className="container">
 
 <BshStreamAnimation />
@@ -16,7 +36,8 @@
 </div>
 </div>
 
-<div className="home-section home-section--contrast">
+<div className="home-section home-section--contrast home-section--wave-top home-section--wave-into-footer">
+<MicrobeBackdrop count={4} seed={3} />
 <div className="container">
 
 <InflammationSliderSection />
