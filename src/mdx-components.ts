@@ -15,6 +15,8 @@ import { BodySymptomsSection } from "./components/BodySymptomsSection";
 import { InflammationSliderSection } from "./components/InflammationSliderSection";
 import { BshStreamAnimation } from "./components/BshStreamAnimation";
 import { MicChart } from "./components/MicChart";
+import { MilestoneArc, Milestone } from "./components/MilestoneArc";
+import { FanSelector, FanBranch } from "./components/FanSelector";
 
 export const mdxComponents = {
   TeamMembers,
@@ -26,6 +28,10 @@ export const mdxComponents = {
   BshStreamAnimation,
   InflammationSliderSection,
   MicChart,
+  MilestoneArc,
+  Milestone,
+  FanSelector,
+  FanBranch,
   Callout,
   TabbedSections,
   TabSection,

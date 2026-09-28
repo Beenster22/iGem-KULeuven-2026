@@ -2931,3 +2931,370 @@ body.home-fullscreen {
     text-align: center;
   }
 }
+
+/* MILESTONE ARC
+   Generated with Claude Opus 5.5 (Anthropic), 2026-09-28
+   Purpose: Entrepreneurship "Problem and mission" journey arc (see
+   MilestoneArc.tsx). The page content sits on the lavender --color-body-bg,
+   so the untravelled road uses a translucent --color-text instead of
+   lavender, and the travelled part uses the brand teal, which reads on both
+   the light and dark body backgrounds. */
+.milestone-arc {
+  margin: 1.5rem 0;
+}
+
+.milestone-arc-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.milestone-arc-road,
+.milestone-arc-road-travelled,
+.milestone-arc-road-dashes {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.milestone-arc-road {
+  stroke: var(--color-text);
+  stroke-opacity: 0.18;
+  stroke-width: 22;
+}
+
+.milestone-arc-road-travelled {
+  stroke: #2fa4a9;
+  stroke-width: 22;
+  transition: stroke-dashoffset 0.6s ease;
+}
+
+.milestone-arc-road-dashes {
+  stroke: #eaf4f5;
+  stroke-opacity: 0.85;
+  stroke-width: 3;
+  stroke-dasharray: 16 14;
+}
+
+.milestone-arc-stop {
+  cursor: pointer;
+}
+
+.milestone-arc-hit {
+  fill: transparent;
+}
+
+.milestone-arc-icon {
+  opacity: 0.45;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+.milestone-arc-stop:hover .milestone-arc-icon {
+  opacity: 0.75;
+}
+
+.milestone-arc-stop.active .milestone-arc-icon {
+  opacity: 1;
+  transform: scale(1.12);
+}
+
+.milestone-arc-icon-stroke {
+  stroke: var(--color-text);
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.milestone-arc-icon-bar {
+  fill: var(--color-text);
+}
+
+.milestone-arc-icon-fill-pink {
+  fill: #f1c3d4;
+  stroke: var(--color-text);
+  stroke-width: 6;
+  stroke-linejoin: round;
+}
+
+.milestone-arc-icon-fill-teal {
+  fill: #b9e3e5;
+}
+
+.milestone-arc-icon-fill-teal-strong {
+  fill: #2fa4a9;
+}
+
+.milestone-arc-dot {
+  fill: var(--color-text);
+  stroke: var(--color-body-bg);
+  stroke-width: 4;
+  transition: r 0.25s ease;
+}
+
+.milestone-arc-stop.active .milestone-arc-dot {
+  fill: #2fa4a9;
+}
+
+.milestone-arc-labels {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.milestone-arc-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.6rem 0.75rem;
+  border: 2px solid transparent;
+  border-radius: 0.75rem;
+  background: transparent;
+  color: var(--color-text);
+  text-align: center;
+  opacity: 0.6;
+  transition:
+    opacity 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.milestone-arc-label:hover {
+  opacity: 0.85;
+}
+
+.milestone-arc-label.active {
+  opacity: 1;
+  border-color: #2fa4a9;
+  background-color: rgba(47, 164, 169, 0.12);
+}
+
+.milestone-arc-label-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.milestone-arc-label-subtitle {
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.milestone-arc-content,
+.fan-selector-content {
+  margin-top: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  border-left: 4px solid #2fa4a9;
+  border-radius: 0.5rem;
+  background-color: rgba(234, 244, 245, 0.45);
+  animation: milestone-arc-fade-in 0.3s ease;
+}
+
+[data-theme="dark"] .milestone-arc-content,
+[data-theme="dark"] .fan-selector-content {
+  background-color: rgba(234, 244, 245, 0.06);
+}
+
+.milestone-arc-content-title {
+  margin-bottom: 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.milestone-arc-content > :last-child,
+.fan-selector-content > :last-child {
+  margin-bottom: 0;
+}
+
+@keyframes milestone-arc-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .milestone-arc-labels {
+    grid-template-columns: 1fr;
+  }
+
+  .milestone-arc-label-title {
+    font-size: 1.05rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .milestone-arc-road-travelled,
+  .milestone-arc-icon,
+  .milestone-arc-dot {
+    transition: none;
+  }
+
+  .milestone-arc-content,
+  .fan-selector-content {
+    animation: none;
+  }
+}
+
+/* FAN SELECTOR
+   Generated with Claude Opus 5.5 (Anthropic), 2026-09-28
+   Purpose: hub-and-fan selector for the Entrepreneurship "Risks and
+   mitigation" section (see FanSelector.tsx). The bands use fixed brand
+   colors (soft pink / light background), so their outlines and text use a
+   fixed dark purple rather than the theme-varying --color-text. */
+.fan-selector {
+  margin: 1.5rem 0;
+}
+
+.fan-selector-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.fan-selector-band {
+  cursor: pointer;
+  outline: none;
+}
+
+.fan-selector-band path {
+  stroke: #33283f;
+  stroke-width: 3;
+  stroke-linejoin: round;
+  opacity: 0.72;
+  transition:
+    opacity 0.2s ease,
+    stroke 0.2s ease,
+    stroke-width 0.2s ease;
+}
+
+.fan-selector-band:hover path {
+  opacity: 0.9;
+}
+
+.fan-selector-band.active path {
+  opacity: 1;
+  stroke: #2fa4a9;
+  stroke-width: 7;
+}
+
+.fan-selector-band:focus-visible path {
+  stroke: #2fa4a9;
+  stroke-dasharray: 10 6;
+}
+
+.fan-selector-band text {
+  fill: #33283f;
+  pointer-events: none;
+  user-select: none;
+}
+
+.fan-selector-band-label {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.fan-selector-band-subtitle {
+  font-size: 24px;
+}
+
+.fan-selector-band:not(.active) text,
+.fan-selector-band:not(.active) .fan-selector-icon {
+  opacity: 0.75;
+}
+
+.fan-selector-icon {
+  fill: none;
+  stroke: #33283f;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.fan-selector-band.active .fan-selector-icon {
+  stroke: #2fa4a9;
+}
+
+.fan-selector-hub {
+  fill: #33283f;
+  stroke: #eaf4f5;
+  stroke-width: 4;
+}
+
+.fan-selector-hub-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #eaf4f5;
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.fan-selector-tabs {
+  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fan-selector-tab {
+  padding: 0.65rem 1rem;
+  border: 2px solid rgba(51, 40, 63, 0.35);
+  border-radius: 0.5rem;
+  color: #33283f;
+  font-weight: 600;
+  text-align: left;
+  opacity: 0.8;
+}
+
+.fan-selector-tab.active {
+  border-color: #2fa4a9;
+  box-shadow: 0 0 0 2px #2fa4a9;
+  opacity: 1;
+}
+
+.fan-selector-content-title {
+  margin-bottom: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+/* Long three-column risk tables: fixed column proportions, and a minimum
+   width so they scroll inside .table-responsive on phones rather than
+   squeezing each column to a few words. */
+.risk-table {
+  min-width: 640px;
+  table-layout: fixed;
+}
+
+.risk-table th:nth-child(1),
+.risk-table td:nth-child(1) {
+  width: 26%;
+}
+
+.risk-table th:nth-child(2),
+.risk-table td:nth-child(2) {
+  width: 30%;
+}
+
+@media (max-width: 575.98px) {
+  .fan-selector-svg {
+    display: none;
+  }
+
+  .fan-selector-tabs {
+    display: flex;
+  }
+}
