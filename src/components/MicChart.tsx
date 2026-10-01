@@ -1,7 +1,9 @@
 // Generated with Claude Sonnet 5 (Anthropic), 2026-09-01
-// Purpose: interactive MIC (minimum inhibitory concentration) chart with a
-// toggle between the two cutoffs used to call an MIC value, rendered from
-// data/layout JSON exported from the team's R/plotly analysis.
+// Purpose: interactive MIC-assay chart with a toggle between the two
+// inhibition cutoffs (IC90% / IC85%), rendered from data/layout JSON exported
+// from the team's R/plotly analysis.
+// Updated with Claude Opus 5.5 (Anthropic), 2026-10-01: relabelled from "MIC"
+// to IC90%/IC85% to match the new figure exports; 90% is now the default.
 import { useEffect, useRef, useState } from "react";
 import type { Config, Data, Layout } from "plotly.js";
 import mic90 from "./data/mic-90.json";
@@ -60,7 +62,7 @@ type PlotlyElement = HTMLDivElement & {
 export function MicChart() {
   const containerRef = useRef<HTMLDivElement>(null);
   const plotlyRef = useRef<typeof import("plotly.js") | null>(null);
-  const [threshold, setThreshold] = useState<Threshold>("85");
+  const [threshold, setThreshold] = useState<Threshold>("90");
   const [ready, setReady] = useState(false);
   const [narrow, setNarrow] = useState(false);
 
@@ -135,8 +137,8 @@ export function MicChart() {
           // break it manually instead of letting it overflow. The narrow
           // layout's font/plot are small enough to need a third line too.
           text: narrow
-            ? `Minimal Inhibitory Concentration<br>of <i>P. vulgatus</i> DSM1447 and RCC1806<br>to different antibiotics, at a cutoff of ${threshold}%`
-            : `Minimal Inhibitory Concentration of <i>P. vulgatus</i> DSM1447 and RCC1806<br>to different antibiotics, at a cutoff of ${threshold}%`,
+            ? `IC<sub>${threshold}%</sub> of <i>P. vulgatus</i><br>DSM1447 and RCC1806<br>to different antibiotics`
+            : `IC<sub>${threshold}%</sub> of <i>P. vulgatus</i> DSM1447 and RCC1806<br>to different antibiotics`,
           font: { size: narrow ? 13 : 18 },
           x: 0.5,
           xanchor: "center",
@@ -196,20 +198,20 @@ export function MicChart() {
         <button
           type="button"
           role="tab"
-          aria-selected={threshold === "85"}
-          className={`segmented-selector-segment${threshold === "85" ? " active" : ""}`}
-          onClick={() => setThreshold("85")}
-        >
-          85% cutoff
-        </button>
-        <button
-          type="button"
-          role="tab"
           aria-selected={threshold === "90"}
           className={`segmented-selector-segment${threshold === "90" ? " active" : ""}`}
           onClick={() => setThreshold("90")}
         >
-          90% cutoff
+          IC<sub>90%</sub>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={threshold === "85"}
+          className={`segmented-selector-segment${threshold === "85" ? " active" : ""}`}
+          onClick={() => setThreshold("85")}
+        >
+          IC<sub>85%</sub>
         </button>
       </div>
       <div className="mic-chart-plot" ref={containerRef}>

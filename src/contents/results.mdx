@@ -1,13 +1,181 @@
 <PageLayout>
 
+{/* Text below is the team's "MIC discussion" document, transferred to MDX with
+    Claude Opus 5.5 (Anthropic), 2026-10-01. In-text citations were converted to
+    footnote references; wording and values are the team's own. */}
+
 ## Antibiotic susceptibility (MIC)
 
-Minimum inhibitory concentration (MIC) of _P. vulgatus_ DSM1447 (wild-type) and RCC1806 against a panel of
-antibiotics. Bars show the determined MIC, individual points are the raw replicate measurements, and hatched
-bars mark antibiotics for which no MIC was found up to the highest concentration tested. Use the toggle to
-switch between the two cutoffs (85% or 90% growth reduction relative to the untreated control) used to call
-an MIC value.
+### Introduction
+
+The MIC assay is part of the toolkit development, which has the aim of facilitating research with
+_Phocaeicola vulgatus_. As _P. vulgatus_ is not a model organism, not as much is known about media optimal
+for growth, most effective antibiotics, compatible fluorescent reporters etc. on a strain level. The goal of
+the MIC assay is to determine which antibiotics are most effective at inhibiting growth of _P. vulgatus_
+DSM1447/ATCC8482 and fecal strain _P. vulgatus_ RCC1806. An application in the therapeutics pipeline is to use
+the most effective antibiotic to inhibit _P. vulgatus_, transformed with the CRISPR construct, growth in the
+case of uncontrolled growth.
+
+### Materials and methods
+
+_P. vulgatus_ DSM1447 was obtained from the research group Molecular Biotechnology of Plants and
+Micro-organisms from KU Leuven by Matt Herdman. The clinical isolate _P. vulgatus_ RCC1806 was obtained from
+the Raes lab of Bioinformatics and (Eco-)Systems Biology by Ruben Vazquez Uribe. The antibiotics ampicillin,
+chloramphenicol, erythromycin, metronidazole, kanamycin, spectinomycin, tetracycline, and gentamicin were
+used, as well as statin (simvastatin). Simvastatin is not an antibiotic, but has been reported to inhibit the
+growth of _P. vulgatus_ DSM1447[^mic-escalante].
+
+Working concentrations in a two-fold serial dilution for the initial MIC assays were taken from literature.
+Antibiotics were diluted in mGAM. The experiment was carried out anaerobically and in triplicate. It was
+repeated if the MIC was not in the concentration range of the antibiotic or if the replicates did not give a
+consensus. The percentage of inhibition was calculated:
+
+<div className="text-center my-3">
+  % inhibition = 1 − (OD<sub>well</sub> − OD<sub>blank</sub>) / (OD<sub>positive control</sub> − OD<sub>blank</sub>)
+</div>
+
+<div className="figure-caption">
+  Equation 1. The percentage of inhibition used to determine the MIC of a replicate of a strain for an
+  antibiotic. The blank was the inoculated antibiotic solvent, e.g. 50% ethanol for ampicillin. The positive
+  control was inoculated mGAM.
+</div>
+
+The MIC of a repeat was the lowest antibiotic concentration that inhibits visible growth. The
+IC<sub>90%</sub>, the minimal concentration needed to result in 90% growth inhibition, was used to provide
+quantitative data[^mic-veiga]. The OD630 of each well was measured after incubating for 48h at 30°C. The
+IC<sub>90%</sub> of a strain for an antibiotic was the consensus of the IC<sub>90%</sub> of the repeats. If
+there were two concentrations at which the same number of repeats indicated a IC<sub>90%</sub>, e.g. three
+repeats indicate a IC<sub>90%</sub> = 2 µg/mL and three repeats indicate a IC<sub>90%</sub> = 4 µg/mL, the
+highest value was taken as the IC<sub>90%</sub>.
+
+### Results
+
+The antibiotic with the lowest IC<sub>90%</sub> is the most effective against _P. vulgatus_ and can be used in
+the therapeutics pipeline to inhibit growth if needed. Tetracycline was found to be the most effective
+antibiotic, followed by chloramphenicol and metronidazole (Figure 1). Ampicillin and erythromycin showed more
+variable results between the two strains. Gentamicin and kanamycin did not inhibit _P. vulgatus_ within the
+tested range, except for RCC1806, which had a IC<sub>90%</sub> of 256 mg/L for gentamicin.
+
+While tetracycline had the lowest IC<sub>90%</sub>, the range was several orders of two high for
+_P. vulgatus_ DSM1447, and there was only one replicate for _P. vulgatus_ RCC1806. To justify tetracycline as
+the most effective antibiotic (although insignificant compared to ampicillin, chloramphenicol, erythromycin,
+and metronidazole) for _P. vulgatus_, the same results, but now with an inhibition cutoff of 85%, are included
+(Figure 2). In some dilutions, wells with a lower antibiotic concentration had inhibition values of above 90%,
+while wells with the highest antibiotic concentration in a dilution sometimes had values of 88% or 89%. As a
+result, these replicates, including the replicates of tetracycline, were discarded when using a cutoff of 90%.
+Thus, when lowering the cutoff to 85%, a more nuanced figure appears, which justifies the choice of
+tetracycline, metronidazole, and chloramphenicol as the most effective antibiotics for both DSM1447 and
+RCC1806.
 
 <MicChart />
+
+<div className="figure-caption">
+  Figure 1 (IC<sub>90%</sub> tab). IC<sub>90%</sub> of <em>P. vulgatus</em> DSM1447 and RCC1806 in response to
+  different antibiotics. Each dot represents one replicate. The striped bars indicate that no
+  IC<sub>90%</sub> was found for the antibiotic, as there was still growth at the highest concentration of the
+  dilution series. Kruskal–Wallis and Dunn’s post hoc test was performed to compare IC<sub>90%</sub> of
+  different antibiotics within a strain. \* = p &lt; 0.05, Amp = ampicillin, Cm = chloramphenicol, Ery =
+  erythromycin, Met = metronidazole, Tet = tetracycline, Spc = spectinomycin, Gm = gentamicin, Stat = statin
+  (simvastatin), Kan = kanamycin.
+</div>
+
+<div className="figure-caption">
+  Figure 2 (IC<sub>85%</sub> tab). IC<sub>90%</sub> of <em>P. vulgatus</em> DSM1447 and RCC1806 in response to
+  different antibiotics, at a cutoff value of 85%. Each dot represents one replicate. The striped bars
+  indicate that no IC<sub>90%</sub> was found for the antibiotic, as there was still growth at the highest
+  concentration of the dilution series. Kruskal–Wallis and Dunn’s post hoc test was performed to compare
+  IC<sub>90%</sub> of different antibiotics within a strain. \* = p &lt; 0.05, \*\* = p &lt; 0.01, Amp =
+  ampicillin, Cm = chloramphenicol, Ery = erythromycin, Met = metronidazole, Tet = tetracycline, Spc =
+  spectinomycin, Gm = gentamicin, Stat = statin (simvastatin), Kan = kanamycin.
+</div>
+
+### Discussion
+
+<div className="figure-caption">
+  Table 1. Comparison with literature. – No MIC values were found, either experimentally or in literature.
+  \* Literature reported MIC50 or MIC90 values for clinical or intestinal isolates, not for
+  <em>P. vulgatus</em> DSM1447, excepting source d. Brackets indicate the range of the found MICs. \*\* S =
+  susceptible, a therapeutic is likely to be successful when using this concentration[^mic-eucast-bp].
+</div>
+
+<div className="table-responsive table-responsive-rounded my-3">
+
+<table className="table table-bordered align-middle text-center">
+<thead>
+<tr>
+<th colSpan={5}>Comparison of IC<sub>90%</sub> values (mg/L) to literature</th>
+</tr>
+<tr>
+<th rowSpan={2}></th>
+<th colSpan={2}>IC<sub>90%</sub> (mg/L)</th>
+<th rowSpan={2}>Literature*</th>
+<th rowSpan={2}>Relation to breakpoint</th>
+</tr>
+<tr>
+<th>DSM1447</th>
+<th>RCC1806</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Amp</td><td>4 (1-32)</td><td>64</td><td>128<sup>a</sup>, 4-512<sup>b</sup></td><td></td></tr>
+<tr><td>Cm</td><td>2 (2-16)</td><td>2</td><td>4 (0.125-8)<sup>a</sup></td><td></td></tr>
+<tr><td>Ery</td><td>4 (0.5-32)</td><td>256 (256-512)</td><td>–</td><td></td></tr>
+<tr><td>Met</td><td>4 (1-4)</td><td>4</td><td>0.5<sup>c</sup>, 0.06-4<sup>b</sup></td><td>S **</td></tr>
+<tr><td>Tet</td><td>1 (0.125-16)</td><td>1</td><td>32<sup>c</sup></td><td></td></tr>
+<tr><td>Spc</td><td>128</td><td>64 (64-128)</td><td>–</td><td></td></tr>
+<tr><td>Gm</td><td>–</td><td>256 (128-512)</td><td>–</td><td></td></tr>
+<tr><td>Stat</td><td>64 (32-64)</td><td>–</td><td>25<sup>d</sup></td><td></td></tr>
+<tr><td>Kan</td><td>–</td><td>–</td><td>–</td><td></td></tr>
+</tbody>
+</table>
+
+</div>
+
+<div className="figure-caption">
+  <sup>a</sup> From Sóki et al. (2020)[^mic-soki]<br />
+  <sup>b</sup> From EUCAST (n.d.)[^mic-eucast-dist]<br />
+  <sup>c</sup> From Boiten et al. (2024)[^mic-boiten]<br />
+  <sup>d</sup> From Escalante et al. (2024)[^mic-escalante]
+</div>
+
+Ampicillin is a β-lactam antibiotic, and β-lactamases have been reported to be present in _P. vulgatus_, so
+resistance was expected[^mic-mahmood][^mic-parker][^mic-sabunwala]. In contrast, the MIC of DSM1447 is 4 mg/L
+(1-32 mg/L), and the MIC of RCC1806 is 64 mg/L. Similar results have been reported (Table 1). Possibly,
+β-lactamases are not present or not as actively expressed in these strains than in the resistant clinical
+isolates. EUCAST advises not to use ampicillin for anaerobic bacteria when the MIC is higher than
+0.5 mg/L[^mic-eucast-nobp]. This advice, combined with the variability in IC<sub>90%</sub> between DSM1447 and
+RCC1806, means that ampicillin will no longer be considered as an effective antibiotic against _P. vulgatus_
+DSM1447 and RCC1806.
+
+For both strains the IC<sub>90%</sub> of metronidazole is at the breakpoint of 4 mg/L, indicating that
+metronidazole is most likely an effective therapeutical antibiotic[^mic-eucast-bp]. A recent meta-analysis
+confirms resistance against metronidazole remains low[^mic-markowska]. No breakpoints or other advice
+concerning tetracycline, chloramphenicol, or erythromycin are available for _P. vulgatus_.
+
+Gentamycin and kanamycin uptake are dependent on the proton motive force, and so indirectly on oxygen, and
+were thus not predicted to have an adverse effect on growth[^mic-krause][^mic-webster], and this is indeed
+confirmed by our results.
+
+### Conclusion
+
+Tetracycline, chloramphenicol, and metronidazole were found to be the most effective antibiotics against
+_P. vulgatus_ DSM1447 and RCC1806. As the EUCAST specifically recommends the use of metronidazole when the MIC
+is below 4 mg/L, this antibiotic is most recommended when working with _P. vulgatus_. Ampicillin and
+erythromycin are less encouraged, given the variability between the strains and a negative advice against
+ampicillin by EUCAST.
+
+[^mic-escalante]: Escalante, V., Nayak, R. R., Noecker, C., Babdor, J., Spitzer, M., Deutschbauer, A. M., & Turnbaugh, P. J. (2024). Simvastatin induces human gut bacterial cell surface genes. Molecular Microbiology, 122(3), 372–386. https://doi.org/10.1111/mmi.15151
+[^mic-veiga]: Veiga, A., Toledo, M. D. G. T., Rossa, L. S., Mengarda, M., Stofella, N. C. F., Oliveira, L. J., Gonçalves, A. G., & Murakami, F. S. (2019). Colorimetric microdilution assay: Validation of a standard method for determination of MIC, IC50%, and IC90% of antimicrobial compounds. Journal of Microbiological Methods, 162, 50–61. https://doi.org/10.1016/j.mimet.2019.05.003
+[^mic-eucast-bp]: The European Committee on Antimicrobial Susceptibility Testing. (2026a, June 24). Breakpoint tables for interpretation of MICs and zone diameters. Version 16.1. https://www.eucast.org/bacteria/clinical-breakpoints-and-interpretation/clinical-breakpoint-tables/
+[^mic-soki]: Sóki, J., Wybo, I., Hajdú, E., Toprak, N. U., Jeverica, S., Stingu, C.-S., Tierney, D., Perry, J. D., Matuz, M., Urbán, E., & Nagy, E. (2020). A Europe-wide assessment of antibiotic resistance rates in Bacteroides and Parabacteroides isolates from intestinal microbiota of healthy subjects. Anaerobe, 62, 102182. https://doi.org/10.1016/j.anaerobe.2020.102182
+[^mic-eucast-dist]: The European Committee on Antimicrobial Susceptibility Testing. (n.d.). MIC and Zone diameter distributions. Retrieved 3 September 2026, from https://mic.eucast.org/search/?search%5Bmethod%5D=mic&search%5Bantibiotic%5D=-1&search%5Bspecies%5D=78&search%5Bdisk_content%5D=-1&search%5Blimit%5D=50
+[^mic-boiten]: Boiten, K. E., Notermans, D. W., Rentenaar, R. J., Van Prehn, J., Bode, L. G. M., Maat, I., Van Der Zwet, W., Jansz, A., Siebers, T. J. H., Rossen, J. W. A., De Greeff, S. C., Hendrickx, A. P. A., Kuijper, E. J., & Veloo, A. C. M. (2024). Antimicrobial susceptibility profile of clinically relevant Bacteroides, Phocaeicola, Parabacteroides and Prevotella species, isolated by eight laboratories in the Netherlands. Journal of Antimicrobial Chemotherapy, 79(4), 868–874. https://doi.org/10.1093/jac/dkae043
+[^mic-mahmood]: Mahmood, B., Sárvári, K. P., Orosz, L., Nagy, E., & Sóki, J. (2024). Novel and rare β-lactamase genes of Bacteroides fragilis group species: Detection of the genes and characterization of their genetic backgrounds. Anaerobe, 86, 102832. https://doi.org/10.1016/j.anaerobe.2024.102832
+[^mic-parker]: Parker, A. C., & Smith, C. J. (1993). Genetic and biochemical analysis of a novel Ambler class A beta-lactamase responsible for cefoxitin resistance in Bacteroides species. Antimicrobial Agents and Chemotherapy, 37(5), 1028–1036. https://doi.org/10.1128/AAC.37.5.1028
+[^mic-sabunwala]: Sabunwala, S. A., Patel, P., & Patel, A. R. (2026). Ampicillin. In StatPearls. StatPearls Publishing. http://www.ncbi.nlm.nih.gov/books/NBK519569/
+[^mic-eucast-nobp]: The European Committee on Antimicrobial Susceptibility Testing. (2026b, July 10). When there are no breakpoints? https://www.eucast.org/bacteria/clinical-breakpoints-and-interpretation/when-there-are-no-breakpoints/
+[^mic-markowska]: Markowska-Michalak, K., Majewska, A., & Pituch, H. (2026). Metronidazole Susceptibility Patterns in European Bacteroides, Phocaeicola, and Parabacteroides Clinical Isolates—A Systematic Review and Meta-Analysis. Medical Sciences, 14(4), 424. https://doi.org/10.3390/medsci14040424
+[^mic-krause]: Krause, K. M., Serio, A. W., Kane, T. R., & Connolly, L. E. (2016). Aminoglycosides: An Overview. Cold Spring Harbor Perspectives in Medicine, 6(6), a027029. https://doi.org/10.1101/cshperspect.a027029
+[^mic-webster]: Webster, C. M., Woody, A. M., Fusseini, S., Holmes, L. G., Robinson, G. K., & Shepherd, M. (2022). Proton motive force underpins respiration-mediated potentiation of aminoglycoside lethality in pathogenic Escherichia coli. Archives of Microbiology, 204(1), 120. https://doi.org/10.1007/s00203-021-02710-y
 
 </PageLayout>
