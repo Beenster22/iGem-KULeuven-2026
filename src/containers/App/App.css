@@ -2249,25 +2249,15 @@ body.home-fullscreen {
 }
 
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-09-24
-   Purpose: "two guts" section (TwoGutsSection.tsx) — pinned side-by-side
-   gut windows with composition bars. Same sticky pin/offset as the body
-   symptoms section above. */
-.two-guts-scroller {
-  position: relative;
-}
-
-.two-guts-pinned {
+   Purpose: "two guts" section (TwoGutsSection.tsx) — side-by-side gut
+   windows with composition bars. */
+.two-guts {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.25rem;
   text-align: center;
   padding: 1.5rem 0;
-}
-
-.two-guts-pinned--sticky {
-  position: sticky;
-  top: 5rem;
 }
 
 .two-guts-heading {
@@ -2311,7 +2301,7 @@ body.home-fullscreen {
 
 .two-guts-lens {
   width: 100%;
-  max-height: 42vh;
+  max-height: 60vh;
   aspect-ratio: 1;
 }
 
@@ -2326,17 +2316,25 @@ body.home-fullscreen {
   stroke-width: 5;
 }
 
+/* --dx/--dy/--spin and the duration are set per cell in TwoGutsSection.tsx,
+   so each one wanders its own way. */
 .two-guts-cell {
-  animation: two-guts-wiggle 8s ease-in-out infinite;
+  animation: two-guts-drift 6s ease-in-out infinite;
 }
 
-@keyframes two-guts-wiggle {
+@keyframes two-guts-drift {
   0%,
   100% {
     translate: 0 0;
+    rotate: 0deg;
   }
-  50% {
-    translate: 2px -3px;
+  30% {
+    translate: var(--dx) calc(var(--dy) * 0.4);
+    rotate: var(--spin);
+  }
+  65% {
+    translate: calc(var(--dx) * -0.6) var(--dy);
+    rotate: calc(var(--spin) * -0.7);
   }
 }
 
@@ -2367,17 +2365,6 @@ body.home-fullscreen {
   font-size: 0.8rem;
   opacity: 0.7;
   max-width: 560px;
-}
-
-.two-guts-hint {
-  margin: 0;
-  font-size: 0.85rem;
-  opacity: 0.7;
-  transition: opacity 0.3s ease;
-}
-
-.two-guts-hint--done {
-  opacity: 0;
 }
 
 /* BSH STREAM ANIMATION

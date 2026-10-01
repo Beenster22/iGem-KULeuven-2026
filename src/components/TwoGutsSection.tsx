@@ -1,19 +1,27 @@
 // Generated with Claude Opus 5.5 (Anthropic), 2026-09-24
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-01: removed the
+// scroll-pinned transition — both windows now show their final state
+// straight away so the difference is obvious at a glance — and made the
+// bacteria larger and livelier.
 // Purpose: home-page "two guts" section, the step between "What is PMOS?"
-// and the BSH diagram. Two circular windows into the gut start identical;
-// scrolling through the pinned section makes some bacterial groups in the
-// "With PMOS" window get crowded out and replaced by a few dominant groups,
-// so visitors watch diversity drop and the mix change. The composition bars
-// underneath are computed from the cells actually drawn, so they always
-// match the picture. This is an ILLUSTRATION, not data: the groups are
-// generic shapes/colours, not real taxa. Same sticky-in-a-tall-wrapper
-// technique as BodySymptomsSection (no wheel hijacking), but progress is
-// continuous and reversible rather than a ratchet. prefers-reduced-motion
-// skips the pin and shows the finished comparison.
-import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import { useReducedMotion } from "framer-motion";
+// and the BSH diagram. Two circular windows into the gut, side by side: in
+// the "With PMOS" window some bacterial groups are missing and a few
+// dominant groups have taken their place, so diversity is visibly lower and
+// the mix different. The composition bars underneath are computed from the
+// cells actually drawn, so they always match the picture. This is an
+// ILLUSTRATION, not data: the groups are generic shapes/colours, not real
+// taxa. The cells drift and turn on a CSS loop (off under
+// prefers-reduced-motion, see App.css).
+import type { CSSProperties, ReactNode } from "react";
 
-type Shape = "rod" | "short-rod" | "coccus" | "diplo" | "chain" | "curved" | "spiral";
+type Shape =
+  | "rod"
+  | "short-rod"
+  | "coccus"
+  | "diplo"
+  | "chain"
+  | "curved"
+  | "spiral";
 
 interface Group {
   id: string;
@@ -31,12 +39,15 @@ const GROUPS: Group[] = [
   { id: "g", shape: "spiral", color: "#e2825a" },
 ];
 
-// In the PMOS window these groups get crowded out, and each lost cell is
+// In the PMOS window these groups are crowded out, and each lost cell is
 // taken over by one of the dominant groups.
 const LOST = new Set(["c", "f", "g"]);
 const DOMINANT = ["d", "e"];
 
-const SLOTS = 49;
+// Deliberately few slots, so each cell can be drawn large (CELL_SCALE) and
+// still has room to drift.
+const SLOTS = 28;
+const CELL_SCALE = 1.5;
 const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 const VB = 300;
 const CENTER = VB / 2;
@@ -52,9 +63,15 @@ interface Slot {
   y: number;
   rotation: number;
   groupIndex: number;
-  // Where in the scroll (0-1) this cell starts being replaced, if it is.
-  threshold: number;
-  replacementIndex: number;
+  // The group shown in the PMOS window (differs from groupIndex only for
+  // cells whose own group has been crowded out).
+  pmosGroupIndex: number;
+  // Per-cell drift so the cells don't all move in step (see two-guts-drift
+  // in App.css).
+  dx: number;
+  dy: number;
+  spin: number;
+  duration: number;
   delay: number;
 }
 
@@ -62,37 +79,65 @@ const SLOT_LAYOUT: Slot[] = Array.from({ length: SLOTS }, (_, i) => {
   const angle = i * GOLDEN_ANGLE + (seededValue(i + 3) - 0.5) * 0.4;
   const radius = Math.sqrt((i + 0.5) / SLOTS) * (LENS_R - 22);
   const groupIndex = i % GROUPS.length;
-  const replacementId = DOMINANT[Math.floor(seededValue(i + 9) * DOMINANT.length)];
+  const replacementId =
+    DOMINANT[Math.floor(seededValue(i + 9) * DOMINANT.length)];
   return {
     x: CENTER + Math.cos(angle) * radius,
     y: CENTER + Math.sin(angle) * radius,
     rotation: Math.round(seededValue(i + 17) * 360),
     groupIndex,
-    threshold: seededValue(i + 29) * 0.8,
-    replacementIndex: GROUPS.findIndex((g) => g.id === replacementId),
+    pmosGroupIndex: LOST.has(GROUPS[groupIndex].id)
+      ? GROUPS.findIndex((g) => g.id === replacementId)
+      : groupIndex,
+    dx: Math.round((seededValue(i + 53) - 0.5) * 36),
+    dy: Math.round((seededValue(i + 61) - 0.5) * 36),
+    spin: Math.round((seededValue(i + 71) - 0.5) * 90),
+    duration: 4 + seededValue(i + 83) * 4,
     delay: -seededValue(i + 41) * 8,
   };
 });
-
-// 0 before this cell's threshold, 1 once it has fully swapped over.
-function swapAmount(slot: Slot, progress: number) {
-  if (!LOST.has(GROUPS[slot.groupIndex].id)) return 0;
-  return Math.min(1, Math.max(0, (progress - slot.threshold) / 0.18));
-}
 
 function CellShape({ shape, color }: { shape: Shape; color: string }) {
   const stroke = "rgba(0, 0, 0, 0.28)";
   switch (shape) {
     case "rod":
-      return <rect x={-17} y={-7} width={34} height={14} rx={7} fill={color} stroke={stroke} strokeWidth={1.5} />;
+      return (
+        <rect
+          x={-17}
+          y={-7}
+          width={34}
+          height={14}
+          rx={7}
+          fill={color}
+          stroke={stroke}
+          strokeWidth={1.5}
+        />
+      );
     case "short-rod":
-      return <rect x={-10} y={-7} width={20} height={14} rx={7} fill={color} stroke={stroke} strokeWidth={1.5} />;
+      return (
+        <rect
+          x={-10}
+          y={-7}
+          width={20}
+          height={14}
+          rx={7}
+          fill={color}
+          stroke={stroke}
+          strokeWidth={1.5}
+        />
+      );
     case "coccus":
       return <circle r={8} fill={color} stroke={stroke} strokeWidth={1.5} />;
     case "diplo":
       return (
         <>
-          <circle cx={-6} r={6} fill={color} stroke={stroke} strokeWidth={1.5} />
+          <circle
+            cx={-6}
+            r={6}
+            fill={color}
+            stroke={stroke}
+            strokeWidth={1.5}
+          />
           <circle cx={6} r={6} fill={color} stroke={stroke} strokeWidth={1.5} />
         </>
       );
@@ -100,69 +145,107 @@ function CellShape({ shape, color }: { shape: Shape; color: string }) {
       return (
         <>
           {[-11, 0, 11].map((cx) => (
-            <circle key={cx} cx={cx} r={5} fill={color} stroke={stroke} strokeWidth={1.5} />
+            <circle
+              key={cx}
+              cx={cx}
+              r={5}
+              fill={color}
+              stroke={stroke}
+              strokeWidth={1.5}
+            />
           ))}
         </>
       );
     case "curved":
-      return <path d="M-14 5 Q0 -13 14 5" fill="none" stroke={color} strokeWidth={8} strokeLinecap="round" />;
+      return (
+        <path
+          d="M-14 5 Q0 -13 14 5"
+          fill="none"
+          stroke={color}
+          strokeWidth={8}
+          strokeLinecap="round"
+        />
+      );
     case "spiral":
       return (
-        <path d="M-16 0 q4 -8 8 0 t8 0 t8 0 t8 0" fill="none" stroke={color} strokeWidth={4} strokeLinecap="round" />
+        <path
+          d="M-16 0 q4 -8 8 0 t8 0 t8 0 t8 0"
+          fill="none"
+          stroke={color}
+          strokeWidth={4}
+          strokeLinecap="round"
+        />
       );
   }
 }
 
-function GutWindow({ label, progress }: { label: string; progress: number }) {
+function GutWindow({ label, pmos }: { label: string; pmos: boolean }) {
   const clipId = `two-guts-clip-${label.replace(/\W+/g, "-").toLowerCase()}`;
   return (
     <figure className="two-guts-window">
       <figcaption className="two-guts-window-label">{label}</figcaption>
-      <svg viewBox={`0 0 ${VB} ${VB}`} className="two-guts-lens" aria-hidden="true">
+      <svg
+        viewBox={`0 0 ${VB} ${VB}`}
+        className="two-guts-lens"
+        aria-hidden="true"
+      >
         <defs>
           <clipPath id={clipId}>
             <circle cx={CENTER} cy={CENTER} r={LENS_R} />
           </clipPath>
         </defs>
-        <circle cx={CENTER} cy={CENTER} r={LENS_R} className="two-guts-lens-bg" />
+        <circle
+          cx={CENTER}
+          cy={CENTER}
+          r={LENS_R}
+          className="two-guts-lens-bg"
+        />
         <g clipPath={`url(#${clipId})`}>
           {SLOT_LAYOUT.map((slot, i) => {
-            const swap = swapAmount(slot, progress);
-            const from = GROUPS[slot.groupIndex];
-            const to = GROUPS[slot.replacementIndex];
+            const group = GROUPS[pmos ? slot.pmosGroupIndex : slot.groupIndex];
             return (
-              <g key={i} transform={`translate(${slot.x} ${slot.y}) rotate(${slot.rotation})`}>
-                <g className="two-guts-cell" style={{ animationDelay: `${slot.delay}s` }}>
-                  {swap < 1 && (
-                    <g opacity={1 - swap} transform={`scale(${1 - swap * 0.6})`}>
-                      <CellShape shape={from.shape} color={from.color} />
-                    </g>
-                  )}
-                  {swap > 0 && (
-                    <g opacity={swap} transform={`scale(${0.4 + swap * 0.6})`}>
-                      <CellShape shape={to.shape} color={to.color} />
-                    </g>
-                  )}
+              <g
+                key={i}
+                transform={`translate(${slot.x} ${slot.y}) rotate(${slot.rotation})`}
+              >
+                <g
+                  className="two-guts-cell"
+                  style={
+                    {
+                      "--dx": `${slot.dx}px`,
+                      "--dy": `${slot.dy}px`,
+                      "--spin": `${slot.spin}deg`,
+                      animationDuration: `${slot.duration}s`,
+                      animationDelay: `${slot.delay}s`,
+                    } as CSSProperties
+                  }
+                >
+                  <g transform={`scale(${CELL_SCALE})`}>
+                    <CellShape shape={group.shape} color={group.color} />
+                  </g>
                 </g>
               </g>
             );
           })}
         </g>
-        <circle cx={CENTER} cy={CENTER} r={LENS_R} className="two-guts-lens-rim" />
+        <circle
+          cx={CENTER}
+          cy={CENTER}
+          r={LENS_R}
+          className="two-guts-lens-rim"
+        />
       </svg>
-      <CompositionBar progress={progress} />
+      <CompositionBar pmos={pmos} />
     </figure>
   );
 }
 
-// Share of each group among the cells currently drawn (a swapping cell
-// counts partly for both), so the bar always mirrors the window above it.
-function CompositionBar({ progress }: { progress: number }) {
+// Share of each group among the cells drawn, so the bar always mirrors the
+// window above it.
+function CompositionBar({ pmos }: { pmos: boolean }) {
   const weights = GROUPS.map(() => 0);
   for (const slot of SLOT_LAYOUT) {
-    const swap = swapAmount(slot, progress);
-    weights[slot.groupIndex] += 1 - swap;
-    weights[slot.replacementIndex] += swap;
+    weights[pmos ? slot.pmosGroupIndex : slot.groupIndex] += 1;
   }
   return (
     <div className="two-guts-bar" aria-hidden="true">
@@ -185,80 +268,24 @@ interface TwoGutsSectionProps {
 }
 
 export function TwoGutsSection({ heading, children }: TwoGutsSectionProps) {
-  const prefersReducedMotion = useReducedMotion();
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const pinnedRef = useRef<HTMLDivElement>(null);
-  const [progressState, setProgressState] = useState(0);
-  const progress = prefersReducedMotion ? 1 : progressState;
-
-  useLayoutEffect(() => {
-    if (prefersReducedMotion) return;
-    const wrapper = wrapperRef.current;
-    const pinned = pinnedRef.current;
-    if (!wrapper || !pinned) return;
-
-    let frame: number | null = null;
-
-    // Roughly one and a half screens of scrolling to play the whole change.
-    const recomputeHeight = () => {
-      wrapper.style.height = `${pinned.offsetHeight + Math.round(window.innerHeight * 1.5)}px`;
-    };
-
-    const updateProgress = () => {
-      frame = null;
-      const rect = wrapper.getBoundingClientRect();
-      const scrollable = wrapper.offsetHeight - pinned.offsetHeight;
-      const next = scrollable > 0 ? Math.min(1, Math.max(0, -rect.top / scrollable)) : 0;
-      setProgressState(Math.round(next * 200) / 200); // skip re-renders for sub-pixel scroll changes
-    };
-
-    const onScroll = () => {
-      if (frame === null) frame = requestAnimationFrame(updateProgress);
-    };
-    const onResize = () => {
-      recomputeHeight();
-      updateProgress();
-    };
-
-    recomputeHeight();
-    updateProgress();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onResize);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onResize);
-      if (frame !== null) cancelAnimationFrame(frame);
-    };
-  }, [prefersReducedMotion]);
-
   return (
-    <div className="two-guts-scroller" ref={wrapperRef}>
+    <div className="two-guts">
+      <h3 className="two-guts-heading">{heading}</h3>
+      <div className="two-guts-intro">{children}</div>
+
       <div
-        className={`two-guts-pinned${prefersReducedMotion ? "" : " two-guts-pinned--sticky"}`}
-        ref={pinnedRef}
+        className="two-guts-row"
+        role="img"
+        aria-label="Illustration: two windows into the gut microbiome. Without PMOS, many different kinds of bacteria are evenly mixed. With PMOS, several kinds disappear and a few take over, so the community is less diverse and differently composed."
       >
-        <h3 className="two-guts-heading">{heading}</h3>
-        <div className="two-guts-intro">{children}</div>
-
-        <div
-          className="two-guts-row"
-          role="img"
-          aria-label="Illustration: two windows into the gut microbiome. Without PMOS, many different kinds of bacteria are evenly mixed. With PMOS, several kinds disappear and a few take over, so the community is less diverse and differently composed."
-        >
-          <GutWindow label="Without PMOS" progress={0} />
-          <GutWindow label="With PMOS" progress={progress} />
-        </div>
-
-        <p className="two-guts-note">
-          Illustration only: each shape and colour stands for a different group of gut bacteria; not measured data.
-        </p>
-
-        {!prefersReducedMotion && (
-          <p className={`two-guts-hint${progress >= 1 ? " two-guts-hint--done" : ""}`} aria-hidden="true">
-            Keep scrolling to see how the gut changes ↓
-          </p>
-        )}
+        <GutWindow label="Without PMOS" pmos={false} />
+        <GutWindow label="With PMOS" pmos />
       </div>
+
+      <p className="two-guts-note">
+        Illustration only: each shape and colour stands for a different group of
+        gut bacteria; not measured data.
+      </p>
     </div>
   );
 }
