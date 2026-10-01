@@ -1,5 +1,5 @@
 // Purpose: interactive, spinnable 3D globe — click any country to see the
-// (placeholder, see pmosContinentStats.ts) PMOS estimate for its continent.
+// PMOS estimate for its continent (figures in pmosContinentStats.ts).
 // Country outlines are bundled locally from the `world-atlas` npm package
 // (not fetched from a CDN at runtime) to comply with the "everything must be
 // served from iGEM infrastructure" asset rule in README.md. The globe itself
@@ -15,8 +15,8 @@ import worldTopo from "world-atlas/countries-110m.json";
 import { useThemeMode } from "../ThemeModeContext";
 import { Continent, COUNTRY_ID_TO_CONTINENT } from "./pmosContinents";
 import {
-  PMOS_CONTINENT_NOTES_PLACEHOLDER,
-  PMOS_STATS_BY_CONTINENT_PLACEHOLDER,
+  PMOS_CONTINENT_NOTES,
+  PMOS_STATS_BY_CONTINENT,
 } from "./pmosContinentStats";
 
 interface CountryProps {
@@ -35,13 +35,15 @@ const UNMAPPED_COLOR = "#888888";
 
 const topology = worldTopo as unknown as Topology;
 const countries = (
-  feature(topology, topology.objects.countries as GeometryCollection) as FeatureCollection<
-    Geometry,
-    CountryProps
-  >
+  feature(
+    topology,
+    topology.objects.countries as GeometryCollection,
+  ) as FeatureCollection<Geometry, CountryProps>
 ).features;
 
-function continentOf(country: Feature<Geometry, CountryProps>): Continent | undefined {
+function continentOf(
+  country: Feature<Geometry, CountryProps>,
+): Continent | undefined {
   return COUNTRY_ID_TO_CONTINENT[String(country.id)];
 }
 
@@ -69,8 +71,13 @@ export function PmosGlobe() {
   const stageRef = useRef<HTMLDivElement>(null);
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const [size, setSize] = useState(320);
-  const [selected, setSelected] = useState<{ continent: Continent; count: number } | null>(null);
-  const [hoveredContinent, setHoveredContinent] = useState<Continent | null>(null);
+  const [selected, setSelected] = useState<{
+    continent: Continent;
+    count: number;
+  } | null>(null);
+  const [hoveredContinent, setHoveredContinent] = useState<Continent | null>(
+    null,
+  );
 
   useEffect(() => {
     const el = stageRef.current;
@@ -112,7 +119,10 @@ export function PmosGlobe() {
   // the resolved value the browser has already computed for --color-accent
   // rather than passing the "var(...)" string straight through.
   const atmosphereColor = useMemo(
-    () => getComputedStyle(document.documentElement).getPropertyValue("--color-accent").trim() || "#C9BDE8",
+    () =>
+      getComputedStyle(document.documentElement)
+        .getPropertyValue("--color-accent")
+        .trim() || "#C9BDE8",
     [mode],
   );
 
@@ -125,7 +135,7 @@ export function PmosGlobe() {
     }
     const controls = globeRef.current?.controls();
     if (controls) controls.autoRotate = false;
-    setSelected({ continent, count: PMOS_STATS_BY_CONTINENT_PLACEHOLDER[continent] });
+    setSelected({ continent, count: PMOS_STATS_BY_CONTINENT[continent] });
   }
 
   // Only countries that map to a continent are meaningfully clickable, so
@@ -138,7 +148,9 @@ export function PmosGlobe() {
   }
 
   return (
-    <div className={`pmos-globe-wrap${selected ? " pmos-globe-wrap--split" : ""}`}>
+    <div
+      className={`pmos-globe-wrap${selected ? " pmos-globe-wrap--split" : ""}`}
+    >
       <div
         className={`pmos-globe-stage${hoveredContinent ? " is-hovering" : ""}`}
         ref={stageRef}
@@ -156,7 +168,9 @@ export function PmosGlobe() {
           polygonCapColor={(d) => {
             const country = d as Feature<Geometry, CountryProps>;
             const base = colorOf(country);
-            return continentOf(country) === hoveredContinent ? lighten(base, 0.35) : base;
+            return continentOf(country) === hoveredContinent
+              ? lighten(base, 0.35)
+              : base;
           }}
           polygonSideColor={() => "rgba(0,0,0,0.15)"}
           polygonStrokeColor={() => "#221B2B"}
@@ -172,8 +186,8 @@ export function PmosGlobe() {
             const country = d as Feature<Geometry, CountryProps>;
             const continent = continentOf(country);
             if (!continent) return "";
-            const count = PMOS_STATS_BY_CONTINENT_PLACEHOLDER[continent];
-            return `<div class="pmos-globe-tooltip"><strong>${continent}</strong><br />${count.toLocaleString()} affected</div>`;
+            const count = PMOS_STATS_BY_CONTINENT[continent];
+            return `<div class="pmos-globe-tooltip"><strong>${continent}</strong><br />${count.toLocaleString()} women affected</div>`;
           }}
           onPolygonHover={handleHover}
           onPolygonClick={handleClick}
@@ -182,16 +196,22 @@ export function PmosGlobe() {
       <div className="pmos-globe-info" aria-live="polite">
         {selected ? (
           <div className="pmos-globe-info-panel">
-            <span className="pmos-globe-info-continent">{selected.continent}</span>
+            <span className="pmos-globe-info-continent">
+              {selected.continent}
+            </span>
             <span className="pmos-globe-info-count">
               {selected.count.toLocaleString()} women affected
             </span>
-            <p className="pmos-globe-info-note">
-              {PMOS_CONTINENT_NOTES_PLACEHOLDER[selected.continent]}
-            </p>
+            {PMOS_CONTINENT_NOTES[selected.continent] && (
+              <p className="pmos-globe-info-note">
+                {PMOS_CONTINENT_NOTES[selected.continent]}
+              </p>
+            )}
           </div>
         ) : (
-          <span className="pmos-globe-info-hint">Click a country to see its continent's estimate</span>
+          <span className="pmos-globe-info-hint">
+            Click a country to see its continent's estimate
+          </span>
         )}
       </div>
     </div>

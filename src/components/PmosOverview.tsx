@@ -8,7 +8,9 @@ import { MicrobeBackdrop } from "./MicrobeBackdrop";
 // three.js + globe.gl add ~700KB (gzipped) to the bundle — lazy-loaded so
 // that weight is only fetched once a visitor actually scrolls this far,
 // instead of blocking the initial page/hero load for everyone.
-const PmosGlobe = lazy(() => import("./PmosGlobe").then((m) => ({ default: m.PmosGlobe })));
+const PmosGlobe = lazy(() =>
+  import("./PmosGlobe").then((m) => ({ default: m.PmosGlobe })),
+);
 
 const COUNT_DURATION_MS = 2000;
 const EASE_OUT_CUBIC = (t: number) => 1 - Math.pow(1 - t, 3);
@@ -64,13 +66,42 @@ export function PmosOverview() {
       <MicrobeBackdrop count={4} seed={1} />
       <div className="pmos-counter" ref={headingRef}>
         <h2 className="pmos-counter-heading">
-          <span className="pmos-counter-number">{count.toLocaleString()}</span> people are affected
-          by PMOS
+          <span className="pmos-counter-number">{count.toLocaleString()}</span>{" "}
+          women are affected by PMOS during their reproductive years alone
         </h2>
+        <p className="pmos-counter-sub">
+          Diagnosis is often delayed: up to <strong>70%</strong> of affected
+          individuals remain undiagnosed.
+        </p>
       </div>
-      <Suspense fallback={<div className="pmos-globe-loading">Loading globe…</div>}>
+      <Suspense
+        fallback={<div className="pmos-globe-loading">Loading globe…</div>}
+      >
         <PmosGlobe />
       </Suspense>
+      {/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-01 — citations as
+          supplied by the team in "Text for HOME PAGE".
+          TODO(team): link the wiki page explaining the IHME GBD method once
+          it exists. */}
+      <p className="pmos-overview-source">
+        Sources: Prevalence of polycystic ovary syndrome: a global and regional
+        systematic review and meta-analysis, <em>Hum Reprod Update</em>, 2026,{" "}
+        <a href="https://doi.org/10.1093/humupd/dmaf030">
+          doi:10.1093/humupd/dmaf030
+        </a>
+        ; The prevalence of polycystic ovary syndrome in a community sample
+        assessed under contrasting diagnostic criteria, <em>Hum Reprod</em>,
+        2010; 25:544-551. Continent figures: IHME Global Burden of Disease data;
+        see also{" "}
+        <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(26)00717-8/fulltext">
+          The Lancet (2026)
+        </a>{" "}
+        and{" "}
+        <a href="https://link.springer.com/article/10.1186/s12978-025-02016-y">
+          Springer (2025)
+        </a>
+        .
+      </p>
     </section>
   );
 }

@@ -1,6 +1,10 @@
 // Generated with Claude Sonnet 5 (Anthropic), 2026-09-18
-// Purpose: home-page "What is PMOS?" section — heading + overview paragraph
-// centered above a centered body diagram. Scroll-linked reveal: the section
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-01: the heading +
+// overview paragraph are now their own near-full-screen block above the
+// pinned figure (team feedback: make "What is PMOS?" stand out, with a
+// further scroll leading to the figure).
+// Purpose: home-page "What is PMOS?" section — a large heading + overview
+// paragraph, then a centered body diagram. Scroll-linked reveal: the figure
 // pins in place (CSS position: sticky inside a tall wrapper) while the
 // visitor scrolls through it, popping up one symptom label at a time next to
 // the body part it affects — connected by a bent leader line, like an
@@ -32,7 +36,7 @@ interface SymptomStep {
 // (formerly PCOS) medical literature — verify wording/sources before this
 // goes on the published wiki.
 const OVERVIEW_TEXT =
-  "PMOS (formerly PCOS) is one of the most common hormonal conditions affecting people with ovaries — but its effects reach far beyond the reproductive system. Disrupted hormone signaling and insulin resistance can touch the brain, heart, pancreas, and skin too. Scroll to see how, organ by organ.";
+  "Polyendocrine Metabolic Ovarian Syndrome (PMOS), formerly known as Polycystic Ovary Syndrome (PCOS), is one of the most common hormonal conditions affecting people with ovaries — but its effects reach far beyond the reproductive system. Disrupted hormone signaling and insulin resistance can touch the brain, heart, pancreas, and skin too. Scroll to see how, organ by organ.";
 
 // The figure + its two label columns are laid out on a fixed virtual canvas
 // (see body-symptoms-figure-row in App.css, which locks the row to this same
@@ -60,7 +64,8 @@ const SYMPTOM_STEPS: SymptomStep[] = [
     id: "hair",
     side: "right",
     label: "Hair",
-    blurb: "Excess androgens reshape hair growth — thicker on the face, thinner at the scalp.",
+    blurb:
+      "Excess androgens reshape hair growth — thicker on the face, thinner at the scalp.",
     anchor: [382, 47],
     slotTopPct: 25,
   },
@@ -76,7 +81,8 @@ const SYMPTOM_STEPS: SymptomStep[] = [
     id: "pancreas",
     side: "right",
     label: "Pancreas",
-    blurb: "Insulin resistance drives it to produce more insulin — and more androgens.",
+    blurb:
+      "Insulin resistance drives it to produce more insulin — and more androgens.",
     anchor: [386, 143],
     slotTopPct: 75,
   },
@@ -84,7 +90,8 @@ const SYMPTOM_STEPS: SymptomStep[] = [
     id: "uterus",
     side: "left",
     label: "Uterus & Ovaries",
-    blurb: "Irregular shedding of the uterine lining raises long-term endometrial risk.",
+    blurb:
+      "Irregular shedding of the uterine lining raises long-term endometrial risk.",
     anchor: [381, 192],
     slotTopPct: 85,
   },
@@ -137,7 +144,8 @@ export function BodySymptomsSection() {
       frame = null;
       const rect = wrapper.getBoundingClientRect();
       const scrollable = wrapper.offsetHeight - pinned.offsetHeight;
-      const progress = scrollable > 0 ? Math.min(1, Math.max(0, -rect.top / scrollable)) : 0;
+      const progress =
+        scrollable > 0 ? Math.min(1, Math.max(0, -rect.top / scrollable)) : 0;
       const next = Math.min(STEPS, Math.floor(progress * STEPS + 1e-6));
       // Ratchet, not a mirror of scroll position: once a symptom has been
       // revealed, scrolling back up must not un-reveal it — only ever raise
@@ -165,75 +173,85 @@ export function BodySymptomsSection() {
   }, [prefersReducedMotion]);
 
   return (
-    <div
-      className="body-symptoms-scroller"
-      ref={wrapperRef}
-      style={prefersReducedMotion ? undefined : { height: FALLBACK_WRAPPER_HEIGHT }}
-    >
+    <>
+      <div className="body-symptoms-intro">
+        <h2 className="body-symptoms-heading">What is PMOS?</h2>
+        <p className="body-symptoms-blurb">{OVERVIEW_TEXT}</p>
+      </div>
       <div
-        className={`body-symptoms-pinned${prefersReducedMotion ? "" : " body-symptoms-pinned--sticky"}`}
-        ref={pinnedRef}
+        className="body-symptoms-scroller"
+        ref={wrapperRef}
+        style={
+          prefersReducedMotion ? undefined : { height: FALLBACK_WRAPPER_HEIGHT }
+        }
       >
-        <div className="body-symptoms-intro">
-          <h3 className="body-symptoms-heading">What is PMOS?</h3>
-          <p className="body-symptoms-blurb">{OVERVIEW_TEXT}</p>
-        </div>
+        <div
+          className={`body-symptoms-pinned${prefersReducedMotion ? "" : " body-symptoms-pinned--sticky"}`}
+          ref={pinnedRef}
+        >
+          <div className="body-symptoms-figure-row">
+            <svg
+              className="body-symptoms-lines"
+              viewBox={`0 0 ${VIRTUAL_W} ${VIRTUAL_H}`}
+              preserveAspectRatio="xMidYMid meet"
+              aria-hidden="true"
+            >
+              {SYMPTOM_STEPS.map((step, index) => (
+                <path
+                  key={step.id}
+                  d={elbowPath(step)}
+                  className={`symptom-callout-path${index < revealed ? " symptom-callout-path--visible" : ""}`}
+                />
+              ))}
+              {SYMPTOM_STEPS.map((step, index) => (
+                <circle
+                  key={step.id}
+                  cx={step.anchor[0]}
+                  cy={step.anchor[1]}
+                  r={4}
+                  className={`symptom-callout-dot${index < revealed ? " symptom-callout-dot--visible" : ""}`}
+                />
+              ))}
+            </svg>
 
-        <div className="body-symptoms-figure-row">
-          <svg
-            className="body-symptoms-lines"
-            viewBox={`0 0 ${VIRTUAL_W} ${VIRTUAL_H}`}
-            preserveAspectRatio="xMidYMid meet"
-            aria-hidden="true"
-          >
-            {SYMPTOM_STEPS.map((step, index) => (
-              <path
-                key={step.id}
-                d={elbowPath(step)}
-                className={`symptom-callout-path${index < revealed ? " symptom-callout-path--visible" : ""}`}
-              />
-            ))}
-            {SYMPTOM_STEPS.map((step, index) => (
-              <circle
-                key={step.id}
-                cx={step.anchor[0]}
-                cy={step.anchor[1]}
-                r={4}
-                className={`symptom-callout-dot${index < revealed ? " symptom-callout-dot--visible" : ""}`}
-              />
-            ))}
-          </svg>
+            <div className="body-symptoms-figure">
+              <BodyDiagram className="body-symptoms-figure-svg" />
+            </div>
 
-          <div className="body-symptoms-figure">
-            <BodyDiagram className="body-symptoms-figure-svg" />
+            {SYMPTOM_STEPS.map((step, index) => {
+              const isVisible = index < revealed;
+              const edgePct = pct(
+                step.side === "left" ? LEFT_EDGE_X : RIGHT_EDGE_X,
+                VIRTUAL_W,
+              );
+              return (
+                <div
+                  key={step.id}
+                  className={`symptom-callout symptom-callout--${step.side}${isVisible ? " symptom-callout--visible" : ""}`}
+                  style={{
+                    top: `${step.slotTopPct}%`,
+                    [step.side === "left" ? "right" : "left"]:
+                      `${step.side === "left" ? 100 - edgePct : edgePct}%`,
+                  }}
+                  aria-hidden={!isVisible}
+                >
+                  <strong>{step.label}</strong>
+                  <span>{step.blurb}</span>
+                </div>
+              );
+            })}
           </div>
 
-          {SYMPTOM_STEPS.map((step, index) => {
-            const isVisible = index < revealed;
-            const edgePct = pct(step.side === "left" ? LEFT_EDGE_X : RIGHT_EDGE_X, VIRTUAL_W);
-            return (
-              <div
-                key={step.id}
-                className={`symptom-callout symptom-callout--${step.side}${isVisible ? " symptom-callout--visible" : ""}`}
-                style={{
-                  top: `${step.slotTopPct}%`,
-                  [step.side === "left" ? "right" : "left"]: `${step.side === "left" ? 100 - edgePct : edgePct}%`,
-                }}
-                aria-hidden={!isVisible}
-              >
-                <strong>{step.label}</strong>
-                <span>{step.blurb}</span>
-              </div>
-            );
-          })}
+          {!prefersReducedMotion && (
+            <p
+              className={`body-symptoms-hint${revealed >= STEPS ? " body-symptoms-hint--done" : ""}`}
+              aria-hidden="true"
+            >
+              Keep scrolling to see how PMOS affects the body ↓
+            </p>
+          )}
         </div>
-
-        {!prefersReducedMotion && (
-          <p className={`body-symptoms-hint${revealed >= STEPS ? " body-symptoms-hint--done" : ""}`} aria-hidden="true">
-            Keep scrolling to see how PMOS affects the body ↓
-          </p>
-        )}
       </div>
-    </div>
+    </>
   );
 }
