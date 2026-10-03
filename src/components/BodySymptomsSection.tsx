@@ -36,7 +36,7 @@ interface SymptomStep {
 // (formerly PCOS) medical literature — verify wording/sources before this
 // goes on the published wiki.
 const OVERVIEW_TEXT =
-  "Polyendocrine Metabolic Ovarian Syndrome (PMOS), formerly known as Polycystic Ovary Syndrome (PCOS), is one of the most common hormonal conditions affecting people with ovaries — but its effects reach far beyond the reproductive system. Disrupted hormone signaling and insulin resistance can touch the brain, heart, pancreas, and skin too. Scroll to see how, organ by organ.";
+  " but its effects reach far beyond the reproductive system. Disrupted hormone signaling and insulin resistance can touch the brain, heart, pancreas, and skin too. Scroll to see how, organ by organ.";
 
 // The figure + its two label columns are laid out on a fixed virtual canvas
 // (see body-symptoms-figure-row in App.css, which locks the row to this same

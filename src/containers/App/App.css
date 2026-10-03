@@ -3738,3 +3738,157 @@ body.home-fullscreen {
     display: flex;
   }
 }
+
+/* MARKET RINGS
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-03
+   Purpose: Entrepreneurship "Market and target group" TAM / SAM / SOM rings
+   (see MarketRings.tsx). Ring fills are fixed brand tints, so the labels on
+   them use fixed colours too instead of the theme text colour. Selecting a
+   ring deepens its fill and fades the other two into the background. */
+.market-rings {
+  margin: 1.5rem 0;
+}
+
+.market-rings-svg {
+  display: block;
+  width: 100%;
+  max-width: 460px;
+  height: auto;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.market-ring {
+  cursor: pointer;
+  outline: none;
+}
+
+.market-ring-circle {
+  stroke: rgba(51, 40, 63, 0.25);
+  stroke-width: 2;
+  transition:
+    fill 0.25s ease,
+    stroke 0.25s ease;
+}
+
+.market-ring-0 .market-ring-circle {
+  fill: #e2dbf4;
+}
+
+.market-ring-1 .market-ring-circle {
+  fill: #f1c3d4;
+}
+
+.market-ring-2 .market-ring-circle {
+  fill: #7fc4c7;
+}
+
+/* Unselected rings fade by moving to a paler opaque tint rather than by
+   opacity, which would let the ring behind show through. */
+.market-rings.has-active .market-ring-0 .market-ring-circle {
+  fill: #ebe6f7;
+}
+
+.market-rings.has-active .market-ring-1 .market-ring-circle {
+  fill: #f8e1ea;
+}
+
+.market-rings.has-active .market-ring-2 .market-ring-circle {
+  fill: #bfe1e3;
+}
+
+.market-rings.has-active .market-ring-0.active .market-ring-circle {
+  fill: #a892dc;
+}
+
+.market-rings.has-active .market-ring-1.active .market-ring-circle {
+  fill: #e58fb0;
+}
+
+.market-rings.has-active .market-ring-2.active .market-ring-circle {
+  fill: #23878c;
+}
+
+.market-ring:hover .market-ring-circle,
+.market-ring:focus-visible .market-ring-circle,
+.market-ring.active .market-ring-circle {
+  stroke: #33283f;
+  stroke-width: 3;
+}
+
+.market-ring-title,
+.market-ring-name {
+  fill: #33283f;
+  text-anchor: middle;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.market-ring-title {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.market-rings.has-active .market-ring:not(.active) text {
+  opacity: 0.45;
+}
+
+.market-ring-2.active .market-ring-title,
+.market-ring-2.active .market-ring-name {
+  fill: #ffffff;
+}
+
+.market-rings-hint {
+  margin: 0.75rem 0 0;
+  text-align: center;
+  opacity: 0.75;
+}
+
+.market-rings-content {
+  margin-top: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  border-left: 4px solid #a892dc;
+  border-radius: 0.5rem;
+  background-color: rgba(234, 244, 245, 0.45);
+  animation: milestone-arc-fade-in 0.3s ease;
+}
+
+.market-rings-content-1 {
+  border-left-color: #e58fb0;
+}
+
+.market-rings-content-2 {
+  border-left-color: #23878c;
+}
+
+[data-theme="dark"] .market-rings-content {
+  background-color: rgba(234, 244, 245, 0.06);
+}
+
+.market-rings-content-name {
+  margin-bottom: 0.15rem;
+  font-weight: 700;
+}
+
+.market-rings-content-value {
+  margin-bottom: 0.75rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.market-rings-content > :last-child {
+  margin-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .market-ring-circle,
+  .market-ring-title,
+  .market-ring-name {
+    transition: none;
+  }
+
+  .market-rings-content {
+    animation: none;
+  }
+}

@@ -24,6 +24,7 @@ export const PMOS_STATS_BY_CONTINENT: Record<Continent, number> = {
 // One short note per continent, shown in the globe's info panel. Asia has
 // none yet — the panel simply omits the note until the team supplies one.
 export const PMOS_CONTINENT_NOTES: Partial<Record<Continent, string>> = {
+  Asia: "Asia accounts for more than half of all recorded PMOS cases worldwide, largely because it is home to most of the world's population.",
   "North America": "In the US alone, PMOS-related healthcare costs exceed $8 billion a year.",
   Europe:
     "95% of Europe's recorded cases are in Western Europe. Central and Eastern Europe report the lowest rates in the world, a sign of missed diagnoses rather than fewer cases.",

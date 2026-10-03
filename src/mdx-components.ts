@@ -17,6 +17,7 @@ import { BshStreamAnimation } from "./components/BshStreamAnimation";
 import { MicChart } from "./components/MicChart";
 import { MilestoneArc, Milestone } from "./components/MilestoneArc";
 import { FanSelector, FanBranch } from "./components/FanSelector";
+import { MarketRings, MarketRing } from "./components/MarketRings";
 import { MicrobeBackdrop } from "./components/MicrobeBackdrop";
 import { TwoGutsSection } from "./components/TwoGutsSection";
 
@@ -34,6 +35,8 @@ export const mdxComponents = {
   Milestone,
   FanSelector,
   FanBranch,
+  MarketRings,
+  MarketRing,
   MicrobeBackdrop,
   TwoGutsSection,
   Callout,
