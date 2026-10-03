@@ -1983,6 +1983,26 @@ body.home-fullscreen {
   --wave-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 64' preserveAspectRatio='none'%3E%3Cpath d='M0 28 C 300 0 520 58 820 36 S 1240 6 1440 34 L1440 64 L0 64 Z'/%3E%3C/svg%3E");
 }
 
+/* The home page's References panel lands after the last band, i.e. below
+   the wave into the footer — so here it drops the card look and becomes a
+   full-bleed strip in the footer's own colours, reading as the footer's
+   first row instead of a box wedged between the wave and the footer. */
+.page-body--home .page-references {
+  margin: 0 calc(-50vw + 50%);
+  padding: 0.25rem max(1.5rem, calc((100vw - 960px) / 2));
+  border: 0;
+  border-radius: 0;
+  background-color: var(--color-footer-bg);
+  color: var(--color-footer-text);
+}
+
+.page-body--home .page-references-summary,
+.page-body--home .page-references-summary::before,
+.page-body--home .page-references li::marker,
+.page-body--home .page-references a {
+  color: var(--color-footer-text);
+}
+
 /* MICROBE BACKDROP (see MicrobeBackdrop.tsx) */
 .microbe-backdrop {
   position: absolute;
@@ -2270,11 +2290,6 @@ body.home-fullscreen {
 
 .two-guts-intro p {
   margin: 0 0 0.5rem;
-}
-
-.two-guts-source {
-  font-size: 0.8rem;
-  opacity: 0.75;
 }
 
 .two-guts-row {
@@ -2732,6 +2747,11 @@ body.home-fullscreen {
   margin: 0;
   font-size: 0.8rem;
   opacity: 0.75;
+}
+
+.pmos-counter-sub p,
+.pmos-overview-source p {
+  margin: 0;
 }
 
 .pmos-globe-loading {

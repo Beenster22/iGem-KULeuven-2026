@@ -262,8 +262,8 @@ function CompositionBar({ pmos }: { pmos: boolean }) {
 
 interface TwoGutsSectionProps {
   heading: string;
-  // Intro/explanation text and source line, written in home.mdx so the
-  // science and citations stay in the team's content files.
+  // Intro/explanation text with its [^n] citations, written in home.mdx so
+  // the science and citations stay in the team's content files.
   children?: ReactNode;
 }
 

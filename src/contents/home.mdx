@@ -1,4 +1,15 @@
-<PmosOverview />
+{/* First paragraph sits under the counter, the second under the globe (see
+    PmosOverview.tsx). Citations as supplied by the team in "Text for HOME
+    PAGE".
+    TODO(team): check each [^n] sits on the claim it actually supports, and
+    link the wiki page explaining the IHME GBD method once it exists. */}
+<PmosOverview>
+
+Diagnosis is often delayed: up to **70%** of affected individuals remain undiagnosed[^pmos-1][^pmos-2].
+
+Figures per continent[^pmos-3][^pmos-4][^pmos-5].
+
+</PmosOverview>
 
 <div className="home-section home-section--contrast home-section--wave-top">
 <MicrobeBackdrop count={9} seed={2} />
@@ -18,9 +29,7 @@
     spelling/years) before publishing — AI-drafted, not yet verified. */}
 <TwoGutsSection heading="PMOS reaches the gut">
 
-Research has linked PMOS to changes in the gut microbiome: the community of bacteria living in the gut tends to be less diverse, and differently balanced, than in people without PMOS.
-
-<p className="two-guts-source">Sources: Lindheim et al., 2017, <em>PLoS ONE</em>; Torres et al., 2018, <em>J Clin Endocrinol Metab</em>; Qi et al., 2019, <em>Nature Medicine</em>.</p>
+Research has linked PMOS to changes in the gut microbiome: the community of bacteria living in the gut tends to be less diverse, and differently balanced, than in people without PMOS[^gut-1][^gut-2][^gut-3].
 
 </TwoGutsSection>
 
@@ -44,3 +53,14 @@ Research has linked PMOS to changes in the gut microbiome: the community of bact
 
 </div>
 </div>
+
+{/* TODO(team): replace these with the full citations (title, volume, pages,
+    DOI) once checked against the papers — see the TODO above. */}
+[^pmos-1]: Prevalence of polycystic ovary syndrome: a global and regional systematic review and meta-analysis, *Hum Reprod Update*, 2026, [doi:10.1093/humupd/dmaf030](https://doi.org/10.1093/humupd/dmaf030).
+[^pmos-2]: The prevalence of polycystic ovary syndrome in a community sample assessed under contrasting diagnostic criteria, *Hum Reprod*, 2010; 25:544-551.
+[^pmos-3]: IHME Global Burden of Disease data.
+[^pmos-4]: [The Lancet (2026)](https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(26)00717-8/fulltext).
+[^pmos-5]: [Springer (2025)](https://link.springer.com/article/10.1186/s12978-025-02016-y).
+[^gut-1]: Lindheim et al., 2017, *PLoS ONE*.
+[^gut-2]: Torres et al., 2018, *J Clin Endocrinol Metab*.
+[^gut-3]: Qi et al., 2019, *Nature Medicine*.

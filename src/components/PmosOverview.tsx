@@ -1,6 +1,15 @@
 // Purpose: homepage section directly below the intro hero — a headline
 // count-up stat, then the interactive globe (PmosGlobe.tsx) underneath it.
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import {
+  Children,
+  isValidElement,
+  lazy,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { useReducedMotion } from "framer-motion";
 import { PMOS_TOTAL } from "./pmosContinentStats";
 import { MicrobeBackdrop } from "./MicrobeBackdrop";
@@ -39,7 +48,13 @@ function useCountUp(target: number, start: boolean) {
   return value;
 }
 
-export function PmosOverview() {
+// The text under the counter and under the globe is written in home.mdx
+// (as this component's children) rather than here, so its [^n] citations go
+// through the same footnote pipeline as the rest of the wiki and end up in
+// the page's References panel. The first paragraph sits under the counter;
+// any further paragraphs become the caption under the globe.
+export function PmosOverview({ children }: { children?: ReactNode }) {
+  const [sub, ...caption] = Children.toArray(children).filter(isValidElement);
   const headingRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
 
@@ -69,39 +84,16 @@ export function PmosOverview() {
           <span className="pmos-counter-number">{count.toLocaleString()}</span>{" "}
           women are affected by PMOS during their reproductive years alone
         </h2>
-        <p className="pmos-counter-sub">
-          Diagnosis is often delayed: up to <strong>70%</strong> of affected
-          individuals remain undiagnosed.
-        </p>
+        <div className="pmos-counter-sub">{sub}</div>
       </div>
       <Suspense
         fallback={<div className="pmos-globe-loading">Loading globe…</div>}
       >
         <PmosGlobe />
       </Suspense>
-      {/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-01 — citations as
-          supplied by the team in "Text for HOME PAGE".
-          TODO(team): link the wiki page explaining the IHME GBD method once
-          it exists. */}
-      <p className="pmos-overview-source">
-        Sources: Prevalence of polycystic ovary syndrome: a global and regional
-        systematic review and meta-analysis, <em>Hum Reprod Update</em>, 2026,{" "}
-        <a href="https://doi.org/10.1093/humupd/dmaf030">
-          doi:10.1093/humupd/dmaf030
-        </a>
-        ; The prevalence of polycystic ovary syndrome in a community sample
-        assessed under contrasting diagnostic criteria, <em>Hum Reprod</em>,
-        2010; 25:544-551. Continent figures: IHME Global Burden of Disease data;
-        see also{" "}
-        <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(26)00717-8/fulltext">
-          The Lancet (2026)
-        </a>{" "}
-        and{" "}
-        <a href="https://link.springer.com/article/10.1186/s12978-025-02016-y">
-          Springer (2025)
-        </a>
-        .
-      </p>
+      {caption.length > 0 && (
+        <div className="pmos-overview-source">{caption}</div>
+      )}
     </section>
   );
 }
