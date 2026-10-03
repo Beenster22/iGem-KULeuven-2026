@@ -2119,20 +2119,25 @@ body.home-fullscreen {
   position: relative;
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-03: the pinned block is
+   exactly one screen tall (below the 64px fixed navbar) and centres its
+   content, so the figure fills the page height and stays in the middle of
+   the screen for the whole reveal. */
 .body-symptoms-pinned {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.75rem;
+  justify-content: center;
   text-align: center;
-  padding: 2.5rem 0;
+  padding: 1rem 0 2rem;
 }
 
-/* top: 5rem matches .section-progress-box's sticky offset elsewhere in this
-   file — enough to clear the 64px fixed navbar with a little breathing room. */
 .body-symptoms-pinned--sticky {
   position: sticky;
-  top: 5rem;
+  top: 4rem;
+  height: calc(100vh - 4rem);
+  height: calc(100svh - 4rem);
 }
 
 /* Its own near-full-screen block, so the definition stands alone and a
@@ -2163,7 +2168,13 @@ body.home-fullscreen {
   opacity: 0.9;
 }
 
+/* Out of the flow at the bottom of the pinned screen, so it takes no height
+   away from the figure. */
 .body-symptoms-hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.4rem;
   margin: 0;
   font-size: 0.85rem;
   opacity: 0.7;
@@ -2174,98 +2185,234 @@ body.home-fullscreen {
   opacity: 0;
 }
 
-/* Figure + label row — a fixed 760:400 virtual canvas (see VIRTUAL_W/H in
-   the component) that scales as one unit via aspect-ratio, so every
-   percentage/SVG coordinate the component computes from that canvas still
-   lines up however large or small the row actually renders. container-type
-   lets the labels' font-size (in cqw, below) shrink and grow with it too. */
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-03
+   Purpose: figure in the middle with the team's four symptom groups listed
+   either side (hormonal/reproductive on the left, the other three on the
+   right). Each group has its own colour, shared by its heading rule, the
+   marker of the symptom currently lit, and the glow on the body. */
 .body-symptoms-figure-row {
-  position: relative;
-  width: min(760px, 94vw);
-  aspect-ratio: 760 / 400;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(0.75rem, 3vw, 3rem);
+  width: min(1250px, 100%);
   margin: 0 auto;
-  container-type: inline-size;
-}
-
-.body-symptoms-lines {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-/* The bent leader line from each organ out to its label — an infographic
-   pointer, not a tooltip: no box, no shadow, just a line and plain text. */
-.symptom-callout-path {
-  fill: none;
-  stroke: var(--color-accent);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.symptom-callout-path--visible {
-  opacity: 0.85;
-}
-
-.symptom-callout-dot {
-  fill: var(--color-accent);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.symptom-callout-dot--visible {
-  opacity: 1;
 }
 
 .body-symptoms-figure {
-  position: absolute;
-  left: 36.84%;
-  top: 0;
-  width: 26.32%;
-  height: 100%;
+  position: relative;
+  /* As tall as the pinned screen allows; the 80vw cap keeps room for the
+     two columns on narrow-but-tall screens. */
+  height: max(280px, min(calc(100vh - 7rem), 80vw));
+  height: max(280px, min(calc(100svh - 7rem), 80vw));
+  /* Proportions of the team's figure drawing (see CANVAS_WIDTH/HEIGHT in
+     BodySymptomsSection.tsx). */
+  aspect-ratio: 217 / 400;
 }
 
 .body-symptoms-figure-svg {
   display: block;
   width: 100%;
   height: 100%;
+  overflow: visible;
 }
 
-/* Plain floating text (no card/border/background) — label + a short phrase,
-   positioned at its assigned slot and right/left-aligned so it reads toward
-   the leader line that points back at the body. Stays in the DOM once
-   revealed=false (for a smooth fade-in) but is inert until its step hits. */
-.symptom-callout {
-  position: absolute;
-  width: 30%;
+.symptom-group--hormonal {
+  --symptom-color: #f08fc0;
+}
+
+.symptom-group--metabolic {
+  --symptom-color: #f0c674;
+}
+
+.symptom-group--wellbeing {
+  --symptom-color: #6fd0e0;
+}
+
+.symptom-group--gut {
+  --symptom-color: #7fc8a9;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-03
+   Purpose: a lit symptom makes the body part itself glow in its group's
+   colour (no ring drawn around it) and dims the other organs. The svg root
+   carries `has-lit lit-<region> symptom-group--<group>` while one is lit. */
+.body-part {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.3s ease;
+}
+
+.body-symptoms-figure-svg.has-lit .body-part {
+  opacity: 0.35;
+}
+
+.lit-brain .body-part--brain,
+.lit-heart .body-part--heart,
+.lit-liver .body-part--liver,
+.lit-pancreas .body-part--pancreas,
+.lit-gut .body-part--gut,
+.lit-adipose .body-part--adipose,
+.lit-uterus .body-part--uterus,
+.lit-reproductive .body-part--uterus {
+  opacity: 1 !important;
+  filter: drop-shadow(0 0 2px var(--symptom-color))
+    drop-shadow(0 0 7px var(--symptom-color));
+  animation: body-part-pulse 1.6s ease-in-out infinite;
+}
+
+/* Ovaries only: the uterus artwork stays, its ovaries (and the fimbriae
+   beside them) glow and the rest of it is dimmed. The ids are the artwork's
+   own, see BodyOrgans.tsx. */
+.lit-ovaries .body-part--uterus {
+  opacity: 1 !important;
+}
+
+/* !important because the artwork's paths carry an inline opacity. */
+.lit-ovaries .body-part--uterus path {
+  opacity: 0.4 !important;
+}
+
+.lit-ovaries .body-part--uterus :is(#path155, #path156, #path157, #path159) {
+  opacity: 1 !important;
+  filter: drop-shadow(0 0 1px var(--symptom-color))
+    drop-shadow(0 0 3px var(--symptom-color));
+}
+
+/* Hair: the hairstyle drawn in FemaleFigure.tsx. */
+.lit-hair .female-figure-hair {
+  filter: drop-shadow(0 0 3px var(--symptom-color))
+    drop-shadow(0 0 9px var(--symptom-color));
+}
+
+/* Skin: the face fills with the group colour. */
+.body-symptoms-face {
+  fill: var(--symptom-color, transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.lit-face .body-symptoms-face {
+  opacity: 0.45;
+  filter: drop-shadow(0 0 6px var(--symptom-color));
+}
+
+@keyframes body-part-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.07);
+  }
+}
+
+.body-symptoms-column {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
-  transform: translateY(-50%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  font-size: clamp(0.6rem, 1.9cqw, 0.95rem);
+  gap: 1rem;
+  text-align: left;
+  font-size: clamp(0.85rem, 1.6vw, 1.25rem);
   line-height: 1.3;
-  pointer-events: none;
 }
 
-.symptom-callout--visible {
+.symptom-group {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.symptom-group--visible {
   opacity: 1;
 }
 
-.symptom-callout--left {
-  text-align: right;
+.symptom-group-title {
+  margin: 0 0 0.4rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 3px solid var(--symptom-color);
+  font-family: inherit;
+  font-size: 1.1em;
+  font-weight: 700;
+  line-height: 1.25;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
-.symptom-callout--right {
-  text-align: left;
+.symptom-group-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.symptom-callout strong {
-  font-size: clamp(0.65rem, 2.1cqw, 1rem);
+.symptom-item {
+  position: relative;
+  padding: 0.2rem 0 0.2rem 1.1em;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.symptom-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 0.55em;
+  height: 0.55em;
+  border-radius: 50%;
+  border: 2px solid var(--symptom-color);
+  transition: background-color 0.25s ease;
+}
+
+.symptom-item--visible {
+  opacity: 0.8;
+}
+
+.symptom-item--lit {
+  opacity: 1;
+  font-weight: 700;
+}
+
+.symptom-item--lit::before {
+  background-color: var(--symptom-color);
+}
+
+/* Phones: the figure moves to the top and the two columns sit side by side
+   underneath, so the whole thing still fits in one pinned screen. */
+@media (max-width: 699.98px) {
+  .body-symptoms-pinned {
+    padding: 0.5rem 0 1.75rem;
+  }
+
+  .body-symptoms-figure-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 0.75rem;
+  }
+
+  .body-symptoms-figure {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    justify-self: center;
+    /* What is left of the pinned screen once the two lists underneath
+       have their room. */
+    height: clamp(200px, calc(100vh - 27rem), 440px);
+    height: clamp(200px, calc(100svh - 27rem), 440px);
+  }
+
+  .body-symptoms-column {
+    gap: 0.6rem;
+    font-size: 0.72rem;
+  }
+
+  .symptom-item {
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .body-part {
+    animation: none !important;
+  }
 }
 
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-09-24
@@ -2373,6 +2520,32 @@ body.home-fullscreen {
   flex-basis: 0;
   min-width: 0;
   transition: flex-grow 0.15s linear;
+}
+
+.two-guts-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+  max-width: 760px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.95rem;
+}
+
+.two-guts-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.two-guts-legend-swatch {
+  flex: none;
+  width: 0.9em;
+  height: 0.9em;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.28);
 }
 
 .two-guts-note {
@@ -2727,13 +2900,25 @@ body.home-fullscreen {
   margin: 0;
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-03: the figure sits on
+   its own line, far larger than the sentence around it and in the brand
+   teal, so it is the first thing read in this band. */
 .pmos-counter-number {
-  color: var(--color-text);
+  display: block;
+  width: fit-content;
+  margin: 0.15em auto;
+  color: #1f8a8f;
+  font-size: clamp(2.6rem, 11vw, 7rem);
+  line-height: 1.05;
   font-variant-numeric: tabular-nums;
   padding: 0 0.1em;
   /* --color-header-bg (not --color-accent) — accent is identical to the
      body background in light mode, which would make this invisible too. */
-  border-bottom: 0.09em solid var(--color-header-bg);
+  border-bottom: 0.07em solid var(--color-header-bg);
+}
+
+[data-theme="dark"] .pmos-counter-number {
+  color: #5fd3d7;
 }
 
 .pmos-counter-sub {

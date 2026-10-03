@@ -1,10 +1,10 @@
 // Purpose: bacterium silhouette used by the microbiome magnifying-glass
 // panel in InflammationSliderSection. The outline (BACTERIUM_D) is traced
 // from the team's own artwork (pvulgbact.svg, measured bbox 773,248 400x568
-// -> cropped viewBox below with ~8px padding). PVulgatisIcon keeps the
+// -> cropped viewBox below with ~8px padding). EngineeredPVulgatusIcon keeps the
 // artwork's internal segment ellipses; OtherBacteriumIcon is the same
 // outline without them, for the generic background bacteria that aren't
-// (yet) engineered P. vulgatis. Both fill with currentColor so the
+// (yet) engineered P. vulgatus. Both fill with currentColor so the
 // microbiome-bacterium / microbiome-bacterium--engineered CSS classes (see
 // App.css) control colour instead of a value baked into the path.
 import type { SVGProps } from "react";
@@ -32,7 +32,7 @@ export function OtherBacteriumIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-export function PVulgatisIcon(props: SVGProps<SVGSVGElement>) {
+export function EngineeredPVulgatusIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox={BACTERIUM_VIEWBOX} {...props}>
       <path d={BACTERIUM_D} fill="currentColor" stroke="none" />

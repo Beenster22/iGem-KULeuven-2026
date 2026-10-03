@@ -3,15 +3,19 @@
 // scroll-pinned transition — both windows now show their final state
 // straight away so the difference is obvious at a glance — and made the
 // bacteria larger and livelier.
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-03: the colours now stand
+// for the bacterial groups named in the team's "Text for HOME PAGE"
+// (Section 5), with the mix in each window and a legend following the
+// team's table there.
 // Purpose: home-page "two guts" section, the step between "What is PMOS?"
 // and the BSH diagram. Two circular windows into the gut, side by side: in
-// the "With PMOS" window some bacterial groups are missing and a few
-// dominant groups have taken their place, so diversity is visibly lower and
-// the mix different. The composition bars underneath are computed from the
-// cells actually drawn, so they always match the picture. This is an
-// ILLUSTRATION, not data: the groups are generic shapes/colours, not real
-// taxa. The cells drift and turn on a CSS loop (off under
-// prefers-reduced-motion, see App.css).
+// the "With PMOS" window two groups have increased at the expense of the
+// others, so diversity is visibly lower and the mix different. The
+// composition bars underneath are computed from the cells actually drawn,
+// so they always match the picture. This is an ILLUSTRATION, not data: which
+// groups go up or down follows the team's source, but the cell counts are
+// only chosen to show that direction. The cells drift and turn on a CSS
+// loop (off under prefers-reduced-motion, see App.css).
 import type { CSSProperties, ReactNode } from "react";
 
 type Shape =
@@ -27,27 +31,54 @@ interface Group {
   id: string;
   shape: Shape;
   color: string;
+  // Cells drawn in the "Without PMOS" and "With PMOS" windows.
+  healthy: number;
+  pmos: number;
 }
 
+// Counts follow the team's table: without PMOS the purple group is the most
+// abundant, pink and blue are level, teal sits just below them and the three
+// "other" groups are unchanged; with PMOS pink and blue increase while every
+// other group shrinks. Both columns add up to the same number of cells.
 const GROUPS: Group[] = [
-  { id: "a", shape: "rod", color: "#8f7fc4" },
-  { id: "b", shape: "coccus", color: "#4fae9a" },
-  { id: "c", shape: "chain", color: "#e0a84a" },
-  { id: "d", shape: "curved", color: "#d9779b" },
-  { id: "e", shape: "short-rod", color: "#6f9bd6" },
-  { id: "f", shape: "diplo", color: "#8cc27a" },
-  { id: "g", shape: "spiral", color: "#e2825a" },
+  { id: "a", shape: "rod", color: "#8f7fc4", healthy: 8, pmos: 4 },
+  { id: "b", shape: "coccus", color: "#4fae9a", healthy: 5, pmos: 3 },
+  { id: "c", shape: "chain", color: "#e0a84a", healthy: 4, pmos: 3 },
+  { id: "d", shape: "curved", color: "#d9779b", healthy: 6, pmos: 11 },
+  { id: "e", shape: "short-rod", color: "#6f9bd6", healthy: 6, pmos: 11 },
+  { id: "f", shape: "diplo", color: "#8cc27a", healthy: 4, pmos: 3 },
+  { id: "g", shape: "spiral", color: "#e2825a", healthy: 4, pmos: 2 },
 ];
 
-// In the PMOS window these groups are crowded out, and each lost cell is
-// taken over by one of the dominant groups.
-const LOST = new Set(["c", "f", "g"]);
-const DOMINANT = ["d", "e"];
+// Legend entries, named and labelled as in the team's text. Entries with
+// `italic` are bacterial names, set in italics.
+const LEGEND: {
+  groupIds: string[];
+  name: string;
+  italic?: boolean;
+  trend?: string;
+}[] = [
+  { groupIds: ["d"], name: "Bacteroides", italic: true, trend: "INCREASE" },
+  {
+    groupIds: ["e"],
+    name: "Escherichia and Shigella",
+    italic: true,
+    trend: "INCREASE",
+  },
+  {
+    groupIds: ["a"],
+    name: "Lactobacilli and Bifidobacteria",
+    italic: true,
+    trend: "DECREASE",
+  },
+  { groupIds: ["b"], name: "Prevotellaceae", italic: true, trend: "DECREASE" },
+  { groupIds: ["g", "c", "f"], name: "other bacteria" },
+];
 
 // Deliberately few slots, so each cell can be drawn large (CELL_SCALE) and
 // still has room to drift.
-const SLOTS = 28;
-const CELL_SCALE = 1.5;
+const SLOTS = GROUPS.reduce((sum, group) => sum + group.healthy, 0);
+const CELL_SCALE = 1.35;
 const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 const VB = 300;
 const CENTER = VB / 2;
@@ -64,7 +95,7 @@ interface Slot {
   rotation: number;
   groupIndex: number;
   // The group shown in the PMOS window (differs from groupIndex only for
-  // cells whose own group has been crowded out).
+  // cells taken over by one of the two groups that increase).
   pmosGroupIndex: number;
   // Per-cell drift so the cells don't all move in step (see two-guts-drift
   // in App.css).
@@ -75,20 +106,50 @@ interface Slot {
   delay: number;
 }
 
+// Which group sits in each slot without PMOS: every group's cells, dealt out
+// in a fixed pseudo-random order so no group clumps together.
+const HEALTHY_ORDER = GROUPS.flatMap((group, groupIndex) =>
+  Array.from({ length: group.healthy }, () => groupIndex),
+)
+  .map((groupIndex, i) => ({ groupIndex, key: seededValue(i + 29) }))
+  .sort((a, b) => a.key - b.key)
+  .map((entry) => entry.groupIndex);
+
+// With PMOS: each shrinking group gives up its surplus cells, which the
+// growing groups take over in turn, so a cell only changes when it has to.
+const PMOS_ORDER = (() => {
+  const order = [...HEALTHY_ORDER];
+  const surplus = GROUPS.map((group) => group.healthy - group.pmos);
+  const growing = GROUPS.flatMap((group, groupIndex) =>
+    Array.from(
+      { length: Math.max(0, group.pmos - group.healthy) },
+      () => groupIndex,
+    ),
+  );
+  let next = 0;
+  for (let i = 0; i < order.length; i++) {
+    if (surplus[order[i]] > 0 && next < growing.length) {
+      surplus[order[i]] -= 1;
+      // Alternate between the growing groups rather than filling one first.
+      const pick =
+        next % 2 === 0 ? next / 2 : growing.length - 1 - (next - 1) / 2;
+      order[i] = growing[pick];
+      next += 1;
+    }
+  }
+  return order;
+})();
+
 const SLOT_LAYOUT: Slot[] = Array.from({ length: SLOTS }, (_, i) => {
   const angle = i * GOLDEN_ANGLE + (seededValue(i + 3) - 0.5) * 0.4;
   const radius = Math.sqrt((i + 0.5) / SLOTS) * (LENS_R - 22);
-  const groupIndex = i % GROUPS.length;
-  const replacementId =
-    DOMINANT[Math.floor(seededValue(i + 9) * DOMINANT.length)];
+  const groupIndex = HEALTHY_ORDER[i];
   return {
     x: CENTER + Math.cos(angle) * radius,
     y: CENTER + Math.sin(angle) * radius,
     rotation: Math.round(seededValue(i + 17) * 360),
     groupIndex,
-    pmosGroupIndex: LOST.has(GROUPS[groupIndex].id)
-      ? GROUPS.findIndex((g) => g.id === replacementId)
-      : groupIndex,
+    pmosGroupIndex: PMOS_ORDER[i],
     dx: Math.round((seededValue(i + 53) - 0.5) * 36),
     dy: Math.round((seededValue(i + 61) - 0.5) * 36),
     spin: Math.round((seededValue(i + 71) - 0.5) * 90),
@@ -276,15 +337,41 @@ export function TwoGutsSection({ heading, children }: TwoGutsSectionProps) {
       <div
         className="two-guts-row"
         role="img"
-        aria-label="Illustration: two windows into the gut microbiome. Without PMOS, many different kinds of bacteria are evenly mixed. With PMOS, several kinds disappear and a few take over, so the community is less diverse and differently composed."
+        aria-label="Illustration: two windows into the gut microbiome. Without PMOS, many different kinds of bacteria are mixed. With PMOS, Bacteroides and Escherichia and Shigella increase while Lactobacilli and Bifidobacteria, Prevotellaceae and other bacteria decrease, so the community is less diverse."
       >
         <GutWindow label="Without PMOS" pmos={false} />
         <GutWindow label="With PMOS" pmos />
       </div>
 
+      <ul className="two-guts-legend">
+        {LEGEND.map((entry) => (
+          <li key={entry.name} className="two-guts-legend-item">
+            {entry.groupIds.map((id) => (
+              <span
+                key={id}
+                className="two-guts-legend-swatch"
+                style={{
+                  backgroundColor: GROUPS.find((g) => g.id === id)?.color,
+                }}
+                aria-hidden="true"
+              />
+            ))}
+            <span>
+              {entry.italic ? <em>{entry.name}</em> : entry.name}
+              {entry.trend && (
+                <strong className="two-guts-legend-trend">
+                  {" "}
+                  {entry.trend}
+                </strong>
+              )}
+            </span>
+          </li>
+        ))}
+      </ul>
+
       <p className="two-guts-note">
-        Illustration only: each shape and colour stands for a different group of
-        gut bacteria; not measured data.
+        Illustration only: the number of cells drawn shows the direction of
+        each change, not measured data.
       </p>
     </div>
   );

@@ -5,6 +5,7 @@ import BootstrapNavbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
 import Pages from "../pages.ts";
 import { useThemeMode } from "../ThemeModeContext";
+import { renderItalics } from "../utils/renderItalics";
 
 // Generated with Claude Sonnet 5 (Anthropic), 2026-09-08
 // Purpose: the stylized "Empower" wordmark, swapped per theme — each image
@@ -189,7 +190,7 @@ export function Navbar() {
                       <span className="mega-menu-link-name">{subpage.name}</span>
                       {subpage.lead && (
                         <span className="mega-menu-link-lead">
-                          {subpage.lead}
+                          {renderItalics(subpage.lead)}
                         </span>
                       )}
                     </Link>

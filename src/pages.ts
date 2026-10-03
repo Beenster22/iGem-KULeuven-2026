@@ -198,7 +198,7 @@ const Pages: (Page | Folder)[] = [
         title: "Best Alternative Platform",
         path: "/alternative-platform",
         component: AlternativePlatform,
-        lead: "This award is designed to celebrate exemplary work done in alternative platforms, and covers anything that is not E. coli, S. cerevisiae, and B. subtilis.",
+        lead: "This award is designed to celebrate exemplary work done in alternative platforms, and covers anything that is not _E. coli_, _S. cerevisiae_, and _B. subtilis_.",
       },
       {
         name: "Best Part Collection",

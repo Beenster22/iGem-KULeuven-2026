@@ -80,9 +80,14 @@ export function PmosOverview({ children }: { children?: ReactNode }) {
     <section className="pmos-overview home-section--wave-top">
       <MicrobeBackdrop count={4} seed={1} />
       <div className="pmos-counter" ref={headingRef}>
+        {/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-03: sentence
+            worded as in the team's "Text for HOME PAGE" (Section 2), with
+            the figure written out in full so it can count up, on its own
+            line and much larger than the sentence around it. */}
         <h2 className="pmos-counter-heading">
+          Polycystic ovary syndrome (PCOS) affects{" "}
           <span className="pmos-counter-number">{count.toLocaleString()}</span>{" "}
-          women are affected by PMOS during their reproductive years alone
+          women during their reproductive years alone.
         </h2>
         <div className="pmos-counter-sub">{sub}</div>
       </div>
