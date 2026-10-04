@@ -7,6 +7,13 @@
 // for the bacterial groups named in the team's "Text for HOME PAGE"
 // (Section 5), with the mix in each window and a legend following the
 // team's table there.
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-04: legend now only names
+// the groups (no INCREASE/DECREASE labels), and the "With PMOS" window has
+// fewer "other" bacteria and more of the two dominating groups. Bacteroides are drawn as capsules (and Lactobacilli
+// and Bifidobacteria as the curved cells instead), and the lowest one in the
+// "With PMOS" window is marked data-pv-zoom-source: it is the cell that
+// BshStreamAnimation.tsx lifts out and enlarges on the way to the next
+// section, so it stays still rather than drifting.
 // Purpose: home-page "two guts" section, the step between "What is PMOS?"
 // and the BSH diagram. Two circular windows into the gut, side by side: in
 // the "With PMOS" window two groups have increased at the expense of the
@@ -20,6 +27,7 @@ import type { CSSProperties, ReactNode } from "react";
 
 type Shape =
   | "rod"
+  | "capsule"
   | "short-rod"
   | "coccus"
   | "diplo"
@@ -39,39 +47,30 @@ interface Group {
 // Counts follow the team's table: without PMOS the purple group is the most
 // abundant, pink and blue are level, teal sits just below them and the three
 // "other" groups are unchanged; with PMOS pink and blue increase while every
-// other group shrinks. Both columns add up to the same number of cells.
+// other group shrinks, the "other" groups down to a single cell each so the
+// two dominating groups stand out. Both columns add up to the same number of
+// cells.
 const GROUPS: Group[] = [
-  { id: "a", shape: "rod", color: "#8f7fc4", healthy: 8, pmos: 4 },
+  { id: "a", shape: "curved", color: "#8f7fc4", healthy: 8, pmos: 4 },
   { id: "b", shape: "coccus", color: "#4fae9a", healthy: 5, pmos: 3 },
-  { id: "c", shape: "chain", color: "#e0a84a", healthy: 4, pmos: 3 },
-  { id: "d", shape: "curved", color: "#d9779b", healthy: 6, pmos: 11 },
-  { id: "e", shape: "short-rod", color: "#6f9bd6", healthy: 6, pmos: 11 },
-  { id: "f", shape: "diplo", color: "#8cc27a", healthy: 4, pmos: 3 },
-  { id: "g", shape: "spiral", color: "#e2825a", healthy: 4, pmos: 2 },
+  { id: "c", shape: "chain", color: "#e0a84a", healthy: 4, pmos: 1 },
+  { id: "d", shape: "capsule", color: "#d9779b", healthy: 6, pmos: 14 },
+  { id: "e", shape: "short-rod", color: "#6f9bd6", healthy: 6, pmos: 13 },
+  { id: "f", shape: "diplo", color: "#8cc27a", healthy: 4, pmos: 1 },
+  { id: "g", shape: "spiral", color: "#e2825a", healthy: 4, pmos: 1 },
 ];
 
-// Legend entries, named and labelled as in the team's text. Entries with
-// `italic` are bacterial names, set in italics.
+// Legend entries, named as in the team's text: it only says which colour is
+// which group. Entries with `italic` are bacterial names, set in italics.
 const LEGEND: {
   groupIds: string[];
   name: string;
   italic?: boolean;
-  trend?: string;
 }[] = [
-  { groupIds: ["d"], name: "Bacteroides", italic: true, trend: "INCREASE" },
-  {
-    groupIds: ["e"],
-    name: "Escherichia and Shigella",
-    italic: true,
-    trend: "INCREASE",
-  },
-  {
-    groupIds: ["a"],
-    name: "Lactobacilli and Bifidobacteria",
-    italic: true,
-    trend: "DECREASE",
-  },
-  { groupIds: ["b"], name: "Prevotellaceae", italic: true, trend: "DECREASE" },
+  { groupIds: ["d"], name: "Bacteroides", italic: true },
+  { groupIds: ["e"], name: "Escherichia and Shigella", italic: true },
+  { groupIds: ["a"], name: "Lactobacilli and Bifidobacteria", italic: true },
+  { groupIds: ["b"], name: "Prevotellaceae", italic: true },
   { groupIds: ["g", "c", "f"], name: "other bacteria" },
 ];
 
@@ -158,6 +157,19 @@ const SLOT_LAYOUT: Slot[] = Array.from({ length: SLOTS }, (_, i) => {
   };
 });
 
+// Width of a capsule cell in viewBox units (see CellShape), and the slot of
+// the Bacteroides cell handed over to the next section: the lowest one in the
+// "With PMOS" window, so it has the shortest way down.
+const CAPSULE_W = 34;
+const ZOOM_SOURCE_SLOT = SLOT_LAYOUT.reduce(
+  (best, slot, i) =>
+    GROUPS[slot.pmosGroupIndex].id === "d" &&
+    (best < 0 || slot.y > SLOT_LAYOUT[best].y)
+      ? i
+      : best,
+  -1,
+);
+
 function CellShape({ shape, color }: { shape: Shape; color: string }) {
   const stroke = "rgba(0, 0, 0, 0.28)";
   switch (shape) {
@@ -169,6 +181,20 @@ function CellShape({ shape, color }: { shape: Shape; color: string }) {
           width={34}
           height={14}
           rx={7}
+          fill={color}
+          stroke={stroke}
+          strokeWidth={1.5}
+        />
+      );
+    // Same proportions as the P. vulgatus in BshStreamAnimation.tsx.
+    case "capsule":
+      return (
+        <rect
+          x={-CAPSULE_W / 2}
+          y={-8.2}
+          width={CAPSULE_W}
+          height={16.4}
+          rx={8.2}
           fill={color}
           stroke={stroke}
           strokeWidth={1.5}
@@ -264,13 +290,23 @@ function GutWindow({ label, pmos }: { label: string; pmos: boolean }) {
         <g clipPath={`url(#${clipId})`}>
           {SLOT_LAYOUT.map((slot, i) => {
             const group = GROUPS[pmos ? slot.pmosGroupIndex : slot.groupIndex];
+            const zoomSource = pmos && i === ZOOM_SOURCE_SLOT;
             return (
               <g
                 key={i}
                 transform={`translate(${slot.x} ${slot.y}) rotate(${slot.rotation})`}
+                {...(zoomSource && {
+                  "data-pv-zoom-source": "",
+                  "data-rotation": slot.rotation,
+                  "data-width": CAPSULE_W * CELL_SCALE,
+                })}
               >
                 <g
-                  className="two-guts-cell"
+                  className={
+                    zoomSource
+                      ? "two-guts-cell two-guts-cell--still"
+                      : "two-guts-cell"
+                  }
                   style={
                     {
                       "--dx": `${slot.dx}px`,
@@ -356,22 +392,14 @@ export function TwoGutsSection({ heading, children }: TwoGutsSectionProps) {
                 aria-hidden="true"
               />
             ))}
-            <span>
-              {entry.italic ? <em>{entry.name}</em> : entry.name}
-              {entry.trend && (
-                <strong className="two-guts-legend-trend">
-                  {" "}
-                  {entry.trend}
-                </strong>
-              )}
-            </span>
+            <span>{entry.italic ? <em>{entry.name}</em> : entry.name}</span>
           </li>
         ))}
       </ul>
 
       <p className="two-guts-note">
-        Illustration only: the number of cells drawn shows the direction of
-        each change, not measured data.
+        Illustration only: the number of cells drawn shows the direction of each
+        change, not measured data.
       </p>
     </div>
   );

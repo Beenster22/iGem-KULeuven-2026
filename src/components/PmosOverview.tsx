@@ -85,7 +85,7 @@ export function PmosOverview({ children }: { children?: ReactNode }) {
             the figure written out in full so it can count up, on its own
             line and much larger than the sentence around it. */}
         <h2 className="pmos-counter-heading">
-          Polycystic ovary syndrome (PCOS) affects{" "}
+          Polyendocrine metabolic ovarian syndrome (PMOS) affects{" "}
           <span className="pmos-counter-number">{count.toLocaleString()}</span>{" "}
           women during their reproductive years alone.
         </h2>
