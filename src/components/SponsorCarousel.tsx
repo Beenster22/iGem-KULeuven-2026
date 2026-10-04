@@ -47,13 +47,11 @@ function SponsorTile({ sponsor, hidden }: { sponsor: Sponsor; hidden?: boolean }
     <span className="sponsor-carousel-placeholder">{sponsor.name}</span>
   );
 
-  if (hidden) {
-    return (
-      <div className="sponsor-carousel-item" aria-hidden="true">
-        {content}
-      </div>
-    );
-  }
+  // The duplicate set (`hidden`) is what's on screen for the second half of
+  // each loop, so its tiles must be clickable links too — they are only kept
+  // away from screen readers and the tab order, which already get each
+  // sponsor once from the first set.
+  const duplicateProps = hidden ? { "aria-hidden": true, tabIndex: -1 } : {};
 
   return sponsor.href ? (
     <a
@@ -61,11 +59,14 @@ function SponsorTile({ sponsor, hidden }: { sponsor: Sponsor; hidden?: boolean }
       href={sponsor.href}
       target="_blank"
       rel="noreferrer noopener"
+      {...duplicateProps}
     >
       {content}
     </a>
   ) : (
-    <div className="sponsor-carousel-item">{content}</div>
+    <div className="sponsor-carousel-item" aria-hidden={hidden || undefined}>
+      {content}
+    </div>
   );
 }
 

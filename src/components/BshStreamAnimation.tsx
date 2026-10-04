@@ -263,8 +263,16 @@ const TRAVELLER_H = BAC_H + TRAVELLER_PAD * 2;
 // it begins when the source cell has scrolled up to START_AT and is complete
 // when the bacterium below has come up to END_AT. Starting low and ending
 // high spreads it over more scrolling, so it is slow enough to follow.
-const START_AT = 0.6;
-const END_AT = 0.45;
+const START_AT = 0.7;
+const END_AT = 0.6;
+
+// Once the cell has landed the diagram stays complete: the labels and bile
+// acids come in on their own (progress runs on to SETTLED without any more
+// scrolling) and nothing is undone until the page has been scrolled back up
+// to RELEASE_AT — so the diagram can be read anywhere near the middle of the
+// screen, and a small scroll back up does not take it apart again.
+const SETTLED = 1.2;
+const RELEASE_AT = 0.55;
 
 // The cell follows the scroll position through a soft spring instead of
 // rigidly, so a quick flick of the wheel still plays out as a glide.
@@ -353,13 +361,20 @@ function usePvZoom(
       rotate.set(startRotation * (1 - eased));
     };
 
+    let landed = false;
+    const held = (target: number) => {
+      if (target >= 1) landed = true;
+      else if (target < RELEASE_AT) landed = false;
+      return landed ? SETTLED : target;
+    };
+
     const update = () => {
-      scrolled.set(measure().target);
+      scrolled.set(held(measure().target));
       place();
     };
 
     // No glide on load: start wherever the page already is.
-    const initial = measure().target;
+    const initial = held(measure().target);
     scrolled.jump(initial);
     progress.jump(initial);
     place();

@@ -130,6 +130,11 @@ export function Footer() {
                 href="https://www.eppendorf.com/be-en/"
               />
               <SponsorLogo
+                name="Gimber"
+                src="https://static.igem.wiki/teams/6299/wiki/sponsors/gimber.avif"
+                href="https://gimber.com/"
+              />
+              <SponsorLogo
                 name="IDT"
                 src="https://static.igem.wiki/teams/6299/wiki/sponsors/idt.avif"
                 href="https://eu.idtdna.com/page"
