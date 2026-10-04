@@ -245,7 +245,7 @@ const Pages: (Page | Folder)[] = [
         title: "Sponsors",
         path: "/sponsors",
         component: Sponsors,
-        lead: "Placeholder page — replace with your sponsors content.",
+        lead: "EMPOWER is made possible by the organisations on this page. Thank you for supporting our project.",
       },
     ],
   },

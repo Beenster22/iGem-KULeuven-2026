@@ -1743,6 +1743,9 @@ footer hr {
      minimum), since that's the tallest padding requirement of any sponsor
      sharing this tile size — bumped from 0.75rem for that reason. */
   padding: 1rem 1.25rem;
+  /* Logos enlarged with `zoom` (SponsorCarousel.tsx) may reach into the
+     padding; this keeps them inside the tile's rounded corners. */
+  overflow: hidden;
   transition: transform 0.2s ease;
 }
 
@@ -1776,6 +1779,76 @@ footer hr {
 @media (prefers-reduced-motion: reduce) {
   .sponsor-carousel-track {
     animation: none;
+  }
+}
+
+/* SPONSORS PAGE
+   Logo wall (SponsorGrid.tsx): the same white logo tiles as the footer's
+   .sponsor-carousel-item, larger and with the sponsor's name underneath. */
+.sponsor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0 2rem;
+  padding: 0;
+  list-style: none;
+}
+
+.sponsor-grid-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+  background-color: var(--color-page-bg);
+  border: 1px solid rgba(51, 40, 63, 0.15);
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.08);
+  color: var(--color-text);
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.sponsor-grid-card:hover,
+.sponsor-grid-card:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 0.75rem 2rem rgba(51, 40, 63, 0.16);
+  color: var(--color-text);
+}
+
+/* Always white, in both themes: the logos are made for a white background. */
+.sponsor-grid-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 130px;
+  padding: 1.5rem 1.75rem;
+  background-color: #fff;
+  /* Logos enlarged with pageZoom (sponsors.ts) must not spill over the name. */
+  overflow: hidden;
+}
+
+.sponsor-grid-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.sponsor-grid-name {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sponsor-grid-card {
+    transition: none;
   }
 }
 

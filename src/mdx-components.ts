@@ -20,6 +20,7 @@ import { FanSelector, FanBranch } from "./components/FanSelector";
 import { MarketRings, MarketRing } from "./components/MarketRings";
 import { MicrobeBackdrop } from "./components/MicrobeBackdrop";
 import { TwoGutsSection } from "./components/TwoGutsSection";
+import { SponsorGrid } from "./components/SponsorGrid";
 
 export const mdxComponents = {
   TeamMembers,
@@ -39,6 +40,7 @@ export const mdxComponents = {
   MarketRing,
   MicrobeBackdrop,
   TwoGutsSection,
+  SponsorGrid,
   Callout,
   TabbedSections,
   TabSection,
