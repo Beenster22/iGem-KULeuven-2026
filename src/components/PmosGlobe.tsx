@@ -66,8 +66,7 @@ function lighten(hex: string, amount: number): string {
 export function PmosGlobe() {
   const { mode } = useThemeMode();
   // Sizes the globe itself — its own stage element, not the outer wrap,
-  // since the wrap also grows to fit the info panel once split into a
-  // two-column layout, which would otherwise inflate the globe too.
+  // which also holds the text beside it.
   const stageRef = useRef<HTMLDivElement>(null);
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const [size, setSize] = useState(320);
@@ -147,10 +146,11 @@ export function PmosGlobe() {
     setHoveredContinent(country ? (continentOf(country) ?? null) : null);
   }
 
+  // Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: the globe now always
+  // sits on the left with the text beside it — an invitation to explore until
+  // a continent is clicked, then that continent's figures in its place.
   return (
-    <div
-      className={`pmos-globe-wrap${selected ? " pmos-globe-wrap--split" : ""}`}
-    >
+    <div className="pmos-globe-wrap">
       <div
         className={`pmos-globe-stage${hoveredContinent ? " is-hovering" : ""}`}
         ref={stageRef}
@@ -195,7 +195,7 @@ export function PmosGlobe() {
       </div>
       <div className="pmos-globe-info" aria-live="polite">
         {selected ? (
-          <div className="pmos-globe-info-panel">
+          <div className="pmos-globe-info-panel" key={selected.continent}>
             <span className="pmos-globe-info-continent">
               {selected.continent}
             </span>
@@ -209,9 +209,14 @@ export function PmosGlobe() {
             )}
           </div>
         ) : (
-          <span className="pmos-globe-info-hint">
-            Click a country to see its continent's estimate
-          </span>
+          <div className="pmos-globe-info-panel">
+            <h2 className="pmos-globe-prompt">
+              See how this affects the world
+            </h2>
+            <span className="pmos-globe-info-hint">
+              Click a continent on the globe
+            </span>
+          </div>
         )}
       </div>
     </div>

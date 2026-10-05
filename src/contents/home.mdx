@@ -1,17 +1,18 @@
-{/* First paragraph sits under the counter, the second under the globe (see
-    PmosOverview.tsx). Citations as supplied by the team in "Text for HOME
-    PAGE".
+{/* The text sits under the globe (see PmosOverview.tsx). Citations as
+    supplied by the team in "Text for HOME PAGE".
     TODO(team): check each [^n] sits on the claim it actually supports, and
     link the wiki page explaining the IHME GBD method once it exists. */}
-<PmosOverview>
+{/* Each band below is its own full-screen section; HomeSnapScroll glides
+    from one `data-snap` stop to the next (see HomeSnapScroll.tsx). */}
+<HomeSnapScroll />
 
-Delayed diagnosis—with up to 70% of affected individuals remaining undiagnosed[^pmos-1][^pmos-2]
+<PmosOverview>
 
 Figures per continent[^pmos-3][^pmos-4][^pmos-5].
 
 </PmosOverview>
 
-<div className="home-section home-section--contrast home-section--wave-top">
+<div className="home-section home-section--flush home-section--contrast home-section--wave-top">
 <MicrobeBackdrop count={9} seed={2} />
 <div className="container">
 
@@ -20,25 +21,19 @@ Figures per continent[^pmos-3][^pmos-4][^pmos-5].
 </div>
 </div>
 
-<div className="home-section home-section--page home-section--wave-top">
+<div className="home-section home-section--flush home-section--page home-section--wave-top">
 <MicrobeBackdrop count={6} seed={5} />
 <div className="container">
 
 {/* Heading and text exactly as supplied by the team in "Text for HOME PAGE"
     (Section 5); the bacterial groups in the figure follow the paper the team
     cites there. */}
-<TwoGutsSection heading="EMPOWER FOCUSES ON THE GUT MICROBIOME">
-
-Clear correlation between the intestinal microbiome and the development of metabolic disorders led us to investigate its link with PMOS.
-
-Microbial diversity in women with PMOS tends to decrease, with some bacterial species dominating[^gut-1].
-
-</TwoGutsSection>
+<TwoGutsSection heading="EMPOWER FOCUSES ON THE GUT MICROBIOME" />
 
 </div>
 </div>
 
-<div className="home-section home-section--body home-section--wave-top">
+<div className="home-section home-section--body home-section--wave-top home-snap-screen" data-snap="">
 <MicrobeBackdrop count={4} seed={4} />
 <div className="container">
 
@@ -47,7 +42,7 @@ Microbial diversity in women with PMOS tends to decrease, with some bacterial sp
 </div>
 </div>
 
-<div className="home-section home-section--contrast home-section--wave-top home-section--wave-into-footer">
+<div className="home-section home-section--contrast home-section--wave-top home-section--wave-into-footer home-snap-screen" data-snap="">
 <MicrobeBackdrop count={4} seed={3} />
 <div className="container">
 

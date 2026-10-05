@@ -259,13 +259,6 @@ const TRAVELLER_PAD = 8;
 const TRAVELLER_W = BAC_W + TRAVELLER_PAD * 2;
 const TRAVELLER_H = BAC_H + TRAVELLER_PAD * 2;
 
-// Where the hand-over starts and ends, as a fraction of the viewport height:
-// it begins when the source cell has scrolled up to START_AT and is complete
-// when the bacterium below has come up to END_AT. Starting low and ending
-// high spreads it over more scrolling, so it is slow enough to follow.
-const START_AT = 0.7;
-const END_AT = 0.6;
-
 // Once the cell has landed the diagram stays complete: the labels and bile
 // acids come in on their own (progress runs on to SETTLED without any more
 // scrolling) and nothing is undone until the page has been scrolled back up
@@ -312,7 +305,13 @@ function usePvZoom(
     const source = document.querySelector<SVGGElement>("[data-pv-zoom-source]");
     const lens = source?.ownerSVGElement;
     const diagram = diagramRef.current;
-    if (!enabled || !source || !lens || !diagram) {
+    // Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: the gut window is
+    // now pinned to the screen until the page moves on to this section, so
+    // the hand-over follows that move: it starts when this section's band
+    // (a `data-snap` stop, see HomeSnapScroll.tsx) comes in at the bottom of
+    // the screen and is complete when the band fills it.
+    const band = diagram?.closest<HTMLElement>("[data-snap]");
+    if (!enabled || !source || !lens || !diagram || !band) {
       scrolled.jump(2);
       progress.jump(2);
       return;
@@ -337,9 +336,7 @@ function usePvZoom(
       const toY = diagramRect.top + BAC_MID_Y * unit;
       const toW = BAC_W * unit;
 
-      const vh = window.innerHeight;
-      const span = Math.max(1, toY - fromY - (END_AT - START_AT) * vh);
-      const target = (START_AT * vh - fromY) / span;
+      const target = 1 - band.getBoundingClientRect().top / window.innerHeight;
       return { fromX, fromY, fromW, toX, toY, toW, target };
     };
 
@@ -506,8 +503,11 @@ export function BshStreamAnimation() {
         className="bsh-stream-heading"
         style={{ opacity: headingOpacity }}
       >
-        Bile salt hydrolase breaks down conjugated bile acids
+        We are specifically focusing on <em>P. vulgatus</em>
       </motion.h3>
+      <motion.p className="bsh-stream-sub" style={{ opacity: headingOpacity }}>
+        Bile salt hydrolase breaks down conjugated bile acids
+      </motion.p>
       <div
         className="bsh-stream-diagram"
         ref={diagramRef}

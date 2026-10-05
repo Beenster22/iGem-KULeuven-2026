@@ -14,16 +14,23 @@
 // "With PMOS" window is marked data-pv-zoom-source: it is the cell that
 // BshStreamAnimation.tsx lifts out and enlarges on the way to the next
 // section, so it stays still rather than drifting.
-// Purpose: home-page "two guts" section, the step between "What is PMOS?"
-// and the BSH diagram. Two circular windows into the gut, side by side: in
-// the "With PMOS" window two groups have increased at the expense of the
-// others, so diversity is visibly lower and the mix different. The
-// composition bars underneath are computed from the cells actually drawn,
-// so they always match the picture. This is an ILLUSTRATION, not data: which
-// groups go up or down follows the team's source, but the cell counts are
-// only chosen to show that direction. The cells drift and turn on a CSS
-// loop (off under prefers-reduced-motion, see App.css).
-import type { CSSProperties, ReactNode } from "react";
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: one window instead of
+// two, shown over two scroll steps of a pinned full-screen section (see
+// HomeSnapScroll.tsx): first the healthy gut on the left with its text on the
+// right, then the same window slides to the right while its bacteria change
+// to the PMOS mix and the text gives way to the PMOS text on the left.
+// Purpose: home-page gut-microbiome section, the step between "What is
+// PMOS?" and the BSH diagram. A circular window into the gut: with PMOS two
+// groups have increased at the expense of the others, so diversity is
+// visibly lower and the mix different. The composition bar underneath is
+// computed from the cells actually drawn, so it always matches the picture.
+// This is an ILLUSTRATION, not data: which groups go up or down follows the
+// team's source, but the cell counts are only chosen to show that direction.
+// The cells drift and turn on a CSS loop (off under prefers-reduced-motion,
+// see App.css).
+import { useRef, type CSSProperties } from "react";
+import { SnapSteps } from "./HomeSnapScroll";
+import { usePinnedStep } from "./usePinnedStep";
 
 type Shape =
   | "rod"
@@ -39,7 +46,7 @@ interface Group {
   id: string;
   shape: Shape;
   color: string;
-  // Cells drawn in the "Without PMOS" and "With PMOS" windows.
+  // Cells drawn without PMOS and with PMOS.
   healthy: number;
   pmos: number;
 }
@@ -266,18 +273,30 @@ function CellShape({ shape, color }: { shape: Shape; color: string }) {
   }
 }
 
-function GutWindow({ label, pmos }: { label: string; pmos: boolean }) {
-  const clipId = `two-guts-clip-${label.replace(/\W+/g, "-").toLowerCase()}`;
+// The one window. Cells whose group differs between the two states are drawn
+// twice and cross-fade (each after its own short delay, so the mix changes
+// gradually while the window slides); the rest stay as they are.
+function GutWindow({ pmos }: { pmos: boolean }) {
   return (
-    <figure className="two-guts-window">
-      <figcaption className="two-guts-window-label">{label}</figcaption>
+    <figure
+      className="two-guts-window"
+      role="img"
+      aria-label={
+        pmos
+          ? "Illustration: a window into the gut microbiome with PMOS. Bacteroides and Escherichia and Shigella have increased while Lactobacilli and Bifidobacteria, Prevotellaceae and other bacteria have decreased, so the community is less diverse."
+          : "Illustration: a window into a healthy gut microbiome, with many different kinds of bacteria mixed together."
+      }
+    >
+      <figcaption className="two-guts-window-label">
+        {pmos ? "With PMOS" : "Without PMOS"}
+      </figcaption>
       <svg
         viewBox={`0 0 ${VB} ${VB}`}
         className="two-guts-lens"
         aria-hidden="true"
       >
         <defs>
-          <clipPath id={clipId}>
+          <clipPath id="two-guts-clip">
             <circle cx={CENTER} cy={CENTER} r={LENS_R} />
           </clipPath>
         </defs>
@@ -287,10 +306,11 @@ function GutWindow({ label, pmos }: { label: string; pmos: boolean }) {
           r={LENS_R}
           className="two-guts-lens-bg"
         />
-        <g clipPath={`url(#${clipId})`}>
+        <g clipPath="url(#two-guts-clip)">
           {SLOT_LAYOUT.map((slot, i) => {
-            const group = GROUPS[pmos ? slot.pmosGroupIndex : slot.groupIndex];
-            const zoomSource = pmos && i === ZOOM_SOURCE_SLOT;
+            const healthyGroup = GROUPS[slot.groupIndex];
+            const pmosGroup = GROUPS[slot.pmosGroupIndex];
+            const zoomSource = i === ZOOM_SOURCE_SLOT;
             return (
               <g
                 key={i}
@@ -312,13 +332,34 @@ function GutWindow({ label, pmos }: { label: string; pmos: boolean }) {
                       "--dx": `${slot.dx}px`,
                       "--dy": `${slot.dy}px`,
                       "--spin": `${slot.spin}deg`,
+                      "--swap-delay": `${(0.15 + seededValue(i + 97) * 0.6).toFixed(2)}s`,
                       animationDuration: `${slot.duration}s`,
                       animationDelay: `${slot.delay}s`,
                     } as CSSProperties
                   }
                 >
                   <g transform={`scale(${CELL_SCALE})`}>
-                    <CellShape shape={group.shape} color={group.color} />
+                    {healthyGroup === pmosGroup ? (
+                      <CellShape
+                        shape={healthyGroup.shape}
+                        color={healthyGroup.color}
+                      />
+                    ) : (
+                      <>
+                        <g className="two-guts-swap two-guts-swap--healthy">
+                          <CellShape
+                            shape={healthyGroup.shape}
+                            color={healthyGroup.color}
+                          />
+                        </g>
+                        <g className="two-guts-swap two-guts-swap--pmos">
+                          <CellShape
+                            shape={pmosGroup.shape}
+                            color={pmosGroup.color}
+                          />
+                        </g>
+                      </>
+                    )}
                   </g>
                 </g>
               </g>
@@ -357,50 +398,59 @@ function CompositionBar({ pmos }: { pmos: boolean }) {
   );
 }
 
-interface TwoGutsSectionProps {
-  heading: string;
-  // Intro/explanation text with its [^n] citations, written in home.mdx so
-  // the science and citations stay in the team's content files.
-  children?: ReactNode;
-}
+export function TwoGutsSection({ heading }: { heading: string }) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const pmos = usePinnedStep(wrapperRef, 2) === 1;
 
-export function TwoGutsSection({ heading, children }: TwoGutsSectionProps) {
   return (
-    <div className="two-guts">
-      <h3 className="two-guts-heading">{heading}</h3>
-      <div className="two-guts-intro">{children}</div>
-
+    <div
+      className="home-snap-pin"
+      ref={wrapperRef}
+      style={{ "--snap-steps": 2 } as CSSProperties}
+    >
+      <SnapSteps steps={2} />
       <div
-        className="two-guts-row"
-        role="img"
-        aria-label="Illustration: two windows into the gut microbiome. Without PMOS, many different kinds of bacteria are mixed. With PMOS, Bacteroides and Escherichia and Shigella increase while Lactobacilli and Bifidobacteria, Prevotellaceae and other bacteria decrease, so the community is less diverse."
+        className={`two-guts home-snap-stage${pmos ? " two-guts--pmos" : ""}`}
       >
-        <GutWindow label="Without PMOS" pmos={false} />
-        <GutWindow label="With PMOS" pmos />
+        <h3 className="two-guts-heading">{heading}</h3>
+
+        <div className="two-guts-row">
+          <GutWindow pmos={pmos} />
+          <div className="two-guts-panel two-guts-panel--healthy" inert={pmos}>
+            <h4 className="two-guts-panel-title">
+              This is a healthy gut microbiome
+            </h4>
+          </div>
+          <div className="two-guts-panel two-guts-panel--pmos" inert={!pmos}>
+            <h4 className="two-guts-panel-title">
+              This is the gut microbiome with PMOS
+            </h4>
+          </div>
+        </div>
+
+        <ul className="two-guts-legend">
+          {LEGEND.map((entry) => (
+            <li key={entry.name} className="two-guts-legend-item">
+              {entry.groupIds.map((id) => (
+                <span
+                  key={id}
+                  className="two-guts-legend-swatch"
+                  style={{
+                    backgroundColor: GROUPS.find((g) => g.id === id)?.color,
+                  }}
+                  aria-hidden="true"
+                />
+              ))}
+              <span>{entry.italic ? <em>{entry.name}</em> : entry.name}</span>
+            </li>
+          ))}
+        </ul>
+
+        <p className="two-guts-note">
+          Illustration only: the number of cells drawn shows the direction of
+          each change, not measured data.
+        </p>
       </div>
-
-      <ul className="two-guts-legend">
-        {LEGEND.map((entry) => (
-          <li key={entry.name} className="two-guts-legend-item">
-            {entry.groupIds.map((id) => (
-              <span
-                key={id}
-                className="two-guts-legend-swatch"
-                style={{
-                  backgroundColor: GROUPS.find((g) => g.id === id)?.color,
-                }}
-                aria-hidden="true"
-              />
-            ))}
-            <span>{entry.italic ? <em>{entry.name}</em> : entry.name}</span>
-          </li>
-        ))}
-      </ul>
-
-      <p className="two-guts-note">
-        Illustration only: the number of cells drawn shows the direction of each
-        change, not measured data.
-      </p>
     </div>
   );
 }

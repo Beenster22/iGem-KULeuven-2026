@@ -12,15 +12,20 @@
 // (AdiposeDrawing.tsx) to the figure. The body itself is now the team's
 // own figure drawing (FemaleFigure.tsx), with the existing organ artwork
 // (BodyOrgans.tsx) placed on it.
-// Purpose: home-page "What is PMOS?" section — a large heading + definition,
-// then a centered body diagram. Scroll-linked reveal: the figure pins in
-// place (CSS position: sticky inside a tall wrapper) while the visitor
-// scrolls through it. Once every symptom is shown the wrapper holds the
-// finished picture a little longer, then its extra height runs out and the
-// page resumes normal scrolling — no wheel-event hijacking involved.
-// prefers-reduced-motion skips the pin entirely and shows every symptom at
-// once in a static layout.
-import { useLayoutEffect, useRef, useState } from "react";
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: the definition and the
+// figure are now two of the home page's full-screen sections (see
+// HomeSnapScroll.tsx). The symptoms appear a whole group at a time, one
+// group per scroll step, instead of one by one; the symptoms are styled as
+// things to point at, a hint under the figure says so, and until the visitor
+// has tried it the newest group's symptoms take turns lighting up their body
+// part by themselves.
+// Purpose: home-page "What is PMOS?" section — a large heading + definition
+// on its own screen, then a centered body diagram that stays pinned (CSS
+// position: sticky inside a tall wrapper) while each scroll step brings in
+// the next group of symptoms. Pointing at (or focusing) a symptom lights up
+// the part of the body it concerns. prefers-reduced-motion skips the pin
+// entirely and shows every group at once in a static layout.
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useReducedMotion } from "framer-motion";
 import { AdiposeDrawing, ADIPOSE_DRAWING_WIDTH } from "./AdiposeDrawing";
 import {
@@ -35,7 +40,9 @@ import {
   FEMALE_FIGURE_WIDTH,
 } from "./FemaleFigure";
 import { GutDrawing, GUT_DRAWING_WIDTH } from "./GutDrawing";
+import { SnapSteps } from "./HomeSnapScroll";
 import { LiverDrawing, LIVER_DRAWING_WIDTH } from "./LiverDrawing";
+import { usePinnedStep } from "./usePinnedStep";
 
 // Wording supplied by the team ("Text for HOME PAGE", Section 3) — keep as
 // written.
@@ -131,7 +138,10 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
     symptoms: [
       { label: "Low grade chronic inflammation", region: "adipose" },
       { label: "Insulin resistance and hyperinsulinaemia", region: "pancreas" },
-      { label: "Dyslipidaemia and raised cardiovascular risk", region: "heart" },
+      {
+        label: "Dyslipidaemia and raised cardiovascular risk",
+        region: "heart",
+      },
       { label: "Hepatic steatosis", region: "liver" },
     ],
   },
@@ -152,11 +162,12 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
   },
 ];
 
-// Reveal order: group by group, symptom by symptom.
+// Flat list of every symptom, so one index identifies a symptom across
+// groups.
 const SYMPTOMS = SYMPTOM_GROUPS.flatMap((group) =>
   group.symptoms.map((symptom) => ({ ...symptom, groupId: group.id })),
 );
-const STEPS = SYMPTOMS.length;
+const GROUP_COUNT = SYMPTOM_GROUPS.length;
 const FIRST_INDEX_OF_GROUP = Object.fromEntries(
   SYMPTOM_GROUPS.map((group) => [
     group.id,
@@ -164,94 +175,87 @@ const FIRST_INDEX_OF_GROUP = Object.fromEntries(
   ]),
 );
 
-// Fallback used only for the very first paint, before the layout effect
-// below measures the real pinned height and overwrites it.
-const FALLBACK_WRAPPER_HEIGHT = 700 + STEPS * 160;
+// How long each symptom stays lit while they take turns by themselves.
+const DEMO_INTERVAL_MS = 1600;
 
 export function BodySymptomsSection() {
   const prefersReducedMotion = useReducedMotion();
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const pinnedRef = useRef<HTMLDivElement>(null);
-  const [revealedState, setRevealedState] = useState(0);
+  // One scroll step per group, mirroring the scroll position: scrolling back
+  // up takes the groups away again in reverse, so the reveal can be replayed.
+  const step = usePinnedStep(wrapperRef, GROUP_COUNT);
+  const shownGroups = prefersReducedMotion ? GROUP_COUNT : step + 1;
+
   const [hovered, setHovered] = useState<number | null>(null);
-  const revealed = prefersReducedMotion ? STEPS : revealedState;
-  // The symptom whose body part is lit: the one being pointed at, otherwise
-  // the one most recently revealed by scrolling.
+  // Until the visitor has pointed at a symptom themselves, the symptoms of
+  // the group that came in last light up in turn, to show what pointing does.
+  const [interacted, setInteracted] = useState(false);
+  const [inView, setInView] = useState(false);
+  const [demoTick, setDemoTick] = useState(0);
+  const demoRunning = !prefersReducedMotion && !interacted && inView;
+
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+    const observer = new IntersectionObserver(([entry]) =>
+      setInView(entry.isIntersecting),
+    );
+    observer.observe(wrapper);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!demoRunning) return;
+    setDemoTick(0);
+    const timer = setInterval(
+      () => setDemoTick((tick) => tick + 1),
+      DEMO_INTERVAL_MS,
+    );
+    return () => clearInterval(timer);
+  }, [demoRunning, shownGroups]);
+
+  const newestGroup = SYMPTOM_GROUPS[shownGroups - 1];
+  // A symptom whose group has been scrolled away again no longer counts as
+  // pointed at.
+  const shownSymptoms =
+    shownGroups < GROUP_COUNT
+      ? FIRST_INDEX_OF_GROUP[SYMPTOM_GROUPS[shownGroups].id]
+      : SYMPTOMS.length;
   const litIndex =
-    hovered ?? (prefersReducedMotion || revealed === 0 ? null : revealed - 1);
+    (hovered !== null && hovered < shownSymptoms ? hovered : null) ??
+    (demoRunning
+      ? FIRST_INDEX_OF_GROUP[newestGroup.id] +
+        (demoTick % newestGroup.symptoms.length)
+      : null);
   const lit = litIndex === null ? undefined : SYMPTOMS[litIndex];
 
-  useLayoutEffect(() => {
-    if (prefersReducedMotion) return;
-    const wrapper = wrapperRef.current;
-    const pinned = pinnedRef.current;
-    if (!wrapper || !pinned) return;
-
-    let frame: number | null = null;
-    let stepPx = 160;
-
-    // Each step "costs" a slice of the viewport's height to scroll through —
-    // enough that a normal scroll/trackpad tick doesn't skip a symptom, short
-    // enough that revealing all of them doesn't take forever. The extra hold
-    // at the end keeps the finished picture pinned for a while before the
-    // page moves on.
-    const recomputeHeight = () => {
-      stepPx = Math.max(110, Math.round(window.innerHeight * 0.2));
-      const holdPx = Math.round(window.innerHeight * 0.6);
-      wrapper.style.height = `${pinned.offsetHeight + STEPS * stepPx + holdPx}px`;
-    };
-
-    const updateProgress = () => {
-      frame = null;
-      const scrolled = -wrapper.getBoundingClientRect().top;
-      const next = Math.min(
-        STEPS,
-        Math.max(0, Math.floor(scrolled / stepPx + 0.6)),
-      );
-      // Ratchet, not a mirror of scroll position: once a symptom has been
-      // revealed, scrolling back up must not un-reveal it — only ever raise
-      // the count, never lower it.
-      setRevealedState((prev) => Math.max(prev, next));
-    };
-
-    const onScroll = () => {
-      if (frame === null) frame = requestAnimationFrame(updateProgress);
-    };
-    const onResize = () => {
-      recomputeHeight();
-      updateProgress();
-    };
-
-    recomputeHeight();
-    updateProgress();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onResize);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onResize);
-      if (frame !== null) cancelAnimationFrame(frame);
-    };
-  }, [prefersReducedMotion]);
+  const point = (index: number) => {
+    setHovered(index);
+    setInteracted(true);
+  };
 
   const renderGroup = (group: SymptomGroup) => {
     const first = FIRST_INDEX_OF_GROUP[group.id];
+    const isVisible = SYMPTOM_GROUPS.indexOf(group) < shownGroups;
     return (
       <div
         key={group.id}
-        className={`symptom-group symptom-group--${group.id}${first < revealed ? " symptom-group--visible" : ""}`}
+        className={`symptom-group symptom-group--${group.id}${isVisible ? " symptom-group--visible" : ""}`}
+        inert={!isVisible}
       >
         <h3 className="symptom-group-title">{group.title}</h3>
         <ul className="symptom-group-list">
           {group.symptoms.map((symptom, offset) => {
             const index = first + offset;
-            const isVisible = index < revealed;
             return (
               <li
                 key={symptom.label}
-                className={`symptom-item${isVisible ? " symptom-item--visible" : ""}${index === litIndex ? " symptom-item--lit" : ""}`}
-                aria-hidden={!isVisible}
-                onMouseEnter={() => isVisible && setHovered(index)}
+                className={`symptom-item${index === litIndex ? " symptom-item--lit" : ""}`}
+                tabIndex={0}
+                onMouseEnter={() => point(index)}
                 onMouseLeave={() => setHovered(null)}
+                onFocus={() => point(index)}
+                onBlur={() => setHovered(null)}
               >
                 {symptom.label}
               </li>
@@ -264,20 +268,18 @@ export function BodySymptomsSection() {
 
   return (
     <>
-      <div className="body-symptoms-intro">
+      <div className="body-symptoms-intro" data-snap="">
         <h2 className="body-symptoms-heading">What is PMOS?</h2>
         <p className="body-symptoms-blurb">{OVERVIEW_TEXT}</p>
       </div>
       <div
-        className="body-symptoms-scroller"
+        className={`body-symptoms-scroller${prefersReducedMotion ? "" : " home-snap-pin"}`}
         ref={wrapperRef}
-        style={
-          prefersReducedMotion ? undefined : { height: FALLBACK_WRAPPER_HEIGHT }
-        }
+        style={{ "--snap-steps": GROUP_COUNT } as CSSProperties}
       >
+        {!prefersReducedMotion && <SnapSteps steps={GROUP_COUNT} />}
         <div
-          className={`body-symptoms-pinned${prefersReducedMotion ? "" : " body-symptoms-pinned--sticky"}`}
-          ref={pinnedRef}
+          className={`body-symptoms-pinned${prefersReducedMotion ? "" : " home-snap-stage"}`}
         >
           <div className="body-symptoms-figure-row">
             <div className="body-symptoms-column body-symptoms-column--left">
@@ -342,14 +344,16 @@ export function BodySymptomsSection() {
             </div>
           </div>
 
-          {!prefersReducedMotion && (
-            <p
-              className={`body-symptoms-hint${revealed >= STEPS ? " body-symptoms-hint--done" : ""}`}
-              aria-hidden="true"
-            >
-              Keep scrolling to see how PMOS affects the body ↓
-            </p>
-          )}
+          <p className="body-symptoms-hint">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 3l14 8-6 1.6L16.5 19l-2.6 1.3-3.4-6.5L6 18z" />
+            </svg>
+            <span>
+              <span className="body-symptoms-hint-hover">Hover over</span>
+              <span className="body-symptoms-hint-tap">Tap</span> a symptom to
+              see where it shows in the body
+            </span>
+          </p>
         </div>
       </div>
     </>

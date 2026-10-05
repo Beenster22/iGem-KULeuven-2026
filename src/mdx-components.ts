@@ -21,6 +21,7 @@ import { MarketRings, MarketRing } from "./components/MarketRings";
 import { MicrobeBackdrop } from "./components/MicrobeBackdrop";
 import { TwoGutsSection } from "./components/TwoGutsSection";
 import { SponsorGrid } from "./components/SponsorGrid";
+import { HomeSnapScroll } from "./components/HomeSnapScroll";
 
 export const mdxComponents = {
   TeamMembers,
@@ -41,6 +42,7 @@ export const mdxComponents = {
   MicrobeBackdrop,
   TwoGutsSection,
   SponsorGrid,
+  HomeSnapScroll,
   Callout,
   TabbedSections,
   TabSection,

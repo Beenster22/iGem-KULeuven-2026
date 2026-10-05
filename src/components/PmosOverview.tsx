@@ -1,5 +1,5 @@
-// Purpose: homepage section directly below the intro hero — a headline
-// count-up stat, then the interactive globe (PmosGlobe.tsx) underneath it.
+// Purpose: the two homepage sections directly below the intro hero — a
+// headline count-up stat, then the interactive globe (PmosGlobe.tsx).
 import {
   Children,
   isValidElement,
@@ -37,7 +37,11 @@ function useCountUp(target: number, start: boolean) {
     let frame: number;
     const startTime = performance.now();
     const tick = (now: number) => {
-      const progress = Math.min((now - startTime) / COUNT_DURATION_MS, 1);
+      // Clamped at 0 too: the first frame's timestamp can predate startTime.
+      const progress = Math.min(
+        Math.max((now - startTime) / COUNT_DURATION_MS, 0),
+        1,
+      );
       setValue(Math.round(target * EASE_OUT_CUBIC(progress)));
       if (progress < 1) frame = requestAnimationFrame(tick);
     };
@@ -48,13 +52,15 @@ function useCountUp(target: number, start: boolean) {
   return value;
 }
 
-// The text under the counter and under the globe is written in home.mdx
-// (as this component's children) rather than here, so its [^n] citations go
-// through the same footnote pipeline as the rest of the wiki and end up in
-// the page's References panel. The first paragraph sits under the counter;
-// any further paragraphs become the caption under the globe.
+// The caption under the globe is written in home.mdx (as this component's
+// children) rather than here, so its [^n] citations go through the same
+// footnote pipeline as the rest of the wiki and end up in the page's
+// References panel.
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: split into two
+// full-screen sections (each a `data-snap` stop, see HomeSnapScroll.tsx) —
+// the headline figure on its own, then the globe.
 export function PmosOverview({ children }: { children?: ReactNode }) {
-  const [sub, ...caption] = Children.toArray(children).filter(isValidElement);
+  const caption = Children.toArray(children).filter(isValidElement);
   const headingRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
 
@@ -74,31 +80,41 @@ export function PmosOverview({ children }: { children?: ReactNode }) {
     return () => observer.disconnect();
   }, []);
 
-  const count = useCountUp(PMOS_TOTAL, inView);
+  const millions = useCountUp(PMOS_TOTAL / 1_000_000, inView);
 
   return (
-    <section className="pmos-overview home-section--wave-top">
-      <MicrobeBackdrop count={4} seed={1} />
-      <div className="pmos-counter" ref={headingRef}>
-        {/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-03: sentence
-            worded as in the team's "Text for HOME PAGE" (Section 2), with
-            the figure written out in full so it can count up, on its own
-            line and much larger than the sentence around it. */}
-        <h2 className="pmos-counter-heading">
-          Polyendocrine metabolic ovarian syndrome (PMOS) affects{" "}
-          <span className="pmos-counter-number">{count.toLocaleString()}</span>{" "}
-          women during their reproductive years alone.
-        </h2>
-        <div className="pmos-counter-sub">{sub}</div>
-      </div>
-      <Suspense
-        fallback={<div className="pmos-globe-loading">Loading globe…</div>}
+    <>
+      <section
+        className="pmos-overview home-snap-screen home-section--wave-top"
+        data-snap=""
       >
-        <PmosGlobe />
-      </Suspense>
-      {caption.length > 0 && (
-        <div className="pmos-overview-source">{caption}</div>
-      )}
-    </section>
+        <MicrobeBackdrop count={4} seed={1} />
+        <div className="pmos-counter" ref={headingRef}>
+          {/* Wording as asked for by the team; the figure (PMOS_TOTAL, in
+              millions) counts up, on its own line and much larger than the
+              words under it. */}
+          <h2 className="pmos-counter-heading">
+            <span className="pmos-counter-number">{millions} million</span>{" "}
+            <span className="pmos-counter-rest">
+              women affected during their reproductive years
+            </span>
+          </h2>
+        </div>
+      </section>
+      <section
+        className="pmos-overview home-section--body home-snap-screen home-section--wave-top"
+        data-snap=""
+      >
+        <MicrobeBackdrop count={4} seed={6} />
+        <Suspense
+          fallback={<div className="pmos-globe-loading">Loading globe…</div>}
+        >
+          <PmosGlobe />
+        </Suspense>
+        {caption.length > 0 && (
+          <div className="pmos-overview-source">{caption}</div>
+        )}
+      </section>
+    </>
   );
 }

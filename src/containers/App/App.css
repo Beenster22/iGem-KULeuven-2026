@@ -298,7 +298,11 @@ a[data-footnote-ref]:focus {
   border-bottom: 1px solid rgba(51, 40, 63, 0.12);
 }
 
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-05
+   Purpose: in dark mode the navbar uses the Dark Purple swatch (same as the
+   mega-menu and body cards) rather than the near-black --color-page-bg. */
 [data-theme="dark"] .navbar-empower {
+  background-color: #33283f;
   border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -1992,6 +1996,78 @@ body.home-fullscreen {
   color: var(--color-text);
 }
 
+/* HOME SNAP SECTIONS
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-05
+   Purpose: every home-page section fills the screen, and HomeSnapScroll.tsx
+   glides from one `data-snap` stop to the next. "home-snap-screen" is an
+   ordinary full-screen section; "home-snap-pin" is a taller wrapper whose
+   "home-snap-stage" stays pinned to the screen while the visitor scrolls
+   through `--snap-steps` steps (markers placed by SnapSteps). The fixed
+   navbar only covers the top of the screen once the visitor has opened it
+   (see body.home-fullscreen), hence --home-nav-h. */
+body {
+  --home-nav-h: 64px;
+}
+
+body.home-fullscreen {
+  --home-nav-h: 0px;
+}
+
+/* With the navbar open the hero starts below it; keep it to what is left of
+   the screen so the first section still begins exactly one screen down. */
+body:not(.home-fullscreen) .home-hero {
+  height: calc(100dvh - 64px);
+}
+
+.home-snap-screen {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: calc(var(--home-nav-h) + 3rem);
+}
+
+/* Bands holding a pinned section: the stage must meet the band's edges. */
+.home-section--flush {
+  padding: 0;
+}
+
+.home-snap-pin {
+  --snap-step: 60vh;
+  position: relative;
+  height: calc(100vh + (var(--snap-steps) - 1) * var(--snap-step));
+  height: calc(100svh + (var(--snap-steps) - 1) * var(--snap-step));
+}
+
+.home-snap-pin > .home-snap-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+}
+
+.home-snap-marker {
+  position: absolute;
+  left: 0;
+  top: calc(var(--i) * var(--snap-step));
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+/* Touch screens scroll natively (no wheel to take over), so the browser's
+   own snapping nudges the page onto the nearest stop instead. */
+@media (hover: none) and (pointer: coarse) {
+  html.home-snap {
+    scroll-snap-type: y proximity;
+  }
+
+  html.home-snap [data-snap] {
+    scroll-snap-align: start;
+  }
+}
+
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-09-24
    Purpose: home-page polish — (1) drop the page-body/footer gaps so the
    bands meet edge to edge, (2) wavy edges between bands, (3) the faint
@@ -2192,10 +2268,10 @@ body.home-fullscreen {
   position: relative;
 }
 
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-03: the pinned block is
-   exactly one screen tall (below the 64px fixed navbar) and centres its
-   content, so the figure fills the page height and stays in the middle of
-   the screen for the whole reveal. */
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: the pinned block is
+   a .home-snap-stage (exactly one screen tall) and centres its content
+   below the navbar, so the figure fills the page height and stays in the
+   middle of the screen while the groups come in. */
 .body-symptoms-pinned {
   position: relative;
   display: flex;
@@ -2203,23 +2279,17 @@ body.home-fullscreen {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 1rem 0 2rem;
-}
-
-.body-symptoms-pinned--sticky {
-  position: sticky;
-  top: 4rem;
-  height: calc(100vh - 4rem);
-  height: calc(100svh - 4rem);
+  padding: calc(var(--home-nav-h) + 0.75rem) 0 3.5rem;
 }
 
 /* Its own near-full-screen block, so the definition stands alone and a
    further scroll brings the figure in. */
 .body-symptoms-intro {
-  min-height: 80vh;
+  min-height: 100vh;
+  min-height: 100svh;
   max-width: 900px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: calc(var(--home-nav-h) + 2rem) 1rem 2rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -2241,21 +2311,58 @@ body.home-fullscreen {
   opacity: 0.9;
 }
 
-/* Out of the flow at the bottom of the pinned screen, so it takes no height
-   away from the figure. */
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: says what pointing at
+   a symptom does. Out of the flow at the bottom of the pinned screen, so it
+   takes no height away from the figure. */
 .body-symptoms-hint {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0.4rem;
+  left: 50%;
+  bottom: 0.9rem;
+  translate: -50% 0;
+  width: max-content;
+  max-width: 100%;
   margin: 0;
-  font-size: 0.85rem;
-  opacity: 0.7;
-  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 1rem;
+  border: 2px solid currentColor;
+  border-radius: 999px;
+  font-size: clamp(0.8rem, 1.4vw, 1rem);
+  font-weight: 600;
 }
 
-.body-symptoms-hint--done {
-  opacity: 0;
+.body-symptoms-hint svg {
+  flex: none;
+  width: 1.1em;
+  height: 1.1em;
+  fill: currentColor;
+  animation: body-symptoms-hint-nudge 1.6s ease-in-out infinite;
+}
+
+/* Touch screens have no hover: the hint says "Tap" there instead. */
+.body-symptoms-hint-tap {
+  display: none;
+}
+
+@media (hover: none) {
+  .body-symptoms-hint-hover {
+    display: none;
+  }
+
+  .body-symptoms-hint-tap {
+    display: inline;
+  }
+}
+
+@keyframes body-symptoms-hint-nudge {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: -3px -3px;
+  }
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-03
@@ -2276,8 +2383,8 @@ body.home-fullscreen {
   position: relative;
   /* As tall as the pinned screen allows; the 80vw cap keeps room for the
      two columns on narrow-but-tall screens. */
-  height: max(280px, min(calc(100vh - 7rem), 80vw));
-  height: max(280px, min(calc(100svh - 7rem), 80vw));
+  height: max(280px, min(calc(100vh - 5rem - var(--home-nav-h)), 80vw));
+  height: max(280px, min(calc(100svh - 5rem - var(--home-nav-h)), 80vw));
   /* Proportions of the team's figure drawing (see CANVAS_WIDTH/HEIGHT in
      BodySymptomsSection.tsx). */
   aspect-ratio: 217 / 400;
@@ -2389,13 +2496,20 @@ body.home-fullscreen {
   line-height: 1.3;
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: a group comes in as
+   a whole, and its symptoms look like things to point at (pointer cursor, a
+   tinted chip on hover, a filled chip while lit). */
 .symptom-group {
   opacity: 0;
-  transition: opacity 0.4s ease;
+  translate: 0 0.9rem;
+  transition:
+    opacity 0.5s ease,
+    translate 0.5s ease;
 }
 
 .symptom-group--visible {
   opacity: 1;
+  translate: 0 0;
 }
 
 .symptom-group-title {
@@ -2418,15 +2532,20 @@ body.home-fullscreen {
 
 .symptom-item {
   position: relative;
-  padding: 0.2rem 0 0.2rem 1.1em;
-  opacity: 0;
-  transition: opacity 0.4s ease;
+  margin: 0.1rem 0;
+  padding: 0.2rem 0.5rem 0.2rem 1.5em;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  outline: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .symptom-item::before {
   content: "";
   position: absolute;
-  left: 0;
+  left: 0.45em;
   top: 0.62em;
   width: 0.55em;
   height: 0.55em;
@@ -2435,24 +2554,40 @@ body.home-fullscreen {
   transition: background-color 0.25s ease;
 }
 
-.symptom-item--visible {
-  opacity: 0.8;
+.symptom-item:hover,
+.symptom-item:focus-visible {
+  background-color: color-mix(in srgb, var(--symptom-color) 30%, transparent);
 }
 
-.symptom-item--lit {
-  opacity: 1;
+.symptom-item--lit,
+.symptom-item--lit:hover,
+.symptom-item--lit:focus-visible {
+  background-color: var(--symptom-color);
+  /* The group colours are all light, so the label is a fixed dark ink. */
+  color: #221b2b;
   font-weight: 700;
 }
 
 .symptom-item--lit::before {
-  background-color: var(--symptom-color);
+  border-color: #221b2b;
+  background-color: #221b2b;
 }
 
 /* Phones: the figure moves to the top and the two columns sit side by side
    underneath, so the whole thing still fits in one pinned screen. */
 @media (max-width: 699.98px) {
   .body-symptoms-pinned {
-    padding: 0.5rem 0 1.75rem;
+    padding: calc(var(--home-nav-h) + 0.5rem) 0 2.75rem;
+  }
+
+  /* To the left, clear of the back-to-top button in the corner. */
+  .body-symptoms-hint {
+    left: 0;
+    translate: none;
+    max-width: calc(100% - 4rem);
+    padding: 0.25rem 0.75rem;
+    font-size: 0.72rem;
+    text-align: left;
   }
 
   .body-symptoms-figure-row {
@@ -2467,8 +2602,8 @@ body.home-fullscreen {
     justify-self: center;
     /* What is left of the pinned screen once the two lists underneath
        have their room. */
-    height: clamp(200px, calc(100vh - 27rem), 440px);
-    height: clamp(200px, calc(100svh - 27rem), 440px);
+    height: clamp(180px, calc(100vh - 28rem - var(--home-nav-h)), 440px);
+    height: clamp(180px, calc(100svh - 28rem - var(--home-nav-h)), 440px);
   }
 
   .body-symptoms-column {
@@ -2477,67 +2612,188 @@ body.home-fullscreen {
   }
 
   .symptom-item {
+    margin: 0;
     padding-top: 0.1rem;
     padding-bottom: 0.1rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .body-part {
+  .body-part,
+  .body-symptoms-hint svg {
     animation: none !important;
   }
 }
 
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-09-24
-   Purpose: "two guts" section (TwoGutsSection.tsx) — side-by-side gut
-   windows with composition bars. */
+   Purpose: gut-microbiome section (TwoGutsSection.tsx) — a gut window with
+   its composition bar.
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: one window on a
+   pinned screen. It starts on the left with the healthy text on the right;
+   with .two-guts--pmos it slides to the right while its cells cross-fade to
+   the PMOS mix, the healthy text fades out and the PMOS text fades in on the
+   left. */
 .two-guts {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.25rem;
+  justify-content: center;
+  gap: 1rem;
   text-align: center;
-  padding: 1.5rem 0;
+  padding: calc(var(--home-nav-h) + 1rem) 0 1rem;
 }
 
 .two-guts-heading {
   margin: 0;
 }
 
-.two-guts-intro {
-  max-width: 640px;
-}
-
-.two-guts-intro p {
-  margin: 0 0 0.5rem;
-}
-
 .two-guts-row {
-  display: flex;
-  justify-content: center;
-  gap: clamp(1rem, 6vw, 6rem);
-  width: 100%;
+  --lens: min(400px, 42vw, 46vh);
+  --lens-gap: clamp(1rem, 4vw, 3.5rem);
+  /* Room under the lens for its label and composition bar. */
+  --lens-extras: 4.75rem;
+  position: relative;
+  width: min(100%, 1000px);
+  height: calc(var(--lens) + var(--lens-extras));
 }
 
 .two-guts-window {
-  flex: 0 1 380px;
-  min-width: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--lens);
   margin: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
+  transition: left 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.two-guts--pmos .two-guts-window {
+  left: calc(100% - var(--lens));
 }
 
 .two-guts-window-label {
+  order: 1; /* under the lens, above the bar */
   font-weight: 700;
   font-size: clamp(0.9rem, 1.6vw, 1.15rem);
 }
 
+.two-guts-window .two-guts-bar {
+  order: 2;
+}
+
 .two-guts-lens {
   width: 100%;
-  max-height: 60vh;
   aspect-ratio: 1;
+}
+
+/* The text beside the window: both panels are always laid out, each in the
+   space the window leaves free in its state, and swap by fading. The one
+   coming in waits until the window has nearly arrived. */
+.two-guts-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+  text-align: left;
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  line-height: 1.5;
+  transition:
+    opacity 0.35s ease,
+    translate 0.35s ease;
+}
+
+.two-guts-panel p {
+  margin: 0;
+}
+
+.two-guts-panel-title {
+  margin: 0;
+  font-size: clamp(1.5rem, 3.4vw, 2.6rem);
+  line-height: 1.1;
+}
+
+.two-guts-panel--healthy {
+  left: calc(var(--lens) + var(--lens-gap));
+  right: 0;
+}
+
+.two-guts-panel--pmos {
+  left: 0;
+  right: calc(var(--lens) + var(--lens-gap));
+  opacity: 0;
+  translate: -1.5rem 0;
+}
+
+.two-guts:not(.two-guts--pmos) .two-guts-panel--healthy,
+.two-guts--pmos .two-guts-panel--pmos {
+  transition-delay: 0.55s;
+}
+
+.two-guts--pmos .two-guts-panel--healthy {
+  opacity: 0;
+  translate: 1.5rem 0;
+}
+
+.two-guts--pmos .two-guts-panel--pmos {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* A cell that belongs to a different group with PMOS: its two shapes
+   cross-fade, --swap-delay (set per cell) spreading the change out. */
+.two-guts-swap {
+  transition: opacity 0.35s ease var(--swap-delay, 0s);
+}
+
+.two-guts-swap--pmos,
+.two-guts--pmos .two-guts-swap--healthy {
+  opacity: 0;
+}
+
+.two-guts--pmos .two-guts-swap--pmos {
+  opacity: 1;
+}
+
+/* Phones: no room for text beside the window, so it goes underneath; the
+   window still slides from the left edge to the right edge. */
+@media (max-width: 699.98px) {
+  .two-guts-row {
+    --lens: min(62vw, 34vh);
+    --panel: 11.5rem;
+    height: calc(var(--lens) + var(--lens-extras) + var(--panel));
+  }
+
+  .two-guts-panel {
+    top: calc(var(--lens) + var(--lens-extras));
+    justify-content: flex-start;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+  }
+
+  .two-guts-panel--healthy,
+  .two-guts-panel--pmos {
+    left: 0;
+    right: 0;
+  }
+
+  .two-guts-legend {
+    font-size: 0.75rem;
+    gap: 0.25rem 0.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .two-guts-window,
+  .two-guts-panel,
+  .two-guts-swap {
+    transition: none;
+  }
 }
 
 .two-guts-lens-bg {
@@ -2587,6 +2843,7 @@ body.home-fullscreen {
 
 .two-guts-bar {
   display: flex;
+  flex: none;
   width: 85%;
   height: 14px;
   border-radius: 7px;
@@ -2598,7 +2855,7 @@ body.home-fullscreen {
 .two-guts-bar-segment {
   flex-basis: 0;
   min-width: 0;
-  transition: flex-grow 0.15s linear;
+  transition: flex-grow 0.9s ease;
 }
 
 .two-guts-legend {
@@ -2645,8 +2902,15 @@ body.home-fullscreen {
    pale-blue BSH, pale-yellow conjugated / red deconjugated hexagons,
    light-blue glycine/taurine group). */
 .bsh-stream-heading {
+  margin: 0 0 0.5rem;
+  text-align: center;
+}
+
+.bsh-stream-sub {
   margin: 0 0 1.5rem;
   text-align: center;
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  opacity: 0.85;
 }
 
 .bsh-stream-diagram {
@@ -2999,8 +3263,13 @@ body.home-fullscreen {
 .pmos-counter-heading {
   font-size: clamp(1.5rem, 4vw, 2.75rem);
   font-weight: 700;
-  max-width: 40ch;
   margin: 0;
+}
+
+.pmos-counter-rest {
+  display: block;
+  max-width: 24ch;
+  margin: 0 auto;
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-03: the figure sits on
@@ -3011,8 +3280,9 @@ body.home-fullscreen {
   width: fit-content;
   margin: 0.15em auto;
   color: #1f8a8f;
-  font-size: clamp(2.6rem, 11vw, 7rem);
+  font-size: clamp(2.75rem, 12vw, 8.5rem);
   line-height: 1.05;
+  white-space: nowrap;
   font-variant-numeric: tabular-nums;
   padding: 0 0.1em;
   /* --color-header-bg (not --color-accent) — accent is identical to the
@@ -3024,12 +3294,6 @@ body.home-fullscreen {
   color: #5fd3d7;
 }
 
-.pmos-counter-sub {
-  margin: 1rem auto 0;
-  max-width: 40ch;
-  font-size: clamp(1rem, 2vw, 1.35rem);
-}
-
 .pmos-overview-source {
   max-width: 80ch;
   margin: 0;
@@ -3037,7 +3301,6 @@ body.home-fullscreen {
   opacity: 0.75;
 }
 
-.pmos-counter-sub p,
 .pmos-overview-source p {
   margin: 0;
 }
@@ -3047,36 +3310,20 @@ body.home-fullscreen {
   padding: 2rem;
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: the globe always
+   takes the left half of the section, with the text (the invitation, then
+   the clicked continent's figures) on the right. */
 .pmos-globe-wrap {
-  width: min(100%, 520px);
+  width: min(100%, 1050px);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  transition:
-    width 0.4s ease,
-    max-width 0.4s ease,
-    gap 0.4s ease;
-}
-
-/* Once a continent has been picked, the globe shifts to the left half of
-   the section and the info panel takes the right half. */
-.pmos-globe-wrap--split {
-  width: 100%;
-  max-width: 900px;
-  flex-direction: row;
-  align-items: center;
-  gap: 2.5rem;
+  justify-content: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
 }
 
 .pmos-globe-stage {
   flex: none;
-  width: min(100%, 520px);
-  transition: width 0.4s ease;
-}
-
-.pmos-globe-wrap--split .pmos-globe-stage {
-  width: min(45%, 340px);
+  width: min(50%, 520px, 70vh);
 }
 
 /* Pointer cursor while hovering a clickable country — grab otherwise, since
@@ -3091,18 +3338,23 @@ body.home-fullscreen {
 }
 
 .pmos-globe-info {
-  min-height: 2.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.pmos-globe-wrap--split .pmos-globe-info {
   flex: 1;
   min-width: 0;
+  max-width: 28rem;
+  /* Tall enough for the longest continent note, so the globe does not shift
+     when the text changes. */
+  min-height: 16rem;
+  display: flex;
+  flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
   text-align: left;
+}
+
+.pmos-globe-prompt {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.75rem);
+  line-height: 1.05;
 }
 
 .pmos-globe-info-panel {
@@ -3153,8 +3405,8 @@ body.home-fullscreen {
 }
 
 .pmos-globe-info-hint {
-  font-size: 0.9rem;
-  opacity: 0.7;
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  opacity: 0.75;
 }
 
 .pmos-globe-tooltip {
@@ -3168,17 +3420,20 @@ body.home-fullscreen {
 }
 
 @media (max-width: 768px) {
-  .pmos-globe-wrap--split {
+  .pmos-globe-wrap {
     flex-direction: column;
     gap: 1rem;
   }
 
-  .pmos-globe-wrap--split .pmos-globe-stage {
-    width: min(100%, 520px);
+  .pmos-globe-stage {
+    width: min(100%, 360px, 45vh);
   }
 
-  .pmos-globe-wrap--split .pmos-globe-info {
+  .pmos-globe-info {
+    flex: none;
+    min-height: 13rem;
     align-items: center;
+    justify-content: flex-start;
     text-align: center;
   }
 
