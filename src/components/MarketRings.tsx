@@ -2,7 +2,7 @@
 // Purpose: nested TAM / SAM / SOM rings for the Entrepreneurship page's
 // "Market and target group" section. Clicking a ring lights it up, fades the
 // others into the background, and shows that ring's estimate below.
-import { Children, KeyboardEvent, ReactElement, ReactNode, isValidElement, useMemo, useState } from "react";
+import { Children, KeyboardEvent, ReactElement, ReactNode, isValidElement, useEffect, useMemo, useState } from "react";
 
 interface MarketRingProps {
   label: string;
@@ -44,6 +44,20 @@ export function MarketRings({ children }: MarketRingsProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const active = activeIndex === null ? undefined : rings[activeIndex];
 
+  // Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+  // Purpose: each ring's <g> carries its label as an id (#tam, #sam, #som),
+  // so an in-page link like [SOM](#som) scrolls to it natively; this also
+  // selects that ring so its estimate is already open on arrival.
+  useEffect(() => {
+    const selectFromHash = () => {
+      const index = rings.findIndex((ring) => `#${ring.label.toLowerCase()}` === window.location.hash);
+      if (index !== -1) setActiveIndex(index);
+    };
+    selectFromHash();
+    window.addEventListener("hashchange", selectFromHash);
+    return () => window.removeEventListener("hashchange", selectFromHash);
+  }, [rings]);
+
   const onKeyDown = (event: KeyboardEvent<SVGGElement>, index: number) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
@@ -60,7 +74,8 @@ export function MarketRings({ children }: MarketRingsProps) {
           return (
             <g
               key={ring.label}
-              className={`market-ring market-ring-${index}${isActive ? " active" : ""}`}
+              id={ring.label.toLowerCase()}
+              className={`market-ringmarket-ring-${index}${isActive ? " active" : ""}`}
               role="button"
               tabIndex={0}
               aria-pressed={isActive}

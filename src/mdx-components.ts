@@ -33,8 +33,14 @@ import {
 import { SponsorGrid } from "./components/SponsorGrid";
 import { HomeSnapScroll } from "./components/HomeSnapScroll";
 import { ZoomableImage } from "./components/ZoomableImage";
+import { Link } from "react-router-dom";
 
 export const mdxComponents = {
+  // Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+  // Purpose: lets .mdx pages link to another wiki page (optionally with a
+  // #section) via <Link to="/page#section">, which respects the router's
+  // base path — a plain markdown [text](/page) link would not.
+  Link,
   TeamMembers,
   TeamMemberCard,
   ProtocolBox,

@@ -10,8 +10,12 @@
 // Edited with Claude Opus 5.5 (Anthropic), 2026-10-06: added StoryStatement,
 // a single sentence in the same style for a section of its own (used for
 // "But why is this reaction important?" after the BSH diagram).
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-06: the "quest" step is
+// split over the screen (first half top left, second half bottom right) with
+// a magnifying glass looking over some gut microbes in between.
 import {
   useEffect,
+  useId,
   useRef,
   useState,
   type CSSProperties,
@@ -24,8 +28,8 @@ import { usePinnedStep } from "./usePinnedStep";
 interface StoryStep {
   id: string;
   // Where the sentence sits on the screen (see .story-step--* in App.css).
-  position: "left" | "right" | "center" | "low-left" | "high-right";
-  art?: "question" | "clock";
+  position: "left" | "right" | "center" | "low-left" | "high-right" | "split";
+  art?: "question" | "clock" | "microbiome";
   lines: ReactNode[];
 }
 
@@ -74,7 +78,8 @@ const STEPS: StoryStep[] = [
   },
   {
     id: "quest",
-    position: "low-left",
+    position: "split",
+    art: "microbiome",
     lines: [
       <>On a quest to find a new solution…</>,
       <>
@@ -137,6 +142,132 @@ function ClockArt() {
         y2={16}
       />
       <circle className="story-clock-pin" cx={50} cy={50} r={3} />
+    </svg>
+  );
+}
+
+// The gut microbes of MicrobiomeArt, drawn once faintly on the page and once
+// more, enlarged, inside the lens. Each one wriggles on its own beat.
+function Microbes() {
+  const beat = (delay: number): CSSProperties => ({
+    animationDelay: `${delay}s`,
+  });
+  return (
+    <>
+      <g transform="rotate(-20 41 49.5)">
+        <rect
+          className="story-microbe"
+          style={beat(0)}
+          x={28}
+          y={44}
+          width={26}
+          height={11}
+          rx={5.5}
+        />
+      </g>
+      <circle
+        className="story-microbe story-microbe--teal"
+        style={beat(-0.6)}
+        cx={78}
+        cy={62}
+        r={7}
+      />
+      <g className="story-microbe" style={beat(-1.3)}>
+        <circle cx={112} cy={38} r={5.5} />
+        <circle cx={122} cy={41} r={5.5} />
+      </g>
+      <path
+        className="story-microbe story-microbe--curved story-microbe--teal"
+        style={beat(-0.3)}
+        d="M132 78 q10 -12 22 -2"
+      />
+      <g transform="rotate(15 54 97)">
+        <rect
+          className="story-microbe story-microbe--teal"
+          style={beat(-1.8)}
+          x={42}
+          y={92}
+          width={24}
+          height={10}
+          rx={5}
+        />
+      </g>
+      <circle
+        className="story-microbe"
+        style={beat(-1)}
+        cx={100}
+        cy={98}
+        r={6}
+      />
+      <g transform="rotate(-10 162 109)">
+        <rect
+          className="story-microbe"
+          style={beat(-2.2)}
+          x={150}
+          y={104}
+          width={24}
+          height={10}
+          rx={5}
+        />
+      </g>
+      <path
+        className="story-microbe story-microbe--curved"
+        style={beat(-1.5)}
+        d="M150 40 q12 8 22 -3"
+      />
+    </>
+  );
+}
+
+// A magnifying glass wandering over the gut microbes: under the lens they
+// show enlarged and in full colour. The enlarged copy moves against the lens
+// (see story-lens-view in App.css) so that it stays a true close-up of
+// whatever the lens is over.
+function MicrobiomeArt() {
+  const id = useId();
+  return (
+    <svg
+      className="story-art story-art--microbiome"
+      viewBox="0 0 200 150"
+      aria-hidden="true"
+    >
+      <defs>
+        <clipPath id={`${id}-lens`}>
+          <circle cx={70} cy={65} r={30} />
+        </clipPath>
+        <mask
+          id={`${id}-outside`}
+          maskUnits="userSpaceOnUse"
+          x={0}
+          y={0}
+          width={200}
+          height={150}
+        >
+          <rect width={200} height={150} fill="#fff" />
+          <circle className="story-lens" cx={70} cy={65} r={31} fill="#000" />
+        </mask>
+      </defs>
+      <g className="story-microbes-far" mask={`url(#${id}-outside)`}>
+        <Microbes />
+      </g>
+      <g className="story-lens">
+        <g clipPath={`url(#${id}-lens)`}>
+          <g className="story-lens-view">
+            <g transform="translate(-56 -52) scale(1.8)">
+              <Microbes />
+            </g>
+          </g>
+        </g>
+        <line
+          className="story-lens-handle"
+          x1={94}
+          y1={89}
+          x2={113}
+          y2={108}
+        />
+        <circle className="story-lens-rim" cx={70} cy={65} r={32} />
+        <path className="story-lens-shine" d="M50 55 a22 22 0 0 1 12 -11" />
+      </g>
     </svg>
   );
 }
@@ -216,6 +347,7 @@ export function StoryScrollSection() {
               </p>
               {entry.art === "question" && <QuestionArt />}
               {entry.art === "clock" && <ClockArt />}
+              {entry.art === "microbiome" && <MicrobiomeArt />}
             </div>
           );
         })}

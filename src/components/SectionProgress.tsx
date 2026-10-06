@@ -54,7 +54,15 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
 
     const found = collectHeadings(container);
     setHeadings(found);
-    setActiveId(found[0]?.id ?? "");
+
+    // Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+    // Purpose: heading ids only exist once the scan above has run, so a
+    // link from another page to /page#section can't be resolved by the
+    // browser on its own — jump to the requested section here instead.
+    const hashId = decodeURIComponent(window.location.hash.slice(1));
+    if (hashId) document.getElementById(hashId)?.scrollIntoView({ block: "start" });
+    const target = found.find((heading) => heading.id === hashId);
+    setActiveId(target?.id ?? found[0]?.id ?? "");
   }, [containerRef, location.pathname]);
 
   useEffect(() => {

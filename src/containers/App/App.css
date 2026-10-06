@@ -86,7 +86,8 @@ h6 {
    via the DNA index's scrollIntoView, a direct #hash link, or back/forward
    navigation restoring one. */
 h2,
-h3 {
+h3,
+h4[id] {
   scroll-margin-top: 5rem;
 }
 
@@ -616,6 +617,20 @@ a[data-footnote-ref]:focus {
 .comp-table.table-responsive-rounded .table-bordered th:not(:first-child),
 .comp-table.table-responsive-rounded .table-bordered td:not(:first-child) {
   min-width: 0;
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: "SPIOMET4HEALTH" (9th column) is one long word that broke over
+   two lines in its evenly divided column — give that column a little more
+   of the width and keep its header on a single line. Only on desktop
+   widths, where the wider column is actually wide enough to hold it;
+   below that it wraps as before rather than spilling into the next cell. */
+@media (min-width: 1240px) {
+  .comp-table.table-responsive-rounded .table-bordered th:nth-child(9) {
+    width: 14%;
+    white-space: nowrap;
+    word-wrap: normal;
+  }
 }
 
 /* CALLOUT */
@@ -3122,6 +3137,155 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: the "quest" step — first half of the sentence top left, second
+   half bottom right, and between them a magnifying glass wandering over
+   some gut microbes (MicrobiomeArt in StoryScrollSection.tsx). */
+.story-step--split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 1rem;
+  padding-top: 4vh;
+  padding-bottom: 4vh;
+}
+
+/* The two halves are placed on the step's grid themselves. */
+.story-step--split .story-text {
+  display: contents;
+}
+
+.story-step--split .story-line {
+  max-width: 12em;
+  margin-top: 0;
+}
+
+.story-step--split .story-line:first-child {
+  grid-row: 1;
+  justify-self: start;
+  text-align: left;
+}
+
+.story-step--split .story-line:last-child {
+  grid-row: 3;
+  justify-self: end;
+  text-align: right;
+}
+
+.story-step--split .story-art {
+  grid-row: 2;
+  place-self: center;
+}
+
+.story-art--microbiome {
+  width: clamp(10rem, 30vw, 22rem);
+  height: auto;
+  max-height: 100%;
+  overflow: visible;
+}
+
+.story-microbe {
+  fill: currentColor;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: story-microbe-wriggle 2.6s ease-in-out infinite;
+}
+
+.story-microbe--teal {
+  fill: #2fa4a9;
+}
+
+.story-microbe--curved {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.story-microbe--curved.story-microbe--teal {
+  stroke: #2fa4a9;
+}
+
+.story-microbes-far {
+  opacity: 0.3;
+}
+
+@keyframes story-microbe-wriggle {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: -6deg;
+  }
+  50% {
+    translate: 0 -2px;
+    rotate: 7deg;
+  }
+}
+
+/* The glass and the hole it leaves in the faint microbes share one path;
+   the close-up inside it runs the same path times -1.8 (the enlargement),
+   which keeps it centred on whatever the lens is over. */
+.story-lens {
+  animation: story-lens-wander 9s ease-in-out infinite;
+}
+
+.story-lens-view {
+  animation: story-lens-view 9s ease-in-out infinite;
+}
+
+.story-lens-rim {
+  fill: currentColor;
+  fill-opacity: 0.05;
+  stroke: currentColor;
+  stroke-width: 4;
+}
+
+.story-lens-handle {
+  stroke: #2fa4a9;
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.story-lens-shine {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: 0.45;
+}
+
+@keyframes story-lens-wander {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  30% {
+    transform: translate(55px, -12px);
+  }
+  55% {
+    transform: translate(75px, 18px);
+  }
+  80% {
+    transform: translate(25px, 25px);
+  }
+}
+
+@keyframes story-lens-view {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  30% {
+    transform: translate(-99px, 21.6px);
+  }
+  55% {
+    transform: translate(-135px, -32.4px);
+  }
+  80% {
+    transform: translate(-45px, -45px);
+  }
+}
+
 /* Phones: no room beside the sentence, so the drawing goes above it and
    everything is centred; the sentences still move up and down the screen. */
 @media (max-width: 699.98px) {
@@ -3168,7 +3332,10 @@ body:not(.home-fullscreen) .home-hero {
   }
 
   .story-art--question span,
-  .story-clock-hand {
+  .story-clock-hand,
+  .story-microbe,
+  .story-lens,
+  .story-lens-view {
     animation: none;
   }
 }
@@ -5401,7 +5568,9 @@ body:not(.home-fullscreen) .home-hero {
 .fan-selector-svg {
   display: block;
   width: 100%;
+  max-width: 640px;
   height: auto;
+  margin: 0 auto;
 }
 
 .fan-selector-band {
