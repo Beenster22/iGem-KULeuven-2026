@@ -19,6 +19,10 @@
 // HomeSnapScroll.tsx): first the healthy gut on the left with its text on the
 // right, then the same window slides to the right while its bacteria change
 // to the PMOS mix and the text gives way to the PMOS text on the left.
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): the
+// section's title is gone (StoryScrollSection.tsx now leads into it), and the
+// two captions under the window and the sentence beside it in each state use
+// the team's new wording.
 // Purpose: home-page gut-microbiome section, the step between "What is
 // PMOS?" and the BSH diagram. A circular window into the gut: with PMOS two
 // groups have increased at the expense of the others, so diversity is
@@ -288,7 +292,7 @@ function GutWindow({ pmos }: { pmos: boolean }) {
       }
     >
       <figcaption className="two-guts-window-label">
-        {pmos ? "With PMOS" : "Without PMOS"}
+        {pmos ? "Gut microbiome with PMOS" : "Normal gut microbiome composition"}
       </figcaption>
       <svg
         viewBox={`0 0 ${VB} ${VB}`}
@@ -398,7 +402,7 @@ function CompositionBar({ pmos }: { pmos: boolean }) {
   );
 }
 
-export function TwoGutsSection({ heading }: { heading: string }) {
+export function TwoGutsSection() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const pmos = usePinnedStep(wrapperRef, 2) === 1;
 
@@ -412,18 +416,18 @@ export function TwoGutsSection({ heading }: { heading: string }) {
       <div
         className={`two-guts home-snap-stage${pmos ? " two-guts--pmos" : ""}`}
       >
-        <h3 className="two-guts-heading">{heading}</h3>
-
         <div className="two-guts-row">
           <GutWindow pmos={pmos} />
           <div className="two-guts-panel two-guts-panel--healthy" inert={pmos}>
             <h4 className="two-guts-panel-title">
-              This is a healthy gut microbiome
+              In a healthy gut, there’s a wide variety of bacteria living in
+              balance.
             </h4>
           </div>
           <div className="two-guts-panel two-guts-panel--pmos" inert={!pmos}>
             <h4 className="two-guts-panel-title">
-              This is the gut microbiome with PMOS
+              In case of PMOS, there’s clear dysbiosis, with one species
+              standing out a lot!
             </h4>
           </div>
         </div>

@@ -16,7 +16,18 @@
 // TwoGutsSection.tsx), travels down the page while growing and turning into
 // the P. vulgatus drawn here, and the bile acids and labels fade in once it
 // has landed (see usePvZoom). Off under prefers-reduced-motion.
-import { useEffect, useMemo, type RefObject, useRef } from "react";
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): now a
+// pinned section of two scroll steps (see HomeSnapScroll.tsx). First only the
+// cell, enlarged on the left, with "Meet Phocaeicola vulgatus" beside it; then
+// the cell moves to the middle and the reaction plays around it under the
+// team's new title. Under prefers-reduced-motion both are shown, unpinned.
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  type CSSProperties,
+  type RefObject,
+} from "react";
 import { createPortal } from "react-dom";
 import {
   motion,
@@ -26,6 +37,8 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
+import { SnapSteps } from "./HomeSnapScroll";
+import { usePinnedStep } from "./usePinnedStep";
 
 function seededValue(seed: number) {
   const x = Math.sin(seed * 12.9898) * 43758.5453;
@@ -310,7 +323,9 @@ function usePvZoom(
     // the hand-over follows that move: it starts when this section's band
     // (a `data-snap` stop, see HomeSnapScroll.tsx) comes in at the bottom of
     // the screen and is complete when the band fills it.
-    const band = diagram?.closest<HTMLElement>("[data-snap]");
+    // Edited 2026-10-06: this section is itself pinned now, so the "band" is
+    // its tall .home-snap-pin wrapper.
+    const band = diagram?.closest<HTMLElement>(".home-snap-pin");
     if (!enabled || !source || !lens || !diagram || !band) {
       scrolled.jump(2);
       progress.jump(2);
@@ -487,136 +502,159 @@ const pctY = (y: number) => `${(y / VB_H) * 100}%`;
 
 export function BshStreamAnimation() {
   const prefersReducedMotion = useReducedMotion();
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const diagramRef = useRef<HTMLDivElement>(null);
   const zoom = usePvZoom(diagramRef, !prefersReducedMotion);
-  // The heading clears in just before the cell lands under it; the cell's own
-  // labels follow the landing, then everything around it.
-  const headingOpacity = useTransform(zoom.progress, [0.85, 1], [0, 1]);
+  // Two scroll steps: the cell on its own with its introduction beside it,
+  // then the reaction around it. Without the pin both are simply shown.
+  const step = usePinnedStep(wrapperRef, 2);
+  const state = prefersReducedMotion
+    ? "static"
+    : step === 0
+      ? "meet"
+      : "reaction";
+  // The drawn cell takes over from the travelling one as it lands, and its
+  // introduction follows the landing.
   const cellOpacity = useTransform(zoom.progress, (p) => (p >= 1 ? 1 : 0));
-  const labelOpacity = useTransform(zoom.progress, [1, 1.06], [0, 1]);
-  const restOpacity = useTransform(zoom.progress, [1.03, 1.15], [0, 1]);
+  const meetOpacity = useTransform(zoom.progress, [1, 1.1], [0, 1]);
 
   return (
-    <div className="bsh-stream">
-      {!prefersReducedMotion && <TravellingBacterium zoom={zoom} />}
-      <motion.h3
-        className="bsh-stream-heading"
-        style={{ opacity: headingOpacity }}
-      >
-        We are specifically focusing on <em>P. vulgatus</em>
-      </motion.h3>
-      <motion.p className="bsh-stream-sub" style={{ opacity: headingOpacity }}>
-        Bile salt hydrolase breaks down conjugated bile acids
-      </motion.p>
+    <div
+      className={prefersReducedMotion ? undefined : "home-snap-pin"}
+      ref={wrapperRef}
+      style={{ "--snap-steps": 2 } as CSSProperties}
+    >
+      {!prefersReducedMotion && <SnapSteps steps={2} />}
       <div
-        className="bsh-stream-diagram"
-        ref={diagramRef}
-        style={{ aspectRatio: `${VB_W} / ${VB_H}` }}
+        className={`bsh-stream bsh-stream--${state}${prefersReducedMotion ? "" : " home-snap-stage"}`}
       >
-        <svg
-          className="bsh-stream-svg"
-          viewBox={`0 0 ${VB_W} ${VB_H}`}
-          preserveAspectRatio="xMidYMid meet"
-          role="img"
-          aria-label="Animated diagram: Phocaeicola vulgatus uses the enzyme BSH to convert the conjugated bile acids GDCA and TUDCA into the deconjugated bile acids DCA and UDCA, splitting off glycine and taurine."
-        >
-          <defs>
-            <marker
-              id="bsh-arrowhead"
-              viewBox="0 0 10 10"
-              refX="8"
-              refY="5"
-              markerWidth="5"
-              markerHeight="5"
-              orient="auto"
-            >
-              <path d="M0,0 L10,5 L0,10 Z" className="bsh-arrow-head" />
-            </marker>
-          </defs>
-
-          <motion.g style={{ opacity: restOpacity }}>
-            <line
-              className="bsh-arrow"
-              x1={330}
-              y1={ARROW_Y}
-              x2={680}
-              y2={ARROW_Y}
-              markerEnd="url(#bsh-arrowhead)"
-            />
-            <Molecules animate={!prefersReducedMotion} />
-          </motion.g>
-          <motion.g className="bsh-bacterium" style={{ opacity: cellOpacity }}>
-            <BacteriumShapes />
-          </motion.g>
-        </svg>
-
+        {!prefersReducedMotion && <TravellingBacterium zoom={zoom} />}
         <motion.div
-          className="bsh-stream-layer"
-          style={{ opacity: labelOpacity }}
+          className="bsh-stream-meet"
+          style={{ opacity: meetOpacity }}
+          inert={state === "reaction"}
         >
-          <span
-            className="bsh-stream-caption bsh-stream-caption--species"
-            style={{ left: "50%", top: pctY(40) }}
-          >
-            Phocaeicola vulgatus
-          </span>
-          <span
-            className="bsh-stream-enzyme-label"
-            style={{ left: "50%", top: pctY(BAC_MID_Y) }}
-          >
-            BSH
-          </span>
+          <div className="bsh-stream-meet-text">
+            <h3 className="bsh-stream-meet-title">
+              Meet <em>Phocaeicola vulgatus</em>
+            </h3>
+            <p>
+              A super interesting microorganism involved in breaking down bile
+              acids
+            </p>
+          </div>
         </motion.div>
-
-        <motion.div
-          className="bsh-stream-layer"
-          style={{ opacity: restOpacity }}
+        <h3 className="bsh-stream-heading bsh-stream-reaction">
+          Bile salt hydrolase from <em>P. vulgatus</em> is responsible for bile
+          acid deconjugation
+        </h3>
+        <div
+          className="bsh-stream-diagram"
+          ref={diagramRef}
+          style={{ aspectRatio: `${VB_W} / ${VB_H}` }}
         >
-          <span
-            className="bsh-stream-badge bsh-stream-badge--conjugated"
-            style={{ left: pctX(70), top: "36%" }}
+          <svg
+            className="bsh-stream-svg"
+            viewBox={`0 0 ${VB_W} ${VB_H}`}
+            preserveAspectRatio="xMidYMid meet"
+            role="img"
+            aria-label="Animated diagram: Phocaeicola vulgatus uses the enzyme BSH to convert the conjugated bile acids GDCA and TUDCA into the deconjugated bile acids DCA and UDCA, splitting off glycine and taurine."
           >
-            GDCA
-          </span>
-          <span
-            className="bsh-stream-badge bsh-stream-badge--conjugated"
-            style={{ left: pctX(70), top: "54%" }}
-          >
-            TUDCA
-          </span>
-          <span
-            className="bsh-stream-caption"
-            style={{ left: pctX(180), top: pctY(275) }}
-          >
-            conjugated bile acids
-          </span>
+            <defs>
+              <marker
+                id="bsh-arrowhead"
+                viewBox="0 0 10 10"
+                refX="8"
+                refY="5"
+                markerWidth="5"
+                markerHeight="5"
+                orient="auto"
+              >
+                <path d="M0,0 L10,5 L0,10 Z" className="bsh-arrow-head" />
+              </marker>
+            </defs>
 
-          <div
-            className="bsh-stream-products"
-            style={{ left: pctX(900), top: "45%" }}
-          >
-            <span className="bsh-stream-badge bsh-stream-badge--deconjugated">
-              DCA
+            <g className="bsh-stream-reaction">
+              <line
+                className="bsh-arrow"
+                x1={330}
+                y1={ARROW_Y}
+                x2={680}
+                y2={ARROW_Y}
+                markerEnd="url(#bsh-arrowhead)"
+              />
+              <Molecules animate={!prefersReducedMotion} />
+            </g>
+            <motion.g
+              className="bsh-bacterium"
+              style={{ opacity: cellOpacity }}
+            >
+              <BacteriumShapes />
+            </motion.g>
+          </svg>
+
+          <div className="bsh-stream-layer bsh-stream-reaction">
+            <span
+              className="bsh-stream-caption bsh-stream-caption--species"
+              style={{ left: "50%", top: pctY(40) }}
+            >
+              Phocaeicola vulgatus
             </span>
-            <span className="bsh-stream-plus">+</span>
-            <span className="bsh-stream-badge bsh-stream-badge--tag">
-              Glycine
-            </span>
-            <span className="bsh-stream-badge bsh-stream-badge--deconjugated">
-              UDCA
-            </span>
-            <span className="bsh-stream-plus">+</span>
-            <span className="bsh-stream-badge bsh-stream-badge--tag">
-              Taurine
+            <span
+              className="bsh-stream-enzyme-label"
+              style={{ left: "50%", top: pctY(BAC_MID_Y) }}
+            >
+              BSH
             </span>
           </div>
-          <span
-            className="bsh-stream-caption"
-            style={{ left: pctX(820), top: pctY(275) }}
-          >
-            deconjugated bile acids
-          </span>
-        </motion.div>
+
+          <div className="bsh-stream-layer bsh-stream-reaction">
+            <span
+              className="bsh-stream-badge bsh-stream-badge--conjugated"
+              style={{ left: pctX(70), top: "36%" }}
+            >
+              GDCA
+            </span>
+            <span
+              className="bsh-stream-badge bsh-stream-badge--conjugated"
+              style={{ left: pctX(70), top: "54%" }}
+            >
+              TUDCA
+            </span>
+            <span
+              className="bsh-stream-caption"
+              style={{ left: pctX(180), top: pctY(275) }}
+            >
+              conjugated bile acids
+            </span>
+
+            <div
+              className="bsh-stream-products"
+              style={{ left: pctX(900), top: "45%" }}
+            >
+              <span className="bsh-stream-badge bsh-stream-badge--deconjugated">
+                DCA
+              </span>
+              <span className="bsh-stream-plus">+</span>
+              <span className="bsh-stream-badge bsh-stream-badge--tag">
+                Glycine
+              </span>
+              <span className="bsh-stream-badge bsh-stream-badge--deconjugated">
+                UDCA
+              </span>
+              <span className="bsh-stream-plus">+</span>
+              <span className="bsh-stream-badge bsh-stream-badge--tag">
+                Taurine
+              </span>
+            </div>
+            <span
+              className="bsh-stream-caption"
+              style={{ left: pctX(820), top: pctY(275) }}
+            >
+              deconjugated bile acids
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );

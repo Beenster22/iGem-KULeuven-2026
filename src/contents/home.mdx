@@ -21,23 +21,51 @@ Figures per continent[^pmos-3][^pmos-4][^pmos-5].
 </div>
 </div>
 
+{/* One big sentence per scroll step, leading from the symptoms to the gut
+    (see StoryScrollSection.tsx). Wording as supplied by the team. */}
+<div className="home-section home-section--flush home-section--body home-section--wave-top">
+<MicrobeBackdrop count={7} seed={7} />
+<div className="container">
+
+<StoryScrollSection />
+
+</div>
+</div>
+
 <div className="home-section home-section--flush home-section--page home-section--wave-top">
 <MicrobeBackdrop count={6} seed={5} />
 <div className="container">
 
-{/* Heading and text exactly as supplied by the team in "Text for HOME PAGE"
-    (Section 5); the bacterial groups in the figure follow the paper the team
-    cites there. */}
-<TwoGutsSection heading="EMPOWER FOCUSES ON THE GUT MICROBIOME" />
+{/* Text as supplied by the team in "Text for HOME PAGE" (Section 5) and the
+    home-page notes of 2026-10-06 (which dropped the section's title); the
+    bacterial groups in the figure follow the paper the team cites there. */}
+<TwoGutsSection />
 
 </div>
 </div>
 
-<div className="home-section home-section--body home-section--wave-top home-snap-screen" data-snap="">
+{/* Two scroll steps: P. vulgatus on its own, then the reaction (see
+    BshStreamAnimation.tsx). */}
+<div className="home-section home-section--flush home-section--body home-section--wave-top">
 <MicrobeBackdrop count={4} seed={4} />
 <div className="container">
 
 <BshStreamAnimation />
+
+</div>
+</div>
+
+{/* The team's question on a screen of its own, in the style of the text
+    story above (see StoryStatement in StoryScrollSection.tsx). */}
+<div className="home-section home-section--page home-section--wave-top home-snap-screen" data-snap="">
+<MicrobeBackdrop count={4} seed={9} />
+<div className="container">
+
+<StoryStatement>
+
+But why is this reaction **important?**
+
+</StoryStatement>
 
 </div>
 </div>

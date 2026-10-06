@@ -2685,6 +2685,293 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
+/* STORY SCROLL
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: the big one-sentence-per-step screen between the symptoms and the
+   gut section (StoryScrollSection.tsx). Every step fills the pinned stage
+   and places its sentence somewhere else on it (.story-step--<position>);
+   only the --active one is visible, the others wait just below (--future) or
+   have drifted off above (--past). */
+.story-stage {
+  position: relative;
+  overflow: hidden;
+}
+
+.story-step {
+  position: absolute;
+  inset: calc(var(--home-nav-h) + 1.5rem) 0 calc(var(--home-wave-h) + 1.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  padding: 0 clamp(0.5rem, 3vw, 2.5rem);
+  opacity: 0;
+  translate: 0 3rem;
+  transition:
+    opacity 0.45s ease,
+    translate 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.story-step--past {
+  translate: 0 -3rem;
+}
+
+.story-step--active {
+  opacity: 1;
+  translate: 0 0;
+  transition-delay: 0.2s; /* lets the previous sentence clear first */
+}
+
+.story-text {
+  margin: 0;
+  max-width: 12em;
+  font-size: clamp(1.9rem, 5.2vw, 4.25rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+/* The parts of a sentence come in one after the other. */
+.story-line {
+  display: block;
+  opacity: 0;
+  translate: 0 0.5em;
+  transition:
+    opacity 0.5s ease,
+    translate 0.5s ease;
+}
+
+.story-line + .story-line {
+  margin-top: 0.35em;
+}
+
+.story-step--active .story-line {
+  opacity: 1;
+  translate: 0 0;
+  transition-delay: calc(0.3s + var(--line) * 0.7s);
+}
+
+/* The key words: marked with the brand teal rather than coloured in it,
+   which would not be readable on this band in light mode. */
+.story-text strong {
+  font-weight: inherit;
+  background: linear-gradient(#2fa4a9, #2fa4a9) 0 92% / 100% 0.14em no-repeat;
+  padding-bottom: 0.05em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.story-step--left {
+  justify-content: flex-start;
+}
+
+.story-step--right {
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  text-align: right;
+}
+
+.story-step--high-right {
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding-top: 8vh;
+  text-align: right;
+}
+
+.story-step--center {
+  text-align: center;
+}
+
+.story-step--center .story-text {
+  max-width: 14em;
+}
+
+/* StoryStatement: one sentence in an ordinary full-screen band, so it is
+   laid out in the flow rather than over a pinned stage. */
+.story-step--single {
+  position: static;
+}
+
+.story-step--single .story-text p {
+  margin: 0;
+}
+
+.story-step--low-left {
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding-bottom: 8vh;
+}
+
+.story-art {
+  flex: none;
+}
+
+.story-step--left .story-art {
+  margin-left: auto;
+}
+
+.story-step--right .story-art {
+  margin-right: auto;
+}
+
+.story-art--question {
+  position: relative;
+  width: clamp(9rem, 26vw, 20rem);
+  height: clamp(9rem, 26vw, 20rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.story-art--question span {
+  position: absolute;
+  animation: story-question 3.2s ease-in-out infinite;
+}
+
+.story-art--question span:nth-child(1) {
+  left: 28%;
+  top: 8%;
+  font-size: clamp(7rem, 20vw, 16rem);
+  color: #2fa4a9;
+}
+
+.story-art--question span:nth-child(2) {
+  left: 2%;
+  top: 2%;
+  font-size: clamp(2.5rem, 7vw, 5.5rem);
+  opacity: 0.55;
+  --tilt: -16deg;
+  animation-duration: 2.6s;
+  animation-delay: -0.9s;
+}
+
+.story-art--question span:nth-child(3) {
+  right: 0;
+  bottom: 6%;
+  font-size: clamp(3rem, 9vw, 7rem);
+  opacity: 0.35;
+  --tilt: 14deg;
+  animation-duration: 3.8s;
+  animation-delay: -1.7s;
+}
+
+@keyframes story-question {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: var(--tilt, 0deg);
+  }
+  50% {
+    translate: 0 -0.12em;
+    rotate: calc(var(--tilt, 0deg) + 8deg);
+  }
+}
+
+.story-art--clock {
+  width: clamp(8rem, 22vw, 17rem);
+  height: auto;
+  overflow: visible;
+}
+
+.story-clock-face {
+  fill: currentColor;
+  fill-opacity: 0.06;
+  stroke: currentColor;
+  stroke-width: 4;
+}
+
+.story-clock-mark,
+.story-clock-hand {
+  stroke: currentColor;
+  stroke-linecap: round;
+}
+
+.story-clock-mark {
+  stroke-width: 2;
+}
+
+.story-clock-hand {
+  transform-origin: 50px 50px;
+}
+
+.story-clock-hand--hour {
+  stroke-width: 5;
+  animation: story-clock-turn 240s linear infinite;
+}
+
+.story-clock-hand--minute {
+  stroke-width: 3.5;
+  animation: story-clock-turn 20s linear infinite;
+}
+
+/* One tick a second, a full turn a minute. */
+.story-clock-hand--second {
+  stroke: #2fa4a9;
+  stroke-width: 2;
+  animation: story-clock-turn 60s steps(60) infinite;
+}
+
+.story-clock-pin {
+  fill: #2fa4a9;
+}
+
+@keyframes story-clock-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Phones: no room beside the sentence, so the drawing goes above it and
+   everything is centred; the sentences still move up and down the screen. */
+@media (max-width: 699.98px) {
+  .story-step,
+  .story-step--right {
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 1.25rem;
+  }
+
+  .story-step--high-right {
+    justify-content: flex-end; /* column-reverse: the top */
+  }
+
+  .story-step--low-left {
+    justify-content: flex-start; /* column-reverse: the bottom */
+  }
+
+  .story-step .story-art {
+    margin: 0;
+  }
+}
+
+/* No pinning: the sentences are listed one under the other, all shown. */
+.story-scroll--static .story-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  padding: calc(var(--home-nav-h) + 3rem) 0 calc(var(--home-wave-h) + 3rem);
+}
+
+.story-scroll--static .story-step {
+  position: static;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-step,
+  .story-line {
+    transition: none;
+  }
+
+  .story-art--question span,
+  .story-clock-hand {
+    animation: none;
+  }
+}
+
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-09-24
    Purpose: gut-microbiome section (TwoGutsSection.tsx) — a gut window with
    its composition bar.
@@ -2701,10 +2988,6 @@ body:not(.home-fullscreen) .home-hero {
   gap: 1rem;
   text-align: center;
   padding: calc(var(--home-nav-h) + 1rem) 0 1rem;
-}
-
-.two-guts-heading {
-  margin: 0;
 }
 
 .two-guts-row {
@@ -2961,16 +3244,32 @@ body:not(.home-fullscreen) .home-hero {
    taken from the team's abstract figure (lavender double-membrane cell,
    pale-blue BSH, pale-yellow conjugated / red deconjugated hexagons,
    light-blue glycine/taurine group). */
-.bsh-stream-heading {
-  margin: 0 0 0.5rem;
-  text-align: center;
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06: a pinned screen of
+   two steps. With .bsh-stream--meet only the cell shows, enlarged and moved
+   to the left, with its introduction on the right; with .bsh-stream--reaction
+   the diagram is back at its own size and everything marked
+   .bsh-stream-reaction (title, bile acids, labels) has faded in.
+   .bsh-stream--static (reduced motion) shows both, one under the other. */
+.bsh-stream {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: calc(var(--home-nav-h) + 1rem) 0 calc(var(--home-wave-h) + 1rem);
 }
 
-.bsh-stream-sub {
-  margin: 0 0 1.5rem;
+/* The enlarged diagram reaches past the sides of the screen (only its cell
+   is visible then); cut it off at the band so the page cannot scroll
+   sideways. */
+.home-section:has(.bsh-stream) {
+  overflow-x: clip;
+}
+
+.bsh-stream-heading {
+  max-width: 22em;
+  margin: 0 auto 1.5rem;
   text-align: center;
-  font-size: clamp(1rem, 1.8vw, 1.25rem);
-  opacity: 0.85;
+  text-wrap: balance;
 }
 
 .bsh-stream-diagram {
@@ -2978,6 +3277,87 @@ body:not(.home-fullscreen) .home-hero {
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
+  transition:
+    translate 0.9s cubic-bezier(0.65, 0, 0.35, 1),
+    scale 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.bsh-stream--meet .bsh-stream-diagram {
+  translate: -25% 0;
+  scale: 1.6;
+}
+
+.bsh-stream-reaction {
+  transition: opacity 0.45s ease 0.6s; /* after the cell has moved over */
+}
+
+.bsh-stream--meet .bsh-stream-reaction {
+  opacity: 0;
+  transition-delay: 0s;
+}
+
+/* The introduction: fills the half of the screen the cell leaves free. */
+.bsh-stream-meet {
+  position: absolute;
+  inset: 0 0 0 52%;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+}
+
+.bsh-stream-meet-text {
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  line-height: 1.4;
+  transition:
+    opacity 0.35s ease 0.5s,
+    translate 0.35s ease 0.5s;
+}
+
+.bsh-stream-meet-text p {
+  margin: 0;
+}
+
+.bsh-stream-meet-title {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.9rem, 4.6vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1.08;
+}
+
+.bsh-stream--reaction .bsh-stream-meet-text {
+  opacity: 0;
+  translate: 1.5rem 0;
+  transition-delay: 0s;
+}
+
+.bsh-stream--static .bsh-stream-meet {
+  position: static;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+/* Phones: the cell on top, its introduction underneath. */
+@media (max-width: 699.98px) {
+  .bsh-stream--meet .bsh-stream-diagram {
+    translate: 0 -75%;
+    scale: 2.2;
+  }
+
+  .bsh-stream-meet {
+    inset: 50% 0 0;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bsh-stream-diagram,
+  .bsh-stream-reaction,
+  .bsh-stream-meet-text {
+    transition: none;
+  }
 }
 
 .bsh-stream-svg {

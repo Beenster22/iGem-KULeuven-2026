@@ -211,7 +211,7 @@ export function PmosGlobe() {
         ) : (
           <div className="pmos-globe-info-panel">
             <h2 className="pmos-globe-prompt">
-              See how this affects the world
+              See the prevalence of PMOS by continent
             </h2>
             <span className="pmos-globe-info-hint">
               Click a continent on the globe

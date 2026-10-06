@@ -20,6 +20,10 @@ import { FanSelector, FanBranch } from "./components/FanSelector";
 import { MarketRings, MarketRing } from "./components/MarketRings";
 import { MicrobeBackdrop } from "./components/MicrobeBackdrop";
 import { TwoGutsSection } from "./components/TwoGutsSection";
+import {
+  StoryScrollSection,
+  StoryStatement,
+} from "./components/StoryScrollSection";
 import { SponsorGrid } from "./components/SponsorGrid";
 import { HomeSnapScroll } from "./components/HomeSnapScroll";
 
@@ -41,6 +45,8 @@ export const mdxComponents = {
   MarketRing,
   MicrobeBackdrop,
   TwoGutsSection,
+  StoryScrollSection,
+  StoryStatement,
   SponsorGrid,
   HomeSnapScroll,
   Callout,
