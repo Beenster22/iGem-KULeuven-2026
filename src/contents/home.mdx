@@ -70,11 +70,40 @@ But why is this reaction **important?**
 </div>
 </div>
 
-<div className="home-section home-section--contrast home-section--wave-top home-section--wave-into-footer home-snap-screen" data-snap="">
-<MicrobeBackdrop count={4} seed={3} />
+{/* The rest follows the team's "Text for HOME PAGE" (2nd round of changes);
+    see Tgr5Story.tsx for all four components. */}
+<div className="home-section home-section--flush home-section--body home-section--wave-top">
+<MicrobeBackdrop count={4} seed={6} />
 <div className="container">
 
-<InflammationSliderSection />
+<Tgr5MechanismSection />
+
+</div>
+</div>
+
+<div className="home-section home-section--flush home-section--page home-section--wave-top">
+<MicrobeBackdrop count={5} seed={8} />
+<div className="container">
+
+<Tgr5ConsequencesSection />
+
+</div>
+</div>
+
+<div className="home-section home-section--body home-section--wave-top home-snap-screen" data-snap="">
+<MicrobeBackdrop count={4} seed={11} />
+<div className="container">
+
+<EngineerSection />
+
+</div>
+</div>
+
+{/* A shorter band to end on: not a snap stop, the page scrolls freely here. */}
+<div className="home-section home-section--page home-section--wave-top home-section--wave-into-footer">
+<div className="container">
+
+<FindOutMore />
 
 </div>
 </div>

@@ -750,6 +750,73 @@ a[data-footnote-ref]:focus {
 .page-body:not(.page-body--home) .page-shell-content :is(p, li) {
   text-align: justify;
   hyphens: auto;
+  line-height: 1.75;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): more
+   breathing room on content pages. Beside the section index the content ran
+   to within 12px of the right edge of the screen, so it now keeps a real
+   margin there; and the text is set less tightly: taller lines (above), more
+   space between paragraphs, and headings, tables, figures and rules set
+   apart from what surrounds them. Only the page's own top-level blocks are
+   spaced (direct children of the content or of a PageLayout column), so the
+   insides of components keep their own layout. The home page is left alone. */
+@media (min-width: 992px) {
+  .section-progress + .page-shell-content {
+    max-width: none;
+    padding-right: clamp(2.5rem, 7vw, 7rem);
+  }
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"])
+  > p {
+  margin-bottom: 1.35rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"])
+  > :is(ul, ol)
+  > li
+  + li {
+  margin-top: 0.4rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"])
+  > :is(h2, h3, h4) {
+  margin-bottom: 1rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"])
+  > :not(:first-child):is(h2) {
+  margin-top: 3.25rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"])
+  > :not(:first-child):is(h3) {
+  margin-top: 2.5rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"])
+  > :not(:first-child):is(h4) {
+  margin-top: 1.9rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"])
+  > :is(.table-responsive, figure, blockquote) {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"])
+  > hr {
+  margin: 2.75rem 0;
 }
 
 /* SECTION PROGRESS */
@@ -1858,6 +1925,85 @@ footer hr {
   font-weight: 600;
   font-size: 0.9rem;
   text-align: center;
+}
+
+/* Stands in for a logo that has not been uploaded yet (no src in sponsors.ts). */
+.sponsor-grid-placeholder {
+  font-weight: 700;
+  text-align: center;
+  color: #33283f;
+  opacity: 0.6;
+}
+
+/* Only linked cards lift on hover. */
+div.sponsor-grid-card:hover {
+  transform: none;
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.08);
+}
+
+/* Updated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: sponsor tiers (SponsorGrid.tsx) — a heading with a medal-coloured
+   rule per tier, and cards that get smaller from gold down to bronze. */
+.sponsor-tier {
+  --sponsor-tier-color: rgba(51, 40, 63, 0.35);
+  --sponsor-tier-col: 190px;
+  --sponsor-tier-logo-h: 130px;
+  margin: 2rem 0 2.5rem;
+}
+
+.sponsor-tier-gold {
+  --sponsor-tier-color: #d4a72c;
+  --sponsor-tier-col: 250px;
+  --sponsor-tier-logo-h: 170px;
+}
+
+.sponsor-tier-silver {
+  --sponsor-tier-color: #9aa3ad;
+  --sponsor-tier-col: 220px;
+  --sponsor-tier-logo-h: 150px;
+}
+
+.sponsor-tier-bronze {
+  --sponsor-tier-color: #b87333;
+}
+
+.sponsor-tier-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.sponsor-tier-heading::before {
+  content: "";
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: var(--sponsor-tier-color);
+}
+
+.sponsor-tier-heading::after {
+  content: "";
+  flex: 1;
+  height: 3px;
+  border-radius: 3px;
+  background-color: var(--sponsor-tier-color);
+}
+
+.sponsor-tier .sponsor-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--sponsor-tier-col), 100%), 1fr));
+  margin: 1.25rem 0 0;
+}
+
+.sponsor-tier .sponsor-grid-card {
+  border-top: 4px solid var(--sponsor-tier-color);
+}
+
+.sponsor-tier .sponsor-grid-logo {
+  height: var(--sponsor-tier-logo-h);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3544,6 +3690,624 @@ body:not(.home-fullscreen) .home-hero {
 
   .bsh-stream-products {
     gap: 0.2rem 0.15rem;
+  }
+}
+
+/* TGR5 STORY
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: the last home-page sections (Tgr5Story.tsx): the TGR5 diagram
+   with the question that pops up over it, the three consequences joined by
+   a growing line, the "why we engineer" screen and the row of links. The
+   diagrams keep fixed colours in both themes, like the BSH diagram whose
+   palette they share. */
+.tgr5 {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: calc(var(--home-nav-h) + 1rem) 0 calc(var(--home-wave-h) + 1rem);
+}
+
+.tgr5-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  transition:
+    opacity 0.5s ease,
+    filter 0.5s ease,
+    scale 0.5s ease;
+}
+
+.tgr5-heading {
+  max-width: 24em;
+  margin: 0;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.tgr5-svg {
+  display: block;
+  width: min(100%, 760px);
+  max-height: 56vh;
+}
+
+.tgr5-cell {
+  fill: #f3eef9;
+  stroke: #6e5b9e;
+  stroke-width: 4;
+}
+
+.tgr5-nucleus {
+  fill: #d6cdea;
+  stroke: #6e5b9e;
+  stroke-width: 3;
+}
+
+.tgr5-receptor rect {
+  fill: #5d86b5;
+  stroke: #2f4f86;
+  stroke-width: 2;
+}
+
+.tgr5-arrow {
+  fill: none;
+  stroke: #33283f;
+  stroke-width: 3;
+}
+
+.tgr5-arrow-head {
+  fill: #33283f;
+}
+
+/* The weakened signal: a broken line whose dashes creep towards the nucleus. */
+.tgr5-arrow--signal {
+  stroke-dasharray: 7 7;
+  animation: tgr5-signal 1.6s linear infinite;
+}
+
+@keyframes tgr5-signal {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+.tgr5-dna {
+  fill: none;
+  stroke: #6e5b9e;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.tgr5-factor {
+  fill: #a06a94;
+  stroke: #6a3a5f;
+  stroke-width: 2;
+}
+
+.tgr5-gene {
+  fill: #7a5fa8;
+  stroke: #4f3f86;
+  stroke-width: 2;
+}
+
+.tgr5-il22 {
+  fill: #5a4699;
+  stroke: #33283f;
+  stroke-width: 3;
+}
+
+.tgr5-down,
+.tgr5-up {
+  fill: none;
+  stroke: #cc4a4a;
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tgr5-svg .tgr5-down,
+.tgr5-bob {
+  animation: tgr5-bob 1.4s ease-in-out infinite;
+}
+
+.tgr5-up.tgr5-bob {
+  --bob: -6px;
+}
+
+@keyframes tgr5-bob {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 var(--bob, 6px);
+  }
+}
+
+.tgr5-label {
+  fill: currentColor;
+  font-size: 22px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+.tgr5-label--dark {
+  fill: #33283f;
+}
+
+.tgr5-label--light {
+  fill: #fff;
+}
+
+.tgr5-label--small {
+  font-size: 17px;
+}
+
+.tgr5-label--cell {
+  font-size: 26px;
+}
+
+.tgr5-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem 1.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.95rem;
+}
+
+.tgr5-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.tgr5-legend svg {
+  height: 1.5em;
+  width: auto;
+}
+
+/* The question: over the whole screen, the diagram fading back behind it. */
+.tgr5-question {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+  opacity: 0;
+  scale: 0.8;
+  pointer-events: none;
+  transition:
+    opacity 0.4s ease,
+    scale 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tgr5-question-text {
+  max-width: none;
+  font-size: clamp(2.4rem, 8.5vw, 6.75rem);
+  text-align: center;
+}
+
+.tgr5--asking .tgr5-figure {
+  opacity: 0.12;
+  filter: blur(3px);
+  scale: 0.96;
+}
+
+.tgr5--asking .tgr5-question {
+  opacity: 1;
+  scale: 1;
+  transition-delay: 0.15s;
+}
+
+.tgr5--static .tgr5-question {
+  position: static;
+  margin-top: 3rem;
+  opacity: 1;
+  scale: 1;
+}
+
+/* The three consequences. --shown (set by the component) is how many are
+   in; --reach is how far the joining line has grown: up to the edge of the
+   newest item's drawing. */
+.tgr5-effects {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(1.5rem, 5vh, 3.5rem);
+  padding: calc(var(--home-nav-h) + 1rem) 0 calc(var(--home-wave-h) + 1rem);
+}
+
+.tgr5-effects-heading {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1.6rem, 4vw, 3rem);
+}
+
+.tgr5-effects-list {
+  --art: clamp(6.5rem, 14vw, 11rem);
+  --reach: calc(
+    (var(--shown) * 2 - 1) / (var(--count) * 2) * 100% - var(--art) / 2
+  );
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--count), minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tgr5-effects-line {
+  position: absolute;
+  left: 0;
+  top: calc(var(--art) / 2 - 3px);
+  width: 100%;
+  height: 6px;
+}
+
+.tgr5-effects-line-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--reach);
+  height: 100%;
+  border-radius: 3px;
+  background: #2fa4a9;
+  transition:
+    width 0.8s cubic-bezier(0.65, 0, 0.35, 1),
+    height 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* A bacterium leading the line. */
+.tgr5-effects-line-head {
+  position: absolute;
+  left: var(--reach);
+  top: 50%;
+  width: 2.4rem;
+  height: 1.1rem;
+  translate: -85% -50%;
+  border-radius: 999px;
+  background: #d9779b;
+  border: 2px solid #9c5670;
+  transition:
+    left 0.8s cubic-bezier(0.65, 0, 0.35, 1),
+    top 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.tgr5-effect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+  text-align: center;
+  opacity: 0;
+  translate: 0 1.5rem;
+  transition:
+    opacity 0.45s ease,
+    translate 0.45s ease;
+}
+
+/* Comes in once the line has reached it. */
+.tgr5-effect--shown {
+  opacity: 1;
+  translate: 0 0;
+  transition-delay: 0.45s;
+}
+
+.tgr5-effect-art {
+  position: relative;
+  flex: none;
+  width: var(--art);
+  height: var(--art);
+  margin-bottom: 0.5rem;
+  border-radius: 50%;
+  border: 4px solid #2fa4a9;
+  background: #f3eef9;
+  color: #33283f;
+}
+
+.tgr5-effect-art svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 14%;
+  overflow: visible;
+}
+
+.tgr5-drop {
+  fill: #e9a3a3;
+  stroke: #8e2626;
+  stroke-width: 3;
+}
+
+.tgr5-ring {
+  fill: #f7f0c8;
+  stroke: #33283f;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.tgr5-effect-title {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.6vw, 2rem);
+}
+
+.tgr5-effect-detail {
+  margin: 0;
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  opacity: 0.85;
+}
+
+/* Phones: the items go under each other, drawing on the left, and the line
+   runs down through the drawings instead. */
+@media (max-width: 699.98px) {
+  .tgr5-effects-list {
+    --art: clamp(5rem, 15vh, 7rem);
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: 1fr;
+    gap: 1.5rem 0;
+    padding: 0 0.5rem;
+  }
+
+  .tgr5-effects-line {
+    left: calc(0.5rem + var(--art) / 2 - 3px);
+    top: -1.5rem;
+    width: 6px;
+    height: calc(100% + 1.5rem);
+  }
+
+  .tgr5-effects-line-fill {
+    width: 100%;
+    height: var(--reach);
+  }
+
+  .tgr5-effects-line-head {
+    left: 50%;
+    top: var(--reach);
+    translate: -50% -85%;
+    rotate: 90deg;
+  }
+
+  .tgr5-effect {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-content: center;
+    align-items: center;
+    gap: 0.25rem 1rem;
+    padding: 0;
+    text-align: left;
+  }
+
+  .tgr5-effect-art {
+    grid-row: 1 / span 2;
+    margin-bottom: 0;
+  }
+
+  .tgr5-effect-title:last-child {
+    grid-row: 1 / span 2;
+  }
+}
+
+/* Why we engineer P. vulgatus. */
+.engineer {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  padding: 0 clamp(0.5rem, 3vw, 2.5rem);
+}
+
+.engineer-text {
+  max-width: none;
+  font-size: clamp(1.8rem, 4.4vw, 3.6rem);
+}
+
+.engineer-svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+  animation: engineer-float 5s ease-in-out infinite;
+}
+
+@keyframes engineer-float {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: -2deg;
+  }
+  50% {
+    translate: 0 -0.6rem;
+    rotate: 2deg;
+  }
+}
+
+.engineer-dna {
+  stroke: #33283f;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.engineer-promoter,
+.engineer-terminator {
+  fill: none;
+  stroke: #33283f;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.engineer-part {
+  stroke: #33283f;
+  stroke-width: 2;
+  animation: engineer-glow 2.4s ease-in-out infinite;
+}
+
+.engineer-part--a {
+  fill: #2fa4a9;
+}
+
+.engineer-part--b {
+  fill: #e0a84a;
+  animation-delay: 0.4s;
+}
+
+@keyframes engineer-glow {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.3);
+  }
+}
+
+/* From the circuit to BSH, ending in the blunt bar that means "inhibits";
+   the dashes run along it towards BSH. */
+.engineer-inhibit {
+  fill: none;
+  stroke: #cc4a4a;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 6 6;
+  animation: tgr5-signal 1.2s linear infinite;
+}
+
+.engineer-bsh {
+  fill: #dfe8f7;
+  fill-opacity: 0.55;
+  stroke: #2f4f86;
+  stroke-width: 3;
+  stroke-dasharray: 5 5;
+}
+
+.engineer-bsh-label {
+  fill: #1c2f52;
+  fill-opacity: 0.7;
+  font-size: 20px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+@media (max-width: 699.98px) {
+  .engineer {
+    grid-template-columns: minmax(0, 1fr);
+    text-align: center;
+  }
+
+  .engineer-svg {
+    width: min(100%, 20rem);
+    margin: 0 auto;
+  }
+}
+
+/* Find out more: links rolling sideways like the sponsor logos (the track
+   holds the set four times over and shifts by half its width per loop). */
+.find-more {
+  text-align: center;
+}
+
+.find-more-heading {
+  margin: 0 0 1.5rem;
+}
+
+.find-more-band {
+  overflow: hidden;
+  margin: 0 calc(-50vw + 50%);
+  padding: 0.5rem 0;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+}
+
+.find-more-track {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;
+  padding-right: 1.5rem;
+  animation: find-more-roll 36s linear infinite;
+}
+
+.find-more-band:hover .find-more-track,
+.find-more-band:focus-within .find-more-track {
+  animation-play-state: paused;
+}
+
+@keyframes find-more-roll {
+  to {
+    translate: -50% 0;
+  }
+}
+
+.find-more-link {
+  flex: none;
+  padding: 0.7rem 1.75rem;
+  border: 3px solid currentColor;
+  border-radius: 999px;
+  color: inherit;
+  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    scale 0.2s ease;
+}
+
+.find-more-link:hover,
+.find-more-link:focus-visible {
+  background-color: #2fa4a9;
+  border-color: #2fa4a9;
+  color: #fff;
+  scale: 1.05;
+}
+
+.find-more-band--static {
+  margin: 0;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.find-more-band--static .find-more-track {
+  flex-wrap: wrap;
+  justify-content: center;
+  width: auto;
+  padding-right: 0;
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tgr5-figure,
+  .tgr5-question,
+  .tgr5-effect,
+  .tgr5-effects-line-fill,
+  .tgr5-effects-line-head {
+    transition: none;
+  }
+
+  .tgr5-arrow--signal,
+  .tgr5-svg .tgr5-down,
+  .tgr5-bob,
+  .engineer-svg,
+  .engineer-part,
+  .engineer-inhibit {
+    animation: none;
   }
 }
 

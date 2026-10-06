@@ -24,6 +24,12 @@ import {
   StoryScrollSection,
   StoryStatement,
 } from "./components/StoryScrollSection";
+import {
+  EngineerSection,
+  FindOutMore,
+  Tgr5ConsequencesSection,
+  Tgr5MechanismSection,
+} from "./components/Tgr5Story";
 import { SponsorGrid } from "./components/SponsorGrid";
 import { HomeSnapScroll } from "./components/HomeSnapScroll";
 
@@ -47,6 +53,10 @@ export const mdxComponents = {
   TwoGutsSection,
   StoryScrollSection,
   StoryStatement,
+  Tgr5MechanismSection,
+  Tgr5ConsequencesSection,
+  EngineerSection,
+  FindOutMore,
   SponsorGrid,
   HomeSnapScroll,
   Callout,
