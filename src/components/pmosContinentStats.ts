@@ -31,7 +31,7 @@ export const PMOS_CONTINENT_NOTES: Partial<Record<Continent, string>> = {
   Africa:
     "Likely the most underestimated continent: where diagnosis and healthcare access are limited, most cases are never recorded.",
   "South America":
-    "Recorded numbers vary widely: the Andean countries (Peru, Ecuador, Bolivia) report more cases than Brazil, despite having about a third of its population, which shows how much depends on diagnosis.",
+    "Recorded numbers vary widely: the Andean countries (Peru, Ecuador, Bolivia) report more cases than Brazil, despite having about a third of its population, which shows how much prevalence depends on diagnosis.",
   Oceania:
     "Australia and New Zealand have some of the highest recorded rates in the world, and Australia leads the international guidelines on diagnosing and treating PMOS.",
 };

@@ -45,9 +45,14 @@ import { LiverDrawing, LIVER_DRAWING_WIDTH } from "./LiverDrawing";
 import { usePinnedStep } from "./usePinnedStep";
 
 // Wording supplied by the team ("Text for HOME PAGE", Section 3) — keep as
-// written.
+// written. Edited with Claude Opus 5.5 (Anthropic), 2026-10-06: the team's
+// one sentence is now laid out in three parts (team request) — the name
+// spelled out down the left, one word per letter of PMOS, the "formerly
+// known as" note under it, and the rest of the sentence beside it.
+const PMOS_WORDS = ["Polyendocrine", "Metabolic", "Ovarian", "Syndrome"];
+const FORMER_NAME_TEXT = "Formerly known as Polycystic Ovary Syndrome (PCOS)";
 const OVERVIEW_TEXT =
-  "Polyendocrine Metabolic Ovarian Syndrome, formerly known as Polycystic Ovary Syndrome (PCOS), is the most common metabolic and endocrine disorder affecting women of reproductive age.";
+  "The most common metabolic and endocrine disorder affecting women of reproductive age.";
 
 // Everything in the figure is laid out on one canvas: the team's female
 // figure (FemaleFigure.tsx) scaled so the body is 400 units tall. The organs
@@ -269,8 +274,25 @@ export function BodySymptomsSection() {
   return (
     <>
       <div className="body-symptoms-intro" data-snap="">
-        <h2 className="body-symptoms-heading">What is PMOS?</h2>
-        <p className="body-symptoms-blurb">{OVERVIEW_TEXT}</p>
+        <div className="body-symptoms-definition">
+          <div className="body-symptoms-name">
+            <p
+              className="body-symptoms-acrostic"
+              aria-label={PMOS_WORDS.join(" ")}
+            >
+              {PMOS_WORDS.map((word) => (
+                <span key={word} aria-hidden="true">
+                  <span className="body-symptoms-acrostic-letter">
+                    {word[0]}
+                  </span>
+                  {word.slice(1)}
+                </span>
+              ))}
+            </p>
+            <p className="body-symptoms-former-name">{FORMER_NAME_TEXT}</p>
+          </div>
+          <p className="body-symptoms-blurb">{OVERVIEW_TEXT}</p>
+        </div>
       </div>
       <div
         className={`body-symptoms-scroller${prefersReducedMotion ? "" : " home-snap-pin"}`}

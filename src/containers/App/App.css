@@ -742,6 +742,16 @@ a[data-footnote-ref]:focus {
   min-width: 0;
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): the
+   running text of every content page is justified, so lines end flush on
+   the right as in a paper. Hyphenation keeps the word gaps from opening up
+   in narrow columns. The home page is left alone, and so is anything a page
+   centres on purpose (Bootstrap's .text-center is !important). */
+.page-body:not(.page-body--home) .page-shell-content :is(p, li) {
+  text-align: justify;
+  hyphens: auto;
+}
+
 /* SECTION PROGRESS */
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-07-13 (restyled 2026-07-28,
    2026-09-08)
@@ -2007,6 +2017,8 @@ body.home-fullscreen {
    (see body.home-fullscreen), hence --home-nav-h. */
 body {
   --home-nav-h: 64px;
+  /* How far a band's wave pokes up into the band above it. */
+  --home-wave-h: clamp(28px, 4vw, 64px);
 }
 
 body.home-fullscreen {
@@ -2279,7 +2291,11 @@ body:not(.home-fullscreen) .home-hero {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: calc(var(--home-nav-h) + 0.75rem) 0 3.5rem;
+  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06: the bottom also
+     clears the next band's wave, which lies over the foot of this screen
+     once the last group is in and used to cover the hint. */
+  padding: calc(var(--home-nav-h) + 0.75rem) 0
+    calc(var(--home-wave-h) + 3rem);
 }
 
 /* Its own near-full-screen block, so the definition stands alone and a
@@ -2298,17 +2314,60 @@ body:not(.home-fullscreen) .home-hero {
   text-align: center;
 }
 
-.body-symptoms-heading {
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): the
+   name spelled out down the left, one word per letter of PMOS, and the
+   definition beside it, set apart by a rule between the two. */
+.body-symptoms-definition {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  text-align: left;
+}
+
+.body-symptoms-acrostic {
   margin: 0;
-  font-size: clamp(2.75rem, 9vw, 6rem);
-  line-height: 1.05;
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(1.5rem, 3.6vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.body-symptoms-acrostic-letter {
+  display: inline-block;
+  font-size: 1.5em;
+  font-weight: 800;
+  color: #2fa4a9;
+}
+
+.body-symptoms-former-name {
+  margin: 0.75rem 0 0;
+  font-size: clamp(0.85rem, 1.3vw, 1rem);
+  opacity: 0.8;
 }
 
 .body-symptoms-blurb {
   margin: 0;
-  font-size: clamp(1.05rem, 2vw, 1.4rem);
-  line-height: 1.6;
+  padding-left: clamp(1.5rem, 4vw, 3rem);
+  border-left: 3px solid #2fa4a9;
+  font-size: clamp(1.25rem, 2.5vw, 1.8rem);
+  line-height: 1.5;
   opacity: 0.9;
+}
+
+/* Narrow screens: the definition goes under the name, and the rule between
+   them turns horizontal. */
+@media (max-width: 640px) {
+  .body-symptoms-definition {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .body-symptoms-blurb {
+    padding: clamp(1.5rem, 4vw, 3rem) 0 0;
+    border-left: 0;
+    border-top: 3px solid #2fa4a9;
+  }
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: says what pointing at
@@ -2317,7 +2376,7 @@ body:not(.home-fullscreen) .home-hero {
 .body-symptoms-hint {
   position: absolute;
   left: 50%;
-  bottom: 0.9rem;
+  bottom: calc(var(--home-wave-h) + 0.4rem);
   translate: -50% 0;
   width: max-content;
   max-width: 100%;
@@ -2383,8 +2442,8 @@ body:not(.home-fullscreen) .home-hero {
   position: relative;
   /* As tall as the pinned screen allows; the 80vw cap keeps room for the
      two columns on narrow-but-tall screens. */
-  height: max(280px, min(calc(100vh - 5rem - var(--home-nav-h)), 80vw));
-  height: max(280px, min(calc(100svh - 5rem - var(--home-nav-h)), 80vw));
+  height: max(280px, min(calc(100vh - 4.5rem - var(--home-wave-h) - var(--home-nav-h)), 80vw));
+  height: max(280px, min(calc(100svh - 4.5rem - var(--home-wave-h) - var(--home-nav-h)), 80vw));
   /* Proportions of the team's figure drawing (see CANVAS_WIDTH/HEIGHT in
      BodySymptomsSection.tsx). */
   aspect-ratio: 217 / 400;
@@ -2577,7 +2636,8 @@ body:not(.home-fullscreen) .home-hero {
    underneath, so the whole thing still fits in one pinned screen. */
 @media (max-width: 699.98px) {
   .body-symptoms-pinned {
-    padding: calc(var(--home-nav-h) + 0.5rem) 0 2.75rem;
+    padding: calc(var(--home-nav-h) + 0.5rem) 0
+      calc(var(--home-wave-h) + 2.25rem);
   }
 
   /* To the left, clear of the back-to-top button in the corner. */
@@ -2602,8 +2662,8 @@ body:not(.home-fullscreen) .home-hero {
     justify-self: center;
     /* What is left of the pinned screen once the two lists underneath
        have their room. */
-    height: clamp(180px, calc(100vh - 28rem - var(--home-nav-h)), 440px);
-    height: clamp(180px, calc(100svh - 28rem - var(--home-nav-h)), 440px);
+    height: clamp(180px, calc(100vh - 28rem - var(--home-wave-h) - var(--home-nav-h)), 440px);
+    height: clamp(180px, calc(100svh - 28rem - var(--home-wave-h) - var(--home-nav-h)), 440px);
   }
 
   .body-symptoms-column {
@@ -3274,12 +3334,13 @@ body:not(.home-fullscreen) .home-hero {
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-03: the figure sits on
    its own line, far larger than the sentence around it and in the brand
-   teal, so it is the first thing read in this band. */
+   teal, so it is the first thing read in this band. Colour set to the
+   brand teal #2fa4a9 on 2026-10-06 (was the darker #1f8a8f). */
 .pmos-counter-number {
   display: block;
   width: fit-content;
   margin: 0.15em auto;
-  color: #1f8a8f;
+  color: #2fa4a9;
   font-size: clamp(2.75rem, 12vw, 8.5rem);
   line-height: 1.05;
   white-space: nowrap;
