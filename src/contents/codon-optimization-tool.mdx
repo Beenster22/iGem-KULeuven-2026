@@ -1,9 +1,106 @@
+{/* Page formatted with Claude Opus 5 (Anthropic), 2026-10-06.
+    Purpose: lay out the team's "Dry lab" document (Introduction + Codon
+    optimization tool sections) as MDX. The prose is the team's own text,
+    transferred verbatim; only typography was adjusted (species names in
+    italics, prime/≥ characters, footnote-style references). */}
+
 <PageLayout>
 
-## Codon Optimization Tool
+## Introduction
 
 ---
 
-Hi Milica. Hope you are doing well. youve been doing such a great job and we all appreciate you. I will work on this page very soon I promise :D. For now, here is a very beautiful paragraph for you to read. I hope this fulfils your anxiety.
+The EMPOWER team's aim is to cure PCOS in women, we had two aims this year. First, we wanted to
+develop a proof of concept therapeutic strategy by targeting the prevalent gram postivite bacteria
+*P. vulgatus*. Second and more relevant for the dry lab page, we wanted to develop a toolkit for
+easier engineering of *Bacteroides* species.
+
+## Codon optimization tool
+
+---
+
+While planning our constructs in the wet lab we ran into a gap. There existed no online tool to
+perform codon optimization or harmonization for *Bacteroides* species. Existing tools target
+*E. coli*, yeast or mammalian hosts, and their defaults are a poor fit for an AT-rich anaerobe.
+Since we needed one ourselves, we built it and made it freely available.
+
+### Optimization versus harmonization
+
+Codon optimization replaces each codon with the one most frequently used by the host, maximising
+translation speed and therefore heterologous expression. What it does not account for is folding.
+The genetic code is redundant, and evolution can make a rare codon functionally important by
+introducing a pause which causes it to give the nascent chain a window in which to fold
+co-translationally[^cod-1]. Remove those pauses and the protein may misfold, producing an enzyme
+that is abundantly expressed but yield some inactive version. Codon harmonization preserves this
+pattern instead of erasing it, mapping the relative codon usage of the native sequence onto the
+host.
+
+### Tool design
+
+#### Aim
+
+Our goal was a tool that takes a coding sequence and returns a version that can realistically be
+expressed in *Bacteroides*, without the user needing to know anything about the genus' quirks. We
+designed a tool that can handle both optimization and harmonization, since the choice between them
+depends on whether the user cares more about yield or about folding.
+
+#### Species and codon usage data
+
+Codon usage tables are taken from the Kazusa Codon Usage Database and vendored locally, so the tool
+works offline and gives reproducible results independent of database availability. Two reference
+genomes are supported: *B. thetaiotaomicron* VPI-5482, *B. fragilis* NCTC 9343.
+
+#### Two modes
+
+In optimize mode, every position is reassigned to the most frequent synonymous codon for the
+*Bacteroides* species. In harmonize mode, the rank of each codon in the source organism is mapped
+onto the codon of equivalent rank in *Bacteroides*, preserving the relative fast/slow pattern of the
+native sequence. We chose rank-based mapping over frequency-percentile mapping because ranks stay
+meaningful between organisms with very different overall codon bias, which matters here given the
+AT-rich *Bacteroides* genome. Harmonization works with a source-organism table supplied by the user.
+If none is given, the tool falls back to self-referential ranking within the input CDS itself and
+warns when the source table is too small to rank reliably.
+
+#### Constraints
+
+A sequence that is optimal on paper is still useless if it cannot be cloned or translated. Four
+constraint modules run over every candidate sequence:
+
+- **5′ folding:** strong secondary structure around the start codon block initiation. Rather than a
+  fixed ΔG cutoff, we compute the minimum free energy of the initiation window with ViennaRNA and
+  convert it to a z-score against a null distribution of shuffled sequences.
+- **Repeats:** direct and inverted repeats of ≥11 bp, with fuzzy matching allowing up to two
+  mismatches, since near-identical repeats are enough to cause synthesis failure for a lot of
+  manufacturers.
+- **GC content:** global GC and a sliding window, with an upper ceiling only. No floor is imposed,
+  because low GC is the normal state for this genus rather than a defect.
+- **Restriction sites:** a fixed panel of nine enzymes covering common Golden Gate and the biobrick
+  enzymes (BsaI, PaqCI, SapI, BbsI, EcoRI, NotI, XbaI, SpeI, PstI), checked on both strands.
+
+#### Repair
+
+Violations are not simply reported: the tool attempts to fix them using synonymous substitutions, in
+strict priority order. A candidate substitution is accepted only if it resolves its target violation
+without introducing a higher-priority one, which prevents the repair loop from trading one problem
+for a worse one.
+
+#### Output
+
+Every run produces a diagnostics report: per-constraint summaries, the full log of substitutions
+made, and any violations that could not be resolved, flagged as warnings. A sequence that cannot be
+made fully compliant is still returned, with the remaining problems made explicit, so the user can
+decide whether to accept it or redesign.
+
+### Availability
+
+{/* TODO: replace the placeholder below with the public GitHub repository URL. */}
+
+The tool is open source and available at [GitHub repository — link to be added]. It is written in
+Python and runs as a command line application.
+
+{/* The "References" panel below is generated automatically from this
+    footnote definition by rehypeReferences — no heading needed here. */}
+
+[^cod-1]: Mignon, C., Mariano, N., Stadthagen, G., Lugari, A., Lagoutte, P., Donnat, S., Chenavas, S., Perot, C., Sodoyer, R., & Werle, B. (2018). Codon harmonization – going beyond the speed limit for protein expression. FEBS Letters, 592(9), 1554–1564. https://doi.org/10.1002/1873-3468.13046
 
 </PageLayout>

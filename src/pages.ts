@@ -99,7 +99,7 @@ const Pages: (Page | Folder)[] = [
         title: "Codon Optimization Tool",
         path: "/codon-optimization-tool",
         component: CodonOptimizationTool,
-        lead: "Placeholder page — replace with your codon optimization tool content.",
+        lead: "A codon optimization and harmonization tool for Bacteroides species.",
       },
       {
         name: "BSH Screening",

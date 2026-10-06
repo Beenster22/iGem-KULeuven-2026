@@ -837,10 +837,8 @@ a[data-footnote-ref]:focus {
 /* SECTION PROGRESS */
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-07-13 (restyled 2026-07-28,
    2026-09-08)
-   Purpose: boxed, always-expanded page index. A single DNA strand runs
-   straight through each section's dot (ul::before, painted behind the li
-   content) so every title reads as literally threaded onto the strand,
-   rather than a decorative graphic floating beside an unrelated list.
+   Purpose: boxed, always-expanded page index, with the mascot marking the
+   current section (see .section-progress-mascot below).
    The column itself is a full-height --color-page-bg rail running the whole
    length of the article (not just the box's own height) so the index reads
    as a distinct sidebar rather than a card dropped onto the page body's
@@ -881,30 +879,12 @@ a[data-footnote-ref]:focus {
   position: relative;
   list-style: none;
   margin: 0;
-  padding: 0;
+  /* Left gutter the mascot travels in. */
+  --mascot-size: 2.25rem;
+  padding: 0 0 0 calc(var(--mascot-size) + 0.5rem);
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
-
-/* The strand: a beaded gradient standing in for DNA rungs, positioned to
-   run exactly through the center of each dot below. */
-.section-progress ul::before {
-  content: "";
-  position: absolute;
-  top: 6px;
-  bottom: 6px;
-  left: 4px;
-  width: 2px;
-  border-radius: 2px;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    var(--color-accent) 0,
-    var(--color-accent) 5px,
-    transparent 5px,
-    transparent 11px
-  );
-  opacity: 0.6;
 }
 
 .section-progress li {
@@ -912,34 +892,73 @@ a[data-footnote-ref]:focus {
 }
 
 .section-progress a {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
+  display: block;
   text-decoration: none;
   color: var(--color-text);
 }
 
-.section-progress-dot {
-  position: relative;
-  z-index: 1;
-  flex: none;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  /* Matches the box background so an inactive dot reads as a hollow ring;
-     the active state below fills it with the (distinct) accent color. */
-  background-color: var(--color-page-bg);
-  border: 2px solid rgba(51, 40, 63, 0.35);
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    transform 0.15s ease;
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: the mascot marks the current section in place of the old strand
+   and dots. It lives in the gutter the list's padding reserves and is slid
+   to the active row by an inline translateY (set in SectionProgress.tsx to
+   that row's vertical center); the inner body carries the hop so the two
+   movements don't fight over one transform. */
+.section-progress li.section-progress-mascot {
+  position: absolute;
+  top: calc(var(--mascot-size) / -2);
+  left: 0;
+  width: var(--mascot-size);
+  height: var(--mascot-size);
+  pointer-events: none;
+  /* Keep in sync with MASCOT_TRAVEL_MS in SectionProgress.tsx. */
+  transition: transform 0.45s cubic-bezier(0.34, 1.3, 0.64, 1);
 }
 
-.section-progress li.active .section-progress-dot {
-  background-color: var(--color-accent);
-  border-color: var(--color-accent);
-  transform: scale(1.3);
+.section-progress-mascot-body {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.section-progress-mascot.travelling .section-progress-mascot-body {
+  animation: section-progress-mascot-hop 0.45s ease-in-out;
+}
+
+.section-progress-mascot img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+}
+
+.section-progress-mascot img.shown {
+  opacity: 1;
+}
+
+@keyframes section-progress-mascot-hop {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0);
+  }
+  30% {
+    transform: translateX(-3px) rotate(-12deg);
+  }
+  70% {
+    transform: translateX(3px) rotate(10deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-progress li.section-progress-mascot {
+    transition: none;
+  }
+
+  .section-progress-mascot.travelling .section-progress-mascot-body {
+    animation: none;
+  }
 }
 
 .section-progress-label {
@@ -951,21 +970,10 @@ a[data-footnote-ref]:focus {
   font-weight: 600;
 }
 
-/* Subsections (h3) branch off the strand rather than sitting on it: shifted
-   right and shrunk down so the hierarchy against main sections (h2, on the
-   strand) reads at a glance without a second legend. */
+/* Subsections (h3) are shifted right and shrunk down so the hierarchy
+   against main sections (h2) reads at a glance without a second legend. */
 .section-progress li.sub {
   margin-left: 1.1rem;
-}
-
-.section-progress li.sub .section-progress-dot {
-  width: 6px;
-  height: 6px;
-  border-width: 1.5px;
-}
-
-.section-progress li.sub.active .section-progress-dot {
-  transform: scale(1.3);
 }
 
 .section-progress li.sub .section-progress-label {

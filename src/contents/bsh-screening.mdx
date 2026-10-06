@@ -1,9 +1,92 @@
+{/* Page formatted with Claude Opus 5 (Anthropic), 2026-10-06.
+    Purpose: lay out the "Therapeutics" sections of the team's "Dry lab"
+    document (phylogenetic analysis of the BSH candidates + AutoDock Vina
+    docking) as MDX, with the BSH tree figure placed where the document
+    marked it. The prose is the team's own text, transferred verbatim; only
+    typography was adjusted (species names in italics, gene IDs as code,
+    footnote-style references). */}
+
 <PageLayout>
 
-## BSH Screening
+## Phylogenetic analysis of the candidates
 
 ---
 
-Placeholder page — replace with your BSH screening content (structure prediction and interactions with bile acids).
+To understand how our candidates relate to one another and to enzymes with confirmed bile salt
+hydrolase activity, we reconstructed a phylogeny of the full candidate panel together with
+characterized reference sequences (24 sequences in total). The reference set was chosen to span the
+taxonomic range over which BSH activity have been described: *Bifidobacterium*, *Collinsella*,
+*Lactobacillus* and other related genera such as *Blautia*, *Bacteroides*, *Phocaeicola* and
+*Parabacteroides*. In our analysis we have also included the biochemically characterized bile salt
+hydrolase of *Bifidobacterium longum* (UniProt Q9KK62) as a reference point.
+
+Prior to generating our tree we aligned the sequences with MAFFT version 7 and G-INS-1 as strategy,
+after trimming we were left with 309 aligned positions, of which 289 were parsimony-informative. A
+maximum likelihood tree was inferred in IQ-TREE 3.1.2., substitution models were screened with
+ModelFinder and Q.PFAM+I+G4 selected by BIC, with the proportion of invariable sites estimated at
+0.040 and a Gamma shape parameter of 1.96 across four rate categories. Branch support was assessed
+by performing 1000 ultrafast bootstrap replicates and 1000 SH-aLRT replicates.
+
+The resulting tree was created using iTOL and separates the candidate set into two broad groups. One
+contains the characterised *Bifidobacterium* enzyme together with the *Collinsella*, *Lactobacillus*
+and *Blautia* sequences. The second contains the Bacteroidota sequences: *Bacteroides dorei*,
+*Phocaeicola vulgatus*, *Phocaeicola plebeius* and *Parabacteroides merdae*, and is separated from
+the first by substantially longer branches.
+
+Two observations follow from this. First, sequence similarity to a known BSH is a weak guide within
+our candidate set: the Bacteroidota candidates are distant enough from the characterised enzymes that
+homology alone does not establish what reaction they catalyse. This is the concern that motivated our
+docking analysis, we discuss further in the wiki. Second, the two *P. vulgatus* sequences in our set
+do not group together. `HMPREF1058_00373` resolves alongside *B. dorei*, while `HMPREF1058_02605`
+resolves with *P. merdae* on a long branch, indicating that this single strain carries two divergent
+members of the choloylglycine hydrolase family rather than two copies of one enzyme.
+
+<div className="text-center my-3">
+<ZoomableImage src="https://static.igem.wiki/teams/6299/wiki/dry-lab/bsh-tree-alejandro.avif" alt="Maximum likelihood phylogenetic tree of the bile salt hydrolase candidate panel together with characterized reference sequences" />
+<p className="figure-caption small mt-2 mb-0">Figure 1. Maximum likelihood phylogeny of the bile salt hydrolase candidate panel. Twenty-four sequences comprising the full candidate panel and characterized reference sequences were aligned with MAFFT v7 (G-INS-1) and the tree inferred in IQ-TREE 3.1.2 under Q.PFAM+I+G4, with 1000 ultrafast bootstrap and 1000 SH-aLRT replicates. The tree was visualized using iTOL.</p>
+</div>
+
+## BSH–bile salt interaction using AutoDock Vina
+
+---
+
+Sequence-level evidence alone is not enough to call a gene a bile salt hydrolase (BSH). BSHs belong
+to the cholylglycine hydrolase family, which also contains enzymes with different substrate
+preferences, so homology searches can return proteins that share the fold and the catalytic
+machinery without acting on bile salts. To address this before committing wet lab capacity, we asked
+a structural question: does each candidate actually have a binding site capable of accommodating a
+bile salt?
+
+Bile salt hydrolases (BSHs) are N-terminal nucleophile hydrolases (Ntn) and their catalytic
+nucleophile is a cysteine at position 2, exposed by autocatalytic cleavage[^bsh-1][^bsh-2]. A
+candidate without a cysteine at this position does not match the canonical BSH catalytic
+architecture. We therefore checked this residue in all 15 predicted structures. Eleven candidates
+carry Cys2 and were treated as canonical. Four (bdor, pmer, ppleb and pvul1) have no cysteine at
+position 2. Instead they carry an N-terminal extension with the profile of a signal peptide (a
+hydrophobic stretch followed by a polar region), and the first cysteine downstream of it sits at
+position 20–26. For these four we took that cysteine as the putative catalytic residue, assuming the
+extension is cleaved to expose it. The assignment is inferred from sequence features and has not been
+confirmed experimentally, so we flag these candidates as divergent from canonical BSHs regardless of
+their docking results.
+
+We predicted the structure of each of the 15 candidates with AlphaFold3 and docked them against a
+panel of bile salts using AutoDock Vina, run in Google Colab so that the entire pipeline is
+reproducible by anyone without local installation or licensed software. The docking search box was
+centered on the catalytic cysteine of each protein. For each protein-ligand pair we recorded the
+binding affinity of the top-scoring pose and inspected the pose relative to the catalytic residue,
+since a favorable score in the wrong pocket says nothing useful.
+
+Docking scores are a ranking tool, not a measurement. Vina affinities do not translate into kinetic
+parameters, and the scoring function was not developed with steroid-scaffold ligands in mind. We
+therefore treated the results as a prioritization step rather than a prediction of activity:
+candidates that dock poorly across the entire bile salt panel, that bind in a pose incompatible with
+catalysis, or that lack the Cys2 nucleophile are deprioritized, while the ranking is used to
+interpret the BSH assay and LC-MS results rather than to replace them.
+
+{/* The "References" panel below is generated automatically from these
+    footnote definitions by rehypeReferences — no heading needed here. */}
+
+[^bsh-1]: Asar, R., Dhindwal, P., & Ruzzini, A. (2024). Structural and functional analysis of a bile salt hydrolase from the bison microbiome. Journal of Biological Chemistry, 300(10). https://doi.org/10.1016/j.jbc.2024.107769
+[^bsh-2]: Xu, F., Hu, X.-J., Singh, W., Geng, W., Tikhonova, I. G., & Lin, J. (2019). The complex structure of bile salt hydrolase from Lactobacillus salivarius reveals the structural basis of substrate specificity. Scientific Reports, 9(1), 12438. https://doi.org/10.1038/s41598-019-48850-6
 
 </PageLayout>
