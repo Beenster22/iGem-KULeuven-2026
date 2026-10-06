@@ -75,7 +75,7 @@ export function MarketRings({ children }: MarketRingsProps) {
             <g
               key={ring.label}
               id={ring.label.toLowerCase()}
-              className={`market-ringmarket-ring-${index}${isActive ? " active" : ""}`}
+              className={`market-ring market-ring-${index}${isActive ? " active" : ""}`}
               role="button"
               tabIndex={0}
               aria-pressed={isActive}
