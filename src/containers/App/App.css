@@ -2012,6 +2012,61 @@ div.sponsor-grid-card:hover {
   }
 }
 
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: click-to-fullscreen figures (ZoomableImage.tsx). */
+.zoomable-image-trigger {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+.zoomable-image-trigger img {
+  width: 100%;
+}
+
+.zoomable-image-dialog {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 1rem;
+  border: 0;
+  background-color: rgba(20, 15, 26, 0.92);
+  cursor: zoom-out;
+}
+
+.zoomable-image-dialog[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zoomable-image-dialog img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 0.5rem;
+}
+
+.zoomable-image-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
 /* HOME PAGE FULLSCREEN CHROME */
 body.home-fullscreen {
   padding-top: 0;

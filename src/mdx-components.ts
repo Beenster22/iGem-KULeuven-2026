@@ -32,6 +32,7 @@ import {
 } from "./components/Tgr5Story";
 import { SponsorGrid } from "./components/SponsorGrid";
 import { HomeSnapScroll } from "./components/HomeSnapScroll";
+import { ZoomableImage } from "./components/ZoomableImage";
 
 export const mdxComponents = {
   TeamMembers,
@@ -59,6 +60,7 @@ export const mdxComponents = {
   FindOutMore,
   SponsorGrid,
   HomeSnapScroll,
+  ZoomableImage,
   Callout,
   TabbedSections,
   TabSection,
