@@ -19,6 +19,9 @@
 // things to point at, a hint under the figure says so, and until the visitor
 // has tried it the newest group's symptoms take turns lighting up their body
 // part by themselves.
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-06: the definition is its
+// own component (PmosDefinition) so home.mdx can place it straight after the
+// hero video, ahead of the counter and the globe (team request).
 // Purpose: home-page "What is PMOS?" section — a large heading + definition
 // on its own screen, then a centered body diagram that stays pinned (CSS
 // position: sticky inside a tall wrapper) while each scroll step brings in
@@ -183,6 +186,30 @@ const FIRST_INDEX_OF_GROUP = Object.fromEntries(
 // How long each symptom stays lit while they take turns by themselves.
 const DEMO_INTERVAL_MS = 1600;
 
+export function PmosDefinition() {
+  return (
+    <div className="body-symptoms-intro" data-snap="">
+      <div className="body-symptoms-definition">
+        <div className="body-symptoms-name">
+          <p
+            className="body-symptoms-acrostic"
+            aria-label={PMOS_WORDS.join(" ")}
+          >
+            {PMOS_WORDS.map((word) => (
+              <span key={word} aria-hidden="true">
+                <span className="body-symptoms-acrostic-letter">{word[0]}</span>
+                {word.slice(1)}
+              </span>
+            ))}
+          </p>
+          <p className="body-symptoms-former-name">{FORMER_NAME_TEXT}</p>
+        </div>
+        <p className="body-symptoms-blurb">{OVERVIEW_TEXT}</p>
+      </div>
+    </div>
+  );
+}
+
 export function BodySymptomsSection() {
   const prefersReducedMotion = useReducedMotion();
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -273,27 +300,6 @@ export function BodySymptomsSection() {
 
   return (
     <>
-      <div className="body-symptoms-intro" data-snap="">
-        <div className="body-symptoms-definition">
-          <div className="body-symptoms-name">
-            <p
-              className="body-symptoms-acrostic"
-              aria-label={PMOS_WORDS.join(" ")}
-            >
-              {PMOS_WORDS.map((word) => (
-                <span key={word} aria-hidden="true">
-                  <span className="body-symptoms-acrostic-letter">
-                    {word[0]}
-                  </span>
-                  {word.slice(1)}
-                </span>
-              ))}
-            </p>
-            <p className="body-symptoms-former-name">{FORMER_NAME_TEXT}</p>
-          </div>
-          <p className="body-symptoms-blurb">{OVERVIEW_TEXT}</p>
-        </div>
-      </div>
       <div
         className={`body-symptoms-scroller${prefersReducedMotion ? "" : " home-snap-pin"}`}
         ref={wrapperRef}

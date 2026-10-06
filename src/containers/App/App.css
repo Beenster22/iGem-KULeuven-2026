@@ -112,6 +112,14 @@ a[data-footnote-ref] {
   text-decoration: none;
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): table
+   cells keep a fixed light background (white, lavender, teal) in both
+   themes, where the light --color-text marker was close to invisible. Inside
+   a table the marker takes the cell's own text colour instead. */
+.table a[data-footnote-ref] {
+  color: inherit;
+}
+
 a[data-footnote-ref]::before {
   content: "[";
 }
@@ -531,6 +539,32 @@ a[data-footnote-ref]:focus {
   opacity: 0.65;
 }
 
+/* BRAND MERCH PHOTOS
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: the entrepreneurship page's hoodie / t-shirt / stickers row mixes
+   two landscape photos with a tall phone screenshot (945x2048, black bars
+   above and below the actual photo). Give every tile the same 16:9 frame and
+   crop to fill it, so the row stays one even height. */
+.brand-merch-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+/* BRAND PALETTE SWATCHES
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: MDX wraps each colour name in a <p>, whose bottom margin lifted
+   the label above its swatch dot. Drop it so dot and label share a centre. */
+.brand-palette li > p {
+  margin-bottom: 0;
+}
+
+/* Photo sits between the black bars; aim the crop at the sticker sheet. */
+.brand-merch-img-stickers {
+  object-position: 50% 57%;
+}
+
 /* TABLES
    Generated with Claude Sonnet 5 (Anthropic), 2026-09-10
    Purpose: Bootstrap's table-bordered ships hard, high-contrast gridlines
@@ -591,27 +625,31 @@ a[data-footnote-ref]:focus {
   color: #000000;
 }
 
-/* This table has 10 columns, wider than the base rules above allow for
-   without horizontal scrolling. table-layout: fixed divides the full width
-   evenly (first column gets a little extra for its labels) instead of
-   sizing columns to their content, so all 10 always fit on screen — long
-   cell text wraps onto multiple lines rather than forcing overflow. */
+/* This table has 10 columns, wider than the base rules above allow for, so
+   it gets tighter padding and smaller text.
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): columns
+   used to be an even split (table-layout: fixed) with break-word, which cut
+   words wherever the column ended ("Symptomati-c"). Columns are now sized to
+   their content, so each is at least as wide as its longest word and words
+   stay whole; the few very long ones carry their own break points in the
+   MDX (&shy; / <wbr />). On screens too narrow for that the table scrolls
+   sideways inside its wrapper instead of breaking words. */
 .comp-table.table-responsive-rounded .table-bordered {
-  table-layout: fixed;
+  table-layout: auto;
   width: 100%;
 }
 
 .comp-table.table-responsive-rounded .table-bordered th,
 .comp-table.table-responsive-rounded .table-bordered td {
-  padding: 0.5rem 0.4rem;
+  padding: 0.5rem 0.3rem;
   font-size: 0.75rem;
-  word-wrap: break-word;
+  overflow-wrap: normal;
+  hyphens: manual;
 }
 
 .comp-table.table-responsive-rounded .table-bordered th:first-child,
 .comp-table.table-responsive-rounded .table-bordered td:first-child {
   min-width: 0;
-  width: 13%;
 }
 
 .comp-table.table-responsive-rounded .table-bordered th:not(:first-child),
@@ -627,9 +665,7 @@ a[data-footnote-ref]:focus {
    below that it wraps as before rather than spilling into the next cell. */
 @media (min-width: 1240px) {
   .comp-table.table-responsive-rounded .table-bordered th:nth-child(9) {
-    width: 14%;
     white-space: nowrap;
-    word-wrap: normal;
   }
 }
 
@@ -759,12 +795,13 @@ a[data-footnote-ref]:focus {
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): the
    running text of every content page is justified, so lines end flush on
-   the right as in a paper. Hyphenation keeps the word gaps from opening up
-   in narrow columns. The home page is left alone, and so is anything a page
-   centres on purpose (Bootstrap's .text-center is !important). */
+   the right as in a paper. Words are never split over two lines (team
+   review, same day: automatic hyphenation read badly). The home page is left
+   alone, and so is anything a page centres on purpose (Bootstrap's
+   .text-center is !important). */
 .page-body:not(.page-body--home) .page-shell-content :is(p, li) {
   text-align: justify;
-  hyphens: auto;
+  hyphens: manual;
   line-height: 1.75;
 }
 
@@ -2527,7 +2564,7 @@ body:not(.home-fullscreen) .home-hero {
 .body-symptoms-intro {
   min-height: 100vh;
   min-height: 100svh;
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: calc(var(--home-nav-h) + 2rem) 1rem 2rem;
   display: flex;
@@ -2549,19 +2586,24 @@ body:not(.home-fullscreen) .home-hero {
   text-align: left;
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): the
+   name is set larger, and its four initials use the site's heading face
+   (Luckiest Guy, already self-hosted) for a slightly more cartoonish PMOS.
+   That face only has one weight, hence font-weight: 400 (see FONTS above). */
 .body-symptoms-acrostic {
   margin: 0;
   display: flex;
   flex-direction: column;
-  font-size: clamp(1.5rem, 3.6vw, 2.5rem);
+  font-size: clamp(1.8rem, 4.6vw, 3.4rem);
   font-weight: 600;
   line-height: 1.3;
 }
 
 .body-symptoms-acrostic-letter {
   display: inline-block;
+  font-family: "Luckiest Guy", "Poppins", sans-serif;
   font-size: 1.5em;
-  font-weight: 800;
+  font-weight: 400;
   color: #2fa4a9;
 }
 
@@ -2911,11 +2953,14 @@ body:not(.home-fullscreen) .home-hero {
 
 /* STORY SCROLL
    Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
-   Purpose: the big one-sentence-per-step screen between the symptoms and the
-   gut section (StoryScrollSection.tsx). Every step fills the pinned stage
-   and places its sentence somewhere else on it (.story-step--<position>);
-   only the --active one is visible, the others wait just below (--future) or
-   have drifted off above (--past). */
+   Purpose: the big-sentence screens between the symptoms and the gut section
+   (StoryScrollSection.tsx). Every step fills the pinned stage and lays its
+   sentences out on it (.story-step--<position>); only the --active one is
+   visible, the others wait just below (--future) or have drifted off above
+   (--past).
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team feedback: text
+   too big, too much scrolling for little information): smaller type and
+   drawings, and two sentences per screen (.story-step--pair-*). */
 .story-stage {
   position: relative;
   overflow: hidden;
@@ -2948,8 +2993,8 @@ body:not(.home-fullscreen) .home-hero {
 
 .story-text {
   margin: 0;
-  max-width: 12em;
-  font-size: clamp(1.9rem, 5.2vw, 4.25rem);
+  max-width: 16em;
+  font-size: clamp(1.35rem, 3.2vw, 2.6rem);
   font-weight: 800;
   line-height: 1.12;
   letter-spacing: -0.01em;
@@ -2986,21 +3031,33 @@ body:not(.home-fullscreen) .home-hero {
   box-decoration-break: clone;
 }
 
-.story-step--left {
-  justify-content: flex-start;
+/* Two sentences on one screen: the first at the top with the drawing beside
+   it, the second below on the opposite side. */
+.story-step--pair-left,
+.story-step--pair-right {
+  flex-direction: column;
+  align-items: stretch;
+  gap: clamp(2rem, 8vh, 5rem);
 }
 
-.story-step--right {
+.story-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
+}
+
+.story-step--pair-left .story-text--second {
+  align-self: flex-end;
+  text-align: right;
+}
+
+.story-step--pair-right .story-row {
   flex-direction: row-reverse;
-  justify-content: flex-start;
   text-align: right;
 }
 
-.story-step--high-right {
-  align-items: flex-start;
-  justify-content: flex-end;
-  padding-top: 8vh;
-  text-align: right;
+.story-step--pair-right .story-text--second {
+  align-self: flex-start;
 }
 
 .story-step--center {
@@ -3021,28 +3078,14 @@ body:not(.home-fullscreen) .home-hero {
   margin: 0;
 }
 
-.story-step--low-left {
-  align-items: flex-end;
-  justify-content: flex-start;
-  padding-bottom: 8vh;
-}
-
 .story-art {
   flex: none;
 }
 
-.story-step--left .story-art {
-  margin-left: auto;
-}
-
-.story-step--right .story-art {
-  margin-right: auto;
-}
-
 .story-art--question {
   position: relative;
-  width: clamp(9rem, 26vw, 20rem);
-  height: clamp(9rem, 26vw, 20rem);
+  width: clamp(6rem, 15vw, 11rem);
+  height: clamp(6rem, 15vw, 11rem);
   font-weight: 800;
   line-height: 1;
 }
@@ -3055,14 +3098,14 @@ body:not(.home-fullscreen) .home-hero {
 .story-art--question span:nth-child(1) {
   left: 28%;
   top: 8%;
-  font-size: clamp(7rem, 20vw, 16rem);
+  font-size: clamp(4.5rem, 11.5vw, 9rem);
   color: #2fa4a9;
 }
 
 .story-art--question span:nth-child(2) {
   left: 2%;
   top: 2%;
-  font-size: clamp(2.5rem, 7vw, 5.5rem);
+  font-size: clamp(1.6rem, 4vw, 3.1rem);
   opacity: 0.55;
   --tilt: -16deg;
   animation-duration: 2.6s;
@@ -3072,7 +3115,7 @@ body:not(.home-fullscreen) .home-hero {
 .story-art--question span:nth-child(3) {
   right: 0;
   bottom: 6%;
-  font-size: clamp(3rem, 9vw, 7rem);
+  font-size: clamp(2rem, 5vw, 4rem);
   opacity: 0.35;
   --tilt: 14deg;
   animation-duration: 3.8s;
@@ -3092,7 +3135,7 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .story-art--clock {
-  width: clamp(8rem, 22vw, 17rem);
+  width: clamp(5.5rem, 13vw, 10rem);
   height: auto;
   overflow: visible;
 }
@@ -3164,7 +3207,7 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .story-step--split .story-line {
-  max-width: 12em;
+  max-width: 16em;
   margin-top: 0;
 }
 
@@ -3186,7 +3229,7 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .story-art--microbiome {
-  width: clamp(10rem, 30vw, 22rem);
+  width: clamp(9rem, 24vw, 17rem);
   height: auto;
   max-height: 100%;
   overflow: visible;
@@ -3295,27 +3338,26 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 /* Phones: no room beside the sentence, so the drawing goes above it and
-   everything is centred; the sentences still move up and down the screen. */
+   everything is centred, one sentence under the other. */
 @media (max-width: 699.98px) {
-  .story-step,
-  .story-step--right {
-    flex-direction: column-reverse;
-    justify-content: center;
+  .story-step--pair-left,
+  .story-step--pair-right {
     align-items: center;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .story-step--pair-left .story-row,
+  .story-step--pair-right .story-row {
+    flex-direction: column-reverse;
     text-align: center;
     gap: 1.25rem;
   }
 
-  .story-step--high-right {
-    justify-content: flex-end; /* column-reverse: the top */
-  }
-
-  .story-step--low-left {
-    justify-content: flex-start; /* column-reverse: the bottom */
-  }
-
-  .story-step .story-art {
-    margin: 0;
+  .story-step--pair-left .story-text--second,
+  .story-step--pair-right .story-text--second {
+    align-self: center;
+    text-align: center;
   }
 }
 
@@ -3369,34 +3411,37 @@ body:not(.home-fullscreen) .home-hero {
 .two-guts-row {
   --lens: min(400px, 42vw, 46vh);
   --lens-gap: clamp(1rem, 4vw, 3.5rem);
-  /* Room under the lens for its label and composition bar. */
-  --lens-extras: 4.75rem;
   position: relative;
   width: min(100%, 1000px);
-  height: calc(var(--lens) + var(--lens-extras));
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review: text and
+   figure overlapped in a split-screen window): the window used to be taken
+   out of the flow, with a fixed allowance under the lens for its label and
+   bar. In a narrow window the label wraps onto two or three lines, outgrew
+   that allowance, and the bar ran into the text underneath. The window is
+   now in the flow, so the row is exactly as tall as the window really is
+   (label and bar included), and it slides by its left margin instead. */
 .two-guts-window {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
   width: var(--lens);
   margin: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
-  transition: left 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+  transition: margin-left 0.9s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .two-guts--pmos .two-guts-window {
-  left: calc(100% - var(--lens));
+  margin-left: calc(100% - var(--lens));
 }
 
 .two-guts-window-label {
   order: 1; /* under the lens, above the bar */
   font-weight: 700;
   font-size: clamp(0.9rem, 1.6vw, 1.15rem);
+  line-height: 1.3;
 }
 
 .two-guts-window .two-guts-bar {
@@ -3479,26 +3524,24 @@ body:not(.home-fullscreen) .home-hero {
   opacity: 1;
 }
 
-/* Phones: no room for text beside the window, so it goes underneath; the
-   window still slides from the left edge to the right edge. */
+/* Phones (and narrow split-screen windows): no room for text beside the
+   window, so it goes underneath; the window still slides from the left edge
+   to the right edge. Both sentences share the one grid cell under the
+   window, so the row is as tall as the window plus the longer sentence. */
 @media (max-width: 699.98px) {
   .two-guts-row {
-    --lens: min(62vw, 34vh);
-    --panel: 11.5rem;
-    height: calc(var(--lens) + var(--lens-extras) + var(--panel));
+    --lens: min(62vw, 30vh);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 1rem;
   }
 
   .two-guts-panel {
-    top: calc(var(--lens) + var(--lens-extras));
+    position: static;
+    grid-area: 2 / 1;
     justify-content: flex-start;
     gap: 0.4rem;
     font-size: 0.9rem;
-  }
-
-  .two-guts-panel--healthy,
-  .two-guts-panel--pmos {
-    left: 0;
-    right: 0;
   }
 
   .two-guts-legend {
@@ -3648,6 +3691,12 @@ body:not(.home-fullscreen) .home-hero {
   text-wrap: balance;
 }
 
+/* The slanted species name leans into the space after it (team review,
+   2026-10-06: "is there a space?"), so it gets a little extra room. */
+.bsh-stream-heading em {
+  margin-right: 0.12em;
+}
+
 .bsh-stream-diagram {
   position: relative;
   width: 100%;
@@ -3731,7 +3780,8 @@ body:not(.home-fullscreen) .home-hero {
 @media (prefers-reduced-motion: reduce) {
   .bsh-stream-diagram,
   .bsh-stream-reaction,
-  .bsh-stream-meet-text {
+  .bsh-stream-meet-text,
+  .bsh-dna {
     transition: none;
   }
 }
@@ -3762,10 +3812,6 @@ body:not(.home-fullscreen) .home-hero {
   overflow: visible;
 }
 
-.bsh-zoom-traveller .bsh-enzyme {
-  animation: none;
-}
-
 .bsh-membrane-outer {
   fill: #f3eef9;
   stroke: #6e5b9e;
@@ -3776,6 +3822,31 @@ body:not(.home-fullscreen) .home-hero {
   fill: none;
   stroke: #6e5b9e;
   stroke-width: 2.5;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): the
+   cell's fimbriae/pili and its tangled loop of DNA. */
+.bsh-pili {
+  fill: none;
+  stroke: #6e5b9e;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.bsh-dna {
+  fill: none;
+  stroke: #2f4f86;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.6s ease;
+}
+
+/* With the reaction the DNA makes room for the BSH capsule beside it. */
+.bsh-stream--reaction .bsh-dna,
+.bsh-stream--static .bsh-dna {
+  transform: translateX(-44px) scale(0.7);
 }
 
 .bsh-enzyme {
@@ -4896,7 +4967,10 @@ body:not(.home-fullscreen) .home-hero {
      canvas and would lose contrast against the site's dark mode. */
   background-color: #ffffff;
   border-radius: 0.5rem;
-  padding: 0.5rem;
+  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): no
+     padding here. Plotly sizes its SVG to this box's full width and height,
+     so padding pushed the chart out past the card's right and bottom edges. */
+  overflow: hidden;
 }
 
 .mic-chart-loading {

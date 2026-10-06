@@ -11,7 +11,7 @@ import { ExpandableText } from "./components/Expandable-Text";
 import { EventsTimeline, EventEntry } from "./components/EventsTimeline";
 import { HumanPracticesInterviews, HPSection, Interviewee } from "./components/HumanPracticesInterviews";
 import { PmosOverview } from "./components/PmosOverview";
-import { BodySymptomsSection } from "./components/BodySymptomsSection";
+import { BodySymptomsSection, PmosDefinition } from "./components/BodySymptomsSection";
 import { InflammationSliderSection } from "./components/InflammationSliderSection";
 import { BshStreamAnimation } from "./components/BshStreamAnimation";
 import { MicChart } from "./components/MicChart";
@@ -47,6 +47,7 @@ export const mdxComponents = {
   PageLayout,
   PmosOverview,
   BodySymptomsSection,
+  PmosDefinition,
   BshStreamAnimation,
   InflammationSliderSection,
   MicChart,

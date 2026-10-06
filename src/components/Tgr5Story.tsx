@@ -551,7 +551,7 @@ export function EngineerSection() {
 const MORE_LINKS = [
   { label: "Project description", to: "/description" },
   { label: "Wet lab", to: "/experiments" },
-  { label: "Dry lab", to: "/promoters-and-rbs" },
+  { label: "Dry lab", to: "/dry-lab" },
   { label: "Integrated Human Practices", to: "/human-practices" },
   { label: "Entrepreneurship", to: "/entrepreneurship" },
 ];

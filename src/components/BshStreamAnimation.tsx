@@ -21,6 +21,12 @@
 // cell, enlarged on the left, with "Meet Phocaeicola vulgatus" beside it; then
 // the cell moves to the middle and the reaction plays around it under the
 // team's new title. Under prefers-reduced-motion both are shown, unpinned.
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): the cell
+// now carries fimbriae/pili around its outline and a tangled loop of DNA
+// inside, as the team asked. The blue BSH capsule was being read as the
+// genome, so it is smaller, sits beside the DNA and only appears, with its
+// label, once the reaction is shown. Wording changes from the same review:
+// "intriguing", the plural title, capitalised captions.
 import {
   useEffect,
   useMemo,
@@ -404,9 +410,88 @@ function usePvZoom(
   return { progress, x, y, scale, rotate };
 }
 
+// Fimbriae/pili: short hairs standing out from the cell's outline, evenly
+// spread round the capsule with a little variation in length and lean.
+const PILI_COUNT = 40;
+const PILI_PATHS = (() => {
+  const r = BAC_H / 2;
+  const straight = BAC_W - BAC_H;
+  const perimeter = 2 * straight + 2 * Math.PI * r;
+  const leftX = BAC_X + r;
+  const rightX = BAC_RIGHT - r;
+  return Array.from({ length: PILI_COUNT }, (_, i) => {
+    // A point on the outline and the outward direction there, going
+    // clockwise from the left end of the top edge.
+    let d = ((i + 0.5) / PILI_COUNT) * perimeter;
+    let x: number;
+    let y: number;
+    let angle: number;
+    if (d < straight) {
+      x = leftX + d;
+      y = BAC_Y;
+      angle = -Math.PI / 2;
+    } else if ((d -= straight) < Math.PI * r) {
+      angle = -Math.PI / 2 + d / r;
+      x = rightX + r * Math.cos(angle);
+      y = BAC_MID_Y + r * Math.sin(angle);
+    } else if ((d -= Math.PI * r) < straight) {
+      x = rightX - d;
+      y = BAC_Y + BAC_H;
+      angle = Math.PI / 2;
+    } else {
+      angle = Math.PI / 2 + (d - straight) / r;
+      x = leftX + r * Math.cos(angle);
+      y = BAC_MID_Y + r * Math.sin(angle);
+    }
+    const length = 9 + seededValue(i * 7 + 301) * 8;
+    const lean = (seededValue(i * 7 + 302) - 0.5) * 0.7;
+    const tipX = x + length * Math.cos(angle + lean);
+    const tipY = y + length * Math.sin(angle + lean);
+    // Bends slightly on the way out, so the hairs do not look ruled.
+    const midX = x + length * 0.55 * Math.cos(angle - lean * 0.6);
+    const midY = y + length * 0.55 * Math.sin(angle - lean * 0.6);
+    return `M${x.toFixed(1)},${y.toFixed(1)} Q${midX.toFixed(1)},${midY.toFixed(1)} ${tipX.toFixed(1)},${tipY.toFixed(1)}`;
+  }).join(" ");
+})();
+
+// The genome: one closed, tangled loop of DNA in the middle of the cell. Once
+// the reaction is shown it shrinks into the left half to make room for the
+// BSH capsule (see .bsh-dna in App.css).
+const DNA_CENTER_X = BAC_X + BAC_W / 2;
+const DNA_RX = 70;
+const DNA_RY = 34;
+const DNA_PATH = (() => {
+  const points = Array.from({ length: 26 }, (_, i) => {
+    const angle = seededValue(i * 5 + 401) * Math.PI * 2;
+    const radius = Math.sqrt(seededValue(i * 5 + 402));
+    return [
+      DNA_CENTER_X + DNA_RX * radius * Math.cos(angle),
+      BAC_MID_Y + DNA_RY * radius * Math.sin(angle),
+    ];
+  });
+  // A smooth closed curve: each point is the control point of a curve
+  // between the midpoints either side of it.
+  const mid = (i: number) => {
+    const a = points[i % points.length];
+    const b = points[(i + 1) % points.length];
+    return `${((a[0] + b[0]) / 2).toFixed(1)},${((a[1] + b[1]) / 2).toFixed(1)}`;
+  };
+  return (
+    `M${mid(points.length - 1)} ` +
+    points
+      .map((p, i) => `Q${p[0].toFixed(1)},${p[1].toFixed(1)} ${mid(i)}`)
+      .join(" ") +
+    " Z"
+  );
+})();
+
+const ENZYME = { x: 528, width: 72, height: 40 };
+const ENZYME_MID_X = ENZYME.x + ENZYME.width / 2;
+
 function BacteriumShapes() {
   return (
     <>
+      <path className="bsh-pili" d={PILI_PATHS} />
       <rect
         className="bsh-membrane-outer"
         x={BAC_X}
@@ -423,21 +508,25 @@ function BacteriumShapes() {
         height={BAC_H - 16}
         rx={(BAC_H - 16) / 2}
       />
-      <rect
-        className="bsh-enzyme"
-        x={440}
-        y={BAC_MID_Y - 24}
-        width={120}
-        height={48}
-        rx={24}
-      />
+      <path className="bsh-dna" d={DNA_PATH} />
+      {/* Only with the reaction, where its "BSH" label is shown too. */}
+      <g className="bsh-stream-reaction">
+        <rect
+          className="bsh-enzyme"
+          x={ENZYME.x}
+          y={BAC_MID_Y - ENZYME.height / 2}
+          width={ENZYME.width}
+          height={ENZYME.height}
+          rx={ENZYME.height / 2}
+        />
+      </g>
     </>
   );
 }
 
 // The cell on its way from the gut window to this diagram: starts as a plain
 // pink capsule like the ones in the window and picks up the colours, inner
-// membrane and BSH of P. vulgatus on the way.
+// membrane, pili and DNA of P. vulgatus on the way.
 function TravellingBacterium({ zoom }: { zoom: PvZoom }) {
   const { progress } = zoom;
   const opacity = useTransform(progress, (p) => (p > 0 && p < 1 ? 1 : 0));
@@ -446,7 +535,7 @@ function TravellingBacterium({ zoom }: { zoom: PvZoom }) {
   const stroke = useTransform(progress, [0.3, 0.9], [SOURCE_STROKE, "#6e5b9e"]);
   const strokeWidth = useTransform(progress, [0, 1], [SOURCE_STROKE_WIDTH, 4]);
   const innerOpacity = useTransform(progress, [0.15, 0.6], [0, 1]);
-  const enzymeOpacity = useTransform(progress, [0.35, 0.8], [0, 1]);
+  const detailOpacity = useTransform(progress, [0.35, 0.8], [0, 1]);
 
   return createPortal(
     <motion.svg
@@ -463,6 +552,11 @@ function TravellingBacterium({ zoom }: { zoom: PvZoom }) {
         opacity,
       }}
     >
+      <motion.path
+        className="bsh-pili"
+        d={PILI_PATHS}
+        style={{ opacity: detailOpacity }}
+      />
       {/* No .bsh-membrane-outer class here: its CSS fill/stroke would win
           over the animated ones, which are set as SVG attributes. */}
       <motion.rect
@@ -482,14 +576,10 @@ function TravellingBacterium({ zoom }: { zoom: PvZoom }) {
         rx={(BAC_H - 16) / 2}
         style={{ opacity: innerOpacity }}
       />
-      <motion.rect
-        className="bsh-enzyme"
-        x={440}
-        y={BAC_MID_Y - 24}
-        width={120}
-        height={48}
-        rx={24}
-        style={{ opacity: enzymeOpacity }}
+      <motion.path
+        className="bsh-dna"
+        d={DNA_PATH}
+        style={{ opacity: detailOpacity }}
       />
     </motion.svg>,
     document.body,
@@ -539,14 +629,13 @@ export function BshStreamAnimation() {
               Meet <em>Phocaeicola vulgatus</em>
             </h3>
             <p>
-              A super interesting microorganism involved in breaking down bile
-              acids
+              An intriguing microorganism involved in breaking down bile acids
             </p>
           </div>
         </motion.div>
         <h3 className="bsh-stream-heading bsh-stream-reaction">
-          Bile salt hydrolase from <em>P. vulgatus</em> is responsible for bile
-          acid deconjugation
+          Bile salt hydrolases from <em>P. vulgatus</em> are responsible for
+          bile acid deconjugation
         </h3>
         <div
           className="bsh-stream-diagram"
@@ -602,7 +691,7 @@ export function BshStreamAnimation() {
             </span>
             <span
               className="bsh-stream-enzyme-label"
-              style={{ left: "50%", top: pctY(BAC_MID_Y) }}
+              style={{ left: pctX(ENZYME_MID_X), top: pctY(BAC_MID_Y) }}
             >
               BSH
             </span>
@@ -625,7 +714,7 @@ export function BshStreamAnimation() {
               className="bsh-stream-caption"
               style={{ left: pctX(180), top: pctY(275) }}
             >
-              conjugated bile acids
+              Conjugated bile acids
             </span>
 
             <div
@@ -651,7 +740,7 @@ export function BshStreamAnimation() {
               className="bsh-stream-caption"
               style={{ left: pctX(820), top: pctY(275) }}
             >
-              deconjugated bile acids
+              Deconjugated bile acids
             </span>
           </div>
         </div>

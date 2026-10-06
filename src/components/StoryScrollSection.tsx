@@ -13,6 +13,10 @@
 // Edited with Claude Opus 5.5 (Anthropic), 2026-10-06: the "quest" step is
 // split over the screen (first half top left, second half bottom right) with
 // a magnifying glass looking over some gut microbes in between.
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team feedback: the text
+// was very big and took a lot of scrolling for little information): two
+// sentences per screen instead of one, in smaller type, so the same five
+// sentences now take three scroll steps instead of five.
 import {
   useEffect,
   useId,
@@ -27,16 +31,20 @@ import { usePinnedStep } from "./usePinnedStep";
 
 interface StoryStep {
   id: string;
-  // Where the sentence sits on the screen (see .story-step--* in App.css).
-  position: "left" | "right" | "center" | "low-left" | "high-right" | "split";
+  // How the screen is laid out (see .story-step--* in App.css). "pair-left"
+  // puts the first sentence top left and the second bottom right;
+  // "pair-right" is its mirror image.
+  position: "pair-left" | "pair-right" | "split";
   art?: "question" | "clock" | "microbiome";
   lines: ReactNode[];
+  // The screen's second sentence (the pair layouts).
+  second?: ReactNode[];
 }
 
 const STEPS: StoryStep[] = [
   {
     id: "etiology",
-    position: "left",
+    position: "pair-left",
     art: "question",
     lines: [
       <>So many symptoms…</>,
@@ -44,11 +52,7 @@ const STEPS: StoryStep[] = [
         …but no known <strong>etiology</strong>
       </>,
     ],
-  },
-  {
-    id: "therapy",
-    position: "high-right",
-    lines: [
+    second: [
       <>
         There is currently no actual therapeutic solution that tackles{" "}
         <strong>all of the symptoms at once!</strong>
@@ -57,7 +61,7 @@ const STEPS: StoryStep[] = [
   },
   {
     id: "diagnosis",
-    position: "right",
+    position: "pair-right",
     art: "clock",
     lines: [
       <>
@@ -65,11 +69,7 @@ const STEPS: StoryStep[] = [
         differently between each patient…
       </>,
     ],
-  },
-  {
-    id: "passion",
-    position: "center",
-    lines: [
+    second: [
       <>
         With so much passion about women’s health, we knew we needed to{" "}
         <strong>do something about this!</strong>
@@ -258,13 +258,7 @@ function MicrobiomeArt() {
             </g>
           </g>
         </g>
-        <line
-          className="story-lens-handle"
-          x1={94}
-          y1={89}
-          x2={113}
-          y2={108}
-        />
+        <line className="story-lens-handle" x1={94} y1={89} x2={113} y2={108} />
         <circle className="story-lens-rim" cx={70} cy={65} r={32} />
         <path className="story-lens-shine" d="M50 55 a22 22 0 0 1 12 -11" />
       </g>
@@ -327,27 +321,53 @@ export function StoryScrollSection() {
               : i < step
                 ? "past"
                 : "future";
+          // `offset` keeps the second sentence's lines coming in after the
+          // first sentence's.
+          const text = (lines: ReactNode[], offset: number, extra = "") => (
+            <p className={`story-text${extra}`}>
+              {lines.map((line, lineIndex) => (
+                <span
+                  key={lineIndex}
+                  className="story-line"
+                  style={{ "--line": offset + lineIndex } as CSSProperties}
+                >
+                  {line}
+                </span>
+              ))}
+            </p>
+          );
+          const art = (
+            <>
+              {entry.art === "question" && <QuestionArt />}
+              {entry.art === "clock" && <ClockArt />}
+              {entry.art === "microbiome" && <MicrobiomeArt />}
+            </>
+          );
           return (
             <div
               key={entry.id}
               className={`story-step story-step--${entry.position} story-step--${state}`}
-              // Only the sentence on screen is read out and reachable.
+              // Only the sentences on screen are read out and reachable.
               inert={state !== "active"}
             >
-              <p className="story-text">
-                {entry.lines.map((line, lineIndex) => (
-                  <span
-                    key={lineIndex}
-                    className="story-line"
-                    style={{ "--line": lineIndex } as CSSProperties}
-                  >
-                    {line}
-                  </span>
-                ))}
-              </p>
-              {entry.art === "question" && <QuestionArt />}
-              {entry.art === "clock" && <ClockArt />}
-              {entry.art === "microbiome" && <MicrobiomeArt />}
+              {entry.second ? (
+                <>
+                  <div className="story-row">
+                    {text(entry.lines, 0)}
+                    {art}
+                  </div>
+                  {text(
+                    entry.second,
+                    entry.lines.length,
+                    " story-text--second",
+                  )}
+                </>
+              ) : (
+                <>
+                  {text(entry.lines, 0)}
+                  {art}
+                </>
+              )}
             </div>
           );
         })}

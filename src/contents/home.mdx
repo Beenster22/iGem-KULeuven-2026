@@ -6,6 +6,17 @@
     from one `data-snap` stop to the next (see HomeSnapScroll.tsx). */}
 <HomeSnapScroll />
 
+{/* What PMOS is comes first, straight after the hero video (team request,
+    2026-10-06); the counter and the globe follow. */}
+<div className="home-section home-section--flush home-section--contrast home-section--wave-top">
+<MicrobeBackdrop count={5} seed={3} />
+<div className="container">
+
+<PmosDefinition />
+
+</div>
+</div>
+
 <PmosOverview>
 
 Figures per continent[^pmos-3][^pmos-4][^pmos-5].

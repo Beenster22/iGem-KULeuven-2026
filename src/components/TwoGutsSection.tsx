@@ -32,7 +32,7 @@
 // team's source, but the cell counts are only chosen to show that direction.
 // The cells drift and turn on a CSS loop (off under prefers-reduced-motion,
 // see App.css).
-import { useRef, type CSSProperties } from "react";
+import { Fragment, useRef, type CSSProperties } from "react";
 import { SnapSteps } from "./HomeSnapScroll";
 import { usePinnedStep } from "./usePinnedStep";
 
@@ -72,7 +72,8 @@ const GROUPS: Group[] = [
 ];
 
 // Legend entries, named as in the team's text: it only says which colour is
-// which group. Entries with `italic` are bacterial names, set in italics.
+// which group. Entries with `italic` are bacterial names, set in italics
+// (the "and" joining two names stays upright; team review, 2026-10-06).
 const LEGEND: {
   groupIds: string[];
   name: string;
@@ -292,7 +293,9 @@ function GutWindow({ pmos }: { pmos: boolean }) {
       }
     >
       <figcaption className="two-guts-window-label">
-        {pmos ? "Gut microbiome with PMOS" : "Normal gut microbiome composition"}
+        {pmos
+          ? "Gut microbiome with PMOS"
+          : "Normal gut microbiome composition"}
       </figcaption>
       <svg
         viewBox={`0 0 ${VB} ${VB}`}
@@ -426,7 +429,7 @@ export function TwoGutsSection() {
           </div>
           <div className="two-guts-panel two-guts-panel--pmos" inert={!pmos}>
             <h4 className="two-guts-panel-title">
-              In case of PMOS, there’s clear dysbiosis, with one species
+              In case of PMOS, there’s a clear dysbiosis, with one species
               standing out a lot!
             </h4>
           </div>
@@ -445,7 +448,16 @@ export function TwoGutsSection() {
                   aria-hidden="true"
                 />
               ))}
-              <span>{entry.italic ? <em>{entry.name}</em> : entry.name}</span>
+              <span>
+                {entry.italic
+                  ? entry.name.split(" and ").map((name, i) => (
+                      <Fragment key={name}>
+                        {i > 0 && " and "}
+                        <em>{name}</em>
+                      </Fragment>
+                    ))
+                  : entry.name}
+              </span>
             </li>
           ))}
         </ul>

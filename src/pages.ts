@@ -6,10 +6,9 @@ import {
   BestPartCollection,
   BestPresentation,
   BestWiki,
-  BshScreening,
-  CodonOptimizationTool,
   Contribution,
   Description,
+  DryLab,
   Engineering,
   Entrepreneurship,
   Events,
@@ -19,7 +18,6 @@ import {
   HumanPractices,
   Members,
   Notebook,
-  PromotersAndRbs,
   Protocols,
   Results,
   SafetyAndSecurity,
@@ -86,29 +84,10 @@ const Pages: (Page | Folder)[] = [
   },
   {
     name: "Dry Lab",
-    folder: [
-      {
-        name: "Promoters and RBSs",
-        title: "Promoters and Ribosome Binding Sites",
-        path: "/promoters-and-rbs",
-        component: PromotersAndRbs,
-        lead: "Placeholder page — replace with your promoters and ribosome binding sites content.",
-      },
-      {
-        name: "Codon Optimization Tool",
-        title: "Codon Optimization Tool",
-        path: "/codon-optimization-tool",
-        component: CodonOptimizationTool,
-        lead: "A codon optimization and harmonization tool for Bacteroides species.",
-      },
-      {
-        name: "BSH Screening",
-        title: "BSH Screening",
-        path: "/bsh-screening",
-        component: BshScreening,
-        lead: "Structure prediction and interactions with bile acids.",
-      },
-    ],
+    title: "Dry Lab",
+    path: "/dry-lab",
+    component: DryLab,
+    lead: "A toolkit for engineering Bacteroides species, and the computational screening that narrowed our bile salt hydrolase candidates.",
   },
   {
     name: "Wet Lab",
@@ -147,7 +126,7 @@ const Pages: (Page | Folder)[] = [
     name: "IHP",
     folder: [
       {
-        name: "Integrated HP",
+        name: "Integrated Human Practices",
         title: "Integrated Human Practices",
         path: "/human-practices",
         component: HumanPractices,
