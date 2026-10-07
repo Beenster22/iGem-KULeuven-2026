@@ -4020,6 +4020,83 @@ body:not(.home-fullscreen) .home-hero {
     scale 0.5s ease;
 }
 
+/* Added with Claude Opus 5.5 (Anthropic), 2026-10-07
+   Purpose: the overview figure and the ILC3 close-up share one spot on the
+   pinned screen, one fading out as the other comes in. */
+.tgr5-figures {
+  display: grid;
+  width: 100%;
+}
+
+.tgr5-figures > .tgr5-figure {
+  grid-area: 1 / 1;
+  justify-content: center;
+}
+
+.tgr5 .tgr5-figure--away {
+  opacity: 0;
+  scale: 0.96;
+  pointer-events: none;
+}
+
+.tgr5--static .tgr5-figures {
+  gap: 3rem;
+}
+
+.tgr5--static .tgr5-figures > .tgr5-figure {
+  grid-area: auto;
+}
+
+.tgr5-svg.tgr5-svg--overview {
+  width: min(100%, 1000px);
+}
+
+/* The gut wall: one winding band, drawn as a wide line over a slightly wider
+   darker one (its outline), with thin dashes across it for the cells. */
+.tgr5-gut {
+  fill: none;
+  stroke: #f1c3d4;
+  stroke-width: 20;
+}
+
+.tgr5-gut--edge {
+  stroke: #a06a94;
+  stroke-width: 26;
+}
+
+.tgr5-gut--cells {
+  stroke: #a06a94;
+  stroke-dasharray: 2 13;
+}
+
+.tgr5-gut--l-edge {
+  stroke: #6e5b9e;
+  stroke-width: 26;
+}
+
+.tgr5-gut--l-cell {
+  stroke: #f3eef9;
+}
+
+.tgr5-node {
+  fill: #f3eef9;
+  stroke: #6e5b9e;
+  stroke-width: 3;
+}
+
+/* Arrows drawn on the band itself follow its text colour. */
+.tgr5-arrow--outer {
+  stroke: currentColor;
+}
+
+.tgr5-arrow-head--outer {
+  fill: currentColor;
+}
+
+.tgr5-label.tgr5-label--start {
+  text-anchor: start;
+}
+
 .tgr5-heading {
   max-width: 24em;
   margin: 0;
@@ -4999,30 +5076,34 @@ body:not(.home-fullscreen) .home-hero {
   align-items: center;
   gap: 0.6rem;
   border: none;
-  background-color: var(--color-page-bg);
-  border-radius: 1rem;
-  padding: 1.25rem 1rem;
+  background: none;
+  padding: 0;
   cursor: pointer;
   color: var(--color-text);
-  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.12);
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+  transition: transform 0.25s ease;
 }
 
 .team-member-card:hover,
 .team-member-card:focus-visible {
   transform: translateY(-0.25rem) scale(1.03);
-  box-shadow: 0 1rem 2.5rem rgba(51, 40, 63, 0.22);
 }
 
+/* Restyled with Claude Opus 5.5 (Anthropic), 2026-10-07
+   Purpose: square photo in a thick dark rounded frame, name underneath. */
 .team-member-card-photo {
   display: block;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  overflow: hidden;
-  background-color: var(--color-body-bg);
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 6.5%;
+  border-radius: 12%;
+  background-color: var(--color-header-bg);
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.18);
+  transition: box-shadow 0.25s ease;
+}
+
+.team-member-card:hover .team-member-card-photo,
+.team-member-card:focus-visible .team-member-card-photo {
+  box-shadow: 0 1rem 2.5rem rgba(51, 40, 63, 0.3);
 }
 
 .team-member-card-photo img {
@@ -5030,10 +5111,14 @@ body:not(.home-fullscreen) .home-hero {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 6%;
+  background-color: var(--color-body-bg);
 }
 
 .team-member-card-name {
+  font-size: 1.15rem;
   font-weight: 700;
+  line-height: 1.2;
   text-align: center;
 }
 

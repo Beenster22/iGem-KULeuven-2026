@@ -2,8 +2,9 @@
 // Purpose: the last stretch of the home page, after "But why is this
 // reaction important?", following the team's "Text for HOME PAGE" (2nd round
 // of changes) and the comments on it:
-//  - Tgr5MechanismSection: a pinned screen of two scroll steps. First an
-//    animated version of the ILC3 part of the team's figure (panels B/C):
+//  - Tgr5MechanismSection: a pinned screen of three scroll steps. First an
+//    overview of the two pathways that start at TGR5 (added 2026-10-07, see
+//    Tgr5OverviewDiagram). Then an animated version of the ILC3 part of the team's figure (panels B/C):
 //    conjugated bile acids bind TGR5 on the cell, deconjugated ones do not,
 //    and less IL-22 leaves the cell. Then the question "But how does this
 //    cause issues?" pops up across the whole screen.
@@ -281,41 +282,247 @@ function Tgr5Diagram({ animate }: { animate: boolean }) {
   );
 }
 
+/* ------------------------------------------------------------------ */
+/* TGR5 in the gut: the two pathways                                   */
+/* ------------------------------------------------------------------ */
+
+// Added with Claude Opus 5.5 (Anthropic), 2026-10-07
+// Purpose: the overview the team asked for after "But why is this reaction
+// important?" (review of the home page): the gut with an enteroendocrine L
+// cell carrying TGR5, and an ILC3 carrying TGR5, each with what it leads to.
+// A simplified redrawing of panels 4b and 5a of the team's own figure, cut
+// down further on the team's request (the gut as villi; each pathway ending
+// in the one outcome the team names for it).
+const OV_W = 1000;
+const OV_H = 420;
+// The gut wall: villi drawn as one band that winds up and down. `r` is the
+// radius of each turn, so a villus and the gap after it take up 4r.
+const GUT = { x: 50, top: 66, bottom: 170, r: 30, villi: 8, lCell: 6 };
+const L_CELL_X = GUT.x + GUT.r * 4 * GUT.lCell + GUT.r;
+const ILC3 = { x: 150, y: 330, r: 72 };
+
+function buildGutPath() {
+  const { x, top, bottom, r, villi } = GUT;
+  let d = `M${x},${top + r}`;
+  for (let i = 0; i < villi; i++) {
+    d += ` a${r},${r} 0 0 1 ${2 * r},0 V${bottom - r}`;
+    // After the last villus the band runs off downwards instead of turning.
+    d +=
+      i < villi - 1
+        ? ` a${r},${r} 0 0 0 ${2 * r},0 V${top + r}`
+        : ` V${bottom}`;
+  }
+  return d;
+}
+
+// The stretch of the band at the tip of its villus that is the L cell.
+function buildLCellPath() {
+  const dx = GUT.r * Math.sin(Math.PI / 6);
+  const y = GUT.top + GUT.r - GUT.r * Math.cos(Math.PI / 6);
+  return `M${L_CELL_X - dx},${y} A${GUT.r},${GUT.r} 0 0 1 ${L_CELL_X + dx},${y}`;
+}
+
+// A receptor standing in a membrane that runs left to right through (x, y):
+// a bundle of helices.
+function ReceptorShape({ x, y }: { x: number; y: number }) {
+  return (
+    <g className="tgr5-receptor" transform={`translate(${x} ${y}) rotate(90)`}>
+      {[-18, -6, 6, 18].map((dy, i) => (
+        <rect
+          key={dy}
+          x={-27}
+          y={dy - 5}
+          width={54}
+          height={10}
+          rx={5}
+          transform={`rotate(${i % 2 ? 7 : -7} 0 ${dy})`}
+        />
+      ))}
+    </g>
+  );
+}
+
+function Tgr5OverviewDiagram() {
+  const gutPath = useMemo(buildGutPath, []);
+  const lCellPath = useMemo(buildLCellPath, []);
+  return (
+    <svg
+      className="tgr5-svg tgr5-svg--overview"
+      viewBox={`0 0 ${OV_W} ${OV_H}`}
+      role="img"
+      aria-label="Illustration of two pathways that start at the TGR5 receptor. In the gut, a bile acid binds TGR5 on an enteroendocrine L cell: GLP-1, insulin going up, and at the end of this pathway insulin resistance. A bile acid also binds TGR5 on an ILC3 cell: IL-22, and at the end of this pathway anovulation."
+    >
+      <defs>
+        <marker
+          id="tgr5-ov-arrowhead"
+          viewBox="0 0 10 10"
+          refX="8"
+          refY="5"
+          markerWidth="6"
+          markerHeight="6"
+          orient="auto"
+        >
+          <path d="M0,0 L10,5 L0,10 Z" className="tgr5-arrow-head--outer" />
+        </marker>
+      </defs>
+
+      {/* The gut wall as villi; the dashes mark off its cells. */}
+      <text className="tgr5-label tgr5-label--start" x={GUT.x - 13} y={36}>
+        Gut
+      </text>
+      <path className="tgr5-gut tgr5-gut--edge" d={gutPath} />
+      <path className="tgr5-gut" d={gutPath} />
+      <path className="tgr5-gut tgr5-gut--cells" d={gutPath} />
+      <path className="tgr5-gut tgr5-gut--l-edge" d={lCellPath} />
+      <path className="tgr5-gut tgr5-gut--l-cell" d={lCellPath} />
+      <ReceptorShape x={L_CELL_X} y={GUT.top} />
+      <g transform={`translate(${L_CELL_X} ${GUT.top - 42})`}>
+        <BileAcidShape conjugated />
+      </g>
+      <text
+        className="tgr5-label tgr5-label--start"
+        x={L_CELL_X + 34}
+        y={GUT.top - 18}
+      >
+        TGR5
+      </text>
+      <text className="tgr5-label" x={L_CELL_X} y={GUT.bottom + 36}>
+        Enteroendocrine L cell
+      </text>
+
+      {/* L cell → GLP-1 → insulin → insulin resistance. */}
+      <path
+        className="tgr5-arrow tgr5-arrow--outer"
+        d={`M${L_CELL_X},${GUT.bottom + 48} V252`}
+        markerEnd="url(#tgr5-ov-arrowhead)"
+      />
+      <text className="tgr5-label tgr5-label--start" x={L_CELL_X + 14} y={243}>
+        GLP-1
+      </text>
+      <text className="tgr5-label" x={L_CELL_X} y={282}>
+        Insulin ↑
+      </text>
+      <path
+        className="tgr5-arrow tgr5-arrow--outer"
+        d={`M${L_CELL_X},294 V326`}
+        markerEnd="url(#tgr5-ov-arrowhead)"
+      />
+      <rect
+        className="tgr5-node"
+        x={L_CELL_X - 120}
+        y={332}
+        width={240}
+        height={60}
+        rx={14}
+      />
+      <text className="tgr5-label tgr5-label--dark" x={L_CELL_X} y={370}>
+        Insulin resistance
+      </text>
+
+      {/* ILC3 → IL-22 → anovulation. */}
+      <circle className="tgr5-cell" cx={ILC3.x} cy={ILC3.y} r={ILC3.r} />
+      <ReceptorShape x={ILC3.x} y={ILC3.y - ILC3.r} />
+      <g transform={`translate(${ILC3.x} ${ILC3.y - ILC3.r - 42})`}>
+        <BileAcidShape conjugated />
+      </g>
+      <text
+        className="tgr5-label tgr5-label--start"
+        x={ILC3.x + 34}
+        y={ILC3.y - ILC3.r - 18}
+      >
+        TGR5
+      </text>
+      <text className="tgr5-label tgr5-label--dark" x={ILC3.x} y={ILC3.y + 8}>
+        ILC3
+      </text>
+      <path
+        className="tgr5-arrow tgr5-arrow--outer"
+        d={`M${ILC3.x + ILC3.r + 8},${ILC3.y} H268`}
+        markerEnd="url(#tgr5-ov-arrowhead)"
+      />
+      <circle className="tgr5-il22" cx={290} cy={ILC3.y} r={15} />
+      <text className="tgr5-label" x={290} y={ILC3.y + 46}>
+        IL-22
+      </text>
+      <path
+        className="tgr5-arrow tgr5-arrow--outer"
+        d={`M312,${ILC3.y} H354`}
+        markerEnd="url(#tgr5-ov-arrowhead)"
+      />
+      <rect
+        className="tgr5-node"
+        x={360}
+        y={ILC3.y - 30}
+        width={200}
+        height={60}
+        rx={14}
+      />
+      <text className="tgr5-label tgr5-label--dark" x={460} y={ILC3.y + 8}>
+        Anovulation
+      </text>
+    </svg>
+  );
+}
+
+// Scroll steps of the pinned screen: the overview, the ILC3 close-up, then
+// the question over it.
+const MECHANISM_STEPS = 3;
+
 export function Tgr5MechanismSection() {
   const prefersReducedMotion = useReducedMotion();
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const asking = usePinnedStep(wrapperRef, 2) === 1;
+  const step = usePinnedStep(wrapperRef, MECHANISM_STEPS);
+  const asking = step === 2;
+  // Which of the two figures is hidden behind the other (never when static).
+  const away = (index: number) =>
+    !prefersReducedMotion && (step === 0) !== (index === 0);
 
   return (
     <div
       className={prefersReducedMotion ? undefined : "home-snap-pin"}
       ref={wrapperRef}
-      style={{ "--snap-steps": 2 } as CSSProperties}
+      style={{ "--snap-steps": MECHANISM_STEPS } as CSSProperties}
     >
-      {!prefersReducedMotion && <SnapSteps steps={2} />}
+      {!prefersReducedMotion && <SnapSteps steps={MECHANISM_STEPS} />}
       <div
         className={`tgr5${prefersReducedMotion ? " tgr5--static" : " home-snap-stage"}${asking ? " tgr5--asking" : ""}`}
       >
-        <div className="tgr5-figure" inert={asking}>
-          <h3 className="tgr5-heading">
-            Deconjugation of bile acids depletes levels of IL-22 through a TGR5
-            receptor
-          </h3>
-          <Tgr5Diagram animate={!prefersReducedMotion} />
-          <ul className="tgr5-legend">
-            <li>
-              <svg viewBox="-34 -14 48 28" aria-hidden="true">
-                <BileAcidShape conjugated />
-              </svg>
-              conjugated bile acid
-            </li>
-            <li>
-              <svg viewBox="-14 -14 28 28" aria-hidden="true">
-                <BileAcidShape conjugated={false} />
-              </svg>
-              deconjugated bile acid
-            </li>
-          </ul>
+        <div className="tgr5-figures">
+          <div
+            className={`tgr5-figure${away(0) ? " tgr5-figure--away" : ""}`}
+            inert={away(0)}
+          >
+            {/* TODO(team): heading written by the assistant from the review
+              comment, not supplied by the team. Check or replace. */}
+            <h3 className="tgr5-heading">
+              Conjugated bile acids bind TGR5 receptors on cells in the gut
+            </h3>
+            <Tgr5OverviewDiagram />
+          </div>
+          <div
+            className={`tgr5-figure${away(1) ? " tgr5-figure--away" : ""}`}
+            inert={away(1) || asking}
+          >
+            <h3 className="tgr5-heading">
+              Deconjugation of bile acids depletes levels of IL-22 through a
+              TGR5 receptor
+            </h3>
+            <Tgr5Diagram animate={!prefersReducedMotion} />
+            <ul className="tgr5-legend">
+              <li>
+                <svg viewBox="-34 -14 48 28" aria-hidden="true">
+                  <BileAcidShape conjugated />
+                </svg>
+                conjugated bile acid
+              </li>
+              <li>
+                <svg viewBox="-14 -14 28 28" aria-hidden="true">
+                  <BileAcidShape conjugated={false} />
+                </svg>
+                deconjugated bile acid
+              </li>
+            </ul>
+          </div>
         </div>
         <div className="tgr5-question" inert={!asking && !prefersReducedMotion}>
           <p className="story-text tgr5-question-text">
@@ -330,26 +537,6 @@ export function Tgr5MechanismSection() {
 /* ------------------------------------------------------------------ */
 /* What inactivating TGR5 contributes to                               */
 /* ------------------------------------------------------------------ */
-
-// IL-22 with an arrow down.
-function Il22Art() {
-  return (
-    <svg viewBox="0 0 100 100" aria-hidden="true">
-      <circle className="tgr5-il22" cx={42} cy={50} r={26} />
-      <text
-        className="tgr5-label tgr5-label--small tgr5-label--light"
-        x={42}
-        y={55}
-      >
-        IL-22
-      </text>
-      <path
-        className="tgr5-down tgr5-bob"
-        d="M82,28 v40 m-11,-13 l11,15 l11,-15"
-      />
-    </svg>
-  );
-}
 
 // A drop with a glucose ring in it.
 function InsulinArt() {
@@ -396,17 +583,25 @@ function AndrogenArt() {
   );
 }
 
-// Wording as supplied by the team. The explanations for the last two are
-// still open in the team's notes ("still thinking what to write").
-// TODO(team): add the explanations for insulin resistance and
-// hyperandrogenism as `detail` once written.
+// A follicle that keeps its egg: the release is crossed out.
+function AnovulationArt() {
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle className="tgr5-ring" cx={44} cy={56} r={32} />
+      <circle className="tgr5-il22" cx={44} cy={56} r={13} />
+      <path className="tgr5-down" d="M70,12 l22,22 m0,-22 l-22,22" />
+    </svg>
+  );
+}
+
+// The three the team lists in its review of the home page (2026-10-07), in
+// that order; they replace the earlier "IL-22 depletion — Meaning more
+// inflammation" as first item. The explanations are still open in the team's
+// notes ("still thinking what to write").
+// TODO(team): add the explanations as `detail` once written.
 const CONSEQUENCES: { title: string; detail?: string; art: ReactNode }[] = [
-  {
-    title: "IL-22 depletion",
-    detail: "Meaning more inflammation",
-    art: <Il22Art />,
-  },
   { title: "Insulin resistance", art: <InsulinArt /> },
+  { title: "Anovulation", art: <AnovulationArt /> },
   { title: "Hyperandrogenism", art: <AndrogenArt /> },
 ];
 

@@ -123,7 +123,7 @@ const Pages: (Page | Folder)[] = [
     ],
   },
   {
-    name: "IHP",
+    name: "Engagement",
     folder: [
       {
         name: "Integrated Human Practices",
