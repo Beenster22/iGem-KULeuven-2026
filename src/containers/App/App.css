@@ -1087,33 +1087,76 @@ a[data-footnote-ref]:focus {
   gap: 1.5rem;
 }
 
+/* Reworked with Claude Opus 5.5 (Anthropic), 2026-10-07
+   Purpose: the wet lab wheel (WheelSelector.tsx). The wheel turns to bring
+   the selected wedge to the bottom; the labels turn back by the same amount,
+   with the same timing, so they stay upright. Its colours are fixed in both
+   themes, like the other drawings. */
 .wheel-selector-svg {
   width: 100%;
-  max-width: 320px;
+  max-width: 520px;
   height: auto;
+  overflow: visible;
+}
+
+.wheel-selector-wheel,
+.wheel-selector-label {
+  transition: transform 0.7s cubic-bezier(0.45, 0, 0.2, 1);
+}
+
+.wheel-selector-wedge {
+  cursor: pointer;
+  outline: none;
 }
 
 .wheel-selector-wedge path {
-  fill: var(--color-body-bg);
-  stroke: var(--color-text);
-  stroke-width: 2;
-  cursor: pointer;
-  transition: fill 0.15s ease;
+  stroke: #fdf1f6;
+  stroke-width: 1.5;
+  transition: filter 0.15s ease;
 }
 
-.wheel-selector-wedge:hover path {
-  fill: rgba(201, 189, 232, 0.6);
+.wheel-selector-wedge:hover path,
+.wheel-selector-wedge:focus-visible path {
+  filter: brightness(0.94) saturate(1.3);
 }
 
-.wheel-selector-wedge.active path {
-  fill: var(--color-accent);
-}
-
-.wheel-selector-wedge text {
-  fill: var(--color-text);
-  font-weight: 700;
+.wheel-selector-label {
+  font-size: 17px;
+  font-weight: 600;
   pointer-events: none;
   user-select: none;
+}
+
+.wheel-selector-wedge.active .wheel-selector-label {
+  font-weight: 800;
+}
+
+/* The same pale pink as the background of the bacterium image on top of it. */
+.wheel-selector-hub {
+  fill: #fdf0f7;
+}
+
+.wheel-selector-bacterium {
+  pointer-events: none;
+}
+
+.wheel-selector-selected {
+  fill: none;
+  stroke: #33283f;
+  stroke-width: 4;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.wheel-selector-pointer {
+  fill: #33283f;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wheel-selector-wheel,
+  .wheel-selector-label {
+    transition: none;
+  }
 }
 
 .wheel-selector-content {
