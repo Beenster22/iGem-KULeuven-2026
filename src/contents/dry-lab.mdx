@@ -173,6 +173,11 @@ centered on the catalytic cysteine of each protein. For each protein-ligand pair
 binding affinity of the top-scoring pose and inspected the pose relative to the catalytic residue,
 since a favorable score in the wrong pocket says nothing useful.
 
+<div className="my-4">
+<DockingHeatmap />
+<p className="figure-caption small mt-2 mb-0">Figure 2. Predicted binding affinities for each BSH candidate against the bile salt panel. Each protein was docked against each bile salt with AutoDock Vina, the search box centered on the catalytic cysteine, and the affinity of the top-scoring pose is shown. Select a cell to view the corresponding docking pose.</p>
+</div>
+
 Docking scores are a ranking tool, not a measurement. Vina affinities do not translate into kinetic
 parameters, and the scoring function was not developed with steroid-scaffold ligands in mind. We
 therefore treated the results as a prioritization step rather than a prediction of activity:

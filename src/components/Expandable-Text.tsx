@@ -19,9 +19,10 @@ export function ExpandableText({ title, children }: ExpandableTextProps) {
         onClick={() => setIsOpen((open) => !open)}
       >
         {/* h3 (not a span) so the page-wide left index (SectionProgress, which
-            scans h2/h3) picks up every protocol as a linkable subsection —
-            this component has exactly one consumer (protocols.mdx), so
-            promoting the title to a real heading is safe here. */}
+            scans h2/h3) picks up every protocol / notebook as a linkable
+            subsection — the only consumers are protocols.mdx and
+            NotebookDropdown (notebook.mdx), so promoting the title to a
+            real heading is safe here. */}
         <h3 className="expandable-title">{title}</h3>
         <svg
           className="expandable-arrow"

@@ -8,10 +8,21 @@ import { WheelSelector } from "./components/WheelSelector";
 import { SegmentedSelector } from "./components/SegmentedSelector";
 import { NotebookTimeline, NotebookEntry } from "./components/NotebookTimeline";
 import { ExpandableText } from "./components/Expandable-Text";
+import {
+  NotebookDropdown,
+  NotebookSection,
+} from "./components/NotebookDropdown";
 import { EventsTimeline, EventEntry } from "./components/EventsTimeline";
-import { HumanPracticesInterviews, HPSection, Interviewee } from "./components/HumanPracticesInterviews";
+import {
+  HumanPracticesInterviews,
+  HPSection,
+  Interviewee,
+} from "./components/HumanPracticesInterviews";
 import { PmosOverview } from "./components/PmosOverview";
-import { BodySymptomsSection, PmosDefinition } from "./components/BodySymptomsSection";
+import {
+  BodySymptomsSection,
+  PmosDefinition,
+} from "./components/BodySymptomsSection";
 import { InflammationSliderSection } from "./components/InflammationSliderSection";
 import { BshStreamAnimation } from "./components/BshStreamAnimation";
 import { MicChart } from "./components/MicChart";
@@ -33,6 +44,7 @@ import {
 import { SponsorGrid } from "./components/SponsorGrid";
 import { HomeSnapScroll } from "./components/HomeSnapScroll";
 import { ZoomableImage } from "./components/ZoomableImage";
+import { DockingHeatmap } from "./components/DockingHeatmap";
 import { Link } from "react-router-dom";
 
 export const mdxComponents = {
@@ -68,6 +80,7 @@ export const mdxComponents = {
   SponsorGrid,
   HomeSnapScroll,
   ZoomableImage,
+  DockingHeatmap,
   Callout,
   TabbedSections,
   TabSection,
@@ -77,6 +90,8 @@ export const mdxComponents = {
   NotebookTimeline,
   NotebookEntry,
   ExpandableText,
+  NotebookDropdown,
+  NotebookSection,
   EventsTimeline,
   EventEntry,
   HumanPracticesInterviews,
