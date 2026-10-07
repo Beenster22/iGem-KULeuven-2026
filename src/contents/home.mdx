@@ -1,6 +1,29 @@
-<PmosOverview />
+{/* The text sits under the globe (see PmosOverview.tsx). Citations as
+    supplied by the team in "Text for HOME PAGE".
+    TODO(team): check each [^n] sits on the claim it actually supports, and
+    link the wiki page explaining the IHME GBD method once it exists. */}
+{/* Each band below is its own full-screen section; HomeSnapScroll glides
+    from one `data-snap` stop to the next (see HomeSnapScroll.tsx). */}
+<HomeSnapScroll />
 
-<div className="home-section home-section--contrast home-section--wave-top">
+{/* What PMOS is comes first, straight after the hero video (team request,
+    2026-10-06); the counter and the globe follow. */}
+<div className="home-section home-section--flush home-section--contrast home-section--wave-top">
+<MicrobeBackdrop count={5} seed={3} />
+<div className="container">
+
+<PmosDefinition />
+
+</div>
+</div>
+
+<PmosOverview>
+
+Figures per continent[^pmos-3][^pmos-4][^pmos-5].
+
+</PmosOverview>
+
+<div className="home-section home-section--flush home-section--contrast home-section--wave-top">
 <MicrobeBackdrop count={9} seed={2} />
 <div className="container">
 
@@ -9,25 +32,32 @@
 </div>
 </div>
 
-<div className="home-section home-section--page home-section--wave-top">
+{/* One big sentence per scroll step, leading from the symptoms to the gut
+    (see StoryScrollSection.tsx). Wording as supplied by the team. */}
+<div className="home-section home-section--flush home-section--body home-section--wave-top">
+<MicrobeBackdrop count={7} seed={7} />
+<div className="container">
+
+<StoryScrollSection />
+
+</div>
+</div>
+
+<div className="home-section home-section--flush home-section--page home-section--wave-top">
 <MicrobeBackdrop count={6} seed={5} />
 <div className="container">
 
-{/* TODO(team): check the wording below and these three references against
-    the papers themselves (direction of change, which measures, author
-    spelling/years) before publishing — AI-drafted, not yet verified. */}
-<TwoGutsSection heading="PMOS reaches the gut">
-
-Research has linked PMOS to changes in the gut microbiome: the community of bacteria living in the gut tends to be less diverse, and differently balanced, than in people without PMOS. Scroll to see what that looks like.
-
-<p className="two-guts-source">Sources: Lindheim et al., 2017, <em>PLoS ONE</em>; Torres et al., 2018, <em>J Clin Endocrinol Metab</em>; Qi et al., 2019, <em>Nature Medicine</em>.</p>
-
-</TwoGutsSection>
+{/* Text as supplied by the team in "Text for HOME PAGE" (Section 5) and the
+    home-page notes of 2026-10-06 (which dropped the section's title); the
+    bacterial groups in the figure follow the paper the team cites there. */}
+<TwoGutsSection />
 
 </div>
 </div>
 
-<div className="home-section home-section--body home-section--wave-top">
+{/* Two scroll steps: P. vulgatus on its own, then the reaction (see
+    BshStreamAnimation.tsx). */}
+<div className="home-section home-section--flush home-section--body home-section--wave-top">
 <MicrobeBackdrop count={4} seed={4} />
 <div className="container">
 
@@ -36,11 +66,64 @@ Research has linked PMOS to changes in the gut microbiome: the community of bact
 </div>
 </div>
 
-<div className="home-section home-section--contrast home-section--wave-top home-section--wave-into-footer">
-<MicrobeBackdrop count={4} seed={3} />
+{/* The team's question on a screen of its own, in the style of the text
+    story above (see StoryStatement in StoryScrollSection.tsx). */}
+<div className="home-section home-section--page home-section--wave-top home-snap-screen" data-snap="">
+<MicrobeBackdrop count={4} seed={9} />
 <div className="container">
 
-<InflammationSliderSection />
+<StoryStatement>
+
+But why is this reaction **important?**
+
+</StoryStatement>
 
 </div>
 </div>
+
+{/* The rest follows the team's "Text for HOME PAGE" (2nd round of changes);
+    see Tgr5Story.tsx for all four components. */}
+<div className="home-section home-section--flush home-section--body home-section--wave-top">
+<MicrobeBackdrop count={4} seed={6} />
+<div className="container">
+
+<Tgr5MechanismSection />
+
+</div>
+</div>
+
+<div className="home-section home-section--flush home-section--page home-section--wave-top">
+<MicrobeBackdrop count={5} seed={8} />
+<div className="container">
+
+<Tgr5ConsequencesSection />
+
+</div>
+</div>
+
+<div className="home-section home-section--body home-section--wave-top home-snap-screen" data-snap="">
+<MicrobeBackdrop count={4} seed={11} />
+<div className="container">
+
+<EngineerSection />
+
+</div>
+</div>
+
+{/* A shorter band to end on: not a snap stop, the page scrolls freely here. */}
+<div className="home-section home-section--page home-section--wave-top home-section--wave-into-footer">
+<div className="container">
+
+<FindOutMore />
+
+</div>
+</div>
+
+{/* TODO(team): replace these with the full citations (title, volume, pages,
+    DOI) once checked against the papers — see the TODO above. */}
+[^pmos-1]: Prevalence of polycystic ovary syndrome: a global and regional systematic review and meta-analysis, *Hum Reprod Update*, 2026, [doi:10.1093/humupd/dmaf030](https://doi.org/10.1093/humupd/dmaf030).
+[^pmos-2]: The prevalence of polycystic ovary syndrome in a community sample assessed under contrasting diagnostic criteria, *Hum Reprod*, 2010; 25:544-551.
+[^pmos-3]: IHME Global Burden of Disease data.
+[^pmos-4]: [The Lancet (2026)](https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(26)00717-8/fulltext).
+[^pmos-5]: [Springer (2025)](https://link.springer.com/article/10.1186/s12978-025-02016-y).
+[^gut-1]: *Int. J. Mol. Sci.*, 22(4), 2048, Table 1, [mdpi.com/1422-0067/22/4/2048](https://www.mdpi.com/1422-0067/22/4/2048).

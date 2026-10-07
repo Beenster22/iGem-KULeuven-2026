@@ -9,9 +9,7 @@ export { default as Engineering } from "./engineering.mdx";
 export { default as Contribution } from "./contribution.mdx";
 export { default as SafetyAndSecurity } from "./safety-and-security.mdx";
 // Dry Lab
-export { default as PromotersAndRbs } from "./promoters-and-rbs.mdx";
-export { default as CodonOptimizationTool } from "./codon-optimization-tool.mdx";
-export { default as BshScreening } from "./bsh-screening.mdx";
+export { default as DryLab } from "./dry-lab.mdx";
 // Wet Lab
 export { default as Experiments } from "./experiments.mdx";
 export { default as Protocols } from "./protocols.mdx";

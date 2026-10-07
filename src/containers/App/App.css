@@ -86,7 +86,8 @@ h6 {
    via the DNA index's scrollIntoView, a direct #hash link, or back/forward
    navigation restoring one. */
 h2,
-h3 {
+h3,
+h4[id] {
   scroll-margin-top: 5rem;
 }
 
@@ -109,6 +110,14 @@ a[data-footnote-ref] {
   color: var(--color-text);
   font-weight: 700;
   text-decoration: none;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): table
+   cells keep a fixed light background (white, lavender, teal) in both
+   themes, where the light --color-text marker was close to invisible. Inside
+   a table the marker takes the cell's own text colour instead. */
+.table a[data-footnote-ref] {
+  color: inherit;
 }
 
 a[data-footnote-ref]::before {
@@ -298,7 +307,11 @@ a[data-footnote-ref]:focus {
   border-bottom: 1px solid rgba(51, 40, 63, 0.12);
 }
 
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-05
+   Purpose: in dark mode the navbar uses the Dark Purple swatch (same as the
+   mega-menu and body cards) rather than the near-black --color-page-bg. */
 [data-theme="dark"] .navbar-empower {
+  background-color: #33283f;
   border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -526,6 +539,32 @@ a[data-footnote-ref]:focus {
   opacity: 0.65;
 }
 
+/* BRAND MERCH PHOTOS
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: the entrepreneurship page's hoodie / t-shirt / stickers row mixes
+   two landscape photos with a tall phone screenshot (945x2048, black bars
+   above and below the actual photo). Give every tile the same 16:9 frame and
+   crop to fill it, so the row stays one even height. */
+.brand-merch-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+/* BRAND PALETTE SWATCHES
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: MDX wraps each colour name in a <p>, whose bottom margin lifted
+   the label above its swatch dot. Drop it so dot and label share a centre. */
+.brand-palette li > p {
+  margin-bottom: 0;
+}
+
+/* Photo sits between the black bars; aim the crop at the sticker sheet. */
+.brand-merch-img-stickers {
+  object-position: 50% 57%;
+}
+
 /* TABLES
    Generated with Claude Sonnet 5 (Anthropic), 2026-09-10
    Purpose: Bootstrap's table-bordered ships hard, high-contrast gridlines
@@ -586,32 +625,48 @@ a[data-footnote-ref]:focus {
   color: #000000;
 }
 
-/* This table has 10 columns, wider than the base rules above allow for
-   without horizontal scrolling. table-layout: fixed divides the full width
-   evenly (first column gets a little extra for its labels) instead of
-   sizing columns to their content, so all 10 always fit on screen — long
-   cell text wraps onto multiple lines rather than forcing overflow. */
+/* This table has 10 columns, wider than the base rules above allow for, so
+   it gets tighter padding and smaller text.
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): columns
+   used to be an even split (table-layout: fixed) with break-word, which cut
+   words wherever the column ended ("Symptomati-c"). Columns are now sized to
+   their content, so each is at least as wide as its longest word and words
+   stay whole; the few very long ones carry their own break points in the
+   MDX (&shy; / <wbr />). On screens too narrow for that the table scrolls
+   sideways inside its wrapper instead of breaking words. */
 .comp-table.table-responsive-rounded .table-bordered {
-  table-layout: fixed;
+  table-layout: auto;
   width: 100%;
 }
 
 .comp-table.table-responsive-rounded .table-bordered th,
 .comp-table.table-responsive-rounded .table-bordered td {
-  padding: 0.5rem 0.4rem;
+  padding: 0.5rem 0.3rem;
   font-size: 0.75rem;
-  word-wrap: break-word;
+  overflow-wrap: normal;
+  hyphens: manual;
 }
 
 .comp-table.table-responsive-rounded .table-bordered th:first-child,
 .comp-table.table-responsive-rounded .table-bordered td:first-child {
   min-width: 0;
-  width: 13%;
 }
 
 .comp-table.table-responsive-rounded .table-bordered th:not(:first-child),
 .comp-table.table-responsive-rounded .table-bordered td:not(:first-child) {
   min-width: 0;
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: "SPIOMET4HEALTH" (9th column) is one long word that broke over
+   two lines in its evenly divided column — give that column a little more
+   of the width and keep its header on a single line. Only on desktop
+   widths, where the wider column is actually wide enough to hold it;
+   below that it wraps as before rather than spilling into the next cell. */
+@media (min-width: 1240px) {
+  .comp-table.table-responsive-rounded .table-bordered th:nth-child(9) {
+    white-space: nowrap;
+  }
 }
 
 /* CALLOUT */
@@ -738,13 +793,89 @@ a[data-footnote-ref]:focus {
   min-width: 0;
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): the
+   running text of every content page is justified, so lines end flush on
+   the right as in a paper. Words are never split over two lines (team
+   review, same day: automatic hyphenation read badly). The home page is left
+   alone, and so is anything a page centres on purpose (Bootstrap's
+   .text-center is !important). */
+.page-body:not(.page-body--home) .page-shell-content :is(p, li) {
+  text-align: justify;
+  hyphens: manual;
+  line-height: 1.75;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): more
+   breathing room on content pages. Beside the section index the content ran
+   to within 12px of the right edge of the screen, so it now keeps a real
+   margin there; and the text is set less tightly: taller lines (above), more
+   space between paragraphs, and headings, tables, figures and rules set
+   apart from what surrounds them. Only the page's own top-level blocks are
+   spaced (direct children of the content or of a PageLayout column), so the
+   insides of components keep their own layout. The home page is left alone. */
+@media (min-width: 992px) {
+  .section-progress + .page-shell-content {
+    max-width: none;
+    padding-right: clamp(2.5rem, 7vw, 7rem);
+  }
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"])
+  > p {
+  margin-bottom: 1.35rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"])
+  > :is(ul, ol)
+  > li
+  + li {
+  margin-top: 0.4rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"])
+  > :is(h2, h3, h4) {
+  margin-bottom: 1rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"])
+  > :not(:first-child):is(h2) {
+  margin-top: 3.25rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"])
+  > :not(:first-child):is(h3) {
+  margin-top: 2.5rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"])
+  > :not(:first-child):is(h4) {
+  margin-top: 1.9rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"])
+  > :is(.table-responsive, figure, blockquote) {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"])
+  > hr {
+  margin: 2.75rem 0;
+}
+
 /* SECTION PROGRESS */
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-07-13 (restyled 2026-07-28,
    2026-09-08)
-   Purpose: boxed, always-expanded page index. A single DNA strand runs
-   straight through each section's dot (ul::before, painted behind the li
-   content) so every title reads as literally threaded onto the strand,
-   rather than a decorative graphic floating beside an unrelated list.
+   Purpose: boxed, always-expanded page index, with the mascot marking the
+   current section (see .section-progress-mascot below).
    The column itself is a full-height --color-page-bg rail running the whole
    length of the article (not just the box's own height) so the index reads
    as a distinct sidebar rather than a card dropped onto the page body's
@@ -785,30 +916,12 @@ a[data-footnote-ref]:focus {
   position: relative;
   list-style: none;
   margin: 0;
-  padding: 0;
+  /* Left gutter the mascot travels in. */
+  --mascot-size: 2.25rem;
+  padding: 0 0 0 calc(var(--mascot-size) + 0.5rem);
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
-
-/* The strand: a beaded gradient standing in for DNA rungs, positioned to
-   run exactly through the center of each dot below. */
-.section-progress ul::before {
-  content: "";
-  position: absolute;
-  top: 6px;
-  bottom: 6px;
-  left: 4px;
-  width: 2px;
-  border-radius: 2px;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    var(--color-accent) 0,
-    var(--color-accent) 5px,
-    transparent 5px,
-    transparent 11px
-  );
-  opacity: 0.6;
 }
 
 .section-progress li {
@@ -816,34 +929,73 @@ a[data-footnote-ref]:focus {
 }
 
 .section-progress a {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
+  display: block;
   text-decoration: none;
   color: var(--color-text);
 }
 
-.section-progress-dot {
-  position: relative;
-  z-index: 1;
-  flex: none;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  /* Matches the box background so an inactive dot reads as a hollow ring;
-     the active state below fills it with the (distinct) accent color. */
-  background-color: var(--color-page-bg);
-  border: 2px solid rgba(51, 40, 63, 0.35);
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    transform 0.15s ease;
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: the mascot marks the current section in place of the old strand
+   and dots. It lives in the gutter the list's padding reserves and is slid
+   to the active row by an inline translateY (set in SectionProgress.tsx to
+   that row's vertical center); the inner body carries the hop so the two
+   movements don't fight over one transform. */
+.section-progress li.section-progress-mascot {
+  position: absolute;
+  top: calc(var(--mascot-size) / -2);
+  left: 0;
+  width: var(--mascot-size);
+  height: var(--mascot-size);
+  pointer-events: none;
+  /* Keep in sync with MASCOT_TRAVEL_MS in SectionProgress.tsx. */
+  transition: transform 0.45s cubic-bezier(0.34, 1.3, 0.64, 1);
 }
 
-.section-progress li.active .section-progress-dot {
-  background-color: var(--color-accent);
-  border-color: var(--color-accent);
-  transform: scale(1.3);
+.section-progress-mascot-body {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.section-progress-mascot.travelling .section-progress-mascot-body {
+  animation: section-progress-mascot-hop 0.45s ease-in-out;
+}
+
+.section-progress-mascot img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+}
+
+.section-progress-mascot img.shown {
+  opacity: 1;
+}
+
+@keyframes section-progress-mascot-hop {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0);
+  }
+  30% {
+    transform: translateX(-3px) rotate(-12deg);
+  }
+  70% {
+    transform: translateX(3px) rotate(10deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-progress li.section-progress-mascot {
+    transition: none;
+  }
+
+  .section-progress-mascot.travelling .section-progress-mascot-body {
+    animation: none;
+  }
 }
 
 .section-progress-label {
@@ -855,21 +1007,10 @@ a[data-footnote-ref]:focus {
   font-weight: 600;
 }
 
-/* Subsections (h3) branch off the strand rather than sitting on it: shifted
-   right and shrunk down so the hierarchy against main sections (h2, on the
-   strand) reads at a glance without a second legend. */
+/* Subsections (h3) are shifted right and shrunk down so the hierarchy
+   against main sections (h2) reads at a glance without a second legend. */
 .section-progress li.sub {
   margin-left: 1.1rem;
-}
-
-.section-progress li.sub .section-progress-dot {
-  width: 6px;
-  height: 6px;
-  border-width: 1.5px;
-}
-
-.section-progress li.sub.active .section-progress-dot {
-  transform: scale(1.3);
 }
 
 .section-progress li.sub .section-progress-label {
@@ -1743,6 +1884,9 @@ footer hr {
      minimum), since that's the tallest padding requirement of any sponsor
      sharing this tile size — bumped from 0.75rem for that reason. */
   padding: 1rem 1.25rem;
+  /* Logos enlarged with `zoom` (SponsorCarousel.tsx) may reach into the
+     padding; this keeps them inside the tile's rounded corners. */
+  overflow: hidden;
   transition: transform 0.2s ease;
 }
 
@@ -1777,6 +1921,210 @@ footer hr {
   .sponsor-carousel-track {
     animation: none;
   }
+}
+
+/* SPONSORS PAGE
+   Logo wall (SponsorGrid.tsx): the same white logo tiles as the footer's
+   .sponsor-carousel-item, larger and with the sponsor's name underneath. */
+.sponsor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0 2rem;
+  padding: 0;
+  list-style: none;
+}
+
+.sponsor-grid-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+  background-color: var(--color-page-bg);
+  border: 1px solid rgba(51, 40, 63, 0.15);
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.08);
+  color: var(--color-text);
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.sponsor-grid-card:hover,
+.sponsor-grid-card:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 0.75rem 2rem rgba(51, 40, 63, 0.16);
+  color: var(--color-text);
+}
+
+/* Always white, in both themes: the logos are made for a white background. */
+.sponsor-grid-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 130px;
+  padding: 1.5rem 1.75rem;
+  background-color: #fff;
+  /* Logos enlarged with pageZoom (sponsors.ts) must not spill over the name. */
+  overflow: hidden;
+}
+
+.sponsor-grid-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.sponsor-grid-name {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* Stands in for a logo that has not been uploaded yet (no src in sponsors.ts). */
+.sponsor-grid-placeholder {
+  font-weight: 700;
+  text-align: center;
+  color: #33283f;
+  opacity: 0.6;
+}
+
+/* Only linked cards lift on hover. */
+div.sponsor-grid-card:hover {
+  transform: none;
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.08);
+}
+
+/* Updated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: sponsor tiers (SponsorGrid.tsx) — a heading with a medal-coloured
+   rule per tier, and cards that get smaller from gold down to bronze. */
+.sponsor-tier {
+  --sponsor-tier-color: rgba(51, 40, 63, 0.35);
+  --sponsor-tier-col: 190px;
+  --sponsor-tier-logo-h: 130px;
+  margin: 2rem 0 2.5rem;
+}
+
+.sponsor-tier-gold {
+  --sponsor-tier-color: #d4a72c;
+  --sponsor-tier-col: 250px;
+  --sponsor-tier-logo-h: 170px;
+}
+
+.sponsor-tier-silver {
+  --sponsor-tier-color: #9aa3ad;
+  --sponsor-tier-col: 220px;
+  --sponsor-tier-logo-h: 150px;
+}
+
+.sponsor-tier-bronze {
+  --sponsor-tier-color: #b87333;
+}
+
+.sponsor-tier-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.sponsor-tier-heading::before {
+  content: "";
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: var(--sponsor-tier-color);
+}
+
+.sponsor-tier-heading::after {
+  content: "";
+  flex: 1;
+  height: 3px;
+  border-radius: 3px;
+  background-color: var(--sponsor-tier-color);
+}
+
+.sponsor-tier .sponsor-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--sponsor-tier-col), 100%), 1fr));
+  margin: 1.25rem 0 0;
+}
+
+.sponsor-tier .sponsor-grid-card {
+  border-top: 4px solid var(--sponsor-tier-color);
+}
+
+.sponsor-tier .sponsor-grid-logo {
+  height: var(--sponsor-tier-logo-h);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sponsor-grid-card {
+    transition: none;
+  }
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: click-to-fullscreen figures (ZoomableImage.tsx). */
+.zoomable-image-trigger {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+.zoomable-image-trigger img {
+  width: 100%;
+}
+
+.zoomable-image-dialog {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 1rem;
+  border: 0;
+  background-color: rgba(20, 15, 26, 0.92);
+  cursor: zoom-out;
+}
+
+.zoomable-image-dialog[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zoomable-image-dialog img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 0.5rem;
+}
+
+.zoomable-image-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
 }
 
 /* HOME PAGE FULLSCREEN CHROME */
@@ -1919,6 +2267,80 @@ body.home-fullscreen {
   color: var(--color-text);
 }
 
+/* HOME SNAP SECTIONS
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-05
+   Purpose: every home-page section fills the screen, and HomeSnapScroll.tsx
+   glides from one `data-snap` stop to the next. "home-snap-screen" is an
+   ordinary full-screen section; "home-snap-pin" is a taller wrapper whose
+   "home-snap-stage" stays pinned to the screen while the visitor scrolls
+   through `--snap-steps` steps (markers placed by SnapSteps). The fixed
+   navbar only covers the top of the screen once the visitor has opened it
+   (see body.home-fullscreen), hence --home-nav-h. */
+body {
+  --home-nav-h: 64px;
+  /* How far a band's wave pokes up into the band above it. */
+  --home-wave-h: clamp(28px, 4vw, 64px);
+}
+
+body.home-fullscreen {
+  --home-nav-h: 0px;
+}
+
+/* With the navbar open the hero starts below it; keep it to what is left of
+   the screen so the first section still begins exactly one screen down. */
+body:not(.home-fullscreen) .home-hero {
+  height: calc(100dvh - 64px);
+}
+
+.home-snap-screen {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: calc(var(--home-nav-h) + 3rem);
+}
+
+/* Bands holding a pinned section: the stage must meet the band's edges. */
+.home-section--flush {
+  padding: 0;
+}
+
+.home-snap-pin {
+  --snap-step: 60vh;
+  position: relative;
+  height: calc(100vh + (var(--snap-steps) - 1) * var(--snap-step));
+  height: calc(100svh + (var(--snap-steps) - 1) * var(--snap-step));
+}
+
+.home-snap-pin > .home-snap-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+}
+
+.home-snap-marker {
+  position: absolute;
+  left: 0;
+  top: calc(var(--i) * var(--snap-step));
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+/* Touch screens scroll natively (no wheel to take over), so the browser's
+   own snapping nudges the page onto the nearest stop instead. */
+@media (hover: none) and (pointer: coarse) {
+  html.home-snap {
+    scroll-snap-type: y proximity;
+  }
+
+  html.home-snap [data-snap] {
+    scroll-snap-align: start;
+  }
+}
+
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-09-24
    Purpose: home-page polish — (1) drop the page-body/footer gaps so the
    bands meet edge to edge, (2) wavy edges between bands, (3) the faint
@@ -1981,6 +2403,26 @@ body.home-fullscreen {
   bottom: -1px;
   background: var(--color-footer-bg);
   --wave-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 64' preserveAspectRatio='none'%3E%3Cpath d='M0 28 C 300 0 520 58 820 36 S 1240 6 1440 34 L1440 64 L0 64 Z'/%3E%3C/svg%3E");
+}
+
+/* The home page's References panel lands after the last band, i.e. below
+   the wave into the footer — so here it drops the card look and becomes a
+   full-bleed strip in the footer's own colours, reading as the footer's
+   first row instead of a box wedged between the wave and the footer. */
+.page-body--home .page-references {
+  margin: 0 calc(-50vw + 50%);
+  padding: 0.25rem max(1.5rem, calc((100vw - 960px) / 2));
+  border: 0;
+  border-radius: 0;
+  background-color: var(--color-footer-bg);
+  color: var(--color-footer-text);
+}
+
+.page-body--home .page-references-summary,
+.page-body--home .page-references-summary::before,
+.page-body--home .page-references li::marker,
+.page-body--home .page-references a {
+  color: var(--color-footer-text);
 }
 
 /* MICROBE BACKDROP (see MicrobeBackdrop.tsx) */
@@ -2099,205 +2541,1021 @@ body.home-fullscreen {
   position: relative;
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: the pinned block is
+   a .home-snap-stage (exactly one screen tall) and centres its content
+   below the navbar, so the figure fills the page height and stays in the
+   middle of the screen while the groups come in. */
 .body-symptoms-pinned {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.75rem;
+  justify-content: center;
   text-align: center;
-  padding: 2.5rem 0;
+  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06: the bottom also
+     clears the next band's wave, which lies over the foot of this screen
+     once the last group is in and used to cover the hint. */
+  padding: calc(var(--home-nav-h) + 0.75rem) 0
+    calc(var(--home-wave-h) + 3rem);
 }
 
-/* top: 5rem matches .section-progress-box's sticky offset elsewhere in this
-   file — enough to clear the 64px fixed navbar with a little breathing room. */
-.body-symptoms-pinned--sticky {
-  position: sticky;
-  top: 5rem;
-}
-
+/* Its own near-full-screen block, so the definition stands alone and a
+   further scroll brings the figure in. */
 .body-symptoms-intro {
-  max-width: 640px;
+  min-height: 100vh;
+  min-height: 100svh;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: calc(var(--home-nav-h) + 2rem) 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
 }
 
-.body-symptoms-heading {
-  margin: 0 0 0.5rem;
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): the
+   name spelled out down the left, one word per letter of PMOS, and the
+   definition beside it, set apart by a rule between the two. */
+.body-symptoms-definition {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  text-align: left;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): the
+   name is set larger, and its four initials use the site's heading face
+   (Luckiest Guy, already self-hosted) for a slightly more cartoonish PMOS.
+   That face only has one weight, hence font-weight: 400 (see FONTS above). */
+.body-symptoms-acrostic {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(1.8rem, 4.6vw, 3.4rem);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.body-symptoms-acrostic-letter {
+  display: inline-block;
+  font-family: "Luckiest Guy", "Poppins", sans-serif;
+  font-size: 1.5em;
+  font-weight: 400;
+  color: #2fa4a9;
+}
+
+.body-symptoms-former-name {
+  margin: 0.75rem 0 0;
+  font-size: clamp(0.85rem, 1.3vw, 1rem);
+  opacity: 0.8;
 }
 
 .body-symptoms-blurb {
   margin: 0;
+  padding-left: clamp(1.5rem, 4vw, 3rem);
+  border-left: 3px solid #2fa4a9;
+  font-size: clamp(1.25rem, 2.5vw, 1.8rem);
+  line-height: 1.5;
   opacity: 0.9;
 }
 
+/* Narrow screens: the definition goes under the name, and the rule between
+   them turns horizontal. */
+@media (max-width: 640px) {
+  .body-symptoms-definition {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .body-symptoms-blurb {
+    padding: clamp(1.5rem, 4vw, 3rem) 0 0;
+    border-left: 0;
+    border-top: 3px solid #2fa4a9;
+  }
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: says what pointing at
+   a symptom does. Out of the flow at the bottom of the pinned screen, so it
+   takes no height away from the figure. */
 .body-symptoms-hint {
-  margin: 0;
-  font-size: 0.85rem;
-  opacity: 0.7;
-  transition: opacity 0.3s ease;
-}
-
-.body-symptoms-hint--done {
-  opacity: 0;
-}
-
-/* Figure + label row — a fixed 760:400 virtual canvas (see VIRTUAL_W/H in
-   the component) that scales as one unit via aspect-ratio, so every
-   percentage/SVG coordinate the component computes from that canvas still
-   lines up however large or small the row actually renders. container-type
-   lets the labels' font-size (in cqw, below) shrink and grow with it too. */
-.body-symptoms-figure-row {
-  position: relative;
-  width: min(760px, 94vw);
-  aspect-ratio: 760 / 400;
-  margin: 0 auto;
-  container-type: inline-size;
-}
-
-.body-symptoms-lines {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  left: 50%;
+  bottom: calc(var(--home-wave-h) + 0.4rem);
+  translate: -50% 0;
+  width: max-content;
+  max-width: 100%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 1rem;
+  border: 2px solid currentColor;
+  border-radius: 999px;
+  font-size: clamp(0.8rem, 1.4vw, 1rem);
+  font-weight: 600;
 }
 
-/* The bent leader line from each organ out to its label — an infographic
-   pointer, not a tooltip: no box, no shadow, just a line and plain text. */
-.symptom-callout-path {
-  fill: none;
-  stroke: var(--color-accent);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: 0;
-  transition: opacity 0.4s ease;
+.body-symptoms-hint svg {
+  flex: none;
+  width: 1.1em;
+  height: 1.1em;
+  fill: currentColor;
+  animation: body-symptoms-hint-nudge 1.6s ease-in-out infinite;
 }
 
-.symptom-callout-path--visible {
-  opacity: 0.85;
+/* Touch screens have no hover: the hint says "Tap" there instead. */
+.body-symptoms-hint-tap {
+  display: none;
 }
 
-.symptom-callout-dot {
-  fill: var(--color-accent);
-  opacity: 0;
-  transition: opacity 0.3s ease;
+@media (hover: none) {
+  .body-symptoms-hint-hover {
+    display: none;
+  }
+
+  .body-symptoms-hint-tap {
+    display: inline;
+  }
 }
 
-.symptom-callout-dot--visible {
-  opacity: 1;
+@keyframes body-symptoms-hint-nudge {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: -3px -3px;
+  }
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-03
+   Purpose: figure in the middle with the team's four symptom groups listed
+   either side (hormonal/reproductive on the left, the other three on the
+   right). Each group has its own colour, shared by its heading rule, the
+   marker of the symptom currently lit, and the glow on the body. */
+.body-symptoms-figure-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(0.75rem, 3vw, 3rem);
+  width: min(1250px, 100%);
+  margin: 0 auto;
 }
 
 .body-symptoms-figure {
-  position: absolute;
-  left: 36.84%;
-  top: 0;
-  width: 26.32%;
-  height: 100%;
+  position: relative;
+  /* As tall as the pinned screen allows; the 80vw cap keeps room for the
+     two columns on narrow-but-tall screens. */
+  height: max(280px, min(calc(100vh - 4.5rem - var(--home-wave-h) - var(--home-nav-h)), 80vw));
+  height: max(280px, min(calc(100svh - 4.5rem - var(--home-wave-h) - var(--home-nav-h)), 80vw));
+  /* Proportions of the team's figure drawing (see CANVAS_WIDTH/HEIGHT in
+     BodySymptomsSection.tsx). */
+  aspect-ratio: 217 / 400;
 }
 
 .body-symptoms-figure-svg {
   display: block;
   width: 100%;
   height: 100%;
+  overflow: visible;
 }
 
-/* Plain floating text (no card/border/background) — label + a short phrase,
-   positioned at its assigned slot and right/left-aligned so it reads toward
-   the leader line that points back at the body. Stays in the DOM once
-   revealed=false (for a smooth fade-in) but is inert until its step hits. */
-.symptom-callout {
-  position: absolute;
-  width: 30%;
+.symptom-group--hormonal {
+  --symptom-color: #f08fc0;
+}
+
+.symptom-group--metabolic {
+  --symptom-color: #f0c674;
+}
+
+.symptom-group--wellbeing {
+  --symptom-color: #6fd0e0;
+}
+
+.symptom-group--gut {
+  --symptom-color: #7fc8a9;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-03
+   Purpose: a lit symptom makes the body part itself glow in its group's
+   colour (no ring drawn around it) and dims the other organs. The svg root
+   carries `has-lit lit-<region> symptom-group--<group>` while one is lit. */
+.body-part {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.3s ease;
+}
+
+.body-symptoms-figure-svg.has-lit .body-part {
+  opacity: 0.35;
+}
+
+.lit-brain .body-part--brain,
+.lit-heart .body-part--heart,
+.lit-liver .body-part--liver,
+.lit-pancreas .body-part--pancreas,
+.lit-gut .body-part--gut,
+.lit-adipose .body-part--adipose,
+.lit-uterus .body-part--uterus,
+.lit-reproductive .body-part--uterus {
+  opacity: 1 !important;
+  filter: drop-shadow(0 0 2px var(--symptom-color))
+    drop-shadow(0 0 7px var(--symptom-color));
+  animation: body-part-pulse 1.6s ease-in-out infinite;
+}
+
+/* Ovaries only: the uterus artwork stays, its ovaries (and the fimbriae
+   beside them) glow and the rest of it is dimmed. The ids are the artwork's
+   own, see BodyOrgans.tsx. */
+.lit-ovaries .body-part--uterus {
+  opacity: 1 !important;
+}
+
+/* !important because the artwork's paths carry an inline opacity. */
+.lit-ovaries .body-part--uterus path {
+  opacity: 0.4 !important;
+}
+
+.lit-ovaries .body-part--uterus :is(#path155, #path156, #path157, #path159) {
+  opacity: 1 !important;
+  filter: drop-shadow(0 0 1px var(--symptom-color))
+    drop-shadow(0 0 3px var(--symptom-color));
+}
+
+/* Hair: the hairstyle drawn in FemaleFigure.tsx. */
+.lit-hair .female-figure-hair {
+  filter: drop-shadow(0 0 3px var(--symptom-color))
+    drop-shadow(0 0 9px var(--symptom-color));
+}
+
+/* Skin: the face fills with the group colour. */
+.body-symptoms-face {
+  fill: var(--symptom-color, transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.lit-face .body-symptoms-face {
+  opacity: 0.45;
+  filter: drop-shadow(0 0 6px var(--symptom-color));
+}
+
+@keyframes body-part-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.07);
+  }
+}
+
+.body-symptoms-column {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
-  transform: translateY(-50%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  font-size: clamp(0.6rem, 1.9cqw, 0.95rem);
+  gap: 1rem;
+  text-align: left;
+  font-size: clamp(0.85rem, 1.6vw, 1.25rem);
   line-height: 1.3;
-  pointer-events: none;
 }
 
-.symptom-callout--visible {
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: a group comes in as
+   a whole, and its symptoms look like things to point at (pointer cursor, a
+   tinted chip on hover, a filled chip while lit). */
+.symptom-group {
+  opacity: 0;
+  translate: 0 0.9rem;
+  transition:
+    opacity 0.5s ease,
+    translate 0.5s ease;
+}
+
+.symptom-group--visible {
   opacity: 1;
+  translate: 0 0;
 }
 
-.symptom-callout--left {
+.symptom-group-title {
+  margin: 0 0 0.4rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 3px solid var(--symptom-color);
+  font-family: inherit;
+  font-size: 1.1em;
+  font-weight: 700;
+  line-height: 1.25;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.symptom-group-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.symptom-item {
+  position: relative;
+  margin: 0.1rem 0;
+  padding: 0.2rem 0.5rem 0.2rem 1.5em;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  outline: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.symptom-item::before {
+  content: "";
+  position: absolute;
+  left: 0.45em;
+  top: 0.62em;
+  width: 0.55em;
+  height: 0.55em;
+  border-radius: 50%;
+  border: 2px solid var(--symptom-color);
+  transition: background-color 0.25s ease;
+}
+
+.symptom-item:hover,
+.symptom-item:focus-visible {
+  background-color: color-mix(in srgb, var(--symptom-color) 30%, transparent);
+}
+
+.symptom-item--lit,
+.symptom-item--lit:hover,
+.symptom-item--lit:focus-visible {
+  background-color: var(--symptom-color);
+  /* The group colours are all light, so the label is a fixed dark ink. */
+  color: #221b2b;
+  font-weight: 700;
+}
+
+.symptom-item--lit::before {
+  border-color: #221b2b;
+  background-color: #221b2b;
+}
+
+/* Phones: the figure moves to the top and the two columns sit side by side
+   underneath, so the whole thing still fits in one pinned screen. */
+@media (max-width: 699.98px) {
+  .body-symptoms-pinned {
+    padding: calc(var(--home-nav-h) + 0.5rem) 0
+      calc(var(--home-wave-h) + 2.25rem);
+  }
+
+  /* To the left, clear of the back-to-top button in the corner. */
+  .body-symptoms-hint {
+    left: 0;
+    translate: none;
+    max-width: calc(100% - 4rem);
+    padding: 0.25rem 0.75rem;
+    font-size: 0.72rem;
+    text-align: left;
+  }
+
+  .body-symptoms-figure-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 0.75rem;
+  }
+
+  .body-symptoms-figure {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    justify-self: center;
+    /* What is left of the pinned screen once the two lists underneath
+       have their room. */
+    height: clamp(180px, calc(100vh - 28rem - var(--home-wave-h) - var(--home-nav-h)), 440px);
+    height: clamp(180px, calc(100svh - 28rem - var(--home-wave-h) - var(--home-nav-h)), 440px);
+  }
+
+  .body-symptoms-column {
+    gap: 0.6rem;
+    font-size: 0.72rem;
+  }
+
+  .symptom-item {
+    margin: 0;
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .body-part,
+  .body-symptoms-hint svg {
+    animation: none !important;
+  }
+}
+
+/* STORY SCROLL
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: the big-sentence screens between the symptoms and the gut section
+   (StoryScrollSection.tsx). Every step fills the pinned stage and lays its
+   sentences out on it (.story-step--<position>); only the --active one is
+   visible, the others wait just below (--future) or have drifted off above
+   (--past).
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team feedback: text
+   too big, too much scrolling for little information): smaller type and
+   drawings, and two sentences per screen (.story-step--pair-*). */
+.story-stage {
+  position: relative;
+  overflow: hidden;
+}
+
+.story-step {
+  position: absolute;
+  inset: calc(var(--home-nav-h) + 1.5rem) 0 calc(var(--home-wave-h) + 1.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  padding: 0 clamp(0.5rem, 3vw, 2.5rem);
+  opacity: 0;
+  translate: 0 3rem;
+  transition:
+    opacity 0.45s ease,
+    translate 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.story-step--past {
+  translate: 0 -3rem;
+}
+
+.story-step--active {
+  opacity: 1;
+  translate: 0 0;
+  transition-delay: 0.2s; /* lets the previous sentence clear first */
+}
+
+.story-text {
+  margin: 0;
+  max-width: 16em;
+  font-size: clamp(1.35rem, 3.2vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+/* The parts of a sentence come in one after the other. */
+.story-line {
+  display: block;
+  opacity: 0;
+  translate: 0 0.5em;
+  transition:
+    opacity 0.5s ease,
+    translate 0.5s ease;
+}
+
+.story-line + .story-line {
+  margin-top: 0.35em;
+}
+
+.story-step--active .story-line {
+  opacity: 1;
+  translate: 0 0;
+  transition-delay: calc(0.3s + var(--line) * 0.7s);
+}
+
+/* The key words: marked with the brand teal rather than coloured in it,
+   which would not be readable on this band in light mode. */
+.story-text strong {
+  font-weight: inherit;
+  background: linear-gradient(#2fa4a9, #2fa4a9) 0 92% / 100% 0.14em no-repeat;
+  padding-bottom: 0.05em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Two sentences on one screen: the first at the top with the drawing beside
+   it, the second below on the opposite side. */
+.story-step--pair-left,
+.story-step--pair-right {
+  flex-direction: column;
+  align-items: stretch;
+  gap: clamp(2rem, 8vh, 5rem);
+}
+
+.story-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
+}
+
+.story-step--pair-left .story-text--second {
+  align-self: flex-end;
   text-align: right;
 }
 
-.symptom-callout--right {
-  text-align: left;
+.story-step--pair-right .story-row {
+  flex-direction: row-reverse;
+  text-align: right;
 }
 
-.symptom-callout strong {
-  font-size: clamp(0.65rem, 2.1cqw, 1rem);
+.story-step--pair-right .story-text--second {
+  align-self: flex-start;
 }
 
-/* Generated with Claude Opus 5.5 (Anthropic), 2026-09-24
-   Purpose: "two guts" section (TwoGutsSection.tsx) — pinned side-by-side
-   gut windows with composition bars. Same sticky pin/offset as the body
-   symptoms section above. */
-.two-guts-scroller {
-  position: relative;
-}
-
-.two-guts-pinned {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.25rem;
+.story-step--center {
   text-align: center;
-  padding: 1.5rem 0;
 }
 
-.two-guts-pinned--sticky {
-  position: sticky;
-  top: 5rem;
+.story-step--center .story-text {
+  max-width: 14em;
 }
 
-.two-guts-heading {
+/* StoryStatement: one sentence in an ordinary full-screen band, so it is
+   laid out in the flow rather than over a pinned stage. */
+.story-step--single {
+  position: static;
+}
+
+.story-step--single .story-text p {
   margin: 0;
 }
 
-.two-guts-intro {
-  max-width: 640px;
+.story-art {
+  flex: none;
 }
 
-.two-guts-intro p {
-  margin: 0 0 0.5rem;
+.story-art--question {
+  position: relative;
+  width: clamp(6rem, 15vw, 11rem);
+  height: clamp(6rem, 15vw, 11rem);
+  font-weight: 800;
+  line-height: 1;
 }
 
-.two-guts-source {
-  font-size: 0.8rem;
-  opacity: 0.75;
+.story-art--question span {
+  position: absolute;
+  animation: story-question 3.2s ease-in-out infinite;
+}
+
+.story-art--question span:nth-child(1) {
+  left: 28%;
+  top: 8%;
+  font-size: clamp(4.5rem, 11.5vw, 9rem);
+  color: #2fa4a9;
+}
+
+.story-art--question span:nth-child(2) {
+  left: 2%;
+  top: 2%;
+  font-size: clamp(1.6rem, 4vw, 3.1rem);
+  opacity: 0.55;
+  --tilt: -16deg;
+  animation-duration: 2.6s;
+  animation-delay: -0.9s;
+}
+
+.story-art--question span:nth-child(3) {
+  right: 0;
+  bottom: 6%;
+  font-size: clamp(2rem, 5vw, 4rem);
+  opacity: 0.35;
+  --tilt: 14deg;
+  animation-duration: 3.8s;
+  animation-delay: -1.7s;
+}
+
+@keyframes story-question {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: var(--tilt, 0deg);
+  }
+  50% {
+    translate: 0 -0.12em;
+    rotate: calc(var(--tilt, 0deg) + 8deg);
+  }
+}
+
+.story-art--clock {
+  width: clamp(5.5rem, 13vw, 10rem);
+  height: auto;
+  overflow: visible;
+}
+
+.story-clock-face {
+  fill: currentColor;
+  fill-opacity: 0.06;
+  stroke: currentColor;
+  stroke-width: 4;
+}
+
+.story-clock-mark,
+.story-clock-hand {
+  stroke: currentColor;
+  stroke-linecap: round;
+}
+
+.story-clock-mark {
+  stroke-width: 2;
+}
+
+.story-clock-hand {
+  transform-origin: 50px 50px;
+}
+
+.story-clock-hand--hour {
+  stroke-width: 5;
+  animation: story-clock-turn 240s linear infinite;
+}
+
+.story-clock-hand--minute {
+  stroke-width: 3.5;
+  animation: story-clock-turn 20s linear infinite;
+}
+
+/* One tick a second, a full turn a minute. */
+.story-clock-hand--second {
+  stroke: #2fa4a9;
+  stroke-width: 2;
+  animation: story-clock-turn 60s steps(60) infinite;
+}
+
+.story-clock-pin {
+  fill: #2fa4a9;
+}
+
+@keyframes story-clock-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: the "quest" step — first half of the sentence top left, second
+   half bottom right, and between them a magnifying glass wandering over
+   some gut microbes (MicrobiomeArt in StoryScrollSection.tsx). */
+.story-step--split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 1rem;
+  padding-top: 4vh;
+  padding-bottom: 4vh;
+}
+
+/* The two halves are placed on the step's grid themselves. */
+.story-step--split .story-text {
+  display: contents;
+}
+
+.story-step--split .story-line {
+  max-width: 16em;
+  margin-top: 0;
+}
+
+.story-step--split .story-line:first-child {
+  grid-row: 1;
+  justify-self: start;
+  text-align: left;
+}
+
+.story-step--split .story-line:last-child {
+  grid-row: 3;
+  justify-self: end;
+  text-align: right;
+}
+
+.story-step--split .story-art {
+  grid-row: 2;
+  place-self: center;
+}
+
+.story-art--microbiome {
+  width: clamp(9rem, 24vw, 17rem);
+  height: auto;
+  max-height: 100%;
+  overflow: visible;
+}
+
+.story-microbe {
+  fill: currentColor;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: story-microbe-wriggle 2.6s ease-in-out infinite;
+}
+
+.story-microbe--teal {
+  fill: #2fa4a9;
+}
+
+.story-microbe--curved {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.story-microbe--curved.story-microbe--teal {
+  stroke: #2fa4a9;
+}
+
+.story-microbes-far {
+  opacity: 0.3;
+}
+
+@keyframes story-microbe-wriggle {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: -6deg;
+  }
+  50% {
+    translate: 0 -2px;
+    rotate: 7deg;
+  }
+}
+
+/* The glass and the hole it leaves in the faint microbes share one path;
+   the close-up inside it runs the same path times -1.8 (the enlargement),
+   which keeps it centred on whatever the lens is over. */
+.story-lens {
+  animation: story-lens-wander 9s ease-in-out infinite;
+}
+
+.story-lens-view {
+  animation: story-lens-view 9s ease-in-out infinite;
+}
+
+.story-lens-rim {
+  fill: currentColor;
+  fill-opacity: 0.05;
+  stroke: currentColor;
+  stroke-width: 4;
+}
+
+.story-lens-handle {
+  stroke: #2fa4a9;
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.story-lens-shine {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: 0.45;
+}
+
+@keyframes story-lens-wander {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  30% {
+    transform: translate(55px, -12px);
+  }
+  55% {
+    transform: translate(75px, 18px);
+  }
+  80% {
+    transform: translate(25px, 25px);
+  }
+}
+
+@keyframes story-lens-view {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  30% {
+    transform: translate(-99px, 21.6px);
+  }
+  55% {
+    transform: translate(-135px, -32.4px);
+  }
+  80% {
+    transform: translate(-45px, -45px);
+  }
+}
+
+/* Phones: no room beside the sentence, so the drawing goes above it and
+   everything is centred, one sentence under the other. */
+@media (max-width: 699.98px) {
+  .story-step--pair-left,
+  .story-step--pair-right {
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .story-step--pair-left .story-row,
+  .story-step--pair-right .story-row {
+    flex-direction: column-reverse;
+    text-align: center;
+    gap: 1.25rem;
+  }
+
+  .story-step--pair-left .story-text--second,
+  .story-step--pair-right .story-text--second {
+    align-self: center;
+    text-align: center;
+  }
+}
+
+/* No pinning: the sentences are listed one under the other, all shown. */
+.story-scroll--static .story-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  padding: calc(var(--home-nav-h) + 3rem) 0 calc(var(--home-wave-h) + 3rem);
+}
+
+.story-scroll--static .story-step {
+  position: static;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-step,
+  .story-line {
+    transition: none;
+  }
+
+  .story-art--question span,
+  .story-clock-hand,
+  .story-microbe,
+  .story-lens,
+  .story-lens-view {
+    animation: none;
+  }
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-09-24
+   Purpose: gut-microbiome section (TwoGutsSection.tsx) — a gut window with
+   its composition bar.
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: one window on a
+   pinned screen. It starts on the left with the healthy text on the right;
+   with .two-guts--pmos it slides to the right while its cells cross-fade to
+   the PMOS mix, the healthy text fades out and the PMOS text fades in on the
+   left. */
+.two-guts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+  padding: calc(var(--home-nav-h) + 1rem) 0 1rem;
 }
 
 .two-guts-row {
-  display: flex;
-  justify-content: center;
-  gap: clamp(1rem, 6vw, 6rem);
-  width: 100%;
+  --lens: min(400px, 42vw, 46vh);
+  --lens-gap: clamp(1rem, 4vw, 3.5rem);
+  position: relative;
+  width: min(100%, 1000px);
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review: text and
+   figure overlapped in a split-screen window): the window used to be taken
+   out of the flow, with a fixed allowance under the lens for its label and
+   bar. In a narrow window the label wraps onto two or three lines, outgrew
+   that allowance, and the bar ran into the text underneath. The window is
+   now in the flow, so the row is exactly as tall as the window really is
+   (label and bar included), and it slides by its left margin instead. */
 .two-guts-window {
-  flex: 0 1 380px;
-  min-width: 0;
+  position: relative;
+  width: var(--lens);
   margin: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
+  transition: margin-left 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.two-guts--pmos .two-guts-window {
+  margin-left: calc(100% - var(--lens));
 }
 
 .two-guts-window-label {
+  order: 1; /* under the lens, above the bar */
   font-weight: 700;
   font-size: clamp(0.9rem, 1.6vw, 1.15rem);
+  line-height: 1.3;
+}
+
+.two-guts-window .two-guts-bar {
+  order: 2;
 }
 
 .two-guts-lens {
   width: 100%;
-  max-height: 42vh;
   aspect-ratio: 1;
+}
+
+/* The text beside the window: both panels are always laid out, each in the
+   space the window leaves free in its state, and swap by fading. The one
+   coming in waits until the window has nearly arrived. */
+.two-guts-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+  text-align: left;
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  line-height: 1.5;
+  transition:
+    opacity 0.35s ease,
+    translate 0.35s ease;
+}
+
+.two-guts-panel p {
+  margin: 0;
+}
+
+.two-guts-panel-title {
+  margin: 0;
+  font-size: clamp(1.5rem, 3.4vw, 2.6rem);
+  line-height: 1.1;
+}
+
+.two-guts-panel--healthy {
+  left: calc(var(--lens) + var(--lens-gap));
+  right: 0;
+}
+
+.two-guts-panel--pmos {
+  left: 0;
+  right: calc(var(--lens) + var(--lens-gap));
+  opacity: 0;
+  translate: -1.5rem 0;
+}
+
+.two-guts:not(.two-guts--pmos) .two-guts-panel--healthy,
+.two-guts--pmos .two-guts-panel--pmos {
+  transition-delay: 0.55s;
+}
+
+.two-guts--pmos .two-guts-panel--healthy {
+  opacity: 0;
+  translate: 1.5rem 0;
+}
+
+.two-guts--pmos .two-guts-panel--pmos {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* A cell that belongs to a different group with PMOS: its two shapes
+   cross-fade, --swap-delay (set per cell) spreading the change out. */
+.two-guts-swap {
+  transition: opacity 0.35s ease var(--swap-delay, 0s);
+}
+
+.two-guts-swap--pmos,
+.two-guts--pmos .two-guts-swap--healthy {
+  opacity: 0;
+}
+
+.two-guts--pmos .two-guts-swap--pmos {
+  opacity: 1;
+}
+
+/* Phones (and narrow split-screen windows): no room for text beside the
+   window, so it goes underneath; the window still slides from the left edge
+   to the right edge. Both sentences share the one grid cell under the
+   window, so the row is as tall as the window plus the longer sentence. */
+@media (max-width: 699.98px) {
+  .two-guts-row {
+    --lens: min(62vw, 30vh);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 1rem;
+  }
+
+  .two-guts-panel {
+    position: static;
+    grid-area: 2 / 1;
+    justify-content: flex-start;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+  }
+
+  .two-guts-legend {
+    font-size: 0.75rem;
+    gap: 0.25rem 0.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .two-guts-window,
+  .two-guts-panel,
+  .two-guts-swap {
+    transition: none;
+  }
 }
 
 .two-guts-lens-bg {
@@ -2311,18 +3569,32 @@ body.home-fullscreen {
   stroke-width: 5;
 }
 
+/* --dx/--dy/--spin and the duration are set per cell in TwoGutsSection.tsx,
+   so each one wanders its own way. */
 .two-guts-cell {
-  animation: two-guts-wiggle 8s ease-in-out infinite;
+  animation: two-guts-drift 6s ease-in-out infinite;
 }
 
-@keyframes two-guts-wiggle {
+@keyframes two-guts-drift {
   0%,
   100% {
     translate: 0 0;
+    rotate: 0deg;
   }
-  50% {
-    translate: 2px -3px;
+  30% {
+    translate: var(--dx) calc(var(--dy) * 0.4);
+    rotate: var(--spin);
   }
+  65% {
+    translate: calc(var(--dx) * -0.6) var(--dy);
+    rotate: calc(var(--spin) * -0.7);
+  }
+}
+
+/* The cell handed over to the BSH section holds still, so the travelling
+   copy can take its place without a jump. */
+.two-guts-cell--still {
+  animation: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2333,6 +3605,7 @@ body.home-fullscreen {
 
 .two-guts-bar {
   display: flex;
+  flex: none;
   width: 85%;
   height: 14px;
   border-radius: 7px;
@@ -2344,7 +3617,33 @@ body.home-fullscreen {
 .two-guts-bar-segment {
   flex-basis: 0;
   min-width: 0;
-  transition: flex-grow 0.15s linear;
+  transition: flex-grow 0.9s ease;
+}
+
+.two-guts-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+  max-width: 760px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.95rem;
+}
+
+.two-guts-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.two-guts-legend-swatch {
+  flex: none;
+  width: 0.9em;
+  height: 0.9em;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.28);
 }
 
 .two-guts-note {
@@ -2352,17 +3651,6 @@ body.home-fullscreen {
   font-size: 0.8rem;
   opacity: 0.7;
   max-width: 560px;
-}
-
-.two-guts-hint {
-  margin: 0;
-  font-size: 0.85rem;
-  opacity: 0.7;
-  transition: opacity 0.3s ease;
-}
-
-.two-guts-hint--done {
-  opacity: 0;
 }
 
 /* BSH STREAM ANIMATION
@@ -2375,9 +3663,38 @@ body.home-fullscreen {
    taken from the team's abstract figure (lavender double-membrane cell,
    pale-blue BSH, pale-yellow conjugated / red deconjugated hexagons,
    light-blue glycine/taurine group). */
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06: a pinned screen of
+   two steps. With .bsh-stream--meet only the cell shows, enlarged and moved
+   to the left, with its introduction on the right; with .bsh-stream--reaction
+   the diagram is back at its own size and everything marked
+   .bsh-stream-reaction (title, bile acids, labels) has faded in.
+   .bsh-stream--static (reduced motion) shows both, one under the other. */
+.bsh-stream {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: calc(var(--home-nav-h) + 1rem) 0 calc(var(--home-wave-h) + 1rem);
+}
+
+/* The enlarged diagram reaches past the sides of the screen (only its cell
+   is visible then); cut it off at the band so the page cannot scroll
+   sideways. */
+.home-section:has(.bsh-stream) {
+  overflow-x: clip;
+}
+
 .bsh-stream-heading {
-  margin: 0 0 1.5rem;
+  max-width: 22em;
+  margin: 0 auto 1.5rem;
   text-align: center;
+  text-wrap: balance;
+}
+
+/* The slanted species name leans into the space after it (team review,
+   2026-10-06: "is there a space?"), so it gets a little extra room. */
+.bsh-stream-heading em {
+  margin-right: 0.12em;
 }
 
 .bsh-stream-diagram {
@@ -2385,12 +3702,114 @@ body.home-fullscreen {
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
+  transition:
+    translate 0.9s cubic-bezier(0.65, 0, 0.35, 1),
+    scale 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.bsh-stream--meet .bsh-stream-diagram {
+  translate: -25% 0;
+  scale: 1.6;
+}
+
+.bsh-stream-reaction {
+  transition: opacity 0.45s ease 0.6s; /* after the cell has moved over */
+}
+
+.bsh-stream--meet .bsh-stream-reaction {
+  opacity: 0;
+  transition-delay: 0s;
+}
+
+/* The introduction: fills the half of the screen the cell leaves free. */
+.bsh-stream-meet {
+  position: absolute;
+  inset: 0 0 0 52%;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+}
+
+.bsh-stream-meet-text {
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  line-height: 1.4;
+  transition:
+    opacity 0.35s ease 0.5s,
+    translate 0.35s ease 0.5s;
+}
+
+.bsh-stream-meet-text p {
+  margin: 0;
+}
+
+.bsh-stream-meet-title {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.9rem, 4.6vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1.08;
+}
+
+.bsh-stream--reaction .bsh-stream-meet-text {
+  opacity: 0;
+  translate: 1.5rem 0;
+  transition-delay: 0s;
+}
+
+.bsh-stream--static .bsh-stream-meet {
+  position: static;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+/* Phones: the cell on top, its introduction underneath. */
+@media (max-width: 699.98px) {
+  .bsh-stream--meet .bsh-stream-diagram {
+    translate: 0 -75%;
+    scale: 2.2;
+  }
+
+  .bsh-stream-meet {
+    inset: 50% 0 0;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bsh-stream-diagram,
+  .bsh-stream-reaction,
+  .bsh-stream-meet-text,
+  .bsh-dna {
+    transition: none;
+  }
 }
 
 .bsh-stream-svg {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+/* Holds the HTML labels so a whole group of them can fade in together
+   during the scroll zoom-in (BshStreamAnimation.tsx). */
+.bsh-stream-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* The cell travelling from the gut window to this diagram while the page
+   scrolls (TravellingBacterium in BshStreamAnimation.tsx): positioned and
+   scaled from JS, above the page content but below the navbar. */
+.bsh-zoom-traveller {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 900;
+  pointer-events: none;
+  overflow: visible;
 }
 
 .bsh-membrane-outer {
@@ -2403,6 +3822,31 @@ body.home-fullscreen {
   fill: none;
   stroke: #6e5b9e;
   stroke-width: 2.5;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): the
+   cell's fimbriae/pili and its tangled loop of DNA. */
+.bsh-pili {
+  fill: none;
+  stroke: #6e5b9e;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.bsh-dna {
+  fill: none;
+  stroke: #2f4f86;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.6s ease;
+}
+
+/* With the reaction the DNA makes room for the BSH capsule beside it. */
+.bsh-stream--reaction .bsh-dna,
+.bsh-stream--static .bsh-dna {
+  transform: translateX(-44px) scale(0.7);
 }
 
 .bsh-enzyme {
@@ -2547,6 +3991,624 @@ body.home-fullscreen {
 
   .bsh-stream-products {
     gap: 0.2rem 0.15rem;
+  }
+}
+
+/* TGR5 STORY
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: the last home-page sections (Tgr5Story.tsx): the TGR5 diagram
+   with the question that pops up over it, the three consequences joined by
+   a growing line, the "why we engineer" screen and the row of links. The
+   diagrams keep fixed colours in both themes, like the BSH diagram whose
+   palette they share. */
+.tgr5 {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: calc(var(--home-nav-h) + 1rem) 0 calc(var(--home-wave-h) + 1rem);
+}
+
+.tgr5-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  transition:
+    opacity 0.5s ease,
+    filter 0.5s ease,
+    scale 0.5s ease;
+}
+
+.tgr5-heading {
+  max-width: 24em;
+  margin: 0;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.tgr5-svg {
+  display: block;
+  width: min(100%, 760px);
+  max-height: 56vh;
+}
+
+.tgr5-cell {
+  fill: #f3eef9;
+  stroke: #6e5b9e;
+  stroke-width: 4;
+}
+
+.tgr5-nucleus {
+  fill: #d6cdea;
+  stroke: #6e5b9e;
+  stroke-width: 3;
+}
+
+.tgr5-receptor rect {
+  fill: #5d86b5;
+  stroke: #2f4f86;
+  stroke-width: 2;
+}
+
+.tgr5-arrow {
+  fill: none;
+  stroke: #33283f;
+  stroke-width: 3;
+}
+
+.tgr5-arrow-head {
+  fill: #33283f;
+}
+
+/* The weakened signal: a broken line whose dashes creep towards the nucleus. */
+.tgr5-arrow--signal {
+  stroke-dasharray: 7 7;
+  animation: tgr5-signal 1.6s linear infinite;
+}
+
+@keyframes tgr5-signal {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+.tgr5-dna {
+  fill: none;
+  stroke: #6e5b9e;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.tgr5-factor {
+  fill: #a06a94;
+  stroke: #6a3a5f;
+  stroke-width: 2;
+}
+
+.tgr5-gene {
+  fill: #7a5fa8;
+  stroke: #4f3f86;
+  stroke-width: 2;
+}
+
+.tgr5-il22 {
+  fill: #5a4699;
+  stroke: #33283f;
+  stroke-width: 3;
+}
+
+.tgr5-down,
+.tgr5-up {
+  fill: none;
+  stroke: #cc4a4a;
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tgr5-svg .tgr5-down,
+.tgr5-bob {
+  animation: tgr5-bob 1.4s ease-in-out infinite;
+}
+
+.tgr5-up.tgr5-bob {
+  --bob: -6px;
+}
+
+@keyframes tgr5-bob {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 var(--bob, 6px);
+  }
+}
+
+.tgr5-label {
+  fill: currentColor;
+  font-size: 22px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+.tgr5-label--dark {
+  fill: #33283f;
+}
+
+.tgr5-label--light {
+  fill: #fff;
+}
+
+.tgr5-label--small {
+  font-size: 17px;
+}
+
+.tgr5-label--cell {
+  font-size: 26px;
+}
+
+.tgr5-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem 1.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.95rem;
+}
+
+.tgr5-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.tgr5-legend svg {
+  height: 1.5em;
+  width: auto;
+}
+
+/* The question: over the whole screen, the diagram fading back behind it. */
+.tgr5-question {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+  opacity: 0;
+  scale: 0.8;
+  pointer-events: none;
+  transition:
+    opacity 0.4s ease,
+    scale 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tgr5-question-text {
+  max-width: none;
+  font-size: clamp(2.4rem, 8.5vw, 6.75rem);
+  text-align: center;
+}
+
+.tgr5--asking .tgr5-figure {
+  opacity: 0.12;
+  filter: blur(3px);
+  scale: 0.96;
+}
+
+.tgr5--asking .tgr5-question {
+  opacity: 1;
+  scale: 1;
+  transition-delay: 0.15s;
+}
+
+.tgr5--static .tgr5-question {
+  position: static;
+  margin-top: 3rem;
+  opacity: 1;
+  scale: 1;
+}
+
+/* The three consequences. --shown (set by the component) is how many are
+   in; --reach is how far the joining line has grown: up to the edge of the
+   newest item's drawing. */
+.tgr5-effects {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(1.5rem, 5vh, 3.5rem);
+  padding: calc(var(--home-nav-h) + 1rem) 0 calc(var(--home-wave-h) + 1rem);
+}
+
+.tgr5-effects-heading {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1.6rem, 4vw, 3rem);
+}
+
+.tgr5-effects-list {
+  --art: clamp(6.5rem, 14vw, 11rem);
+  --reach: calc(
+    (var(--shown) * 2 - 1) / (var(--count) * 2) * 100% - var(--art) / 2
+  );
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--count), minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tgr5-effects-line {
+  position: absolute;
+  left: 0;
+  top: calc(var(--art) / 2 - 3px);
+  width: 100%;
+  height: 6px;
+}
+
+.tgr5-effects-line-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--reach);
+  height: 100%;
+  border-radius: 3px;
+  background: #2fa4a9;
+  transition:
+    width 0.8s cubic-bezier(0.65, 0, 0.35, 1),
+    height 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* A bacterium leading the line. */
+.tgr5-effects-line-head {
+  position: absolute;
+  left: var(--reach);
+  top: 50%;
+  width: 2.4rem;
+  height: 1.1rem;
+  translate: -85% -50%;
+  border-radius: 999px;
+  background: #d9779b;
+  border: 2px solid #9c5670;
+  transition:
+    left 0.8s cubic-bezier(0.65, 0, 0.35, 1),
+    top 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.tgr5-effect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+  text-align: center;
+  opacity: 0;
+  translate: 0 1.5rem;
+  transition:
+    opacity 0.45s ease,
+    translate 0.45s ease;
+}
+
+/* Comes in once the line has reached it. */
+.tgr5-effect--shown {
+  opacity: 1;
+  translate: 0 0;
+  transition-delay: 0.45s;
+}
+
+.tgr5-effect-art {
+  position: relative;
+  flex: none;
+  width: var(--art);
+  height: var(--art);
+  margin-bottom: 0.5rem;
+  border-radius: 50%;
+  border: 4px solid #2fa4a9;
+  background: #f3eef9;
+  color: #33283f;
+}
+
+.tgr5-effect-art svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 14%;
+  overflow: visible;
+}
+
+.tgr5-drop {
+  fill: #e9a3a3;
+  stroke: #8e2626;
+  stroke-width: 3;
+}
+
+.tgr5-ring {
+  fill: #f7f0c8;
+  stroke: #33283f;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.tgr5-effect-title {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.6vw, 2rem);
+}
+
+.tgr5-effect-detail {
+  margin: 0;
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  opacity: 0.85;
+}
+
+/* Phones: the items go under each other, drawing on the left, and the line
+   runs down through the drawings instead. */
+@media (max-width: 699.98px) {
+  .tgr5-effects-list {
+    --art: clamp(5rem, 15vh, 7rem);
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: 1fr;
+    gap: 1.5rem 0;
+    padding: 0 0.5rem;
+  }
+
+  .tgr5-effects-line {
+    left: calc(0.5rem + var(--art) / 2 - 3px);
+    top: -1.5rem;
+    width: 6px;
+    height: calc(100% + 1.5rem);
+  }
+
+  .tgr5-effects-line-fill {
+    width: 100%;
+    height: var(--reach);
+  }
+
+  .tgr5-effects-line-head {
+    left: 50%;
+    top: var(--reach);
+    translate: -50% -85%;
+    rotate: 90deg;
+  }
+
+  .tgr5-effect {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-content: center;
+    align-items: center;
+    gap: 0.25rem 1rem;
+    padding: 0;
+    text-align: left;
+  }
+
+  .tgr5-effect-art {
+    grid-row: 1 / span 2;
+    margin-bottom: 0;
+  }
+
+  .tgr5-effect-title:last-child {
+    grid-row: 1 / span 2;
+  }
+}
+
+/* Why we engineer P. vulgatus. */
+.engineer {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  padding: 0 clamp(0.5rem, 3vw, 2.5rem);
+}
+
+.engineer-text {
+  max-width: none;
+  font-size: clamp(1.8rem, 4.4vw, 3.6rem);
+}
+
+.engineer-svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+  animation: engineer-float 5s ease-in-out infinite;
+}
+
+@keyframes engineer-float {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: -2deg;
+  }
+  50% {
+    translate: 0 -0.6rem;
+    rotate: 2deg;
+  }
+}
+
+.engineer-dna {
+  stroke: #33283f;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.engineer-promoter,
+.engineer-terminator {
+  fill: none;
+  stroke: #33283f;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.engineer-part {
+  stroke: #33283f;
+  stroke-width: 2;
+  animation: engineer-glow 2.4s ease-in-out infinite;
+}
+
+.engineer-part--a {
+  fill: #2fa4a9;
+}
+
+.engineer-part--b {
+  fill: #e0a84a;
+  animation-delay: 0.4s;
+}
+
+@keyframes engineer-glow {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.3);
+  }
+}
+
+/* From the circuit to BSH, ending in the blunt bar that means "inhibits";
+   the dashes run along it towards BSH. */
+.engineer-inhibit {
+  fill: none;
+  stroke: #cc4a4a;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 6 6;
+  animation: tgr5-signal 1.2s linear infinite;
+}
+
+.engineer-bsh {
+  fill: #dfe8f7;
+  fill-opacity: 0.55;
+  stroke: #2f4f86;
+  stroke-width: 3;
+  stroke-dasharray: 5 5;
+}
+
+.engineer-bsh-label {
+  fill: #1c2f52;
+  fill-opacity: 0.7;
+  font-size: 20px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+@media (max-width: 699.98px) {
+  .engineer {
+    grid-template-columns: minmax(0, 1fr);
+    text-align: center;
+  }
+
+  .engineer-svg {
+    width: min(100%, 20rem);
+    margin: 0 auto;
+  }
+}
+
+/* Find out more: links rolling sideways like the sponsor logos (the track
+   holds the set four times over and shifts by half its width per loop). */
+.find-more {
+  text-align: center;
+}
+
+.find-more-heading {
+  margin: 0 0 1.5rem;
+}
+
+.find-more-band {
+  overflow: hidden;
+  margin: 0 calc(-50vw + 50%);
+  padding: 0.5rem 0;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+}
+
+.find-more-track {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;
+  padding-right: 1.5rem;
+  animation: find-more-roll 36s linear infinite;
+}
+
+.find-more-band:hover .find-more-track,
+.find-more-band:focus-within .find-more-track {
+  animation-play-state: paused;
+}
+
+@keyframes find-more-roll {
+  to {
+    translate: -50% 0;
+  }
+}
+
+.find-more-link {
+  flex: none;
+  padding: 0.7rem 1.75rem;
+  border: 3px solid currentColor;
+  border-radius: 999px;
+  color: inherit;
+  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    scale 0.2s ease;
+}
+
+.find-more-link:hover,
+.find-more-link:focus-visible {
+  background-color: #2fa4a9;
+  border-color: #2fa4a9;
+  color: #fff;
+  scale: 1.05;
+}
+
+.find-more-band--static {
+  margin: 0;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.find-more-band--static .find-more-track {
+  flex-wrap: wrap;
+  justify-content: center;
+  width: auto;
+  padding-right: 0;
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tgr5-figure,
+  .tgr5-question,
+  .tgr5-effect,
+  .tgr5-effects-line-fill,
+  .tgr5-effects-line-head {
+    transition: none;
+  }
+
+  .tgr5-arrow--signal,
+  .tgr5-svg .tgr5-down,
+  .tgr5-bob,
+  .engineer-svg,
+  .engineer-part,
+  .engineer-inhibit {
+    animation: none;
   }
 }
 
@@ -2706,17 +4768,47 @@ body.home-fullscreen {
 .pmos-counter-heading {
   font-size: clamp(1.5rem, 4vw, 2.75rem);
   font-weight: 700;
-  max-width: 40ch;
   margin: 0;
 }
 
+.pmos-counter-rest {
+  display: block;
+  max-width: 24ch;
+  margin: 0 auto;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-03: the figure sits on
+   its own line, far larger than the sentence around it and in the brand
+   teal, so it is the first thing read in this band. Colour set to the
+   brand teal #2fa4a9 on 2026-10-06 (was the darker #1f8a8f). */
 .pmos-counter-number {
-  color: var(--color-text);
+  display: block;
+  width: fit-content;
+  margin: 0.15em auto;
+  color: #2fa4a9;
+  font-size: clamp(2.75rem, 12vw, 8.5rem);
+  line-height: 1.05;
+  white-space: nowrap;
   font-variant-numeric: tabular-nums;
   padding: 0 0.1em;
   /* --color-header-bg (not --color-accent) — accent is identical to the
      body background in light mode, which would make this invisible too. */
-  border-bottom: 0.09em solid var(--color-header-bg);
+  border-bottom: 0.07em solid var(--color-header-bg);
+}
+
+[data-theme="dark"] .pmos-counter-number {
+  color: #5fd3d7;
+}
+
+.pmos-overview-source {
+  max-width: 80ch;
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
+.pmos-overview-source p {
+  margin: 0;
 }
 
 .pmos-globe-loading {
@@ -2724,36 +4816,20 @@ body.home-fullscreen {
   padding: 2rem;
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: the globe always
+   takes the left half of the section, with the text (the invitation, then
+   the clicked continent's figures) on the right. */
 .pmos-globe-wrap {
-  width: min(100%, 520px);
+  width: min(100%, 1050px);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  transition:
-    width 0.4s ease,
-    max-width 0.4s ease,
-    gap 0.4s ease;
-}
-
-/* Once a continent has been picked, the globe shifts to the left half of
-   the section and the info panel takes the right half. */
-.pmos-globe-wrap--split {
-  width: 100%;
-  max-width: 900px;
-  flex-direction: row;
-  align-items: center;
-  gap: 2.5rem;
+  justify-content: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
 }
 
 .pmos-globe-stage {
   flex: none;
-  width: min(100%, 520px);
-  transition: width 0.4s ease;
-}
-
-.pmos-globe-wrap--split .pmos-globe-stage {
-  width: min(45%, 340px);
+  width: min(50%, 520px, 70vh);
 }
 
 /* Pointer cursor while hovering a clickable country — grab otherwise, since
@@ -2768,18 +4844,23 @@ body.home-fullscreen {
 }
 
 .pmos-globe-info {
-  min-height: 2.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.pmos-globe-wrap--split .pmos-globe-info {
   flex: 1;
   min-width: 0;
+  max-width: 28rem;
+  /* Tall enough for the longest continent note, so the globe does not shift
+     when the text changes. */
+  min-height: 16rem;
+  display: flex;
+  flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
   text-align: left;
+}
+
+.pmos-globe-prompt {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.75rem);
+  line-height: 1.05;
 }
 
 .pmos-globe-info-panel {
@@ -2830,8 +4911,8 @@ body.home-fullscreen {
 }
 
 .pmos-globe-info-hint {
-  font-size: 0.9rem;
-  opacity: 0.7;
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  opacity: 0.75;
 }
 
 .pmos-globe-tooltip {
@@ -2845,17 +4926,20 @@ body.home-fullscreen {
 }
 
 @media (max-width: 768px) {
-  .pmos-globe-wrap--split {
+  .pmos-globe-wrap {
     flex-direction: column;
     gap: 1rem;
   }
 
-  .pmos-globe-wrap--split .pmos-globe-stage {
-    width: min(100%, 520px);
+  .pmos-globe-stage {
+    width: min(100%, 360px, 45vh);
   }
 
-  .pmos-globe-wrap--split .pmos-globe-info {
+  .pmos-globe-info {
+    flex: none;
+    min-height: 13rem;
     align-items: center;
+    justify-content: flex-start;
     text-align: center;
   }
 
@@ -2883,7 +4967,10 @@ body.home-fullscreen {
      canvas and would lose contrast against the site's dark mode. */
   background-color: #ffffff;
   border-radius: 0.5rem;
-  padding: 0.5rem;
+  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): no
+     padding here. Plotly sizes its SVG to this box's full width and height,
+     so padding pushed the chart out past the card's right and bottom edges. */
+  overflow: hidden;
 }
 
 .mic-chart-loading {
@@ -3563,7 +5650,9 @@ body.home-fullscreen {
 .fan-selector-svg {
   display: block;
   width: 100%;
+  max-width: 640px;
   height: auto;
+  margin: 0 auto;
 }
 
 .fan-selector-band {
@@ -3701,5 +5790,159 @@ body.home-fullscreen {
 
   .fan-selector-tabs {
     display: flex;
+  }
+}
+
+/* MARKET RINGS
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-03
+   Purpose: Entrepreneurship "Market and target group" TAM / SAM / SOM rings
+   (see MarketRings.tsx). Ring fills are fixed brand tints, so the labels on
+   them use fixed colours too instead of the theme text colour. Selecting a
+   ring deepens its fill and fades the other two into the background. */
+.market-rings {
+  margin: 1.5rem 0;
+}
+
+.market-rings-svg {
+  display: block;
+  width: 100%;
+  max-width: 460px;
+  height: auto;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.market-ring {
+  cursor: pointer;
+  outline: none;
+}
+
+.market-ring-circle {
+  stroke: rgba(51, 40, 63, 0.25);
+  stroke-width: 2;
+  transition:
+    fill 0.25s ease,
+    stroke 0.25s ease;
+}
+
+.market-ring-0 .market-ring-circle {
+  fill: #e2dbf4;
+}
+
+.market-ring-1 .market-ring-circle {
+  fill: #f1c3d4;
+}
+
+.market-ring-2 .market-ring-circle {
+  fill: #7fc4c7;
+}
+
+/* Unselected rings fade by moving to a paler opaque tint rather than by
+   opacity, which would let the ring behind show through. */
+.market-rings.has-active .market-ring-0 .market-ring-circle {
+  fill: #ebe6f7;
+}
+
+.market-rings.has-active .market-ring-1 .market-ring-circle {
+  fill: #f8e1ea;
+}
+
+.market-rings.has-active .market-ring-2 .market-ring-circle {
+  fill: #bfe1e3;
+}
+
+.market-rings.has-active .market-ring-0.active .market-ring-circle {
+  fill: #a892dc;
+}
+
+.market-rings.has-active .market-ring-1.active .market-ring-circle {
+  fill: #e58fb0;
+}
+
+.market-rings.has-active .market-ring-2.active .market-ring-circle {
+  fill: #23878c;
+}
+
+.market-ring:hover .market-ring-circle,
+.market-ring:focus-visible .market-ring-circle,
+.market-ring.active .market-ring-circle {
+  stroke: #33283f;
+  stroke-width: 3;
+}
+
+.market-ring-title,
+.market-ring-name {
+  fill: #33283f;
+  text-anchor: middle;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.market-ring-title {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.market-rings.has-active .market-ring:not(.active) text {
+  opacity: 0.45;
+}
+
+.market-ring-2.active .market-ring-title,
+.market-ring-2.active .market-ring-name {
+  fill: #ffffff;
+}
+
+.market-rings-hint {
+  margin: 0.75rem 0 0;
+  text-align: center;
+  opacity: 0.75;
+}
+
+.market-rings-content {
+  margin-top: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  border-left: 4px solid #a892dc;
+  border-radius: 0.5rem;
+  background-color: rgba(234, 244, 245, 0.45);
+  animation: milestone-arc-fade-in 0.3s ease;
+}
+
+.market-rings-content-1 {
+  border-left-color: #e58fb0;
+}
+
+.market-rings-content-2 {
+  border-left-color: #23878c;
+}
+
+[data-theme="dark"] .market-rings-content {
+  background-color: rgba(234, 244, 245, 0.06);
+}
+
+.market-rings-content-name {
+  margin-bottom: 0.15rem;
+  font-weight: 700;
+}
+
+.market-rings-content-value {
+  margin-bottom: 0.75rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.market-rings-content > :last-child {
+  margin-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .market-ring-circle,
+  .market-ring-title,
+  .market-ring-name {
+    transition: none;
+  }
+
+  .market-rings-content {
+    animation: none;
   }
 }
