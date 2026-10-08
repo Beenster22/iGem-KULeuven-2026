@@ -33,6 +33,11 @@ import {
 import { SponsorGrid } from "./components/SponsorGrid";
 import { HomeSnapScroll } from "./components/HomeSnapScroll";
 import { ZoomableImage } from "./components/ZoomableImage";
+import {
+  StakeholderGroups,
+  StakeholderGroup,
+  StakeholderMatrix,
+} from "./components/StakeholderAnalysis";
 import { Link } from "react-router-dom";
 
 export const mdxComponents = {
@@ -82,4 +87,7 @@ export const mdxComponents = {
   HumanPracticesInterviews,
   HPSection,
   Interviewee,
+  StakeholderGroups,
+  StakeholderGroup,
+  StakeholderMatrix,
 };
