@@ -8,7 +8,7 @@
 // faint "ghost" bubbles mark where each one started. Positions are read off
 // the team's two matrix drafts (initial vs. outcome) as % of the plot area,
 // where x = interest and y = influence (0 = low, 100 = high).
-import { ReactNode, useId, useRef, useState } from "react";
+import { ReactNode, useId, useState } from "react";
 
 /* ---------- Icons ---------- */
 
@@ -97,34 +97,8 @@ export function StakeholderGroup({ title, icon, children }: StakeholderGroupProp
   );
 }
 
-// Cards sit side by side in one horizontally scrolling row (scroll-snapped
-// to each card); the arrow buttons scroll by one card for mouse users.
 export function StakeholderGroups({ children }: { children: ReactNode }) {
-  const rowRef = useRef<HTMLDivElement | null>(null);
-
-  function scrollByCard(direction: 1 | -1) {
-    const row = rowRef.current;
-    const card = row?.firstElementChild as HTMLElement | null;
-    if (!row || !card) return;
-    const gap = parseFloat(getComputedStyle(row).columnGap) || 0;
-    row.scrollBy({ left: direction * (card.offsetWidth + gap), behavior: "smooth" });
-  }
-
-  return (
-    <div className="stakeholder-squircles-wrap">
-      <div className="stakeholder-squircles" ref={rowRef}>
-        {children}
-      </div>
-      <div className="stakeholder-squircles-nav">
-        <button type="button" onClick={() => scrollByCard(-1)} aria-label="Previous stakeholder group">
-          &#8592;
-        </button>
-        <button type="button" onClick={() => scrollByCard(1)} aria-label="Next stakeholder group">
-          &#8594;
-        </button>
-      </div>
-    </div>
-  );
+  return <div className="stakeholder-squircles">{children}</div>;
 }
 
 /* ---------- Influence–interest matrix ---------- */
@@ -152,9 +126,8 @@ const CATEGORIES: MatrixCategory[] = [
   {
     id: "ethics",
     initialLabel: "Safety & Bioethical Regulations",
-    finalLabel: "Ethical",
     initial: { x: 25, y: 47 },
-    final: { x: 13, y: 72 },
+    final: { x: 11, y: 72 },
   },
 ];
 
@@ -162,11 +135,11 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-// The plot is drawn in an SVG viewBox of 1000 x 560 units (the plot box keeps
+// The plot is drawn in an SVG viewBox of 1000 x 620 units (the plot box keeps
 // the same aspect ratio in CSS, so arrowheads never stretch); bubbles are
 // HTML overlaid on top with % positions so their text wraps naturally.
 const VB_W = 1000;
-const VB_H = 560;
+const VB_H = 620;
 const toVbX = (x: number) => (x / 100) * VB_W;
 const toVbY = (y: number) => VB_H - (y / 100) * VB_H;
 

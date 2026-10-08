@@ -6375,54 +6375,21 @@ body:not(.home-fullscreen) .home-hero {
    the final one (see StakeholderAnalysis.tsx). Squircle corners use
    `corner-shape: squircle` where supported and fall back to a large
    border-radius elsewhere. */
-.stakeholder-squircles-wrap {
+/* Wide horizontal cards stacked down the page: icon + title on the left,
+   text on the right. */
+.stakeholder-squircles {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
   margin: 2rem 0 3rem;
 }
 
-/* One horizontal row of cards, scroll-snapped to each card */
-.stakeholder-squircles {
-  display: flex;
-  gap: 1.5rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-padding-inline: 0.25rem;
-  padding: 0.5rem 0.25rem 1.25rem;
-  scrollbar-width: thin;
-  scrollbar-color: #2fa4a9 transparent;
-}
-
-.stakeholder-squircles > .stakeholder-squircle {
-  flex: 0 0 min(85%, 340px);
-  scroll-snap-align: start;
-}
-
-.stakeholder-squircles-nav {
-  display: flex;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-top: 0.25rem;
-}
-
-.stakeholder-squircles-nav button {
-  width: 2.5rem;
-  height: 2.5rem;
-  border: none;
-  border-radius: 50%;
-  background-color: #2fa4a9;
-  color: #ffffff;
-  font-size: 1.15rem;
-  line-height: 1;
-  cursor: pointer;
-  transition: transform 0.15s ease;
-}
-
-.stakeholder-squircles-nav button:hover,
-.stakeholder-squircles-nav button:focus-visible {
-  transform: scale(1.08);
-}
-
 .stakeholder-squircle {
-  padding: 1.5rem 1.75rem 1.75rem;
+  display: grid;
+  grid-template-columns: 13rem 1fr;
+  gap: 1.75rem;
+  align-items: center;
+  padding: 1.5rem 2rem;
   border-radius: 2.25rem;
   corner-shape: squircle;
   background-color: var(--color-page-bg);
@@ -6440,7 +6407,7 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .stakeholder-squircle:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   box-shadow: 0 1rem 2rem rgba(51, 40, 63, 0.14);
 }
 
@@ -6474,9 +6441,9 @@ body:not(.home-fullscreen) .home-hero {
 
 .stakeholder-squircle-header {
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
 }
 
 .stakeholder-squircle-title {
@@ -6499,7 +6466,8 @@ body:not(.home-fullscreen) .home-hero {
 
 /* Influence–interest matrix */
 .stakeholder-matrix {
-  margin: 2rem 0 3rem;
+  max-width: 44rem;
+  margin: 2rem auto 3rem;
   padding: 1.25rem 1.25rem 1.5rem;
   border-radius: 2.25rem;
   corner-shape: squircle;
@@ -6509,7 +6477,7 @@ body:not(.home-fullscreen) .home-hero {
 
 .stakeholder-matrix-heading {
   font-family: "Luckiest Guy", "Poppins", sans-serif;
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   text-align: center;
   margin-bottom: 0.4rem;
 }
@@ -6542,7 +6510,7 @@ body:not(.home-fullscreen) .home-hero {
 .stakeholder-matrix-axis-label {
   position: absolute;
   font-weight: 800;
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   line-height: 1;
   white-space: nowrap;
 }
@@ -6562,7 +6530,7 @@ body:not(.home-fullscreen) .home-hero {
 
 .stakeholder-matrix-plot {
   position: relative;
-  aspect-ratio: 1000 / 560;
+  aspect-ratio: 1000 / 620;
   /* Left/bottom: room for the axis labels. Top/right: room so edge bubbles
      (centred on their point) don't spill out of the card. */
   margin: 1.5rem 4rem 2.5rem 2.75rem;
@@ -6630,11 +6598,11 @@ body:not(.home-fullscreen) .home-hero {
   position: absolute;
   transform: translate(-50%, 50%);
   width: max-content;
-  max-width: 10.5rem;
-  padding: 0.7rem 1rem;
-  border-radius: 1.4rem;
+  max-width: 8.5rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 1.2rem;
   corner-shape: squircle;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   font-weight: 700;
   line-height: 1.3;
   text-align: center;
@@ -6724,6 +6692,17 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 @media (max-width: 700px) {
+  .stakeholder-squircle {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .stakeholder-squircle-header {
+    flex-direction: row;
+    align-items: center;
+  }
+
   /* Below this width the bubbles would pile on top of each other, so the
      plot keeps a readable minimum width and the figure scrolls sideways. */
   .stakeholder-matrix {
