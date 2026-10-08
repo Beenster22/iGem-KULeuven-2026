@@ -50,6 +50,26 @@ function collectHeadings(container: HTMLElement): Heading[] {
   });
 }
 
+// Headings land 5rem below the top of the screen when jumped to (see
+// scroll-margin-top in App.css); the reading line sits just under that, so
+// the section a reader jumped to counts as the current one.
+const READING_LINE_PX = 92;
+// How long a clicked row stays the current one regardless of scroll position
+// if the browser never reports the end of the scroll.
+const CLICK_LOCK_MS = 1500;
+
+// The section being read: the last heading at or above the reading line.
+function currentHeadingId(headings: Heading[]): string {
+  let current = headings[0]?.id ?? "";
+  for (const heading of headings) {
+    const element = document.getElementById(heading.id);
+    if (!element) continue;
+    if (element.getBoundingClientRect().top > READING_LINE_PX) break;
+    current = heading.id;
+  }
+  return current;
+}
+
 function sameHeadings(a: Heading[], b: Heading[]) {
   return (
     a.length === b.length &&
@@ -69,6 +89,8 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
   // measured so the mascot first appears in place instead of sliding in.
   const [mascotY, setMascotY] = useState<number | null>(null);
   const [travelling, setTravelling] = useState(false);
+  // Timer id while a clicked row is held as the current one; 0 otherwise.
+  const clickLock = useRef(0);
 
   // Page content changes on navigation, so re-scan whenever the route does.
   // The DOM is already committed by the time this effect runs, so the scan
@@ -107,11 +129,7 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
       // back to the last heading above the reading line.
       setActiveId((current) => {
         if (found.some((heading) => heading.id === current)) return current;
-        const above = found.filter((heading) => {
-          const element = document.getElementById(heading.id);
-          return element !== null && element.getBoundingClientRect().top <= 140;
-        });
-        return above[above.length - 1]?.id ?? found[0]?.id ?? "";
+        return currentHeadingId(found);
       });
     };
 
@@ -125,27 +143,44 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
     };
   }, [containerRef, location.pathname]);
 
+  // Generated with Claude Opus 5.5 (Anthropic), 2026-10-08
+  // Purpose: follow the reader's scroll position. Replaces an
+  // IntersectionObserver band that started below where a clicked heading
+  // lands, so jumping upwards marked the section after the clicked one.
+  // A clicked row stays current until its scroll has finished (or the reader
+  // scrolls themselves), which also covers sections near the end of the page
+  // that can never reach the reading line.
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container || headings.length === 0) return;
+    if (headings.length === 0) return;
 
-    const elements = headings
-      .map((heading) => document.getElementById(heading.id))
-      .filter((element): element is HTMLElement => element !== null);
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      if (clickLock.current) return;
+      setActiveId(currentHeadingId(headings));
+    };
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+    const releaseLock = () => {
+      window.clearTimeout(clickLock.current);
+      clickLock.current = 0;
+    };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible[0]) setActiveId(visible[0].target.id);
-      },
-      { rootMargin: "-120px 0px -70% 0px", threshold: 0 },
-    );
-
-    elements.forEach((element) => observer.observe(element));
-    return () => observer.disconnect();
-  }, [containerRef, headings]);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scrollend", releaseLock);
+    window.addEventListener("wheel", releaseLock, { passive: true });
+    window.addEventListener("touchmove", releaseLock, { passive: true });
+    window.addEventListener("keydown", releaseLock);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scrollend", releaseLock);
+      window.removeEventListener("wheel", releaseLock);
+      window.removeEventListener("touchmove", releaseLock);
+      window.removeEventListener("keydown", releaseLock);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [headings]);
 
   // Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
   // Purpose: measure where the active row sits so the mascot can be moved to
@@ -206,6 +241,10 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
     target.scrollIntoView({ behavior: "smooth", block: "start" });
     history.replaceState(null, "", `#${id}`);
     setActiveId(id);
+    window.clearTimeout(clickLock.current);
+    clickLock.current = window.setTimeout(() => {
+      clickLock.current = 0;
+    }, CLICK_LOCK_MS);
   }
 
   if (headings.length < 2) return null;
