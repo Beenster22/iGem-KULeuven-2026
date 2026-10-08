@@ -723,16 +723,28 @@ a[data-footnote-ref]:focus {
   justify-content: space-between;
   gap: 1rem;
   width: 100%;
-  border: none;
+  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-07: in light mode the
+     accent fill is the same colour as the page body behind it, so the tab
+     had no visible edge — it gets a dark purple outline there. Dark mode
+     keeps the border transparent (the fill already stands out). */
+  border: 1px solid rgba(51, 40, 63, 0.55);
   border-radius: 1rem;
   background-color: var(--color-accent);
-  color: var(--color-text);
+  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-07: --color-accent is
+     the same light purple in both themes, so the title needs a fixed dark
+     colour — the theme-varying --color-text turned near-white in dark mode
+     and was hard to read on it. */
+  color: #33283f;
   padding: 1rem 1.5rem;
   text-align: left;
   cursor: pointer;
   transition:
     border-radius 0.15s ease,
     filter 0.15s ease;
+}
+
+[data-theme="dark"] .expandable-header {
+  border-color: transparent;
 }
 
 .expandable-header:hover {
@@ -757,9 +769,13 @@ a[data-footnote-ref]:focus {
 
 .expandable-content {
   background-color: var(--color-page-bg);
-  border: 1px solid rgba(51, 40, 63, 0.15);
+  border: 1px solid rgba(51, 40, 63, 0.55);
   border-top: none;
   border-radius: 0 0 1rem 1rem;
+}
+
+[data-theme="dark"] .expandable-content {
+  border-color: rgba(201, 189, 232, 0.35);
 }
 
 .expandable-content-inner {
@@ -771,6 +787,283 @@ a[data-footnote-ref]:focus {
 }
 
 .expandable-content-inner > :last-child {
+  margin-bottom: 0;
+}
+
+/* DOCKING HEATMAP (dry lab page)
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-07
+   Purpose: the interactive rebuild of the docking figure — a grid of
+   coloured, clickable cells with the selected pair's pose shown beneath.
+   The grid is wider than the content column, so it scrolls sideways with
+   the homolog column pinned to the left edge. Cell colours are inline
+   styles (computed per value in DockingHeatmap.tsx), so nothing here sets
+   them. */
+.docking-heatmap {
+  margin: 1.5rem 0;
+}
+
+.docking-heatmap-scroll {
+  overflow-x: auto;
+  border-radius: 0.75rem;
+}
+
+.docking-heatmap-grid {
+  border-collapse: separate;
+  border-spacing: 2px;
+}
+
+.docking-heatmap-caption {
+  caption-side: top;
+  padding-bottom: 0.75rem;
+  color: var(--color-text);
+  opacity: 0.7;
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.docking-heatmap-col-head {
+  vertical-align: bottom;
+  padding: 0 0 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  /* Ten full bile salt names will not fit side by side at column width, so
+     they are set vertically, as in the original figure's angled labels. */
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+
+.docking-heatmap-corner {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-align: left;
+  vertical-align: bottom;
+  padding-bottom: 0.4rem;
+}
+
+.docking-heatmap-row-head,
+.docking-heatmap-corner {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background-color: var(--color-page-bg);
+  padding-right: 0.6rem;
+}
+
+.docking-heatmap-row-head {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.docking-heatmap-cell-wrap {
+  padding: 0;
+}
+
+.docking-heatmap-cell {
+  display: block;
+  width: 100%;
+  min-width: 56px;
+  border: none;
+  border-radius: 0.2rem;
+  padding: 0.55rem 0.35rem;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  cursor: pointer;
+  transition: outline-color 0.12s ease;
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+}
+
+.docking-heatmap-cell:hover {
+  outline-color: var(--color-text);
+}
+
+.docking-heatmap-cell.selected {
+  outline: 3px solid var(--color-text);
+  outline-offset: -3px;
+}
+
+.docking-heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.docking-heatmap-legend-bar {
+  flex: 0 1 180px;
+  height: 0.6rem;
+  border-radius: 999px;
+}
+
+.docking-heatmap-legend-label {
+  opacity: 0.7;
+}
+
+.docking-heatmap-detail {
+  margin-top: 1rem;
+  border: 1px solid rgba(51, 40, 63, 0.25);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+[data-theme="dark"] .docking-heatmap-detail {
+  border-color: rgba(201, 189, 232, 0.3);
+}
+
+.page-body .docking-heatmap-detail p {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.docking-heatmap-detail-head {
+  margin-bottom: 0.75rem !important;
+}
+
+.docking-heatmap-detail-placeholder {
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* MARKDOWN TABLES INSIDE A DROPDOWN (notebook / protocol accordions)
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-07
+   Purpose: a plain markdown table written in .mdx renders as a bare <table>
+   with none of Bootstrap's classes, so it arrived unstyled inside the
+   notebook dropdowns. These rules give it the same look as the site's
+   Bootstrap tables (see .table-responsive-rounded above): soft gridlines,
+   room around the text, and a lavender header row. Left-aligned rather than
+   centered, since these tables hold sentences, not short labels. */
+.expandable-content table {
+  width: 100%;
+  margin-bottom: 1.25rem;
+  border-collapse: collapse;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.expandable-content table :is(th, td) {
+  border: 1px solid rgba(51, 40, 63, 0.18);
+  padding: 0.6rem 0.85rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+[data-theme="dark"] .expandable-content table :is(th, td) {
+  border-color: rgba(201, 189, 232, 0.25);
+}
+
+.expandable-content table th {
+  background-color: var(--color-accent);
+  /* The accent fill is light in both themes, so the header text is fixed
+     dark rather than the theme-varying --color-text. */
+  color: #33283f;
+  font-weight: 600;
+}
+
+/* Table cells are short entries, not running prose — the page-wide
+   justification (see PAGE SHELL) would stretch them oddly. */
+.page-body .expandable-content table :is(p, li) {
+  text-align: left;
+}
+
+/* NOTEBOOK DROPDOWN
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-07
+   Purpose: what NotebookDropdown adds inside the accordion above — the PDF
+   download button at the top of an opened notebook, and the nested section
+   dropdowns a large notebook is divided into. */
+.notebook-dropdown-pdf {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.notebook-dropdown-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  background-color: var(--color-accent);
+  /* Fixed dark text: the accent fill is light in both themes. */
+  color: #33283f;
+  padding: 0.45rem 1.1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: filter 0.15s ease;
+}
+
+.notebook-dropdown-download:hover {
+  color: #33283f;
+  filter: brightness(0.94);
+}
+
+.notebook-dropdown-pdf-placeholder {
+  font-size: 0.9rem;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* Each section is a smaller dropdown inside the notebook: outlined instead
+   of filled, so it reads as one level below the notebook's own tab. The
+   outline is dark purple in light mode (the accent is too pale to show up
+   there) and the accent in dark mode. */
+.notebook-section {
+  --notebook-section-outline: rgba(51, 40, 63, 0.55);
+  margin-top: 0.75rem;
+  border: 1px solid var(--notebook-section-outline);
+  border-radius: 0.75rem;
+}
+
+[data-theme="dark"] .notebook-section {
+  --notebook-section-outline: var(--color-accent);
+}
+
+.notebook-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  border: none;
+  border-radius: 0.75rem;
+  background: none;
+  color: var(--color-text);
+  padding: 0.7rem 1.1rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.notebook-section-header:hover {
+  background-color: color-mix(in srgb, var(--color-text) 8%, transparent);
+}
+
+.notebook-section-header[aria-expanded="true"] {
+  border-radius: 0.75rem 0.75rem 0 0;
+  border-bottom: 1px solid var(--notebook-section-outline);
+}
+
+.notebook-section-title {
+  margin: 0;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.notebook-section-content {
+  padding: 1rem 1.1rem;
+}
+
+.notebook-section-content > :first-child {
+  margin-top: 0;
+}
+
+.notebook-section-content > :last-child {
   margin-bottom: 0;
 }
 

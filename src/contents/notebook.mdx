@@ -1,92 +1,166 @@
 <PageLayout>
 
-{/* Top-level switcher: Section 1 / 2 / 3 */}
-<TabbedSections>
+## Notebooks
 
-{/* --- Section 1 timeline --- */}
-<TabSection label="1">
+Click a notebook below to open it. Each one can also be downloaded as a PDF.
 
-<NotebookTimeline>
+{/*
+  HOW TO ADD A NOTEBOOK
+  1. Copy one <NotebookDropdown> block below and set its title — that is the
+     text shown on the dropdown.
+  2. Write the notebook inside it in plain Markdown. For a large notebook,
+     put each part in a <NotebookSection title="..."> — every section is its
+     own smaller dropdown inside the notebook. Sections are optional.
+  3. Upload the notebook's PDF with the uploads tool
+     (https://teams.igem.org/go/deliverables/wiki/uploads) and paste the URL
+     it gives you as pdfUrl, e.g.
+       <NotebookDropdown title="Cloning" pdfUrl="https://static.igem.wiki/teams/6299/wiki/notebook/cloning.pdf">
+     Without pdfUrl the notebook shows "PDF not yet uploaded." instead of the
+     download button. A <NotebookSection> takes pdfUrl too, if you also want
+     a PDF of just that section.
+*/}
 
-<NotebookEntry label="Entry 1" pdfUrl="https://static.igem.wiki/teams/2026/kuleuven/notebook/entry-1.pdf">
+<NotebookDropdown title="Notebook 1: Overview" pdfUrl="https://static.igem.wiki/teams/6299/wiki/wet-lab/01-notebook-final-overview.pdf">
 
-**Goal** — Replace this with the goal of this notebook entry, then upload the
-corresponding PDF via [the uploads tool](https://teams.igem.org/go/deliverables/wiki/uploads)
-and pass its URL as `pdfUrl` on this `NotebookEntry`, e.g.
-`<NotebookEntry label="Entry 1" pdfUrl="https://static.igem.wiki/teams/2026/kuleuven/notebook/entry-1.pdf">`.
+Pinheiro Lab and Raes Lab, 2026-07-01 to 2026-10-03.
 
-</NotebookEntry>
+Our wet lab work is organised into research lines, each with its own code.
+Every experiment is numbered within its line — `STR-01`, `CNJ-06`, and so on —
+and those entry codes are used throughout the rest of our notebooks. The two
+tables below are the key to that system; the sections after them list the
+entries belonging to each research line.
 
-<NotebookEntry label="Entry 2">
+<NotebookSection title="Wet lab team members">
 
-**Goal** — Replace this with the goal of this notebook entry.
+| Name | Initials |
+| --- | --- |
+| Milica Glušac | MG |
+| Sarah Vanderhoydonck | SV |
+| Tim Lybeer | TL |
+| Martha Philipiak | MP |
+| Alec Lontie | AL |
+| Azra Yagmur Tufanoglu | AT |
+| Marie Van de Mosselaer | MV |
+| Onkar Satish Jadhav | OJ |
+| Elizabeth De Schouwer | ED |
+| Daniel Steukers | DS |
+| Esma Oulad-Mhand-Ouâli | EO |
 
-</NotebookEntry>
+</NotebookSection>
 
-<NotebookEntry label="Entry 3">
+<NotebookSection title="Research lines">
 
-**Goal** — Replace this with the goal of this notebook entry.
+| Code | Research line | Goal in one sentence |
+| --- | --- | --- |
+| STR | Strain and medium selection | Choose the strain and growth medium the rest of the project runs on |
+| MIC | MIC assay | Establish the antibiotic concentrations used for selection |
+| CNJ | Conjugation | Get conjugation working in *P. vulgatus* and compare efficiencies between conditions |
+| PRM | Promoter library screening | Build the pNBU2 promoter library and rank promoters by reporter output |
+| BSH | BSH constructs | Select BSH genes, design the constructs and clone them sequence-verified |
+| BSA | Bile salt assays | Measure BSH activity on plates |
+| FIT | Fitness cost screening | Quantify the burden each construct puts on the host |
+| CRI | CRISPR construct design | *(goal still to be written — replace this)* |
+| SUP | Supporting experiments | Calibrations, controls, method checks |
+| GEN | General lab | Media, competent cells, stocks, maintenance |
 
-</NotebookEntry>
+</NotebookSection>
 
-</NotebookTimeline>
+<NotebookSection title="STR — Strain and medium selection">
 
-</TabSection>
+- STR-01 — Strain selection
+- STR-02r1 — Medium comparison, first round
+- STR-02r2 — Medium comparison, second round
+- STR-02r3 — Medium comparison, third round
+- STR-03 — Growth curves, full factorial design (MM vs mGAM)
 
-{/* --- Section 2 timeline --- */}
-<TabSection label="2">
+</NotebookSection>
 
-<NotebookTimeline>
+<NotebookSection title="MIC — MIC assay">
 
-<NotebookEntry label="Entry 1">
+- MIC-01 — First MIC assay, 1447
+- MIC-02 — Second MIC assay, 1447 and 1806
+- MIC-03 — MIC assay, 1806
+- MIC-04 — Final MIC assay, 1447 and 1806
 
-**Goal** — Replace this with the goal of this notebook entry.
+</NotebookSection>
 
-</NotebookEntry>
+<NotebookSection title="CNJ — Conjugation">
 
-<NotebookEntry label="Entry 2">
+- CNJ-01 — Conjugation of pNBU2 into 1447, first run
+- CNJ-02 — Colony count of the first conjugation
+- CNJ-03 — ParB marker selection and primer design
+- CNJ-04 — Cryostocks and plates from conjugated 1447
+- CNJ-05 — Pilot colony PCR, primer combination check
+- CNJ-06 — Colony PCR and gel, conjugation confirmation
+- CNJ-07 — Fluorescence microscopy of conjugated 1447
+- CNJ-08 — Conjugation into five further strains, first attempt
+- CNJ-09 — Conjugation into all strains, repeat
+- CNJ-10 — Colony PCR across all strains with ParB primers
+- CNJ-11 — New ParB primers and 16S rRNA confirmation
 
-**Goal** — Replace this with the goal of this notebook entry.
+</NotebookSection>
 
-</NotebookEntry>
+<NotebookSection title="PRM — Promoter library screening">
 
-<NotebookEntry label="Entry 3">
+- PRM-01 — pNBU2 propagation and host troubleshooting
+- PRM-02 — Promoter and RBS library design
+- PRM-03 — pNBU2 miniprep
+- PRM-04 — pNBU2 backbone amplification
+- PRM-05 — Gibson assembly of promoter–reporter constructs
+- PRM-06 — Chemically competent *E. coli* S17 λpir
+- PRM-07 — Transformation of Gibson constructs into S17, heat shock 1
+- PRM-08 — Transformation, heat shock 2
+- PRM-09 — Electroporation of the remaining constructs
+- PRM-10 — Transformation, heat shock 3
+- PRM-11 — Conjugation of promoter constructs into 1447
+- PRM-12 — Colony PCR for gBlock presence in conjugated 1447
+- PRM-13 — Miniprep and sequencing of promoter constructs
+- PRM-14 — Promoter strength characterisation (reporter assay)
 
-**Goal** — Replace this with the goal of this notebook entry.
+</NotebookSection>
 
-</NotebookEntry>
+<NotebookSection title="BSH — BSH constructs">
 
-</NotebookTimeline>
+- BSH-01 — BSH gene selection and plasmid set
+- BSH-02 — Construct dilution, transformation into DH5α and miniprep (first run)
+- BSH-03 — Colony picking, colony PCR and cryostocks
+- BSH-04 — Sequencing, first round
+- BSH-05 — Colony PCR repeat, sequencing and alignments
+- BSH-06 — Characterisation of the Pmer (D2) deletion
 
-</TabSection>
+</NotebookSection>
 
-{/* --- Section 3 timeline --- */}
-<TabSection label="3">
+<NotebookSection title="FIT — Fitness cost screening">
 
-<NotebookTimeline>
+- FIT-01 — Dilution series test for plating
+- FIT-02 — Fitness cost assay, run 1
+- FIT-03 — Fitness cost assay, run 2
 
-<NotebookEntry label="Entry 1">
+</NotebookSection>
 
-**Goal** — Replace this with the goal of this notebook entry.
+<NotebookSection title="BSA — Bile salt assays">
 
-</NotebookEntry>
+- BSA-01 — Bile salt plate pilot 1
+- BSA-02 — Bile salt plate pilot 2
+- BSA-03 — Bile salt plate pilot 3, GUDCA and TUDCA solubility
+- BSA-04 — Bile salt plate panel
+- BSA-05 — BSH plating and HALO assay in RESHAPE
+- BSA-06 — Bile salt assay in liquid culture for LC-MS
 
-<NotebookEntry label="Entry 2">
+</NotebookSection>
 
-**Goal** — Replace this with the goal of this notebook entry.
+</NotebookDropdown>
 
-</NotebookEntry>
+<NotebookDropdown title="Notebook 2: Title of notebook">
 
-<NotebookEntry label="Entry 3">
+Replace this with the full write-up for Notebook 2.
 
-**Goal** — Replace this with the goal of this notebook entry.
+</NotebookDropdown>
 
-</NotebookEntry>
+<NotebookDropdown title="Notebook 3: Title of notebook">
 
-</NotebookTimeline>
+Replace this with the full write-up for Notebook 3.
 
-</TabSection>
-
-</TabbedSections>
+</NotebookDropdown>
 
 </PageLayout>
