@@ -6375,11 +6375,50 @@ body:not(.home-fullscreen) .home-hero {
    the final one (see StakeholderAnalysis.tsx). Squircle corners use
    `corner-shape: squircle` where supported and fall back to a large
    border-radius elsewhere. */
-.stakeholder-squircles {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-  gap: 1.5rem;
+.stakeholder-squircles-wrap {
   margin: 2rem 0 3rem;
+}
+
+/* One horizontal row of cards, scroll-snapped to each card */
+.stakeholder-squircles {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0.25rem;
+  padding: 0.5rem 0.25rem 1.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: #2fa4a9 transparent;
+}
+
+.stakeholder-squircles > .stakeholder-squircle {
+  flex: 0 0 min(85%, 340px);
+  scroll-snap-align: start;
+}
+
+.stakeholder-squircles-nav {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.stakeholder-squircles-nav button {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 50%;
+  background-color: #2fa4a9;
+  color: #ffffff;
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.stakeholder-squircles-nav button:hover,
+.stakeholder-squircles-nav button:focus-visible {
+  transform: scale(1.08);
 }
 
 .stakeholder-squircle {
@@ -6461,7 +6500,7 @@ body:not(.home-fullscreen) .home-hero {
 /* Influence–interest matrix */
 .stakeholder-matrix {
   margin: 2rem 0 3rem;
-  padding: 1.5rem 1.5rem 1.75rem;
+  padding: 1.25rem 1.25rem 1.5rem;
   border-radius: 2.25rem;
   corner-shape: squircle;
   background-color: var(--color-page-bg);
@@ -6472,14 +6511,14 @@ body:not(.home-fullscreen) .home-hero {
   font-family: "Luckiest Guy", "Poppins", sans-serif;
   font-size: 1.75rem;
   text-align: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 .stakeholder-matrix-phase {
   display: flex;
   justify-content: center;
   gap: 0.5rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.5rem;
   font-size: 0.85rem;
   font-weight: 600;
 }
@@ -6498,34 +6537,35 @@ body:not(.home-fullscreen) .home-hero {
   background-color: var(--color-body-bg);
 }
 
-.stakeholder-matrix-frame {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: 1fr auto;
-  gap: 0.5rem;
-}
-
+/* Axis labels sit inside the plot box, positioned just outside its left /
+   bottom edge so they hug the axes. */
 .stakeholder-matrix-axis-label {
-  font-weight: 700;
-  font-size: 1.05rem;
-  text-align: center;
+  position: absolute;
+  font-weight: 800;
+  font-size: 1.4rem;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .stakeholder-matrix-axis-label--y {
+  left: -0.6rem;
+  top: 50%;
+  transform: translate(-100%, -50%) rotate(180deg);
   writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  align-self: center;
 }
 
 .stakeholder-matrix-axis-label--x {
-  grid-column: 2;
+  left: 50%;
+  bottom: -0.6rem;
+  transform: translate(-50%, 100%);
 }
 
 .stakeholder-matrix-plot {
   position: relative;
-  aspect-ratio: 1000 / 640;
-  /* Room so edge bubbles (centred on their point) don't spill out */
-  margin: 2.25rem 4.5rem 1rem;
+  aspect-ratio: 1000 / 560;
+  /* Left/bottom: room for the axis labels. Top/right: room so edge bubbles
+     (centred on their point) don't spill out of the card. */
+  margin: 1.5rem 4rem 2.5rem 2.75rem;
   /* Axes with arrowheads, drawn as borders + pseudo-elements */
   border-left: 2px solid var(--color-text);
   border-bottom: 2px solid var(--color-text);
@@ -6594,7 +6634,7 @@ body:not(.home-fullscreen) .home-hero {
   padding: 0.7rem 1rem;
   border-radius: 1.4rem;
   corner-shape: squircle;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 700;
   line-height: 1.3;
   text-align: center;
@@ -6614,11 +6654,30 @@ body:not(.home-fullscreen) .home-hero {
   box-shadow: 0 0.4rem 1rem rgba(51, 40, 63, 0.18);
 }
 
+/* --ghost-fade (0-1) is set inline as the slider moves away from "Initial" */
 .stakeholder-matrix-ghost {
   z-index: 1;
   border: 2px dashed #2fa4a9;
   color: #2fa4a9;
+  opacity: calc(var(--ghost-fade, 0) * 0.55);
   pointer-events: none;
+}
+
+/* On the dark card the teal outline reads too dim, so lighten it there */
+[data-theme="dark"] .stakeholder-matrix-ghost {
+  border-color: #8fd6d9;
+  color: #b5e6e8;
+  opacity: calc(var(--ghost-fade, 0) * 0.85);
+}
+
+[data-theme="dark"] .stakeholder-matrix-phase span {
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .stakeholder-matrix-phase span.is-active {
+  opacity: 1;
+  background-color: #2fa4a9;
+  color: #ffffff;
 }
 
 .stakeholder-matrix-slider {
@@ -6626,7 +6685,7 @@ body:not(.home-fullscreen) .home-hero {
   align-items: center;
   gap: 1rem;
   max-width: 32rem;
-  margin: 1.5rem auto 0;
+  margin: 0.5rem auto 0;
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -6677,7 +6736,11 @@ body:not(.home-fullscreen) .home-hero {
   }
 
   .stakeholder-matrix-plot {
-    margin: 1.75rem 3.25rem 0.75rem;
+    margin: 1.5rem 3.25rem 2.25rem 2.5rem;
+  }
+
+  .stakeholder-matrix-axis-label {
+    font-size: 1.15rem;
   }
 
   .stakeholder-matrix-bubble,
