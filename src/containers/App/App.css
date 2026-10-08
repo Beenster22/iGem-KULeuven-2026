@@ -1315,6 +1315,17 @@ a[data-footnote-ref]:focus {
   opacity: 1;
 }
 
+/* Sections inside an open dropdown (h4, e.g. STR-01 inside a notebook) sit
+   one step further in, and closer together than the rows above them. */
+.section-progress li.sub-sub {
+  margin-left: 2.1rem;
+  margin-top: -0.45rem;
+}
+
+.section-progress li.sub-sub .section-progress-label {
+  font-size: 0.72rem;
+}
+
 @media (max-width: 991.98px) {
   .page-shell {
     display: block;

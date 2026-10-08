@@ -6,9 +6,10 @@
 // sections, with always-visible titles and the mascot marking the current
 // one. Scans the rendered page for h2/h3 directly (content pages compose
 // several PageLayout blocks, so headings can't be read off any single
-// block's props) and re-scans whenever the route changes. h3s are tracked as
-// subsections and rendered indented (see the "sub" class in App.css) so the
-// hierarchy reads at a glance.
+// block's props) and re-scans whenever the route or the page's DOM changes.
+// h3s are tracked as subsections and rendered indented (see the "sub" class
+// in App.css) so the hierarchy reads at a glance; opted-in h4s sit one level
+// deeper ("sub-sub").
 import { MouseEvent, RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { stringToSlug } from "../utils/stringToSlug";
@@ -16,8 +17,13 @@ import { stringToSlug } from "../utils/stringToSlug";
 interface Heading {
   id: string;
   text: string;
-  level: 2 | 3;
+  level: 2 | 3 | 4;
 }
+
+// h4s are only listed when they opt in with data-toc-sub (the sections inside
+// an open notebook, see NotebookSection).
+const HEADING_SELECTOR =
+  "h2:not([data-toc-ignore]), h3:not([data-toc-ignore]), h4[data-toc-sub]";
 
 interface SectionProgressProps {
   containerRef: RefObject<HTMLElement | null>;
@@ -32,18 +38,23 @@ const MASCOT_TRAVEL_MS = 450;
 
 function collectHeadings(container: HTMLElement): Heading[] {
   const seen = new Map<string, number>();
-  return Array.from(
-    container.querySelectorAll("h2:not([data-toc-ignore]), h3:not([data-toc-ignore])"),
-  ).map((element) => {
+  return Array.from(container.querySelectorAll(HEADING_SELECTOR)).map((element) => {
     const text = (element.textContent || "").trim();
     let slug = stringToSlug(text) || "section";
     const count = seen.get(slug) ?? 0;
     seen.set(slug, count + 1);
     if (count > 0) slug = `${slug}-${count}`;
     element.id = slug;
-    const level: 2 | 3 = element.tagName === "H3" ? 3 : 2;
+    const level: 2 | 3 | 4 = element.tagName === "H4" ? 4 : element.tagName === "H3" ? 3 : 2;
     return { id: slug, text, level };
   });
+}
+
+function sameHeadings(a: Heading[], b: Heading[]) {
+  return (
+    a.length === b.length &&
+    a.every((heading, i) => heading.id === b[i].id && heading.text === b[i].text && heading.level === b[i].level)
+  );
 }
 
 // A boxed left-hand rail, one row per section, with the mascot sitting next
@@ -77,6 +88,41 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
     if (hashId) document.getElementById(hashId)?.scrollIntoView({ block: "start" });
     const target = found.find((heading) => heading.id === hashId);
     setActiveId(target?.id ?? found[0]?.id ?? "");
+  }, [containerRef, location.pathname]);
+
+  // Generated with Claude Opus 5.5 (Anthropic), 2026-10-08
+  // Purpose: dropdowns only render their content while open, so headings come
+  // and go without a route change (opening a notebook reveals its sections).
+  // Re-scan when the page's DOM changes so the index follows along.
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    let frame = 0;
+    const rescan = () => {
+      frame = 0;
+      const found = collectHeadings(container);
+      setHeadings((current) => (sameHeadings(current, found) ? current : found));
+      // If the current section was inside a dropdown that just closed, fall
+      // back to the last heading above the reading line.
+      setActiveId((current) => {
+        if (found.some((heading) => heading.id === current)) return current;
+        const above = found.filter((heading) => {
+          const element = document.getElementById(heading.id);
+          return element !== null && element.getBoundingClientRect().top <= 140;
+        });
+        return above[above.length - 1]?.id ?? found[0]?.id ?? "";
+      });
+    };
+
+    const observer = new MutationObserver(() => {
+      if (!frame) frame = window.requestAnimationFrame(rescan);
+    });
+    observer.observe(container, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, [containerRef, location.pathname]);
 
   useEffect(() => {
@@ -193,7 +239,8 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
               key={heading.id}
               className={[
                 activeId === heading.id ? "active" : null,
-                heading.level === 3 ? "sub" : null,
+                heading.level >= 3 ? "sub" : null,
+                heading.level === 4 ? "sub-sub" : null,
               ]
                 .filter(Boolean)
                 .join(" ") || undefined}

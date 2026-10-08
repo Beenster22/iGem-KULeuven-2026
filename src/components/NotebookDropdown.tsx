@@ -80,9 +80,9 @@ interface NotebookSectionProps {
 }
 
 // One section of a NotebookDropdown, as its own smaller dropdown nested
-// inside the notebook. The title is an h4 on purpose: the page-wide left
-// index only lists h2/h3, so it shows the notebooks themselves and not the
-// sections inside them.
+// inside the notebook. The title is an h4 marked data-toc-sub, so the
+// page-wide left index (SectionProgress) lists a notebook's sections under
+// it for as long as that notebook is open.
 export function NotebookSection({ title, pdfUrl, children }: NotebookSectionProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -94,7 +94,7 @@ export function NotebookSection({ title, pdfUrl, children }: NotebookSectionProp
         aria-expanded={isOpen}
         onClick={() => setIsOpen((open) => !open)}
       >
-        <h4 className="notebook-section-title">{title}</h4>
+        <h4 className="notebook-section-title" data-toc-sub>{title}</h4>
         <svg
           className="expandable-arrow"
           xmlns="http://www.w3.org/2000/svg"

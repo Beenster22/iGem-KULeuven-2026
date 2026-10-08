@@ -8,9 +8,13 @@ Click a notebook below to open it. Each one can also be downloaded as a PDF.
   HOW TO ADD A NOTEBOOK
   1. Copy one <NotebookDropdown> block below and set its title — that is the
      text shown on the dropdown.
-  2. Write the notebook inside it in plain Markdown. For a large notebook,
-     put each part in a <NotebookSection title="..."> — every section is its
-     own smaller dropdown inside the notebook. Sections are optional.
+     There is one notebook per research line, titled
+     "Notebook: CODE - Research line".
+  2. Give every entry (STR-01, STR-02r1, ...) its own
+     <NotebookSection title="..."> and write the entry inside it in plain
+     Markdown (links work as usual). Every section is its own smaller
+     dropdown inside the notebook, and shows up in the "On this page" menu
+     while the notebook is open.
   3. Upload the notebook's PDF with the uploads tool
      (https://teams.igem.org/go/deliverables/wiki/uploads) and paste the URL
      it gives you as pdfUrl, e.g.
@@ -20,15 +24,15 @@ Click a notebook below to open it. Each one can also be downloaded as a PDF.
      a PDF of just that section.
 */}
 
-<NotebookDropdown title="Notebook 1: Overview" pdfUrl="https://static.igem.wiki/teams/6299/wiki/wet-lab/01-notebook-final-overview.pdf">
+<NotebookDropdown title="Notebook content and abbreviations" pdfUrl="https://static.igem.wiki/teams/6299/wiki/wet-lab/01-notebook-final-overview.pdf">
 
 Pinheiro Lab and Raes Lab, 2026-07-01 to 2026-10-03.
 
 Our wet lab work is organised into research lines, each with its own code.
 Every experiment is numbered within its line — `STR-01`, `CNJ-06`, and so on —
 and those entry codes are used throughout the rest of our notebooks. The two
-tables below are the key to that system; the sections after them list the
-entries belonging to each research line.
+tables below are the key to that system; each research line has its own
+notebook further down this page, with one dropdown per entry.
 
 <NotebookSection title="Wet lab team members">
 
@@ -65,101 +69,327 @@ entries belonging to each research line.
 
 </NotebookSection>
 
-<NotebookSection title="STR — Strain and medium selection">
+</NotebookDropdown>
 
-- STR-01 — Strain selection
-- STR-02r1 — Medium comparison, first round
-- STR-02r2 — Medium comparison, second round
-- STR-02r3 — Medium comparison, third round
-- STR-03 — Growth curves, full factorial design (MM vs mGAM)
+<NotebookDropdown title="Notebook: STR - Strain and medium selection">
 
-</NotebookSection>
+<NotebookSection title="STR-01 — Strain selection">
 
-<NotebookSection title="MIC — MIC assay">
-
-- MIC-01 — First MIC assay, 1447
-- MIC-02 — Second MIC assay, 1447 and 1806
-- MIC-03 — MIC assay, 1806
-- MIC-04 — Final MIC assay, 1447 and 1806
+*Write-up to be added.*
 
 </NotebookSection>
 
-<NotebookSection title="CNJ — Conjugation">
+<NotebookSection title="STR-02r1 — Medium comparison, first round">
 
-- CNJ-01 — Conjugation of pNBU2 into 1447, first run
-- CNJ-02 — Colony count of the first conjugation
-- CNJ-03 — ParB marker selection and primer design
-- CNJ-04 — Cryostocks and plates from conjugated 1447
-- CNJ-05 — Pilot colony PCR, primer combination check
-- CNJ-06 — Colony PCR and gel, conjugation confirmation
-- CNJ-07 — Fluorescence microscopy of conjugated 1447
-- CNJ-08 — Conjugation into five further strains, first attempt
-- CNJ-09 — Conjugation into all strains, repeat
-- CNJ-10 — Colony PCR across all strains with ParB primers
-- CNJ-11 — New ParB primers and 16S rRNA confirmation
+*Write-up to be added.*
 
 </NotebookSection>
 
-<NotebookSection title="PRM — Promoter library screening">
+<NotebookSection title="STR-02r2 — Medium comparison, second round">
 
-- PRM-01 — pNBU2 propagation and host troubleshooting
-- PRM-02 — Promoter and RBS library design
-- PRM-03 — pNBU2 miniprep
-- PRM-04 — pNBU2 backbone amplification
-- PRM-05 — Gibson assembly of promoter–reporter constructs
-- PRM-06 — Chemically competent *E. coli* S17 λpir
-- PRM-07 — Transformation of Gibson constructs into S17, heat shock 1
-- PRM-08 — Transformation, heat shock 2
-- PRM-09 — Electroporation of the remaining constructs
-- PRM-10 — Transformation, heat shock 3
-- PRM-11 — Conjugation of promoter constructs into 1447
-- PRM-12 — Colony PCR for gBlock presence in conjugated 1447
-- PRM-13 — Miniprep and sequencing of promoter constructs
-- PRM-14 — Promoter strength characterisation (reporter assay)
+*Write-up to be added.*
 
 </NotebookSection>
 
-<NotebookSection title="BSH — BSH constructs">
+<NotebookSection title="STR-02r3 — Medium comparison, third round">
 
-- BSH-01 — BSH gene selection and plasmid set
-- BSH-02 — Construct dilution, transformation into DH5α and miniprep (first run)
-- BSH-03 — Colony picking, colony PCR and cryostocks
-- BSH-04 — Sequencing, first round
-- BSH-05 — Colony PCR repeat, sequencing and alignments
-- BSH-06 — Characterisation of the Pmer (D2) deletion
+*Write-up to be added.*
 
 </NotebookSection>
 
-<NotebookSection title="FIT — Fitness cost screening">
+<NotebookSection title="STR-03 — Growth curves, full factorial design (MM vs mGAM)">
 
-- FIT-01 — Dilution series test for plating
-- FIT-02 — Fitness cost assay, run 1
-- FIT-03 — Fitness cost assay, run 2
-
-</NotebookSection>
-
-<NotebookSection title="BSA — Bile salt assays">
-
-- BSA-01 — Bile salt plate pilot 1
-- BSA-02 — Bile salt plate pilot 2
-- BSA-03 — Bile salt plate pilot 3, GUDCA and TUDCA solubility
-- BSA-04 — Bile salt plate panel
-- BSA-05 — BSH plating and HALO assay in RESHAPE
-- BSA-06 — Bile salt assay in liquid culture for LC-MS
+*Write-up to be added.*
 
 </NotebookSection>
 
 </NotebookDropdown>
 
-<NotebookDropdown title="Notebook 2: Title of notebook">
+<NotebookDropdown title="Notebook: MIC - MIC assay">
 
-Replace this with the full write-up for Notebook 2.
+<NotebookSection title="MIC-01 — First MIC assay, 1447">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="MIC-02 — Second MIC assay, 1447 and 1806">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="MIC-03 — MIC assay, 1806">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="MIC-04 — Final MIC assay, 1447 and 1806">
+
+*Write-up to be added.*
+
+</NotebookSection>
 
 </NotebookDropdown>
 
-<NotebookDropdown title="Notebook 3: Title of notebook">
+<NotebookDropdown title="Notebook: CNJ - Conjugation">
 
-Replace this with the full write-up for Notebook 3.
+<NotebookSection title="CNJ-01 — Conjugation of pNBU2 into 1447, first run">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="CNJ-02 — Colony count of the first conjugation">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="CNJ-03 — ParB marker selection and primer design">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="CNJ-04 — Cryostocks and plates from conjugated 1447">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="CNJ-05 — Pilot colony PCR, primer combination check">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="CNJ-06 — Colony PCR and gel, conjugation confirmation">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="CNJ-07 — Fluorescence microscopy of conjugated 1447">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="CNJ-08 — Conjugation into five further strains, first attempt">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="CNJ-09 — Conjugation into all strains, repeat">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="CNJ-10 — Colony PCR across all strains with ParB primers">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="CNJ-11 — New ParB primers and 16S rRNA confirmation">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+</NotebookDropdown>
+
+<NotebookDropdown title="Notebook: PRM - Promoter library screening">
+
+<NotebookSection title="PRM-01 — pNBU2 propagation and host troubleshooting">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="PRM-02 — Promoter and RBS library design">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="PRM-03 — pNBU2 miniprep">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="PRM-04 — pNBU2 backbone amplification">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="PRM-05 — Gibson assembly of promoter–reporter constructs">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="PRM-06 — Chemically competent *E. coli* S17 λpir">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="PRM-07 — Transformation of Gibson constructs into S17, heat shock 1">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="PRM-08 — Transformation, heat shock 2">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="PRM-09 — Electroporation of the remaining constructs">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="PRM-10 — Transformation, heat shock 3">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="PRM-11 — Conjugation of promoter constructs into 1447">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="PRM-12 — Colony PCR for gBlock presence in conjugated 1447">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="PRM-13 — Miniprep and sequencing of promoter constructs">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="PRM-14 — Promoter strength characterisation (reporter assay)">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+</NotebookDropdown>
+
+<NotebookDropdown title="Notebook: BSH - BSH constructs">
+
+<NotebookSection title="BSH-01 — BSH gene selection and plasmid set">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="BSH-02 — Construct dilution, transformation into DH5α and miniprep (first run)">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="BSH-03 — Colony picking, colony PCR and cryostocks">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="BSH-04 — Sequencing, first round">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="BSH-05 — Colony PCR repeat, sequencing and alignments">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="BSH-06 — Characterisation of the Pmer (D2) deletion">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+</NotebookDropdown>
+
+<NotebookDropdown title="Notebook: FIT - Fitness cost screening">
+
+<NotebookSection title="FIT-01 — Dilution series test for plating">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="FIT-02 — Fitness cost assay, run 1">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="FIT-03 — Fitness cost assay, run 2">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+</NotebookDropdown>
+
+<NotebookDropdown title="Notebook: BSA - Bile salt assays">
+
+<NotebookSection title="BSA-01 — Bile salt plate pilot 1">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="BSA-02 — Bile salt plate pilot 2">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="BSA-03 — Bile salt plate pilot 3, GUDCA and TUDCA solubility">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="BSA-04 — Bile salt plate panel">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="BSA-05 — BSH plating and HALO assay in RESHAPE">
+
+*Write-up to be added.*
+
+</NotebookSection>
+
+<NotebookSection title="BSA-06 — Bile salt assay in liquid culture for LC-MS">
+
+*Write-up to be added.*
+
+</NotebookSection>
 
 </NotebookDropdown>
 
