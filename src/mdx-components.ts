@@ -12,6 +12,7 @@ import {
   NotebookDropdown,
   NotebookSection,
 } from "./components/NotebookDropdown";
+import { NotebookEntryMeta } from "./components/NotebookEntryMeta";
 import { EventsTimeline, EventEntry } from "./components/EventsTimeline";
 import {
   HumanPracticesInterviews,
@@ -39,6 +40,7 @@ import {
   EngineerSection,
   FindOutMore,
   Tgr5ConsequencesSection,
+  Tgr5Ilc3Figure,
   Tgr5MechanismSection,
 } from "./components/Tgr5Story";
 import { SponsorGrid } from "./components/SponsorGrid";
@@ -79,6 +81,8 @@ export const mdxComponents = {
   StoryScrollSection,
   StoryStatement,
   Tgr5MechanismSection,
+  // Not on the home page any more; free to use on another page.
+  Tgr5Ilc3Figure,
   Tgr5ConsequencesSection,
   EngineerSection,
   FindOutMore,
@@ -97,6 +101,7 @@ export const mdxComponents = {
   ExpandableText,
   NotebookDropdown,
   NotebookSection,
+  NotebookEntryMeta,
   EventsTimeline,
   EventEntry,
   HumanPracticesInterviews,

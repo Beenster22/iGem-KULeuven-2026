@@ -106,12 +106,13 @@ notebook further down this page, with one dropdown per entry.
 </NotebookSection>
 <NotebookSection title="BSA — Bile salt assays">
 
-- BSA-01 — Bile salt plate pilot 1
-- BSA-02 — Bile salt plate pilot 2
+- BSA-01 — Bile salt plate pilot 1 w Bile salt mixture
+- BSA-02 — Bile salt plate pilot 2 w Bile salt mixture
 - BSA-03 — Bile salt plate pilot 3, GUDCA and TUDCA solubility
 - BSA-04 — Bile salt plate panel
 - BSA-05 — BSH plating and HALO assay in RESHAPE
-- BSA-06 — Bile salt assay in liquid culture for LC-MS
+- BSA-06 — Bile salt assay in liquid culture for LC-MS w 0.5% BS solution
+- BSA-07 — Bile salt assay in liquid culture for LC-MS w 0.1 and 0.25% BS solution
 
 </NotebookSection>
 
@@ -121,11 +122,13 @@ notebook further down this page, with one dropdown per entry.
 
 <NotebookSection title="STR-01 - Strain selection">
 
-- **Dates:** 2026-07-08 to 2026-07-24
-- **People:** AL, ED, MV, EO
-- **Status:** Done
-- **Builds on:** /
-- **Followed by:** STR-02, MIC-01, CNJ-01
+<NotebookEntryMeta
+  dates="2026-07-08 to 2026-07-24"
+  people="AL, ED, MV, EO"
+  status="Done"
+  buildsOn="/"
+  followedBy="STR-02, MIC-01, CNJ-01"
+/>
 
 **Goal.** Determine which *P. vulgatus* strains the project would be valuable to include in the further downstream project.
 
@@ -172,11 +175,13 @@ Both 1447 and 1806 were viable from cryostock and culturable on mGAM and WC, wit
 
 <NotebookSection title="STR-02r1 - Medium comparison, first round">
 
-- **Dates:** 2026-07-13 to 2026-07-16
-- **People:** AL, MV, TL
-- **Status:** Repeated as STR-02r2
-- **Builds on:** STR-01
-- **Followed by:** STR-02r2
+<NotebookEntryMeta
+  dates="2026-07-13 to 2026-07-16"
+  people="AL, MV, TL"
+  status="Repeated as STR-02r2"
+  buildsOn="STR-01"
+  followedBy="STR-02r2"
+/>
 
 **Goal.** Determine which of four media (mGAM, BHI, WC and minimal medium (MM)) best supports growth of *P. vulgatus* 1447.
 
@@ -243,11 +248,13 @@ Figure 1a and 1b: OD₆₀₀ growth curves of *P. vulgatus* DSM 1447 over first
 
 <NotebookSection title="STR-02r2 - Medium comparison, second round">
 
-- **Dates:** 2026-07-22 to 2026-07-27
-- **People:** AL, TL, ED
-- **Status:** Repeated as STR-02r3
-- **Builds on:** STR-02
-- **Followed by:** STR-02r3
+<NotebookEntryMeta
+  dates="2026-07-22 to 2026-07-27"
+  people="AL, TL, ED"
+  status="Repeated as STR-02r3"
+  buildsOn="STR-02"
+  followedBy="STR-02r3"
+/>
 
 **Goal.** Repeat the four-medium comparison with freshly plated cultures and correctly made media. This time also the growth of the fecal strain 1806 was determined.
 
@@ -314,11 +321,13 @@ Figure 1a and 1b: OD₆₀₀ growth curves of *P. vulgatus* DSM 1447 over first
 
 <NotebookSection title="STR-02r3 - Medium comparison, third round">
 
-- **Dates:** 2026-07-28 to 2026-07-31
-- **People:** AL, SV
-- **Status:** Done: design changed after this round
-- **Builds on:** STR-02r2
-- **Followed by:** STR-03
+<NotebookEntryMeta
+  dates="2026-07-28 to 2026-07-31"
+  people="AL, SV"
+  status="Done: design changed after this round"
+  buildsOn="STR-02r2"
+  followedBy="STR-03"
+/>
 
 **Goal.** Repeat the four-medium comparison for both 1447 and 1806, with manual OD600 readings over the day. The main goal of this experiment was shortening the lag-phases based on advise from Laurie Comstock.
 
@@ -395,11 +404,13 @@ Figure 1a and 1b: OD₆₀₀ growth curves of *P. vulgatus* DSM 1447 over first
 
 <NotebookSection title="STR-03 - Growth curves, full factorial design (MM vs mGAM)">
 
-- **Dates:** 2026-08-04 to 2026-08-18
-- **People:** AL, MV
-- **Status:** Data collected; analysis open
-- **Builds on:** STR-02r3
-- **Followed by:** /
+<NotebookEntryMeta
+  dates="2026-08-04 to 2026-08-18"
+  people="AL, MV"
+  status="Data collected; analysis open"
+  buildsOn="STR-02r3"
+  followedBy="/"
+/>
 
 **Goal.** Determine which supplements bring minimal medium up to mGAM for growth of 1447, testing starch, vitamin K1 and pH adjustment.
 
@@ -466,11 +477,13 @@ Figure 1a and 1b: OD₆₀₀ growth curves of *P. vulgatus* DSM 1447 over first
 
 <NotebookSection title="MIC-01 - First MIC assay, 1447">
 
-- **Dates:** 2026-07-28 to 2026-07-31
-- **People:** AL, SV
-- **Status:** Done: ranges too high, repeated as MIC-02
-- **Builds on:** /
-- **Followed by:** MIC-02
+<NotebookEntryMeta
+  dates="2026-07-28 to 2026-07-31"
+  people="AL, SV"
+  status="Done: ranges too high, repeated as MIC-02"
+  buildsOn="/"
+  followedBy="MIC-02"
+/>
 
 **Goal.** Find the concentration at which each of seven antibiotics inhibits *P. vulgatus* 1447. The panel also serves the toolkit side of the project: *P. vulgatus* is not a model organism, so the most effective antibiotic is wanted to stop growth of the CRISPR-carrying strain should that ever be needed for a therapeutic application.
 
@@ -566,11 +579,13 @@ Raw data – plate 3
 
 <NotebookSection title="MIC-02 - Second MIC assay, 1447 and 1806">
 
-- **Dates:** 2026-08-04 to 2026-08-07
-- **People:** MV, SV, AL, ED
-- **Status:** Done
-- **Builds on:** MIC-01
-- **Followed by:** MIC-03
+<NotebookEntryMeta
+  dates="2026-08-04 to 2026-08-07"
+  people="MV, SV, AL, ED"
+  status="Done"
+  buildsOn="MIC-01"
+  followedBy="MIC-03"
+/>
 
 **Goal.** Locate the MICs that MIC-01 missed, by starting the dilution series lower, and extend the panel to 1806, gentamicin and statins.
 
@@ -724,11 +739,13 @@ Raw data – plate 3 – 1806
 
 <NotebookSection title="MIC-03 - MIC assay, 1806">
 
-- **Dates:** 2026-08-12 to 2026-08-14
-- **People:** AL, MV
-- **Status:** Done
-- **Builds on:** MIC-02
-- **Followed by:** MIC-04
+<NotebookEntryMeta
+  dates="2026-08-12 to 2026-08-14"
+  people="AL, MV"
+  status="Done"
+  buildsOn="MIC-02"
+  followedBy="MIC-04"
+/>
 
 **Goal.** Complete the antibiotic panel for 1806.
 
@@ -778,11 +795,13 @@ Raw data – plate 3 – 1806
 
 <NotebookSection title="MIC-04 - Final MIC assay, 1447 and 1806">
 
-- **Dates:** 2026-08-20 to 2026-08-21
-- **People:** MV, ED
-- **Status:** Done
-- **Builds on:** MIC-03
-- **Followed by:** CNJ-09
+<NotebookEntryMeta
+  dates="2026-08-20 to 2026-08-21"
+  people="MV, ED"
+  status="Done"
+  buildsOn="MIC-03"
+  followedBy="CNJ-09"
+/>
 
 **Goal.** Settle the working MIC values for both strains across the full antibiotic panel.
 
@@ -825,11 +844,13 @@ Raw data – plate 3 – 1806
 
 <NotebookSection title="CNJ-01 - Conjugation of pNBU2 into 1447, first run">
 
-- **Dates:** 2026-08-03 to 2026-08-05
-- **People:** AL
-- **Status:** Done
-- **Builds on:** STR-01, MIC-02
-- **Followed by:** CNJ-02
+<NotebookEntryMeta
+  dates="2026-08-03 to 2026-08-05"
+  people="AL"
+  status="Done"
+  buildsOn="STR-01, MIC-02"
+  followedBy="CNJ-02"
+/>
 
 **Goal.** Transfer the pNBU2 plasmid from *E. coli* S17 λpir into *P. vulgatus* 1447 by conjugation, and recover transconjugants on selective plates.
 
@@ -873,11 +894,13 @@ Figure 11A and 11B: 6 selected transconjugants on selective mGAM medium containi
 
 <NotebookSection title="CNJ-02 - Colony count of the first conjugation">
 
-- **Dates:** 2026-08-11
-- **People:** AL
-- **Status:** Done — counts not usable for an efficiency
-- **Builds on:** CNJ-01
-- **Followed by:** CNJ-03
+<NotebookEntryMeta
+  dates="2026-08-11"
+  people="AL"
+  status="Done — counts not usable for an efficiency"
+  buildsOn="CNJ-01"
+  followedBy="CNJ-03"
+/>
 
 **Goal.** Count transconjugants across the dilution series to estimate conjugation efficiency from CNJ-01.
 
@@ -918,11 +941,13 @@ Figure 12A and 12B: Resulting *P. vulgatus* 1447 colonies containing the pNBU2 p
 
 <NotebookSection title="CNJ-03 - ParB marker selection and primer design">
 
-- **Dates:** 2026-08-12
-- **People:** AL, MV
-- **Status:** Done: marker later found to be strain-specific (see CNJ-10)
-- **Builds on:** CNJ-02
-- **Followed by:** CNJ-04, CNJ-05
+<NotebookEntryMeta
+  dates="2026-08-12"
+  people="AL, MV"
+  status="Done: marker later found to be strain-specific (see CNJ-10)"
+  buildsOn="CNJ-02"
+  followedBy="CNJ-04, CNJ-05"
+/>
 
 **Goal.** Find a gene present in *P. vulgatus* but absent from *E. coli*, so that colonies growing on the selective plates can be confirmed as transconjugants rather than surviving donor.
 
@@ -960,11 +985,13 @@ Figure 12A and 12B: Resulting *P. vulgatus* 1447 colonies containing the pNBU2 p
 
 <NotebookSection title="CNJ-04 - Cryostocks and plates from conjugated 1447">
 
-- **Dates:** 2026-08-12 to 2026-08-13
-- **People:** AL
-- **Status:** Done
-- **Builds on:** CNJ-01
-- **Followed by:** CNJ-05
+<NotebookEntryMeta
+  dates="2026-08-12 to 2026-08-13"
+  people="AL"
+  status="Done"
+  buildsOn="CNJ-01"
+  followedBy="CNJ-05"
+/>
 
 **Goal.** Secure the transconjugants as cryostocks and working plates.
 
@@ -994,11 +1021,13 @@ Figure 12A and 12B: Resulting *P. vulgatus* 1447 colonies containing the pNBU2 p
 
 <NotebookSection title="CNJ-05 - Pilot colony PCR, primer combination check">
 
-- **Dates:** 2026-08-19 to 2026-08-20
-- **People:** AL
-- **Status:** Done
-- **Builds on:** CNJ-03, CNJ-04
-- **Followed by:** CNJ-06
+<NotebookEntryMeta
+  dates="2026-08-19 to 2026-08-20"
+  people="AL"
+  status="Done"
+  buildsOn="CNJ-03, CNJ-04"
+  followedBy="CNJ-06"
+/>
 
 **Goal.** Find which of the six ParB forward/reverse primer combinations amplifies cleanly from a conjugated *P. vulgatus* colony.
 
@@ -1031,11 +1060,13 @@ Figure 12A and 12B: Resulting *P. vulgatus* 1447 colonies containing the pNBU2 p
 
 <NotebookSection title="CNJ-06 - Colony PCR and gel, conjugation confirmation">
 
-- **Dates:** 2026-08-21
-- **People:** AL
-- **Status:** Done
-- **Builds on:** CNJ-05
-- **Followed by:** CNJ-08
+<NotebookEntryMeta
+  dates="2026-08-21"
+  people="AL"
+  status="Done"
+  buildsOn="CNJ-05"
+  followedBy="CNJ-08"
+/>
 
 **Goal.** Confirm that the colonies recovered on the selective plates are *P. vulgatus* carrying the plasmid, not surviving *E. coli*.
 
@@ -1065,11 +1096,13 @@ Figure 12A and 12B: Resulting *P. vulgatus* 1447 colonies containing the pNBU2 p
 
 <NotebookSection title="CNJ-07 - Fluorescence microscopy of conjugated 1447">
 
-- **Dates:** 2026-08-17 to 2026-09-11
-- **People:** AL, ED, MV, with Matt
-- **Status:** Samples imaged
-- **Builds on:** CNJ-04
-- **Followed by:** PRM-14
+<NotebookEntryMeta
+  dates="2026-08-17 to 2026-09-11"
+  people="AL, ED, MV, with Matt"
+  status="Samples imaged"
+  buildsOn="CNJ-04"
+  followedBy="PRM-14"
+/>
 
 **Goal.** Establish whether the KOFP-7 reporter on pNBU2 can be detected in conjugated *P. vulgatus* 1447, as a readout for the promoter screening later.
 
@@ -1123,11 +1156,13 @@ Method note for anyone repeating this: cells must be washed thoroughly in PBS fi
 
 <NotebookSection title="CNJ-08 - Conjugation into five further strains, first attempt">
 
-- **Dates:** 2026-08-24 to 2026-08-31
-- **People:** MV, ED, AL
-- **Status:** Partly failed: repeated as CNJ-09
-- **Builds on:** CNJ-06
-- **Followed by:** CNJ-09
+<NotebookEntryMeta
+  dates="2026-08-24 to 2026-08-31"
+  people="MV, ED, AL"
+  status="Partly failed: repeated as CNJ-09"
+  buildsOn="CNJ-06"
+  followedBy="CNJ-09"
+/>
 
 **Goal.** Extend the conjugation from 1447 to the other *P. vulgatus* strains: 1806, 108222, 3289, 108234 and 108228.
 
@@ -1163,11 +1198,13 @@ Method note for anyone repeating this: cells must be washed thoroughly in PBS fi
 
 <NotebookSection title="CNJ-09 - Conjugation into all strains, repeat">
 
-- **Dates:** 2026-09-01 to 2026-09-07
-- **People:** MV, AL
-- **Status:** Done: all matings gave colonies
-- **Builds on:** CNJ-08, MIC-04
-- **Followed by:** CNJ-10
+<NotebookEntryMeta
+  dates="2026-09-01 to 2026-09-07"
+  people="MV, AL"
+  status="Done: all matings gave colonies"
+  buildsOn="CNJ-08, MIC-04"
+  followedBy="CNJ-10"
+/>
 
 **Goal.** Repeat the five-strain conjugation with less dilution of the recipients.
 
@@ -1227,11 +1264,13 @@ The counts also separate the strains by how easily they take up the plasmid. 180
 
 <NotebookSection title="CNJ-10 - Colony PCR across all strains with ParB primers">
 
-- **Dates:** 2026-09-07
-- **People:** MV, AL
-- **Status:** Failed: primers not specific to the intended target
-- **Builds on:** CNJ-09, CNJ-03
-- **Followed by:** CNJ-11
+<NotebookEntryMeta
+  dates="2026-09-07"
+  people="MV, AL"
+  status="Failed: primers not specific to the intended target"
+  buildsOn="CNJ-09, CNJ-03"
+  followedBy="CNJ-11"
+/>
 
 **Goal.** Confirm that the colonies recovered from all six matings(CNJ-09) are *P. vulgatus* and not *E. coli* carrying the plasmid.
 
@@ -1261,11 +1300,13 @@ This couples back to CNJ-03, where the candidate sequence was checked against on
 
 <NotebookSection title="CNJ-11 - New ParB primers and 16S rRNA confirmation">
 
-- **Dates:** 2026-09-08 to 2026-09-18
-- **People:** MV, AL, ED
-- **Status:** Sequencing submitted; analysis open
-- **Builds on:** CNJ-10
-- **Followed by:** /
+<NotebookEntryMeta
+  dates="2026-09-08 to 2026-09-18"
+  people="MV, AL, ED"
+  status="Sequencing submitted; analysis open"
+  buildsOn="CNJ-10"
+  followedBy="/"
+/>
 
 **Goal.** Confirm the identity of the transconjugants across all strains.
 

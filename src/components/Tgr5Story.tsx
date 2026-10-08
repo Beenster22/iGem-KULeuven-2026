@@ -2,12 +2,17 @@
 // Purpose: the last stretch of the home page, after "But why is this
 // reaction important?", following the team's "Text for HOME PAGE" (2nd round
 // of changes) and the comments on it:
-//  - Tgr5MechanismSection: a pinned screen of three scroll steps. First an
-//    overview of the two pathways that start at TGR5 (added 2026-10-07, see
-//    Tgr5OverviewDiagram). Then an animated version of the ILC3 part of the team's figure (panels B/C):
-//    conjugated bile acids bind TGR5 on the cell, deconjugated ones do not,
-//    and less IL-22 leaves the cell. Then the question "But how does this
-//    cause issues?" pops up across the whole screen.
+//  - Tgr5MechanismSection: one screen with an overview of the two pathways
+//    that start at TGR5 (added 2026-10-07, see Tgr5OverviewDiagram). Cut back
+//    to this single screen on 2026-10-08 after Marie's review: the ILC3
+//    close-up that followed it and the question "But how does this cause
+//    issues?" were both dropped, so the page goes straight from here to the
+//    consequences.
+//  - Tgr5Ilc3Figure: that ILC3 close-up, kept so the team can use it on
+//    another page (registered in mdx-components.ts). An animated version of
+//    the ILC3 part of the team's figure (panels B/C): conjugated bile acids
+//    bind TGR5 on the cell, deconjugated ones do not, and less IL-22 leaves
+//    the cell. Not used on the home page.
 //  - Tgr5ConsequencesSection: a pinned screen where the three things the
 //    team lists come in one per scroll step, joined by a line that grows
 //    from one to the next with a bacterium at its head.
@@ -47,6 +52,9 @@ const NUCLEUS = { x: 462, y: 196, r: 98 };
 // Where a bile acid docks: the outer end of the TGR5 receptor, which sits in
 // the membrane on the cell's left.
 const DOCK = { x: 252, y: 200 };
+// The IL-22 that has left the cell. Moved down level with the middle of the
+// cell on Marie's review comment (2026-10-08), where it sat well above it.
+const IL22_OUT = { x: CELL.x + CELL.r + 62, y: CELL.y - 18 };
 
 interface BileAcid {
   id: number;
@@ -256,21 +264,16 @@ function Tgr5Diagram({ animate }: { animate: boolean }) {
       {/* IL-22 leaving the cell: less of it. */}
       <path
         className="tgr5-arrow"
-        d={`M${NUCLEUS.x + 60},${NUCLEUS.y - 38} Q${NUCLEUS.x + 130},${NUCLEUS.y - 110} ${CELL.x + CELL.r + 34},${CELL.y - 72}`}
+        d={`M${NUCLEUS.x + 78},${NUCLEUS.y - 20} Q${CELL.x + CELL.r - 28},${IL22_OUT.y - 44} ${IL22_OUT.x - 22},${IL22_OUT.y - 4}`}
         markerEnd="url(#tgr5-arrowhead)"
       />
-      <circle
-        className="tgr5-il22"
-        cx={CELL.x + CELL.r + 62}
-        cy={CELL.y - 62}
-        r={16}
-      />
-      <text className="tgr5-label" x={CELL.x + CELL.r + 62} y={CELL.y - 18}>
+      <circle className="tgr5-il22" cx={IL22_OUT.x} cy={IL22_OUT.y} r={16} />
+      <text className="tgr5-label" x={IL22_OUT.x} y={IL22_OUT.y + 38}>
         IL-22
       </text>
       <path
         className="tgr5-down"
-        d={`M${CELL.x + CELL.r + 104},${CELL.y - 84} v34 m-11,-12 l11,14 l11,-14`}
+        d={`M${IL22_OUT.x + 42},${IL22_OUT.y - 22} v34 m-11,-12 l11,14 l11,-14`}
       />
 
       <text className="tgr5-label tgr5-label--cell" x={CELL.x} y={VB_H - 6}>
@@ -464,34 +467,23 @@ function Tgr5OverviewDiagram() {
   );
 }
 
-// Scroll steps of the pinned screen: the overview, the ILC3 close-up, then
-// the question over it.
-const MECHANISM_STEPS = 3;
+// One screen, so one snap stop.
+const MECHANISM_STEPS = 1;
 
 export function Tgr5MechanismSection() {
   const prefersReducedMotion = useReducedMotion();
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const step = usePinnedStep(wrapperRef, MECHANISM_STEPS);
-  const asking = step === 2;
-  // Which of the two figures is hidden behind the other (never when static).
-  const away = (index: number) =>
-    !prefersReducedMotion && (step === 0) !== (index === 0);
 
   return (
     <div
       className={prefersReducedMotion ? undefined : "home-snap-pin"}
-      ref={wrapperRef}
       style={{ "--snap-steps": MECHANISM_STEPS } as CSSProperties}
     >
       {!prefersReducedMotion && <SnapSteps steps={MECHANISM_STEPS} />}
       <div
-        className={`tgr5${prefersReducedMotion ? " tgr5--static" : " home-snap-stage"}${asking ? " tgr5--asking" : ""}`}
+        className={`tgr5${prefersReducedMotion ? " tgr5--static" : " home-snap-stage"}`}
       >
         <div className="tgr5-figures">
-          <div
-            className={`tgr5-figure${away(0) ? " tgr5-figure--away" : ""}`}
-            inert={away(0)}
-          >
+          <div className="tgr5-figure">
             {/* TODO(team): heading written by the assistant from the review
               comment, not supplied by the team. Check or replace. */}
             <h3 className="tgr5-heading">
@@ -499,37 +491,39 @@ export function Tgr5MechanismSection() {
             </h3>
             <Tgr5OverviewDiagram />
           </div>
-          <div
-            className={`tgr5-figure${away(1) ? " tgr5-figure--away" : ""}`}
-            inert={away(1) || asking}
-          >
-            <h3 className="tgr5-heading">
-              Deconjugation of bile acids depletes levels of IL-22 through a
-              TGR5 receptor
-            </h3>
-            <Tgr5Diagram animate={!prefersReducedMotion} />
-            <ul className="tgr5-legend">
-              <li>
-                <svg viewBox="-34 -14 48 28" aria-hidden="true">
-                  <BileAcidShape conjugated />
-                </svg>
-                conjugated bile acid
-              </li>
-              <li>
-                <svg viewBox="-14 -14 28 28" aria-hidden="true">
-                  <BileAcidShape conjugated={false} />
-                </svg>
-                deconjugated bile acid
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="tgr5-question" inert={!asking && !prefersReducedMotion}>
-          <p className="story-text tgr5-question-text">
-            But how does this <strong>cause issues?</strong>
-          </p>
         </div>
       </div>
+    </div>
+  );
+}
+
+// The ILC3 close-up that used to be the second step of the screen above.
+// Taken off the home page on Marie's review (2026-10-08) but kept whole, so
+// it can go on another page: drop <Tgr5Ilc3Figure /> into any .mdx file.
+export function Tgr5Ilc3Figure() {
+  const prefersReducedMotion = useReducedMotion();
+
+  return (
+    <div className="tgr5-figure">
+      <h3 className="tgr5-heading">
+        Deconjugation of bile acids depletes levels of IL-22 through a TGR5
+        receptor
+      </h3>
+      <Tgr5Diagram animate={!prefersReducedMotion} />
+      <ul className="tgr5-legend">
+        <li>
+          <svg viewBox="-34 -14 48 28" aria-hidden="true">
+            <BileAcidShape conjugated />
+          </svg>
+          conjugated bile acid
+        </li>
+        <li>
+          <svg viewBox="-14 -14 28 28" aria-hidden="true">
+            <BileAcidShape conjugated={false} />
+          </svg>
+          deconjugated bile acid
+        </li>
+      </ul>
     </div>
   );
 }
@@ -621,8 +615,9 @@ export function Tgr5ConsequencesSection() {
       <div
         className={`tgr5-effects${prefersReducedMotion ? " tgr5-effects--static" : " home-snap-stage"}`}
       >
+        {/* Retitled on Marie's review (2026-10-08): TGR5 is not inactivated. */}
         <h3 className="tgr5-effects-heading">
-          Inactivation of TGR5 contributes to
+          Deconjugation of bile acids leads to
         </h3>
         <ol
           className="tgr5-effects-list"

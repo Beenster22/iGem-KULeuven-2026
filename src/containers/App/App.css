@@ -1067,6 +1067,101 @@ a[data-footnote-ref]:focus {
   margin-bottom: 0;
 }
 
+/* NOTEBOOK ENTRY META (Elle's speech bubble)
+   Generated with Claude Opus 5 (Anthropic), 2026-10-08
+   Purpose: the dates/people/status block each notebook entry opens with, as
+   the mascot holding up a speech bubble (NotebookEntryMeta.tsx). The bubble
+   is tinted with the accent over the page background so it reads as a card on
+   the section's own surface in both themes, and its tail is a rotated square
+   sharing that fill and two of the border edges — which keeps the join
+   seamless without a second background image. */
+.notebook-meta {
+  --notebook-meta-bg: color-mix(in srgb, var(--color-accent) 35%, var(--color-page-bg));
+  --notebook-meta-border: color-mix(in srgb, var(--color-text) 25%, transparent);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  margin: 0 0 1.25rem;
+}
+
+.notebook-meta-mascot {
+  flex: none;
+  width: 4.5rem;
+  height: auto;
+  margin-top: 0.2rem;
+}
+
+.notebook-meta-bubble {
+  position: relative;
+  /* min-width lets the bubble shrink inside the flex row instead of pushing
+     wide values (long status lines) out past the section. */
+  flex: 0 1 auto;
+  min-width: 0;
+  /* Hug the content rather than running the full width of the entry, so it
+     reads as something Elle is holding up and not as a header bar. */
+  max-width: 34rem;
+  margin: 0;
+  padding: 0.85rem 1.15rem;
+  font-size: 0.9rem;
+  background-color: var(--notebook-meta-bg);
+  border: 1px solid var(--notebook-meta-border);
+  border-radius: 1rem;
+}
+
+.notebook-meta-bubble::before {
+  content: "";
+  position: absolute;
+  /* Level with the middle of the mascot beside it. */
+  top: 1.95rem;
+  left: -0.47rem;
+  width: 0.85rem;
+  height: 0.85rem;
+  background-color: var(--notebook-meta-bg);
+  border-left: 1px solid var(--notebook-meta-border);
+  border-bottom: 1px solid var(--notebook-meta-border);
+  border-bottom-left-radius: 0.2rem;
+  transform: rotate(45deg);
+}
+
+.notebook-meta-row {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: 0.15rem 0.85rem;
+}
+
+.notebook-meta-row + .notebook-meta-row {
+  margin-top: 0.3rem;
+}
+
+.notebook-meta-bubble dt {
+  font-weight: 600;
+}
+
+.notebook-meta-bubble dd {
+  margin: 0;
+}
+
+/* On phones the two-column rows leave the values too narrow, so the label
+   sits above its value and the mascot shrinks to match. */
+@media (max-width: 575.98px) {
+  .notebook-meta {
+    gap: 0.6rem;
+  }
+
+  .notebook-meta-mascot {
+    width: 3.25rem;
+  }
+
+  .notebook-meta-row {
+    grid-template-columns: 1fr;
+  }
+
+  .notebook-meta-bubble dt {
+    font-size: 0.78rem;
+    opacity: 0.7;
+  }
+}
+
 /* PAGE SHELL */
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-07-28
    Purpose: every routed page's content sits in a flex row next to the DNA
