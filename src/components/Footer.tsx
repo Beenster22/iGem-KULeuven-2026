@@ -1,206 +1,55 @@
 import { stringToSlug } from "../utils";
-import { SponsorCarousel, SponsorLogo } from "./SponsorCarousel";
-import { useThemeMode } from "../ThemeModeContext";
-
-// Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
-// Purpose: the wordmark logo variant, swapped per theme so its ink color
-// always contrasts with the light/dark logo-circle badge behind it.
-const FOOTER_LOGO_BY_MODE = {
-  light:
-    "https://static.igem.wiki/teams/6299/wiki/icons/logo-dark-purple-text.avif",
-  dark: "https://static.igem.wiki/teams/6299/wiki/icons/logo-light-purple-text.avif",
-} as const;
-
-const SOCIAL_LINKS = [
-  {
-    label: "TikTok",
-    handle: "@igem_kuleuven",
-    href: "https://www.tiktok.com/@igem_kuleuven",
-    icon: (
-      <path d="M13.5 3c.4 2.2 2 3.9 4.2 4.2v2.4c-1.5-.1-2.9-.6-4.1-1.4v6.4a5 5 0 1 1-4.3-4.9v2.5a2.5 2.5 0 1 0 1.8 2.4V3h2.4z" />
-    ),
-  },
-  {
-    label: "LinkedIn",
-    handle: "KU Leuven iGEM",
-    href: "https://www.linkedin.com/company/kuleuvenigem/posts/?feedView=all",
-    icon: (
-      <>
-        <rect x="3" y="3" width="18" height="18" rx="4" fill="none" stroke="currentColor" strokeWidth="1.6" />
-        <circle cx="8" cy="8.5" r="1.3" />
-        <rect x="7" y="11" width="2" height="7" />
-        <path d="M12 11h2v1.1c.6-.8 1.6-1.3 2.7-1.3 2 0 3.3 1.3 3.3 3.9V18h-2v-3c0-1.3-.5-2.1-1.7-2.1-1 0-1.6.7-1.9 1.3-.1.2-.1.5-.1.8V18h-2z" />
-      </>
-    ),
-  },
-  {
-    label: "Instagram",
-    handle: "@igemkuleuven",
-    href: "https://www.instagram.com/igemkuleuven/",
-    icon: (
-      <>
-        <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" strokeWidth="1.8" />
-        <circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" strokeWidth="1.8" />
-        <circle cx="17.2" cy="6.8" r="1.1" />
-      </>
-    ),
-  },
-  {
-    label: "iGEM Leuven website",
-    handle: "igemleuven.be",
-    href: "https://igemleuven.be/",
-    icon: (
-      <>
-        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="1.6" />
-        <path
-          d="M3 12h18M12 3c2.5 2.5 4 5.7 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.7-4-9s1.5-6.5 4-9z"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        />
-      </>
-    ),
-  },
-];
 
 export function Footer() {
   const teamYear = import.meta.env.VITE_TEAM_YEAR;
   const teamName = import.meta.env.VITE_TEAM_NAME;
   const teamSlug = stringToSlug(teamName);
-  const { mode } = useThemeMode();
 
   return (
-    // Layout/typography/hover styling below is inspired by the 2025 Heidelberg
-    // iGEM team's wiki footer (https://2025.igem.wiki/heidelberg/), adapted to
-    // keep our dark purple background and light text instead of their light theme.
-    <footer className="pt-5 pb-5 footer py-5 mt-5 footer-empower">
+    <footer className="pt-5 pb-5 footer py-5 mt-5 bg-dark text-white">
       <div className="container">
-        <div className="row mb-4 footer-top-row align-items-center justify-content-between g-2">
-          <div className="col-lg-auto col-12 d-flex justify-content-center justify-content-lg-start footer-logo-container">
-            <div className="footer-logo-circle">
-              <img
-                className={`footer-logo-img footer-logo-img-${mode}`}
-                src={FOOTER_LOGO_BY_MODE[mode]}
-                alt={teamName}
-              />
-            </div>
+        <div className="row mb-4">
+          <div className="col-lg-6 col-xs-12">
+            <h4 className="mb-3">Heading</h4>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac
+              ante mollis quam tristique convallis
+            </p>
           </div>
-          <div className="col-lg-auto col-12 mt-4 mt-lg-0">
-            <h4>Follow Us</h4>
-            <ul className="footer-social-list">
-              {SOCIAL_LINKS.map((social) => (
-                <li key={social.label}>
-                  <a href={social.href} target="_blank" rel="noreferrer noopener">
-                    <span className="footer-icon-box" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" fill="currentColor">
-                        {social.icon}
-                      </svg>
-                    </span>
-                    <span className="footer-social-handle">{social.handle}</span>
-                  </a>
-                </li>
-              ))}
+          <div className="col-lg-3 col-xs-12">
+            <h4 className="mt-lg-0 mt-sm-3">Links</h4>
+            <ul className="m-2 p-2">
+              <li>
+                <a href="#">Lorem ipsum</a>
+              </li>
+              <li>
+                <a href="#">Nam mauris velit</a>
+              </li>
+              <li>
+                <a href="#">Etiam vitae mauris</a>
+              </li>
+              <li>
+                <a href="#">Fusce scelerisque</a>
+              </li>
+              <li>
+                <a href="#">Sed faucibus</a>
+              </li>
+              <li>
+                <a href="#">Mauris efficitur nulla</a>
+              </li>
             </ul>
           </div>
-          <div className="col-lg-auto col-12 mt-4 mt-lg-0">
-            <h4 className="mb-3">Contact</h4>
-            <p>
-              Herestraat 49 Box 1030
-              <br />
-              Leuven 3000, Belgium
-            </p>
-            <p>
-              <a href="mailto:finance@igemleuven.be">finance@igemleuven.be</a>
-            </p>
-          </div>
-        </div>
-
-        <div className="row mb-4">
-          <div className="col-12">
-            <h4 className="mb-3">Our Sponsors</h4>
-            <SponsorCarousel>
-              <SponsorLogo
-                name="Couleurs de Noir"
-                src="https://static.igem.wiki/teams/6299/wiki/sponsors/couleurs-de-noir.avif"
-                href="https://couleursdenoir.com/fr"
-              />
-              <SponsorLogo
-                name="Eppendorf"
-                src="https://static.igem.wiki/teams/6299/wiki/sponsors/eppendorf.avif"
-                href="https://www.eppendorf.com/be-en/"
-              />
-              <SponsorLogo
-                name="IDT"
-                src="https://static.igem.wiki/teams/6299/wiki/sponsors/idt.avif"
-                href="https://eu.idtdna.com/page"
-              />
-              <SponsorLogo
-                name="Jena Bioscience"
-                src="https://static.igem.wiki/teams/6299/wiki/sponsors/jena-bioscience.avif"
-                href="https://www.jenabioscience.com/"
-              />
-              <SponsorLogo
-                name="KU Leuven Kick"
-                src="https://static.igem.wiki/teams/6299/wiki/sponsors/kul-kick.avif"
-                href="https://lrd.kuleuven.be/kuleuvenkick"
-              />
-              <SponsorLogo
-                name="KU Leuven Group Biomedical Sciences"
-                src="https://static.igem.wiki/teams/6299/wiki/sponsors/leuven-group-biomedical-sciences.avif"
-                href="https://gbiomed.kuleuven.be/english/b"
-              />
-              <SponsorLogo
-                name="KU Leuven Group Science, Engineering & Technology"
-                src="https://static.igem.wiki/teams/6299/wiki/sponsors/kuleuven-groepw-t-cymk-logo-eng.avif"
-                href="https://set.kuleuven.be/en"
-              />
-              <SponsorLogo
-                name="KU Leuven Research & Development"
-                src="https://static.igem.wiki/teams/6299/wiki/sponsors/leuven-r-d.avif"
-                href="https://lrd.kuleuven.be/"
-              />
-              <SponsorLogo
-                name="New England Biolabs"
-                src="https://static.igem.wiki/teams/6299/wiki/sponsors/neb.avif"
-                href="https://www.neb.com/en"
-              />
-              <SponsorLogo
-                name="Promega"
-                src="https://static.igem.wiki/teams/6299/wiki/sponsors/promega.avif"
-                href="https://be.promega.com/"
-              />
-              <SponsorLogo
-                name="Reshape Biotech"
-                src="https://static.igem.wiki/teams/6299/wiki/sponsors/reshape.avif"
-                href="https://reshapebiotech.com/"
-              />
-              <SponsorLogo
-                name="Sarstedt"
-                src="https://static.igem.wiki/teams/6299/wiki/sponsors/sarstedt.avif"
-                href="https://www.sarstedt.com/en/BE"
-              />
-              <SponsorLogo
-                name="SnapGene"
-                src="https://static.igem.wiki/teams/6299/wiki/sponsors/snapgene.avif"
-                href="https://www.snapgene.com/"
-              />
-              <SponsorLogo
-                name="Sopachem"
-                src="https://static.igem.wiki/teams/6299/wiki/sponsors/sopachem.avif"
-                href="https://sopachem.com/"
-              />
-              <SponsorLogo
-                name="Technovation Hub"
-                src="https://static.igem.wiki/teams/6299/wiki/sponsors/technovation-hub.avif"
-                href="https://lrd.kuleuven.be/kuleuvenkick/technovation-hub"
-              />
-            </SponsorCarousel>
+          <div className="col-lg-3 col-xs-12">
+            <h4 className="mt-lg-0 mt-sm-4 mb-3">Contact</h4>
+            <p>22, Lorem ipsum dolor, consectetur adipiscing</p>
+            <p className="mb-0">(541) 754-3010</p>
+            <p>info@hsdf.com</p>
           </div>
         </div>
         <hr />
         {/* The following MUST be on every page: license information and link to the repository on gitlab.igem.org */}
-        <div className="row mt-4 justify-content-center text-center footer-bottom-row">
-          <div className="col-lg-8 col-12">
+        <div className="row mt-4">
+          <div className="col">
             <p className="mb-0">
               <small>
                 © {teamYear} - Content on this site is licensed under a{" "}
