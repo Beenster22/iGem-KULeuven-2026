@@ -6559,13 +6559,12 @@ body:not(.home-fullscreen) .home-hero {
   color: #2fa4a9;
 }
 
-/* Justified (block) text; hyphenation keeps the word gaps even. Selector is
-   long only to out-rank the .page-shell-content :is(p, li) rule. */
+/* Justified (block) text like the rest of the page. Selector is long only
+   to out-rank the .page-shell-content :is(p, li) rule. */
 .page-body .page-shell-content .stakeholder-squircle .stakeholder-squircle-body p {
   margin: 0;
   line-height: 1.6;
   text-align: justify;
-  hyphens: auto;
 }
 
 .stakeholder-squircle-body p + p {
@@ -6830,5 +6829,310 @@ body:not(.home-fullscreen) .home-hero {
     max-width: 7.5rem;
     padding: 0.45rem 0.65rem;
     font-size: 0.7rem;
+  }
+}
+
+/* FEEDBACK CYCLE (Human Practices)
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-09
+   Purpose: Listen → Analyse → Implement section. The text runs on the left
+   and the cycle wheel stays pinned on the right while the section is read,
+   turning so the current step sits at the top; a line drawn on scroll joins
+   the "active implementation" outcome to the Implement step (see
+   FeedbackCycle.tsx). Below 992px the wheel sits above the text instead. */
+.feedback-cycle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 15rem;
+  gap: 2.5rem;
+  margin: 1.5rem 0 3rem;
+}
+
+.feedback-cycle-content {
+  position: relative;
+}
+
+.feedback-cycle-aside {
+  position: sticky;
+  top: 7rem;
+  align-self: start;
+}
+
+.feedback-wheel {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.feedback-wheel-rotor {
+  transform-box: view-box;
+  transform-origin: 200px 200px;
+  transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.feedback-wheel-arrow {
+  fill: #a9d9db;
+  transition: fill 0.4s ease;
+}
+
+.feedback-wheel-step.is-active .feedback-wheel-arrow {
+  fill: #2fa4a9;
+}
+
+.feedback-wheel-label {
+  font-family: "Poppins", sans-serif;
+  font-size: 27px;
+  font-weight: 700;
+  fill: #1f6f73;
+  animation: feedback-label-in 1.1s ease both;
+}
+
+/* Hidden while the wheel turns (0.9s), then fades in */
+@keyframes feedback-label-in {
+  0%,
+  70% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.feedback-wheel-step.is-active .feedback-wheel-label {
+  fill: #ffffff;
+}
+
+.feedback-wheel-count {
+  font-family: "Luckiest Guy", "Poppins", sans-serif;
+  font-size: 64px;
+  fill: #2fa4a9;
+}
+
+.feedback-wheel-of {
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  fill: var(--color-text);
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .feedback-wheel-arrow {
+  fill: #2a5d61;
+}
+
+[data-theme="dark"] .feedback-wheel-label {
+  fill: #a9d9db;
+}
+
+/* Steps */
+.feedback-step + .feedback-step {
+  margin-top: 3rem;
+}
+
+.feedback-step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.feedback-step-number {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background-color: #2fa4a9;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.feedback-step-title {
+  margin: 0;
+}
+
+/* Analyse outcomes: three squircles side by side */
+.feedback-outcomes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 0;
+}
+
+.feedback-outcome {
+  padding: 1.1rem 1.2rem;
+  border-radius: 1.75rem;
+  corner-shape: squircle;
+  background-color: var(--color-page-bg);
+  border: 2px solid rgba(47, 164, 169, 0.35);
+}
+
+@supports (corner-shape: squircle) {
+  .feedback-outcome {
+    border-radius: 2.75rem;
+  }
+}
+
+.feedback-outcome--active {
+  background-color: #2fa4a9;
+  border-color: #2fa4a9;
+  color: #ffffff;
+}
+
+.feedback-outcome--none {
+  opacity: 0.75;
+}
+
+.feedback-outcome-title {
+  margin: 0 0 0.4rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2fa4a9;
+}
+
+.feedback-outcome--active .feedback-outcome-title {
+  color: #ffffff;
+}
+
+/* Left-aligned: justified text opens wide gaps in a card this narrow.
+   Selector is long only to out-rank the .page-shell-content :is(p, li) rule. */
+.page-body .page-shell-content .feedback-outcome .feedback-outcome-body p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  text-align: left;
+}
+
+/* Line from the active outcome down to the Implement step */
+.feedback-implement-arrow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.feedback-implement-arrow-line {
+  fill: none;
+  stroke: #2fa4a9;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+}
+
+.feedback-implement-arrowhead {
+  fill: #2fa4a9;
+}
+
+/* The Implement step gets some air above it so the line has room to land */
+.feedback-step--implement {
+  padding-top: 2.5rem;
+}
+
+/* Downloadable files */
+.resource-download {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.25rem 0;
+  padding: 0.9rem 1.2rem;
+  border-radius: 1.5rem;
+  corner-shape: squircle;
+  background-color: var(--color-page-bg);
+  border: 2px solid rgba(47, 164, 169, 0.35);
+  color: var(--color-text);
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.resource-download:hover,
+.resource-download:focus-visible {
+  color: var(--color-text);
+  transform: translateY(-2px);
+  box-shadow: 0 0.75rem 1.5rem rgba(51, 40, 63, 0.12);
+}
+
+.resource-download-icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.9rem;
+  background-color: #2fa4a9;
+  color: #ffffff;
+}
+
+.resource-download-icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.resource-download-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.resource-download-title {
+  font-weight: 700;
+}
+
+.resource-download-description {
+  font-size: 0.88rem;
+  opacity: 0.8;
+}
+
+.resource-download-type {
+  margin-left: auto;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background-color: rgba(47, 164, 169, 0.15);
+  color: #1f6f73;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+[data-theme="dark"] .resource-download-type {
+  color: #a9d9db;
+}
+
+@media (max-width: 991.98px) {
+  .feedback-cycle {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+
+  .feedback-cycle-aside {
+    position: static;
+    order: -1;
+    width: min(16rem, 70%);
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .feedback-outcomes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Stacked, the active card goes last so its line drops straight to the
+     Implement step instead of crossing the other two cards. */
+  .feedback-outcome--active {
+    order: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feedback-wheel-rotor {
+    transition: none;
+  }
+
+  .feedback-wheel-label {
+    animation: none;
   }
 }
