@@ -17,6 +17,11 @@
 // was very big and took a lot of scrolling for little information): two
 // sentences per screen instead of one, in smaller type, so the same five
 // sentences now take three scroll steps instead of five.
+// Edited with Claude Opus 5 (Anthropic), 2026-10-09 (team feedback on the
+// empty corners): Elle stands in the bottom-left corner of the "etiology"
+// screen, its question marks are bigger and sit further right, and on the
+// "quest" screen the magnifying glass fills the top right while the two
+// halves of the sentence move together into the bottom-left corner.
 import {
   useEffect,
   useId,
@@ -29,6 +34,10 @@ import { useReducedMotion } from "framer-motion";
 import { SnapSteps } from "./HomeSnapScroll";
 import { usePinnedStep } from "./usePinnedStep";
 
+// Same artwork as the page index (SectionProgress.tsx) and the notebook entry
+// headers (NotebookEntryMeta.tsx).
+const MASCOT_BASE = "https://static.igem.wiki/teams/6299/wiki/mascot";
+
 interface StoryStep {
   id: string;
   // How the screen is laid out (see .story-step--* in App.css). "pair-left"
@@ -36,6 +45,8 @@ interface StoryStep {
   // "pair-right" is its mirror image.
   position: "pair-left" | "pair-right" | "split";
   art?: "question" | "clock" | "microbiome";
+  // Elle, standing in the step's bottom-left corner (decorative).
+  mascot?: boolean;
   lines: ReactNode[];
   // The screen's second sentence (the pair layouts).
   second?: ReactNode[];
@@ -46,6 +57,7 @@ const STEPS: StoryStep[] = [
     id: "etiology",
     position: "pair-left",
     art: "question",
+    mascot: true,
     lines: [
       <>So many symptoms…</>,
       <>
@@ -350,6 +362,15 @@ export function StoryScrollSection() {
               // Only the sentences on screen are read out and reachable.
               inert={state !== "active"}
             >
+              {entry.mascot && (
+                <img
+                  className="story-mascot"
+                  src={`${MASCOT_BASE}/uterus-smile.avif`}
+                  alt=""
+                  loading="lazy"
+                  aria-hidden="true"
+                />
+              )}
               {entry.second ? (
                 <>
                   <div className="story-row">

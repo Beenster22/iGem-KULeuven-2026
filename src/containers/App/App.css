@@ -181,6 +181,18 @@ a[data-footnote-ref]:focus {
   margin-bottom: 0.6rem;
 }
 
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09 (team report: a EUCAST
+   citation with a long query-string URL ran off the right of the panel).
+   A URL has no spaces, so it is one "word" the line cannot break: it both
+   overflowed and — because running text is justified, see PAGE SHELL —
+   stretched the line before it across the full column. Allowing a break
+   inside such a word fixes both, here and in any citation added later.
+   break-word rather than anywhere: it only breaks a word that would not fit
+   on a line of its own, so ordinary prose is untouched. */
+.page-shell-content :is(p, li, dd, dt, th, td, figcaption) {
+  overflow-wrap: break-word;
+}
+
 .page-references li::marker {
   color: var(--color-text);
   font-weight: 700;
@@ -970,6 +982,64 @@ a[data-footnote-ref]:focus {
    justification (see PAGE SHELL) would stretch them oddly. */
 .page-body .expandable-content table :is(p, li) {
   text-align: left;
+}
+
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09 (team report: the
+   96-well plate tables had their last column cut off). A 12-column plate
+   layout needs more room than the ~960px the dropdown gives it — at the
+   default size these ran 27–127px over — so a table with many columns is
+   set smaller and tighter until it fits. :has() counts the columns, so the
+   two- and three-column tables of running text around them keep the
+   comfortable default. Short labels like "BHI+1447" stay perfectly legible
+   at this size.
+   Shrinking alone only fixes a full-width window — on a narrower one (a
+   laptop at 1024px, a tablet) a 12-column plate still does not fit at a
+   readable size, so these tables also scroll sideways rather than having
+   their last column clipped. display:block is what makes the table its own
+   scroll box; it is confined to the wide tables, so every other table still
+   lays out as an ordinary full-width one. */
+.expandable-content table:has(tr > :nth-child(8)) {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  font-size: 0.84rem;
+}
+
+.expandable-content table:has(tr > :nth-child(8)) :is(th, td) {
+  padding: 0.4rem 0.45rem;
+}
+
+.expandable-content table:has(tr > :nth-child(11)) {
+  font-size: 0.76rem;
+}
+
+.expandable-content table:has(tr > :nth-child(11)) :is(th, td) {
+  padding: 0.3rem 0.3rem;
+}
+
+/* Anything wider still (none today) keeps shrinking rather than spilling. */
+.expandable-content table:has(tr > :nth-child(15)) {
+  font-size: 0.68rem;
+}
+
+.expandable-content table:has(tr > :nth-child(15)) :is(th, td) {
+  padding: 0.25rem;
+}
+
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09: found while fixing the
+   plate tables above — on a phone even the three- and four-column notebook
+   tables ran past the content column and had their last column clipped, so
+   below this breakpoint every table in a dropdown gets the same scroll box.
+   A table narrow enough to fit then sits at its own width instead of filling
+   the column, which is the price of not hiding a column off-screen. */
+@media (max-width: 991.98px) {
+  .expandable-content table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
 }
 
 /* NOTEBOOK DROPDOWN
@@ -2525,8 +2595,21 @@ div.sponsor-grid-card:hover {
   cursor: zoom-in;
 }
 
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09 (team report: notebook
+   figures illegible and generally too big). width: 100% stretched every
+   figure to the full column whatever its real resolution, so the low-res
+   lab photos were being blown up 2–5x — a 181px plate photo was drawn at
+   927px. That upscaling was the blur: there is no detail to show past an
+   image's own pixels. Each figure is now drawn at its natural size, capped
+   to the column (and to 46rem, so the few high-resolution plots do not
+   dominate the entry either). Anything genuinely detailed is still one
+   click from fullscreen. */
 .zoomable-image-trigger img {
-  width: 100%;
+  display: block;
+  width: auto;
+  max-width: min(100%, 46rem);
+  height: auto;
+  margin-inline: auto;
 }
 
 .zoomable-image-dialog {
@@ -2547,9 +2630,15 @@ div.sponsor-grid-card:hover {
   justify-content: center;
 }
 
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09: now that a figure is
+   drawn at its own size in the entry (above), the small ones would have
+   opened fullscreen at that same size — a click that appeared to do
+   nothing. Fullscreen therefore fills the screen, which is the one place
+   enlarging a low-resolution photo is what the reader actually asked for.
+   object-fit keeps the proportions whichever way it has to scale. */
 .zoomable-image-dialog img {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   border-radius: 0.5rem;
 }
@@ -3524,10 +3613,26 @@ body:not(.home-fullscreen) .home-hero {
   flex: none;
 }
 
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09: Elle fills the empty
+   bottom-left corner of the "etiology" screen. Taken out of the flow so the
+   two sentences keep the places they had. */
+.story-mascot {
+  position: absolute;
+  left: clamp(0.5rem, 3vw, 3rem);
+  bottom: 0;
+  width: clamp(6rem, 14vw, 13rem);
+  height: auto;
+  pointer-events: none;
+}
+
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09: bigger, and pushed over
+   to the right-hand side of its row. */
 .story-art--question {
   position: relative;
-  width: clamp(6rem, 15vw, 11rem);
-  height: clamp(6rem, 15vw, 11rem);
+  width: clamp(8rem, 20vw, 15rem);
+  height: clamp(8rem, 20vw, 15rem);
+  margin-inline-start: auto;
+  margin-inline-end: clamp(0rem, 5vw, 5rem);
   font-weight: 800;
   line-height: 1;
 }
@@ -3540,14 +3645,14 @@ body:not(.home-fullscreen) .home-hero {
 .story-art--question span:nth-child(1) {
   left: 28%;
   top: 8%;
-  font-size: clamp(4.5rem, 11.5vw, 9rem);
+  font-size: clamp(6rem, 15.5vw, 12rem);
   color: #2fa4a9;
 }
 
 .story-art--question span:nth-child(2) {
   left: 2%;
   top: 2%;
-  font-size: clamp(1.6rem, 4vw, 3.1rem);
+  font-size: clamp(2.1rem, 5.4vw, 4.2rem);
   opacity: 0.55;
   --tilt: -16deg;
   animation-duration: 2.6s;
@@ -3557,7 +3662,7 @@ body:not(.home-fullscreen) .home-hero {
 .story-art--question span:nth-child(3) {
   right: 0;
   bottom: 6%;
-  font-size: clamp(2rem, 5vw, 4rem);
+  font-size: clamp(2.7rem, 6.7vw, 5.4rem);
   opacity: 0.35;
   --tilt: 14deg;
   animation-duration: 3.8s;
@@ -3634,44 +3739,45 @@ body:not(.home-fullscreen) .home-hero {
    Purpose: the "quest" step — first half of the sentence top left, second
    half bottom right, and between them a magnifying glass wandering over
    some gut microbes (MicrobiomeArt in StoryScrollSection.tsx). */
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09: the glass now fills the
+   top right and the two halves of the sentence sit together in the
+   bottom-left corner, still staggered but much closer than before. */
 .story-step--split {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
   gap: 1rem;
   padding-top: 4vh;
   padding-bottom: 4vh;
 }
 
-/* The two halves are placed on the step's grid themselves. */
 .story-step--split .story-text {
-  display: contents;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  align-self: end;
+  justify-self: start;
+  max-width: 15em;
 }
 
 .story-step--split .story-line {
-  max-width: 16em;
   margin-top: 0;
-}
-
-.story-step--split .story-line:first-child {
-  grid-row: 1;
-  justify-self: start;
   text-align: left;
 }
 
 .story-step--split .story-line:last-child {
-  grid-row: 3;
-  justify-self: end;
+  margin-top: 0.45em;
+  margin-inline-start: clamp(1rem, 7vw, 6rem);
   text-align: right;
 }
 
 .story-step--split .story-art {
-  grid-row: 2;
-  place-self: center;
+  grid-column: 2;
+  grid-row: 1;
+  place-self: center end;
 }
 
 .story-art--microbiome {
-  width: clamp(9rem, 24vw, 17rem);
+  width: clamp(12rem, 38vw, 30rem);
   height: auto;
   max-height: 100%;
   overflow: visible;
@@ -3801,6 +3907,37 @@ body:not(.home-fullscreen) .home-hero {
     align-self: center;
     text-align: center;
   }
+
+  .story-art--question {
+    margin-inline: auto;
+  }
+
+  /* No empty corner left to stand in once the sentences are centred. */
+  .story-mascot {
+    display: none;
+  }
+
+  /* One column: the glass above, then the sentence under it. */
+  .story-step--split {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  .story-step--split .story-text {
+    grid-column: 1;
+    justify-self: center;
+    text-align: center;
+  }
+
+  .story-step--split .story-art {
+    grid-column: 1;
+    place-self: center;
+  }
+
+  .story-step--split .story-line:last-child {
+    margin-inline-start: 0;
+    text-align: center;
+  }
 }
 
 /* No pinning: the sentences are listed one under the other, all shown. */
@@ -3812,7 +3949,8 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .story-scroll--static .story-step {
-  position: static;
+  /* Relative, not static, so Elle still anchors to her own step's corner. */
+  position: relative;
   padding-top: 0;
   padding-bottom: 0;
 }
