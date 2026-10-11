@@ -16,6 +16,14 @@ interface TeamMemberCardProps {
   name: string;
   role: string;
   nationality?: string;
+  /** Age, as collected from the team (students only). */
+  age?: number;
+  /** Degree and year, as the member wrote it. */
+  study?: string;
+  /** Subteams the member works in, comma separated. */
+  teams?: string;
+  /** Subteams they step into when a deadline needs the hands. */
+  helpsWith?: string;
   photo?: string;
   /** Extra bio content shown only in the popup, not on the grid card. */
   children?: ReactNode;
@@ -31,6 +39,10 @@ interface Member {
   name: string;
   role: string;
   nationality?: string;
+  age?: number;
+  study?: string;
+  teams?: string;
+  helpsWith?: string;
   photo?: string;
   bio: ReactNode;
 }
@@ -42,6 +54,10 @@ function extractMembers(children: ReactNode): Member[] {
       name: child.props.name,
       role: child.props.role,
       nationality: child.props.nationality,
+      age: child.props.age,
+      study: child.props.study,
+      teams: child.props.teams,
+      helpsWith: child.props.helpsWith,
       photo: child.props.photo,
       bio: child.props.children,
     }));
@@ -123,9 +139,42 @@ export function TeamMembers({ children }: TeamMembersProps) {
             <div className="team-member-modal-info">
               <h3 className="team-member-modal-name">{openMember.name}</h3>
               <p className="team-member-modal-role">{openMember.role}</p>
-              {openMember.nationality && (
-                <p className="team-member-modal-nationality">Nationality - {openMember.nationality}</p>
-              )}
+              {/* Generated with Claude Opus 5 (Anthropic), 2026-10-11: the
+                  facts the team collected about each member. Every one is
+                  optional — the PIs, advisors and coaches have none of them,
+                  and their rows simply do not appear. */}
+              <dl className="team-member-modal-facts">
+                {openMember.nationality && (
+                  <>
+                    <dt>Nationality</dt>
+                    <dd>{openMember.nationality}</dd>
+                  </>
+                )}
+                {openMember.age !== undefined && (
+                  <>
+                    <dt>Age</dt>
+                    <dd>{openMember.age}</dd>
+                  </>
+                )}
+                {openMember.study && (
+                  <>
+                    <dt>Studies</dt>
+                    <dd>{openMember.study}</dd>
+                  </>
+                )}
+                {openMember.teams && (
+                  <>
+                    <dt>Subteams</dt>
+                    <dd>{openMember.teams}</dd>
+                  </>
+                )}
+                {openMember.helpsWith && (
+                  <>
+                    <dt>Also helps out in</dt>
+                    <dd>{openMember.helpsWith}</dd>
+                  </>
+                )}
+              </dl>
               {openMember.bio && <div className="team-member-modal-bio">{openMember.bio}</div>}
             </div>
           </div>

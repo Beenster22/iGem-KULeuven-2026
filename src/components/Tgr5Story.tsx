@@ -662,15 +662,15 @@ export function EngineerSection() {
     <div className="engineer">
       <p className="story-text engineer-text">
         This is why we want to <strong>engineer</strong> <em>P. vulgatus</em>{" "}
-        and interfere with <strong>BSH function</strong>
+        and silence <strong>BSH expression</strong>
       </p>
       {/* The cell of BshStreamAnimation.tsx, now with a genetic circuit in
-          it that acts on BSH (drawn with the usual blunt "inhibits" line). */}
+          it that silences BSH (drawn with the usual blunt "inhibits" line). */}
       <svg
         className="engineer-svg"
         viewBox="0 0 300 170"
         role="img"
-        aria-label="Illustration: Phocaeicola vulgatus with an engineered genetic circuit inside that interferes with its BSH enzyme."
+        aria-label="Illustration: Phocaeicola vulgatus with an engineered genetic circuit inside that silences expression of its BSH enzyme."
       >
         <rect
           className="bsh-membrane-outer"

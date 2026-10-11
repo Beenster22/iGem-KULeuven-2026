@@ -6013,10 +6013,36 @@ body:not(.home-fullscreen) .home-hero {
   opacity: 0.85;
 }
 
-.team-member-modal-nationality {
-  margin: 0;
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-11
+   Purpose: the facts under a member's name in the popup — nationality, age,
+   studies and subteams. A two-column grid so the labels line up, collapsing
+   to label-over-value on a narrow screen. */
+.team-member-modal-facts {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.2rem 0.75rem;
+  margin: 0.5rem 0 0;
   font-size: 0.9rem;
-  opacity: 0.7;
+}
+
+.team-member-modal-facts dt {
+  font-weight: 600;
+  opacity: 0.6;
+}
+
+.team-member-modal-facts dd {
+  margin: 0;
+}
+
+@media (max-width: 560px) {
+  .team-member-modal-facts {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .team-member-modal-facts dd {
+    margin-bottom: 0.4rem;
+  }
 }
 
 .team-member-modal-bio {
