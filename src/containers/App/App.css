@@ -1821,6 +1821,43 @@ a[data-footnote-ref]:focus {
   width: 100%;
 }
 
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-11
+   Purpose: the "side" wheel (WheelSelector layout="side", project
+   description). Same wheel, smaller, laid out as a row: the selected wedge
+   rests at the right-hand side and points across at its paragraph. */
+.wheel-selector--side {
+  flex-direction: row;
+  align-items: center;
+  gap: 2rem;
+}
+
+.wheel-selector--side .wheel-selector-svg {
+  flex: none;
+  width: clamp(200px, 38%, 320px);
+}
+
+.wheel-selector--side .wheel-selector-content {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.wheel-selector--side .wheel-selector-content > :last-child {
+  margin-bottom: 0;
+}
+
+/* Too narrow to read a paragraph beside the wheel: it goes back under it,
+   still pointing right — the pointer is part of the drawing. */
+@media (max-width: 767.98px) {
+  .wheel-selector--side {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .wheel-selector--side .wheel-selector-svg {
+    width: min(100%, 320px);
+  }
+}
+
 /* SEGMENTED SELECTOR */
 .segmented-selector-bar {
   display: flex;

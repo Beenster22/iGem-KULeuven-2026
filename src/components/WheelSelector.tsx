@@ -10,6 +10,14 @@ import { extractLabeledChildren } from "../utils/extractLabeledChildren";
 
 interface WheelSelectorProps {
   children: ReactNode;
+  /**
+   * "below" (the wet lab wheel): the selected wedge turns to the bottom and
+   * its content sits underneath. "side" (added 2026-10-11): a smaller wheel
+   * whose selected wedge turns to the right, with its content beside it.
+   */
+  layout?: "below" | "side";
+  /** Accessible name for the ring of wedges. */
+  label?: string;
 }
 
 const SIZE = 520;
@@ -76,8 +84,13 @@ function wrapLabel(label: string) {
 const midAngle = (index: number, count: number) =>
   -90 + ((index + 0.5) * 360) / count;
 
-// How far the wheel is turned to bring wedge `index` to the bottom.
-const restAngle = (index: number, count: number) => 90 - midAngle(index, count);
+// Where the selected wedge comes to rest, in degrees clockwise from "east":
+// at the bottom of the wheel, or at its right-hand side.
+const REST_DEGREES = { below: 90, side: 0 } as const;
+
+// How far the wheel is turned to bring wedge `index` to its resting place.
+const restAngle = (index: number, count: number, rest: number) =>
+  rest - midAngle(index, count);
 
 // The team's drawing of the bacterium (143 × 123 px, on the same pale pink
 // as the hub), shown in the middle and cut to the hub's circle.
@@ -106,31 +119,37 @@ function Bacterium() {
   );
 }
 
-export function WheelSelector({ children }: WheelSelectorProps) {
+export function WheelSelector({
+  children,
+  layout = "below",
+  label = "Wet lab sections",
+}: WheelSelectorProps) {
   const items = useMemo(() => extractLabeledChildren(children), [children]);
   const count = items.length;
+  const rest = REST_DEGREES[layout];
   const [activeIndex, setActiveIndex] = useState(0);
   // Kept as a running total (not reduced to 0–360) so each turn takes the
   // shorter way round instead of unwinding.
-  const [rotation, setRotation] = useState(() => restAngle(0, count));
+  const [rotation, setRotation] = useState(() => restAngle(0, count, rest));
   const active = items[activeIndex];
   const step = 360 / count;
 
   const select = (index: number) => {
     setActiveIndex(index);
     setRotation((current) => {
-      const delta = (((restAngle(index, count) - current) % 360) + 540) % 360;
+      const delta =
+        (((restAngle(index, count, rest) - current) % 360) + 540) % 360;
       return current + delta - 180;
     });
   };
 
   return (
-    <div className="wheel-selector">
+    <div className={`wheel-selector wheel-selector--${layout}`}>
       <svg
         className="wheel-selector-svg"
         viewBox={`0 0 ${SIZE} ${SIZE}`}
         role="tablist"
-        aria-label="Wet lab sections"
+        aria-label={label}
       >
         <g
           className="wheel-selector-wheel"
@@ -200,15 +219,19 @@ export function WheelSelector({ children }: WheelSelectorProps) {
           r={INNER_RADIUS}
         />
         <Bacterium />
-        {/* The selected wedge is the one at the bottom: outlined there, with
-            a pointer down to its content. */}
+        {/* The selected wedge is the one at rest: outlined there, with a
+            pointer from it towards its content. */}
         <path
           className="wheel-selector-selected"
-          d={wedgePath(90 - step / 2, 90 + step / 2)}
+          d={wedgePath(rest - step / 2, rest + step / 2)}
         />
         <path
           className="wheel-selector-pointer"
-          d={`M${CENTER - 12},${SIZE - 10} h24 l-12,10 Z`}
+          d={
+            layout === "side"
+              ? `M${SIZE - 10},${CENTER - 12} v24 l10,-12 Z`
+              : `M${CENTER - 12},${SIZE - 10} h24 l-12,10 Z`
+          }
         />
       </svg>
       {active && <div className="wheel-selector-content">{active.content}</div>}
