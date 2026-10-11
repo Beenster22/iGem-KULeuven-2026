@@ -4,6 +4,7 @@ import { stringToSlug } from "./src/utils/stringToSlug";
 import remarkGfm from "remark-gfm";
 import { remarkAutoReferences } from "./src/mdx/remarkAutoReferences";
 import { rehypeReferences } from "./src/mdx/rehypeReferences";
+import { rehypeSections } from "./src/mdx/rehypeSections";
 
 // https://vitejs.dev/config/
 export default async ({ mode }: ConfigEnv) => {
@@ -21,8 +22,10 @@ export default async ({ mode }: ConfigEnv) => {
         // written inline with no id to invent (see the file for how);
         // rehypeReferences turns the resulting footnote list into a
         // collapsible "References" panel (see src/mdx/rehypeReferences.ts).
+        // rehypeSections boxes each "## " section of a content page (see
+        // src/mdx/rehypeSections.ts).
         remarkPlugins: [remarkGfm, remarkAutoReferences],
-        rehypePlugins: [rehypeReferences],
+        rehypePlugins: [rehypeReferences, rehypeSections],
       })
     ],
   });

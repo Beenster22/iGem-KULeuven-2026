@@ -25,6 +25,9 @@ interface TeamMemberCardProps {
   /** Subteams they step into when a deadline needs the hands. */
   helpsWith?: string;
   photo?: string;
+  /** Degrees to turn the photo clockwise (e.g. -90), for a file that was
+      uploaded sideways. */
+  rotate?: number;
   /** Extra bio content shown only in the popup, not on the grid card. */
   children?: ReactNode;
 }
@@ -44,6 +47,7 @@ interface Member {
   teams?: string;
   helpsWith?: string;
   photo?: string;
+  rotate?: number;
   bio: ReactNode;
 }
 
@@ -59,8 +63,17 @@ function extractMembers(children: ReactNode): Member[] {
       teams: child.props.teams,
       helpsWith: child.props.helpsWith,
       photo: child.props.photo,
+      rotate: child.props.rotate,
       bio: child.props.children,
     }));
+}
+
+// Generated with Claude Opus 5.5 (Anthropic), 2026-10-11
+// Purpose: iGEM's servers cache an uploaded photo for two years, so a file
+// that went up sideways can't simply be replaced under the same name. Both
+// photo frames are square, so turning the <img> itself keeps it filling them.
+function rotateStyle(rotate?: number) {
+  return rotate ? { transform: `rotate(${rotate}deg)` } : undefined;
 }
 
 interface TeamMembersProps {
@@ -106,7 +119,9 @@ export function TeamMembers({ children }: TeamMembersProps) {
             onClick={() => setOpenIndex(index)}
           >
             <span className="team-member-card-photo">
-              {member.photo && <img src={member.photo} alt={`Photo of ${member.name}`} />}
+              {member.photo && (
+                <img src={member.photo} alt={`Photo of ${member.name}`} style={rotateStyle(member.rotate)} />
+              )}
             </span>
             <span className="team-member-card-name">{member.name}</span>
             <span className="team-member-card-role">{member.role}</span>
@@ -134,7 +149,13 @@ export function TeamMembers({ children }: TeamMembersProps) {
               &times;
             </button>
             <div className="team-member-modal-photo">
-              {openMember.photo && <img src={openMember.photo} alt={`Photo of ${openMember.name}`} />}
+              {openMember.photo && (
+                <img
+                  src={openMember.photo}
+                  alt={`Photo of ${openMember.name}`}
+                  style={rotateStyle(openMember.rotate)}
+                />
+              )}
             </div>
             <div className="team-member-modal-info">
               <h3 className="team-member-modal-name">{openMember.name}</h3>
