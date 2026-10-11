@@ -13,6 +13,7 @@ export { default as DryLab } from "./dry-lab.mdx";
 // Wet Lab
 export { default as Experiments } from "./experiments.mdx";
 export { default as Protocols } from "./protocols.mdx";
+export { default as Parts } from "./parts.mdx";
 export { default as Notebook } from "./notebook.mdx";
 export { default as Results } from "./results.mdx";
 // iHP
@@ -21,10 +22,4 @@ export { default as Events } from "./events.mdx";
 // Entrepreneurship
 export { default as Entrepreneurship } from "./entrepreneurship.mdx";
 // Prizes and Medals / Judging Form
-export { default as GoldMedal } from "./gold-medal.mdx";
-export { default as BestWiki } from "./best-wiki.mdx";
-export { default as BestPresentation } from "./best-presentation.mdx";
-export { default as AlternativePlatform } from "./alternative-platform.mdx";
-export { default as BestPartCollection } from "./best-part-collection.mdx";
-export { default as BestEntrepreneurship } from "./best-entrepreneurship.mdx";
-export { default as BestIhp } from "./best-ihp.mdx";
+export { default as Awards } from "./awards.mdx";

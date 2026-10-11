@@ -28,6 +28,7 @@ import {
 import { useReducedMotion } from "framer-motion";
 import { SnapSteps } from "./HomeSnapScroll";
 import { usePinnedStep } from "./usePinnedStep";
+import { ElleSays, type ElleMood } from "./ElleSays";
 
 interface StoryStep {
   id: string;
@@ -39,6 +40,20 @@ interface StoryStep {
   lines: ReactNode[];
   // The screen's second sentence (the pair layouts).
   second?: ReactNode[];
+  // Elle in the step's free bottom corner, saying something. She is placed
+  // out of the column flow (see .story-elle in App.css), so adding her does
+  // not move the sentences.
+  elle?: {
+    says: ReactNode;
+    // Which bottom corner she stands in — whichever one the sentences leave
+    // empty: bottom left for the pair-left and split layouts, bottom right
+    // for pair-right.
+    corner: "left" | "right";
+    mood?: ElleMood;
+    // Milliseconds after the step arrives before she speaks up.
+    delay?: number;
+    glass?: boolean;
+  };
 }
 
 const STEPS: StoryStep[] = [
@@ -58,6 +73,14 @@ const STEPS: StoryStep[] = [
         <strong>all of the symptoms at once!</strong>
       </>,
     ],
+    // The first step she appears on, so this is where she introduces herself.
+    // Wording as supplied by the team (2026-10-09).
+    elle: {
+      says: <>Hey, I’m Elle! Want to go on a journey with me?</>,
+      corner: "left",
+      mood: "happy",
+      delay: 2600,
+    },
   },
   {
     id: "diagnosis",
@@ -75,6 +98,12 @@ const STEPS: StoryStep[] = [
         <strong>do something about this!</strong>
       </>,
     ],
+    elle: {
+      says: <>Let’s find out together!</>,
+      corner: "right",
+      mood: "smile",
+      delay: 2600,
+    },
   },
   {
     id: "quest",
@@ -86,6 +115,14 @@ const STEPS: StoryStep[] = [
         …we looked into the <strong>gut microbiome</strong>…
       </>,
     ],
+    // No magnifying glass of her own here: this step's drawing already is
+    // one, and two on the same screen read as a mistake.
+    elle: {
+      says: <>Let’s have a look together!</>,
+      corner: "left",
+      mood: "excited",
+      delay: 2600,
+    },
   },
 ];
 
@@ -343,6 +380,24 @@ export function StoryScrollSection() {
               {entry.art === "microbiome" && <MicrobiomeArt />}
             </>
           );
+          const elle = entry.elle && (
+            <div className={`story-elle story-elle--${entry.elle.corner}`}>
+              <ElleSays
+                size="lg"
+                // She faces in from her corner, so the bubble sits towards
+                // the middle of the screen rather than off the edge.
+                side={entry.elle.corner}
+                mood={entry.elle.mood}
+                glass={entry.elle.glass}
+                delay={entry.elle.delay}
+                // Counted from the step arriving, not from scroll: every step
+                // is stacked on the same spot, so they are all "in view".
+                active={state === "active"}
+              >
+                {entry.elle.says}
+              </ElleSays>
+            </div>
+          );
           return (
             <div
               key={entry.id}
@@ -361,11 +416,13 @@ export function StoryScrollSection() {
                     entry.lines.length,
                     " story-text--second",
                   )}
+                  {elle}
                 </>
               ) : (
                 <>
                   {text(entry.lines, 0)}
                   {art}
+                  {elle}
                 </>
               )}
             </div>

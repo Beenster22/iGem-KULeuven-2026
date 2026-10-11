@@ -977,6 +977,154 @@ a[data-footnote-ref]:focus {
    Purpose: what NotebookDropdown adds inside the accordion above — the PDF
    download button at the top of an opened notebook, and the nested section
    dropdowns a large notebook is divided into. */
+
+/* NOTEBOOK TONES
+   Generated with Claude Opus 5 (Anthropic), 2026-10-09
+   Purpose: the notebook page was a stack of identical accent-coloured bars,
+   so one research line was indistinguishable from the next. Each notebook now
+   carries a tone — a two-stop gradient that starts on a hue of its own and
+   resolves into the site accent, which keeps the shelf varied without any tab
+   leaving the palette. Every stop is a light tint, because the tab's title is
+   a fixed dark purple in both themes (see .expandable-header) and has to stay
+   readable on it. --nb-edge is the saturated end of the same hue, used for the
+   thin bars that mark the notebook's sections once it is open.
+   A notebook with no tone (the overview dropdown, which is not a research
+   line) falls through to the plain accent and gets no badge. */
+.notebook-dropdown {
+  --nb-a: var(--color-accent);
+  --nb-b: #ddd6f2;
+  --nb-edge: #8f7fc4;
+}
+
+.notebook-dropdown[data-tone="str"] {
+  --nb-a: #cbe3e8;
+  --nb-b: #ddd6f2;
+  --nb-edge: #5f9aa6;
+}
+
+.notebook-dropdown[data-tone="mic"] {
+  --nb-a: #f0cfdd;
+  --nb-b: #e3d3f1;
+  --nb-edge: #bd6f92;
+}
+
+.notebook-dropdown[data-tone="cnj"] {
+  --nb-a: #c6e6d8;
+  --nb-b: #d8dcf2;
+  --nb-edge: #5a9f81;
+}
+
+.notebook-dropdown[data-tone="prm"] {
+  --nb-a: #f4ddc2;
+  --nb-b: #e6d6ee;
+  --nb-edge: #c08b4a;
+}
+
+.notebook-dropdown[data-tone="bsh"] {
+  --nb-a: #d6e8c4;
+  --nb-b: #d9dcf0;
+  --nb-edge: #7fa556;
+}
+
+.notebook-dropdown[data-tone="bsa"] {
+  --nb-a: #f2e7b8;
+  --nb-b: #e2d8ef;
+  --nb-edge: #b39a42;
+}
+
+.notebook-dropdown[data-tone="fit"] {
+  --nb-a: #c8dbf2;
+  --nb-b: #ded6f1;
+  --nb-edge: #6286b5;
+}
+
+.notebook-dropdown[data-tone="sup"],
+.notebook-dropdown[data-tone="gen"] {
+  --nb-a: #e2dced;
+  --nb-b: #d2cbe6;
+  --nb-edge: #8577ab;
+}
+
+/* background-image rather than background, so --color-accent stays as the
+   background-color underneath if the gradient is ever not painted. */
+.notebook-dropdown .expandable-header {
+  background-image: linear-gradient(100deg, var(--nb-a) 0%, var(--nb-b) 62%, var(--color-accent) 100%);
+}
+
+/* The title takes the slack so the badges sit against the chevron, instead of
+   space-between spreading all three apart. */
+.notebook-dropdown .expandable-title {
+  margin-right: auto;
+}
+
+/* Pop-out: a closed notebook lifts off the page under the cursor. The open one
+   is deliberately left flat — it is already anchored by its content panel, and
+   lifting a tab with a metre of notebook hanging off it looks broken. */
+.notebook-dropdown .expandable-header[aria-expanded="false"] {
+  transition:
+    border-radius 0.15s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.notebook-dropdown .expandable-header[aria-expanded="false"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1.1rem rgba(51, 40, 63, 0.22);
+  /* Overrides the shared .expandable-header:hover dimming, which muddied the
+     gradient. */
+  filter: none;
+}
+
+[data-theme="dark"] .notebook-dropdown .expandable-header[aria-expanded="false"]:hover {
+  box-shadow: 0 0.5rem 1.1rem rgba(0, 0, 0, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notebook-dropdown .expandable-header[aria-expanded="false"]:hover {
+    transform: none;
+  }
+}
+
+/* An open notebook is framed in its own tone, so a reader deep inside a long
+   entry can still see which notebook they are in. */
+.notebook-dropdown .expandable-content {
+  border-top: 2px solid var(--nb-edge);
+}
+
+/* Badges on the right of the tab: the entry count as plain text, the research
+   line code as a filled pill. Both take the same fixed dark colour as the
+   title, since the gradient is light in both themes. */
+.notebook-dropdown-meta {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.6rem;
+  color: #33283f;
+}
+
+.notebook-dropdown-count {
+  font-size: 0.8rem;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+.notebook-dropdown-code {
+  border-radius: 999px;
+  background-color: rgba(51, 40, 63, 0.14);
+  padding: 0.15rem 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+/* On phones the tab is too narrow for the title, the count and the pill, so
+   the count drops and only the code stays. */
+@media (max-width: 575.98px) {
+  .notebook-dropdown-count {
+    display: none;
+  }
+}
+
 .notebook-dropdown-pdf {
   display: flex;
   justify-content: flex-end;
@@ -1018,10 +1166,48 @@ a[data-footnote-ref]:focus {
   margin-top: 0.75rem;
   border: 1px solid var(--notebook-section-outline);
   border-radius: 0.75rem;
+  /* Edited with Claude Opus 5 (Anthropic), 2026-10-09: anchors the tone bar
+     below, and clips it to the rounded corners. */
+  position: relative;
+  overflow: hidden;
 }
 
 [data-theme="dark"] .notebook-section {
   --notebook-section-outline: var(--color-accent);
+}
+
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-09
+   Purpose: a bar down the left edge in the parent notebook's tone (--nb-edge,
+   inherited from .notebook-dropdown), so every entry inside a notebook is
+   visibly part of it. It widens under the cursor, which gives the row a bit of
+   response without moving any text. */
+.notebook-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0.25rem;
+  background-color: var(--nb-edge, var(--color-accent));
+  transition: width 0.18s ease;
+}
+
+.notebook-section:hover::before {
+  width: 0.45rem;
+}
+
+/* An open entry keeps a wash of the tone behind its header, marking where the
+   reader is within a notebook of twenty-odd entries. */
+.notebook-section-header[aria-expanded="true"] {
+  background-color: color-mix(in srgb, var(--nb-edge, var(--color-accent)) 12%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notebook-section::before,
+  .notebook-section:hover::before {
+    transition: none;
+    width: 0.25rem;
+  }
 }
 
 .notebook-section-header {
@@ -1034,7 +1220,9 @@ a[data-footnote-ref]:focus {
   border-radius: 0.75rem;
   background: none;
   color: var(--color-text);
-  padding: 0.7rem 1.1rem;
+  /* Edited with Claude Opus 5 (Anthropic), 2026-10-09: the left padding clears
+     the tone bar at its widest, so the title never shifts on hover. */
+  padding: 0.7rem 1.1rem 0.7rem 1.35rem;
   text-align: left;
   cursor: pointer;
 }
@@ -1056,7 +1244,8 @@ a[data-footnote-ref]:focus {
 }
 
 .notebook-section-content {
-  padding: 1rem 1.1rem;
+  /* Left padding matches the header's, clearing the tone bar. */
+  padding: 1rem 1.1rem 1rem 1.35rem;
 }
 
 .notebook-section-content > :first-child {
@@ -3524,6 +3713,42 @@ body:not(.home-fullscreen) .home-hero {
   flex: none;
 }
 
+/* Elle in a story step's free bottom corner.
+   Generated with Claude Opus 5 (Anthropic), 2026-10-09
+   Purpose: she is taken out of the step's column flow and pinned to the
+   corner the sentences leave empty — bottom left on the pair-left and split
+   layouts, bottom right on pair-right. Positioning her rather than adding her
+   to the column means a step's sentences stay exactly where they were, and a
+   tall Elle cannot push them off a short screen. The step is already
+   position: absolute, so it is her containing block. */
+.story-elle {
+  position: absolute;
+  bottom: 0;
+  max-width: min(30rem, 48%);
+  pointer-events: none;
+}
+
+.story-elle--left {
+  left: 0;
+}
+
+.story-elle--right {
+  right: 0;
+}
+
+.story-elle .elle {
+  margin: 0;
+}
+
+/* Phones: the step is only just tall enough for its two sentences and the
+   drawing, so a corner Elle would land on top of them. She is flavour rather
+   than content — the sentences carry the meaning — so she steps out here. */
+@media (max-width: 699.98px) {
+  .story-elle {
+    display: none;
+  }
+}
+
 .story-art--question {
   position: relative;
   width: clamp(6rem, 15vw, 11rem);
@@ -3635,11 +3860,20 @@ body:not(.home-fullscreen) .home-hero {
    half bottom right, and between them a magnifying glass wandering over
    some gut microbes (MicrobiomeArt in StoryScrollSection.tsx). */
 .story-step--split {
+  /* Edited with Claude Opus 5 (Anthropic), 2026-10-09 (team feedback: both
+     halves of the sentence sat too low on the screen): the second half used to
+     be pinned to the floor of the section by the third row. An empty fourth
+     row now holds slack underneath it, which lifts it — and the drawing above
+     it — up the screen, and the top padding is trimmed so the first half
+     rides higher too. --split-slack sizes that empty row against the row the
+     magnifying glass sits in: 0 puts the sentence back on the floor, larger
+     values lift everything further. */
+  --split-slack: 0.6fr;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-rows: auto minmax(0, 1fr) auto minmax(0, var(--split-slack));
   gap: 1rem;
-  padding-top: 4vh;
+  padding-top: 1.5vh;
   padding-bottom: 4vh;
 }
 
@@ -6833,5 +7067,361 @@ body:not(.home-fullscreen) .home-hero {
     max-width: 7.5rem;
     padding: 0.45rem 0.65rem;
     font-size: 0.7rem;
+  }
+}
+
+/* ELLE (the mascot as a character on the page)
+   Generated with Claude Opus 5 (Anthropic), 2026-10-09
+   Purpose: styles for ElleSays.tsx — Elle standing next to a speech bubble.
+   The bubble reuses the look of the notebook entry header's bubble (accent
+   tinted over the page background, with a tail formed from a rotated square)
+   so she reads as the same character in both places. The bubble is laid out
+   from the start but only becomes visible once she speaks, so nothing on the
+   page shifts when it arrives. */
+.elle {
+  --elle-size: 7rem;
+  --elle-bubble-bg: color-mix(in srgb, var(--color-accent) 35%, var(--color-page-bg));
+  --elle-bubble-border: color-mix(in srgb, var(--color-text) 25%, transparent);
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin: 2rem 0;
+}
+
+.elle--sm {
+  --elle-size: 5rem;
+}
+
+.elle--md {
+  --elle-size: 7rem;
+}
+
+.elle--lg {
+  --elle-size: clamp(8rem, 14vw, 12rem);
+}
+
+/* Elle on the right of her bubble instead of the left: the row is reversed
+   and the tail flips to the other edge (see the tail rules below). */
+.elle--right {
+  flex-direction: row-reverse;
+}
+
+.elle--center {
+  justify-content: center;
+}
+
+.elle-figure {
+  position: relative;
+  flex: none;
+  width: var(--elle-size);
+}
+
+.elle-mascot {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* A slow bob with a little tilt, so she looks alive without drawing the eye
+   away from the text. Two different durations would drift in and out of sync;
+   one animation on the figure keeps the glass travelling with her. */
+.elle:not(.elle--still) .elle-figure {
+  animation: elle-idle 4.2s ease-in-out infinite;
+  transform-origin: 50% 85%;
+}
+
+@keyframes elle-idle {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-0.5rem) rotate(2deg);
+  }
+}
+
+/* The magnifying glass she holds up, over her lower right side. */
+.elle-glass {
+  position: absolute;
+  right: -12%;
+  bottom: 2%;
+  width: 46%;
+  height: auto;
+  overflow: visible;
+  color: var(--color-text);
+}
+
+.elle-glass-lens {
+  fill: color-mix(in srgb, var(--color-accent) 45%, transparent);
+  stroke: currentColor;
+  stroke-width: 4;
+}
+
+.elle-glass-handle {
+  stroke: currentColor;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.elle-glass-shine {
+  fill: none;
+  stroke: var(--color-page-bg);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: 0.9;
+}
+
+.elle:not(.elle--still) .elle-glass {
+  animation: elle-glass-sweep 3.4s ease-in-out infinite;
+  transform-origin: 70% 70%;
+}
+
+@keyframes elle-glass-sweep {
+  0%,
+  100% {
+    transform: rotate(-9deg);
+  }
+  50% {
+    transform: rotate(9deg);
+  }
+}
+
+.elle-bubble {
+  position: relative;
+  max-width: 24em;
+  margin: 0;
+  padding: 0.9rem 1.25rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  /* Running prose is justified page-wide (see PAGE SHELL); one short spoken
+     line should not be stretched to the bubble's edges. */
+  text-align: left;
+  background-color: var(--elle-bubble-bg);
+  border: 1px solid var(--elle-bubble-border);
+  border-radius: 1.1rem;
+  /* Laid out from the start so the bubble arriving does not move the page. */
+  opacity: 0;
+  transform: translateY(0.4rem) scale(0.97);
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease;
+}
+
+.page-body .elle-bubble {
+  text-align: left;
+}
+
+.elle--speaking .elle-bubble {
+  opacity: 1;
+  transform: none;
+}
+
+.elle--lg .elle-bubble {
+  font-size: clamp(1.1rem, 1.9vw, 1.5rem);
+  max-width: 20em;
+}
+
+/* The tail, a rotated square sharing the bubble's fill and two of its border
+   edges — the same trick as the notebook bubble, which keeps the join
+   seamless without a second background image. */
+.elle-bubble::before {
+  content: "";
+  position: absolute;
+  top: calc(50% - 0.42rem);
+  left: -0.47rem;
+  width: 0.85rem;
+  height: 0.85rem;
+  background-color: var(--elle-bubble-bg);
+  border-left: 1px solid var(--elle-bubble-border);
+  border-bottom: 1px solid var(--elle-bubble-border);
+  border-bottom-left-radius: 0.2rem;
+  transform: rotate(45deg);
+}
+
+.elle--right .elle-bubble::before {
+  left: auto;
+  right: -0.47rem;
+  border-left: none;
+  border-bottom: none;
+  border-right: 1px solid var(--elle-bubble-border);
+  border-top: 1px solid var(--elle-bubble-border);
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 0.2rem;
+}
+
+/* Phones: she sits above her bubble, both centred, and the tail moves to the
+   top edge so it still points at her. */
+@media (max-width: 575.98px) {
+  .elle,
+  .elle--right {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .elle--sm,
+  .elle--md,
+  .elle--lg {
+    --elle-size: 6.5rem;
+  }
+
+  .elle-bubble {
+    font-size: 1rem;
+  }
+
+  .elle--lg .elle-bubble {
+    font-size: 1.05rem;
+  }
+
+  .elle-bubble::before,
+  .elle--right .elle-bubble::before {
+    top: -0.47rem;
+    left: calc(50% - 0.42rem);
+    right: auto;
+    border: none;
+    border-left: 1px solid var(--elle-bubble-border);
+    border-top: 1px solid var(--elle-bubble-border);
+    border-radius: 0;
+    border-top-left-radius: 0.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elle .elle-figure,
+  .elle .elle-glass {
+    animation: none;
+  }
+
+  .elle-bubble {
+    transition: none;
+  }
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-11
+   Purpose: QuestionSelector — a row of "Question N" cards with the selected
+   question's answer shown below — and the InfoCards used inside an answer
+   (Entrepreneurship page, Regulatory strategy). */
+.question-selector {
+  margin: 1.5rem 0;
+}
+
+.question-selector-hint {
+  margin-bottom: 0.75rem;
+  opacity: 0.75;
+}
+
+.question-selector-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.75rem;
+}
+
+.question-selector-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 1rem 1.15rem;
+  border: none;
+  border-radius: 0.9rem;
+  background-color: rgba(47, 164, 169, 0.14);
+  color: var(--color-text);
+  text-align: left;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.question-selector-card:hover {
+  background-color: rgba(47, 164, 169, 0.28);
+}
+
+.question-selector-card:focus-visible {
+  outline: 2px solid #2fa4a9;
+  outline-offset: 2px;
+}
+
+.question-selector-card.active {
+  background-color: #2fa4a9;
+  color: #fff;
+}
+
+.question-selector-card-number {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1f7f84;
+}
+
+[data-theme="dark"] .question-selector-card-number {
+  color: #6fd0d4;
+}
+
+.question-selector-card.active .question-selector-card-number {
+  color: #fff;
+}
+
+.question-selector-card-label {
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.question-selector-content {
+  margin-top: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  border-left: 4px solid #2fa4a9;
+  border-radius: 0.5rem;
+  background-color: rgba(234, 244, 245, 0.45);
+  animation: milestone-arc-fade-in 0.3s ease;
+}
+
+[data-theme="dark"] .question-selector-content {
+  background-color: rgba(234, 244, 245, 0.06);
+}
+
+.question-selector-content-title {
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.question-selector-content > :last-child,
+.info-card > :last-child {
+  margin-bottom: 0;
+}
+
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.info-card {
+  padding: 1rem 1.15rem;
+  text-align: left;
+  border-radius: 0.9rem;
+}
+
+.info-card--teal {
+  background-color: rgba(47, 164, 169, 0.14);
+}
+
+.info-card--lilac {
+  background-color: rgba(201, 189, 232, 0.35);
+}
+
+[data-theme="dark"] .info-card--lilac {
+  background-color: rgba(201, 189, 232, 0.16);
+}
+
+.info-card-title {
+  margin-bottom: 0.35rem;
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .question-selector-content {
+    animation: none;
   }
 }

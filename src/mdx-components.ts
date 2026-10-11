@@ -46,12 +46,19 @@ import {
 import { SponsorGrid } from "./components/SponsorGrid";
 import { HomeSnapScroll } from "./components/HomeSnapScroll";
 import { ZoomableImage } from "./components/ZoomableImage";
+import { ElleSays } from "./components/ElleSays";
 import {
   StakeholderGroups,
   StakeholderGroup,
   StakeholderMatrix,
 } from "./components/StakeholderAnalysis";
 import { DockingHeatmap } from "./components/DockingHeatmap";
+import {
+  QuestionSelector,
+  Question,
+  InfoCards,
+  InfoCard,
+} from "./components/QuestionSelector";
 import { Link } from "react-router-dom";
 
 export const mdxComponents = {
@@ -89,7 +96,12 @@ export const mdxComponents = {
   SponsorGrid,
   HomeSnapScroll,
   ZoomableImage,
+  ElleSays,
   DockingHeatmap,
+  QuestionSelector,
+  Question,
+  InfoCards,
+  InfoCard,
   Callout,
   TabbedSections,
   TabSection,
