@@ -4,7 +4,18 @@
     {
       "name": "dev",
       "runtimeExecutable": "yarn",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 5173
+    },
+    {
+      "name": "dev-npx",
+      "runtimeExecutable": "/opt/homebrew/bin/npx",
+      "runtimeArgs": [
+        "vite"
+      ],
       "port": 5173
     }
   ]

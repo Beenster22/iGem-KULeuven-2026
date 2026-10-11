@@ -17,6 +17,12 @@
 // was very big and took a lot of scrolling for little information): two
 // sentences per screen instead of one, in smaller type, so the same five
 // sentences now take three scroll steps instead of five.
+// Edited with Claude Opus 5 (Anthropic), 2026-10-09 (team feedback on the
+// empty corners): Elle fills the corner the sentences leave empty (see
+// `elle` below), the "etiology" question marks are bigger and sit further
+// right, and on the "quest" screen the magnifying glass fills the top right
+// while the two halves of the sentence move together into the bottom-left
+// corner.
 import {
   useEffect,
   useId,
@@ -118,8 +124,11 @@ const STEPS: StoryStep[] = [
     // No magnifying glass of her own here: this step's drawing already is
     // one, and two on the same screen read as a mistake.
     elle: {
+      // Right, not left: on this layout both halves of the sentence sit in
+      // the bottom-left corner, so the free corner is the one under the
+      // magnifying glass.
       says: <>Let’s have a look together!</>,
-      corner: "left",
+      corner: "right",
       mood: "excited",
       delay: 2600,
     },

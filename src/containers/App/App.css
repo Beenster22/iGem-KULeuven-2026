@@ -181,6 +181,18 @@ a[data-footnote-ref]:focus {
   margin-bottom: 0.6rem;
 }
 
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09 (team report: a EUCAST
+   citation with a long query-string URL ran off the right of the panel).
+   A URL has no spaces, so it is one "word" the line cannot break: it both
+   overflowed and — because running text is justified, see PAGE SHELL —
+   stretched the line before it across the full column. Allowing a break
+   inside such a word fixes both, here and in any citation added later.
+   break-word rather than anywhere: it only breaks a word that would not fit
+   on a line of its own, so ordinary prose is untouched. */
+.page-shell-content :is(p, li, dd, dt, th, td, figcaption) {
+  overflow-wrap: break-word;
+}
+
 .page-references li::marker {
   color: var(--color-text);
   font-weight: 700;
@@ -970,6 +982,64 @@ a[data-footnote-ref]:focus {
    justification (see PAGE SHELL) would stretch them oddly. */
 .page-body .expandable-content table :is(p, li) {
   text-align: left;
+}
+
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09 (team report: the
+   96-well plate tables had their last column cut off). A 12-column plate
+   layout needs more room than the ~960px the dropdown gives it — at the
+   default size these ran 27–127px over — so a table with many columns is
+   set smaller and tighter until it fits. :has() counts the columns, so the
+   two- and three-column tables of running text around them keep the
+   comfortable default. Short labels like "BHI+1447" stay perfectly legible
+   at this size.
+   Shrinking alone only fixes a full-width window — on a narrower one (a
+   laptop at 1024px, a tablet) a 12-column plate still does not fit at a
+   readable size, so these tables also scroll sideways rather than having
+   their last column clipped. display:block is what makes the table its own
+   scroll box; it is confined to the wide tables, so every other table still
+   lays out as an ordinary full-width one. */
+.expandable-content table:has(tr > :nth-child(8)) {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  font-size: 0.84rem;
+}
+
+.expandable-content table:has(tr > :nth-child(8)) :is(th, td) {
+  padding: 0.4rem 0.45rem;
+}
+
+.expandable-content table:has(tr > :nth-child(11)) {
+  font-size: 0.76rem;
+}
+
+.expandable-content table:has(tr > :nth-child(11)) :is(th, td) {
+  padding: 0.3rem 0.3rem;
+}
+
+/* Anything wider still (none today) keeps shrinking rather than spilling. */
+.expandable-content table:has(tr > :nth-child(15)) {
+  font-size: 0.68rem;
+}
+
+.expandable-content table:has(tr > :nth-child(15)) :is(th, td) {
+  padding: 0.25rem;
+}
+
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09: found while fixing the
+   plate tables above — on a phone even the three- and four-column notebook
+   tables ran past the content column and had their last column clipped, so
+   below this breakpoint every table in a dropdown gets the same scroll box.
+   A table narrow enough to fit then sits at its own width instead of filling
+   the column, which is the price of not hiding a column off-screen. */
+@media (max-width: 991.98px) {
+  .expandable-content table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
 }
 
 /* NOTEBOOK DROPDOWN
@@ -2714,8 +2784,21 @@ div.sponsor-grid-card:hover {
   cursor: zoom-in;
 }
 
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09 (team report: notebook
+   figures illegible and generally too big). width: 100% stretched every
+   figure to the full column whatever its real resolution, so the low-res
+   lab photos were being blown up 2–5x — a 181px plate photo was drawn at
+   927px. That upscaling was the blur: there is no detail to show past an
+   image's own pixels. Each figure is now drawn at its natural size, capped
+   to the column (and to 46rem, so the few high-resolution plots do not
+   dominate the entry either). Anything genuinely detailed is still one
+   click from fullscreen. */
 .zoomable-image-trigger img {
-  width: 100%;
+  display: block;
+  width: auto;
+  max-width: min(100%, 46rem);
+  height: auto;
+  margin-inline: auto;
 }
 
 .zoomable-image-dialog {
@@ -2736,9 +2819,15 @@ div.sponsor-grid-card:hover {
   justify-content: center;
 }
 
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09: now that a figure is
+   drawn at its own size in the entry (above), the small ones would have
+   opened fullscreen at that same size — a click that appeared to do
+   nothing. Fullscreen therefore fills the screen, which is the one place
+   enlarging a low-resolution photo is what the reader actually asked for.
+   object-fit keeps the proportions whichever way it has to scale. */
 .zoomable-image-dialog img {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   border-radius: 0.5rem;
 }
@@ -3716,8 +3805,8 @@ body:not(.home-fullscreen) .home-hero {
 /* Elle in a story step's free bottom corner.
    Generated with Claude Opus 5 (Anthropic), 2026-10-09
    Purpose: she is taken out of the step's column flow and pinned to the
-   corner the sentences leave empty — bottom left on the pair-left and split
-   layouts, bottom right on pair-right. Positioning her rather than adding her
+   corner the sentences leave empty — bottom left on pair-left, bottom right
+   on pair-right and split. Positioning her rather than adding her
    to the column means a step's sentences stay exactly where they were, and a
    tall Elle cannot push them off a short screen. The step is already
    position: absolute, so it is her containing block. */
@@ -3736,6 +3825,13 @@ body:not(.home-fullscreen) .home-hero {
   right: 0;
 }
 
+/* The "quest" step keeps both halves of its sentence in the bottom-left
+   corner, so the right-hand side Elle stands in is narrower there than on the
+   pair layouts — without this she reaches back over the second half. */
+.story-step--split .story-elle {
+  max-width: min(26rem, 40%);
+}
+
 .story-elle .elle {
   margin: 0;
 }
@@ -3749,10 +3845,14 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09: bigger, and pushed over
+   to the right-hand side of its row. */
 .story-art--question {
   position: relative;
-  width: clamp(6rem, 15vw, 11rem);
-  height: clamp(6rem, 15vw, 11rem);
+  width: clamp(8rem, 20vw, 15rem);
+  height: clamp(8rem, 20vw, 15rem);
+  margin-inline-start: auto;
+  margin-inline-end: clamp(0rem, 5vw, 5rem);
   font-weight: 800;
   line-height: 1;
 }
@@ -3765,14 +3865,14 @@ body:not(.home-fullscreen) .home-hero {
 .story-art--question span:nth-child(1) {
   left: 28%;
   top: 8%;
-  font-size: clamp(4.5rem, 11.5vw, 9rem);
+  font-size: clamp(6rem, 15.5vw, 12rem);
   color: #2fa4a9;
 }
 
 .story-art--question span:nth-child(2) {
   left: 2%;
   top: 2%;
-  font-size: clamp(1.6rem, 4vw, 3.1rem);
+  font-size: clamp(2.1rem, 5.4vw, 4.2rem);
   opacity: 0.55;
   --tilt: -16deg;
   animation-duration: 2.6s;
@@ -3782,7 +3882,7 @@ body:not(.home-fullscreen) .home-hero {
 .story-art--question span:nth-child(3) {
   right: 0;
   bottom: 6%;
-  font-size: clamp(2rem, 5vw, 4rem);
+  font-size: clamp(2.7rem, 6.7vw, 5.4rem);
   opacity: 0.35;
   --tilt: 14deg;
   animation-duration: 3.8s;
@@ -3859,53 +3959,45 @@ body:not(.home-fullscreen) .home-hero {
    Purpose: the "quest" step — first half of the sentence top left, second
    half bottom right, and between them a magnifying glass wandering over
    some gut microbes (MicrobiomeArt in StoryScrollSection.tsx). */
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09: the glass now fills the
+   top right and the two halves of the sentence sit together in the
+   bottom-left corner, still staggered but much closer than before. */
 .story-step--split {
-  /* Edited with Claude Opus 5 (Anthropic), 2026-10-09 (team feedback: both
-     halves of the sentence sat too low on the screen): the second half used to
-     be pinned to the floor of the section by the third row. An empty fourth
-     row now holds slack underneath it, which lifts it — and the drawing above
-     it — up the screen, and the top padding is trimmed so the first half
-     rides higher too. --split-slack sizes that empty row against the row the
-     magnifying glass sits in: 0 puts the sentence back on the floor, larger
-     values lift everything further. */
-  --split-slack: 0.6fr;
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto minmax(0, var(--split-slack));
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
   gap: 1rem;
-  padding-top: 1.5vh;
+  padding-top: 4vh;
   padding-bottom: 4vh;
 }
 
-/* The two halves are placed on the step's grid themselves. */
 .story-step--split .story-text {
-  display: contents;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  align-self: end;
+  justify-self: start;
+  max-width: 15em;
 }
 
 .story-step--split .story-line {
-  max-width: 16em;
   margin-top: 0;
-}
-
-.story-step--split .story-line:first-child {
-  grid-row: 1;
-  justify-self: start;
   text-align: left;
 }
 
 .story-step--split .story-line:last-child {
-  grid-row: 3;
-  justify-self: end;
+  margin-top: 0.45em;
+  margin-inline-start: clamp(1rem, 7vw, 6rem);
   text-align: right;
 }
 
 .story-step--split .story-art {
-  grid-row: 2;
-  place-self: center;
+  grid-column: 2;
+  grid-row: 1;
+  place-self: center end;
 }
 
 .story-art--microbiome {
-  width: clamp(9rem, 24vw, 17rem);
+  width: clamp(12rem, 38vw, 30rem);
   height: auto;
   max-height: 100%;
   overflow: visible;
@@ -4035,6 +4127,37 @@ body:not(.home-fullscreen) .home-hero {
     align-self: center;
     text-align: center;
   }
+
+  .story-art--question {
+    margin-inline: auto;
+  }
+
+  /* No empty corner left to stand in once the sentences are centred. */
+  .story-mascot {
+    display: none;
+  }
+
+  /* One column: the glass above, then the sentence under it. */
+  .story-step--split {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  .story-step--split .story-text {
+    grid-column: 1;
+    justify-self: center;
+    text-align: center;
+  }
+
+  .story-step--split .story-art {
+    grid-column: 1;
+    place-self: center;
+  }
+
+  .story-step--split .story-line:last-child {
+    margin-inline-start: 0;
+    text-align: center;
+  }
 }
 
 /* No pinning: the sentences are listed one under the other, all shown. */
@@ -4046,7 +4169,8 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .story-scroll--static .story-step {
-  position: static;
+  /* Relative, not static, so Elle still anchors to her own step's corner. */
+  position: relative;
   padding-top: 0;
   padding-bottom: 0;
 }
@@ -6715,8 +6839,8 @@ body:not(.home-fullscreen) .home-hero {
    the final one (see StakeholderAnalysis.tsx). Squircle corners use
    `corner-shape: squircle` where supported and fall back to a large
    border-radius elsewhere. */
-/* Wide horizontal cards stacked down the page: icon + title on the left,
-   text on the right. */
+/* Wide horizontal cards stacked down the page: icon beside the title on the
+   left, text on the right. */
 .stakeholder-squircles {
   display: flex;
   flex-direction: column;
@@ -6726,7 +6850,7 @@ body:not(.home-fullscreen) .home-hero {
 
 .stakeholder-squircle {
   display: grid;
-  grid-template-columns: 13rem 1fr;
+  grid-template-columns: 15rem 1fr;
   gap: 1.75rem;
   align-items: center;
   padding: 1.5rem 2rem;
@@ -6781,23 +6905,24 @@ body:not(.home-fullscreen) .home-hero {
 
 .stakeholder-squircle-header {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
   gap: 0.75rem;
 }
 
 .stakeholder-squircle-title {
   margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.3;
   color: #2fa4a9;
 }
 
-/* Left-aligned rather than the site-wide justify: in a card this narrow,
-   justified text opens wide gaps between words. Selector is long only to
-   out-rank the .page-shell-content :is(p, li) rule. */
+/* Justified (block) text like the rest of the page. Selector is long only
+   to out-rank the .page-shell-content :is(p, li) rule. */
 .page-body .page-shell-content .stakeholder-squircle .stakeholder-squircle-body p {
   margin: 0;
   line-height: 1.6;
-  text-align: left;
+  text-align: justify;
 }
 
 .stakeholder-squircle-body p + p {
@@ -7036,11 +7161,6 @@ body:not(.home-fullscreen) .home-hero {
     grid-template-columns: 1fr;
     gap: 1rem;
     padding: 1.5rem;
-  }
-
-  .stakeholder-squircle-header {
-    flex-direction: row;
-    align-items: center;
   }
 
   /* Below this width the bubbles would pile on top of each other, so the
@@ -7397,6 +7517,109 @@ body:not(.home-fullscreen) .home-hero {
   margin-bottom: 1rem;
 }
 
+/* FEEDBACK CYCLE (Human Practices)
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-09
+   Purpose: Listen → Analyse → Implement section. The text runs on the left
+   and the cycle wheel stays pinned on the right while the section is read,
+   turning so the current step sits at the top; a line drawn on scroll joins
+   the "active implementation" outcome to the Implement step (see
+   FeedbackCycle.tsx). Below 992px the wheel sits above the text instead. */
+.feedback-cycle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 15rem;
+  gap: 2.5rem;
+  margin: 1.5rem 0 3rem;
+}
+
+.feedback-cycle-content {
+  position: relative;
+}
+
+.feedback-cycle-aside {
+  position: sticky;
+  top: 7rem;
+  align-self: start;
+}
+
+.feedback-wheel {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.feedback-wheel-rotor {
+  transform-box: view-box;
+  transform-origin: 200px 200px;
+  transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.feedback-wheel-arrow {
+  fill: #a9d9db;
+  transition: fill 0.4s ease;
+}
+
+.feedback-wheel-step.is-active .feedback-wheel-arrow {
+  fill: #2fa4a9;
+}
+
+.feedback-wheel-label {
+  font-family: "Poppins", sans-serif;
+  font-size: 27px;
+  font-weight: 700;
+  fill: #1f6f73;
+  animation: feedback-label-in 1.1s ease both;
+}
+
+/* Hidden while the wheel turns (0.9s), then fades in */
+@keyframes feedback-label-in {
+  0%,
+  70% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.feedback-wheel-step.is-active .feedback-wheel-label {
+  fill: #ffffff;
+}
+
+.feedback-wheel-count {
+  font-family: "Luckiest Guy", "Poppins", sans-serif;
+  font-size: 64px;
+  fill: #2fa4a9;
+}
+
+.feedback-wheel-of {
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  fill: var(--color-text);
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .feedback-wheel-arrow {
+  fill: #2a5d61;
+}
+
+[data-theme="dark"] .feedback-wheel-label {
+  fill: #a9d9db;
+}
+
+/* Steps */
+.feedback-step + .feedback-step {
+  margin-top: 3rem;
+}
+
+.feedback-step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
 .info-card {
   padding: 1rem 1.15rem;
   text-align: left;
@@ -7422,6 +7645,208 @@ body:not(.home-fullscreen) .home-hero {
 
 @media (prefers-reduced-motion: reduce) {
   .question-selector-content {
+    animation: none;
+  }
+}
+
+.feedback-step-number {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background-color: #2fa4a9;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.feedback-step-title {
+  margin: 0;
+}
+
+/* Analyse outcomes: three squircles side by side */
+.feedback-outcomes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 0;
+}
+
+.feedback-outcome {
+  padding: 1.1rem 1.2rem;
+  border-radius: 1.75rem;
+  corner-shape: squircle;
+  background-color: var(--color-page-bg);
+  border: 2px solid rgba(47, 164, 169, 0.35);
+}
+
+@supports (corner-shape: squircle) {
+  .feedback-outcome {
+    border-radius: 2.75rem;
+  }
+}
+
+.feedback-outcome--active {
+  background-color: #2fa4a9;
+  border-color: #2fa4a9;
+  color: #ffffff;
+}
+
+.feedback-outcome--none {
+  opacity: 0.75;
+}
+
+.feedback-outcome-title {
+  margin: 0 0 0.4rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2fa4a9;
+}
+
+.feedback-outcome--active .feedback-outcome-title {
+  color: #ffffff;
+}
+
+/* Left-aligned: justified text opens wide gaps in a card this narrow.
+   Selector is long only to out-rank the .page-shell-content :is(p, li) rule. */
+.page-body .page-shell-content .feedback-outcome .feedback-outcome-body p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  text-align: left;
+}
+
+/* Line from the active outcome down to the Implement step */
+.feedback-implement-arrow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.feedback-implement-arrow-line {
+  fill: none;
+  stroke: #2fa4a9;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+}
+
+.feedback-implement-arrowhead {
+  fill: #2fa4a9;
+}
+
+/* The Implement step gets some air above it so the line has room to land */
+.feedback-step--implement {
+  padding-top: 2.5rem;
+}
+
+/* Downloadable files */
+.resource-download {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.25rem 0;
+  padding: 0.9rem 1.2rem;
+  border-radius: 1.5rem;
+  corner-shape: squircle;
+  background-color: var(--color-page-bg);
+  border: 2px solid rgba(47, 164, 169, 0.35);
+  color: var(--color-text);
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.resource-download:hover,
+.resource-download:focus-visible {
+  color: var(--color-text);
+  transform: translateY(-2px);
+  box-shadow: 0 0.75rem 1.5rem rgba(51, 40, 63, 0.12);
+}
+
+.resource-download-icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.9rem;
+  background-color: #2fa4a9;
+  color: #ffffff;
+}
+
+.resource-download-icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.resource-download-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.resource-download-title {
+  font-weight: 700;
+}
+
+.resource-download-description {
+  font-size: 0.88rem;
+  opacity: 0.8;
+}
+
+.resource-download-type {
+  margin-left: auto;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background-color: rgba(47, 164, 169, 0.15);
+  color: #1f6f73;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+[data-theme="dark"] .resource-download-type {
+  color: #a9d9db;
+}
+
+@media (max-width: 991.98px) {
+  .feedback-cycle {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+
+  .feedback-cycle-aside {
+    position: static;
+    order: -1;
+    width: min(16rem, 70%);
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .feedback-outcomes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Stacked, the active card goes last so its line drops straight to the
+     Implement step instead of crossing the other two cards. */
+  .feedback-outcome--active {
+    order: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feedback-wheel-rotor {
+    transition: none;
+  }
+
+  .feedback-wheel-label {
     animation: none;
   }
 }

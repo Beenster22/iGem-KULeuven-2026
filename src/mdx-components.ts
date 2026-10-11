@@ -52,6 +52,13 @@ import {
   StakeholderGroup,
   StakeholderMatrix,
 } from "./components/StakeholderAnalysis";
+import {
+  FeedbackCycle,
+  FeedbackStep,
+  FeedbackOutcomes,
+  FeedbackOutcome,
+  ResourceDownload,
+} from "./components/FeedbackCycle";
 import { DockingHeatmap } from "./components/DockingHeatmap";
 import {
   QuestionSelector,
@@ -122,4 +129,9 @@ export const mdxComponents = {
   StakeholderGroups,
   StakeholderGroup,
   StakeholderMatrix,
+  FeedbackCycle,
+  FeedbackStep,
+  FeedbackOutcomes,
+  FeedbackOutcome,
+  ResourceDownload,
 };

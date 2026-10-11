@@ -5,7 +5,8 @@
 // each with a small line icon. <StakeholderMatrix> is the influence–interest
 // matrix with a slider that morphs every category from the team's initial
 // assessment to the final one; dashed arrows trace each category's path, and
-// faint "ghost" bubbles mark where each one started. Positions are read off
+// faint "ghost" bubbles mark where each one started. A category with no
+// initial position wasn't on the first draft and fades in instead. Positions are read off
 // the team's two matrix drafts (initial vs. outcome) as % of the plot area,
 // where x = interest and y = influence (0 = low, 100 = high).
 import { ReactNode, useId, useState } from "react";
@@ -113,22 +114,18 @@ interface MatrixCategory {
   initialLabel: string;
   /** Only set when the category was renamed between the two assessments. */
   finalLabel?: string;
-  initial: Point;
+  /** Left out when the category wasn't on the initial assessment. */
+  initial?: Point;
   final: Point;
 }
 
 const CATEGORIES: MatrixCategory[] = [
-  { id: "advocates", initialLabel: "Advocates & Legislators", initial: { x: 37, y: 86 }, final: { x: 37, y: 86 } },
-  { id: "patients", initialLabel: "Patients", initial: { x: 92, y: 91 }, final: { x: 89, y: 37 } },
-  { id: "science", initialLabel: "Scientific & Technical Experts", initial: { x: 71, y: 78 }, final: { x: 63, y: 91 } },
-  { id: "industry", initialLabel: "Biotech & Industry", initial: { x: 90, y: 57 }, final: { x: 41, y: 65 } },
-  { id: "healthcare", initialLabel: "Healthcare Professionals", initial: { x: 59, y: 52 }, final: { x: 47, y: 32 } },
-  {
-    id: "ethics",
-    initialLabel: "Safety & Bioethical Regulations",
-    initial: { x: 25, y: 47 },
-    final: { x: 11, y: 72 },
-  },
+  { id: "advocates", initialLabel: "Advocates & Legislators", initial: { x: 86, y: 25 }, final: { x: 70, y: 83 } },
+  { id: "patients", initialLabel: "Patients", initial: { x: 91, y: 90 }, final: { x: 88, y: 64 } },
+  { id: "science", initialLabel: "Scientific & Technical Experts", initial: { x: 71, y: 77 }, final: { x: 88, y: 90 } },
+  { id: "industry", initialLabel: "Biotech & Industry", initial: { x: 51, y: 50 }, final: { x: 57, y: 50 } },
+  { id: "healthcare", initialLabel: "Healthcare Professionals", initial: { x: 88, y: 45 }, final: { x: 70, y: 29 } },
+  { id: "ethics", initialLabel: "Safety & Bioethical Regulations", final: { x: 13, y: 79 } },
 ];
 
 function lerp(a: number, b: number, t: number) {
@@ -207,6 +204,7 @@ export function StakeholderMatrix() {
 
             {/* Development arrows: from where each group started to where it is now */}
             {CATEGORIES.map((category) => {
+              if (!category.initial) return null;
               const current = {
                 x: lerp(category.initial.x, category.final.x, t),
                 y: lerp(category.initial.y, category.final.y, t),
@@ -227,6 +225,7 @@ export function StakeholderMatrix() {
 
           {/* Ghost bubbles at the initial positions, fading in once things move */}
           {CATEGORIES.map((category) => {
+            if (!category.initial) return null;
             const moves =
               category.initial.x !== category.final.x || category.initial.y !== category.final.y;
             if (!moves) return null;
@@ -249,13 +248,16 @@ export function StakeholderMatrix() {
 
           {CATEGORIES.map((category) => {
             const label = category.finalLabel && t >= 0.5 ? category.finalLabel : category.initialLabel;
+            const from = category.initial ?? category.final;
             return (
               <span
                 key={category.id}
                 className="stakeholder-matrix-bubble"
                 style={{
-                  left: `${lerp(category.initial.x, category.final.x, t)}%`,
-                  bottom: `${lerp(category.initial.y, category.final.y, t)}%`,
+                  left: `${lerp(from.x, category.final.x, t)}%`,
+                  bottom: `${lerp(from.y, category.final.y, t)}%`,
+                  // New on the final assessment: fade in rather than move
+                  ...(category.initial ? null : { opacity: t, visibility: t === 0 ? "hidden" : undefined }),
                 }}
               >
                 {label}
