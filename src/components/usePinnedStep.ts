@@ -3,8 +3,7 @@
 // visitor scrolls through several steps (a tall `.home-snap-pin` wrapper with
 // a sticky `.home-snap-stage` inside, see App.css): reports which step the
 // scroll position is on. Purely derived from the scroll position, so it works
-// the same with the wheel jumps of HomeSnapScroll.tsx, touch scrolling or the
-// scrollbar.
+// the same with the wheel, touch scrolling or the scrollbar.
 import { useEffect, useState, type RefObject } from "react";
 
 // How far into the scroll towards a step it already counts as reached: early,

@@ -2989,8 +2989,8 @@ body.home-fullscreen {
 
 /* HOME SNAP SECTIONS
    Generated with Claude Opus 5.5 (Anthropic), 2026-10-05
-   Purpose: every home-page section fills the screen, and HomeSnapScroll.tsx
-   glides from one `data-snap` stop to the next. "home-snap-screen" is an
+   Purpose: every home-page section fills the screen, and the page settles on
+   `data-snap` stops as it is scrolled. "home-snap-screen" is an
    ordinary full-screen section; "home-snap-pin" is a taller wrapper whose
    "home-snap-stage" stays pinned to the screen while the visitor scrolls
    through `--snap-steps` steps (markers placed by SnapSteps). The fixed
@@ -3049,8 +3049,13 @@ body:not(.home-fullscreen) .home-hero {
   pointer-events: none;
 }
 
-/* Touch screens scroll natively (no wheel to take over), so the browser's
-   own snapping nudges the page onto the nearest stop instead. */
+/* Touch screens scroll with momentum, so the browser's own snapping can nudge
+   the page onto the nearest stop without ever getting in the way.
+   Edited with Claude Opus 5 (Anthropic), 2026-10-11: kept to touch. The stops
+   here are one screen (or 60vh) apart, which is inside the proximity
+   threshold from almost anywhere, so on a mouse the browser pulls the page
+   back to the stop it just left and a single wheel tick moves nothing at all.
+   Pointer devices scroll freely instead. */
 @media (hover: none) and (pointer: coarse) {
   html.home-snap {
     scroll-snap-type: y proximity;
