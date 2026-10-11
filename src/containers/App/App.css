@@ -1829,6 +1829,11 @@ a[data-footnote-ref]:focus {
   flex-direction: row;
   align-items: center;
   gap: 2rem;
+  /* The wheel and its paragraph are centred in the column as a pair, so the
+     wheel sits towards the middle of the page instead of hard against the
+     left edge. The paragraph is capped rather than stretched for the same
+     reason: left to fill the column it would push the wheel back out left. */
+  justify-content: center;
 }
 
 .wheel-selector--side .wheel-selector-svg {
@@ -1837,7 +1842,7 @@ a[data-footnote-ref]:focus {
 }
 
 .wheel-selector--side .wheel-selector-content {
-  flex: 1 1 0;
+  flex: 0 1 26rem;
   min-width: 0;
 }
 
