@@ -1,5 +1,10 @@
 import { TeamMembers, TeamMemberCard } from "./components/TeamMembers";
 import { ProtocolBox } from "./components/ProtocolBox";
+import { ProtocolCalculator } from "./components/ProtocolCalculator";
+import { ProtocolCalcGrid } from "./components/ProtocolCalcGrid";
+import { ProtocolCalculations } from "./components/ProtocolCalculations";
+import { ProtocolNote } from "./components/ProtocolNote";
+import { ProtocolDownloads } from "./components/ProtocolDownloads";
 import { PageLayout } from "./components/PageLayout";
 import { Callout } from "./components/Callout";
 import { TabbedSections, TabSection } from "./components/TabbedSections";
@@ -66,6 +71,7 @@ import {
   InfoCards,
   InfoCard,
 } from "./components/QuestionSelector";
+import { PhenotypeVenn } from "./components/PhenotypeVenn";
 import { Link } from "react-router-dom";
 
 export const mdxComponents = {
@@ -77,6 +83,14 @@ export const mdxComponents = {
   TeamMembers,
   TeamMemberCard,
   ProtocolBox,
+  // Generated with Claude Opus 5 (Anthropic), 2026-10-12
+  // Purpose: the wet lab protocol pages — live calculator tables, the
+  // shaded Note/Critical boxes, and the PDF + workbook download row.
+  ProtocolCalculator,
+  ProtocolCalcGrid,
+  ProtocolCalculations,
+  ProtocolNote,
+  ProtocolDownloads,
   PageLayout,
   PmosOverview,
   BodySymptomsSection,
@@ -134,4 +148,7 @@ export const mdxComponents = {
   FeedbackOutcomes,
   FeedbackOutcome,
   ResourceDownload,
+  // Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
+  // Purpose: the interactive phenotype Venn diagram on the description page.
+  PhenotypeVenn,
 };

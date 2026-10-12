@@ -72,13 +72,21 @@ body {
 }
 
 h1,
-h2,
+h2 {
+  font-family: "Luckiest Guy", "Poppins", sans-serif;
+  font-weight: 400;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-12 (reviewer feedback:
+   Luckiest Guy is easy to read when big, but too heavy at subtitle sizes).
+   Page and section titles (h1, h2) keep the display face; the smaller
+   headings use the body face in bold instead. */
 h3,
 h4,
 h5,
 h6 {
-  font-family: "Luckiest Guy", "Poppins", sans-serif;
-  font-weight: 400;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
 }
 
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-07-28
@@ -110,6 +118,28 @@ a[data-footnote-ref] {
   color: var(--color-text);
   font-weight: 700;
   text-decoration: none;
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-12 (reviewer feedback:
+   link colours clash with the background)
+   Purpose: plain links in page content ([text](url) in the .mdx files, DOI
+   links in the References panel) had no rule of their own and fell back to
+   Bootstrap's blue, which is hard to read on the site's purples (contrast
+   2.6:1 on the light body, 3.1:1 on the dark one). They now take the colour
+   of the text around them, so they are readable on every surface in both
+   themes, and are marked as links by weight and a teal underline instead.
+   Links with a class (buttons, cards, the section index) style themselves. */
+.page-body a:not([class], [data-footnote-ref], .section-progress a) {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: #2fa4a9;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+}
+
+.page-body a:not([class], [data-footnote-ref], .section-progress a):hover {
+  text-decoration-thickness: 3px;
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): table
@@ -2972,6 +3002,22 @@ body.home-fullscreen {
   display: block;
 }
 
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
+   Purpose: object-fit doesn't apply to an <iframe>, so the 16:9 video embed
+   is sized to always cover the hero and centred, letting .home-hero's
+   overflow crop the excess — the same result as object-fit: cover. It's a
+   decorative background, so it takes no pointer input. */
+.home-hero-embed {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, calc(100dvh * 16 / 9));
+  height: max(100%, calc(100vw * 9 / 16));
+  transform: translate(-50%, -50%);
+  border: 0;
+  pointer-events: none;
+}
+
 .home-hero-layer {
   position: absolute;
   inset: 0;
@@ -4646,16 +4692,30 @@ body:not(.home-fullscreen) .home-hero {
 
 /* Phones: the cell on top, its introduction underneath. */
 @media (max-width: 699.98px) {
+  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-12: the introduction
+     used to start at the middle of the screen, but where the cell ends up
+     depends on how many lines the (hidden) reaction title above it wraps to,
+     so on narrow phones the cell lay over the text. It is now a zero-height
+     flex item straight after the diagram, so the text always starts at the
+     diagram's own lower edge, which the enlarged cell stays clear of; both
+     are lifted by the same --bsh-meet-lift to sit nearer the middle. */
+  .bsh-stream {
+    --bsh-meet-lift: 6rem;
+  }
+
   .bsh-stream--meet .bsh-stream-diagram {
-    translate: 0 -75%;
+    translate: 0 calc(-10% - var(--bsh-meet-lift));
     scale: 2.2;
   }
 
-  .bsh-stream-meet {
-    inset: 50% 0 0;
+  .bsh-stream:not(.bsh-stream--static) .bsh-stream-meet {
+    position: static;
+    order: 1;
+    height: 0;
     align-items: flex-start;
     justify-content: center;
     text-align: center;
+    translate: 0 calc(0.5rem - var(--bsh-meet-lift));
   }
 }
 
@@ -5724,9 +5784,11 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-12 (reviewer feedback):
+   400, not 700 — no synthetic bold on Luckiest Guy (see FONTS). */
 .pmos-counter-heading {
   font-size: clamp(1.5rem, 4vw, 2.75rem);
-  font-weight: 700;
+  font-weight: 400;
   margin: 0;
 }
 
@@ -7961,5 +8023,527 @@ body:not(.home-fullscreen) .home-hero {
 
   .feedback-wheel-label {
     animation: none;
+  }
+}
+
+/* WET LAB PROTOCOLS: CALCULATORS, NOTE BOXES AND DOWNLOADS
+   Generated with Claude Opus 5 (Anthropic), 2026-10-12
+   Purpose: styles for the protocol pages built from the team's protocol
+   documents. The interactive tables reuse the gridlines and lavender header
+   of the markdown tables inside a dropdown (see MARKDOWN TABLES INSIDE A
+   DROPDOWN above) so a calculated table and a printed one look alike; the
+   difference is the input boxes and the shaded derived cells. */
+
+.protocol-calc {
+  margin: 0 0 1.5rem;
+}
+
+.protocol-calc-caption {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.protocol-calc-hint {
+  display: block;
+  font-size: 0.85rem;
+  opacity: 0.75;
+  font-style: italic;
+}
+
+.protocol-calc-table {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  border-collapse: collapse;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.protocol-calc-table :is(th, td) {
+  border: 1px solid rgba(51, 40, 63, 0.18);
+  padding: 0.5rem 0.85rem;
+  text-align: left;
+  vertical-align: middle;
+}
+
+[data-theme="dark"] .protocol-calc-table :is(th, td) {
+  border-color: rgba(201, 189, 232, 0.25);
+}
+
+.protocol-calc-table thead th {
+  background-color: var(--color-accent);
+  /* The accent fill is light in both themes, so the header text stays dark
+     rather than following --color-text. */
+  color: #33283f;
+  font-weight: 600;
+}
+
+/* Row labels are <th scope="row"> for screen readers, but they are body
+   text, not a second header row — so they get no accent fill. The explicit
+   colour is required: this table sits inside .expandable-content, whose
+   "table th" rule pins every th to the fixed dark #33283f that suits the
+   light accent fill — on a body row that has no fill, it turned the label
+   near-black on the dark theme's background. */
+.protocol-calc-table tbody th {
+  font-weight: 400;
+  background: none;
+  color: var(--color-text);
+}
+
+.protocol-calc-input {
+  width: 100%;
+  max-width: 9rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid rgba(51, 40, 63, 0.45);
+  border-radius: 0.4rem;
+  background-color: var(--color-page-bg);
+  color: var(--color-text);
+  font: inherit;
+}
+
+[data-theme="dark"] .protocol-calc-input {
+  border-color: rgba(201, 189, 232, 0.45);
+}
+
+.protocol-calc-input:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+/* The cells that were left empty in the document, filled in by the page. */
+.protocol-calc-derived {
+  background-color: rgba(201, 189, 232, 0.3);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .protocol-calc-derived {
+  background-color: rgba(201, 189, 232, 0.16);
+}
+
+.protocol-calc-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: baseline;
+  margin-bottom: 0;
+  font-size: 0.85rem;
+}
+
+.protocol-calc-reset {
+  padding: 0.25rem 0.7rem;
+  border: 1px solid rgba(51, 40, 63, 0.45);
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+[data-theme="dark"] .protocol-calc-reset {
+  border-color: rgba(201, 189, 232, 0.45);
+}
+
+.protocol-calc-reset:hover {
+  background-color: rgba(201, 189, 232, 0.25);
+}
+
+.protocol-calc-workbook {
+  opacity: 0.8;
+}
+
+/* NOTE AND CRITICAL BOXES */
+.protocol-note {
+  margin: 0.75rem 0 1rem;
+  padding: 0.7rem 1rem;
+  border-left: 4px solid var(--color-accent);
+  border-radius: 0 0.5rem 0.5rem 0;
+  background-color: rgba(201, 189, 232, 0.22);
+}
+
+[data-theme="dark"] .protocol-note {
+  background-color: rgba(201, 189, 232, 0.12);
+}
+
+/* A critical step has to survive skim-reading, so it is warmer and heavier
+   than a note rather than only differing in its label. */
+.protocol-note--critical {
+  border-left-color: #b4456b;
+  background-color: rgba(180, 69, 107, 0.14);
+}
+
+[data-theme="dark"] .protocol-note--critical {
+  border-left-color: #e8829f;
+  background-color: rgba(232, 130, 159, 0.14);
+}
+
+/* The note's text comes from MDX as its own <p>, a sibling of the label (see
+   ProtocolNote for why it is not wrapped). Making the first paragraph inline
+   lets the label and the opening sentence read as one line; any further
+   paragraph stays a block. */
+.protocol-note > p {
+  margin-bottom: 0;
+  text-align: left;
+}
+
+.protocol-note > p:first-of-type {
+  display: inline;
+}
+
+.protocol-note > p + p {
+  margin-top: 0.5rem;
+}
+
+.protocol-note--critical .protocol-note-label {
+  color: #8d2347;
+}
+
+[data-theme="dark"] .protocol-note--critical .protocol-note-label {
+  color: #f0a6bc;
+}
+
+/* DOWNLOAD ROW */
+.protocol-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.protocol-download {
+  padding: 0.35rem 0.9rem;
+  border: 1px solid rgba(51, 40, 63, 0.45);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+[data-theme="dark"] .protocol-download {
+  border-color: rgba(201, 189, 232, 0.45);
+}
+
+a.protocol-download:hover {
+  background-color: rgba(201, 189, 232, 0.25);
+  text-decoration: none;
+}
+
+/* An asset with no uploaded URL yet: visibly unfinished, not a dead link. */
+.protocol-download--missing {
+  border-style: dashed;
+  opacity: 0.65;
+  font-style: italic;
+}
+
+/* COLLAPSIBLE "CALCULATIONS" SECTION
+   Generated with Claude Opus 5 (Anthropic), 2026-10-12
+   Purpose: a <details> rather than an ExpandableText, so that the 22
+   Calculations sections on the protocols page do not each add a row to the
+   page-wide index (which scans headings). Styled to match the accordions
+   around it. */
+.protocol-calculations {
+  margin: 1.25rem 0;
+  border: 1px solid rgba(51, 40, 63, 0.35);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .protocol-calculations {
+  border-color: rgba(201, 189, 232, 0.3);
+}
+
+.protocol-calculations-summary {
+  padding: 0.6rem 1rem;
+  background-color: var(--color-accent);
+  /* The accent fill is light in both themes, so the label stays dark. */
+  color: #33283f;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.protocol-calculations-summary::-webkit-details-marker {
+  display: none;
+}
+
+.protocol-calculations-summary::before {
+  content: "▸";
+  display: inline-block;
+  margin-right: 0.5rem;
+  transition: transform 0.15s ease;
+}
+
+.protocol-calculations[open] .protocol-calculations-summary::before {
+  transform: rotate(90deg);
+}
+
+.protocol-calculations-summary:hover {
+  filter: brightness(0.96);
+}
+
+.protocol-calculations-body {
+  padding: 1rem 1.25rem;
+}
+
+.protocol-calculations-body > :first-child {
+  margin-top: 0;
+}
+
+.protocol-calculations-body > :last-child {
+  margin-bottom: 0;
+}
+
+/* PHENOTYPE VENN
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
+   Purpose: the interactive phenotype figure on the project description page
+   (see PhenotypeVenn.tsx). The circles are see-through teal, so where they
+   overlap they darken by themselves as in the team's figure. Everything
+   marked .is-lit belongs to what is pointed at or chosen; with .has-active
+   the rest steps back. A lit overlap is a brighter copy drawn on top,
+   slightly enlarged with a shadow, so it looks raised. */
+.phenotype-venn-frame {
+  container-type: inline-size;
+  margin: 1.5rem 0 2.5rem;
+}
+
+.phenotype-venn {
+  --pv-teal: #23878c;
+  --pv-lit: #f1c3d4;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 1.5rem 2rem;
+}
+
+.phenotype-venn-svg {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.phenotype-venn-circle {
+  fill: var(--pv-teal);
+  fill-opacity: 0.38;
+  stroke: var(--color-text);
+  stroke-opacity: 0.45;
+  stroke-width: 1.5;
+  transition:
+    fill-opacity 0.25s ease,
+    stroke-opacity 0.25s ease,
+    stroke-width 0.25s ease;
+}
+
+.phenotype-venn.has-active .phenotype-venn-circle {
+  fill-opacity: 0.14;
+  stroke-opacity: 0.25;
+}
+
+.phenotype-venn.has-active .phenotype-venn-circle.is-lit {
+  fill-opacity: 0.42;
+  stroke-opacity: 0.9;
+  stroke-width: 2.5;
+}
+
+.phenotype-venn-label,
+.phenotype-venn-letter {
+  fill: var(--color-text);
+  text-anchor: middle;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.phenotype-venn-label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.phenotype-venn-label-short {
+  font-weight: 600;
+}
+
+.phenotype-venn.has-active .phenotype-venn-label:not(.is-lit),
+.phenotype-venn.has-active .phenotype-venn-letter:not(.is-lit) {
+  opacity: 0.4;
+}
+
+.phenotype-venn-letter {
+  dominant-baseline: central;
+  font-size: 40px;
+  font-weight: 800;
+}
+
+/* On the pale lit overlap the letter is always dark, in either theme. */
+.phenotype-venn-letter.is-lit {
+  fill: #33283f;
+}
+
+/* The overlap itself is only there to be pointed at and clicked. */
+.phenotype-venn-region {
+  fill: transparent;
+  cursor: pointer;
+}
+
+.phenotype-venn-raised {
+  fill: var(--pv-lit);
+  stroke: #33283f;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  opacity: 0;
+  pointer-events: none;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    opacity 0.2s ease,
+    transform 0.25s ease,
+    filter 0.25s ease;
+}
+
+.phenotype-venn-raised.is-lit {
+  opacity: 1;
+  transform: scale(1.07);
+  filter: drop-shadow(0 6px 8px rgba(51, 40, 63, 0.4));
+}
+
+.phenotype-venn-panel {
+  padding: 1.5rem 1.5rem 1rem;
+  border-radius: 1.25rem;
+  background-color: rgba(234, 244, 245, 0.45);
+}
+
+[data-theme="dark"] .phenotype-venn-panel {
+  background-color: rgba(234, 244, 245, 0.06);
+}
+
+.phenotype-venn-panel-title {
+  margin: 0 0 0.5rem;
+  padding: 0 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.phenotype-venn-list {
+  margin: 0 0 1.25rem;
+  padding: 0;
+  list-style: none;
+}
+
+.phenotype-venn-row {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.45rem 0.75rem;
+  border: 2px solid transparent;
+  border-radius: 0.75rem;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    opacity 0.2s ease,
+    translate 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.phenotype-venn-row--criteria {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.phenotype-venn-row-letter {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.phenotype-venn.has-active .phenotype-venn-row:not(.is-lit) {
+  opacity: 0.5;
+}
+
+.phenotype-venn-row.is-lit {
+  background-color: var(--pv-lit);
+  color: #33283f;
+  translate: 0.35rem 0;
+  box-shadow: 0 4px 10px rgba(51, 40, 63, 0.25);
+}
+
+.phenotype-venn-row[aria-pressed="true"] {
+  border-color: var(--color-text);
+}
+
+.phenotype-venn-row.is-lit[aria-pressed="true"] {
+  border-color: #33283f;
+}
+
+.phenotype-venn-row:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+/* The lists stay beside the drawing for as long as the drawing keeps a
+   readable size (measured on the figure's own width, since the page's side
+   index narrows the column). In a column under 900px they do so in a compact
+   form, with each phenotype's type under its criteria; only under 600px
+   (phones) does the drawing go on top with the lists underneath. */
+@container (max-width: 899.98px) {
+  .phenotype-venn {
+    grid-template-columns: minmax(0, 1fr) 18.5rem;
+    gap: 1.5rem;
+  }
+
+  .phenotype-venn-panel {
+    padding: 1.25rem 0.75rem 0.5rem;
+  }
+
+  .phenotype-venn-row {
+    grid-template-columns: 2rem minmax(0, 1fr);
+    row-gap: 0;
+  }
+
+  .phenotype-venn-row-letter {
+    grid-row: span 2;
+  }
+
+  .phenotype-venn-row-type {
+    grid-column: 2;
+    font-weight: 400;
+  }
+
+  .phenotype-venn-row--criteria {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+@container (max-width: 599.98px) {
+  .phenotype-venn {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Stacked but not phone-narrow: the two lists side by side. */
+@container (min-width: 520px) and (max-width: 599.98px) {
+  .phenotype-venn-panel {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phenotype-venn-circle,
+  .phenotype-venn-label,
+  .phenotype-venn-letter,
+  .phenotype-venn-raised,
+  .phenotype-venn-row {
+    transition: none;
   }
 }

@@ -2,7 +2,7 @@
 // figure into the gut, into the microbiome, into a single bacterium (the
 // logo's motif), then pulls back out to reveal the team logo. See the
 // STAGES config below to swap in real artwork once it exists.
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useThemeMode } from "../ThemeModeContext";
 
@@ -158,29 +158,68 @@ function layerTarget(index: number, stageIndex: number) {
   return { opacity: 0, scale: entryScale(STAGES[index].direction), transition: { duration: 0 } };
 }
 
-// TEMPORARY — local-only preview of the rendered hero video, while the real
-// upload to iGEM Video Universe is still being sorted out. Points at a file
-// copied into public/temp-preview/ (gitignored, never committed). Once the
-// real static/video.igem.org URL exists, delete this whole block and swap
-// it in below instead — see README.md's asset rules for why it can't stay
-// a local file long-term.
-// import.meta.env.BASE_URL (not a hardcoded leading "/") so this resolves
-// correctly under the "/kuleuven/" base the dev server serves everything
-// from — a plain "/temp-preview/..." 404s because it's missing that prefix.
-const PREVIEW_VIDEO_SRC = `${import.meta.env.BASE_URL}temp-preview/HomePageV1.mp4`;
+// Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
+// Purpose: the home page hero video, embedded from iGEM Video Universe (per
+// README.md's asset rules, video must be served from iGEM infrastructure).
+// Plays once, muted and without player chrome, as a full-bleed background.
+// api=1 turns on the PeerTube embed's postMessage API, which is how the end
+// of playback is detected below.
+const HERO_VIDEO_ORIGIN = "https://video.igem.org";
+const HERO_VIDEO_EMBED_SRC =
+  `${HERO_VIDEO_ORIGIN}/videos/embed/iCBcuNaKri4k2PfQsXQXrj` +
+  "?autoplay=1&muted=1&loop=0&controls=0&controlBar=0&title=0&warningTitle=0&peertubeLink=0&p2p=0&api=1";
 
 // The frame the intro video ends on (logo + banner) — once the video
 // finishes playing, it's swapped for this static image instead of looping
-// or sitting idle as a paused <video>, since a plain <img> is cheaper to
+// or sitting idle as a paused player, since a plain <img> is cheaper to
 // leave on screen indefinitely and guarantees a crisp result regardless of
 // how the video's own last frame compresses.
 const FINAL_FRAME_SRC =
   "https://static.igem.wiki/teams/6299/wiki/home-page/homepageempowerbanner.avif";
 
+// The PeerTube embed talks to its parent page over jschannel: JSON strings
+// with a "peertube::<method>" name. It queues its notifications until the
+// parent answers its "__ready" ping, so that handshake has to be completed
+// before "playbackStatusChange" (playing/paused/ended) starts arriving.
+function useEmbedEnded(iframeRef: React.RefObject<HTMLIFrameElement | null>, onEnded: () => void) {
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      const player = iframeRef.current?.contentWindow;
+      if (!player || event.source !== player || event.origin !== HERO_VIDEO_ORIGIN) return;
+      if (typeof event.data !== "string") return;
+
+      let message: { method?: string; params?: { type?: string } | string };
+      try {
+        message = JSON.parse(event.data);
+      } catch {
+        return;
+      }
+
+      if (
+        message.method === "peertube::__ready" &&
+        typeof message.params === "object" &&
+        message.params.type === "publish-request"
+      ) {
+        player.postMessage(
+          JSON.stringify({ method: "peertube::__ready", params: { type: "publish-reply", publish: [] } }),
+          HERO_VIDEO_ORIGIN,
+        );
+      } else if (message.method === "peertube::playbackStatusChange" && message.params === "ended") {
+        onEnded();
+      }
+    };
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, [iframeRef, onEnded]);
+}
+
 export function HomeHero() {
   const [videoEnded, setVideoEnded] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const handleEnded = useCallback(() => setVideoEnded(true), []);
+  useEmbedEnded(iframeRef, handleEnded);
 
-  if (PREVIEW_VIDEO_SRC) {
+  if (HERO_VIDEO_EMBED_SRC) {
     if (videoEnded) {
       return (
         <div className="home-hero">
@@ -190,9 +229,14 @@ export function HomeHero() {
     }
     return (
       <div className="home-hero">
-        <video className="home-hero-video" autoPlay muted playsInline onEnded={() => setVideoEnded(true)}>
-          <source src={PREVIEW_VIDEO_SRC} />
-        </video>
+        <iframe
+          ref={iframeRef}
+          className="home-hero-embed"
+          title="KULeuven: KU Leuven home page video (2026)"
+          src={HERO_VIDEO_EMBED_SRC}
+          allow="autoplay; fullscreen"
+          sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+        />
       </div>
     );
   }
