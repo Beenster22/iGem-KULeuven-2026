@@ -14,9 +14,9 @@ the numbers in the tables.
 
 The tables that were left blank in our written protocols are **live on this
 page** — change a value in a box and the shaded cells recalculate, so a run can
-be planned without opening the workbook. The same tables are in
-`Protocol_Calculators.xlsx`, which is downloadable from every protocol that
-uses it, alongside that protocol as a PDF.
+be planned without opening anything else. Each of those tables also names the
+tab of our `Protocol_Calculators.xlsx` workbook it came from, for anyone
+working from our own copy.
 
 ## A. Core Methods
 
@@ -2329,6 +2329,291 @@ in which:
 
 </ExpandableText>
 
+<ExpandableText title="Gibson Assembly">
+
+<ProtocolDownloads workbookTab="Gibson assembly" />
+
+#### Introduction
+
+This protocol describes the assembly of a linearized vector with one or more
+synthetic fragments in a single isothermal reaction, using a commercial HiFi
+assembly master mix. The fragments carry overlapping ends, which the reaction
+joins without a separate ligation step.
+
+The assembled product is transformed directly into competent cells (see the
+protocol "Chemical Transformation Protocol").
+
+#### Attributions
+
+Written by Alec Lontie and the wet lab team of iGEM KU Leuven 2026.
+
+The reaction follows the instructions of the manufacturer of the assembly
+master mix (New England Biolabs, n.d.-b), which are available online: NEBuilder
+HiFi DNA Assembly Master Mix (NEB #E2621). The reaction volumes were planned
+with the assembly calculator of the manufacturer (New England Biolabs, n.d.-a).
+
+The iGEM KU Leuven 2026 team used this protocol to assemble the
+promoter-reporter constructs of the promoter library into the amplified pNBU2
+backbone.
+
+#### Materials
+
+**Reagents**
+
+| Item | Specification and quantity |
+|---|---|
+| NEBuilder HiFi DNA Assembly Master Mix (2×) | New England Biolabs, cat. no. E2621; half the reaction volume |
+| Linearized vector | See the protocol "Backbone Amplification PCR" |
+| Synthetic DNA fragments (gBlocks), lyophilised | One or more per construct |
+| Positive control supplied with the kit | For the first use and when troubleshooting |
+| MQ water (Milli-Q), sterile and autoclaved | For resuspension and for the reaction |
+
+**Consumables and tools**
+
+| Item | Specification and quantity |
+|---|---|
+| PCR tubes, thin-walled | One per assembly |
+| Microcentrifuge tubes, 1.5 mL, sterile | One per resuspended fragment |
+| Micropipettes and sterile tips | 0.5–10 µL and 2–20 µL |
+| Ice bucket | The reaction is assembled on ice |
+
+**Instruments**
+
+| Item | Specification and quantity |
+|---|---|
+| Thermocycler | 50 °C |
+| Microplate reader or spectrophotometer | For quantification of the fragments |
+| Vortex mixer and microcentrifuge | For resuspension and collection of the liquid |
+| Freezer | −20 °C |
+
+**Personal protective equipment**
+
+| Item | Specification and quantity |
+|---|---|
+| Lab coat | Worn closed at all times |
+| Nitrile gloves | Changed after contact with reagents or cultures |
+| Safety glasses | Required when handling hot liquids and irritant powders |
+
+#### Safety and safety data sheets
+
+Hazard classifications were taken from the supplier safety data sheets (SDS)
+and product pages cited in the table below. The SDS of the exact product and
+lot in use should be consulted before starting, because classifications can
+differ between suppliers and product grades.
+
+**Table 1.** Hazard classification and safety data sheets (SDS) of the reagents used.
+
+| Substance | CAS no. | Classification (GHS/CLP) | Precautions | SDS |
+|---|---|---|---|---|
+| NEBuilder HiFi DNA Assembly Master Mix | Mixture | The SDS of the product in use should be consulted. | Wear gloves and safety glasses. Keep on ice and thaw on ice. | New England Biolabs (n.d.-b) Product page; SDS under "Documents" |
+| Synthetic DNA fragments and purified vector | n/a | Not classified as hazardous. | Standard laboratory practice. | No SDS required |
+
+**Waste disposal.** All cultures, plates and contaminated consumables are
+inactivated by autoclaving before disposal. The waste and disposal instructions
+of the laboratory in use apply.
+
+#### Procedure
+
+**Preparing the fragments**
+
+1. Prepare a bottle of sterile MQ water in advance.
+
+<ProtocolNote>
+
+It is recommended to prepare and autoclave the water the day before, so that no
+time is lost waiting for it.
+
+</ProtocolNote>
+
+2. Resuspend each lyophilised fragment in MQ water to the intended
+   concentration (Table 2).
+
+<ProtocolNote>
+
+The volume in µL is the amount on the tube in fmol divided by the intended
+concentration in nM, because 1 nM is 1 fmol/µL.
+
+</ProtocolNote>
+
+<ProtocolCalculator
+  number={2}
+  title="Resuspension of lyophilised gBlocks."
+  workbookTab="Gibson assembly"
+  rows={[
+    { key: "fmol", label: "Amount stated on the tube", value: 1000, unit: "fmol", input: true },
+    { key: "cTarget", label: "Target concentration", value: 10, unit: "nM", input: true },
+    { key: "vResuspend", label: "MQ water for resuspension", unit: "µL", decimals: 0, compute: (v) => v.fmol / v.cTarget },
+    { key: "length", label: "Fragment length", value: 1000, unit: "bp", input: true },
+    { key: "cNg", label: "Measured concentration after resuspension", value: 15.7, unit: "ng/µL", input: true },
+    { key: "cNM", label: "Concentration in nM", unit: "nM", decimals: 1, compute: (v) => (v.cNg * 1e6) / (650 * v.length) },
+  ]}
+/>
+
+3. Measure the concentration of each resuspended fragment (see the protocol
+   "DNA Quantification with the LVis Plate"), using 1 µL per measurement.
+
+<ProtocolNote>
+
+As little sample as possible is used, because the whole volume is needed for
+the assemblies.
+
+</ProtocolNote>
+
+4. Convert each measured concentration from ng/µL to nM, using the length of
+   the fragment.
+
+**Setting up the reaction**
+
+5. Thaw the assembly master mix on ice and keep it on ice throughout.
+
+<ProtocolNote kind="critical">
+
+The master mix is kept on ice at all times. When it has thawed, it is pipetted
+up and down very slowly the first time with a sterile tip.
+
+</ProtocolNote>
+
+6. Vortex the DNA fragments briefly and collect the liquid at the bottom of the
+   tubes.
+7. Assemble the reaction on ice according to Table 3: half the reaction volume
+   is master mix, and the fragments are added in the intended molar amounts.
+
+<ProtocolCalculator
+  number={3}
+  title="Assembly reaction."
+  workbookTab="Gibson assembly"
+  rows={[
+    { key: "vTotal", label: "Total reaction volume", value: 10, unit: "µL", input: true },
+    { key: "vMasterMix", label: "NEBuilder HiFi Master Mix (2×)", unit: "µL", decimals: 1, compute: (v) => v.vTotal / 2 },
+    { key: "nVector", label: "Vector, amount in the reaction", value: 0.05, unit: "pmol", input: true },
+    { key: "ratio", label: "Insert to vector molar ratio", value: 2, unit: "–", input: true },
+    { key: "nInsert", label: "Insert, amount in the reaction", unit: "pmol", decimals: 3, compute: (v) => v.nVector * v.ratio },
+    { key: "cVector", label: "Vector concentration", value: 20, unit: "nM", input: true },
+    { key: "cInsert", label: "Insert concentration", value: 50, unit: "nM", input: true },
+    { key: "vVector", label: "Vector volume to add", unit: "µL", compute: (v) => (v.nVector * 1000) / v.cVector },
+    { key: "vInsert", label: "Insert volume to add", unit: "µL", compute: (v) => (v.nInsert * 1000) / v.cInsert },
+    { key: "vWater", label: "Nuclease-free water to add", unit: "µL", decimals: 2, compute: (v) => v.vTotal - v.vMasterMix - v.vVector - v.vInsert },
+  ]}
+/>
+
+<ProtocolNote>
+
+The manufacturer recommends 0.03 to 0.2 pmol of fragments in total for an
+assembly of two or three fragments, with a two-fold molar excess of each insert
+over the vector, and an overlap of 15 to 20 bp between fragments (New England
+Biolabs, n.d.-b). For cloning efficiency, 50 to 100 ng of vector is a practical
+amount.
+
+</ProtocolNote>
+
+**Incubation**
+
+8. Incubate the reaction at 50 °C for 30 minutes in a thermocycler.
+
+<ProtocolNote>
+
+An incubation of up to 60 minutes can improve the assembly efficiency in some
+cases (New England Biolabs, n.d.-b). The team used 43 minutes.
+
+</ProtocolNote>
+
+9. Place the reaction on ice, or store it at −20 °C until the transformation.
+
+**Transformation**
+
+10. Transform the chilled assembly product into competent cells, using
+    approximately 10% of the reaction volume (see the protocol "Chemical
+    Transformation Protocol").
+
+<ProtocolNote>
+
+For the promoter library, 2.0 µL of a 10 µL assembly was transformed into
+chemically competent *E. coli* S17 λ pir.
+
+</ProtocolNote>
+
+#### Notes from the bench
+
+This section collects the experience of the team with this protocol: what was
+changed between runs, what went wrong and what is worth knowing before
+starting. Members of the team are encouraged to add their own entries, each
+starting with the month and year.
+
+<ProtocolNote date="September 2026">
+
+The assemblies of 3 September 2026 used twenty constructs, combining five
+promoters with four reporters, each as a single fragment assembled into the
+amplified pNBU2 backbone.
+
+</ProtocolNote>
+
+<ProtocolNote date="September 2026">
+
+The fragments were supplied lyophilised and were resuspended to 10 nM, then
+measured individually, because the concentration after resuspension varied
+between fragments.
+
+</ProtocolNote>
+
+<ProtocolCalculations>
+
+This section explains the calculations used in this protocol. The symbols are
+defined for each equation, and the worked example uses the values printed in
+the corresponding table.
+
+**Resuspension of lyophilised gBlocks and conversion to nM**
+
+*V* = *n* / *c*  and  *c*nM = (*c*ng × 10⁶) / (650 × *L*)
+
+in which:
+
+- *V* = volume of MQ water for resuspension (µL)
+- *n* = amount stated on the tube (fmol)
+- *c* = target concentration (nM, equal to fmol/µL)
+- *c*nM = concentration in nM
+- *c*ng = measured concentration (ng/µL)
+- *L* = fragment length (bp)
+- 650 = average molar mass of one base pair of double-stranded DNA (g/mol)
+
+A concentration in nM equals fmol/µL, which is why the amount in fmol divided
+by the target concentration gives the volume directly. The conversion from
+ng/µL to nM is needed because the assembly is set up on a molar basis.
+
+**Worked example.** For a tube containing 1000 fmol at 10 nM: *V* = 1000 / 10 =
+100 µL. A 1000 bp fragment measured at 15.7 ng/µL is (15.7 × 10⁶) /
+(650 × 1000) = 24.2 nM.
+
+**Assembly reaction**
+
+*n*insert = *n*vector × *R*  and  *V* = (*n* × 1000) / *c*
+
+in which:
+
+- *n*vector, *n*insert = amount of vector and insert in the reaction (pmol)
+- *R* = insert to vector molar ratio
+- *V* = volume to add (µL)
+- *c* = concentration of that fragment (nM)
+- 1000 = conversion from pmol to fmol, since 1 nM is 1 fmol/µL
+
+The master mix is half the reaction volume. The manufacturer recommends 0.03 to
+0.2 pmol of fragments in total for a two-fragment assembly, with a two-fold
+molar excess of insert over vector, and an overlap of 15 to 20 bp between
+fragments. Nuclease-free water makes up the remainder.
+
+**Worked example.** For a 10 µL reaction: 5.0 µL of master mix. With 0.05 pmol
+of a 20 nM vector and a 2:1 ratio, the insert is 0.100 pmol; the volumes are
+(0.05 × 1000) / 20 = 2.50 µL of vector and (0.1 × 1000) / 50 = 2.00 µL of a
+50 nM insert, leaving 0.50 µL of water.
+
+</ProtocolCalculations>
+
+#### References
+
+- New England Biolabs. (n.d.-a). *NEBuilder assembly tool*. Retrieved October 6, 2026, from https://nebuildercalculator.neb.com/
+- New England Biolabs. (n.d.-b). *NEBuilder HiFi DNA Assembly Master Mix* (NEB #E2621) [Product information]. Retrieved October 6, 2026, from https://www.neb.com/en/products/e2621-nebuilder-hifi-dna-assembly-master-mix
+
+</ExpandableText>
+
 <ExpandableText title="Chemical Transformation">
 
 <ProtocolDownloads workbookTab="Transformation" />
@@ -3062,13 +3347,11 @@ DNA is negatively charged and migrates towards the positive electrode (red).
 
 </ProtocolNote>
 
-<Callout title="Figure 1 — not yet uploaded">
+<ZoomableImage src="https://static.igem.wiki/teams/6299/wiki/wet-lab/figures/gelorientationinelectrophoresis.avif" alt="Top view of a horizontal electrophoresis tank: the wells sit at the black cathode (negative) end and the DNA migrates towards the red anode (positive) end, with the gel submerged in 10 mM lithium acetate running buffer." />
 
-Orientation of the gel in the electrophoresis apparatus (top view). The diagram
-is embedded in the protocol document and still has to be uploaded through the
-iGEM uploads tool before it can be shown here.
-
-</Callout>
+*Figure 1: Orientation of the gel in the electrophoresis apparatus (top view).
+The wells are placed at the cathode (−, black) and the DNA migrates towards the
+anode (+, red), with the gel submerged in 10 mM lithium acetate running buffer.*
 
 12. Pour enough 10 mM lithium acetate into the tank to cover the gel.
 13. Carefully load the DNA ladder and the samples into the wells.
@@ -3702,6 +3985,306 @@ a slightly lower total yield.
 
 - New England Biolabs. (n.d.-a). *Monarch Spin PCR & DNA Cleanup Kit, 5 µg* (NEB #T1130) [Product information]. Retrieved October 11, 2026, from https://www.neb.com/en/products/t1130-monarch-spin-pcr-and-dna-cleanup-kit-5-ug
 - New England Biolabs. (n.d.-b). *Standard cleanup protocol using the Monarch Spin PCR & DNA Cleanup Kit and centrifugation* (NEB #T1130). Retrieved October 11, 2026, from https://www.neb.com/en-us/protocols/standard-cleanup-protocol-using-the-monarch-spin-pcr-and-dna-cleanup-kit-and-centrifugation
+
+</ExpandableText>
+
+<ExpandableText title="Sanger Sequencing Sample Preparation">
+
+<ProtocolDownloads workbookTab="Sequencing prep" />
+
+#### Introduction
+
+This protocol describes the preparation and submission of purified DNA for
+Sanger sequencing by an external service. The sequencing itself is performed by
+the provider; this protocol covers everything up to handing the samples over.
+
+Two submission formats are available. In the first, template and primer are
+supplied in separate tubes; in the second, they are premixed in one tube. The
+requirements below are those of the provider used by the team (Eurofins
+Genomics, n.d.-b; Eurofins Genomics, n.d.-a) and should be checked against the
+current instructions before each submission, because they change.
+
+#### Attributions
+
+Written by Alec Lontie and the wet lab team of iGEM KU Leuven 2026.
+
+The requirements for the submission are those of the sequencing provider, which
+are available online: TubeSeq sample submission guide and Mix2Seq kit.
+
+The iGEM KU Leuven 2026 team used this protocol to sequence-validate the BSH
+constructs and the promoter library constructs.
+
+#### Materials
+
+**Reagents**
+
+| Item | Specification and quantity |
+|---|---|
+| Purified plasmid DNA or purified PCR product | See the concentration requirements in Table 2 |
+| Sequencing primer, 10 pmol/µL | One per reaction |
+| MQ water (Milli-Q), sterile | For adjusting the concentration |
+
+**Consumables and tools**
+
+| Item | Specification and quantity |
+|---|---|
+| Tubes supplied or specified by the provider | One per sample and, for the separate format, one per primer |
+| Barcode labels supplied by the provider | One per tube |
+| Micropipettes and tips | 0.5–10 µL and 2–20 µL |
+| Permanent marker | For the barcode number on the side of the tube |
+
+**Instruments**
+
+| Item | Specification and quantity |
+|---|---|
+| Microplate reader or spectrophotometer | For quantification before submission |
+| Microcentrifuge | For collecting the liquid at the bottom of the tube |
+
+**Personal protective equipment**
+
+| Item | Specification and quantity |
+|---|---|
+| Lab coat | Worn closed at all times |
+| Nitrile gloves | Changed after contact with reagents or cultures |
+| Safety glasses | Required when handling hot liquids and irritant powders |
+
+#### Safety and safety data sheets
+
+Hazard classifications were taken from the supplier safety data sheets (SDS)
+and product pages cited in the table below. The SDS of the exact product and
+lot in use should be consulted before starting, because classifications can
+differ between suppliers and product grades.
+
+The samples themselves are purified DNA in buffer and present no particular
+hazard. No cells are submitted.
+
+**Table 1.** Hazard classification and safety data sheets (SDS) of the reagents used.
+
+| Substance | CAS no. | Classification (GHS/CLP) | Precautions | SDS |
+|---|---|---|---|---|
+| Purified DNA in elution buffer or water | n/a | Not classified as hazardous. | Standard laboratory practice. | No SDS required |
+
+**Waste disposal.** All cultures, plates and contaminated consumables are
+inactivated by autoclaving before disposal. The waste and disposal instructions
+of the laboratory in use apply.
+
+<Callout title="Check before each submission">
+
+The submission requirements were read from the provider documentation in
+October 2026. They change over time, so check them against the current version
+before the next submission.
+
+</Callout>
+
+#### Procedure
+
+**Preparing the DNA**
+
+1. Purify the DNA before submission: a plasmid preparation from a miniprep, or
+   a PCR product cleaned with the protocol "PCR Clean-Up".
+
+<ProtocolNote kind="critical">
+
+An unpurified PCR reaction cannot be submitted: residual primers, nucleotides
+and polymerase interfere with the sequencing reaction.
+
+</ProtocolNote>
+
+2. Quantify the DNA and check the purity ratios (see the protocol "DNA
+   Quantification with the LVis Plate").
+
+<ProtocolNote>
+
+An A₂₆₀/A₂₈₀ ratio of 1.7 to 1.9 and an A₂₆₀/A₂₃₀ ratio of 2.0 to 2.2 indicate
+a preparation clean enough to sequence.
+
+</ProtocolNote>
+
+3. Check the required concentration for the sample type and length (Table 2)
+   and adjust the sample with MQ water if it is too concentrated.
+
+**Table 2.** Concentration required by the provider, by sample type (Eurofins
+Genomics, n.d.-b; Eurofins Genomics, n.d.-a).
+
+| Sample type | Concentration | Note |
+|---|---|---|
+| Plasmid DNA, up to 30 kbp | 50–100 ng/µL | Purified preparation |
+| PCR product, 150–300 bp | 1 ng/µL | Purified product |
+| PCR product, 300–1000 bp | 5 ng/µL | Purified product |
+| PCR product, 1000–3000 bp | 10 ng/µL | Purified product |
+| Sequencing primer | 10 pmol/µL | Exactly this concentration is required |
+
+**Preparing the primers**
+
+4. Prepare each sequencing primer at exactly 10 pmol/µL (Table 3).
+
+<ProtocolNote>
+
+A concentration of 10 pmol/µL is the same as 10 µM. Primers for sequencing are
+16 to 25 bases long, with a melting temperature of 50 to 62 °C and a GC content
+of 35 to 60%, and carry no phosphorylation or fluorescent label (Eurofins
+Genomics, n.d.-a).
+
+</ProtocolNote>
+
+<ProtocolCalculator
+  number={3}
+  title="Primer working solution at 10 pmol/µL."
+  workbookTab="Sequencing prep"
+  rows={[
+    { key: "nmol", label: "Amount of primer stated on the tube", value: 24.8, unit: "nmol", input: true },
+    { key: "cStock", label: "Stock concentration after resuspension", value: 100, unit: "µM", input: true },
+    { key: "vResuspend", label: "MQ water for resuspension", unit: "µL", decimals: 0, compute: (v) => (v.nmol / v.cStock) * 1000 },
+    { key: "vWorking", label: "Working solution volume", value: 100, unit: "µL", input: true },
+    { key: "cWorking", label: "Working concentration required", value: 10, unit: "pmol/µL", input: true },
+    { key: "vStockAdd", label: "Stock to add", unit: "µL", decimals: 1, compute: (v) => v.vWorking * (v.cWorking / v.cStock) },
+    { key: "vWaterAdd", label: "MQ water to add", unit: "µL", decimals: 1, compute: (v) => v.vWorking - v.vStockAdd },
+  ]}
+/>
+
+**Separate tubes format**
+
+5. Pipette the required volume of template into a tube: 15 µL for one to four
+   reactions, or 20 µL for five to eight reactions (Eurofins Genomics, n.d.-b).
+6. Pipette 15 µL of each primer into its own tube, adding 5 µL for every
+   reaction beyond the first that uses that primer (Eurofins Genomics, n.d.-b).
+
+**Premixed format**
+
+7. Combine the template and the primer in one tube to the total volume required
+   by the format in use (Table 4).
+
+<ProtocolNote>
+
+The premixed TubeSeq format takes a total of 17 µL (Eurofins Genomics, n.d.-b).
+The Mix2Seq format takes 5 µL of purified template and 5 µL of primer at
+5 pmol/µL, with a minimum total of 10 µL (Eurofins Genomics, n.d.-a). The
+format and its volumes are confirmed with the current instructions of the
+provider before mixing.
+
+</ProtocolNote>
+
+<ProtocolCalculator
+  number={4}
+  title="Premixed sample for TubeSeq (17 µL total)."
+  workbookTab="Sequencing prep"
+  rows={[
+    { key: "vTotal", label: "Total premixed volume required", value: 17, unit: "µL", input: true },
+    { key: "vPrimer", label: "Primer volume", value: 2, unit: "µL", input: true },
+    { key: "cPrimer", label: "Primer concentration required", value: 10, unit: "pmol/µL", input: true },
+    { key: "cRequired", label: "Required template concentration", value: 50, unit: "ng/µL", input: true },
+    { key: "cMeasured", label: "Measured DNA concentration", value: 120, unit: "ng/µL", input: true },
+    { key: "vTemplate", label: "Template volume at the required concentration", unit: "µL", decimals: 1, compute: (v) => v.vTotal - v.vPrimer },
+    { key: "mass", label: "DNA needed", unit: "ng", decimals: 0, compute: (v) => v.vTemplate * v.cRequired },
+    { key: "vSample", label: "Volume of the measured sample to use", unit: "µL", compute: (v) => v.mass / v.cMeasured },
+    { key: "vWater", label: "MQ water to add", unit: "µL", compute: (v) => v.vTemplate - v.vSample },
+  ]}
+/>
+
+**Labelling and submission**
+
+8. Stick a barcode label on each tube and write the barcode number on the side
+   of the tube.
+
+<ProtocolNote kind="critical">
+
+The tubes are not taped or wrapped in parafilm (Eurofins Genomics, n.d.-b).
+
+</ProtocolNote>
+
+9. Spin the tubes briefly so that all the liquid is at the bottom, and close
+   them with the cap supplied for the service in use.
+10. Enter the order online, assigning each barcode to its sample and primer, and
+    record in the team strain list which construct each barcode corresponds to.
+11. Submit the samples by the collection or shipping route of the provider.
+
+**After the result**
+
+12. Compare the returned trace with the expected sequence of the construct, and
+    check the quality of the trace over the region of interest before accepting
+    a construct as validated.
+
+<ProtocolNote>
+
+The beginning of a Sanger read is unreliable for the first several dozen bases,
+so a primer is chosen to bind far enough upstream of the region that has to be
+read.
+
+</ProtocolNote>
+
+#### Notes from the bench
+
+This section collects the experience of the team with this protocol: what was
+changed between runs, what went wrong and what is worth knowing before
+starting. Members of the team are encouraged to add their own entries, each
+starting with the month and year.
+
+<ProtocolNote date="September 2026">
+
+The first samples were submitted on 9 September 2026, after cleaning the colony
+PCR products with the Monarch kit.
+
+</ProtocolNote>
+
+<ProtocolNote date="October 2026">
+
+The exact service used, the format of the tubes and the current volume
+requirements should be recorded here, because the requirements of the provider
+change over time.
+
+</ProtocolNote>
+
+<ProtocolCalculations>
+
+This section explains the calculations used in this protocol. The symbols are
+defined for each equation, and the worked example uses the values printed in
+the corresponding table.
+
+**Primer working solution at 10 pmol/µL**
+
+*V* = (*n* / *c*) × 1000  and  *V*stock = *V*working × (*c*working / *c*stock)
+
+in which:
+
+- *V* = MQ water for resuspension (µL)
+- *n* = amount stated on the tube (nmol)
+- *c* = stock concentration (µM)
+- *c*working = working concentration (pmol/µL)
+- *c*stock = stock concentration (pmol/µL)
+
+1 µM equals 1 pmol/µL, so a 10 µM solution is a 10 pmol/µL solution, which is
+the concentration the sequencing service requires.
+
+**Worked example.** For 24.8 nmol resuspended to 100 µM: 248 µL of MQ water.
+For 100 µL at 10 pmol/µL: 10.0 µL of stock and 90.0 µL of MQ water.
+
+**Premixed sequencing sample**
+
+*V*template = *V*total − *V*primer · *m* = *V*template × *c*required · *V*sample = *m* / *c*measured
+
+in which:
+
+- *V*total = total premixed volume required by the service (µL)
+- *V*primer = primer volume (µL)
+- *V*template = volume available for the template (µL)
+- *c*required = template concentration required by the service (ng/µL)
+- *m* = mass of DNA needed (ng)
+- *c*measured = measured concentration of the sample (ng/µL)
+- *V*sample = volume of the sample to use (µL)
+
+The remainder, *V*template − *V*sample, is made up with MQ water so that the
+premix reaches exactly the required total volume.
+
+**Worked example.** For a 17 µL premix with 2 µL of primer, the template
+occupies 15.0 µL. At a required 50 ng/µL that is 750 ng; from a sample measured
+at 120 ng/µL this is 6.25 µL of sample and 8.75 µL of MQ water.
+
+</ProtocolCalculations>
+
+#### References
+
+- Eurofins Genomics. (n.d.-a). *Mix2Seq kit*. Retrieved October 6, 2026, from https://eurofinsgenomics.eu/en/custom-dna-sequencing/mix2seq/
+- Eurofins Genomics. (n.d.-b). *TubeSeq service: sample submission guide*. Retrieved October 6, 2026, from https://eurofinsgenomics.eu/media/1587670/web_tubeseq_samplesubmissionguide_dinlang_final.pdf
 
 </ExpandableText>
 
@@ -8033,6 +8616,274 @@ concentration, so that rhamnose can replace glucose on a mole-for-mole basis.
 
 </ExpandableText>
 
+<ExpandableText title="Plate Reader Sample Preparation">
+
+<ProtocolDownloads workbookTab="Plate reader prep" />
+
+#### Introduction
+
+This protocol describes how cultures are prepared and normalized before an
+endpoint measurement in the plate reader. Every culture is brought to the same
+starting optical density, so that the measured signal reflects the construct
+and not the amount of biomass in the well.
+
+It is used for the promoter-reporter screen and can be used for any
+plate-reader measurement that compares strains against each other.
+
+#### Attributions
+
+Written by Alec Lontie and the wet lab team of iGEM KU Leuven 2026.
+
+The iGEM KU Leuven 2026 team used this protocol to prepare the *P. vulgatus*
+DSM1447 strains carrying the promoter-reporter constructs for the plate-reader
+screen. The procedure was previously recorded inside the conjugation protocol
+and has been adapted here for the plate-reader context.
+
+#### Materials
+
+**Strains**
+
+| Item | Specification and quantity |
+|---|---|
+| *P. vulgatus* DSM1447 carrying the constructs, and the control strains | At least three colonies per construct |
+
+**Reagents**
+
+| Item | Specification and quantity |
+|---|---|
+| mGAM broth with the appropriate antibiotic | 2–5 mL per culture |
+| mGAM agar plates with the appropriate antibiotic | One per strain |
+| Sterile water | For the border wells of the plate |
+
+**Consumables and tools**
+
+| Item | Specification and quantity |
+|---|---|
+| Culture tubes | One per biological replicate |
+| Microtiter plate matching the measurement | Black with a transparent flat bottom for fluorescence and OD₆₀₀ |
+| Cuvettes or a clear plate | For the optical density of the overnight cultures |
+| Micropipettes, a multichannel pipette and sterile tips | As required |
+| Sticky plate seals, transparent | One per plate; seals rather than lids |
+| Reservoir for the multichannel pipette | As required |
+
+**Instruments**
+
+| Item | Specification and quantity |
+|---|---|
+| Anaerobic chamber with incubator | 37 °C |
+| Microplate reader | OD₆₀₀ and the measurement channels in use |
+| Insulated container | For transfer between chambers |
+
+**Personal protective equipment**
+
+| Item | Specification and quantity |
+|---|---|
+| Lab coat | Worn closed at all times |
+| Nitrile gloves | Changed after contact with reagents or cultures |
+| Safety glasses | Required when handling hot liquids and irritant powders |
+
+#### Safety and safety data sheets
+
+Hazard classifications were taken from the supplier safety data sheets (SDS)
+and product pages cited in the table below. The SDS of the exact product and
+lot in use should be consulted before starting, because classifications can
+differ between suppliers and product grades.
+
+**Table 1.** Hazard classification and safety data sheets (SDS) of the reagents used.
+
+| Substance | CAS no. | Classification (GHS/CLP) | Precautions | SDS |
+|---|---|---|---|---|
+| Kanamycin sulfate | 25389-94-0 | Danger. H360D: may damage the unborn child (Repr. 1B). | Wear gloves, lab coat and safety glasses. Weigh powder in a fume hood. Not to be handled during pregnancy. | Sigma-Aldrich (n.d.) |
+| Erythromycin | 114-07-8 | The SDS of the product in use should be consulted. | Avoid dust formation. Stock solutions are prepared in ethanol in a fume hood. | Supplier SDS |
+| Bacterial strains and transformants | n/a | Biological agents. Transformants are genetically modified micro-organisms (contained use). | Work under the containment level approved for the laboratory. Inactivate all cultures, plates and contaminated consumables by autoclaving. | No SDS: see the institutional biosafety guidelines |
+
+**Waste disposal.** All cultures, plates and contaminated consumables are
+inactivated by autoclaving before disposal. The waste and disposal instructions
+of the laboratory in use apply.
+
+#### Procedure
+
+**Day 1: plates**
+
+1. Streak each strain carrying a construct, and the control strains, on
+   selective agar plates and grow them overnight at 37 °C in the anaerobic
+   chamber.
+
+<ProtocolNote>
+
+Growing from a plate rather than directly from a cryostock gives single
+colonies, so that separate colonies can be used as biological replicates.
+
+</ProtocolNote>
+
+**Day 2: overnight cultures**
+
+2. Inoculate one culture per biological replicate from a separate colony, in
+   medium with the appropriate antibiotic.
+
+<ProtocolNote>
+
+At least three colonies per construct are used, so that the variation between
+replicates is the variation between colonies and not between pipetting steps.
+
+</ProtocolNote>
+
+3. Grow the cultures overnight at 37 °C in the anaerobic chamber.
+
+**Day 3: normalization and plating**
+
+4. Resuspend each overnight culture thoroughly and measure its OD₆₀₀, using
+   uninoculated medium as the blank.
+
+<ProtocolNote kind="critical">
+
+*P. vulgatus* sediments quickly, so the culture is resuspended immediately
+before the reading. A reading taken from a settled culture underestimates the
+density and the dilution that follows will be wrong.
+
+</ProtocolNote>
+
+<ProtocolNote>
+
+A reading above approximately 0.8 lies outside the linear range of most
+readers; a dense culture is diluted in medium and the reading multiplied by the
+dilution factor.
+
+</ProtocolNote>
+
+5. Dilute each culture to an OD₆₀₀ of 0.3 in a fresh plate, calculating the
+   volume of culture and of medium per well (Table 2).
+
+<ProtocolCalculator
+  number={2}
+  title="Dilution of the culture to the target OD₆₀₀."
+  workbookTab="Plate reader prep"
+  rows={[
+    { key: "od1", label: "Measured OD₆₀₀ of the overnight culture", value: 1.2, unit: "–", input: true },
+    { key: "od2", label: "Target OD₆₀₀ in the measurement plate", value: 0.3, unit: "–", input: true },
+    { key: "vWell", label: "Final volume per well", value: 200, unit: "µL", input: true },
+    { key: "vCulture", label: "Culture to add", unit: "µL", decimals: 1, compute: (v) => (v.od2 * v.vWell) / v.od1 },
+    { key: "vMedium", label: "Medium to add", unit: "µL", decimals: 1, compute: (v) => v.vWell - v.vCulture },
+    { key: "nWells", label: "Number of wells per culture", value: 3, unit: "wells", input: true },
+    { key: "vPerConstruct", label: "Culture required per construct", unit: "µL", decimals: 1, compute: (v) => v.vCulture * v.nWells },
+  ]}
+/>
+
+When a whole plate is seeded at once, the volumes for every well are calculated
+in the 96-well seeding grid: `Protocol_Calculators.xlsx`, tab "Plate seeding".
+The measured OD₆₀₀ of each well is entered in the first grid, and the volume of
+culture and of medium for that well is read from the second and third grids.
+
+<ProtocolNote>
+
+The grid subtracts the medium blank from every reading. It marks a well "LOW"
+when the culture is already at or below the target optical density and cannot
+be diluted to it, and "n/a" when the blank-corrected reading is zero or
+negative.
+
+</ProtocolNote>
+
+<ProtocolNote>
+
+An OD₆₀₀ of 0.3 was the starting density used by the team. Every construct is
+set to the same value, which is what makes the readings comparable.
+
+</ProtocolNote>
+
+6. Fill the outer wells of the plate with sterile water.
+
+<ProtocolNote>
+
+The water border limits evaporation from the sample wells and leaves 60 usable
+wells on a 96-well plate.
+
+</ProtocolNote>
+
+7. Include the control wells on the same plate: the strain without construct
+   for the autofluorescence baseline, and medium without cells for the
+   background.
+8. Seal the plate with a transparent sticky seal rather than a lid.
+
+<ProtocolNote kind="critical">
+
+A lid allows evaporation over the course of an incubation, which changes the
+optical density and the signal in the outer wells first.
+
+</ProtocolNote>
+
+**Measurement**
+
+9. Transfer the plate to the reader in a closed insulated container if the
+   reader is in another chamber.
+10. Shake or mix the plate immediately before every optical density reading.
+11. Read the plate following the protocol of the measurement in use (see the
+    protocol "Promoter-Reporter Screen").
+
+#### Notes from the bench
+
+This section collects the experience of the team with this protocol: what was
+changed between runs, what went wrong and what is worth knowing before
+starting. Members of the team are encouraged to add their own entries, each
+starting with the month and year.
+
+<ProtocolNote date="October 2026">
+
+This procedure was originally written inside the conjugation protocol, where
+the optical density of the mating cultures is normalized in the same way. It
+has been separated so that it can be cited from any plate-reader experiment.
+
+</ProtocolNote>
+
+<ProtocolNote date="October 2026">
+
+The medium blank of the run of 2 October 2026 read an OD₆₀₀ of 0.541. mGAM is a
+dark medium, so the blank is high and subtracting it matters: a reading of 1.5
+corresponds to a corrected density of about 0.96, which is roughly a third
+lower.
+
+</ProtocolNote>
+
+<ProtocolNote date="October 2026">
+
+In that run several wells read close to the blank value, which the seeding grid
+marks as "LOW" or "n/a". Those cultures had not grown enough to be diluted to
+the target density.
+
+</ProtocolNote>
+
+<ProtocolCalculations>
+
+This section explains the calculations used in this protocol. The symbols are
+defined for each equation, and the worked example uses the values printed in
+the corresponding table.
+
+**Dilution of the culture to the target optical density**
+
+OD1 × V1 = OD2 × V2 → V1 = (OD2 × V2) / OD1
+
+in which:
+
+- OD1 = measured OD₆₀₀ of the overnight culture
+- V1 = volume of culture to add (µL)
+- OD2 = target OD₆₀₀ in the measurement plate
+- V2 = final volume per well (µL)
+
+The volume of medium per well is V2 − V1. Every culture is brought to the same
+starting optical density, so that the measured signal reflects the construct
+and not the amount of biomass.
+
+**Worked example.** To reach OD₆₀₀ 0.3 in 200 µL from a culture at OD₆₀₀ 1.2:
+V1 = (0.3 × 200) / 1.2 = 50.0 µL of culture and 150.0 µL of medium. For three
+wells per construct, 150.0 µL of culture is needed.
+
+</ProtocolCalculations>
+
+#### References
+
+- Sigma-Aldrich. (n.d.). *Kanamycin sulfate from Streptomyces kanamyceticus* (Product No. K1377) [Safety data sheet]. Retrieved October 6, 2026, from https://www.sigmaaldrich.com/BE/en/sds/sigma/k1377
+
+</ExpandableText>
+
 <ExpandableText title="Promoter-Reporter Screen">
 
 <ProtocolDownloads workbookTab="Promoter screen" />
@@ -8431,6 +9282,244 @@ corrected OD is 0.45 − 0.05 = 0.400. Blank-corrected: (45,000 − 1200) / 0.40
 - FPbase. (n.d.-c). *Superfolder GFP*. Retrieved October 11, 2026, from https://www.fpbase.org/protein/superfolder-gfp/
 - Promega. (n.d.). *Nano-Glo luciferase assay system* (Technical Manual TM369). Retrieved October 11, 2026, from https://www.promega.com/-/media/files/resources/protocols/technical-manuals/101/nanoglo-luciferase-assay-system-protocol.pdf
 - Sigma-Aldrich. (n.d.). *Kanamycin sulfate from Streptomyces kanamyceticus* (Product No. K1377) [Safety data sheet]. Retrieved October 11, 2026, from https://www.sigmaaldrich.com/BE/en/sds/sigma/k1377
+
+</ExpandableText>
+
+<ExpandableText title="Fluorescence Microscopy">
+
+<ProtocolDownloads workbookTab="Microscopy" />
+
+#### Introduction
+
+This protocol describes the preparation of *Phocaeicola vulgatus* cells for
+fluorescence microscopy on agarose pads, used to check the expression of
+fluorescent reporters from the pNBU2 constructs at the single-cell level.
+
+Imaging is performed on an inverted microscope with oil immersion, using phase
+contrast for morphological clarity alongside the fluorescence channels.
+
+#### Attributions
+
+Written by Alec Lontie and the wet lab team of iGEM KU Leuven 2026.
+
+The iGEM KU Leuven 2026 team used this protocol to inspect *P. vulgatus*
+DSM1447 carrying pNBU2 reporter constructs, with and without rhamnose
+induction.
+
+#### Materials
+
+**Reagents**
+
+| Item | Specification and quantity |
+|---|---|
+| Overnight cultures of the strains to be imaged | 1 mL per sample |
+| Phosphate-buffered saline (PBS), 1×, sterile | Approximately 4 mL per sample (three washes and the final resuspension) |
+| Agarose | 0.075 g for 5 mL of a 1.5% solution |
+| Vaseline, lanolin and paraffin | Mixed in equal parts to seal the coverslip |
+| Immersion oil | For the objective |
+
+**Consumables and tools**
+
+| Item | Specification and quantity |
+|---|---|
+| Microscope slides and coverslips | One each per sample |
+| Microcentrifuge tubes, 1.5 mL | One per sample |
+| Micropipettes and tips | 20–200 µL and 100–1000 µL |
+
+**Instruments**
+
+| Item | Specification and quantity |
+|---|---|
+| Inverted fluorescence microscope with phase contrast and oil immersion objective | With the filter sets matching the reporters in use |
+| Microcentrifuge | 5000 × g |
+| Heating block or microwave | For dissolving the agarose |
+| Precision balance | Readability 0.001 g |
+
+**Personal protective equipment**
+
+| Item | Specification and quantity |
+|---|---|
+| Lab coat | Worn closed at all times |
+| Nitrile gloves | Changed after contact with reagents or cultures |
+| Safety glasses | Required when handling hot liquids and irritant powders |
+
+#### Safety and safety data sheets
+
+Hazard classifications were taken from the supplier safety data sheets (SDS)
+and product pages cited in the table below. The SDS of the exact product and
+lot in use should be consulted before starting, because classifications can
+differ between suppliers and product grades.
+
+Molten agarose can cause burns. The sealing mixture is heated before use and is
+handled with care.
+
+**Table 1.** Hazard classification and safety data sheets (SDS) of the reagents used.
+
+| Substance | CAS no. | Classification (GHS/CLP) | Precautions | SDS |
+|---|---|---|---|---|
+| Bacterial strains and transformants | n/a | Biological agents. Transformants are genetically modified micro-organisms (contained use). | Work under the containment level approved for the laboratory. Inactivate all cultures, plates and contaminated consumables by autoclaving. | No SDS: see the institutional biosafety guidelines |
+| Agarose | 9012-36-6 | Not classified as hazardous. | Molten agarose can superheat and boil over: wear thermal gloves and safety glasses. | Thermo Fisher Scientific (n.d.) Product page; SDS under "Documents" |
+
+**Waste disposal.** All cultures, plates and contaminated consumables are
+inactivated by autoclaving before disposal. The waste and disposal instructions
+of the laboratory in use apply.
+
+#### Procedure
+
+**Preparing the cells**
+
+1. Determine the volume of culture required to obtain the intended optical
+   density after resuspension (Table 2).
+
+<ProtocolNote>
+
+As a guide, 1 mL of culture at an OD₆₀₀ of 0.5 is resuspended in 1 mL of 1×
+PBS.
+
+</ProtocolNote>
+
+<ProtocolCalculator
+  number={2}
+  title="Resuspension of the cells to a defined OD₆₀₀."
+  workbookTab="Microscopy"
+  rows={[
+    { key: "od1", label: "Measured OD₆₀₀ of the culture", value: 1, unit: "–", input: true },
+    { key: "od2", label: "Target OD₆₀₀ after resuspension", value: 0.5, unit: "–", input: true },
+    { key: "vFinal", label: "Final volume in PBS", value: 1000, unit: "µL", input: true },
+    { key: "vCulture", label: "Culture to pellet", unit: "µL", decimals: 0, compute: (v) => (v.od2 * v.vFinal) / v.od1 },
+    { key: "washes", label: "Number of PBS washes", value: 3, unit: "washes", input: true },
+    { key: "vPBS", label: "PBS required per sample", unit: "µL", decimals: 0, compute: (v) => v.vFinal * (v.washes + 1) },
+  ]}
+/>
+
+2. Pellet the cells by centrifugation at 5000 × g for 5 minutes.
+3. Discard the supernatant and resuspend the pellet in 1 mL of 1× PBS.
+4. Repeat steps 2 and 3 twice more, for three washes in total.
+
+**Preparing the agarose pads**
+
+5. Prepare a 1.5% (w/v) agarose solution in 1× PBS (Table 3) and dissolve it
+   completely.
+
+<ProtocolCalculator
+  number={3}
+  title="Agarose pad."
+  workbookTab="Microscopy"
+  rows={[
+    { key: "percent", label: "Agarose percentage (w/v)", value: 1.5, unit: "%", input: true },
+    { key: "vSolution", label: "Volume of agarose solution to prepare", value: 5, unit: "mL", input: true },
+    { key: "mass", label: "Agarose to weigh", unit: "g", decimals: 3, compute: (v) => (v.percent * v.vSolution) / 100 },
+    { key: "vPerSlide", label: "Volume applied per slide", value: 350, unit: "µL", input: true },
+    { key: "nSlides", label: "Number of slides from this volume", unit: "slides", decimals: 0, compute: (v) => Math.floor((v.vSolution * 1000) / v.vPerSlide) },
+  ]}
+/>
+
+6. Apply 300 to 400 µL of the agarose solution to a microscope slide and let it
+   dry, so that the cells adhere.
+
+<ProtocolNote>
+
+The agarose layer is also what makes autofocus work: the autofocus and
+perfect-focus systems detect a change in refraction, and the agarose produces
+the shift that marks where the sample begins.
+
+</ProtocolNote>
+
+7. Drop the washed cell suspension onto the agarose pad.
+8. Seal the slide and coverslip with a mixture of vaseline, lanolin and
+   paraffin.
+
+**Imaging**
+
+9. Image the cells on the inverted microscope with oil immersion, using phase
+   contrast for morphological clarity alongside the fluorescence channels.
+
+<ProtocolNote>
+
+Slides and plates require different illumination settings; slides need more
+focused light.
+
+</ProtocolNote>
+
+10. Save the images in the project folder for the experiment, with the date and
+    the strain in the file name.
+
+#### Notes from the bench
+
+This section collects the experience of the team with this protocol: what was
+changed between runs, what went wrong and what is worth knowing before
+starting. Members of the team are encouraged to add their own entries, each
+starting with the month and year.
+
+<ProtocolNote date="August 2026">
+
+In the session of 20 August 2026, overnight cultures were prepared the day
+before for six colonies per combination: *P. vulgatus* DSM1447 with pNBU2,
+DSM1447 without plasmid, and DSM1447 with pNBU2 induced with 10 mM rhamnose,
+each in 1 mL of mGAM.
+
+</ProtocolNote>
+
+<ProtocolNote date="August 2026">
+
+No fluorescence could be observed in that session and some cells had died. KOFP
+appears cyan under the microscope.
+
+</ProtocolNote>
+
+<ProtocolNote date="October 2026">
+
+The images of that session are stored in the team SharePoint folder for
+fluorescence microscopy. They can be linked here if they are published.
+
+</ProtocolNote>
+
+<ProtocolCalculations>
+
+This section explains the calculations used in this protocol. The symbols are
+defined for each equation, and the worked example uses the values printed in
+the corresponding table.
+
+**Resuspension of the cells to a defined optical density**
+
+V1 = (OD2 × V2) / OD1  and  *V*pbs = V2 × (*w* + 1)
+
+in which:
+
+- V1 = volume of culture to pellet (µL)
+- OD1 = measured OD₆₀₀ of the culture
+- OD2 = required OD₆₀₀ after resuspension
+- V2 = final volume in PBS (µL)
+- *w* = number of washes
+- *V*pbs = total PBS required per sample (µL)
+
+Each wash uses one final volume of PBS, and the final resuspension uses one
+more, hence the factor (*w* + 1).
+
+**Worked example.** To obtain 1000 µL at an OD₆₀₀ of 0.5 from a culture at
+OD₆₀₀ 1.0: V1 = (0.5 × 1000) / 1.0 = 500 µL of culture. With three washes,
+1000 × 4 = 4000 µL of PBS is required per sample.
+
+**Agarose for the pads**
+
+*m* = (*p* × *V*) / 100  and  *n* = *V* × 1000 / *V*s
+
+in which:
+
+- *m* = mass of agarose to weigh (g)
+- *p* = agarose percentage (% w/v)
+- *V* = volume of agarose solution (mL)
+- *V*s = volume applied per slide (µL)
+- *n* = number of slides
+
+**Worked example.** For 5 mL of 1.5% agarose: *m* = (1.5 × 5) / 100 = 0.075 g.
+At 350 µL per slide this gives 5000 / 350 = 14 slides.
+
+</ProtocolCalculations>
+
+#### References
+
+- Thermo Fisher Scientific. (n.d.). *UltraPure low melting point agarose* (Catalog No. 16520050) [Product information]. Retrieved October 6, 2026, from https://www.thermofisher.com/order/catalog/product/16520050
 
 </ExpandableText>
 
@@ -8985,17 +10074,5 @@ reference, Δ*t* = 2.5 h.
 - Sigma-Aldrich. (n.d.-b). *Kanamycin sulfate from Streptomyces kanamyceticus* (Product No. K1377) [Safety data sheet]. Retrieved October 11, 2026, from https://www.sigmaaldrich.com/BE/en/sds/sigma/k1377
 
 </ExpandableText>
-
-<Callout title="Four protocols still to come">
-
-Four protocols that your structure document and upload instructions both list
-are **not in the upload**, so they are not on this page yet: **Gibson
-Assembly**, **Sanger Sequencing Sample Preparation**, **Plate Reader Sample
-Preparation** and **Fluorescence Microscopy**. The calculator workbook has a
-tab for each of them, so the documents exist somewhere — send them and they
-will be added in their places (construct assembly, sequence validation, and
-reporter characterization).
-
-</Callout>
 
 </PageLayout>
