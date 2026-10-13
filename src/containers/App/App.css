@@ -1715,8 +1715,15 @@ a[data-footnote-ref]:focus {
   line-height: 1.3;
 }
 
-.section-progress li.active .section-progress-label {
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-13: the three levels now
+   differ in weight as well as size and indent, so a group heading such as
+   "Cell Culture" stands out from the protocols listed under it. */
+.section-progress li:not(.sub) .section-progress-label {
   font-weight: 600;
+}
+
+.section-progress li.active .section-progress-label {
+  font-weight: 700;
 }
 
 /* Subsections (h3) are shifted right and shrunk down so the hierarchy
@@ -1726,16 +1733,20 @@ a[data-footnote-ref]:focus {
 }
 
 .section-progress li.sub .section-progress-label {
-  font-size: 0.76rem;
-  opacity: 0.7;
+  font-size: 0.8rem;
+  font-weight: 500;
+  opacity: 0.9;
 }
 
 .section-progress li.sub.active .section-progress-label {
+  font-weight: 700;
   opacity: 1;
 }
 
-/* Sections inside an open dropdown (h4, e.g. STR-01 inside a notebook) sit
-   one step further in, and closer together than the rows above them. */
+/* Third level: sections inside an open dropdown (h4, e.g. STR-01 inside a
+   notebook) and dropdowns grouped under an h3 (the protocols under "Cell
+   Culture"). They sit one step further in, lighter, and closer together than
+   the rows above them. */
 .section-progress li.sub-sub {
   margin-left: 2.1rem;
   margin-top: -0.45rem;
@@ -1743,6 +1754,13 @@ a[data-footnote-ref]:focus {
 
 .section-progress li.sub-sub .section-progress-label {
   font-size: 0.72rem;
+  font-weight: 400;
+  opacity: 0.65;
+}
+
+.section-progress li.sub-sub.active .section-progress-label {
+  font-weight: 700;
+  opacity: 1;
 }
 
 @media (max-width: 991.98px) {
@@ -1755,36 +1773,73 @@ a[data-footnote-ref]:focus {
   }
 }
 
-/* TAB SWITCHER */
+/* TAB SWITCHER
+   Edited with Claude Opus 5 (Anthropic), 2026-10-12: brought in line with the
+   site's other controls. It was sized for single digits — full-width boxes at
+   1.75rem — which dwarfed everything around it once the tabs carried words.
+   Now it is a centered pill group, sized to its labels, using the same rounded
+   pill shape as .protocol-download and the same accent-fill-for-active
+   convention as .expandable-header. Two dark-mode faults are fixed with it:
+   the inactive border was a dark colour that vanished on the dark theme, and
+   the active label inherited --color-text, which is near-white there and sat
+   on the light accent at roughly 1.5:1 contrast. */
 .tab-switcher {
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
   width: 100%;
 }
 
 .tab-switcher-btn {
-  flex: 1 1 0;
-  border: 2px solid rgba(51, 40, 63, 0.25);
+  /* Sized to the label rather than stretched: a two-word tab spread across
+     half the page reads as a banner, not a control. */
+  flex: 0 1 auto;
+  border: 2px solid rgba(51, 40, 63, 0.3);
   background-color: transparent;
   color: var(--color-text);
-  padding: 1.75rem 1rem;
-  border-radius: 1rem;
-  font-weight: 700;
-  font-size: 1.75rem;
+  padding: 0.7rem 1.9rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  cursor: pointer;
   transition:
     background-color 0.15s ease,
     border-color 0.15s ease,
     color 0.15s ease;
 }
 
+[data-theme="dark"] .tab-switcher-btn {
+  border-color: rgba(201, 189, 232, 0.4);
+}
+
 .tab-switcher-btn:hover {
   border-color: var(--color-accent);
 }
 
+.tab-switcher-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* The selected pill has to be filled differently per theme, because the panel
+   these sit on changes colour with the theme. In light mode that panel is
+   itself the accent lavender, so an accent-filled pill disappears into it and
+   the unselected outline ends up looking more prominent than the selected
+   one. Light mode therefore uses the dark header colour — the same treatment
+   the navbar and footer use to stand out against that background. */
 .tab-switcher-btn.active {
+  background-color: var(--color-header-bg);
+  border-color: var(--color-header-bg);
+  color: var(--color-header-text);
+}
+
+[data-theme="dark"] .tab-switcher-btn.active {
+  /* On the dark panel the relationship reverses: the light accent is what
+     reads as selected, with the fixed dark label that fill needs. */
   background-color: var(--color-accent);
   border-color: var(--color-accent);
-  color: var(--color-text);
+  color: #33283f;
 }
 
 .tab-switcher-content {
@@ -1792,13 +1847,9 @@ a[data-footnote-ref]:focus {
 }
 
 @media (max-width: 576px) {
-  .tab-switcher {
-    flex-direction: column;
-  }
-
   .tab-switcher-btn {
-    font-size: 1.25rem;
-    padding: 1.25rem 1rem;
+    font-size: 1rem;
+    padding: 0.6rem 1.4rem;
   }
 }
 

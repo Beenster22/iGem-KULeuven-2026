@@ -7,7 +7,7 @@ import {
   Engineering,
   Entrepreneurship,
   Events,
-  Experiments,
+  ExperimentalOverview,
   Home,
   HumanPractices,
   Members,
@@ -88,10 +88,10 @@ const Pages: (Page | Folder)[] = [
     name: "Wet Lab",
     folder: [
       {
-        name: "Experiments",
-        title: "Experiments",
-        path: "/experiments",
-        component: Experiments,
+        name: "Experimental Overview",
+        title: "Experimental Overview",
+        path: "/experimental-overview",
+        component: ExperimentalOverview,
         lead: "Describe the research, experiments, and protocols you used in your project. It is designed to provide sufficient information for other teams to replicate our work.",
       },
       {

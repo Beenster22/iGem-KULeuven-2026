@@ -740,7 +740,7 @@ export function EngineerSection() {
 // those menus (see pages.ts).
 const MORE_LINKS = [
   { label: "Project description", to: "/description" },
-  { label: "Wet lab", to: "/experiments" },
+  { label: "Wet lab", to: "/experimental-overview" },
   { label: "Dry lab", to: "/dry-lab" },
   { label: "Integrated Human Practices", to: "/human-practices" },
   { label: "Entrepreneurship", to: "/entrepreneurship" },
