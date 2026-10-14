@@ -1080,69 +1080,99 @@ a[data-footnote-ref]:focus {
 
 /* NOTEBOOK TONES
    Generated with Claude Opus 5 (Anthropic), 2026-10-09
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-14: every tone is now
+   mixed only from the five EMPOWER brand colours, and the tones run down the
+   page as one continuous gradient (pale aqua → teal → periwinkle → deep
+   lavender → blush → soft pink → pale pink).
    Purpose: the notebook page was a stack of identical accent-coloured bars,
-   so one research line was indistinguishable from the next. Each notebook now
-   carries a tone — a two-stop gradient that starts on a hue of its own and
-   resolves into the site accent, which keeps the shelf varied without any tab
-   leaving the palette. Every stop is a light tint, because the tab's title is
-   a fixed dark purple in both themes (see .expandable-header) and has to stay
-   readable on it. --nb-edge is the saturated end of the same hue, used for the
-   thin bars that mark the notebook's sections once it is open.
+   so one research line was indistinguishable from the next. Each notebook
+   carries a tone — a gradient that starts on its own step of the shelf
+   gradient below, passes through a blend with the next notebook's step, and
+   resolves into the site accent. Every stop is a light tint, because the
+   tab's title is a fixed dark purple in both themes (see .expandable-header)
+   and has to stay readable on it. --nb-edge is a deeper shade of the same
+   colour, used for the thin bars that mark the notebook's sections once it
+   is open. The steps are assigned in the order the notebooks appear in
+   notebook.mdx, so reordering the notebooks means reassigning steps here.
    A notebook with no tone (the overview dropdown, which is not a research
    line) falls through to the plain accent and gets no badge. */
 .notebook-dropdown {
+  --brand-plum: #33283f;
+  --brand-teal: #2fa4a9;
+  --brand-lavender: #c9bde8;
+  --brand-pink: #f1c3d4;
+  --brand-light: #eaf4f5;
+
+  /* The shelf gradient, one step per research line. */
+  --nb-step-1: color-mix(in srgb, var(--brand-teal) 18%, var(--brand-light));
+  --nb-step-2: color-mix(in srgb, var(--brand-teal) 40%, var(--brand-light));
+  --nb-step-3: color-mix(in srgb, var(--brand-teal) 30%, var(--brand-lavender));
+  --nb-step-4: color-mix(in srgb, var(--brand-lavender) 85%, var(--brand-plum));
+  --nb-step-5: color-mix(in srgb, var(--brand-pink) 60%, var(--brand-lavender));
+  --nb-step-6: var(--brand-pink);
+  --nb-step-7: color-mix(in srgb, var(--brand-pink) 50%, var(--brand-light));
+
   --nb-a: var(--color-accent);
-  --nb-b: #ddd6f2;
-  --nb-edge: #8f7fc4;
+  --nb-b: color-mix(in srgb, var(--brand-lavender) 60%, var(--brand-light));
+  --nb-edge: color-mix(in srgb, var(--brand-lavender) 55%, var(--brand-plum));
 }
 
+/* Pale aqua */
 .notebook-dropdown[data-tone="str"] {
-  --nb-a: #cbe3e8;
-  --nb-b: #ddd6f2;
-  --nb-edge: #5f9aa6;
+  --nb-a: var(--nb-step-1);
+  --nb-b: color-mix(in srgb, var(--nb-step-1) 50%, var(--nb-step-2));
+  --nb-edge: color-mix(in srgb, var(--brand-teal) 65%, var(--brand-plum));
 }
 
+/* Teal */
 .notebook-dropdown[data-tone="mic"] {
-  --nb-a: #f0cfdd;
-  --nb-b: #e3d3f1;
-  --nb-edge: #bd6f92;
+  --nb-a: var(--nb-step-2);
+  --nb-b: color-mix(in srgb, var(--nb-step-2) 50%, var(--nb-step-3));
+  --nb-edge: var(--brand-teal);
 }
 
+/* Periwinkle: teal blended into lavender */
 .notebook-dropdown[data-tone="cnj"] {
-  --nb-a: #c6e6d8;
-  --nb-b: #d8dcf2;
-  --nb-edge: #5a9f81;
+  --nb-a: var(--nb-step-3);
+  --nb-b: color-mix(in srgb, var(--nb-step-3) 50%, var(--nb-step-4));
+  --nb-edge: color-mix(in srgb, var(--brand-teal) 80%, var(--brand-plum));
 }
 
+/* Deep lavender */
 .notebook-dropdown[data-tone="prm"] {
-  --nb-a: #f4ddc2;
-  --nb-b: #e6d6ee;
-  --nb-edge: #c08b4a;
+  --nb-a: var(--nb-step-4);
+  --nb-b: color-mix(in srgb, var(--nb-step-4) 50%, var(--nb-step-5));
+  --nb-edge: color-mix(in srgb, var(--brand-lavender) 45%, var(--brand-plum));
 }
 
+/* Blush: pink leaning into lavender */
 .notebook-dropdown[data-tone="bsh"] {
-  --nb-a: #d6e8c4;
-  --nb-b: #d9dcf0;
-  --nb-edge: #7fa556;
+  --nb-a: var(--nb-step-5);
+  --nb-b: color-mix(in srgb, var(--nb-step-5) 50%, var(--nb-step-6));
+  --nb-edge: color-mix(in srgb, var(--brand-pink) 35%, var(--brand-plum));
 }
 
+/* Soft pink */
 .notebook-dropdown[data-tone="bsa"] {
-  --nb-a: #f2e7b8;
-  --nb-b: #e2d8ef;
-  --nb-edge: #b39a42;
+  --nb-a: var(--nb-step-6);
+  --nb-b: color-mix(in srgb, var(--nb-step-6) 50%, var(--nb-step-7));
+  --nb-edge: color-mix(in srgb, var(--brand-pink) 55%, var(--brand-plum));
 }
 
+/* Pale pink */
 .notebook-dropdown[data-tone="fit"] {
-  --nb-a: #c8dbf2;
-  --nb-b: #ded6f1;
-  --nb-edge: #6286b5;
+  --nb-a: var(--nb-step-7);
+  --nb-b: color-mix(in srgb, var(--nb-step-7) 60%, var(--brand-lavender));
+  --nb-edge: color-mix(in srgb, var(--brand-pink) 45%, var(--brand-plum));
 }
 
+/* Plum mist: the deep plum, heavily lightened (not part of the shelf
+   gradient; for any supplementary notebook added later) */
 .notebook-dropdown[data-tone="sup"],
 .notebook-dropdown[data-tone="gen"] {
-  --nb-a: #e2dced;
-  --nb-b: #d2cbe6;
-  --nb-edge: #8577ab;
+  --nb-a: color-mix(in srgb, var(--brand-plum) 12%, var(--brand-light));
+  --nb-b: color-mix(in srgb, var(--brand-plum) 15%, var(--brand-lavender));
+  --nb-edge: color-mix(in srgb, var(--brand-plum) 65%, var(--brand-lavender));
 }
 
 /* background-image rather than background, so --color-accent stays as the
@@ -8783,5 +8813,196 @@ a.protocol-download:hover {
   .phenotype-venn-raised,
   .phenotype-venn-row {
     transition: none;
+  }
+}
+
+/* SEARCH
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-14
+   Purpose: the navbar search button and its dialog (src/components/Search.tsx). */
+.navbar-search-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  margin-left: 0.25rem;
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+  color: var(--color-text);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.navbar-search-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.navbar-search-button:hover {
+  background-color: rgba(51, 40, 63, 0.08);
+  color: var(--color-accent);
+}
+
+[data-theme="dark"] .navbar-search-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Below the lg breakpoint the nav links collapse behind the hamburger, and
+   the navbar spreads its remaining items apart; keep search beside the
+   theme toggle on the right instead of floating mid-bar. */
+@media (max-width: 991.98px) {
+  .navbar-search-button {
+    margin-left: auto;
+  }
+}
+
+.search-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1060;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10vh 1rem 1rem;
+  background-color: rgba(51, 40, 63, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: search-fade-in 0.12s ease-out;
+}
+
+.search-dialog {
+  width: 100%;
+  max-width: 640px;
+  max-height: 75vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 14px;
+  background-color: var(--color-page-bg);
+  color: var(--color-text);
+  box-shadow: 0 1.5rem 4rem rgba(51, 40, 63, 0.35);
+}
+
+[data-theme="dark"] .search-dialog {
+  background-color: #33283f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.search-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgba(51, 40, 63, 0.12);
+}
+
+[data-theme="dark"] .search-input-row {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.search-input-row > svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  opacity: 0.6;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font-size: 1.05rem;
+}
+
+.search-input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.search-esc {
+  flex: none;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  background-color: rgba(51, 40, 63, 0.1);
+  color: inherit;
+}
+
+[data-theme="dark"] .search-esc {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.search-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.search-status {
+  margin: 0;
+  padding: 1.25rem 1rem;
+  opacity: 0.7;
+}
+
+.search-results {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+}
+
+.search-result {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.search-result.selected {
+  background-color: rgba(201, 189, 232, 0.45);
+}
+
+[data-theme="dark"] .search-result.selected {
+  background-color: rgba(201, 189, 232, 0.15);
+}
+
+.search-result-path {
+  font-weight: 600;
+}
+
+.search-result-trail {
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.search-result-snippet {
+  font-size: 0.875rem;
+  opacity: 0.8;
+  overflow-wrap: anywhere;
+}
+
+.search-result mark {
+  padding: 0;
+  background-color: rgba(201, 189, 232, 0.9);
+  color: inherit;
+  border-radius: 3px;
+}
+
+[data-theme="dark"] .search-result mark {
+  background-color: rgba(201, 189, 232, 0.35);
+}
+
+@keyframes search-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

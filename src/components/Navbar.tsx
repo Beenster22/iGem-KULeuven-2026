@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Pages from "../pages.ts";
 import { useThemeMode } from "../ThemeModeContext";
 import { renderItalics } from "../utils/renderItalics";
+import { SearchButton } from "./Search";
 
 // Generated with Claude Sonnet 5 (Anthropic), 2026-09-08
 // Purpose: the stylized "Empower" wordmark, swapped per theme — each image
@@ -137,6 +138,7 @@ export function Navbar() {
               alt={import.meta.env.VITE_TEAM_NAME}
             />
           </BootstrapNavbar.Brand>
+          <SearchButton />
           <button
             type="button"
             className="navbar-theme-toggle"

@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm";
 import { remarkAutoReferences } from "./src/mdx/remarkAutoReferences";
 import { rehypeReferences } from "./src/mdx/rehypeReferences";
 import { rehypeSections } from "./src/mdx/rehypeSections";
+import { searchIndexPlugin } from "./src/search/searchIndexPlugin";
 
 // https://vitejs.dev/config/
 export default async ({ mode }: ConfigEnv) => {
@@ -26,7 +27,9 @@ export default async ({ mode }: ConfigEnv) => {
         // src/mdx/rehypeSections.ts).
         remarkPlugins: [remarkGfm, remarkAutoReferences],
         rehypePlugins: [rehypeReferences, rehypeSections],
-      })
+      }),
+      // Full-text index for the navbar search (see the file for how).
+      searchIndexPlugin(),
     ],
   });
 };
