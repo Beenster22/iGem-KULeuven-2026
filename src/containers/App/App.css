@@ -1904,6 +1904,11 @@ a[data-footnote-ref]:focus {
   user-select: none;
 }
 
+/* 0.8 × the size above: SMALL_LABEL_SCALE in WheelSelector.tsx. */
+.wheel-selector-label--small {
+  font-size: 13.6px;
+}
+
 .wheel-selector-wedge.active .wheel-selector-label {
   font-weight: 800;
 }
@@ -6291,6 +6296,185 @@ body:not(.home-fullscreen) .home-hero {
   margin: 0 0 1rem;
 }
 
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-14
+   Purpose: featured-interviewee spotlight above each section's carousel —
+   large photo with a short summary beside it, crossfading to the next
+   person on a timer; the active dot fills up as a countdown. */
+.hp-featured {
+  margin-bottom: 1.5rem;
+}
+
+.hp-featured-body {
+  display: grid;
+  grid-template-columns: minmax(180px, 280px) 1fr;
+  gap: 2rem;
+  align-items: center;
+  min-height: 280px;
+  animation: hp-featured-in 0.5s ease;
+}
+
+.hp-featured-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  border: none;
+  border-radius: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: var(--color-body-bg);
+  box-shadow: 0 0.75rem 2rem rgba(51, 40, 63, 0.18);
+}
+
+.hp-featured-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hp-featured-photo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.hp-featured-text {
+  min-width: 0;
+}
+
+.hp-featured-name {
+  margin: 0;
+}
+
+.hp-featured-role {
+  margin: 0.2rem 0 0;
+  font-size: 0.95rem;
+  opacity: 0.75;
+}
+
+.hp-featured-summary {
+  margin-top: 1rem;
+}
+
+.hp-featured-summary :last-child {
+  margin-bottom: 0;
+}
+
+/* No `summary` prop: show the start of the full write-up, faded out. */
+.hp-featured-summary.is-excerpt {
+  max-height: 9.5em;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, black 60%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent);
+}
+
+.hp-featured-more {
+  margin-top: 1rem;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-accent);
+  cursor: pointer;
+}
+
+.hp-featured-more:hover,
+.hp-featured-more:focus-visible {
+  text-decoration: underline;
+}
+
+.hp-featured-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.hp-featured-dot {
+  position: relative;
+  width: 0.6rem;
+  height: 0.6rem;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: rgba(51, 40, 63, 0.2);
+  transition: width 0.3s ease;
+}
+
+[data-theme="dark"] .hp-featured-dot {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.hp-featured-dot.is-active {
+  width: 2rem;
+}
+
+.hp-featured-dot.is-active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-accent);
+}
+
+.hp-featured-dot.is-running::after {
+  transform-origin: left;
+  animation: hp-featured-countdown var(--hp-feature-duration, 8s) linear forwards;
+}
+
+@keyframes hp-featured-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hp-featured-countdown {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (max-width: 640px) {
+  .hp-featured-body {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    min-height: 0;
+  }
+
+  .hp-featured-photo {
+    max-width: 220px;
+    margin: 0 auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hp-featured-body {
+    animation: none;
+  }
+}
+
+/* Marks the spotlighted person's tile in the carousel below. */
+.hp-carousel-item.is-featured .hp-carousel-photo {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
 .hp-carousel {
   overflow: hidden;
   width: 100%;
@@ -6303,7 +6487,7 @@ body:not(.home-fullscreen) .home-hero {
   align-items: flex-start;
   gap: 1.25rem;
   width: max-content;
-  padding-bottom: 1rem;
+  padding: 0.5rem 0 1rem;
   animation: hp-carousel-scroll var(--hp-carousel-duration, 20s) linear infinite;
 }
 

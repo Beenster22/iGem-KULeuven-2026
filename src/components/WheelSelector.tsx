@@ -28,6 +28,10 @@ const LABEL_RADIUS = (OUTER_RADIUS + INNER_RADIUS) / 2 + 4;
 const LINE_HEIGHT = 20;
 // Longest label line, in characters, before it wraps onto the next.
 const MAX_LINE = 14;
+// Labels that wrap onto more lines than this are drawn smaller so they still
+// fit inside their wedge (edited with Claude Opus 5.5, 2026-10-14).
+const MAX_FULL_SIZE_LINES = 3;
+const SMALL_LABEL_SCALE = 0.8;
 
 // Wedge fill and label colour, going round from the top as in the team's
 // drawing; the label colours are darkened a little so they stay readable.
@@ -167,6 +171,8 @@ export function WheelSelector({
             const isActive = index === activeIndex;
             const colours = PALETTE[index % PALETTE.length];
             const lines = wrapLabel(item.label);
+            const scale =
+              lines.length > MAX_FULL_SIZE_LINES ? SMALL_LABEL_SCALE : 1;
 
             return (
               <g
@@ -191,7 +197,7 @@ export function WheelSelector({
                     label stays upright all the way round. */}
                 <g transform={`translate(${labelPos.x} ${labelPos.y})`}>
                   <text
-                    className="wheel-selector-label"
+                    className={`wheel-selector-label${scale === 1 ? "" : " wheel-selector-label--small"}`}
                     style={{ transform: `rotate(${-rotation}deg)` }}
                     fill={colours.ink}
                     textAnchor="middle"
@@ -200,7 +206,7 @@ export function WheelSelector({
                       <tspan
                         key={i}
                         x={0}
-                        y={(i - (lines.length - 1) / 2) * LINE_HEIGHT}
+                        y={(i - (lines.length - 1) / 2) * LINE_HEIGHT * scale}
                         dominantBaseline="middle"
                       >
                         {line}
