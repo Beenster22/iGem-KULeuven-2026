@@ -353,7 +353,7 @@ function Tgr5OverviewDiagram() {
       className="tgr5-svg tgr5-svg--overview"
       viewBox={`0 0 ${OV_W} ${OV_H}`}
       role="img"
-      aria-label="Illustration of two pathways that start at the TGR5 receptor. In the gut, a bile acid binds TGR5 on an enteroendocrine L cell: GLP-1, insulin going up, and at the end of this pathway insulin resistance. A bile acid also binds TGR5 on an ILC3 cell: IL-22, and at the end of this pathway anovulation."
+      aria-label="Illustration of two pathways that start at the TGR5 receptor. In the gut, a bile acid binds TGR5 on an enteroendocrine L cell: GLP-1, insulin going up, and at the end of this pathway hyperinsulinaemia. A bile acid also binds TGR5 on an ILC3 cell: IL-22, and at the end of this pathway anovulation."
     >
       <defs>
         <marker
@@ -393,7 +393,7 @@ function Tgr5OverviewDiagram() {
         Enteroendocrine L cell
       </text>
 
-      {/* L cell → GLP-1 → insulin → insulin resistance. */}
+      {/* L cell → GLP-1 → insulin → hyperinsulinaemia. */}
       <path
         className="tgr5-arrow tgr5-arrow--outer"
         d={`M${L_CELL_X},${GUT.bottom + 48} V252`}
@@ -419,7 +419,7 @@ function Tgr5OverviewDiagram() {
         rx={14}
       />
       <text className="tgr5-label tgr5-label--dark" x={L_CELL_X} y={370}>
-        Insulin resistance
+        Hyperinsulinaemia
       </text>
 
       {/* ILC3 → IL-22 → anovulation. */}
@@ -594,7 +594,7 @@ function AnovulationArt() {
 // notes ("still thinking what to write").
 // TODO(team): add the explanations as `detail` once written.
 const CONSEQUENCES: { title: string; detail?: string; art: ReactNode }[] = [
-  { title: "Insulin resistance", art: <InsulinArt /> },
+  { title: "Hyperinsulinaemia", art: <InsulinArt /> },
   { title: "Anovulation", art: <AnovulationArt /> },
   { title: "Hyperandrogenism", art: <AndrogenArt /> },
 ];

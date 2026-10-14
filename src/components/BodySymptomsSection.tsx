@@ -145,7 +145,7 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
     title: "Metabolic",
     symptoms: [
       { label: "Low grade chronic inflammation", region: "adipose" },
-      { label: "Insulin resistance and hyperinsulinaemia", region: "pancreas" },
+      { label: "Hyperinsulinaemia", region: "pancreas" },
       {
         label: "Dyslipidaemia and raised cardiovascular risk",
         region: "heart",
