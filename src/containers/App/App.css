@@ -1778,8 +1778,8 @@ a[data-footnote-ref]:focus {
    site's other controls. It was sized for single digits — full-width boxes at
    1.75rem — which dwarfed everything around it once the tabs carried words.
    Now it is a centered pill group, sized to its labels, using the same rounded
-   pill shape as .protocol-download and the same accent-fill-for-active
-   convention as .expandable-header. Two dark-mode faults are fixed with it:
+   pill shape as .protocol-download, with the selected pill filled per theme
+   (see below). Two dark-mode faults are fixed with it:
    the inactive border was a dark colour that vanished on the dark theme, and
    the active label inherited --color-text, which is near-white there and sat
    on the light accent at roughly 1.5:1 contrast. */
@@ -1829,16 +1829,19 @@ a[data-footnote-ref]:focus {
    one. Light mode therefore uses the dark header colour — the same treatment
    the navbar and footer use to stand out against that background. */
 .tab-switcher-btn.active {
-  background-color: var(--color-header-bg);
-  border-color: var(--color-header-bg);
-  color: var(--color-header-text);
+  background-color: #33283f;
+  border-color: #33283f;
+  color: #eaf4f5;
 }
 
 [data-theme="dark"] .tab-switcher-btn.active {
   /* On the dark panel the relationship reverses: the light accent is what
-     reads as selected, with the fixed dark label that fill needs. */
-  background-color: var(--color-accent);
-  border-color: var(--color-accent);
+     reads as selected, with the dark label that fill needs. Both states are
+     written as literal colours rather than --color-header-bg/-text, which
+     theme.ts swaps between the two themes — reusing them here would read as
+     if one rule covered both cases when it only happens to suit one. */
+  background-color: #c9bde8;
+  border-color: #c9bde8;
   color: #33283f;
 }
 

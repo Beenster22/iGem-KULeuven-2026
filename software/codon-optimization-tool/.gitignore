@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+
+# Environments
+.venv/
+venv/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# User-supplied source-organism codon tables (downloaded by the user from Kazusa;
+# not redistributed with this repo)
+data/source_tables/
+
+# Local run output
+out*.fasta
+*.report.txt
+*.report.json
