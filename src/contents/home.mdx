@@ -2,8 +2,8 @@
     supplied by the team in "Text for HOME PAGE".
     TODO(team): check each [^n] sits on the claim it actually supports, and
     link the wiki page explaining the IHME GBD method once it exists. */}
-{/* Each band below is its own full-screen section; HomeSnapScroll glides
-    from one `data-snap` stop to the next (see HomeSnapScroll.tsx). */}
+{/* Each band below is its own full-screen section; the page scrolls freely
+    and settles on the nearest `data-snap` stop (see HomeSnapScroll.tsx). */}
 <HomeSnapScroll />
 
 {/* What PMOS is comes first, straight after the hero video (team request,
@@ -27,7 +27,9 @@ Figures per continent[^pmos-3][^pmos-4][^pmos-5].
 <MicrobeBackdrop count={9} seed={2} />
 <div className="container">
 
-<BodySymptomsSection />
+{/* The full symptom list now lives on the Project description page
+    (SymptomGroups); this is the at-a-glance version. */}
+<PmosEffectsSection />
 
 </div>
 </div>

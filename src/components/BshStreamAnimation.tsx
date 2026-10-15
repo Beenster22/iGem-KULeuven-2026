@@ -27,6 +27,12 @@
 // genome, so it is smaller, sits beside the DNA and only appears, with its
 // label, once the reaction is shown. Wording changes from the same review:
 // "intriguing", the plural title, capitalised captions.
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-15 (team request): the DNA
+// loop is gone from the cell, BSH is drawn as a static "pac-man" (the usual
+// way to draw an enzyme), open and facing right, with its label beside it,
+// and the reaction step says what BSH are. The molecules now run in two
+// mostly separate streams (upper and lower half), each in its own colours,
+// and the GDCA/TUDCA and product labels are gone (team request).
 import {
   useEffect,
   useMemo,
@@ -64,7 +70,8 @@ const BAC_LEFT = BAC_X;
 const BAC_RIGHT = BAC_X + BAC_W;
 
 const ARROW_Y = 228;
-const MOLECULE_COUNT = 7;
+// Per stream; there are two (see buildMolecules).
+const MOLECULES_PER_STREAM = 5;
 const HEX_R = 11;
 const TAG_R = 6;
 
@@ -92,6 +99,7 @@ function bezierPath(
 
 interface Molecule {
   id: number;
+  stream: 0 | 1;
   duration: number;
   delay: number;
   inPath: string;
@@ -103,30 +111,36 @@ interface Molecule {
   staticTagOut: [number, number];
 }
 
+// Two streams: 0 runs through the upper half of the diagram, 1 through the
+// lower half (mirrored about the cell's middle), so they stay mostly apart.
 function buildMolecules(): Molecule[] {
-  return Array.from({ length: MOLECULE_COUNT }, (_, i) => {
+  return Array.from({ length: MOLECULES_PER_STREAM * 2 }, (_, i) => {
     const r = (k: number) => seededValue(i * 11 + k);
+    const stream = (i % 2) as 0 | 1;
+    const side = stream === 0 ? -1 : 1;
+    const slot = Math.floor(i / 2);
     const duration = 6.5 + r(1) * 2.5;
-    // Evenly staggered around the loop (plus jitter) so the stream is steady.
-    const delay = -((i + r(2) * 0.5) / MOLECULE_COUNT) * duration;
+    // Evenly staggered around the loop (plus jitter) so each stream is steady.
+    const delay = -((slot + r(2) * 0.5) / MOLECULES_PER_STREAM) * duration;
+    const y = (offset: number) => BAC_MID_Y + side * offset;
 
     const startX = 150 + r(3) * 60;
-    const startY = 50 + r(4) * 200;
-    const entryY = BAC_MID_Y + (r(5) - 0.5) * 30;
-    const curve = (r(6) > 0.5 ? 1 : -1) * (12 + r(7) * 20);
+    const startY = y(18 + r(4) * 80);
+    const entryY = y(8 + r(5) * 16);
+    // Bows away from the other stream.
+    const curve = side * (10 + r(7) * 16);
 
-    const exitY = BAC_MID_Y + (r(8) - 0.5) * 30;
-    const hexEnd: [number, number] = [760 + r(9) * 40, 45 + r(10) * 190];
-    // Glycine/taurine peels away in the opposite vertical direction.
+    const exitY = y(8 + r(8) * 16);
+    const hexEnd: [number, number] = [760 + r(9) * 40, y(20 + r(10) * 50)];
+    // Glycine/taurine peels away further out from the middle.
     const tagEnd: [number, number] = [
       720 + r(12) * 50,
-      hexEnd[1] < BAC_MID_Y
-        ? hexEnd[1] + 50 + r(13) * 40
-        : hexEnd[1] - 50 - r(13) * 40,
+      hexEnd[1] + side * (30 + r(13) * 20),
     ];
 
     return {
       id: i,
+      stream,
       duration,
       delay,
       inPath: bezierPath(startX, startY, BAC_LEFT + 30, entryY, curve),
@@ -135,7 +149,7 @@ function buildMolecules(): Molecule[] {
         exitY,
         hexEnd[0],
         hexEnd[1],
-        -curve * 0.6,
+        curve * 0.6,
       ),
       tagOutPath: bezierPath(
         BAC_RIGHT - 30,
@@ -212,7 +226,7 @@ function Molecules({ animate }: { animate: boolean }) {
     return (
       <>
         {molecules.map((m) => (
-          <g key={m.id}>
+          <g key={m.id} className={`bsh-molecule--${m.stream}`}>
             <g transform={`translate(${m.staticIn[0]},${m.staticIn[1]})`}>
               <ConjugatedMolecule />
             </g>
@@ -236,7 +250,7 @@ function Molecules({ animate }: { animate: boolean }) {
   return (
     <>
       {molecules.map((m) => (
-        <g key={m.id}>
+        <g key={m.id} className={`bsh-molecule--${m.stream}`}>
           <g opacity={0}>
             <ConjugatedMolecule />
             <PhaseMotion
@@ -454,39 +468,18 @@ const PILI_PATHS = (() => {
   }).join(" ");
 })();
 
-// The genome: one closed, tangled loop of DNA in the middle of the cell. Once
-// the reaction is shown it shrinks into the left half to make room for the
-// BSH capsule (see .bsh-dna in App.css).
-const DNA_CENTER_X = BAC_X + BAC_W / 2;
-const DNA_RX = 70;
-const DNA_RY = 34;
-const DNA_PATH = (() => {
-  const points = Array.from({ length: 26 }, (_, i) => {
-    const angle = seededValue(i * 5 + 401) * Math.PI * 2;
-    const radius = Math.sqrt(seededValue(i * 5 + 402));
-    return [
-      DNA_CENTER_X + DNA_RX * radius * Math.cos(angle),
-      BAC_MID_Y + DNA_RY * radius * Math.sin(angle),
-    ];
-  });
-  // A smooth closed curve: each point is the control point of a curve
-  // between the midpoints either side of it.
-  const mid = (i: number) => {
-    const a = points[i % points.length];
-    const b = points[(i + 1) % points.length];
-    return `${((a[0] + b[0]) / 2).toFixed(1)},${((a[1] + b[1]) / 2).toFixed(1)}`;
-  };
-  return (
-    `M${mid(points.length - 1)} ` +
-    points
-      .map((p, i) => `Q${p[0].toFixed(1)},${p[1].toFixed(1)} ${mid(i)}`)
-      .join(" ") +
-    " Z"
-  );
-})();
+// BSH as a static pac-man, mouth open to the right, in the right half of
+// the cell; its "BSH" label sits beside it in the left half.
+const ENZYME = { cx: BAC_X + BAC_W / 2 + 28, r: 34 };
+const MOUTH_ANGLE = 38; // degrees either side of the right-pointing axis
 
-const ENZYME = { x: 528, width: 72, height: 40 };
-const ENZYME_MID_X = ENZYME.x + ENZYME.width / 2;
+const PACMAN_PATH = (() => {
+  const a = (MOUTH_ANGLE * Math.PI) / 180;
+  const x = (ENZYME.cx + ENZYME.r * Math.cos(a)).toFixed(2);
+  const dy = ENZYME.r * Math.sin(a);
+  return `M${ENZYME.cx},${BAC_MID_Y} L${x},${(BAC_MID_Y + dy).toFixed(2)} A${ENZYME.r},${ENZYME.r} 0 1 1 ${x},${(BAC_MID_Y - dy).toFixed(2)} Z`;
+})();
+const ENZYME_LABEL_X = ENZYME.cx - ENZYME.r - 36;
 
 function BacteriumShapes() {
   return (
@@ -508,17 +501,9 @@ function BacteriumShapes() {
         height={BAC_H - 16}
         rx={(BAC_H - 16) / 2}
       />
-      <path className="bsh-dna" d={DNA_PATH} />
       {/* Only with the reaction, where its "BSH" label is shown too. */}
       <g className="bsh-stream-reaction">
-        <rect
-          className="bsh-enzyme"
-          x={ENZYME.x}
-          y={BAC_MID_Y - ENZYME.height / 2}
-          width={ENZYME.width}
-          height={ENZYME.height}
-          rx={ENZYME.height / 2}
-        />
+        <path className="bsh-enzyme" d={PACMAN_PATH} />
       </g>
     </>
   );
@@ -526,7 +511,7 @@ function BacteriumShapes() {
 
 // The cell on its way from the gut window to this diagram: starts as a plain
 // pink capsule like the ones in the window and picks up the colours, inner
-// membrane, pili and DNA of P. vulgatus on the way.
+// membrane and pili of P. vulgatus on the way.
 function TravellingBacterium({ zoom }: { zoom: PvZoom }) {
   const { progress } = zoom;
   const opacity = useTransform(progress, (p) => (p > 0 && p < 1 ? 1 : 0));
@@ -576,11 +561,6 @@ function TravellingBacterium({ zoom }: { zoom: PvZoom }) {
         rx={(BAC_H - 16) / 2}
         style={{ opacity: innerOpacity }}
       />
-      <motion.path
-        className="bsh-dna"
-        d={DNA_PATH}
-        style={{ opacity: detailOpacity }}
-      />
     </motion.svg>,
     document.body,
   );
@@ -629,14 +609,14 @@ export function BshStreamAnimation() {
               Meet <em>Phocaeicola vulgatus</em>
             </h3>
             <p>
-              An intriguing microorganism involved in breaking down bile acids
+              An intriguing microorganism involved in digestion and bile acid metabolism.
             </p>
           </div>
         </motion.div>
         <h3 className="bsh-stream-heading bsh-stream-reaction">
-          Bile salt hydrolases from <em>P. vulgatus</em> are responsible for
-          bile acid deconjugation
+          Bile salt hydrolases from are enzymes responsible for bile acid modification.
         </h3>
+        
         <div
           className="bsh-stream-diagram"
           ref={diagramRef}
@@ -691,7 +671,7 @@ export function BshStreamAnimation() {
             </span>
             <span
               className="bsh-stream-enzyme-label"
-              style={{ left: pctX(ENZYME_MID_X), top: pctY(BAC_MID_Y) }}
+              style={{ left: pctX(ENZYME_LABEL_X), top: pctY(BAC_MID_Y) }}
             >
               BSH
             </span>
@@ -699,43 +679,12 @@ export function BshStreamAnimation() {
 
           <div className="bsh-stream-layer bsh-stream-reaction">
             <span
-              className="bsh-stream-badge bsh-stream-badge--conjugated"
-              style={{ left: pctX(70), top: "36%" }}
-            >
-              GDCA
-            </span>
-            <span
-              className="bsh-stream-badge bsh-stream-badge--conjugated"
-              style={{ left: pctX(70), top: "54%" }}
-            >
-              TUDCA
-            </span>
-            <span
               className="bsh-stream-caption"
               style={{ left: pctX(180), top: pctY(275) }}
             >
               Conjugated bile acids
             </span>
 
-            <div
-              className="bsh-stream-products"
-              style={{ left: pctX(900), top: "45%" }}
-            >
-              <span className="bsh-stream-badge bsh-stream-badge--deconjugated">
-                DCA
-              </span>
-              <span className="bsh-stream-plus">+</span>
-              <span className="bsh-stream-badge bsh-stream-badge--tag">
-                Glycine
-              </span>
-              <span className="bsh-stream-badge bsh-stream-badge--deconjugated">
-                UDCA
-              </span>
-              <span className="bsh-stream-plus">+</span>
-              <span className="bsh-stream-badge bsh-stream-badge--tag">
-                Taurine
-              </span>
-            </div>
             <span
               className="bsh-stream-caption"
               style={{ left: pctX(820), top: pctY(275) }}

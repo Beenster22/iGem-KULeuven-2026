@@ -1,5 +1,10 @@
 import { TeamMembers, TeamMemberCard } from "./components/TeamMembers";
 import { ProtocolBox } from "./components/ProtocolBox";
+import { ProtocolCalculator } from "./components/ProtocolCalculator";
+import { ProtocolCalcGrid } from "./components/ProtocolCalcGrid";
+import { ProtocolCalculations } from "./components/ProtocolCalculations";
+import { ProtocolNote } from "./components/ProtocolNote";
+import { ProtocolDownloads } from "./components/ProtocolDownloads";
 import { PageLayout } from "./components/PageLayout";
 import { Callout } from "./components/Callout";
 import { TabbedSections, TabSection } from "./components/TabbedSections";
@@ -21,9 +26,10 @@ import {
 } from "./components/HumanPracticesInterviews";
 import { PmosOverview } from "./components/PmosOverview";
 import {
-  BodySymptomsSection,
+  SymptomGroups,
   PmosDefinition,
 } from "./components/BodySymptomsSection";
+import { PmosEffectsSection } from "./components/PmosEffectsSection";
 import { InflammationSliderSection } from "./components/InflammationSliderSection";
 import { BshStreamAnimation } from "./components/BshStreamAnimation";
 import { MicChart } from "./components/MicChart";
@@ -46,6 +52,7 @@ import {
 import { SponsorGrid } from "./components/SponsorGrid";
 import { HomeSnapScroll } from "./components/HomeSnapScroll";
 import { ZoomableImage } from "./components/ZoomableImage";
+import { ElleSays } from "./components/ElleSays";
 import {
   StakeholderGroups,
   StakeholderGroup,
@@ -59,6 +66,13 @@ import {
   ResourceDownload,
 } from "./components/FeedbackCycle";
 import { DockingHeatmap } from "./components/DockingHeatmap";
+import {
+  QuestionSelector,
+  Question,
+  InfoCards,
+  InfoCard,
+} from "./components/QuestionSelector";
+import { PhenotypeVenn } from "./components/PhenotypeVenn";
 import { Link } from "react-router-dom";
 
 export const mdxComponents = {
@@ -70,9 +84,18 @@ export const mdxComponents = {
   TeamMembers,
   TeamMemberCard,
   ProtocolBox,
+  // Generated with Claude Opus 5 (Anthropic), 2026-10-12
+  // Purpose: the wet lab protocol pages — live calculator tables, the
+  // shaded Note/Critical boxes, and the PDF + workbook download row.
+  ProtocolCalculator,
+  ProtocolCalcGrid,
+  ProtocolCalculations,
+  ProtocolNote,
+  ProtocolDownloads,
   PageLayout,
   PmosOverview,
-  BodySymptomsSection,
+  SymptomGroups,
+  PmosEffectsSection,
   PmosDefinition,
   BshStreamAnimation,
   InflammationSliderSection,
@@ -96,7 +119,12 @@ export const mdxComponents = {
   SponsorGrid,
   HomeSnapScroll,
   ZoomableImage,
+  ElleSays,
   DockingHeatmap,
+  QuestionSelector,
+  Question,
+  InfoCards,
+  InfoCard,
   Callout,
   TabbedSections,
   TabSection,
@@ -122,4 +150,7 @@ export const mdxComponents = {
   FeedbackOutcomes,
   FeedbackOutcome,
   ResourceDownload,
+  // Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
+  // Purpose: the interactive phenotype Venn diagram on the description page.
+  PhenotypeVenn,
 };

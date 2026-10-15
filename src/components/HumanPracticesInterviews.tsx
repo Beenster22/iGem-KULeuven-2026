@@ -23,6 +23,9 @@ interface IntervieweeProps {
   date?: string;
   /** Where the interviewee works from, e.g. "Leuven, Belgium". */
   basedIn?: string;
+  /** One- or two-sentence blurb shown next to the person while they're
+   * featured. Falls back to a clipped excerpt of the full write-up. */
+  summary?: string;
   /** The interview write-up, shown in the modal under "Interview Summary". */
   children: ReactNode;
 }
@@ -51,6 +54,7 @@ interface FlatInterviewee {
   image?: string;
   date?: string;
   basedIn?: string;
+  summary?: string;
   content: ReactNode;
 }
 
@@ -79,6 +83,7 @@ function extractSections(children: ReactNode): Section[] {
             image: child.props.image,
             date: child.props.date,
             basedIn: child.props.basedIn,
+            summary: child.props.summary,
             content: child.props.children,
           });
         } else {
@@ -117,13 +122,14 @@ function carouselPhoto(person: FlatInterviewee) {
 interface HPCarouselProps {
   title: string;
   interviewees: FlatInterviewee[];
+  featuredIndex: number;
   onOpen: (index: number) => void;
 }
 
 // Infinite-scrolling row of interviewee tiles — same duplicate-the-track
 // technique as SponsorCarousel.tsx, but tiles stay real <button>s (not
 // links) so clicking one still opens that person's modal.
-function HPCarousel({ title, interviewees, onOpen }: HPCarouselProps) {
+function HPCarousel({ title, interviewees, featuredIndex, onOpen }: HPCarouselProps) {
   const duration = Math.max(MIN_CAROUSEL_SECONDS, interviewees.length * SECONDS_PER_TILE);
 
   return (
@@ -137,7 +143,7 @@ function HPCarousel({ title, interviewees, onOpen }: HPCarouselProps) {
             key={person.globalIndex}
             type="button"
             role="listitem"
-            className="hp-carousel-item"
+            className={`hp-carousel-item${person.globalIndex === featuredIndex ? " is-featured" : ""}`}
             onClick={() => onOpen(person.globalIndex)}
           >
             <span className="hp-carousel-photo">{carouselPhoto(person)}</span>
@@ -145,12 +151,198 @@ function HPCarousel({ title, interviewees, onOpen }: HPCarouselProps) {
           </button>
         ))}
         {interviewees.map((person) => (
-          <div key={`${person.globalIndex}-dup`} className="hp-carousel-item" aria-hidden="true">
+          <div
+            key={`${person.globalIndex}-dup`}
+            className={`hp-carousel-item${person.globalIndex === featuredIndex ? " is-featured" : ""}`}
+            aria-hidden="true"
+          >
             <span className="hp-carousel-photo">{carouselPhoto(person)}</span>
             <span className="hp-carousel-name">{person.name}</span>
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+
+// Generated with Claude Opus 5.5 (Anthropic), 2026-10-14
+// Purpose: spotlight one interviewee per section — large photo with a short
+// summary beside it — rotating to the next person every FEATURE_SECONDS.
+// Rotation pauses while the spotlight is hovered/focused or a modal is open,
+// and is off entirely under prefers-reduced-motion (the dots still work).
+const FEATURE_SECONDS = 8;
+
+function prefersReducedMotion() {
+  return typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+}
+
+interface HPFeaturedProps {
+  interviewees: FlatInterviewee[];
+  position: number;
+  paused: boolean;
+  onSelect: (position: number) => void;
+  onOpen: (index: number) => void;
+}
+
+function HPFeatured({ interviewees, position, paused, onSelect, onOpen }: HPFeaturedProps) {
+  const [hovered, setHovered] = useState(false);
+  const person = interviewees[position];
+  const rotating = interviewees.length > 1 && !paused && !hovered && !prefersReducedMotion();
+
+  // Restarting the timeout whenever `position` changes means a manual pick
+  // via the dots gets a full FEATURE_SECONDS before the next switch.
+  useEffect(() => {
+    if (!rotating) return;
+    const timer = window.setTimeout(() => onSelect((position + 1) % interviewees.length), FEATURE_SECONDS * 1000);
+    return () => window.clearTimeout(timer);
+  }, [rotating, position, interviewees.length, onSelect]);
+
+  if (!person) return null;
+
+  return (
+    <div
+      className="hp-featured"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
+      style={{ "--hp-feature-duration": `${FEATURE_SECONDS}s` } as React.CSSProperties}
+    >
+      {/* Keyed on the person so each switch remounts and replays the fade-in. */}
+      <div key={person.globalIndex} className="hp-featured-body" aria-live="polite">
+        <button
+          type="button"
+          className="hp-featured-photo"
+          onClick={() => onOpen(person.globalIndex)}
+          aria-label={`Read the full interview with ${person.name}`}
+        >
+          {person.image ? (
+            <img src={person.image} alt="" />
+          ) : (
+            <span className="hp-featured-photo-placeholder" aria-hidden="true">
+              {initials(person.name)}
+            </span>
+          )}
+        </button>
+        <div className="hp-featured-text">
+          <h3 className="hp-featured-name">{person.name}</h3>
+          {person.role && <p className="hp-featured-role">{person.role}</p>}
+          <div className={`hp-featured-summary${person.summary ? "" : " is-excerpt"}`}>
+            {person.summary ? <p>{person.summary}</p> : person.content}
+          </div>
+          <button type="button" className="hp-featured-more" onClick={() => onOpen(person.globalIndex)}>
+            Read full interview &rarr;
+          </button>
+        </div>
+      </div>
+
+      {interviewees.length > 1 && (
+        <div className="hp-featured-dots" role="tablist" aria-label="Featured interviewee">
+          {interviewees.map((p, i) => (
+            <button
+              key={p.globalIndex}
+              type="button"
+              role="tab"
+              aria-selected={i === position}
+              aria-label={p.name}
+              className={`hp-featured-dot${i === position ? " is-active" : ""}${i === position && rotating ? " is-running" : ""}`}
+              onClick={() => onSelect(i)}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Generated with Claude Opus 5.5 (Anthropic), 2026-10-15
+// Purpose: plain, motion-free alternative to the spotlight + carousel — every
+// interviewee in a section as a stacked row (thumbnail, name, role, summary),
+// still opening the shared modal for the full write-up.
+type HPView = "carousel" | "list";
+const VIEW_STORAGE_KEY = "hp-interviews-view";
+
+function readStoredView(): HPView {
+  try {
+    return window.localStorage.getItem(VIEW_STORAGE_KEY) === "list" ? "list" : "carousel";
+  } catch {
+    return "carousel";
+  }
+}
+
+interface HPListProps {
+  interviewees: FlatInterviewee[];
+  onOpen: (index: number) => void;
+}
+
+function HPList({ interviewees, onOpen }: HPListProps) {
+  return (
+    <ul className="hp-list">
+      {interviewees.map((person) => (
+        <li key={person.globalIndex} className="hp-list-item">
+          <button
+            type="button"
+            className="hp-list-photo"
+            onClick={() => onOpen(person.globalIndex)}
+            aria-label={`Read the full interview with ${person.name}`}
+          >
+            {carouselPhoto(person)}
+          </button>
+          <div className="hp-list-text">
+            <h3 className="hp-list-name">{person.name}</h3>
+            {person.role && <p className="hp-list-role">{person.role}</p>}
+            <div className={`hp-list-summary${person.summary ? "" : " is-excerpt"}`}>
+              {person.summary ? <p>{person.summary}</p> : person.content}
+            </div>
+            <button type="button" className="hp-featured-more" onClick={() => onOpen(person.globalIndex)}>
+              Read full interview &rarr;
+            </button>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+interface HPSectionCardProps {
+  section: Section;
+  view: HPView;
+  paused: boolean;
+  onOpen: (index: number) => void;
+}
+
+function HPSectionCard({ section, view, paused, onOpen }: HPSectionCardProps) {
+  const [position, setPosition] = useState(0);
+  const featured = section.interviewees[position];
+
+  if (view === "list") {
+    return (
+      <div className="hp-section-card">
+        <h2 className="hp-section-title">{section.title}</h2>
+        <HPList interviewees={section.interviewees} onOpen={onOpen} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="hp-section-card">
+      <h2 className="hp-section-title">{section.title}</h2>
+      <HPFeatured
+        interviewees={section.interviewees}
+        position={position}
+        paused={paused}
+        onSelect={setPosition}
+        onOpen={onOpen}
+      />
+      {section.interviewees.length > 1 && (
+        <HPCarousel
+          title={section.title}
+          interviewees={section.interviewees}
+          featuredIndex={featured?.globalIndex ?? -1}
+          onOpen={onOpen}
+        />
+      )}
     </div>
   );
 }
@@ -163,7 +355,17 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
   const sections = useMemo(() => extractSections(children), [children]);
   const flat = useMemo(() => sections.flatMap((section) => section.interviewees), [sections]);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [view, setView] = useState<HPView>(readStoredView);
   const modalRef = useRef<HTMLDivElement | null>(null);
+
+  function changeView(next: HPView) {
+    setView(next);
+    try {
+      window.localStorage.setItem(VIEW_STORAGE_KEY, next);
+    } catch {
+      // Storage blocked (private mode etc.) — the toggle still works for this visit.
+    }
+  }
 
   const openPerson = openIndex !== null ? flat[openIndex] : null;
 
@@ -190,17 +392,24 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
 
   return (
     <>
+      <div className="segmented-selector-bar hp-view-toggle" role="group" aria-label="Interview layout">
+        {(["carousel", "list"] as const).map((option) => (
+          <button
+            key={option}
+            type="button"
+            aria-pressed={view === option}
+            className={`segmented-selector-segment${view === option ? " active" : ""}`}
+            onClick={() => changeView(option)}
+          >
+            {option === "carousel" ? "Carousel" : "List"}
+          </button>
+        ))}
+      </div>
+
       {sections.map((section) =>
         section.interviewees.length > 0 ? (
           <section key={section.title} className="hp-section">
-            <div className="hp-section-card">
-              <h2 className="hp-section-title">{section.title}</h2>
-              <HPCarousel
-                title={section.title}
-                interviewees={section.interviewees}
-                onOpen={setOpenIndex}
-              />
-            </div>
+            <HPSectionCard section={section} view={view} paused={openIndex !== null} onOpen={setOpenIndex} />
 
             {section.context.length > 0 && <div className="hp-section-context">{section.context}</div>}
           </section>

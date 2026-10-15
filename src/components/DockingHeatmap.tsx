@@ -58,7 +58,9 @@ interface Selection {
 interface DockingHeatmapProps {
   // Folder the per-pair pose images live in on static.igem.wiki, without a
   // trailing slash. Each image is expected to be named
-  // `<homolog>-<bile salt>.<imageExtension>`, e.g. "bgal-taurocholic.png".
+  // `<homolog>-<bile salt>-acid.<imageExtension>`, e.g.
+  // "bgal-taurocholic-acid.avif" — the team's `bgal__taurocholic_acid.png`
+  // after the iGEM uploads tool has hyphenated and converted it.
   // Leave it out until the images are uploaded — the panel below the grid
   // then says so instead of showing a broken image.
   imageBaseUrl?: string;
@@ -67,7 +69,7 @@ interface DockingHeatmapProps {
 
 export function DockingHeatmap({
   imageBaseUrl,
-  imageExtension = "png",
+  imageExtension = "avif",
 }: DockingHeatmapProps) {
   const [selected, setSelected] = useState<Selection | null>(null);
 
@@ -83,7 +85,7 @@ export function DockingHeatmap({
 
   const imageUrl =
     imageBaseUrl && selected
-      ? `${imageBaseUrl}/${selected.homolog}-${selected.salt}.${imageExtension}`
+      ? `${imageBaseUrl}/${selected.homolog}-${selected.salt}-acid.${imageExtension}`
       : null;
 
   return (

@@ -2,8 +2,9 @@
 // Purpose: the last stretch of the home page, after "But why is this
 // reaction important?", following the team's "Text for HOME PAGE" (2nd round
 // of changes) and the comments on it:
-//  - Tgr5MechanismSection: one screen with an overview of the two pathways
-//    that start at TGR5 (added 2026-10-07, see Tgr5OverviewDiagram). Cut back
+//  - Tgr5MechanismSection: one screen showing which conjugated bile acid
+//    binds TGR5 where (added 2026-10-07; redrawn 2026-10-15 as the binding
+//    animation in Tgr5BindingDiagram, see there). Cut back
 //    to this single screen on 2026-10-08 after Marie's review: the ILC3
 //    close-up that followed it and the question "But how does this cause
 //    issues?" were both dropped, so the page goes straight from here to the
@@ -24,7 +25,14 @@
 // not data. All wording is the team's; nothing was added where the team's
 // notes are still open (see CONSEQUENCES). Motion is off under
 // prefers-reduced-motion, where nothing is pinned and everything is shown.
-import { useMemo, useRef, type CSSProperties, type ReactNode } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  type CSSProperties,
+  type ReactNode,
+  type RefObject,
+} from "react";
 import { Link } from "react-router-dom";
 import { useReducedMotion } from "framer-motion";
 import { SnapSteps } from "./HomeSnapScroll";
@@ -286,23 +294,47 @@ function Tgr5Diagram({ animate }: { animate: boolean }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* TGR5 in the gut: the two pathways                                   */
+/* TGR5 on an immune cell and in the gut: which bile acid binds where     */
 /* ------------------------------------------------------------------ */
 
-// Added with Claude Opus 5.5 (Anthropic), 2026-10-07
-// Purpose: the overview the team asked for after "But why is this reaction
-// important?" (review of the home page): the gut with an enteroendocrine L
-// cell carrying TGR5, and an ILC3 carrying TGR5, each with what it leads to.
-// A simplified redrawing of panels 4b and 5a of the team's own figure, cut
-// down further on the team's request (the gut as villi; each pathway ending
-// in the one outcome the team names for it).
+// Added with Claude Opus 5.5 (Anthropic), 2026-10-07; redrawn 2026-10-15
+// (team requests): the detail is gone (no L cell, GLP-1, insulin, IL-22 or
+// outcomes). Two halves: on the left one large immune cell (was "ILC3") with
+// TGR5 on top, on the right a stretch of gut epithelium with TGR5 on a villus.
+// Above them a pool of all four bile acids of the BSH section (both
+// conjugated and both deconjugated, in the same colours, see
+// .bsh-molecule--1 in App.css) drifts about, and now and then one goes down
+// to a receptor. Each receptor binds one of the two conjugated bile acids
+// more strongly: the upper-stream one (then yellow, now orange) at the
+// immune cell, the lower-stream one (purple) in the gut (confirmed by
+// the team, 2026-10-15). Not a hard exclusion (team request): the other
+// conjugated one binds too, only less often and briefly. Deconjugated bile
+// acids come close and turn away, as in the team's ILC3 figure
+// (Tgr5Ilc3Figure above).
+// When the diagram comes into view the bile acids pour in from the top of
+// the screen (from the BSH section above, as it were) and settle into the
+// pool. Edited 2026-10-15 (team feedback): this used to be a stream tied to
+// the scroll position between the two sections; it is now a short timed
+// animation that plays by itself, again each time the diagram comes back
+// into view. Everything runs in one requestAnimationFrame loop
+// (useBindingLoop), so an arriving bile acid lands on its live spot in the
+// pool.
 const OV_W = 1000;
-const OV_H = 420;
+const OV_H = 520;
 // The gut wall: villi drawn as one band that winds up and down. `r` is the
 // radius of each turn, so a villus and the gap after it take up 4r.
-const GUT = { x: 50, top: 66, bottom: 170, r: 30, villi: 8, lCell: 6 };
-const L_CELL_X = GUT.x + GUT.r * 4 * GUT.lCell + GUT.r;
-const ILC3 = { x: 150, y: 330, r: 72 };
+const GUT = { x: 580, top: 260, bottom: 470, r: 30, villi: 3, receptor: 1 };
+const GUT_RECEPTOR_X = GUT.x + GUT.r * 4 * GUT.receptor + GUT.r;
+const IMMUNE = { x: 250, y: 370, r: 110 };
+// Half the length of a receptor standing upright (see ReceptorShape).
+const RECEPTOR_HALF = 27;
+// The bile acids are drawn larger here than in the rest of the page.
+const ACID_SCALE = 1.6;
+// How far above the top of a receptor a docked bile acid sits.
+const ACID_R = HEX_R * ACID_SCALE;
+const DOCK_GAP = RECEPTOR_HALF + ACID_R + 3;
+// Where the pool is: the band above the two cells.
+const POOL = { left: 60, right: 940, top: 40, bottom: 175 };
 
 function buildGutPath() {
   const { x, top, bottom, r, villi } = GUT;
@@ -318,13 +350,6 @@ function buildGutPath() {
   return d;
 }
 
-// The stretch of the band at the tip of its villus that is the L cell.
-function buildLCellPath() {
-  const dx = GUT.r * Math.sin(Math.PI / 6);
-  const y = GUT.top + GUT.r - GUT.r * Math.cos(Math.PI / 6);
-  return `M${L_CELL_X - dx},${y} A${GUT.r},${GUT.r} 0 0 1 ${L_CELL_X + dx},${y}`;
-}
-
 // A receptor standing in a membrane that runs left to right through (x, y):
 // a bundle of helices.
 function ReceptorShape({ x, y }: { x: number; y: number }) {
@@ -333,9 +358,9 @@ function ReceptorShape({ x, y }: { x: number; y: number }) {
       {[-18, -6, 6, 18].map((dy, i) => (
         <rect
           key={dy}
-          x={-27}
+          x={-RECEPTOR_HALF}
           y={dy - 5}
-          width={54}
+          width={RECEPTOR_HALF * 2}
           height={10}
           rx={5}
           transform={`rotate(${i % 2 ? 7 : -7} 0 ${dy})`}
@@ -345,124 +370,377 @@ function ReceptorShape({ x, y }: { x: number; y: number }) {
   );
 }
 
-function Tgr5OverviewDiagram() {
+type Point = [number, number];
+// 0 is the upper-stream pair of the BSH section (orange conjugated, yellow
+// deconjugated), 1 the lower-stream pair (dark/light purple).
+type AcidKind = 0 | 1;
+
+interface Site {
+  x: number;
+  top: number;
+  dock: Point;
+  // Which way is away from the middle of the diagram.
+  away: -1 | 1;
+}
+
+const SITES: Site[] = [
+  {
+    x: IMMUNE.x,
+    top: IMMUNE.y - IMMUNE.r,
+    dock: [IMMUNE.x, IMMUNE.y - IMMUNE.r - DOCK_GAP],
+    away: -1,
+  },
+  {
+    x: GUT_RECEPTOR_X,
+    top: GUT.top,
+    dock: [GUT_RECEPTOR_X, GUT.top - DOCK_GAP],
+    away: 1,
+  },
+];
+
+interface PoolAcid {
+  id: number;
+  kind: AcidKind;
+  conjugated: boolean;
+  // Drifting about its home: amplitude, period (s) and phase in x and y.
+  home: Point;
+  amp: Point;
+  period: Point;
+  phase: Point;
+  // Pouring in: where across the screen top it comes from (0-1), how late
+  // it sets off (s), and how much it turns on the way.
+  entryX: number;
+  delay: number;
+  spin: number;
+}
+
+// Four of each: conjugated orange (0-3), conjugated dark purple (4-7),
+// deconjugated yellow (8-11), deconjugated light purple (12-15). The homes are a
+// jittered 8 x 2 grid over the pool, shuffled so the colours mix.
+const ACID_COUNT = 16;
+// Pouring in: each bile acid sets off up to ENTRY_STAGGER s after the first
+// and takes ENTRY_FLIGHT s to land.
+const ENTRY_STAGGER = 1.2;
+const ENTRY_FLIGHT = 1.8;
+function buildPool(): PoolAcid[] {
+  const slots = Array.from({ length: ACID_COUNT }, (_, i) => i).sort(
+    (a, b) => seededValue(a + 700) - seededValue(b + 700),
+  );
+  return Array.from({ length: ACID_COUNT }, (_, i) => {
+    const r = (k: number) => seededValue(i * 17 + k + 500);
+    const kind = (Math.floor(i / 4) % 2) as AcidKind;
+    const conjugated = i < 8;
+    const slot = slots[i];
+    const col = slot % 8;
+    const row = Math.floor(slot / 8);
+    const cellW = (POOL.right - POOL.left) / 8;
+    const cellH = (POOL.bottom - POOL.top) / 2;
+    return {
+      id: i,
+      kind,
+      conjugated,
+      home: [
+        POOL.left + cellW * (col + 0.2 + r(3) * 0.6),
+        POOL.top + cellH * (row + 0.25 + r(4) * 0.5),
+      ],
+      amp: [18 + r(5) * 22, 10 + r(6) * 12],
+      period: [5 + r(7) * 4, 4 + r(8) * 3],
+      phase: [r(9) * Math.PI * 2, r(10) * Math.PI * 2],
+      entryX: r(1),
+      delay: r(11) * ENTRY_STAGGER,
+      spin: (r(13) - 0.5) * 2,
+    };
+  });
+}
+
+// One loop of BIND_LOOP seconds: who goes to which receptor, and when
+// (seconds into the loop). "dock" binds, "near" comes close and turns away.
+// Each receptor is visited by its preferred conjugated bile acid twice, for
+// long, and by the other conjugated one once, briefly.
+const BIND_LOOP = 24;
+interface BindEvent {
+  acid: number;
+  site: 0 | 1;
+  type: "dock" | "near";
+  start: number;
+  arrive: number;
+  leave: number;
+  end: number;
+}
+const ev = (
+  acid: number,
+  site: 0 | 1,
+  type: "dock" | "near",
+  start: number,
+  hold: number,
+): BindEvent => ({
+  acid,
+  site,
+  type,
+  start,
+  arrive: 1.8,
+  leave: 1.8 + hold,
+  end: 1.8 + hold + 1.6,
+});
+const BIND_EVENTS: BindEvent[] = [
+  // Immune cell: prefers orange.
+  ev(0, 0, "dock", 0, 6.2),
+  ev(8, 0, "near", 5, 0),
+  ev(12, 0, "near", 9.4, 0),
+  ev(4, 0, "dock", 11.6, 0.9),
+  ev(1, 0, "dock", 15.2, 5.4),
+  // Gut: prefers dark purple.
+  ev(5, 1, "dock", 12, 6.2),
+  ev(13, 1, "near", 17, 0),
+  ev(9, 1, "near", 21.4, 0),
+  ev(2, 1, "dock", 23.6, 0.9),
+  ev(6, 1, "dock", 3.2, 5.4),
+];
+
+const smooth = (t: number) => t * t * (3 - 2 * t);
+const clamp01 = (t: number) => Math.min(1, Math.max(0, t));
+const lerp = (a: Point, b: Point, t: number): Point => [
+  a[0] + (b[0] - a[0]) * t,
+  a[1] + (b[1] - a[1]) * t,
+];
+
+// Where a bile acid is in the pool diagram `t` seconds in, and the receptor
+// it is bound to (with how long it has been bound), if any.
+function poolPosition(
+  acid: PoolAcid,
+  t: number,
+): { at: Point; bound?: { site: 0 | 1; since: number } } {
+  const drift: Point = [
+    acid.home[0] + acid.amp[0] * Math.sin((t / acid.period[0]) * 2 * Math.PI + acid.phase[0]),
+    acid.home[1] + acid.amp[1] * Math.sin((t / acid.period[1]) * 2 * Math.PI + acid.phase[1]),
+  ];
+  for (const e of BIND_EVENTS) {
+    if (e.acid !== acid.id) continue;
+    const local = (((t - e.start) % BIND_LOOP) + BIND_LOOP) % BIND_LOOP;
+    if (local >= e.end) continue;
+    const site = SITES[e.site];
+    const target: Point =
+      e.type === "dock"
+        ? site.dock
+        : [site.dock[0] - site.away * 40, site.dock[1] - 36];
+    const pull =
+      local < e.arrive
+        ? smooth(local / e.arrive)
+        : local < e.leave
+          ? 1
+          : 1 - smooth((local - e.leave) / (e.end - e.leave));
+    const bound =
+      e.type === "dock" && local >= e.arrive && local < e.leave
+        ? { site: e.site, since: local - e.arrive }
+        : undefined;
+    return { at: lerp(drift, target, pull), bound };
+  }
+  return { at: drift };
+}
+
+// A ring pulses out from a bound bile acid every RING_EVERY seconds.
+const RING_EVERY = 1.4;
+
+function AcidShape({ conjugated }: { conjugated: boolean }) {
+  return conjugated ? (
+    <BileAcidShape conjugated />
+  ) : (
+    <polygon className="bsh-hex bsh-hex--deconjugated" points={HEX_POINTS} />
+  );
+}
+
+interface LoopRefs {
+  svg: RefObject<SVGSVGElement | null>;
+  acids: RefObject<(SVGGElement | null)[]>;
+  rings: RefObject<(SVGCircleElement | null)[]>;
+}
+
+function useBindingLoop(acids: PoolAcid[], refs: LoopRefs, enabled: boolean) {
+  useEffect(() => {
+    const svg = refs.svg.current;
+    if (!enabled || !svg) return;
+    let frame = 0;
+    let visible = false;
+    const start = performance.now();
+    // When the bile acids started pouring in (null until the diagram is in
+    // view), and from where: the top of the screen in the diagram's units.
+    let entryAt: number | null = null;
+    let entryTop = -400;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        if (entry.intersectionRatio >= 0.35 && entryAt === null) {
+          entryAt = performance.now();
+          const ctm = svg.getScreenCTM();
+          entryTop = ctm ? (-60 - ctm.f) / ctm.d : -400;
+        } else if (!entry.isIntersecting) {
+          // Out of view: pour them in again next time.
+          entryAt = null;
+        }
+      },
+      { threshold: [0, 0.35] },
+    );
+    observer.observe(svg);
+
+    const tick = (now: number) => {
+      frame = requestAnimationFrame(tick);
+      if (!visible) return;
+      const t = (now - start) / 1000;
+      const states = acids.map((acid) => poolPosition(acid, t));
+      const sinceEntry = entryAt === null ? -1 : (now - entryAt) / 1000;
+
+      states.forEach((s, i) => {
+        const el = refs.acids.current[i];
+        if (!el) return;
+        const acid = acids[i];
+        const k = clamp01((sinceEntry - acid.delay) / ENTRY_FLIGHT);
+        if (k >= 1) {
+          el.setAttribute(
+            "transform",
+            `translate(${s.at[0].toFixed(1)} ${s.at[1].toFixed(1)})`,
+          );
+          el.setAttribute("opacity", "1");
+          return;
+        }
+        // Falls from the top of the screen, swaying, slowing as it lands.
+        const e = 1 - Math.pow(1 - k, 3);
+        const fromX = POOL.left + acid.entryX * (POOL.right - POOL.left);
+        const x =
+          fromX +
+          (s.at[0] - fromX) * e +
+          30 * Math.sin(Math.PI * k) * Math.sin(2 * Math.PI * (1.5 * k + acid.entryX));
+        const y = entryTop + (s.at[1] - entryTop) * e;
+        const rotate = 200 * acid.spin * (1 - e);
+        el.setAttribute(
+          "transform",
+          `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${rotate.toFixed(1)})`,
+        );
+        el.setAttribute("opacity", clamp01(k * 6).toFixed(2));
+      });
+
+      SITES.forEach((_, site) => {
+        const ring = refs.rings.current[site];
+        if (!ring) return;
+        const boundIndex = states.findIndex(
+          (s, i) =>
+            s.bound?.site === site &&
+            sinceEntry - acids[i].delay >= ENTRY_FLIGHT,
+        );
+        const bound = states[boundIndex]?.bound;
+        // In the colour of whichever bile acid is bound.
+        if (bound) {
+          ring.setAttribute(
+            "class",
+            `tgr5-bind-pulse tgr5-bind-pulse--${acids[boundIndex].kind}`,
+          );
+        }
+        const age = bound ? (bound.since % RING_EVERY) / RING_EVERY : 1;
+        ring.setAttribute("r", (ACID_R * (1 + 1.6 * age)).toFixed(1));
+        ring.setAttribute("opacity", (0.9 * (1 - age)).toFixed(2));
+      });
+    };
+    frame = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
+  }, [acids, refs, enabled]);
+}
+
+function Tgr5BindingDiagram({ animate }: { animate: boolean }) {
   const gutPath = useMemo(buildGutPath, []);
-  const lCellPath = useMemo(buildLCellPath, []);
+  const acids = useMemo(buildPool, []);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const acidRefs = useRef<(SVGGElement | null)[]>([]);
+  const ringRefs = useRef<(SVGCircleElement | null)[]>([]);
+  const refs = useMemo<LoopRefs>(
+    () => ({ svg: svgRef, acids: acidRefs, rings: ringRefs }),
+    [],
+  );
+  useBindingLoop(acids, refs, animate);
+
+  // Without motion: everything at home, with the preferred bile acid bound
+  // at each receptor.
+  const staticAt = (acid: PoolAcid): Point =>
+    acid.id === 0 ? SITES[0].dock : acid.id === 5 ? SITES[1].dock : acid.home;
+
   return (
     <svg
+      ref={svgRef}
       className="tgr5-svg tgr5-svg--overview"
       viewBox={`0 0 ${OV_W} ${OV_H}`}
       role="img"
-      aria-label="Illustration of two pathways that start at the TGR5 receptor. In the gut, a bile acid binds TGR5 on an enteroendocrine L cell: GLP-1, insulin going up, and at the end of this pathway insulin resistance. A bile acid also binds TGR5 on an ILC3 cell: IL-22, and at the end of this pathway anovulation."
+      aria-label="Illustration: a mixture of conjugated and deconjugated bile acids above TGR5 receptors on an immune cell and on an epithelial cell of the gut. Each receptor binds one of the two conjugated bile acids more often and for longer, and the other one only now and then; the deconjugated bile acids come close but do not bind."
     >
-      <defs>
-        <marker
-          id="tgr5-ov-arrowhead"
-          viewBox="0 0 10 10"
-          refX="8"
-          refY="5"
-          markerWidth="6"
-          markerHeight="6"
-          orient="auto"
-        >
-          <path d="M0,0 L10,5 L0,10 Z" className="tgr5-arrow-head--outer" />
-        </marker>
-      </defs>
+      <circle
+        className="tgr5-cell"
+        cx={IMMUNE.x}
+        cy={IMMUNE.y}
+        r={IMMUNE.r}
+      />
+      <text
+        className="tgr5-label tgr5-label--dark"
+        x={IMMUNE.x}
+        y={IMMUNE.y + 8}
+      >
+        Immune cell
+      </text>
 
       {/* The gut wall as villi; the dashes mark off its cells. */}
-      <text className="tgr5-label tgr5-label--start" x={GUT.x - 13} y={36}>
-        Gut
-      </text>
       <path className="tgr5-gut tgr5-gut--edge" d={gutPath} />
       <path className="tgr5-gut" d={gutPath} />
       <path className="tgr5-gut tgr5-gut--cells" d={gutPath} />
-      <path className="tgr5-gut tgr5-gut--l-edge" d={lCellPath} />
-      <path className="tgr5-gut tgr5-gut--l-cell" d={lCellPath} />
-      <ReceptorShape x={L_CELL_X} y={GUT.top} />
-      <g transform={`translate(${L_CELL_X} ${GUT.top - 42})`}>
-        <BileAcidShape conjugated />
-      </g>
-      <text
-        className="tgr5-label tgr5-label--start"
-        x={L_CELL_X + 34}
-        y={GUT.top - 18}
-      >
-        TGR5
-      </text>
-      <text className="tgr5-label" x={L_CELL_X} y={GUT.bottom + 36}>
-        Enteroendocrine L cell
+      <text className="tgr5-label" x={GUT_RECEPTOR_X} y={OV_H - 8}>
+        Epithelial cell
       </text>
 
-      {/* L cell → GLP-1 → insulin → insulin resistance. */}
-      <path
-        className="tgr5-arrow tgr5-arrow--outer"
-        d={`M${L_CELL_X},${GUT.bottom + 48} V252`}
-        markerEnd="url(#tgr5-ov-arrowhead)"
-      />
-      <text className="tgr5-label tgr5-label--start" x={L_CELL_X + 14} y={243}>
-        GLP-1
-      </text>
-      <text className="tgr5-label" x={L_CELL_X} y={282}>
-        Insulin ↑
-      </text>
-      <path
-        className="tgr5-arrow tgr5-arrow--outer"
-        d={`M${L_CELL_X},294 V326`}
-        markerEnd="url(#tgr5-ov-arrowhead)"
-      />
-      <rect
-        className="tgr5-node"
-        x={L_CELL_X - 120}
-        y={332}
-        width={240}
-        height={60}
-        rx={14}
-      />
-      <text className="tgr5-label tgr5-label--dark" x={L_CELL_X} y={370}>
-        Insulin resistance
-      </text>
+      {SITES.map((site, i) => (
+        <g key={site.x}>
+          <ReceptorShape x={site.x} y={site.top} />
+          <text
+            className="tgr5-label tgr5-label--start"
+            x={site.x + 34}
+            y={site.top - 14}
+          >
+            TGR5
+          </text>
+          {/* The pulse ring, in the colour of the bile acid bound (set by
+              useBindingLoop); site i prefers kind i. */}
+          <circle
+            className={`tgr5-bind-pulse tgr5-bind-pulse--${i}`}
+            cx={site.dock[0]}
+            cy={site.dock[1]}
+            r={animate ? ACID_R : ACID_R * 1.8}
+            opacity={animate ? 0 : 1}
+            ref={(el) => {
+              ringRefs.current[i] = el;
+            }}
+          />
+        </g>
+      ))}
 
-      {/* ILC3 → IL-22 → anovulation. */}
-      <circle className="tgr5-cell" cx={ILC3.x} cy={ILC3.y} r={ILC3.r} />
-      <ReceptorShape x={ILC3.x} y={ILC3.y - ILC3.r} />
-      <g transform={`translate(${ILC3.x} ${ILC3.y - ILC3.r - 42})`}>
-        <BileAcidShape conjugated />
+      {/* Hidden until they pour in (see useBindingLoop). */}
+      <g>
+        {acids.map((acid, i) => {
+          const at = staticAt(acid);
+          return (
+            <g
+              key={acid.id}
+              className={`bsh-molecule--${acid.kind}`}
+              transform={`translate(${at[0]} ${at[1]})`}
+              opacity={animate ? 0 : undefined}
+              ref={(el) => {
+                acidRefs.current[i] = el;
+              }}
+            >
+              <g transform={`scale(${ACID_SCALE})`}>
+                <AcidShape conjugated={acid.conjugated} />
+              </g>
+            </g>
+          );
+        })}
       </g>
-      <text
-        className="tgr5-label tgr5-label--start"
-        x={ILC3.x + 34}
-        y={ILC3.y - ILC3.r - 18}
-      >
-        TGR5
-      </text>
-      <text className="tgr5-label tgr5-label--dark" x={ILC3.x} y={ILC3.y + 8}>
-        ILC3
-      </text>
-      <path
-        className="tgr5-arrow tgr5-arrow--outer"
-        d={`M${ILC3.x + ILC3.r + 8},${ILC3.y} H268`}
-        markerEnd="url(#tgr5-ov-arrowhead)"
-      />
-      <circle className="tgr5-il22" cx={290} cy={ILC3.y} r={15} />
-      <text className="tgr5-label" x={290} y={ILC3.y + 46}>
-        IL-22
-      </text>
-      <path
-        className="tgr5-arrow tgr5-arrow--outer"
-        d={`M312,${ILC3.y} H354`}
-        markerEnd="url(#tgr5-ov-arrowhead)"
-      />
-      <rect
-        className="tgr5-node"
-        x={360}
-        y={ILC3.y - 30}
-        width={200}
-        height={60}
-        rx={14}
-      />
-      <text className="tgr5-label tgr5-label--dark" x={460} y={ILC3.y + 8}>
-        Anovulation
-      </text>
     </svg>
   );
 }
@@ -489,7 +767,7 @@ export function Tgr5MechanismSection() {
             <h3 className="tgr5-heading">
               Conjugated bile acids bind TGR5 receptors on cells in the gut
             </h3>
-            <Tgr5OverviewDiagram />
+            <Tgr5BindingDiagram animate={!prefersReducedMotion} />
           </div>
         </div>
       </div>
@@ -594,7 +872,7 @@ function AnovulationArt() {
 // notes ("still thinking what to write").
 // TODO(team): add the explanations as `detail` once written.
 const CONSEQUENCES: { title: string; detail?: string; art: ReactNode }[] = [
-  { title: "Insulin resistance", art: <InsulinArt /> },
+  { title: "Hyperinsulinaemia", art: <InsulinArt /> },
   { title: "Anovulation", art: <AnovulationArt /> },
   { title: "Hyperandrogenism", art: <AndrogenArt /> },
 ];
@@ -662,15 +940,15 @@ export function EngineerSection() {
     <div className="engineer">
       <p className="story-text engineer-text">
         This is why we want to <strong>engineer</strong> <em>P. vulgatus</em>{" "}
-        and interfere with <strong>BSH function</strong>
+        and silence <strong>BSH expression</strong>
       </p>
       {/* The cell of BshStreamAnimation.tsx, now with a genetic circuit in
-          it that acts on BSH (drawn with the usual blunt "inhibits" line). */}
+          it that silences BSH (drawn with the usual blunt "inhibits" line). */}
       <svg
         className="engineer-svg"
         viewBox="0 0 300 170"
         role="img"
-        aria-label="Illustration: Phocaeicola vulgatus with an engineered genetic circuit inside that interferes with its BSH enzyme."
+        aria-label="Illustration: Phocaeicola vulgatus with an engineered genetic circuit inside that silences expression of its BSH enzyme."
       >
         <rect
           className="bsh-membrane-outer"
@@ -740,7 +1018,7 @@ export function EngineerSection() {
 // those menus (see pages.ts).
 const MORE_LINKS = [
   { label: "Project description", to: "/description" },
-  { label: "Wet lab", to: "/experiments" },
+  { label: "Wet lab", to: "/experimental-overview" },
   { label: "Dry lab", to: "/dry-lab" },
   { label: "Integrated Human Practices", to: "/human-practices" },
   { label: "Entrepreneurship", to: "/entrepreneurship" },

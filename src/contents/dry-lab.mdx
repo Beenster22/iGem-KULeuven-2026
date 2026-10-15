@@ -94,10 +94,11 @@ decide whether to accept it or redesign.
 
 ### 1.3 Availability
 
-{/* TODO: replace the placeholder below with the public GitHub repository URL. */}
-
-The tool is open source and available at [GitHub repository — link to be added]. It is written in
-Python and runs as a command line application.
+The tool is open source under the MIT License and lives in our wiki repository, under
+[software/codon-optimization-tool](https://gitlab.igem.org/2026/kuleuven/-/tree/main/software/codon-optimization-tool).
+It is written in Python and runs as a command line application: clone the repository, create the
+conda environment described in the tool's README, and run `python cli.py` on a FASTA file of
+in-frame coding sequences. There is no web version — the tool runs on your own machine.
 
 ### 1.4 Promoters and ribosome binding sites
 
@@ -141,8 +142,8 @@ resolves with *P. merdae* on a long branch, indicating that this single strain c
 members of the choloylglycine hydrolase family rather than two copies of one enzyme.
 
 <div className="text-center my-3">
-<ZoomableImage src="https://static.igem.wiki/teams/6299/wiki/dry-lab/bsh-tree-alejandro.avif" alt="Maximum likelihood phylogenetic tree of the bile salt hydrolase candidate panel together with characterized reference sequences" />
-<p className="figure-caption small mt-2 mb-0">Figure 1. Maximum likelihood phylogeny of the bile salt hydrolase candidate panel. Twenty-four sequences comprising the full candidate panel and characterized reference sequences were aligned with MAFFT v7 (G-INS-1) and the tree inferred in IQ-TREE 3.1.2 under Q.PFAM+I+G4, with 1000 ultrafast bootstrap and 1000 SH-aLRT replicates. The tree was visualized using iTOL.</p>
+<ZoomableImage src="https://static.igem.wiki/teams/6299/wiki/dry-lab/phylum-tree.avif" alt="Maximum likelihood phylogenetic tree of the bile salt hydrolase candidate panel together with characterized reference sequences, with the 24 sequences grouped by phylogenetic character" />
+<p className="figure-caption small mt-2 mb-0">Figure 1. Maximum likelihood phylogeny of the bile salt hydrolase candidate panel. Twenty-four sequences comprising the full candidate panel and characterized reference sequences were aligned with MAFFT v7 (G-INS-1) and the tree inferred in IQ-TREE 3.1.2 under Q.PFAM+I+G4, with 1000 ultrafast bootstrap and 1000 SH-aLRT replicates. The 24 sequences are grouped according to their phylogenetic character. The tree was visualized using iTOL.</p>
 </div>
 
 ### 2.2 BSH–bile salt interaction using AutoDock Vina
@@ -174,7 +175,7 @@ binding affinity of the top-scoring pose and inspected the pose relative to the 
 since a favorable score in the wrong pocket says nothing useful.
 
 <div className="my-4">
-<DockingHeatmap />
+<DockingHeatmap imageBaseUrl="https://static.igem.wiki/teams/6299/wiki/dry-lab/pics" />
 <p className="figure-caption small mt-2 mb-0">Figure 2. Predicted binding affinities for each BSH candidate against the bile salt panel. Each protein was docked against each bile salt with AutoDock Vina, the search box centered on the catalytic cysteine, and the affinity of the top-scoring pose is shown. Select a cell to view the corresponding docking pose.</p>
 </div>
 

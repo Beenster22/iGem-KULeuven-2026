@@ -1,12 +1,24 @@
 <PageLayout>
 
-> "The best way to predict the future is to create it."
+> "Successful innovators are conservative. They have to be. They are not 'risk-focused'; they are 'opportunity-focused'."
 >
 > — Peter Drucker
 
 ---
 
-## 1. Foundation
+## Who is EMPOWER?
+
+{/* TODO: section listed in the new page outline — content still to be written by the team.
+    Points to cover: what EMPOWER is, what PMOS is, and how EMPOWER bridges science and
+    accessible care. */}
+
+*Content to follow.*
+
+Good science deserves a sustainable future. Below, we show how EMPOWER grows from insight to impact.
+
+---
+
+## Phase 1: Foundation
 
 *Every good idea starts with a solid foundation.*
 
@@ -157,7 +169,7 @@ population.
 
 *Content to follow.*
 
-## 2. Development
+## Phase 2: Development
 
 *With that foundation, Empower can develop and distinguish itself.*
 
@@ -467,13 +479,7 @@ scientifically credible and approachable. We developed it in seven steps, each a
 as the client, and a poster with this identity won Best Poster at the BFH international meet-up in
 Germany. The full process is described on our <Link to="/contribution">contribution page</Link>.
 
-### 2.4 POC and development plan
-
-{/* TODO: section listed in the new page outline — content still to be written by the team. */}
-
-*Content to follow.*
-
-### 2.5 Minimal viable product (MVP)
+### 2.4 Minimal viable product (MVP)
 
 The minimum viable product (MVP) is the version of a new product that enables a team to obtain
 the maximum amount of validated learning with the least
@@ -538,11 +544,244 @@ further development.
 <p className="figure-caption small mt-2 mb-0">Figure 2. EMPOWER patient journey map. Patient journey map of a fictional woman with PMOS-related infertility, developed using literature and patient interviews. The map highlights key stages of care, emotional experiences, bright spots, and unmet needs, while illustrating where EMPOWER could potentially fit after unsuccessful first-line treatment. It was used as an MVP to explore patient and stakeholder perceptions of the proposed solution. Created with Claude AI.</p>
 </div>
 
-## 3. Sustainability
+### 2.5 Value chain analysis
+
+To understand how EMPOWER would create and deliver value, we mapped its development onto the
+biopharmaceutical value chain proposed by Kim et al. (2022)[^vc-1]. This framework follows a medicine
+from discovery to post-market monitoring and highlights collaboration between different stakeholders
+throughout the product life cycle (PLC). In a pharmaceutical context, the PLC describes the
+commercial trajectory of a product, from its introduction to the market and growth in adoption to
+eventual maturity and decline, helping companies plan development and investment decisions with
+future market performance in mind[^vc-1]. Because EMPOWER is an LBP, we additionally incorporated key
+considerations specific to LBPs described by Rouanet et al. (2020)[^risk-1].
+
+The value chain begins with research and development, where our team designs and validates the
+engineered bacterial strain and generates the preclinical data required for regulatory approval.
+Following successful preclinical studies, clinical development would proceed through Phase I, with
+the primary goal of demonstrating safety in humans. Throughout these stages, value is created
+through scientific innovation, IP generation, and risk reduction.
+
+After Phase I, we plan to out-license EMPOWER to an established pharmaceutical or live
+biotherapeutic company. Such partners would be responsible for later-stage clinical trials,
+large-scale manufacturing, regulatory submissions, commercialization, and post-market surveillance.
+This strategy reflects common practice in biotechnology, where early-stage innovators transfer
+promising therapeutics to organizations with the expertise and resources needed for late-stage
+development and market access[^vc-3].
+
+Several features distinguish the value chain of LBPs from that of conventional pharmaceuticals.
+First, safety assessments are strain-specific and require detailed characterization of antibiotic
+resistance, virulence potential, and translocation risk[^risk-1]. Second, the regulatory pathway for
+LBPs remains relatively novel, making early interaction with regulators such as the European
+Medicines Agency (EMA) particularly important[^risk-1]. Third, manufacturing itself represents a
+critical source of risk, requiring strict control of product identity, purity, and potency
+throughout production[^risk-1].
+
+<div className="text-center my-3">
+<ZoomableImage src="https://static.igem.wiki/teams/6299/wiki/entrepreneurship/empower-value-chain.avif" alt="EMPOWER value chain from drug discovery to post-market monitoring" />
+<p className="figure-caption small mt-2 mb-0">Figure 3. EMPOWER value chain, adapted from Kim et al. (2022) and supplemented with LBP-specific considerations from Rouanet et al. (2020). Dots indicate the stakeholder primarily responsible for each activity. Figure made with Claude AI.</p>
+</div>
+
+[^vc-1]: Kim, Y., Atukeren, E., & Lee, Y. (2022). A new digital value chain model with PLC in biopharmaceutical industry: The implication for open innovation. Journal of Open Innovation: Technology, Market, and Complexity, 8(2), 63. https://doi.org/10.3390/joitmc8020063
+[^vc-3]: Neuendorf, E., O'Connell, K. E., Frei, P., & Dev, K. K. (2023). A formula for drug licensing deals. Nature Biopharma Dealmakers, B28–B29. https://www.nature.com/biopharmdeal
+
+### 2.6 Regulatory strategy
+
+EMPOWER is developed as a live biotherapeutic product (LBP): a therapeutic containing live
+microorganisms intended to prevent or treat disease. Select a question to see our answer.
+
+<QuestionSelector>
+
+<Question label="How is EMPOWER regulated?" title="Regulated as a medicine">
+
+In the **US**, LBPs are regulated by the FDA as biological products and need an Investigational New
+Drug (IND) application before clinical testing can begin.
+
+In the **EU**, LBPs are regulated as biological medicinal products and must meet the quality
+requirements of the European Pharmacopoeia[^reg-1][^risk-11].
+
+</Question>
+
+<Question label="What is our biggest regulatory risk?" title="A pathway that is still new">
+
+The regulatory pathway for LBPs remains relatively novel, with limited product-specific guidance and
+few precedents compared with conventional pharmaceuticals[^reg-1][^risk-11].
+
+Developers therefore often need to work closely with regulators to make sure their preclinical and
+clinical plans meet expectations.
+
+</Question>
+
+<Question label="Which data do we need to collect?" title="Strain, quality and safety data">
+
+<InfoCards>
+
+<InfoCard title="The strain">
+
+Genome, antimicrobial resistance, virulence potential and translocation risk[^risk-11][^risk-1]
+
+</InfoCard>
+
+<InfoCard title="The product">
+
+Identity, potency, purity and stability[^risk-11][^risk-1]
+
+</InfoCard>
+
+<InfoCard title="Safety">
+
+Non-clinical safety studies and an initial clinical trial for an early safety profile[^risk-1]
+
+</InfoCard>
+
+</InfoCards>
+
+</Question>
+
+<Question label="What is our strategy?" title="US first, then Europe">
+
+<InfoCards>
+
+<InfoCard title="1. US first">
+
+Engage the FDA during early development, using its dedicated LBP guidance and its experience with
+microbiome-based therapeutics[^reg-1][^risk-11].
+
+</InfoCard>
+
+<InfoCard title="2. Then Europe" tone="lilac">
+
+Scientific advice from the European Medicines Agency (EMA) to prepare development within the
+European framework[^risk-1].
+
+</InfoCard>
+
+</InfoCards>
+
+For how we address these regulatory and scientific risks, see our [Risks and mitigation](#3-3-risks-and-mitigation) section.
+
+</Question>
+
+</QuestionSelector>
+
+[^reg-1]: Rodriguez, J., Cordaillat-Simmons, M., Pot, B., & Druart, C. (2025). The regulatory framework for microbiome-based therapies: Insights into European regulatory developments. npj Biofilms and Microbiomes, 11, 53. https://doi.org/10.1038/s41522-025-00683-0
+
+### 2.7 Commercialization and licensing strategy
+
+EMPOWER is being developed with an out-licensing strategy in mind (see
+[Value chain analysis](#2-5-value-chain-analysis)). Our goal is to advance the technology through
+preclinical development and Phase I clinical testing before partnering with a pharmaceutical company
+or live biotherapeutics developer. Such a partner would provide the expertise, infrastructure, and
+financial resources required for large-scale manufacturing, late-stage clinical trials, regulatory
+approval, and commercialization.
+
+We believe EMPOWER offers an attractive value proposition due to the large patient population
+affected by PMOS, the lack of therapies that address the underlying cause of the disease, and the
+potential to provide a non-hormonal treatment option (see
+[Market and target group](#1-2-market-and-target-group)). Advancing EMPOWER through Phase I would
+substantially de-risk the technology by generating human safety data and early evidence of clinical
+activity, thereby increasing its attractiveness to potential licensing partners. By the end of Phase
+I, we aim to generate robust safety data and initial evidence of clinical activity. Combined with a
+strong IP position, these data would form the foundation of future licensing discussions.
+
+In line with our [Financial strategy](#3-4-financial-strategy), potential revenues will be generated
+through licensing agreements, including upfront payments, development and commercial milestone
+payments, and royalties on future product sales. Rather than commercializing the product ourselves,
+our long-term objective is to create value through a licensing partnership that can accelerate the
+translation of EMPOWER to patients. Based on current development timelines, we consider a licensing
+agreement around 2033 to be an aspirational but realistic long-term target, although the exact
+timeline will depend on scientific, regulatory, and funding milestones.
+
+### 2.8 IP
+
+#### Existing technology
+
+Before building EMPOWER on existing technologies, we assessed the IP landscape surrounding the
+technologies used in our project, including the bacterial chassis, genetic tools, and therapeutic
+pathway. To do so, we reviewed publicly available patent databases to identify potential existing IP
+rights relevant to our approach. This assessment is only indicative, as recently filed patent
+applications may not yet be publicly available, and legal interpretation of patent claims requires
+expert knowledge. Prior to commercialization, a qualified patent attorney would conduct a formal
+Freedom-to-Operate (FTO) analysis to identify and assess potential IP risks.
+
+#### What we plan to protect
+
+To better understand what can and cannot be protected by a patent, we had a meeting with Sara
+Holland, a Chartered and European Patent Attorney. She explained that patentable inventions are
+often built from existing technologies, with innovation arising from a novel and non-obvious
+combination of known elements. Therefore, the focus is not on whether every component is new, but on
+whether the overall invention provides a sufficiently inventive contribution. Based on this
+discussion, we distinguished the following categories:
+
+| Insufficient material | Patentable material |
+| --- | --- |
+| Testing known genetic parts (such as published promoters) in another bacterium and showing that they work | Using known parts in a new way that shows unexpected or interesting behaviour |
+| Sequences that are already in public databases | Identifying and annotating a sequence with a new function, which provides new information and a new application |
+| A sequence similarity search based on an already characterized DNA sequence, resulting in new, not-annotated but similar sequences | A sequence that we determine to have an interesting feature or a different function than expected |
+
+During our discussions on IP strategy, we identified the connection between our engineered bacterium
+and PMOS as a key innovative element of EMPOWER. We also learned that public disclosure affects
+future patentability, making it important to carefully consider which technical details are shared
+before a patent application is filed.
+
+Based on these considerations, we have decided not to disclose the specific genetic sequences of the
+BSH variants we are working with. We intentionally withhold these details because EMPOWER is not
+intended to end with iGEM. We plan to further develop and validate the technology after the
+competition, with the long-term goal of translating it into a real therapeutic platform. Protecting
+the core invention at this stage is therefore essential to preserve future development and
+commercialization opportunities.
+
+At the same time, we remain committed to contributing to the scientific community. The genetic
+toolkit we are developing for *P. vulgatus* has value beyond our specific application, and we aim to
+share these broader tools while withholding the details that are central to the core invention.
+
+#### Protection plan
+
+Patents provide exclusive rights to an invention for a limited period in jurisdictions where
+protection is granted. To obtain patent protection, an invention must typically be novel, inventive,
+and industrially applicable. Considering the novelty of our overall idea, we are currently in the
+process of filing for a patent to protect it.
+
+Because public disclosure can affect novelty, we carefully considered which information to include
+on this wiki. While we share the scientific rationale, project design, and experimental results, we
+do not disclose the specific genetic sequences or engineering details that are central to our
+approach.
+
+This decision reflects our ambition to continue developing EMPOWER beyond the iGEM competition. We
+view iGEM as an important milestone rather than the final stage of the project. Several aspects of
+the technology remain under active development, and limiting the disclosure of key engineering
+details preserves the flexibility to further optimize, validate, and expand the platform in the
+future.
+
+We intend to further explore the future development of EMPOWER after iGEM and to discuss potential
+next steps with KU Leuven Research & Development (LRD). As an academic project, continued access to
+research infrastructure, laboratory facilities, expertise, and potential commercialization pathways
+will be essential for advancing the technology. These discussions will help us evaluate the most
+appropriate strategy for translating the project beyond its current proof-of-concept stage.
+
+Following iGEM, we aim to actively explore opportunities to continue the development of EMPOWER
+through follow-up research projects, entrepreneurship initiatives such as Nucleate Belgium, and new
+collaborative partnerships. These efforts will support the further validation and translation of the
+technology beyond its current proof-of-concept stage. At the same time, we remain committed to
+sharing the broader scientific insights, methodologies, and tools generated throughout the project,
+enabling others to learn from and build upon our work.
+
+## Phase 3: Sustainability
 
 *A strong idea deserves a sustainable future.*
 
-### 3.1 Risks and mitigation
+### 3.1 Business model canvas
+
+{/* TODO: section listed in the new page outline — content still to be written by the team. Outline note: how value is created. */}
+
+*Content to follow.*
+
+### 3.2 Roadmap
+
+{/* TODO: section listed in the new page outline — content still to be written by the team. Outline note: Gantt chart — when things happen. */}
+
+*Content to follow.*
+
+### 3.3 Risks and mitigation
 
 Developing EMPOWER as an LBP presents a unique opportunity to bring an innovative treatment approach
 to patients with PMOS. To identify the challenges most critical to success, risks were assessed
@@ -811,51 +1050,101 @@ field of microbiome therapeutics.
 [^risk-13]: Anzita, D., Mauseera, K., & Gouda, M. M. (2025). A comprehensive review of infertility outcomes associated with obesity and polycystic ovary syndrome (PCOS). International Journal of Pharmaceutical Sciences, 3(8), 3010–3021. https://doi.org/10.5281/zenodo.16993703
 [^risk-14]: Microbiome Therapeutics Innovation Group, & Barberio, D. (2024). Navigating regulatory and analytical challenges in live biotherapeutic product development and manufacturing. Frontiers in Microbiomes, 3, 1441290. https://doi.org/10.3389/frmbi.2024.1441290
 
-### 3.2 Roadmap
+### 3.4 Financial strategy
+
+#### 3.4.1 Cost analysis
 
 {/* TODO: section listed in the new page outline — content still to be written by the team. */}
 
 *Content to follow.*
 
-### 3.3 Cash flow and finance
-
-#### 3.3.1 Cost analysis
+#### 3.4.2 Revenue model
 
 {/* TODO: section listed in the new page outline — content still to be written by the team. */}
 
 *Content to follow.*
 
-#### 3.3.2 Financial analysis
+#### 3.4.3 Cash flow
 
 {/* TODO: section listed in the new page outline — content still to be written by the team. */}
 
 *Content to follow.*
 
-#### 3.3.3 Obtaining capital
+#### 3.4.4 Funding strategy
 
-{/* TODO: section listed in the new page outline — content still to be written by the team. */}
-
-*Content to follow.*
-
-### 3.4 IP
-
-{/* TODO: section listed in the new page outline — content still to be written by the team. */}
+{/* TODO: section listed in the new page outline — content still to be written by the team. Outline note: obtaining capital. */}
 
 *Content to follow.*
 
-## 4. Impact
+## Phase 4: Long term impact
 
-### 4.1 Long term impact
+The impact of a healthcare innovation extends beyond clinical outcomes alone. It includes its
+effects on patients, society, healthcare systems, and the environment. To better understand
+EMPOWER's future role, we explored both the opportunities it offers and the considerations needed
+for its responsible implementation.
 
-#### 4.1.1 Positive impacts
+### 4.1 Positive impacts
 
-{/* TODO: section listed in the new page outline — content still to be written by the team. */}
+#### Addressing an unmet medical need
 
-*Content to follow.*
+PMOS affects millions of women in the EU alone (see
+[Market and target group](#1-2-market-and-target-group)) and is responsible for around 80% of cases
+of anovulatory infertility[^pm-4]. Many women nevertheless remain undiagnosed and untreated for years
+after symptom onset[^pm-3]. Existing therapies primarily target individual symptoms, underscoring the
+need for treatments that address the condition more holistically[^lti-3]. EMPOWER targets a proposed
+mechanism that may connect inflammation, insulin resistance, and hyperandrogenism, offering a more
+integrated approach to PMOS management. Through its potential effects on insulin sensitivity and
+inflammation, EMPOWER may support reproductive health while also contributing to long-term metabolic
+well-being. If it proves safe and effective, EMPOWER could become a first-of-its-kind therapy for
+PMOS, and open possibilities for developing more targeted microbiome-based therapeutics.
 
-#### 4.1.2 Negative impacts
+#### Women's health
 
-{/* TODO: section listed in the new page outline — content still to be written by the team. */}
+Women's health research receives an estimated 5% of global research and development
+funding[^lti-4]. Through patient engagement, science communication, and educational outreach, EMPOWER
+seeks to bring greater attention to PMOS and the broader importance of women's health. By increasing
+awareness of PMOS symptoms and their impact, we hope to empower women to seek care earlier and
+advocate for their own health.
+
+#### Science and future therapies
+
+*P. vulgatus* is one of the most abundant bacteria of the human gut and is linked to both health and
+disease. It colonizes the gut soon after birth[^lti-5], and it is elevated in the gut microbiota of
+women with PMOS[^mkt-5]. Yet its role in health and disease is still not well understood[^lti-5]. Our work
+generates new data on this chassis, and the genetic toolkit we built for it can be reused by other
+researchers (see <Link to="/contribution">contribution</Link>). Better tools for its genetic
+engineering help advance this understanding, well beyond our own project.
+
+### 4.2 Negative impacts
+
+#### Long term safety
+
+Because EMPOWER is a living therapy, long-term safety is a key consideration. Potential risks and
+the measures we propose to address them are discussed in [Risks and mitigation](#3-3-risks-and-mitigation). In addition, we envision a stepwise
+clinical development pathway with careful monitoring, independent safety oversight, and clear
+stopping criteria throughout clinical testing (see [Value chain](#2-5-value-chain-analysis)).
+
+#### Environment
+
+EMPOWER is a genetically modified living organism. Modifying it and releasing it, through patients,
+into the body and the environment, could affect human health and the environment in ways we cannot
+yet fully predict. For example, live bacteria can leave the body in stool, and engineered genes
+could in principle spread to other bacteria. These risks would need to be assessed and determined
+before any application can be considered. We plan to build this assessment into our regulatory
+strategy from the earliest stage.
+
+#### Access and affordability
+
+Reimbursement routes for living therapies are still less established, and without reimbursement
+EMPOWER could reach only women who can pay for it. We plan to engage with reimbursement bodies early.
+
+[^lti-3]: Teede, H. J., Tay, C. T., Laven, J. J. E., Dokras, A., Moran, L. J., Piltonen, T. T., Costello, M. F., Boivin, J., Redman, L. M., Boyle, J. A., Norman, R. J., Mousa, A., Joham, A. E., & International PCOS Network. (2023). Recommendations from the 2023 international evidence-based guideline for the assessment and management of polycystic ovary syndrome. European Journal of Endocrinology, 189(2), G43–G64. https://doi.org/10.1093/ejendo/lvad096
+[^lti-4]: Funding research on women's health [Editorial]. (2024). Nature Reviews Bioengineering, 2(10), 797–798. https://doi.org/10.1038/s44222-024-00253-7
+[^lti-5]: Da Silva Morais, E., Grimaud, G. M., Warda, A., Stanton, C., & Ross, P. (2024). Genome plasticity shapes the ecology and evolution of *Phocaeicola dorei* and *Phocaeicola vulgatus*. Scientific Reports, 14. https://doi.org/10.1038/s41598-024-59148-7
+
+## Appendices
+
+{/* TODO: section listed in the new page outline — content still to be written by the team. Appendix 1 (competitor overview) is referenced from 2.1.1. */}
 
 *Content to follow.*
 

@@ -38,14 +38,24 @@ const MASCOT_TRAVEL_MS = 450;
 
 function collectHeadings(container: HTMLElement): Heading[] {
   const seen = new Map<string, number>();
+  // Edited with Claude Opus 5.5 (Anthropic), 2026-10-13
+  // Purpose: dropdown titles (ExpandableText) are h3s too, so on pages that
+  // group dropdowns under a written h3 ("### Cell Culture" on Protocols) the
+  // group and its protocols used to share one level. A dropdown title that
+  // follows a written h3 is listed one level deeper instead.
+  let underWrittenH3 = false;
   return Array.from(container.querySelectorAll(HEADING_SELECTOR)).map((element) => {
+    const isDropdownTitle = element.classList.contains("expandable-title");
+    if (element.tagName === "H2") underWrittenH3 = false;
+    else if (element.tagName === "H3" && !isDropdownTitle) underWrittenH3 = true;
     const text = (element.textContent || "").trim();
     let slug = stringToSlug(text) || "section";
     const count = seen.get(slug) ?? 0;
     seen.set(slug, count + 1);
     if (count > 0) slug = `${slug}-${count}`;
     element.id = slug;
-    const level: 2 | 3 | 4 = element.tagName === "H4" ? 4 : element.tagName === "H3" ? 3 : 2;
+    const level: 2 | 3 | 4 =
+      element.tagName === "H4" || (isDropdownTitle && underWrittenH3) ? 4 : element.tagName === "H3" ? 3 : 2;
     return { id: slug, text, level };
   });
 }

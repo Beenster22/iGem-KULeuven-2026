@@ -1,0 +1,48 @@
+{
+  "source_database": "Kazusa Codon Usage Database",
+  "source_homepage": "http://www.kazusa.or.jp/codon/",
+  "vendoring_policy": "Tables are downloaded once and stored locally. Not fetched live at runtime, since Kazusa is a legacy server with no reliable API/rate-limit guarantees. Re-download manually and update this file if a table ever needs refreshing.",
+  "species": {
+    "thetaiotaomicron_VPI-5482": {
+      "display_name": "Bacteroides thetaiotaomicron VPI-5482",
+      "kazusa_species_id": 226186,
+      "source_url": "http://www.kazusa.or.jp/codon/cgi-bin/showcodon.cgi?species=226186",
+      "cds_count": 4816,
+      "codon_count": 1878135,
+      "file": "bacteroides_thetaiotaomicron_VPI-5482.txt",
+      "download_date": "2026-08-26",
+      "status": "verified"
+    },
+    "fragilis_NCTC_9343": {
+      "display_name": "Bacteroides fragilis NCTC 9343",
+      "kazusa_species_id": 272559,
+      "source_url": "http://www.kazusa.or.jp/codon/cgi-bin/showcodon.cgi?species=272559",
+      "cds_count": 4225,
+      "codon_count": 1537469,
+      "file": "bacteroides_fragilis_NCTC_9343.txt",
+      "download_date": "2026-08-26",
+      "status": "verified"
+    },
+    "fragilis_YCH46": {
+      "display_name": "Bacteroides fragilis YCH46",
+      "kazusa_species_id": 295405,
+      "source_url": "http://www.kazusa.or.jp/codon/cgi-bin/showcodon.cgi?species=295405",
+      "cds_count": 4640,
+      "codon_count": null,
+      "file": null,
+      "download_date": null,
+      "status": "PENDING_VERIFICATION",
+      "note": "Kazusa's static species directory (kazusa.or.jp/codon/B.html) lists species ID 295405 as B. fragilis YCH46 with 4640 CDSs. However, querying the live showcodon.cgi endpoint with species=295405 redirects to species=817, a different, generic 'Bacteroides fragilis' entry with only 299 CDSs (too small to be reliable, and not strain-resolved). This looks like a stale/broken link on Kazusa's legacy server rather than a real data match. Do NOT use the species=817 table as a substitute for YCH46. This entry is excluded from the selectable species list until the correct table is located and verified (e.g. via the Kazusa FTP CUTG bulk archive, or by computing codon usage directly from the YCH46 genome assembly, NCBI accession AP006841)."
+    }
+  },
+  "excluded_low_cds_count_species": {
+    "note": "These Bacteroides entries exist in Kazusa but have too few CDSs (1-20) for a statistically reliable table and are permanently excluded, not just pending.",
+    "entries": [
+      {"display_name": "Bacteroides ovatus", "kazusa_species_id": 28116, "cds_count": 13},
+      {"display_name": "Bacteroides caccae", "kazusa_species_id": 47678, "cds_count": 1},
+      {"display_name": "Bacteroides cellulosolvens", "kazusa_species_id": 35825, "cds_count": 4},
+      {"display_name": "Bacteroides coprosuis", "kazusa_species_id": 151276, "cds_count": 20},
+      {"display_name": "Bacteroides sp.", "kazusa_species_id": 29523, "cds_count": 2}
+    ]
+  }
+}
