@@ -5704,6 +5704,15 @@ body:not(.home-fullscreen) .home-hero {
   margin: 0 0 1rem;
 }
 
+/* Text-only section card (no interviewee carousel) */
+.hp-section-card--text {
+  padding-bottom: 1.5rem;
+}
+
+.hp-section-text :last-child {
+  margin-bottom: 0;
+}
+
 .hp-carousel {
   overflow: hidden;
   width: 100%;
@@ -5916,6 +5925,29 @@ body:not(.home-fullscreen) .home-hero {
   opacity: 0.75;
 }
 
+/* Interview date + "Based in" under the name/role */
+.hp-modal-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.9rem 0 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(47, 164, 169, 0.35);
+}
+
+.hp-modal-meta dt {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #2fa4a9;
+}
+
+.hp-modal-meta dd {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
 .hp-modal-summary-col {
   flex: 1;
   min-width: 0;
@@ -5945,7 +5977,8 @@ body:not(.home-fullscreen) .home-hero {
     margin: 0 auto;
   }
 
-  .hp-modal-caption {
+  .hp-modal-caption,
+  .hp-modal-meta {
     align-items: center;
     text-align: center;
   }

@@ -19,6 +19,10 @@ interface IntervieweeProps {
   /** Free text, e.g. "PhD Candidate, KU Leuven" or "Patient advocate". */
   role?: string;
   image?: string;
+  /** When the interview took place, free text, e.g. "12 March 2026". */
+  date?: string;
+  /** Where the interviewee works from, e.g. "Leuven, Belgium". */
+  basedIn?: string;
   /** The interview write-up, shown in the modal under "Interview Summary". */
   children: ReactNode;
 }
@@ -45,6 +49,8 @@ interface FlatInterviewee {
   name: string;
   role?: string;
   image?: string;
+  date?: string;
+  basedIn?: string;
   content: ReactNode;
 }
 
@@ -71,6 +77,8 @@ function extractSections(children: ReactNode): Section[] {
             name: child.props.name,
             role: child.props.role,
             image: child.props.image,
+            date: child.props.date,
+            basedIn: child.props.basedIn,
             content: child.props.children,
           });
         } else {
@@ -182,20 +190,31 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
 
   return (
     <>
-      {sections.map((section) => (
-        <section key={section.title} className="hp-section">
-          <div className="hp-section-card">
-            <h2 className="hp-section-title">{section.title}</h2>
-            <HPCarousel
-              title={section.title}
-              interviewees={section.interviewees}
-              onOpen={setOpenIndex}
-            />
-          </div>
+      {sections.map((section) =>
+        section.interviewees.length > 0 ? (
+          <section key={section.title} className="hp-section">
+            <div className="hp-section-card">
+              <h2 className="hp-section-title">{section.title}</h2>
+              <HPCarousel
+                title={section.title}
+                interviewees={section.interviewees}
+                onOpen={setOpenIndex}
+              />
+            </div>
 
-          {section.context.length > 0 && <div className="hp-section-context">{section.context}</div>}
-        </section>
-      ))}
+            {section.context.length > 0 && <div className="hp-section-context">{section.context}</div>}
+          </section>
+        ) : (
+          // Text-only section (e.g. Patients, General Public): same card, but
+          // the write-up goes inside it instead of a carousel of interviewees.
+          <section key={section.title} className="hp-section">
+            <div className="hp-section-card hp-section-card--text">
+              <h2 className="hp-section-title">{section.title}</h2>
+              <div className="hp-section-text">{section.context}</div>
+            </div>
+          </section>
+        ),
+      )}
 
       {openPerson && (
         <div className="hp-modal-backdrop" onClick={() => setOpenIndex(null)}>
@@ -226,6 +245,22 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
                   <strong>{openPerson.name}</strong>
                   {openPerson.role && <span>{openPerson.role}</span>}
                 </div>
+                {(openPerson.date || openPerson.basedIn) && (
+                  <dl className="hp-modal-meta">
+                    {openPerson.date && (
+                      <div>
+                        <dt>Date</dt>
+                        <dd>{openPerson.date}</dd>
+                      </div>
+                    )}
+                    {openPerson.basedIn && (
+                      <div>
+                        <dt>Based in</dt>
+                        <dd>{openPerson.basedIn}</dd>
+                      </div>
+                    )}
+                  </dl>
+                )}
               </div>
               <div className="hp-modal-summary-col">
                 <p className="hp-modal-summary-label">Interview Summary</p>
