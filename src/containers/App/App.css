@@ -1481,6 +1481,139 @@ a[data-footnote-ref]:focus {
   }
 }
 
+/* NOTEBOOK TIMELINE
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-15
+   Purpose: the per-notebook timeline at the top of an opened notebook
+   (NotebookGantt.tsx). Bars are solid in the notebook's own --nb-edge tone.
+   Week gridlines are a repeating
+   background on each track, sized inline to the number of weeks shown. */
+.notebook-gantt {
+  --gantt-tone: var(--nb-edge, var(--color-accent));
+  --gantt-grid: color-mix(in srgb, var(--color-text) 12%, transparent);
+  --gantt-label: 4.75rem;
+  margin: 0 0 1.25rem;
+  padding: 0.9rem 1rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--color-text) 20%, transparent);
+  border-radius: 0.75rem;
+  background-color: color-mix(in srgb, var(--gantt-tone) 6%, transparent);
+}
+
+[data-theme="dark"] .notebook-gantt {
+  --gantt-tone: color-mix(in srgb, var(--nb-edge, var(--color-accent)) 45%, var(--color-accent));
+}
+
+.notebook-gantt-caption {
+  margin-bottom: 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.notebook-gantt-axis,
+.notebook-gantt-row {
+  display: grid;
+  grid-template-columns: var(--gantt-label) 1fr;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.notebook-gantt-axis {
+  height: 1.2rem;
+  font-size: 0.7rem;
+  opacity: 0.75;
+}
+
+.notebook-gantt-track {
+  position: relative;
+  display: block;
+  height: 100%;
+}
+
+.notebook-gantt-tick {
+  position: absolute;
+  bottom: 0.15rem;
+  white-space: nowrap;
+  padding-left: 0.2rem;
+  border-left: 1px solid var(--gantt-grid);
+}
+
+.notebook-gantt-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.notebook-gantt-rows li {
+  margin: 0;
+}
+
+.notebook-gantt-row {
+  width: 100%;
+  height: 1.55rem;
+  padding: 0;
+  border: none;
+  border-radius: 0.35rem;
+  background: none;
+  color: var(--color-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.notebook-gantt-row:hover,
+.notebook-gantt-row:focus-visible {
+  background-color: color-mix(in srgb, var(--color-text) 8%, transparent);
+}
+
+.notebook-gantt-code {
+  padding-left: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.notebook-gantt-row .notebook-gantt-track {
+  background-image: linear-gradient(to right, var(--gantt-grid) 1px, transparent 1px);
+  background-repeat: repeat-x;
+}
+
+.notebook-gantt-bar {
+  position: absolute;
+  top: 0.3rem;
+  bottom: 0.3rem;
+  min-width: 0.45rem;
+  border-radius: 0.3rem;
+  background-color: var(--gantt-tone);
+  transition: filter 0.15s ease;
+}
+
+.notebook-gantt-row:hover .notebook-gantt-bar {
+  filter: brightness(1.12) saturate(1.15);
+}
+
+/* Timeline rows scroll their entry into view under the sticky site header. */
+.notebook-section {
+  scroll-margin-top: 5rem;
+}
+
+@media (max-width: 575.98px) {
+  .notebook-gantt {
+    --gantt-label: 3.9rem;
+    padding: 0.75rem 0.6rem 0.6rem;
+  }
+
+  .notebook-gantt-tick.minor {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notebook-gantt-bar {
+    transition: none;
+  }
+}
+
 /* PAGE SHELL */
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-07-28
    Purpose: every routed page's content sits in a flex row next to the DNA
@@ -3241,8 +3374,20 @@ body:not(.home-fullscreen) .home-hero {
 .home-snap-pin {
   --snap-step: 60vh;
   position: relative;
-  height: calc(100vh + (var(--snap-steps) - 1) * var(--snap-step));
-  height: calc(100svh + (var(--snap-steps) - 1) * var(--snap-step));
+  height: calc(100vh + var(--snap-steps) * var(--snap-step));
+  height: calc(100svh + var(--snap-steps) * var(--snap-step));
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-15 (team feedback: too
+   easy to scroll straight past a step): every step, the last one included,
+   now stays pinned for one --snap-step of scrolling (the wrapper used to
+   leave the last step none), and without snapping (pointer devices, see
+   below) that stretch is one and a half screens instead of 60vh. Keep in
+   step with usePinnedStep.ts. */
+@media (hover: hover), (pointer: fine) {
+  .home-snap-pin {
+    --snap-step: 150vh;
+  }
 }
 
 .home-snap-pin > .home-snap-stage {
@@ -3275,6 +3420,23 @@ body:not(.home-fullscreen) .home-hero {
 
   html.home-snap [data-snap] {
     scroll-snap-align: start;
+  }
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-15 (team feedback: a
+   trackpad flick skipped straight past "Meet P. vulgatus"): pointer devices
+   snap again, but only onto the steps of pinned sections, which are now one
+   and a half screens apart (see .home-snap-pin), and a flick may not carry
+   the page past one of them (scroll-snap-stop). The ordinary full-screen
+   sections still scroll freely. */
+@media (hover: hover), (pointer: fine) {
+  html.home-snap {
+    scroll-snap-type: y proximity;
+  }
+
+  html.home-snap .home-snap-pin > .home-snap-marker {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
 }
 
@@ -3465,37 +3627,8 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 /* BODY SYMPTOMS SECTION ("What is PMOS?")
-   Heading + overview paragraph centered above a centered body diagram.
-   Scroll-linked reveal: BodySymptomsSection.tsx sizes .body-symptoms-scroller
-   tall enough to hold one scroll "step" per symptom, and
-   .body-symptoms-pinned sticks to the top of the viewport while the visitor
-   scrolls through that height — once the wrapper runs out of extra height,
-   the sticky element scrolls away with the rest of the page and normal
-   scrolling resumes on its own (no wheel-event hijacking involved).
-   prefers-reduced-motion skips the sticky pin (see the component) and this
-   renders as a normal static block with every symptom already shown. */
-.body-symptoms-scroller {
-  position: relative;
-}
-
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: the pinned block is
-   a .home-snap-stage (exactly one screen tall) and centres its content
-   below the navbar, so the figure fills the page height and stays in the
-   middle of the screen while the groups come in. */
-.body-symptoms-pinned {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06: the bottom also
-     clears the next band's wave, which lies over the foot of this screen
-     once the last group is in and used to cover the hint. */
-  padding: calc(var(--home-nav-h) + 0.75rem) 0
-    calc(var(--home-wave-h) + 3rem);
-}
-
+   The definition on its own screen (.body-symptoms-intro), then the
+   symptom cards (.symptoms-overview, further down). */
 /* Its own near-full-screen block, so the definition stands alone and a
    further scroll brings the figure in. */
 .body-symptoms-intro {
@@ -3573,90 +3706,34 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: says what pointing at
-   a symptom does. Out of the flow at the bottom of the pinned screen, so it
-   takes no height away from the figure. */
-.body-symptoms-hint {
-  position: absolute;
-  left: 50%;
-  bottom: calc(var(--home-wave-h) + 0.4rem);
-  translate: -50% 0;
-  width: max-content;
-  max-width: 100%;
-  margin: 0;
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-15 (team feedback: the
+   body figure was too complex for a home page)
+   Purpose: the team's four symptom groups as four cards on one screen. Each
+   group keeps its own colour (--symptom-color), used for the card's top
+   edge, its icon and its chips' dots. */
+.symptoms-overview {
+  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.35rem 1rem;
-  border: 2px solid currentColor;
-  border-radius: 999px;
-  font-size: clamp(0.8rem, 1.4vw, 1rem);
-  font-weight: 600;
-}
-
-.body-symptoms-hint svg {
-  flex: none;
-  width: 1.1em;
-  height: 1.1em;
-  fill: currentColor;
-  animation: body-symptoms-hint-nudge 1.6s ease-in-out infinite;
-}
-
-/* Touch screens have no hover: the hint says "Tap" there instead. */
-.body-symptoms-hint-tap {
-  display: none;
-}
-
-@media (hover: none) {
-  .body-symptoms-hint-hover {
-    display: none;
-  }
-
-  .body-symptoms-hint-tap {
-    display: inline;
-  }
-}
-
-@keyframes body-symptoms-hint-nudge {
-  0%,
-  100% {
-    translate: 0 0;
-  }
-  50% {
-    translate: -3px -3px;
-  }
-}
-
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-03
-   Purpose: figure in the middle with the team's four symptom groups listed
-   either side (hormonal/reproductive on the left, the other three on the
-   right). Each group has its own colour, shared by its heading rule, the
-   marker of the symptom currently lit, and the glow on the body. */
-.body-symptoms-figure-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  align-items: center;
-  gap: clamp(0.75rem, 3vw, 3rem);
-  width: min(1250px, 100%);
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  max-width: 1150px;
   margin: 0 auto;
+  padding: calc(var(--home-nav-h) + 2.5rem) 1rem
+    calc(var(--home-wave-h) + 2.5rem);
 }
 
-.body-symptoms-figure {
-  position: relative;
-  /* As tall as the pinned screen allows; the 80vw cap keeps room for the
-     two columns on narrow-but-tall screens. */
-  height: max(280px, min(calc(100vh - 4.5rem - var(--home-wave-h) - var(--home-nav-h)), 80vw));
-  height: max(280px, min(calc(100svh - 4.5rem - var(--home-wave-h) - var(--home-nav-h)), 80vw));
-  /* Proportions of the team's figure drawing (see CANVAS_WIDTH/HEIGHT in
-     BodySymptomsSection.tsx). */
-  aspect-ratio: 217 / 400;
+.symptoms-overview-title {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1.8rem, 4vw, 3rem);
 }
 
-.body-symptoms-figure-svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
+.symptoms-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.9rem, 2vw, 1.5rem);
 }
 
 .symptom-group--hormonal {
@@ -3675,216 +3752,234 @@ body:not(.home-fullscreen) .home-hero {
   --symptom-color: #7fc8a9;
 }
 
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-03
-   Purpose: a lit symptom makes the body part itself glow in its group's
-   colour (no ring drawn around it) and dims the other organs. The svg root
-   carries `has-lit lit-<region> symptom-group--<group>` while one is lit. */
-.body-part {
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: opacity 0.3s ease;
-}
-
-.body-symptoms-figure-svg.has-lit .body-part {
-  opacity: 0.35;
-}
-
-.lit-brain .body-part--brain,
-.lit-heart .body-part--heart,
-.lit-liver .body-part--liver,
-.lit-pancreas .body-part--pancreas,
-.lit-gut .body-part--gut,
-.lit-adipose .body-part--adipose,
-.lit-uterus .body-part--uterus,
-.lit-reproductive .body-part--uterus {
-  opacity: 1 !important;
-  filter: drop-shadow(0 0 2px var(--symptom-color))
-    drop-shadow(0 0 7px var(--symptom-color));
-  animation: body-part-pulse 1.6s ease-in-out infinite;
-}
-
-/* Ovaries only: the uterus artwork stays, its ovaries (and the fimbriae
-   beside them) glow and the rest of it is dimmed. The ids are the artwork's
-   own, see BodyOrgans.tsx. */
-.lit-ovaries .body-part--uterus {
-  opacity: 1 !important;
-}
-
-/* !important because the artwork's paths carry an inline opacity. */
-.lit-ovaries .body-part--uterus path {
-  opacity: 0.4 !important;
-}
-
-.lit-ovaries .body-part--uterus :is(#path155, #path156, #path157, #path159) {
-  opacity: 1 !important;
-  filter: drop-shadow(0 0 1px var(--symptom-color))
-    drop-shadow(0 0 3px var(--symptom-color));
-}
-
-/* Hair: the hairstyle drawn in FemaleFigure.tsx. */
-.lit-hair .female-figure-hair {
-  filter: drop-shadow(0 0 3px var(--symptom-color))
-    drop-shadow(0 0 9px var(--symptom-color));
-}
-
-/* Skin: the face fills with the group colour. */
-.body-symptoms-face {
-  fill: var(--symptom-color, transparent);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.lit-face .body-symptoms-face {
-  opacity: 0.45;
-  filter: drop-shadow(0 0 6px var(--symptom-color));
-}
-
-@keyframes body-part-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.07);
-  }
-}
-
-.body-symptoms-column {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  text-align: left;
-  font-size: clamp(0.85rem, 1.6vw, 1.25rem);
-  line-height: 1.3;
-}
-
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: a group comes in as
-   a whole, and its symptoms look like things to point at (pointer cursor, a
-   tinted chip on hover, a filled chip while lit). */
-.symptom-group {
-  opacity: 0;
-  translate: 0 0.9rem;
+.symptom-card {
+  padding: clamp(1rem, 2.2vw, 1.5rem);
+  border-radius: 1.25rem;
+  border-top: 5px solid var(--symptom-color);
+  background-color: color-mix(in srgb, currentColor 7%, transparent);
   transition:
-    opacity 0.5s ease,
-    translate 0.5s ease;
+    translate 0.25s ease,
+    background-color 0.25s ease;
 }
 
-.symptom-group--visible {
-  opacity: 1;
-  translate: 0 0;
+.symptom-card:hover {
+  translate: 0 -4px;
+  background-color: color-mix(in srgb, var(--symptom-color) 16%, transparent);
 }
 
-.symptom-group-title {
-  margin: 0 0 0.4rem;
-  padding-bottom: 0.25rem;
-  border-bottom: 3px solid var(--symptom-color);
+.symptom-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 0.9rem;
+}
+
+.symptom-card-icon {
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--symptom-color);
+  /* The group colours are all light, so the icon is a fixed dark ink. */
+  stroke: #221b2b;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.symptom-card-title {
+  margin: 0;
   font-family: inherit;
-  font-size: 1.1em;
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
   font-weight: 700;
   line-height: 1.25;
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
 
-.symptom-group-list {
+.symptom-card-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: clamp(0.85rem, 1.3vw, 1rem);
+  line-height: 1.3;
+  /* Content pages justify their text, which stretches a wrapped chip. */
+  text-align: left;
+}
+
+.symptom-card-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1.5px solid color-mix(in srgb, currentColor 25%, transparent);
+}
+
+.symptom-card-list li::before {
+  content: "";
+  flex: none;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background-color: var(--symptom-color);
+}
+
+/* Phones: one card per row, a little tighter. */
+@media (max-width: 699.98px) {
+  .symptoms-overview-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .symptom-card-list {
+    gap: 0.35rem;
+    font-size: 0.8rem;
+  }
+
+  .symptom-card-list li {
+    padding: 0.2rem 0.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .symptom-card {
+    transition: none;
+  }
+
+  .symptom-card:hover {
+    translate: none;
+  }
+}
+
+/* PMOS EFFECTS
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-15
+   Purpose: the home page's "How does PMOS affect women?" screen (see
+   PmosEffectsSection.tsx): four panels in a row, each the team's drawing of
+   an organ on a disc in its symptom group's colour, with a short label. */
+.pmos-effects {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(1.75rem, 4vw, 3rem);
+  /* The drawings have no width of their own, so the section must not
+     shrink to fit its content. */
+  width: 100%;
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: calc(var(--home-nav-h) + 2.5rem) 1rem
+    calc(var(--home-wave-h) + 2.5rem);
+}
+
+.pmos-effects-title {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+}
+
+.pmos-effects-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1rem, 3vw, 2.5rem);
+  width: 100%;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.symptom-item {
-  position: relative;
-  margin: 0.1rem 0;
-  padding: 0.2rem 0.5rem 0.2rem 1.5em;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  outline: none;
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
+.pmos-effect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
 }
 
-.symptom-item::before {
-  content: "";
-  position: absolute;
-  left: 0.45em;
-  top: 0.62em;
-  width: 0.55em;
-  height: 0.55em;
+.pmos-effect-art {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 13rem;
+  aspect-ratio: 1;
+  padding: 18%;
   border-radius: 50%;
-  border: 2px solid var(--symptom-color);
-  transition: background-color 0.25s ease;
+  border: 4px solid var(--symptom-color);
+  /* A light disc, so the drawings (coloured against a white page) read the
+     same on the dark band. */
+  background-color: color-mix(in srgb, var(--symptom-color) 22%, #fff);
+  transition: translate 0.25s ease;
 }
 
-.symptom-item:hover,
-.symptom-item:focus-visible {
-  background-color: color-mix(in srgb, var(--symptom-color) 30%, transparent);
+.pmos-effect:hover .pmos-effect-art {
+  translate: 0 -4px;
 }
 
-.symptom-item--lit,
-.symptom-item--lit:hover,
-.symptom-item--lit:focus-visible {
-  background-color: var(--symptom-color);
-  /* The group colours are all light, so the label is a fixed dark ink. */
-  color: #221b2b;
+.pmos-effect-art svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Only on this screen: the symptom cards keep "Hormonal and reproductive
+   issues" as one group, here they are two panels. */
+.pmos-effect.symptom-group--reproductive {
+  --symptom-color: #b9a3f0;
+}
+
+/* The hormone molecule: dark ink like the drawings' outlines. */
+.pmos-effect-molecule {
+  fill: none;
+  stroke: #5a2d4a;
+  stroke-width: 2.2;
+}
+
+.pmos-effect-label {
+  margin: 0;
+  max-width: 14rem;
+  font-family: inherit;
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
   font-weight: 700;
+  line-height: 1.25;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
-.symptom-item--lit::before {
-  border-color: #221b2b;
-  background-color: #221b2b;
+.pmos-effects-more {
+  text-align: center;
+  color: inherit;
+  font-weight: 600;
+  text-underline-offset: 0.2em;
 }
 
-/* Phones: the figure moves to the top and the two columns sit side by side
-   underneath, so the whole thing still fits in one pinned screen. */
-@media (max-width: 699.98px) {
-  .body-symptoms-pinned {
-    padding: calc(var(--home-nav-h) + 0.5rem) 0
-      calc(var(--home-wave-h) + 2.25rem);
+/* Tablets and phones: two by two. */
+@media (max-width: 799.98px) {
+  .pmos-effects-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  /* To the left, clear of the back-to-top button in the corner. */
-  .body-symptoms-hint {
-    left: 0;
-    translate: none;
-    max-width: calc(100% - 4rem);
-    padding: 0.25rem 0.75rem;
-    font-size: 0.72rem;
-    text-align: left;
+  .pmos-effect-art {
+    max-width: 9rem;
   }
 
-  .body-symptoms-figure-row {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: start;
-    gap: 0.75rem;
-  }
-
-  .body-symptoms-figure {
-    grid-column: 1 / -1;
-    grid-row: 1;
-    justify-self: center;
-    /* What is left of the pinned screen once the two lists underneath
-       have their room. */
-    height: clamp(180px, calc(100vh - 28rem - var(--home-wave-h) - var(--home-nav-h)), 440px);
-    height: clamp(180px, calc(100svh - 28rem - var(--home-wave-h) - var(--home-nav-h)), 440px);
-  }
-
-  .body-symptoms-column {
-    gap: 0.6rem;
-    font-size: 0.72rem;
-  }
-
-  .symptom-item {
-    margin: 0;
-    padding-top: 0.1rem;
-    padding-bottom: 0.1rem;
+  .pmos-effect-label {
+    font-size: 0.85rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .body-part,
-  .body-symptoms-hint svg {
-    animation: none !important;
+  .pmos-effect-art {
+    transition: none;
+  }
+
+  .pmos-effect:hover .pmos-effect-art {
+    translate: none;
   }
 }
 
@@ -4703,9 +4798,18 @@ body:not(.home-fullscreen) .home-hero {
 
 .bsh-stream-heading {
   max-width: 22em;
-  margin: 0 auto 1.5rem;
+  margin: 0 auto 0.5rem;
   text-align: center;
   text-wrap: balance;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-15: what BSH are, under
+   the reaction title. */
+.bsh-stream-subheading {
+  margin: 0 auto 1.5rem;
+  text-align: center;
+  font-size: clamp(0.95rem, 1.6vw, 1.2rem);
+  opacity: 0.85;
 }
 
 /* The slanted species name leans into the space after it (team review,
@@ -4811,8 +4915,7 @@ body:not(.home-fullscreen) .home-hero {
 @media (prefers-reduced-motion: reduce) {
   .bsh-stream-diagram,
   .bsh-stream-reaction,
-  .bsh-stream-meet-text,
-  .bsh-dna {
+  .bsh-stream-meet-text {
     transition: none;
   }
 }
@@ -4856,7 +4959,7 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): the
-   cell's fimbriae/pili and its tangled loop of DNA. */
+   cell's fimbriae/pili. (Its loop of DNA was removed on 2026-10-15.) */
 .bsh-pili {
   fill: none;
   stroke: #6e5b9e;
@@ -4864,39 +4967,11 @@ body:not(.home-fullscreen) .home-hero {
   stroke-linecap: round;
 }
 
-.bsh-dna {
-  fill: none;
-  stroke: #2f4f86;
-  stroke-width: 2;
-  stroke-linejoin: round;
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: transform 0.6s ease;
-}
-
-/* With the reaction the DNA makes room for the BSH capsule beside it. */
-.bsh-stream--reaction .bsh-dna,
-.bsh-stream--static .bsh-dna {
-  transform: translateX(-44px) scale(0.7);
-}
-
 .bsh-enzyme {
   fill: #dfe8f7;
   stroke: #2f4f86;
   stroke-width: 3;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: bsh-enzyme-pulse 1.6s ease-in-out infinite;
-}
-
-@keyframes bsh-enzyme-pulse {
-  0%,
-  100% {
-    scale: 1;
-  }
-  50% {
-    scale: 1.06;
-  }
+  stroke-linejoin: round;
 }
 
 .bsh-arrow {
@@ -4910,15 +4985,31 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .bsh-hex--conjugated {
-  fill: #f7f0c8;
-  stroke: #a28a2c;
+  fill: #f28c28;
+  stroke: #a3520c;
   stroke-width: 2;
 }
 
 .bsh-hex--deconjugated {
-  fill: #cc4a4a;
-  stroke: #8e2626;
+  fill: #f7d84a;
+  stroke: #a58a10;
   stroke-width: 2;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-15: the lower stream
+   (BshStreamAnimation.tsx, stream 1) gets its own colours so the two
+   streams read apart. Recoloured the same day (team request: more distinct
+   colours): upper stream orange going in, yellow coming out; lower stream
+   dark purple going in, light purple coming out. The dark purple has a
+   light outline so it stands out on the dark page. */
+.bsh-molecule--1 .bsh-hex--conjugated {
+  fill: #5a2a91;
+  stroke: #c3a6ee;
+}
+
+.bsh-molecule--1 .bsh-hex--deconjugated {
+  fill: #dcc8f7;
+  stroke: #8a68c4;
 }
 
 .bsh-tag {
@@ -4932,55 +5023,11 @@ body:not(.home-fullscreen) .home-hero {
   stroke-width: 2;
 }
 
-.bsh-stream-badge,
-.bsh-stream-plus,
 .bsh-stream-caption,
-.bsh-stream-enzyme-label,
-.bsh-stream-products {
+.bsh-stream-enzyme-label {
   position: absolute;
   transform: translate(-50%, -50%);
   white-space: nowrap;
-}
-
-.bsh-stream-products {
-  display: grid;
-  grid-template-columns: auto auto auto;
-  align-items: center;
-  gap: 0.5rem 0.4rem;
-}
-
-.bsh-stream-products > * {
-  position: static;
-  transform: none;
-}
-
-/* Badges mirror the figure: purple-tinted for bile acids, pale blue for the
-   split-off amino acid. Fixed light colours in both themes, like the
-   figure's own palette, so they read the same on light and dark bands. */
-.bsh-stream-badge {
-  border-radius: 0.4rem;
-  padding: 0.15rem 0.6rem;
-  font-size: clamp(0.65rem, 1.3vw, 0.9rem);
-  font-weight: 600;
-  border: 2px solid;
-}
-
-.bsh-stream-badge--conjugated {
-  background: #8f7fc4;
-  border-color: #4f3f86;
-  color: #fff;
-}
-
-.bsh-stream-badge--deconjugated {
-  background: #c48fb0;
-  border-color: #7a2f5c;
-  color: #fff;
-}
-
-.bsh-stream-badge--tag {
-  background: #dfe8f7;
-  border-color: #2f4f86;
-  color: #1c2f52;
 }
 
 .bsh-stream-enzyme-label {
@@ -4988,11 +5035,6 @@ body:not(.home-fullscreen) .home-hero {
   font-weight: 700;
   color: #1c2f52;
   pointer-events: none;
-}
-
-.bsh-stream-plus {
-  font-size: clamp(0.7rem, 1.3vw, 0.95rem);
-  font-weight: 700;
 }
 
 .bsh-stream-caption {
@@ -5004,25 +5046,6 @@ body:not(.home-fullscreen) .home-hero {
   font-style: italic;
   font-weight: 600;
   opacity: 1;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bsh-enzyme {
-    animation: none;
-  }
-}
-
-/* On phones the side labels would collide with the stream, so tighten
-   badges instead of letting them overlap the particles. */
-@media (max-width: 575.98px) {
-  .bsh-stream-badge {
-    padding: 0.05rem 0.3rem;
-    border-width: 1px;
-  }
-
-  .bsh-stream-products {
-    gap: 0.2rem 0.15rem;
-  }
 }
 
 /* TGR5 STORY
@@ -5100,13 +5123,21 @@ body:not(.home-fullscreen) .home-hero {
   stroke-dasharray: 2 13;
 }
 
-.tgr5-gut--l-edge {
-  stroke: #6e5b9e;
-  stroke-width: 26;
+/* Added with Claude Opus 5.5 (Anthropic), 2026-10-15: the ring that pulses
+   out from a bile acid bound to TGR5, in that bile acid's colour. */
+.tgr5-bind-pulse {
+  fill: none;
+  stroke: #f28c28;
+  stroke-width: 3;
 }
 
-.tgr5-gut--l-cell {
-  stroke: #f3eef9;
+.tgr5-bind-pulse--1 {
+  stroke: #a77de6;
+}
+
+/* The bile acids pour in from above the diagram, so it must not clip them. */
+.tgr5-svg.tgr5-svg--overview {
+  overflow: visible;
 }
 
 .tgr5-node {
@@ -6096,11 +6127,46 @@ body:not(.home-fullscreen) .home-hero {
    Generated with Claude Sonnet 5 (Anthropic), 2026-09-09
    Purpose: grid of member cards on the Team page, each opening a popup with
    a bigger photo on the left and details on the right. */
+/* Light mode's --color-body-bg, fixed (see .team-member-photo-frame). */
+.team-members-grid,
+.team-members-rows,
+.team-member-modal-photo {
+  --team-photo-bg: #c9bde8;
+}
+
 .team-members-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 1.5rem;
   margin: 2rem 0;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-15 (team's "TEAM PAGE"
+   document): a TeamMembers with `rows` lays its cards out in centred rows of
+   the given sizes, every card as wide as one of four in a row; two to a row
+   on phones. */
+.team-members-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.team-members-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.team-members-row > .team-member-card {
+  width: calc((100% - 3 * 1.5rem) / 4);
+}
+
+@media (max-width: 640px) {
+  .team-members-row > .team-member-card {
+    width: calc((100% - 1.5rem) / 2);
+  }
 }
 
 .team-member-card {
@@ -6139,18 +6205,27 @@ body:not(.home-fullscreen) .home-hero {
   box-shadow: 0 1rem 2.5rem rgba(51, 40, 63, 0.3);
 }
 
-.team-member-card-photo img {
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-15 (team request): the
+   photo now sits in its own square frame, so a member's `crop` can scale and
+   shift it inside (see PhotoImg in TeamMembers.tsx). The students' photos
+   are cut-outs, so the frame's background shows round them: it is the light
+   theme's lavender in both themes, so they never sit on a dark backdrop. */
+.team-member-card-photo .team-member-photo-frame {
+  position: relative;
   display: block;
   width: 100%;
-  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-11: was height: 100%,
-     which has nothing to resolve against here (the frame's height comes from
-     its aspect-ratio), so a portrait photo kept its own shape and made its
-     card taller than the rest. Every photo is now cropped to the same square. */
-  height: auto;
   aspect-ratio: 1;
-  object-fit: cover;
+  overflow: hidden;
   border-radius: 6%;
-  background-color: var(--color-body-bg);
+  background-color: var(--team-photo-bg);
+}
+
+.team-member-photo-frame img,
+.team-member-modal-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .team-member-card-name {
@@ -6212,20 +6287,43 @@ body:not(.home-fullscreen) .home-hero {
   cursor: pointer;
 }
 
+/* The photo with, under it at the left, the member's LinkedIn link. */
+.team-member-modal-side {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.team-member-modal-linkedin {
+  --team-linkedin-fg: #fff;
+  display: block;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: #0a66c2;
+  transition: transform 0.2s ease;
+}
+
+.team-member-modal-linkedin:hover,
+.team-member-modal-linkedin:focus-visible {
+  transform: scale(1.1);
+}
+
+.team-member-modal-linkedin svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .team-member-modal-photo {
+  position: relative;
   flex: none;
   width: 160px;
   height: 160px;
   border-radius: 50%;
   overflow: hidden;
-  background-color: var(--color-body-bg);
-}
-
-.team-member-modal-photo img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  background-color: var(--team-photo-bg);
 }
 
 .team-member-modal-info {
@@ -6617,6 +6715,98 @@ body:not(.home-fullscreen) .home-hero {
 
 .hp-section-context :last-child {
   margin-bottom: 0;
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-15
+   Purpose: Carousel/List toggle above the interviews, and the list view —
+   one row per interviewee with a thumbnail, name, role and summary. */
+.hp-view-toggle {
+  max-width: 18rem;
+  margin: 1.5rem 0 0;
+}
+
+.hp-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 1rem;
+}
+
+.hp-list-item {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 1.25rem;
+  align-items: start;
+  padding: 1.25rem 0;
+  border-top: 1px solid rgba(51, 40, 63, 0.12);
+}
+
+.hp-list-item:first-child {
+  border-top: none;
+  padding-top: 0.25rem;
+}
+
+[data-theme="dark"] .hp-list-item {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.hp-list-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  border: none;
+  border-radius: 0.9rem;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: var(--color-body-bg);
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.12);
+}
+
+.hp-list-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hp-list-text {
+  min-width: 0;
+}
+
+.hp-list-name {
+  margin: 0;
+}
+
+.hp-list-role {
+  margin: 0.2rem 0 0;
+  font-size: 0.95rem;
+  opacity: 0.75;
+}
+
+.hp-list-summary {
+  margin-top: 0.75rem;
+}
+
+.hp-list-summary :last-child {
+  margin-bottom: 0;
+}
+
+.hp-list-summary.is-excerpt {
+  max-height: 6.5em;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, black 50%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent);
+}
+
+.hp-list-item .hp-featured-more {
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 480px) {
+  .hp-list-item {
+    grid-template-columns: 72px 1fr;
+    gap: 1rem;
+  }
 }
 
 /* Interview detail popup */

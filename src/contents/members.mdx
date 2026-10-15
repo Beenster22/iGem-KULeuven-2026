@@ -6,27 +6,31 @@
 
 Click a card to read more about each team member.
 
-<TeamMembers>
+<TeamMembers rows={[2, 3, 3, 4]}>
 
-{/* age and study: from the team's own "age at Jamboree / field of study" sheet.
-    teams and helpsWith: from the subteam sign-up sheet — `teams` is a green
-    "I will actively help with tasks for this team", `helpsWith` an orange "if
-    deadline(s) approach and help is needed, I can jump in".
-    TODO(team): Daniel is on neither sheet — his subteams were given directly,
-    his age and studies are still to come. */}
+{/* age and study: from the team's own "age at Jamboree / field of study" sheet
+    (the year of study left out, 2026-10-15: no longer accurate for everyone).
+    favourite and funFact: from the team's "TEAM PAGE" document (2026-10-15).
+    linkedin: a member's LinkedIn profile URL, shown under the photo in the
+    popup. TODO(team): none collected yet, add linkedin="https://..." to each.
+    rows: how many cards go on each row, in the order below.
+    TODO(team): Daniel's nationality is still to come.
+    crop (Claude Opus 5.5, 2026-10-15): measured from each cut-out photo so
+    every head is the same width (about a third of the frame) with the same
+    space above it. A re-uploaded photo needs its crop measured again. */}
 
-<TeamMemberCard name="Milica Glušac" role="Team Captain" nationality="Montenegrin" age={23} study="Masters in Biophysics, Biochemistry and Biotechnology (1st year)" teams="General, Finance, Engagement, Social media, Wiki/website, Dry lab" helpsWith="Wet lab" photo="https://static.igem.wiki/teams/6299/wiki/team/members/milica.avif" />
-<TeamMemberCard name="Sarah Vanderhoydonck" role="Team Vice Captain" nationality="Belgian" age={22} study="Masters in basic and translational research, Biomedical Sciences (1st year)" teams="Finance, Engagement, Social media, Wiki/website" helpsWith="Wet lab, Dry lab" photo="https://static.igem.wiki/teams/6299/wiki/team/members/sarah.avif" />
-<TeamMemberCard name="Esma Oulad-Mhand-Ouâli" role="Social Media Captain" nationality="Belgian, Moroccan" age={24} study="Masters in Management, Biomedical Sciences (1st year)" teams="Social media, Finance, Wiki/website, Wet lab, Dry lab" helpsWith="Engagement, Social committee" photo="https://static.igem.wiki/teams/6299/wiki/team/members/esma.avif" />
-<TeamMemberCard name="Martha Philipiak" role="Engagement Captain" nationality="German" age={23} study="Masters in Biophysics, Biochemistry and Biotechnology (1st year)" teams="Engagement, Wet lab, Dry lab" helpsWith="Social media, Wiki/website" photo="https://static.igem.wiki/teams/6299/wiki/team/members/martha.avif" />
-<TeamMemberCard name="Alec Lontie" role="Wet Lab Co-Captain" nationality="Belgian" age={22} study="Master of Bioscience Engineering: Cellular and Genetic Engineering (1st year)" teams="Wet lab, Engagement, Dry lab" helpsWith="Finance, Social media, Wiki/website" photo="https://static.igem.wiki/teams/6299/wiki/team/members/alec.avif" />
-<TeamMemberCard name="Elizabeth De Schouwer" role="Wet Lab Co-Captain" nationality="American" age={21} study="Master of Bioscience Engineering: Cellular and Genetic Engineering (1st year)" teams="Wet lab, Finance" helpsWith="Engagement, Social media, Wiki/website" photo="https://static.igem.wiki/teams/6299/wiki/team/members/elizabeth.avif" />
-<TeamMemberCard name="Brandon Joubert" role="Wiki Captain" nationality="South African" age={23} study="Bachelor Engineering, Electronics and ICT (3rd year)" teams="Wiki/website, Finance, Engagement, Social media, Dry lab" helpsWith="Wet lab" photo="https://static.igem.wiki/teams/6299/wiki/team/members/brandon.avif" />
-<TeamMemberCard name="Tim Lybeer" role="Member" nationality="Belgian" age={23} study="Master of Bioscience Engineering: Cellular and Genetic Engineering (1st year)" teams="Engagement, Wet lab, Dry lab" helpsWith="Finance, Social media, Wiki/website" photo="https://static.igem.wiki/teams/6299/wiki/team/members/tim.avif" />
-<TeamMemberCard name="Azra Yagmur Tufanoglu" role="Member" nationality="Turkish" age={20} study="Bachelor in Chemical Engineering Technology (1st year)" teams="Finance, Engagement, Wiki/website, Wet lab" helpsWith="Social media, Dry lab" photo="https://static.igem.wiki/teams/6299/wiki/team/members/azra.avif" />
-<TeamMemberCard name="Marie Van de Mosselaer" role="Member" nationality="Belgian" age={21} study="Master of Bioscience Engineering: Cellular and Genetic Engineering (1st year)" teams="Wet lab, Social media, Engagement" helpsWith="Finance" photo="https://static.igem.wiki/teams/6299/wiki/team/members/marie.avif" />
-<TeamMemberCard name="Onkar Satish Jadhav" role="Member" nationality="Indian" age={23} study="Master of Chemistry (1st year)" teams="Finance, Engagement, Wiki/website, Dry lab" helpsWith="Social media, Wet lab" photo="https://static.igem.wiki/teams/6299/wiki/team/members/onkar.avif" />
-<TeamMemberCard name="Daniel Steukers" role="Dry Lab Captain" age={24} study="Biochemistry, Biotechnology and Biophysics" teams="Dry lab, Wet lab" photo="https://static.igem.wiki/teams/6299/wiki/team/members/daniel.avif" rotate={-90} />
+<TeamMemberCard name="Milica Glušac" role="Team Captain" nationality="Montenegrin" age={23} study="Masters in Biophysics, Biochemistry and Biotechnology" favourite="Mamma Mia!" funFact="My friends claim I used to eat mud in kindergarten, and we still debate it to this day" photo="https://static.igem.wiki/teams/6299/wiki/team/members/milica.avif" crop={{ x: 0.061, y: 0.357, size: 0.827 }} />
+<TeamMemberCard name="Sarah Vanderhoydonck" role="Team Vice Captain" nationality="Belgian" age={22} study="Masters in basic and translational research, Biomedical Sciences" favourite="Harry Potter" funFact="I can touch my nose with my tongue!" photo="https://static.igem.wiki/teams/6299/wiki/team/members/sarah.avif" crop={{ x: 0.008, y: 0.429, size: 0.856 }} />
+<TeamMemberCard name="Martha Philipiak" role="Engagement Captain" nationality="German" age={23} study="Masters in Biophysics, Biochemistry and Biotechnology" favourite="Dune trilogy" funFact="I once drank 5 L of beer at Oktoberfest." photo="https://static.igem.wiki/teams/6299/wiki/team/members/martha.avif" crop={{ x: 0.027, y: 0.311, size: 0.92 }} />
+<TeamMemberCard name="Daniel Steukers" role="Dry Lab Captain" age={24} study="Biochemistry, Biotechnology and Biophysics" favourite="The Vital Question by Nick Lane" funFact="I once fell asleep on a train to Münster and ended up in Berlin. That’s how I realized how massive Germany actually is." photo="https://static.igem.wiki/teams/6299/wiki/team/members/daniel.avif" crop={{ x: 0.023, y: 0.396, size: 0.897 }} />
+<TeamMemberCard name="Alec Lontie" role="Wet Lab Co-Captain" nationality="Belgian" age={22} study="Master of Bioscience Engineering: Cellular and Genetic Engineering" favourite="Scholomance by Naomi Novik" funFact="I love collecting shiny things (#DndDiceHoarder)" photo="https://static.igem.wiki/teams/6299/wiki/team/members/alec.avif" crop={{ x: 0.024, y: 0.356, size: 0.911 }} />
+<TeamMemberCard name="Elizabeth De Schouwer" role="Wet Lab Co-Captain" nationality="American" age={21} study="Master of Bioscience Engineering: Cellular and Genetic Engineering" favourite="The Giver by Lois Lowry" funFact="I sing, play piano, and guitar in my free time" photo="https://static.igem.wiki/teams/6299/wiki/team/members/elizabeth.avif" crop={{ x: 0.041, y: 0.449, size: 0.848 }} />
+<TeamMemberCard name="Esma Oulad-Mhand-Ouâli" role="Social Media Captain" nationality="Belgian, Moroccan" age={24} study="Masters in Management, Biomedical Sciences" favourite="La La Land" funFact="My surname was made up because my grandfather forgot his real one." photo="https://static.igem.wiki/teams/6299/wiki/team/members/esma.avif" crop={{ x: 0.066, y: -0.009, size: 0.827 }} />
+<TeamMemberCard name="Brandon Joubert" role="Wiki Captain" nationality="South African" age={23} study="Bachelor Engineering, Electronics and ICT" favourite="The Stormlight Archive" funFact="I joined a synthetic biology team with zero biology experience" photo="https://static.igem.wiki/teams/6299/wiki/team/members/brandon.avif" crop={{ x: 0.034, y: 0.417, size: 0.913 }} />
+<TeamMemberCard name="Marie Van de Mosselaer" role="Member" nationality="Belgian" age={21} study="Master of Bioscience Engineering: Cellular and Genetic Engineering" favourite="The Priory of the Orange Tree by Samantha Shannon" funFact="I once owned fish named Flap, Flep, Flip, Flop, and Flup" photo="https://static.igem.wiki/teams/6299/wiki/team/members/marie.avif" crop={{ x: 0.106, y: 0.336, size: 0.833 }} />
+<TeamMemberCard name="Onkar Satish Jadhav" role="Member" nationality="Indian" age={23} study="Master of Chemistry" favourite="Sherlock Holmes" funFact="Made it to synbio teams without bio background twice" photo="https://static.igem.wiki/teams/6299/wiki/team/members/onkar.avif" crop={{ x: 0.0, y: 0.27, size: 1.026 }} />
+<TeamMemberCard name="Azra Yagmur Tufanoglu" role="Member" nationality="Turkish" age={20} study="Bachelor in Chemical Engineering Technology" favourite="Two for the Road" funFact="I almost studied literature instead of engineering" photo="https://static.igem.wiki/teams/6299/wiki/team/members/azra.avif" crop={{ x: 0.077, y: 0.264, size: 0.938 }} />
+<TeamMemberCard name="Tim Lybeer" role="Member" nationality="Belgian" age={23} study="Master of Bioscience Engineering: Cellular and Genetic Engineering" favourite="Norwegian Wood by Haruki Murakami" funFact="I am physically incapable of tanning, no matter how hard the sun tries" photo="https://static.igem.wiki/teams/6299/wiki/team/members/tim.avif" crop={{ x: 0.007, y: 0.232, size: 0.974 }} />
 
 </TeamMembers>
 

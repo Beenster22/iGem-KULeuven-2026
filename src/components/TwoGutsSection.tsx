@@ -23,6 +23,12 @@
 // section's title is gone (StoryScrollSection.tsx now leads into it), and the
 // two captions under the window and the sentence beside it in each state use
 // the team's new wording.
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-15 (team request): the
+// composition bar now runs in legend order (Bacteroides first), the colours
+// were changed so the named groups stay distinguishable with protan, deutan
+// and tritan colour blindness (checked by simulation; only the three "other"
+// shades, which share one legend entry, stay close), and fewer Escherichia
+// and Shigella cells are drawn with PMOS, the difference going to Bacteroides.
 // Purpose: home-page gut-microbiome section, the step between "What is
 // PMOS?" and the BSH diagram. A circular window into the gut: with PMOS two
 // groups have increased at the expense of the others, so diversity is
@@ -62,13 +68,13 @@ interface Group {
 // two dominating groups stand out. Both columns add up to the same number of
 // cells.
 const GROUPS: Group[] = [
-  { id: "a", shape: "curved", color: "#8f7fc4", healthy: 8, pmos: 4 },
-  { id: "b", shape: "coccus", color: "#4fae9a", healthy: 5, pmos: 3 },
+  { id: "a", shape: "curved", color: "#a58fe0", healthy: 8, pmos: 4 },
+  { id: "b", shape: "coccus", color: "#8fd6b8", healthy: 5, pmos: 3 },
   { id: "c", shape: "chain", color: "#e0a84a", healthy: 4, pmos: 1 },
-  { id: "d", shape: "capsule", color: "#d9779b", healthy: 6, pmos: 14 },
-  { id: "e", shape: "short-rod", color: "#6f9bd6", healthy: 6, pmos: 13 },
-  { id: "f", shape: "diplo", color: "#8cc27a", healthy: 4, pmos: 1 },
-  { id: "g", shape: "spiral", color: "#e2825a", healthy: 4, pmos: 1 },
+  { id: "d", shape: "capsule", color: "#d9779b", healthy: 6, pmos: 18 },
+  { id: "e", shape: "short-rod", color: "#2a5aa3", healthy: 6, pmos: 9 },
+  { id: "f", shape: "diplo", color: "#8a6d4a", healthy: 4, pmos: 1 },
+  { id: "g", shape: "spiral", color: "#b85a35", healthy: 4, pmos: 1 },
 ];
 
 // Legend entries, named as in the team's text: it only says which colour is
@@ -386,7 +392,12 @@ function GutWindow({ pmos }: { pmos: boolean }) {
 }
 
 // Share of each group among the cells drawn, so the bar always mirrors the
-// window above it.
+// window above it. Segments follow the legend's order, so the two read the
+// same way left to right.
+const BAR_ORDER = LEGEND.flatMap((entry) =>
+  entry.groupIds.map((id) => GROUPS.findIndex((group) => group.id === id)),
+);
+
 function CompositionBar({ pmos }: { pmos: boolean }) {
   const weights = GROUPS.map(() => 0);
   for (const slot of SLOT_LAYOUT) {
@@ -394,11 +405,11 @@ function CompositionBar({ pmos }: { pmos: boolean }) {
   }
   return (
     <div className="two-guts-bar" aria-hidden="true">
-      {GROUPS.map((group, i) => (
+      {BAR_ORDER.map((i) => (
         <span
-          key={group.id}
+          key={GROUPS[i].id}
           className="two-guts-bar-segment"
-          style={{ flexGrow: weights[i], backgroundColor: group.color }}
+          style={{ flexGrow: weights[i], backgroundColor: GROUPS[i].color }}
         />
       ))}
     </div>

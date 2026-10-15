@@ -248,15 +248,74 @@ function HPFeatured({ interviewees, position, paused, onSelect, onOpen }: HPFeat
   );
 }
 
+// Generated with Claude Opus 5.5 (Anthropic), 2026-10-15
+// Purpose: plain, motion-free alternative to the spotlight + carousel — every
+// interviewee in a section as a stacked row (thumbnail, name, role, summary),
+// still opening the shared modal for the full write-up.
+type HPView = "carousel" | "list";
+const VIEW_STORAGE_KEY = "hp-interviews-view";
+
+function readStoredView(): HPView {
+  try {
+    return window.localStorage.getItem(VIEW_STORAGE_KEY) === "list" ? "list" : "carousel";
+  } catch {
+    return "carousel";
+  }
+}
+
+interface HPListProps {
+  interviewees: FlatInterviewee[];
+  onOpen: (index: number) => void;
+}
+
+function HPList({ interviewees, onOpen }: HPListProps) {
+  return (
+    <ul className="hp-list">
+      {interviewees.map((person) => (
+        <li key={person.globalIndex} className="hp-list-item">
+          <button
+            type="button"
+            className="hp-list-photo"
+            onClick={() => onOpen(person.globalIndex)}
+            aria-label={`Read the full interview with ${person.name}`}
+          >
+            {carouselPhoto(person)}
+          </button>
+          <div className="hp-list-text">
+            <h3 className="hp-list-name">{person.name}</h3>
+            {person.role && <p className="hp-list-role">{person.role}</p>}
+            <div className={`hp-list-summary${person.summary ? "" : " is-excerpt"}`}>
+              {person.summary ? <p>{person.summary}</p> : person.content}
+            </div>
+            <button type="button" className="hp-featured-more" onClick={() => onOpen(person.globalIndex)}>
+              Read full interview &rarr;
+            </button>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 interface HPSectionCardProps {
   section: Section;
+  view: HPView;
   paused: boolean;
   onOpen: (index: number) => void;
 }
 
-function HPSectionCard({ section, paused, onOpen }: HPSectionCardProps) {
+function HPSectionCard({ section, view, paused, onOpen }: HPSectionCardProps) {
   const [position, setPosition] = useState(0);
   const featured = section.interviewees[position];
+
+  if (view === "list") {
+    return (
+      <div className="hp-section-card">
+        <h2 className="hp-section-title">{section.title}</h2>
+        <HPList interviewees={section.interviewees} onOpen={onOpen} />
+      </div>
+    );
+  }
 
   return (
     <div className="hp-section-card">
@@ -288,7 +347,17 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
   const sections = useMemo(() => extractSections(children), [children]);
   const flat = useMemo(() => sections.flatMap((section) => section.interviewees), [sections]);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [view, setView] = useState<HPView>(readStoredView);
   const modalRef = useRef<HTMLDivElement | null>(null);
+
+  function changeView(next: HPView) {
+    setView(next);
+    try {
+      window.localStorage.setItem(VIEW_STORAGE_KEY, next);
+    } catch {
+      // Storage blocked (private mode etc.) — the toggle still works for this visit.
+    }
+  }
 
   const openPerson = openIndex !== null ? flat[openIndex] : null;
 
@@ -315,9 +384,23 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
 
   return (
     <>
+      <div className="segmented-selector-bar hp-view-toggle" role="group" aria-label="Interview layout">
+        {(["carousel", "list"] as const).map((option) => (
+          <button
+            key={option}
+            type="button"
+            aria-pressed={view === option}
+            className={`segmented-selector-segment${view === option ? " active" : ""}`}
+            onClick={() => changeView(option)}
+          >
+            {option === "carousel" ? "Carousel" : "List"}
+          </button>
+        ))}
+      </div>
+
       {sections.map((section) => (
         <section key={section.title} className="hp-section">
-          <HPSectionCard section={section} paused={openIndex !== null} onOpen={setOpenIndex} />
+          <HPSectionCard section={section} view={view} paused={openIndex !== null} onOpen={setOpenIndex} />
 
           {section.context.length > 0 && <div className="hp-section-context">{section.context}</div>}
         </section>

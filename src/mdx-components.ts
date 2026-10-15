@@ -26,9 +26,10 @@ import {
 } from "./components/HumanPracticesInterviews";
 import { PmosOverview } from "./components/PmosOverview";
 import {
-  BodySymptomsSection,
+  SymptomGroups,
   PmosDefinition,
 } from "./components/BodySymptomsSection";
+import { PmosEffectsSection } from "./components/PmosEffectsSection";
 import { InflammationSliderSection } from "./components/InflammationSliderSection";
 import { BshStreamAnimation } from "./components/BshStreamAnimation";
 import { MicChart } from "./components/MicChart";
@@ -93,7 +94,8 @@ export const mdxComponents = {
   ProtocolDownloads,
   PageLayout,
   PmosOverview,
-  BodySymptomsSection,
+  SymptomGroups,
+  PmosEffectsSection,
   PmosDefinition,
   BshStreamAnimation,
   InflammationSliderSection,

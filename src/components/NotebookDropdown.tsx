@@ -8,8 +8,22 @@
 // notebooks are split up with <NotebookSection>, each its own smaller
 // dropdown inside the notebook. A button offers the notebook (or a single
 // section) as a PDF once it has been uploaded.
-import { Children, ReactNode, isValidElement, useState } from "react";
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-15: an opened notebook now
+// starts with a timeline of its entries (NotebookGantt), read from each
+// entry's <NotebookEntryMeta>; sections carry an id so a timeline row can
+// open them.
+import {
+  Children,
+  ReactElement,
+  ReactNode,
+  isValidElement,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { ExpandableText } from "./Expandable-Text";
+import { NotebookEntryMeta } from "./NotebookEntryMeta";
+import { GanttEntry, NotebookGantt, OPEN_SECTION_EVENT } from "./NotebookGantt";
 
 interface NotebookDropdownProps {
   title: ReactNode;
@@ -92,6 +106,36 @@ function countSections(children: ReactNode) {
   ).length;
 }
 
+// "STR-02r1 - Medium comparison, first round" -> "STR-02r1".
+function sectionCode(title: ReactNode) {
+  if (typeof title !== "string") return undefined;
+  return /^\s*([A-Z]{3}-[\w]+)\s+-\s/.exec(title)?.[1];
+}
+
+function sectionId(title: ReactNode) {
+  const code = sectionCode(title);
+  return code ? `notebook-${code.toLowerCase()}` : undefined;
+}
+
+// One timeline row per section that opens with a <NotebookEntryMeta>; sections
+// without one (overview tables, the abbreviations notebook) are left out.
+function timelineEntries(children: ReactNode): GanttEntry[] {
+  return Children.toArray(children).flatMap((child) => {
+    if (!isValidElement(child) || child.type !== NotebookSection) return [];
+    const { title, children: body } = (child as ReactElement<NotebookSectionProps>).props;
+    const code = sectionCode(title);
+    const targetId = sectionId(title);
+    const meta = Children.toArray(body).find(
+      (el): el is ReactElement<{ dates: string; status: string }> =>
+        isValidElement(el) && el.type === NotebookEntryMeta,
+    );
+    if (!code || !targetId || !meta) return [];
+    return [
+      { code, title: String(title), dates: meta.props.dates, status: meta.props.status, targetId },
+    ];
+  });
+}
+
 export function NotebookDropdown({
   title,
   pdfUrl,
@@ -101,6 +145,7 @@ export function NotebookDropdown({
 }: NotebookDropdownProps) {
   const badge = code ?? codeFromTitle(title);
   const sections = countSections(children);
+  const timeline = timelineEntries(children);
 
   return (
     // The tone travels as a data attribute on a wrapper instead of a prop on
@@ -121,6 +166,7 @@ export function NotebookDropdown({
         }
       >
         <NotebookPdf pdfUrl={pdfUrl} placeholder="PDF not yet uploaded." />
+        <NotebookGantt entries={timeline} />
         {children}
       </ExpandableText>
     </div>
@@ -140,9 +186,19 @@ interface NotebookSectionProps {
 // it for as long as that notebook is open.
 export function NotebookSection({ title, pdfUrl, children }: NotebookSectionProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  // A row in the notebook's timeline asks this section to open.
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const open = () => setIsOpen(true);
+    el.addEventListener(OPEN_SECTION_EVENT, open);
+    return () => el.removeEventListener(OPEN_SECTION_EVENT, open);
+  }, []);
 
   return (
-    <div className="notebook-section">
+    <div className="notebook-section" id={sectionId(title)} ref={ref}>
       <button
         type="button"
         className="notebook-section-header"

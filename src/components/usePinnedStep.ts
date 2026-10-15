@@ -6,10 +6,12 @@
 // the same with the wheel, touch scrolling or the scrollbar.
 import { useEffect, useState, type RefObject } from "react";
 
-// How far into the scroll towards a step it already counts as reached: early,
-// so the change starts as soon as the visitor moves on rather than half-way
-// through the jump.
-const REACHED_AT = 0.15;
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-15 (team feedback: too
+// easy to scroll straight past a step): every step, the last one included,
+// now has its own full stretch of scrolling (the wrapper is one screen tall
+// plus one stretch per step, see .home-snap-pin in App.css), and the step
+// changes just before the scroll reaches the next one's stop.
+const EARLY = 0.1;
 
 export function usePinnedStep(
   wrapperRef: RefObject<HTMLElement | null>,
@@ -24,15 +26,13 @@ export function usePinnedStep(
 
     const update = () => {
       frame = null;
-      // The wrapper is one screen tall plus one stretch of scrolling per
-      // further step.
-      const stepPx = (wrapper.offsetHeight - window.innerHeight) / (steps - 1);
+      const stepPx = (wrapper.offsetHeight - window.innerHeight) / steps;
       if (stepPx <= 0) return;
       const scrolled = -wrapper.getBoundingClientRect().top;
       setStep(
         Math.min(
           steps - 1,
-          Math.max(0, Math.floor(scrolled / stepPx + 1 - REACHED_AT)),
+          Math.max(0, Math.floor(scrolled / stepPx + EARLY)),
         ),
       );
     };
