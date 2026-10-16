@@ -3470,10 +3470,14 @@ body:not(.home-fullscreen) .home-hero {
    now stays pinned for one --snap-step of scrolling (the wrapper used to
    leave the last step none), and without snapping (pointer devices, see
    below) that stretch is one and a half screens instead of 60vh. Keep in
-   step with usePinnedStep.ts. */
+   step with usePinnedStep.ts.
+   Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-16 (team feedback: the
+   page still feels stuck from the "no known etiology" step on): a step now
+   stays pinned for 85vh of scrolling, so the picture changes much more
+   often while scrolling. */
 @media (hover: hover), (pointer: fine) {
   .home-snap-pin {
-    --snap-step: 150vh;
+    --snap-step: 85vh;
   }
 }
 
@@ -4234,12 +4238,16 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
-/* Edited with Claude Opus 5 (Anthropic), 2026-10-09: bigger, and pushed over
-   to the right-hand side of its row. */
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-16 (team feedback: the
+   question marks and the clock were not pretty): the question marks are now
+   three round badges — a glossy teal one, a light one and an outlined one —
+   floating on their own beats, and the clock is a proper wall clock (see
+   ClockArt in StoryScrollSection.tsx). Still bigger and pushed over to the
+   right-hand side of its row. */
 .story-art--question {
   position: relative;
-  width: clamp(8rem, 20vw, 15rem);
-  height: clamp(8rem, 20vw, 15rem);
+  width: clamp(9rem, 22vw, 17rem);
+  height: clamp(9rem, 22vw, 17rem);
   margin-inline-start: auto;
   margin-inline-end: clamp(0rem, 5vw, 5rem);
   font-weight: 800;
@@ -4248,32 +4256,49 @@ body:not(.home-fullscreen) .home-hero {
 
 .story-art--question span {
   position: absolute;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
   animation: story-question 3.2s ease-in-out infinite;
 }
 
 .story-art--question span:nth-child(1) {
-  left: 28%;
-  top: 8%;
-  font-size: clamp(6rem, 15.5vw, 12rem);
-  color: #2fa4a9;
+  left: 26%;
+  top: 14%;
+  width: clamp(5.5rem, 13vw, 10rem);
+  height: clamp(5.5rem, 13vw, 10rem);
+  font-size: clamp(3.2rem, 8vw, 6.2rem);
+  color: #ffffff;
+  background: radial-gradient(circle at 30% 25%, #66d0d5, #2fa4a9 55%, #1f7479);
+  box-shadow:
+    0 0.8rem 1.8rem rgba(31, 116, 121, 0.4),
+    inset 0 -0.4rem 0.7rem rgba(0, 0, 0, 0.14),
+    inset 0 0.35rem 0.6rem rgba(255, 255, 255, 0.3);
 }
 
 .story-art--question span:nth-child(2) {
-  left: 2%;
-  top: 2%;
-  font-size: clamp(2.1rem, 5.4vw, 4.2rem);
-  opacity: 0.55;
-  --tilt: -16deg;
+  left: 0;
+  top: 0;
+  width: clamp(2.8rem, 6.2vw, 4.8rem);
+  height: clamp(2.8rem, 6.2vw, 4.8rem);
+  font-size: clamp(1.5rem, 3.4vw, 2.7rem);
+  color: #33283f;
+  background: #eaf4f5;
+  box-shadow: 0 0.5rem 1.2rem rgba(51, 40, 63, 0.28);
+  --tilt: -12deg;
   animation-duration: 2.6s;
   animation-delay: -0.9s;
 }
 
 .story-art--question span:nth-child(3) {
   right: 0;
-  bottom: 6%;
-  font-size: clamp(2.7rem, 6.7vw, 5.4rem);
-  opacity: 0.35;
-  --tilt: 14deg;
+  bottom: 4%;
+  width: clamp(3.3rem, 7.6vw, 5.9rem);
+  height: clamp(3.3rem, 7.6vw, 5.9rem);
+  font-size: clamp(1.8rem, 4.1vw, 3.2rem);
+  border: 3px solid currentColor;
+  opacity: 0.7;
+  --tilt: 10deg;
   animation-duration: 3.8s;
   animation-delay: -1.7s;
 }
@@ -4285,32 +4310,41 @@ body:not(.home-fullscreen) .home-hero {
     rotate: var(--tilt, 0deg);
   }
   50% {
-    translate: 0 -0.12em;
-    rotate: calc(var(--tilt, 0deg) + 8deg);
+    translate: 0 -0.5rem;
+    rotate: calc(var(--tilt, 0deg) + 6deg);
   }
 }
 
 .story-art--clock {
-  width: clamp(5.5rem, 13vw, 10rem);
+  width: clamp(7rem, 16vw, 12rem);
   height: auto;
   overflow: visible;
+  filter: drop-shadow(0 0.6rem 1rem rgba(51, 40, 63, 0.28));
+}
+
+.story-clock-ring {
+  fill: none;
+  stroke: #2fa4a9;
+  stroke-width: 6;
 }
 
 .story-clock-face {
-  fill: currentColor;
-  fill-opacity: 0.06;
-  stroke: currentColor;
-  stroke-width: 4;
+  fill: #eaf4f5;
 }
 
 .story-clock-mark,
 .story-clock-hand {
-  stroke: currentColor;
+  stroke: #33283f;
   stroke-linecap: round;
 }
 
 .story-clock-mark {
-  stroke-width: 2;
+  stroke-width: 2.4;
+}
+
+.story-clock-dot {
+  fill: #33283f;
+  opacity: 0.55;
 }
 
 .story-clock-hand {
@@ -4319,23 +4353,27 @@ body:not(.home-fullscreen) .home-hero {
 
 .story-clock-hand--hour {
   stroke-width: 5;
-  animation: story-clock-turn 240s linear infinite;
+  animation: story-clock-turn 120s linear infinite;
 }
 
 .story-clock-hand--minute {
-  stroke-width: 3.5;
-  animation: story-clock-turn 20s linear infinite;
+  stroke-width: 3.4;
+  animation: story-clock-turn 10s linear infinite;
 }
 
-/* One tick a second, a full turn a minute. */
+/* Sweeps all the way round every five seconds: time visibly slipping by. */
 .story-clock-hand--second {
   stroke: #2fa4a9;
-  stroke-width: 2;
-  animation: story-clock-turn 60s steps(60) infinite;
+  stroke-width: 1.6;
+  animation: story-clock-turn 5s linear infinite;
 }
 
 .story-clock-pin {
   fill: #2fa4a9;
+}
+
+.story-clock-pin-core {
+  fill: #eaf4f5;
 }
 
 @keyframes story-clock-turn {
