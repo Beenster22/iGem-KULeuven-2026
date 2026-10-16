@@ -23,7 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-# Local-only preview of the hero video before it's uploaded to iGEM Video
-# Universe — never commit this; per README.md, video must be served from
-# iGEM infrastructure, not bundled in the repo.
+# Old local preview of the hero video, from before it was uploaded to iGEM
+# Video Universe. Nothing references it any more — never commit it; per
+# README.md, video must be served from iGEM infrastructure.
 /public/temp-preview/

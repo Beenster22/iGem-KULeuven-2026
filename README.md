@@ -133,6 +133,20 @@ Pick any short id you like (`[^smith2024]`, `[^1]`, ...) — it just has to matc
 and its definition. The two styles number together on the same page in whatever order they appear, and can
 be freely mixed.
 
+## Software
+
+Project code that is not part of the wiki build lives under `software/`. Each tool there is
+self-contained, with its own README and its own license:
+
+- `software/codon-optimization-tool/` — command-line codon optimization / harmonization tool
+  for *Bacteroides* species ([MIT License](software/codon-optimization-tool/LICENSE)). Written
+  up on the [Dry Lab page](src/contents/dry-lab.mdx).
+
+The `LICENSE` file at the repository root (CC BY 4.0) covers the wiki itself. A tool under
+`software/` is covered by the `LICENSE` file inside its own directory, which takes precedence
+for that directory. Nothing under `software/` is part of the Vite build — `.gitlab-ci.yml`
+only runs `yarn build`.
+
 ## About This Template
 
 ### Files

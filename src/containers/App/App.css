@@ -72,13 +72,21 @@ body {
 }
 
 h1,
-h2,
+h2 {
+  font-family: "Luckiest Guy", "Poppins", sans-serif;
+  font-weight: 400;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-12 (reviewer feedback:
+   Luckiest Guy is easy to read when big, but too heavy at subtitle sizes).
+   Page and section titles (h1, h2) keep the display face; the smaller
+   headings use the body face in bold instead. */
 h3,
 h4,
 h5,
 h6 {
-  font-family: "Luckiest Guy", "Poppins", sans-serif;
-  font-weight: 400;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
 }
 
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-07-28
@@ -86,7 +94,8 @@ h6 {
    via the DNA index's scrollIntoView, a direct #hash link, or back/forward
    navigation restoring one. */
 h2,
-h3 {
+h3,
+h4[id] {
   scroll-margin-top: 5rem;
 }
 
@@ -109,6 +118,36 @@ a[data-footnote-ref] {
   color: var(--color-text);
   font-weight: 700;
   text-decoration: none;
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-12 (reviewer feedback:
+   link colours clash with the background)
+   Purpose: plain links in page content ([text](url) in the .mdx files, DOI
+   links in the References panel) had no rule of their own and fell back to
+   Bootstrap's blue, which is hard to read on the site's purples (contrast
+   2.6:1 on the light body, 3.1:1 on the dark one). They now take the colour
+   of the text around them, so they are readable on every surface in both
+   themes, and are marked as links by weight and a teal underline instead.
+   Links with a class (buttons, cards, the section index) style themselves. */
+.page-body a:not([class], [data-footnote-ref], .section-progress a) {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: #2fa4a9;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+}
+
+.page-body a:not([class], [data-footnote-ref], .section-progress a):hover {
+  text-decoration-thickness: 3px;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): table
+   cells keep a fixed light background (white, lavender, teal) in both
+   themes, where the light --color-text marker was close to invisible. Inside
+   a table the marker takes the cell's own text colour instead. */
+.table a[data-footnote-ref] {
+  color: inherit;
 }
 
 a[data-footnote-ref]::before {
@@ -170,6 +209,18 @@ a[data-footnote-ref]:focus {
 
 .page-references li {
   margin-bottom: 0.6rem;
+}
+
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09 (team report: a EUCAST
+   citation with a long query-string URL ran off the right of the panel).
+   A URL has no spaces, so it is one "word" the line cannot break: it both
+   overflowed and — because running text is justified, see PAGE SHELL —
+   stretched the line before it across the full column. Allowing a break
+   inside such a word fixes both, here and in any citation added later.
+   break-word rather than anywhere: it only breaks a word that would not fit
+   on a line of its own, so ordinary prose is untouched. */
+.page-shell-content :is(p, li, dd, dt, th, td, figcaption) {
+  overflow-wrap: break-word;
 }
 
 .page-references li::marker {
@@ -298,7 +349,11 @@ a[data-footnote-ref]:focus {
   border-bottom: 1px solid rgba(51, 40, 63, 0.12);
 }
 
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-05
+   Purpose: in dark mode the navbar uses the Dark Purple swatch (same as the
+   mega-menu and body cards) rather than the near-black --color-page-bg. */
 [data-theme="dark"] .navbar-empower {
+  background-color: #33283f;
   border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -526,6 +581,32 @@ a[data-footnote-ref]:focus {
   opacity: 0.65;
 }
 
+/* BRAND MERCH PHOTOS
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: the entrepreneurship page's hoodie / t-shirt / stickers row mixes
+   two landscape photos with a tall phone screenshot (945x2048, black bars
+   above and below the actual photo). Give every tile the same 16:9 frame and
+   crop to fill it, so the row stays one even height. */
+.brand-merch-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+/* BRAND PALETTE SWATCHES
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: MDX wraps each colour name in a <p>, whose bottom margin lifted
+   the label above its swatch dot. Drop it so dot and label share a centre. */
+.brand-palette li > p {
+  margin-bottom: 0;
+}
+
+/* Photo sits between the black bars; aim the crop at the sticker sheet. */
+.brand-merch-img-stickers {
+  object-position: 50% 57%;
+}
+
 /* TABLES
    Generated with Claude Sonnet 5 (Anthropic), 2026-09-10
    Purpose: Bootstrap's table-bordered ships hard, high-contrast gridlines
@@ -586,32 +667,48 @@ a[data-footnote-ref]:focus {
   color: #000000;
 }
 
-/* This table has 10 columns, wider than the base rules above allow for
-   without horizontal scrolling. table-layout: fixed divides the full width
-   evenly (first column gets a little extra for its labels) instead of
-   sizing columns to their content, so all 10 always fit on screen — long
-   cell text wraps onto multiple lines rather than forcing overflow. */
+/* This table has 10 columns, wider than the base rules above allow for, so
+   it gets tighter padding and smaller text.
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): columns
+   used to be an even split (table-layout: fixed) with break-word, which cut
+   words wherever the column ended ("Symptomati-c"). Columns are now sized to
+   their content, so each is at least as wide as its longest word and words
+   stay whole; the few very long ones carry their own break points in the
+   MDX (&shy; / <wbr />). On screens too narrow for that the table scrolls
+   sideways inside its wrapper instead of breaking words. */
 .comp-table.table-responsive-rounded .table-bordered {
-  table-layout: fixed;
+  table-layout: auto;
   width: 100%;
 }
 
 .comp-table.table-responsive-rounded .table-bordered th,
 .comp-table.table-responsive-rounded .table-bordered td {
-  padding: 0.5rem 0.4rem;
+  padding: 0.5rem 0.3rem;
   font-size: 0.75rem;
-  word-wrap: break-word;
+  overflow-wrap: normal;
+  hyphens: manual;
 }
 
 .comp-table.table-responsive-rounded .table-bordered th:first-child,
 .comp-table.table-responsive-rounded .table-bordered td:first-child {
   min-width: 0;
-  width: 13%;
 }
 
 .comp-table.table-responsive-rounded .table-bordered th:not(:first-child),
 .comp-table.table-responsive-rounded .table-bordered td:not(:first-child) {
   min-width: 0;
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: "SPIOMET4HEALTH" (9th column) is one long word that broke over
+   two lines in its evenly divided column — give that column a little more
+   of the width and keep its header on a single line. Only on desktop
+   widths, where the wider column is actually wide enough to hold it;
+   below that it wraps as before rather than spilling into the next cell. */
+@media (min-width: 1240px) {
+  .comp-table.table-responsive-rounded .table-bordered th:nth-child(9) {
+    white-space: nowrap;
+  }
 }
 
 /* CALLOUT */
@@ -668,16 +765,28 @@ a[data-footnote-ref]:focus {
   justify-content: space-between;
   gap: 1rem;
   width: 100%;
-  border: none;
+  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-07: in light mode the
+     accent fill is the same colour as the page body behind it, so the tab
+     had no visible edge — it gets a dark purple outline there. Dark mode
+     keeps the border transparent (the fill already stands out). */
+  border: 1px solid rgba(51, 40, 63, 0.55);
   border-radius: 1rem;
   background-color: var(--color-accent);
-  color: var(--color-text);
+  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-07: --color-accent is
+     the same light purple in both themes, so the title needs a fixed dark
+     colour — the theme-varying --color-text turned near-white in dark mode
+     and was hard to read on it. */
+  color: #33283f;
   padding: 1rem 1.5rem;
   text-align: left;
   cursor: pointer;
   transition:
     border-radius 0.15s ease,
     filter 0.15s ease;
+}
+
+[data-theme="dark"] .expandable-header {
+  border-color: transparent;
 }
 
 .expandable-header:hover {
@@ -702,9 +811,13 @@ a[data-footnote-ref]:focus {
 
 .expandable-content {
   background-color: var(--color-page-bg);
-  border: 1px solid rgba(51, 40, 63, 0.15);
+  border: 1px solid rgba(51, 40, 63, 0.55);
   border-top: none;
   border-radius: 0 0 1rem 1rem;
+}
+
+[data-theme="dark"] .expandable-content {
+  border-color: rgba(201, 189, 232, 0.35);
 }
 
 .expandable-content-inner {
@@ -717,6 +830,788 @@ a[data-footnote-ref]:focus {
 
 .expandable-content-inner > :last-child {
   margin-bottom: 0;
+}
+
+/* DOCKING HEATMAP (dry lab page)
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-07
+   Purpose: the interactive rebuild of the docking figure — a grid of
+   coloured, clickable cells with the selected pair's pose shown beneath.
+   The grid is wider than the content column, so it scrolls sideways with
+   the homolog column pinned to the left edge. Cell colours are inline
+   styles (computed per value in DockingHeatmap.tsx), so nothing here sets
+   them. */
+.docking-heatmap {
+  margin: 1.5rem 0;
+}
+
+.docking-heatmap-scroll {
+  overflow-x: auto;
+  border-radius: 0.75rem;
+}
+
+.docking-heatmap-grid {
+  border-collapse: separate;
+  border-spacing: 2px;
+}
+
+.docking-heatmap-caption {
+  caption-side: top;
+  padding-bottom: 0.75rem;
+  color: var(--color-text);
+  opacity: 0.7;
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.docking-heatmap-col-head {
+  vertical-align: bottom;
+  padding: 0 0 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  /* Ten full bile salt names will not fit side by side at column width, so
+     they are set vertically, as in the original figure's angled labels. */
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+
+.docking-heatmap-corner {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-align: left;
+  vertical-align: bottom;
+  padding-bottom: 0.4rem;
+}
+
+.docking-heatmap-row-head,
+.docking-heatmap-corner {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background-color: var(--color-page-bg);
+  padding-right: 0.6rem;
+}
+
+.docking-heatmap-row-head {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.docking-heatmap-cell-wrap {
+  padding: 0;
+}
+
+.docking-heatmap-cell {
+  display: block;
+  width: 100%;
+  min-width: 56px;
+  border: none;
+  border-radius: 0.2rem;
+  padding: 0.55rem 0.35rem;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  cursor: pointer;
+  transition: outline-color 0.12s ease;
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+}
+
+.docking-heatmap-cell:hover {
+  outline-color: var(--color-text);
+}
+
+.docking-heatmap-cell.selected {
+  outline: 3px solid var(--color-text);
+  outline-offset: -3px;
+}
+
+.docking-heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.docking-heatmap-legend-bar {
+  flex: 0 1 180px;
+  height: 0.6rem;
+  border-radius: 999px;
+}
+
+.docking-heatmap-legend-label {
+  opacity: 0.7;
+}
+
+.docking-heatmap-detail {
+  margin-top: 1rem;
+  border: 1px solid rgba(51, 40, 63, 0.25);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+[data-theme="dark"] .docking-heatmap-detail {
+  border-color: rgba(201, 189, 232, 0.3);
+}
+
+.page-body .docking-heatmap-detail p {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.docking-heatmap-detail-head {
+  margin-bottom: 0.75rem !important;
+}
+
+.docking-heatmap-detail-placeholder {
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* MARKDOWN TABLES INSIDE A DROPDOWN (notebook / protocol accordions)
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-07
+   Purpose: a plain markdown table written in .mdx renders as a bare <table>
+   with none of Bootstrap's classes, so it arrived unstyled inside the
+   notebook dropdowns. These rules give it the same look as the site's
+   Bootstrap tables (see .table-responsive-rounded above): soft gridlines,
+   room around the text, and a lavender header row. Left-aligned rather than
+   centered, since these tables hold sentences, not short labels. */
+.expandable-content table {
+  width: 100%;
+  margin-bottom: 1.25rem;
+  border-collapse: collapse;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.expandable-content table :is(th, td) {
+  border: 1px solid rgba(51, 40, 63, 0.18);
+  padding: 0.6rem 0.85rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+[data-theme="dark"] .expandable-content table :is(th, td) {
+  border-color: rgba(201, 189, 232, 0.25);
+}
+
+.expandable-content table th {
+  background-color: var(--color-accent);
+  /* The accent fill is light in both themes, so the header text is fixed
+     dark rather than the theme-varying --color-text. */
+  color: #33283f;
+  font-weight: 600;
+}
+
+/* Table cells are short entries, not running prose — the page-wide
+   justification (see PAGE SHELL) would stretch them oddly. */
+.page-body .expandable-content table :is(p, li) {
+  text-align: left;
+}
+
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09 (team report: the
+   96-well plate tables had their last column cut off). A 12-column plate
+   layout needs more room than the ~960px the dropdown gives it — at the
+   default size these ran 27–127px over — so a table with many columns is
+   set smaller and tighter until it fits. :has() counts the columns, so the
+   two- and three-column tables of running text around them keep the
+   comfortable default. Short labels like "BHI+1447" stay perfectly legible
+   at this size.
+   Shrinking alone only fixes a full-width window — on a narrower one (a
+   laptop at 1024px, a tablet) a 12-column plate still does not fit at a
+   readable size, so these tables also scroll sideways rather than having
+   their last column clipped. display:block is what makes the table its own
+   scroll box; it is confined to the wide tables, so every other table still
+   lays out as an ordinary full-width one. */
+.expandable-content table:has(tr > :nth-child(8)) {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  font-size: 0.84rem;
+}
+
+.expandable-content table:has(tr > :nth-child(8)) :is(th, td) {
+  padding: 0.4rem 0.45rem;
+}
+
+.expandable-content table:has(tr > :nth-child(11)) {
+  font-size: 0.76rem;
+}
+
+.expandable-content table:has(tr > :nth-child(11)) :is(th, td) {
+  padding: 0.3rem 0.3rem;
+}
+
+/* Anything wider still (none today) keeps shrinking rather than spilling. */
+.expandable-content table:has(tr > :nth-child(15)) {
+  font-size: 0.68rem;
+}
+
+.expandable-content table:has(tr > :nth-child(15)) :is(th, td) {
+  padding: 0.25rem;
+}
+
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09: found while fixing the
+   plate tables above — on a phone even the three- and four-column notebook
+   tables ran past the content column and had their last column clipped, so
+   below this breakpoint every table in a dropdown gets the same scroll box.
+   A table narrow enough to fit then sits at its own width instead of filling
+   the column, which is the price of not hiding a column off-screen. */
+@media (max-width: 991.98px) {
+  .expandable-content table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+}
+
+/* NOTEBOOK DROPDOWN
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-07
+   Purpose: what NotebookDropdown adds inside the accordion above — the PDF
+   download button at the top of an opened notebook, and the nested section
+   dropdowns a large notebook is divided into. */
+
+/* NOTEBOOK TONES
+   Generated with Claude Opus 5 (Anthropic), 2026-10-09
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-14: every tone is now
+   mixed only from the five EMPOWER brand colours, and the tones run down the
+   page as one continuous gradient (pale aqua → teal → periwinkle → deep
+   lavender → blush → soft pink → pale pink).
+   Purpose: the notebook page was a stack of identical accent-coloured bars,
+   so one research line was indistinguishable from the next. Each notebook
+   carries a tone — a gradient that starts on its own step of the shelf
+   gradient below, passes through a blend with the next notebook's step, and
+   resolves into the site accent. Every stop is a light tint, because the
+   tab's title is a fixed dark purple in both themes (see .expandable-header)
+   and has to stay readable on it. --nb-edge is a deeper shade of the same
+   colour, used for the thin bars that mark the notebook's sections once it
+   is open. The steps are assigned in the order the notebooks appear in
+   notebook.mdx, so reordering the notebooks means reassigning steps here.
+   A notebook with no tone (the overview dropdown, which is not a research
+   line) falls through to the plain accent and gets no badge. */
+.notebook-dropdown {
+  --brand-plum: #33283f;
+  --brand-teal: #2fa4a9;
+  --brand-lavender: #c9bde8;
+  --brand-pink: #f1c3d4;
+  --brand-light: #eaf4f5;
+
+  /* The shelf gradient, one step per research line. */
+  --nb-step-1: color-mix(in srgb, var(--brand-teal) 18%, var(--brand-light));
+  --nb-step-2: color-mix(in srgb, var(--brand-teal) 40%, var(--brand-light));
+  --nb-step-3: color-mix(in srgb, var(--brand-teal) 30%, var(--brand-lavender));
+  --nb-step-4: color-mix(in srgb, var(--brand-lavender) 85%, var(--brand-plum));
+  --nb-step-5: color-mix(in srgb, var(--brand-pink) 60%, var(--brand-lavender));
+  --nb-step-6: var(--brand-pink);
+  --nb-step-7: color-mix(in srgb, var(--brand-pink) 50%, var(--brand-light));
+
+  --nb-a: var(--color-accent);
+  --nb-b: color-mix(in srgb, var(--brand-lavender) 60%, var(--brand-light));
+  --nb-edge: color-mix(in srgb, var(--brand-lavender) 55%, var(--brand-plum));
+}
+
+/* Pale aqua */
+.notebook-dropdown[data-tone="str"] {
+  --nb-a: var(--nb-step-1);
+  --nb-b: color-mix(in srgb, var(--nb-step-1) 50%, var(--nb-step-2));
+  --nb-edge: color-mix(in srgb, var(--brand-teal) 65%, var(--brand-plum));
+}
+
+/* Teal */
+.notebook-dropdown[data-tone="mic"] {
+  --nb-a: var(--nb-step-2);
+  --nb-b: color-mix(in srgb, var(--nb-step-2) 50%, var(--nb-step-3));
+  --nb-edge: var(--brand-teal);
+}
+
+/* Periwinkle: teal blended into lavender */
+.notebook-dropdown[data-tone="cnj"] {
+  --nb-a: var(--nb-step-3);
+  --nb-b: color-mix(in srgb, var(--nb-step-3) 50%, var(--nb-step-4));
+  --nb-edge: color-mix(in srgb, var(--brand-teal) 80%, var(--brand-plum));
+}
+
+/* Deep lavender */
+.notebook-dropdown[data-tone="prm"] {
+  --nb-a: var(--nb-step-4);
+  --nb-b: color-mix(in srgb, var(--nb-step-4) 50%, var(--nb-step-5));
+  --nb-edge: color-mix(in srgb, var(--brand-lavender) 45%, var(--brand-plum));
+}
+
+/* Blush: pink leaning into lavender */
+.notebook-dropdown[data-tone="bsh"] {
+  --nb-a: var(--nb-step-5);
+  --nb-b: color-mix(in srgb, var(--nb-step-5) 50%, var(--nb-step-6));
+  --nb-edge: color-mix(in srgb, var(--brand-pink) 35%, var(--brand-plum));
+}
+
+/* Soft pink */
+.notebook-dropdown[data-tone="bsa"] {
+  --nb-a: var(--nb-step-6);
+  --nb-b: color-mix(in srgb, var(--nb-step-6) 50%, var(--nb-step-7));
+  --nb-edge: color-mix(in srgb, var(--brand-pink) 55%, var(--brand-plum));
+}
+
+/* Pale pink */
+.notebook-dropdown[data-tone="fit"] {
+  --nb-a: var(--nb-step-7);
+  --nb-b: color-mix(in srgb, var(--nb-step-7) 60%, var(--brand-lavender));
+  --nb-edge: color-mix(in srgb, var(--brand-pink) 45%, var(--brand-plum));
+}
+
+/* Plum mist: the deep plum, heavily lightened (not part of the shelf
+   gradient; for any supplementary notebook added later) */
+.notebook-dropdown[data-tone="sup"],
+.notebook-dropdown[data-tone="gen"] {
+  --nb-a: color-mix(in srgb, var(--brand-plum) 12%, var(--brand-light));
+  --nb-b: color-mix(in srgb, var(--brand-plum) 15%, var(--brand-lavender));
+  --nb-edge: color-mix(in srgb, var(--brand-plum) 65%, var(--brand-lavender));
+}
+
+/* background-image rather than background, so --color-accent stays as the
+   background-color underneath if the gradient is ever not painted. */
+.notebook-dropdown .expandable-header {
+  background-image: linear-gradient(100deg, var(--nb-a) 0%, var(--nb-b) 62%, var(--color-accent) 100%);
+}
+
+/* The title takes the slack so the badges sit against the chevron, instead of
+   space-between spreading all three apart. */
+.notebook-dropdown .expandable-title {
+  margin-right: auto;
+}
+
+/* Pop-out: a closed notebook lifts off the page under the cursor. The open one
+   is deliberately left flat — it is already anchored by its content panel, and
+   lifting a tab with a metre of notebook hanging off it looks broken. */
+.notebook-dropdown .expandable-header[aria-expanded="false"] {
+  transition:
+    border-radius 0.15s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.notebook-dropdown .expandable-header[aria-expanded="false"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1.1rem rgba(51, 40, 63, 0.22);
+  /* Overrides the shared .expandable-header:hover dimming, which muddied the
+     gradient. */
+  filter: none;
+}
+
+[data-theme="dark"] .notebook-dropdown .expandable-header[aria-expanded="false"]:hover {
+  box-shadow: 0 0.5rem 1.1rem rgba(0, 0, 0, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notebook-dropdown .expandable-header[aria-expanded="false"]:hover {
+    transform: none;
+  }
+}
+
+/* An open notebook is framed in its own tone, so a reader deep inside a long
+   entry can still see which notebook they are in. */
+.notebook-dropdown .expandable-content {
+  border-top: 2px solid var(--nb-edge);
+}
+
+/* Badges on the right of the tab: the entry count as plain text, the research
+   line code as a filled pill. Both take the same fixed dark colour as the
+   title, since the gradient is light in both themes. */
+.notebook-dropdown-meta {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.6rem;
+  color: #33283f;
+}
+
+.notebook-dropdown-count {
+  font-size: 0.8rem;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+.notebook-dropdown-code {
+  border-radius: 999px;
+  background-color: rgba(51, 40, 63, 0.14);
+  padding: 0.15rem 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+/* On phones the tab is too narrow for the title, the count and the pill, so
+   the count drops and only the code stays. */
+@media (max-width: 575.98px) {
+  .notebook-dropdown-count {
+    display: none;
+  }
+}
+
+.notebook-dropdown-pdf {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.notebook-dropdown-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  background-color: var(--color-accent);
+  /* Fixed dark text: the accent fill is light in both themes. */
+  color: #33283f;
+  padding: 0.45rem 1.1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: filter 0.15s ease;
+}
+
+.notebook-dropdown-download:hover {
+  color: #33283f;
+  filter: brightness(0.94);
+}
+
+.notebook-dropdown-pdf-placeholder {
+  font-size: 0.9rem;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* Each section is a smaller dropdown inside the notebook: outlined instead
+   of filled, so it reads as one level below the notebook's own tab. The
+   outline is dark purple in light mode (the accent is too pale to show up
+   there) and the accent in dark mode. */
+.notebook-section {
+  --notebook-section-outline: rgba(51, 40, 63, 0.55);
+  margin-top: 0.75rem;
+  border: 1px solid var(--notebook-section-outline);
+  border-radius: 0.75rem;
+  /* Edited with Claude Opus 5 (Anthropic), 2026-10-09: anchors the tone bar
+     below, and clips it to the rounded corners. */
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .notebook-section {
+  --notebook-section-outline: var(--color-accent);
+}
+
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-09
+   Purpose: a bar down the left edge in the parent notebook's tone (--nb-edge,
+   inherited from .notebook-dropdown), so every entry inside a notebook is
+   visibly part of it. It widens under the cursor, which gives the row a bit of
+   response without moving any text. */
+.notebook-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0.25rem;
+  background-color: var(--nb-edge, var(--color-accent));
+  transition: width 0.18s ease;
+}
+
+.notebook-section:hover::before {
+  width: 0.45rem;
+}
+
+/* An open entry keeps a wash of the tone behind its header, marking where the
+   reader is within a notebook of twenty-odd entries. */
+.notebook-section-header[aria-expanded="true"] {
+  background-color: color-mix(in srgb, var(--nb-edge, var(--color-accent)) 12%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notebook-section::before,
+  .notebook-section:hover::before {
+    transition: none;
+    width: 0.25rem;
+  }
+}
+
+.notebook-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  border: none;
+  border-radius: 0.75rem;
+  background: none;
+  color: var(--color-text);
+  /* Edited with Claude Opus 5 (Anthropic), 2026-10-09: the left padding clears
+     the tone bar at its widest, so the title never shifts on hover. */
+  padding: 0.7rem 1.1rem 0.7rem 1.35rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.notebook-section-header:hover {
+  background-color: color-mix(in srgb, var(--color-text) 8%, transparent);
+}
+
+.notebook-section-header[aria-expanded="true"] {
+  border-radius: 0.75rem 0.75rem 0 0;
+  border-bottom: 1px solid var(--notebook-section-outline);
+}
+
+.notebook-section-title {
+  margin: 0;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.notebook-section-content {
+  /* Left padding matches the header's, clearing the tone bar. */
+  padding: 1rem 1.1rem 1rem 1.35rem;
+}
+
+.notebook-section-content > :first-child {
+  margin-top: 0;
+}
+
+.notebook-section-content > :last-child {
+  margin-bottom: 0;
+}
+
+/* NOTEBOOK ENTRY META (Elle's speech bubble)
+   Generated with Claude Opus 5 (Anthropic), 2026-10-08
+   Purpose: the dates/people/status block each notebook entry opens with, as
+   the mascot holding up a speech bubble (NotebookEntryMeta.tsx). The bubble
+   is tinted with the accent over the page background so it reads as a card on
+   the section's own surface in both themes, and its tail is a rotated square
+   sharing that fill and two of the border edges — which keeps the join
+   seamless without a second background image. */
+.notebook-meta {
+  --notebook-meta-bg: color-mix(in srgb, var(--color-accent) 35%, var(--color-page-bg));
+  --notebook-meta-border: color-mix(in srgb, var(--color-text) 25%, transparent);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  margin: 0 0 1.25rem;
+}
+
+.notebook-meta-mascot {
+  flex: none;
+  width: 4.5rem;
+  height: auto;
+  margin-top: 0.2rem;
+}
+
+.notebook-meta-bubble {
+  position: relative;
+  /* min-width lets the bubble shrink inside the flex row instead of pushing
+     wide values (long status lines) out past the section. */
+  flex: 0 1 auto;
+  min-width: 0;
+  /* Hug the content rather than running the full width of the entry, so it
+     reads as something Elle is holding up and not as a header bar. */
+  max-width: 34rem;
+  margin: 0;
+  padding: 0.85rem 1.15rem;
+  font-size: 0.9rem;
+  background-color: var(--notebook-meta-bg);
+  border: 1px solid var(--notebook-meta-border);
+  border-radius: 1rem;
+}
+
+.notebook-meta-bubble::before {
+  content: "";
+  position: absolute;
+  /* Level with the middle of the mascot beside it. */
+  top: 1.95rem;
+  left: -0.47rem;
+  width: 0.85rem;
+  height: 0.85rem;
+  background-color: var(--notebook-meta-bg);
+  border-left: 1px solid var(--notebook-meta-border);
+  border-bottom: 1px solid var(--notebook-meta-border);
+  border-bottom-left-radius: 0.2rem;
+  transform: rotate(45deg);
+}
+
+.notebook-meta-row {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: 0.15rem 0.85rem;
+}
+
+.notebook-meta-row + .notebook-meta-row {
+  margin-top: 0.3rem;
+}
+
+.notebook-meta-bubble dt {
+  font-weight: 600;
+}
+
+.notebook-meta-bubble dd {
+  margin: 0;
+}
+
+/* On phones the two-column rows leave the values too narrow, so the label
+   sits above its value and the mascot shrinks to match. */
+@media (max-width: 575.98px) {
+  .notebook-meta {
+    gap: 0.6rem;
+  }
+
+  .notebook-meta-mascot {
+    width: 3.25rem;
+  }
+
+  .notebook-meta-row {
+    grid-template-columns: 1fr;
+  }
+
+  .notebook-meta-bubble dt {
+    font-size: 0.78rem;
+    opacity: 0.7;
+  }
+}
+
+/* NOTEBOOK TIMELINE
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-15
+   Purpose: the per-notebook timeline at the top of an opened notebook
+   (NotebookGantt.tsx). Bars are solid in the notebook's own --nb-edge tone.
+   Week gridlines are a repeating
+   background on each track, sized inline to the number of weeks shown. */
+.notebook-gantt {
+  --gantt-tone: var(--nb-edge, var(--color-accent));
+  --gantt-grid: color-mix(in srgb, var(--color-text) 12%, transparent);
+  --gantt-label: 4.75rem;
+  margin: 0 0 1.25rem;
+  padding: 0.9rem 1rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--color-text) 20%, transparent);
+  border-radius: 0.75rem;
+  background-color: color-mix(in srgb, var(--gantt-tone) 6%, transparent);
+}
+
+[data-theme="dark"] .notebook-gantt {
+  --gantt-tone: color-mix(in srgb, var(--nb-edge, var(--color-accent)) 45%, var(--color-accent));
+}
+
+.notebook-gantt-caption {
+  margin-bottom: 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.notebook-gantt-axis,
+.notebook-gantt-row {
+  display: grid;
+  grid-template-columns: var(--gantt-label) 1fr;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.notebook-gantt-axis {
+  height: 1.2rem;
+  font-size: 0.7rem;
+  opacity: 0.75;
+}
+
+.notebook-gantt-track {
+  position: relative;
+  display: block;
+  height: 100%;
+}
+
+.notebook-gantt-tick {
+  position: absolute;
+  bottom: 0.15rem;
+  white-space: nowrap;
+  padding-left: 0.2rem;
+  border-left: 1px solid var(--gantt-grid);
+}
+
+.notebook-gantt-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.notebook-gantt-rows li {
+  margin: 0;
+}
+
+.notebook-gantt-row {
+  width: 100%;
+  height: 1.55rem;
+  padding: 0;
+  border: none;
+  border-radius: 0.35rem;
+  background: none;
+  color: var(--color-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.notebook-gantt-row:hover,
+.notebook-gantt-row:focus-visible {
+  background-color: color-mix(in srgb, var(--color-text) 8%, transparent);
+}
+
+.notebook-gantt-code {
+  padding-left: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.notebook-gantt-row .notebook-gantt-track {
+  background-image: linear-gradient(to right, var(--gantt-grid) 1px, transparent 1px);
+  background-repeat: repeat-x;
+}
+
+.notebook-gantt-bar {
+  position: absolute;
+  top: 0.3rem;
+  bottom: 0.3rem;
+  min-width: 0.45rem;
+  border-radius: 0.3rem;
+  background-color: var(--gantt-tone);
+  transition: filter 0.15s ease;
+}
+
+.notebook-gantt-row:hover .notebook-gantt-bar {
+  filter: brightness(1.12) saturate(1.15);
+}
+
+/* Timeline rows scroll their entry into view under the sticky site header. */
+.notebook-section {
+  scroll-margin-top: 5rem;
+}
+
+@media (max-width: 575.98px) {
+  .notebook-gantt {
+    --gantt-label: 3.9rem;
+    padding: 0.75rem 0.6rem 0.6rem;
+  }
+
+  .notebook-gantt-tick.minor {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notebook-gantt-bar {
+    transition: none;
+  }
 }
 
 /* PAGE SHELL */
@@ -738,13 +1633,124 @@ a[data-footnote-ref]:focus {
   min-width: 0;
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): the
+   running text of every content page is justified, so lines end flush on
+   the right as in a paper. Words are never split over two lines (team
+   review, same day: automatic hyphenation read badly). The home page is left
+   alone, and so is anything a page centres on purpose (Bootstrap's
+   .text-center is !important). */
+.page-body:not(.page-body--home) .page-shell-content :is(p, li) {
+  text-align: justify;
+  hyphens: manual;
+  line-height: 1.75;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): more
+   breathing room on content pages. Beside the section index the content ran
+   to within 12px of the right edge of the screen, so it now keeps a real
+   margin there; and the text is set less tightly: taller lines (above), more
+   space between paragraphs, and headings, tables, figures and rules set
+   apart from what surrounds them. Only the page's own top-level blocks are
+   spaced (direct children of the content or of a PageLayout column), so the
+   insides of components keep their own layout. The home page is left alone. */
+@media (min-width: 992px) {
+  .section-progress + .page-shell-content {
+    max-width: none;
+    padding-right: clamp(2.5rem, 7vw, 7rem);
+  }
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"], .content-section)
+  > p {
+  margin-bottom: 1.35rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"], .content-section)
+  > :is(ul, ol)
+  > li
+  + li {
+  margin-top: 0.4rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"], .content-section)
+  > :is(h2, h3, h4) {
+  margin-bottom: 1rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"], .content-section)
+  > :not(:first-child):is(h2) {
+  margin-top: 3.25rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"], .content-section)
+  > :not(:first-child):is(h3) {
+  margin-top: 2.5rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"], .content-section)
+  > :not(:first-child):is(h4) {
+  margin-top: 1.9rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"], .content-section)
+  > :is(.table-responsive, figure, blockquote) {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.page-body:not(.page-body--home)
+  :is(.page-shell-content, .page-shell-content > .row > [class*="col"], .content-section)
+  > hr {
+  margin: 2.75rem 0;
+}
+
+/* CONTENT SECTIONS */
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-11 (team request)
+   Purpose: each major ("## ") section of a content page sits in its own box,
+   a lighter shade of the page body's purple, with a gap between one box and
+   the next. The boxes come from src/mdx/rehypeSections.ts; the spacing rules
+   above list .content-section so a section's own blocks are spaced as they
+   were when they sat directly in the page column. */
+.content-section {
+  --content-section-bg: color-mix(in srgb, var(--color-body-bg) 55%, #fff);
+  margin-top: 2.5rem;
+  padding: 2rem 2.25rem;
+  border-radius: 1.25rem;
+  background-color: var(--content-section-bg);
+}
+
+[data-theme="dark"] .content-section {
+  --content-section-bg: color-mix(in srgb, var(--color-body-bg) 88%, #fff);
+}
+
+.content-section:first-child {
+  margin-top: 0;
+}
+
+.content-section > :last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 575.98px) {
+  .content-section {
+    margin-top: 1.75rem;
+    padding: 1.25rem 1rem;
+    border-radius: 0.9rem;
+  }
+}
+
 /* SECTION PROGRESS */
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-07-13 (restyled 2026-07-28,
    2026-09-08)
-   Purpose: boxed, always-expanded page index. A single DNA strand runs
-   straight through each section's dot (ul::before, painted behind the li
-   content) so every title reads as literally threaded onto the strand,
-   rather than a decorative graphic floating beside an unrelated list.
+   Purpose: boxed, always-expanded page index, with the mascot marking the
+   current section (see .section-progress-mascot below).
    The column itself is a full-height --color-page-bg rail running the whole
    length of the article (not just the box's own height) so the index reads
    as a distinct sidebar rather than a card dropped onto the page body's
@@ -785,30 +1791,12 @@ a[data-footnote-ref]:focus {
   position: relative;
   list-style: none;
   margin: 0;
-  padding: 0;
+  /* Left gutter the mascot travels in. */
+  --mascot-size: 2.25rem;
+  padding: 0 0 0 calc(var(--mascot-size) + 0.5rem);
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
-
-/* The strand: a beaded gradient standing in for DNA rungs, positioned to
-   run exactly through the center of each dot below. */
-.section-progress ul::before {
-  content: "";
-  position: absolute;
-  top: 6px;
-  bottom: 6px;
-  left: 4px;
-  width: 2px;
-  border-radius: 2px;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    var(--color-accent) 0,
-    var(--color-accent) 5px,
-    transparent 5px,
-    transparent 11px
-  );
-  opacity: 0.6;
 }
 
 .section-progress li {
@@ -816,34 +1804,73 @@ a[data-footnote-ref]:focus {
 }
 
 .section-progress a {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
+  display: block;
   text-decoration: none;
   color: var(--color-text);
 }
 
-.section-progress-dot {
-  position: relative;
-  z-index: 1;
-  flex: none;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  /* Matches the box background so an inactive dot reads as a hollow ring;
-     the active state below fills it with the (distinct) accent color. */
-  background-color: var(--color-page-bg);
-  border: 2px solid rgba(51, 40, 63, 0.35);
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    transform 0.15s ease;
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: the mascot marks the current section in place of the old strand
+   and dots. It lives in the gutter the list's padding reserves and is slid
+   to the active row by an inline translateY (set in SectionProgress.tsx to
+   that row's vertical center); the inner body carries the hop so the two
+   movements don't fight over one transform. */
+.section-progress li.section-progress-mascot {
+  position: absolute;
+  top: calc(var(--mascot-size) / -2);
+  left: 0;
+  width: var(--mascot-size);
+  height: var(--mascot-size);
+  pointer-events: none;
+  /* Keep in sync with MASCOT_TRAVEL_MS in SectionProgress.tsx. */
+  transition: transform 0.45s cubic-bezier(0.34, 1.3, 0.64, 1);
 }
 
-.section-progress li.active .section-progress-dot {
-  background-color: var(--color-accent);
-  border-color: var(--color-accent);
-  transform: scale(1.3);
+.section-progress-mascot-body {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.section-progress-mascot.travelling .section-progress-mascot-body {
+  animation: section-progress-mascot-hop 0.45s ease-in-out;
+}
+
+.section-progress-mascot img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+}
+
+.section-progress-mascot img.shown {
+  opacity: 1;
+}
+
+@keyframes section-progress-mascot-hop {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0);
+  }
+  30% {
+    transform: translateX(-3px) rotate(-12deg);
+  }
+  70% {
+    transform: translateX(3px) rotate(10deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-progress li.section-progress-mascot {
+    transition: none;
+  }
+
+  .section-progress-mascot.travelling .section-progress-mascot-body {
+    animation: none;
+  }
 }
 
 .section-progress-label {
@@ -851,33 +1878,51 @@ a[data-footnote-ref]:focus {
   line-height: 1.3;
 }
 
-.section-progress li.active .section-progress-label {
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-13: the three levels now
+   differ in weight as well as size and indent, so a group heading such as
+   "Cell Culture" stands out from the protocols listed under it. */
+.section-progress li:not(.sub) .section-progress-label {
   font-weight: 600;
 }
 
-/* Subsections (h3) branch off the strand rather than sitting on it: shifted
-   right and shrunk down so the hierarchy against main sections (h2, on the
-   strand) reads at a glance without a second legend. */
+.section-progress li.active .section-progress-label {
+  font-weight: 700;
+}
+
+/* Subsections (h3) are shifted right and shrunk down so the hierarchy
+   against main sections (h2) reads at a glance without a second legend. */
 .section-progress li.sub {
   margin-left: 1.1rem;
 }
 
-.section-progress li.sub .section-progress-dot {
-  width: 6px;
-  height: 6px;
-  border-width: 1.5px;
-}
-
-.section-progress li.sub.active .section-progress-dot {
-  transform: scale(1.3);
-}
-
 .section-progress li.sub .section-progress-label {
-  font-size: 0.76rem;
-  opacity: 0.7;
+  font-size: 0.8rem;
+  font-weight: 500;
+  opacity: 0.9;
 }
 
 .section-progress li.sub.active .section-progress-label {
+  font-weight: 700;
+  opacity: 1;
+}
+
+/* Third level: sections inside an open dropdown (h4, e.g. STR-01 inside a
+   notebook) and dropdowns grouped under an h3 (the protocols under "Cell
+   Culture"). They sit one step further in, lighter, and closer together than
+   the rows above them. */
+.section-progress li.sub-sub {
+  margin-left: 2.1rem;
+  margin-top: -0.45rem;
+}
+
+.section-progress li.sub-sub .section-progress-label {
+  font-size: 0.72rem;
+  font-weight: 400;
+  opacity: 0.65;
+}
+
+.section-progress li.sub-sub.active .section-progress-label {
+  font-weight: 700;
   opacity: 1;
 }
 
@@ -928,36 +1973,76 @@ a[data-footnote-ref]:focus {
   }
 }
 
-/* TAB SWITCHER */
+/* TAB SWITCHER
+   Edited with Claude Opus 5 (Anthropic), 2026-10-12: brought in line with the
+   site's other controls. It was sized for single digits — full-width boxes at
+   1.75rem — which dwarfed everything around it once the tabs carried words.
+   Now it is a centered pill group, sized to its labels, using the same rounded
+   pill shape as .protocol-download, with the selected pill filled per theme
+   (see below). Two dark-mode faults are fixed with it:
+   the inactive border was a dark colour that vanished on the dark theme, and
+   the active label inherited --color-text, which is near-white there and sat
+   on the light accent at roughly 1.5:1 contrast. */
 .tab-switcher {
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
   width: 100%;
 }
 
 .tab-switcher-btn {
-  flex: 1 1 0;
-  border: 2px solid rgba(51, 40, 63, 0.25);
+  /* Sized to the label rather than stretched: a two-word tab spread across
+     half the page reads as a banner, not a control. */
+  flex: 0 1 auto;
+  border: 2px solid rgba(51, 40, 63, 0.3);
   background-color: transparent;
   color: var(--color-text);
-  padding: 1.75rem 1rem;
-  border-radius: 1rem;
-  font-weight: 700;
-  font-size: 1.75rem;
+  padding: 0.7rem 1.9rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  cursor: pointer;
   transition:
     background-color 0.15s ease,
     border-color 0.15s ease,
     color 0.15s ease;
 }
 
+[data-theme="dark"] .tab-switcher-btn {
+  border-color: rgba(201, 189, 232, 0.4);
+}
+
 .tab-switcher-btn:hover {
   border-color: var(--color-accent);
 }
 
+.tab-switcher-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* The selected pill has to be filled differently per theme, because the panel
+   these sit on changes colour with the theme. In light mode that panel is
+   itself the accent lavender, so an accent-filled pill disappears into it and
+   the unselected outline ends up looking more prominent than the selected
+   one. Light mode therefore uses the dark header colour — the same treatment
+   the navbar and footer use to stand out against that background. */
 .tab-switcher-btn.active {
-  background-color: var(--color-accent);
-  border-color: var(--color-accent);
-  color: var(--color-text);
+  background-color: #33283f;
+  border-color: #33283f;
+  color: #eaf4f5;
+}
+
+[data-theme="dark"] .tab-switcher-btn.active {
+  /* On the dark panel the relationship reverses: the light accent is what
+     reads as selected, with the dark label that fill needs. Both states are
+     written as literal colours rather than --color-header-bg/-text, which
+     theme.ts swaps between the two themes — reusing them here would read as
+     if one rule covered both cases when it only happens to suit one. */
+  background-color: #c9bde8;
+  border-color: #c9bde8;
+  color: #33283f;
 }
 
 .tab-switcher-content {
@@ -965,13 +2050,9 @@ a[data-footnote-ref]:focus {
 }
 
 @media (max-width: 576px) {
-  .tab-switcher {
-    flex-direction: column;
-  }
-
   .tab-switcher-btn {
-    font-size: 1.25rem;
-    padding: 1.25rem 1rem;
+    font-size: 1rem;
+    padding: 0.6rem 1.4rem;
   }
 }
 
@@ -983,37 +2064,127 @@ a[data-footnote-ref]:focus {
   gap: 1.5rem;
 }
 
+/* Reworked with Claude Opus 5.5 (Anthropic), 2026-10-07
+   Purpose: the wet lab wheel (WheelSelector.tsx). The wheel turns to bring
+   the selected wedge to the bottom; the labels turn back by the same amount,
+   with the same timing, so they stay upright. Its colours are fixed in both
+   themes, like the other drawings. */
 .wheel-selector-svg {
   width: 100%;
-  max-width: 320px;
+  max-width: 520px;
   height: auto;
+  overflow: visible;
+}
+
+.wheel-selector-wheel,
+.wheel-selector-label {
+  transition: transform 0.7s cubic-bezier(0.45, 0, 0.2, 1);
+}
+
+.wheel-selector-wedge {
+  cursor: pointer;
+  outline: none;
 }
 
 .wheel-selector-wedge path {
-  fill: var(--color-body-bg);
-  stroke: var(--color-text);
-  stroke-width: 2;
-  cursor: pointer;
-  transition: fill 0.15s ease;
+  stroke: #fdf1f6;
+  stroke-width: 1.5;
+  transition: filter 0.15s ease;
 }
 
-.wheel-selector-wedge:hover path {
-  fill: rgba(201, 189, 232, 0.6);
+.wheel-selector-wedge:hover path,
+.wheel-selector-wedge:focus-visible path {
+  filter: brightness(0.94) saturate(1.3);
 }
 
-.wheel-selector-wedge.active path {
-  fill: var(--color-accent);
-}
-
-.wheel-selector-wedge text {
-  fill: var(--color-text);
-  font-weight: 700;
+.wheel-selector-label {
+  font-size: 17px;
+  font-weight: 600;
   pointer-events: none;
   user-select: none;
 }
 
+/* 0.8 × the size above: SMALL_LABEL_SCALE in WheelSelector.tsx. */
+.wheel-selector-label--small {
+  font-size: 13.6px;
+}
+
+.wheel-selector-wedge.active .wheel-selector-label {
+  font-weight: 800;
+}
+
+/* The same pale pink as the background of the bacterium image on top of it. */
+.wheel-selector-hub {
+  fill: #fdf0f7;
+}
+
+.wheel-selector-bacterium {
+  pointer-events: none;
+}
+
+.wheel-selector-selected {
+  fill: none;
+  stroke: #33283f;
+  stroke-width: 4;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.wheel-selector-pointer {
+  fill: #33283f;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wheel-selector-wheel,
+  .wheel-selector-label {
+    transition: none;
+  }
+}
+
 .wheel-selector-content {
   width: 100%;
+}
+
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-11
+   Purpose: the "side" wheel (WheelSelector layout="side", project
+   description). Same wheel, smaller, laid out as a row: the selected wedge
+   rests at the right-hand side and points across at its paragraph. */
+.wheel-selector--side {
+  flex-direction: row;
+  align-items: center;
+  gap: 2rem;
+  /* The wheel and its paragraph are centred in the column as a pair, so the
+     wheel sits towards the middle of the page instead of hard against the
+     left edge. The paragraph is capped rather than stretched for the same
+     reason: left to fill the column it would push the wheel back out left. */
+  justify-content: center;
+}
+
+.wheel-selector--side .wheel-selector-svg {
+  flex: none;
+  width: clamp(200px, 38%, 320px);
+}
+
+.wheel-selector--side .wheel-selector-content {
+  flex: 0 1 26rem;
+  min-width: 0;
+}
+
+.wheel-selector--side .wheel-selector-content > :last-child {
+  margin-bottom: 0;
+}
+
+/* Too narrow to read a paragraph beside the wheel: it goes back under it,
+   still pointing right — the pointer is part of the drawing. */
+@media (max-width: 767.98px) {
+  .wheel-selector--side {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .wheel-selector--side .wheel-selector-svg {
+    width: min(100%, 320px);
+  }
 }
 
 /* SEGMENTED SELECTOR */
@@ -1423,18 +2594,26 @@ a[data-footnote-ref]:focus {
   font-weight: 800;
 }
 
+/* Fixed-height rectangle — grid-template-areas/-columns/-rows are set
+   inline per event (see EventGallery's buildMosaic), so whatever mix of
+   tile sizes it picks always tiles this one bounding box with no gaps. */
 .events-modal-gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1rem;
+  gap: 0.6rem;
+  height: clamp(220px, 34vw, 420px);
   margin-bottom: 2rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
 }
 
 .events-modal-gallery-item {
+  position: relative;
+  width: 100%;
+  height: 100%;
   border: none;
   padding: 0;
+  margin: 0;
   background: none;
-  border-radius: 0.75rem;
   overflow: hidden;
   aspect-ratio: 4 / 3;
   cursor: zoom-in;
@@ -1451,6 +2630,25 @@ a[data-footnote-ref]:focus {
 .events-modal-gallery-item:hover img,
 .events-modal-gallery-item:focus-visible img {
   transform: scale(1.06);
+}
+
+/* Final tile when there are more photos than the mosaic shows — dims its
+   image and overlays a "+N" count; clicking it opens the lightbox so the
+   rest are reachable via the arrow keys. */
+.events-modal-gallery-more img {
+  filter: brightness(0.45);
+}
+
+.events-modal-gallery-more-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  pointer-events: none;
 }
 
 .events-modal-content :last-child {
@@ -1565,6 +2763,10 @@ a[data-footnote-ref]:focus {
 
   .events-modal-title {
     font-size: 1.5rem;
+  }
+
+  .events-modal-gallery {
+    height: clamp(200px, 60vw, 320px);
   }
 
   .events-lightbox-nav {
@@ -1749,6 +2951,9 @@ footer hr {
      minimum), since that's the tallest padding requirement of any sponsor
      sharing this tile size — bumped from 0.75rem for that reason. */
   padding: 1rem 1.25rem;
+  /* Logos enlarged with `zoom` (SponsorCarousel.tsx) may reach into the
+     padding; this keeps them inside the tile's rounded corners. */
+  overflow: hidden;
   transition: transform 0.2s ease;
 }
 
@@ -1783,6 +2988,229 @@ footer hr {
   .sponsor-carousel-track {
     animation: none;
   }
+}
+
+/* SPONSORS PAGE
+   Logo wall (SponsorGrid.tsx): the same white logo tiles as the footer's
+   .sponsor-carousel-item, larger and with the sponsor's name underneath. */
+.sponsor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0 2rem;
+  padding: 0;
+  list-style: none;
+}
+
+.sponsor-grid-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+  background-color: var(--color-page-bg);
+  border: 1px solid rgba(51, 40, 63, 0.15);
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.08);
+  color: var(--color-text);
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.sponsor-grid-card:hover,
+.sponsor-grid-card:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 0.75rem 2rem rgba(51, 40, 63, 0.16);
+  color: var(--color-text);
+}
+
+/* Always white, in both themes: the logos are made for a white background. */
+.sponsor-grid-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 130px;
+  padding: 1.5rem 1.75rem;
+  background-color: #fff;
+  /* Logos enlarged with pageZoom (sponsors.ts) must not spill over the name. */
+  overflow: hidden;
+}
+
+.sponsor-grid-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.sponsor-grid-name {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* Stands in for a logo that has not been uploaded yet (no src in sponsors.ts). */
+.sponsor-grid-placeholder {
+  font-weight: 700;
+  text-align: center;
+  color: #33283f;
+  opacity: 0.6;
+}
+
+/* Only linked cards lift on hover. */
+div.sponsor-grid-card:hover {
+  transform: none;
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.08);
+}
+
+/* Updated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: sponsor tiers (SponsorGrid.tsx) — a heading with a medal-coloured
+   rule per tier, and cards that get smaller from gold down to bronze. */
+.sponsor-tier {
+  --sponsor-tier-color: rgba(51, 40, 63, 0.35);
+  --sponsor-tier-col: 190px;
+  --sponsor-tier-logo-h: 130px;
+  margin: 2rem 0 2.5rem;
+}
+
+.sponsor-tier-gold {
+  --sponsor-tier-color: #d4a72c;
+  --sponsor-tier-col: 250px;
+  --sponsor-tier-logo-h: 170px;
+}
+
+.sponsor-tier-silver {
+  --sponsor-tier-color: #9aa3ad;
+  --sponsor-tier-col: 220px;
+  --sponsor-tier-logo-h: 150px;
+}
+
+.sponsor-tier-bronze {
+  --sponsor-tier-color: #b87333;
+}
+
+.sponsor-tier-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.sponsor-tier-heading::before {
+  content: "";
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: var(--sponsor-tier-color);
+}
+
+.sponsor-tier-heading::after {
+  content: "";
+  flex: 1;
+  height: 3px;
+  border-radius: 3px;
+  background-color: var(--sponsor-tier-color);
+}
+
+.sponsor-tier .sponsor-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--sponsor-tier-col), 100%), 1fr));
+  margin: 1.25rem 0 0;
+}
+
+.sponsor-tier .sponsor-grid-card {
+  border-top: 4px solid var(--sponsor-tier-color);
+}
+
+.sponsor-tier .sponsor-grid-logo {
+  height: var(--sponsor-tier-logo-h);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sponsor-grid-card {
+    transition: none;
+  }
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: click-to-fullscreen figures (ZoomableImage.tsx). */
+.zoomable-image-trigger {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09 (team report: notebook
+   figures illegible and generally too big). width: 100% stretched every
+   figure to the full column whatever its real resolution, so the low-res
+   lab photos were being blown up 2–5x — a 181px plate photo was drawn at
+   927px. That upscaling was the blur: there is no detail to show past an
+   image's own pixels. Each figure is now drawn at its natural size, capped
+   to the column (and to 46rem, so the few high-resolution plots do not
+   dominate the entry either). Anything genuinely detailed is still one
+   click from fullscreen. */
+.zoomable-image-trigger img {
+  display: block;
+  width: auto;
+  max-width: min(100%, 46rem);
+  height: auto;
+  margin-inline: auto;
+}
+
+.zoomable-image-dialog {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 1rem;
+  border: 0;
+  background-color: rgba(20, 15, 26, 0.92);
+  cursor: zoom-out;
+}
+
+.zoomable-image-dialog[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09: now that a figure is
+   drawn at its own size in the entry (above), the small ones would have
+   opened fullscreen at that same size — a click that appeared to do
+   nothing. Fullscreen therefore fills the screen, which is the one place
+   enlarging a low-resolution photo is what the reader actually asked for.
+   object-fit keeps the proportions whichever way it has to scale. */
+.zoomable-image-dialog img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 0.5rem;
+}
+
+.zoomable-image-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
 }
 
 /* HOME PAGE FULLSCREEN CHROME */
@@ -1831,6 +3259,22 @@ body.home-fullscreen {
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
+   Purpose: object-fit doesn't apply to an <iframe>, so the 16:9 video embed
+   is sized to always cover the hero and centred, letting .home-hero's
+   overflow crop the excess — the same result as object-fit: cover. It's a
+   decorative background, so it takes no pointer input. */
+.home-hero-embed {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, calc(100dvh * 16 / 9));
+  height: max(100%, calc(100vw * 9 / 16));
+  transform: translate(-50%, -50%);
+  border: 0;
+  pointer-events: none;
 }
 
 .home-hero-layer {
@@ -1925,104 +3369,2423 @@ body.home-fullscreen {
   color: var(--color-text);
 }
 
-/* BODY SYMPTOMS SECTION
-   Layout is fixed from first paint — text fills the left ~2/3 of the row,
-   the figure sits flush to the right edge via space-between on the two flex
-   items. Once scrolled into view, BodySymptomsSection.tsx mounts the figure
-   after a timer; only the diagram itself animates in (see
-   body-symptoms-figure-in below), the surrounding layout never moves. The
-   info panel keeps showing the overview paragraph throughout — it only
-   switches to a specific organ's blurb once the visitor clicks one. */
-.body-symptoms-layout {
+/* HOME SNAP SECTIONS
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-05
+   Purpose: every home-page section fills the screen, and the page settles on
+   `data-snap` stops as it is scrolled. "home-snap-screen" is an
+   ordinary full-screen section; "home-snap-pin" is a taller wrapper whose
+   "home-snap-stage" stays pinned to the screen while the visitor scrolls
+   through `--snap-steps` steps (markers placed by SnapSteps). The fixed
+   navbar only covers the top of the screen once the visitor has opened it
+   (see body.home-fullscreen), hence --home-nav-h. */
+body {
+  --home-nav-h: 64px;
+  /* How far a band's wave pokes up into the band above it. */
+  --home-wave-h: clamp(28px, 4vw, 64px);
+}
+
+body.home-fullscreen {
+  --home-nav-h: 0px;
+}
+
+/* With the navbar open the hero starts below it; keep it to what is left of
+   the screen so the first section still begins exactly one screen down. */
+body:not(.home-fullscreen) .home-hero {
+  height: calc(100dvh - 64px);
+}
+
+.home-snap-screen {
+  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: calc(var(--home-nav-h) + 3rem);
+}
+
+/* Bands holding a pinned section: the stage must meet the band's edges. */
+.home-section--flush {
+  padding: 0;
+}
+
+.home-snap-pin {
+  --snap-step: 60vh;
+  position: relative;
+  height: calc(100vh + var(--snap-steps) * var(--snap-step));
+  height: calc(100svh + var(--snap-steps) * var(--snap-step));
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-15 (team feedback: too
+   easy to scroll straight past a step): every step, the last one included,
+   now stays pinned for one --snap-step of scrolling (the wrapper used to
+   leave the last step none), and without snapping (pointer devices, see
+   below) that stretch is one and a half screens instead of 60vh. Keep in
+   step with usePinnedStep.ts. */
+@media (hover: hover), (pointer: fine) {
+  .home-snap-pin {
+    --snap-step: 150vh;
+  }
+}
+
+.home-snap-pin > .home-snap-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+}
+
+.home-snap-marker {
+  position: absolute;
+  left: 0;
+  top: calc(var(--i) * var(--snap-step));
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+/* Touch screens scroll with momentum, so the browser's own snapping can nudge
+   the page onto the nearest stop without ever getting in the way.
+   Edited with Claude Opus 5 (Anthropic), 2026-10-11: kept to touch. The stops
+   here are one screen (or 60vh) apart, which is inside the proximity
+   threshold from almost anywhere, so on a mouse the browser pulls the page
+   back to the stop it just left and a single wheel tick moves nothing at all.
+   Pointer devices scroll freely instead. */
+@media (hover: none) and (pointer: coarse) {
+  html.home-snap {
+    scroll-snap-type: y proximity;
+  }
+
+  html.home-snap [data-snap] {
+    scroll-snap-align: start;
+  }
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-15 (team feedback: a
+   trackpad flick skipped straight past "Meet P. vulgatus"): pointer devices
+   snap again, but only onto the steps of pinned sections, which are now one
+   and a half screens apart (see .home-snap-pin), and a flick may not carry
+   the page past one of them (scroll-snap-stop). The ordinary full-screen
+   sections still scroll freely. */
+@media (hover: hover), (pointer: fine) {
+  html.home-snap {
+    scroll-snap-type: y proximity;
+  }
+
+  html.home-snap .home-snap-pin > .home-snap-marker {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-09-24
+   Purpose: home-page polish — (1) drop the page-body/footer gaps so the
+   bands meet edge to edge, (2) wavy edges between bands, (3) the faint
+   drifting MicrobeBackdrop layer in each band's side margins. */
+.page-body--home {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.page-body--home ~ footer {
+  margin-top: 0 !important; /* overrides Bootstrap's .mt-5 on the footer */
+}
+
+.pmos-overview,
+.home-section {
+  position: relative;
+}
+
+/* Keep real content above the backdrop and the neighbouring band's wave. */
+.home-section > .container,
+.pmos-overview > :not(.microbe-backdrop) {
+  position: relative;
+  z-index: 1;
+}
+
+/* WAVY BAND EDGES
+   The wave is a pseudo-element hanging off the band, masked with an SVG
+   wave. "wave-top" pokes up into the band above using `background: inherit`,
+   so it always matches this band's colour in both themes (including the
+   dark-mode .home-section--contrast override). "wave-into-footer" sits
+   inside the bottom of the last band in the footer's colour. */
+.home-section--wave-top::before,
+.home-section--wave-into-footer::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: clamp(28px, 4vw, 64px);
+  pointer-events: none;
+  z-index: 2;
+  -webkit-mask: var(--wave-mask) center / 100% 100% no-repeat;
+  mask: var(--wave-mask) center / 100% 100% no-repeat;
+}
+
+.home-section--wave-top::before {
+  bottom: calc(100% - 1px); /* 1px overlap hides sub-pixel seams */
+  background: inherit;
+  --wave-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 64' preserveAspectRatio='none'%3E%3Cpath d='M0 40 C 240 64 480 8 720 30 S 1200 60 1440 22 L1440 64 L0 64 Z'/%3E%3C/svg%3E");
+}
+
+.home-section.home-section--wave-top::before {
+  transform: scaleX(-1); /* mirrored so consecutive waves don't repeat */
+}
+
+.home-section--wave-into-footer {
+  padding-bottom: calc(3rem + clamp(28px, 4vw, 64px));
+}
+
+.home-section--wave-into-footer::after {
+  bottom: -1px;
+  background: var(--color-footer-bg);
+  --wave-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 64' preserveAspectRatio='none'%3E%3Cpath d='M0 28 C 300 0 520 58 820 36 S 1240 6 1440 34 L1440 64 L0 64 Z'/%3E%3C/svg%3E");
+}
+
+/* The home page's References panel lands after the last band, i.e. below
+   the wave into the footer — so here it drops the card look and becomes a
+   full-bleed strip in the footer's own colours, reading as the footer's
+   first row instead of a box wedged between the wave and the footer. */
+.page-body--home .page-references {
+  margin: 0 calc(-50vw + 50%);
+  padding: 0.25rem max(1.5rem, calc((100vw - 960px) / 2));
+  border: 0;
+  border-radius: 0;
+  background-color: var(--color-footer-bg);
+  color: var(--color-footer-text);
+}
+
+.page-body--home .page-references-summary,
+.page-body--home .page-references-summary::before,
+.page-body--home .page-references li::marker,
+.page-body--home .page-references a {
+  color: var(--color-footer-text);
+}
+
+/* MICROBE BACKDROP (see MicrobeBackdrop.tsx) */
+.microbe-backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.microbe-backdrop-item {
+  position: absolute;
+  width: clamp(40px, 4.5vw, 84px);
+  height: auto;
+  opacity: 0.18;
+  rotate: var(--r);
+  animation: microbe-backdrop-float 18s ease-in-out infinite;
+}
+
+.microbe-backdrop-item--pv {
+  opacity: 0.28;
+}
+
+.microbe-backdrop-item--hex {
+  width: clamp(18px, 1.8vw, 32px);
+  opacity: 0.3;
+}
+
+@keyframes microbe-backdrop-float {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: var(--r);
+  }
+  33% {
+    translate: 10px -18px;
+    rotate: calc(var(--r) + 14deg);
+  }
+  66% {
+    translate: -8px 12px;
+    rotate: calc(var(--r) - 10deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .microbe-backdrop-item {
+    animation: none;
+  }
+}
+
+/* Below ~laptop width the content fills the page, so the margins the
+   backdrop is meant for don't exist — hide it rather than clutter text. */
+@media (max-width: 991.98px) {
+  .microbe-backdrop {
+    display: none;
+  }
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-09-24
+   Purpose: flat BioRender-style colours for DiagramIcons.tsx (used by
+   MicrobeBackdrop), matching the team's abstract figure. */
+/* Generic gut bacteria: outlined in the band's own foreground colour so
+   they recede behind the engineered P. vulgatus in both themes. */
+.bact-other {
+  fill: currentColor;
+  fill-opacity: 0.12;
+  stroke: currentColor;
+  stroke-opacity: 0.45;
+  stroke-width: 4;
+}
+
+.bact-membrane-outer {
+  fill: #f3eef9;
+  stroke: #6e5b9e;
+  stroke-width: 4;
+}
+
+.bact-membrane-inner {
+  fill: none;
+  stroke: #6e5b9e;
+  stroke-width: 2.5;
+}
+
+.bact-bsh {
+  fill: #dfe8f7;
+  stroke: #2f4f86;
+  stroke-width: 3;
+}
+
+.bile-acid-conjugated {
+  fill: #f7f0c8;
+  stroke: #a28a2c;
+  stroke-width: 4;
+  transition: fill 0.3s ease, stroke 0.3s ease;
+}
+
+.bile-acid-deconjugated {
+  fill: #cc4a4a;
+  stroke: #8e2626;
+  stroke-width: 4;
+  transition: fill 0.3s ease, stroke 0.3s ease;
+}
+
+/* BODY SYMPTOMS SECTION ("What is PMOS?")
+   The definition on its own screen (.body-symptoms-intro), then the
+   symptom cards (.symptoms-overview, further down). */
+/* Its own near-full-screen block, so the definition stands alone and a
+   further scroll brings the figure in. */
+.body-symptoms-intro {
+  min-height: 100vh;
+  min-height: 100svh;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: calc(var(--home-nav-h) + 2rem) 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  min-height: 300px;
-  overflow-x: clip;
+  gap: 1.5rem;
+  text-align: center;
 }
 
-.body-symptoms-info {
-  flex: 1 1 auto;
-  max-width: 66%;
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): the
+   name spelled out down the left, one word per letter of PMOS, and the
+   definition beside it, set apart by a rule between the two. */
+.body-symptoms-definition {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  text-align: left;
 }
 
-.body-symptoms-figure {
-  flex-shrink: 0;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .body-symptoms-figure {
-    animation: body-symptoms-figure-in 1.6s ease both;
-  }
-
-  @keyframes body-symptoms-figure-in {
-    from {
-      opacity: 0;
-      transform: translateX(100vw);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-}
-
-.body-symptoms-info-heading {
-  margin: 0 0 0.5rem;
-}
-
-.body-symptoms-info-blurb {
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): the
+   name is set larger, and its four initials use the site's heading face
+   (Luckiest Guy, already self-hosted) for a slightly more cartoonish PMOS.
+   That face only has one weight, hence font-weight: 400 (see FONTS above). */
+.body-symptoms-acrostic {
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(1.8rem, 4.6vw, 3.4rem);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.body-symptoms-acrostic-letter {
+  display: inline-block;
+  font-family: "Luckiest Guy", "Poppins", sans-serif;
+  font-size: 1.5em;
+  font-weight: 400;
+  color: #2fa4a9;
+}
+
+.body-symptoms-former-name {
+  margin: 0.75rem 0 0;
+  font-size: clamp(0.85rem, 1.3vw, 1rem);
+  opacity: 0.8;
+}
+
+.body-symptoms-blurb {
+  margin: 0;
+  padding-left: clamp(1.5rem, 4vw, 3rem);
+  border-left: 3px solid #2fa4a9;
+  font-size: clamp(1.25rem, 2.5vw, 1.8rem);
+  line-height: 1.5;
   opacity: 0.9;
 }
 
-@media (max-width: 767.98px) {
-  .body-symptoms-layout {
-    flex-direction: column;
+/* Narrow screens: the definition goes under the name, and the rule between
+   them turns horizontal. */
+@media (max-width: 640px) {
+  .body-symptoms-definition {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .body-symptoms-blurb {
+    padding: clamp(1.5rem, 4vw, 3rem) 0 0;
+    border-left: 0;
+    border-top: 3px solid #2fa4a9;
+  }
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-15 (team feedback: the
+   body figure was too complex for a home page)
+   Purpose: the team's four symptom groups as four cards on one screen. Each
+   group keeps its own colour (--symptom-color), used for the card's top
+   edge, its icon and its chips' dots. */
+.symptoms-overview {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: calc(var(--home-nav-h) + 2.5rem) 1rem
+    calc(var(--home-wave-h) + 2.5rem);
+}
+
+.symptoms-overview-title {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+}
+
+.symptoms-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.9rem, 2vw, 1.5rem);
+}
+
+.symptom-group--hormonal {
+  --symptom-color: #f08fc0;
+}
+
+.symptom-group--metabolic {
+  --symptom-color: #f0c674;
+}
+
+.symptom-group--wellbeing {
+  --symptom-color: #6fd0e0;
+}
+
+.symptom-group--gut {
+  --symptom-color: #7fc8a9;
+}
+
+.symptom-card {
+  padding: clamp(1rem, 2.2vw, 1.5rem);
+  border-radius: 1.25rem;
+  border-top: 5px solid var(--symptom-color);
+  background-color: color-mix(in srgb, currentColor 7%, transparent);
+  transition:
+    translate 0.25s ease,
+    background-color 0.25s ease;
+}
+
+.symptom-card:hover {
+  translate: 0 -4px;
+  background-color: color-mix(in srgb, var(--symptom-color) 16%, transparent);
+}
+
+.symptom-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 0.9rem;
+}
+
+.symptom-card-icon {
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--symptom-color);
+  /* The group colours are all light, so the icon is a fixed dark ink. */
+  stroke: #221b2b;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.symptom-card-title {
+  margin: 0;
+  font-family: inherit;
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  font-weight: 700;
+  line-height: 1.25;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.symptom-card-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: clamp(0.85rem, 1.3vw, 1rem);
+  line-height: 1.3;
+  /* Content pages justify their text, which stretches a wrapped chip. */
+  text-align: left;
+}
+
+.symptom-card-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1.5px solid color-mix(in srgb, currentColor 25%, transparent);
+}
+
+.symptom-card-list li::before {
+  content: "";
+  flex: none;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background-color: var(--symptom-color);
+}
+
+/* Phones: one card per row, a little tighter. */
+@media (max-width: 699.98px) {
+  .symptoms-overview-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .symptom-card-list {
+    gap: 0.35rem;
+    font-size: 0.8rem;
+  }
+
+  .symptom-card-list li {
+    padding: 0.2rem 0.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .symptom-card {
+    transition: none;
+  }
+
+  .symptom-card:hover {
+    translate: none;
+  }
+}
+
+/* PMOS EFFECTS
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-15
+   Purpose: the home page's "How does PMOS affect women?" screen (see
+   PmosEffectsSection.tsx): four panels in a row, each the team's drawing of
+   an organ on a disc in its symptom group's colour, with a short label. */
+.pmos-effects {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(1.75rem, 4vw, 3rem);
+  /* The drawings have no width of their own, so the section must not
+     shrink to fit its content. */
+  width: 100%;
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: calc(var(--home-nav-h) + 2.5rem) 1rem
+    calc(var(--home-wave-h) + 2.5rem);
+}
+
+.pmos-effects-title {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+}
+
+.pmos-effects-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1rem, 3vw, 2.5rem);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pmos-effect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.pmos-effect-art {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 13rem;
+  aspect-ratio: 1;
+  padding: 18%;
+  border-radius: 50%;
+  border: 4px solid var(--symptom-color);
+  /* A light disc, so the drawings (coloured against a white page) read the
+     same on the dark band. */
+  background-color: color-mix(in srgb, var(--symptom-color) 22%, #fff);
+  transition: translate 0.25s ease;
+}
+
+.pmos-effect:hover .pmos-effect-art {
+  translate: 0 -4px;
+}
+
+.pmos-effect-art svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Only on this screen: the symptom cards keep "Hormonal and reproductive
+   issues" as one group, here they are two panels. */
+.pmos-effect.symptom-group--reproductive {
+  --symptom-color: #b9a3f0;
+}
+
+/* The hormone molecule: dark ink like the drawings' outlines. */
+.pmos-effect-molecule {
+  fill: none;
+  stroke: #5a2d4a;
+  stroke-width: 2.2;
+}
+
+.pmos-effect-label {
+  margin: 0;
+  max-width: 14rem;
+  font-family: inherit;
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  font-weight: 700;
+  line-height: 1.25;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.pmos-effects-more {
+  text-align: center;
+  color: inherit;
+  font-weight: 600;
+  text-underline-offset: 0.2em;
+}
+
+/* Tablets and phones: two by two. */
+@media (max-width: 799.98px) {
+  .pmos-effects-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pmos-effect-art {
+    max-width: 9rem;
+  }
+
+  .pmos-effect-label {
+    font-size: 0.85rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pmos-effect-art {
+    transition: none;
+  }
+
+  .pmos-effect:hover .pmos-effect-art {
+    translate: none;
+  }
+}
+
+/* STORY SCROLL
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: the big-sentence screens between the symptoms and the gut section
+   (StoryScrollSection.tsx). Every step fills the pinned stage and lays its
+   sentences out on it (.story-step--<position>); only the --active one is
+   visible, the others wait just below (--future) or have drifted off above
+   (--past).
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team feedback: text
+   too big, too much scrolling for little information): smaller type and
+   drawings, and two sentences per screen (.story-step--pair-*). */
+.story-stage {
+  position: relative;
+  overflow: hidden;
+}
+
+.story-step {
+  position: absolute;
+  inset: calc(var(--home-nav-h) + 1.5rem) 0 calc(var(--home-wave-h) + 1.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  padding: 0 clamp(0.5rem, 3vw, 2.5rem);
+  opacity: 0;
+  translate: 0 3rem;
+  transition:
+    opacity 0.45s ease,
+    translate 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.story-step--past {
+  translate: 0 -3rem;
+}
+
+.story-step--active {
+  opacity: 1;
+  translate: 0 0;
+  transition-delay: 0.2s; /* lets the previous sentence clear first */
+}
+
+.story-text {
+  margin: 0;
+  max-width: 16em;
+  font-size: clamp(1.35rem, 3.2vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+/* The parts of a sentence come in one after the other. */
+.story-line {
+  display: block;
+  opacity: 0;
+  translate: 0 0.5em;
+  transition:
+    opacity 0.5s ease,
+    translate 0.5s ease;
+}
+
+.story-line + .story-line {
+  margin-top: 0.35em;
+}
+
+.story-step--active .story-line {
+  opacity: 1;
+  translate: 0 0;
+  transition-delay: calc(0.3s + var(--line) * 0.7s);
+}
+
+/* The key words: marked with the brand teal rather than coloured in it,
+   which would not be readable on this band in light mode. */
+.story-text strong {
+  font-weight: inherit;
+  background: linear-gradient(#2fa4a9, #2fa4a9) 0 92% / 100% 0.14em no-repeat;
+  padding-bottom: 0.05em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Two sentences on one screen: the first at the top with the drawing beside
+   it, the second below on the opposite side. */
+.story-step--pair-left,
+.story-step--pair-right {
+  flex-direction: column;
+  align-items: stretch;
+  gap: clamp(2rem, 8vh, 5rem);
+}
+
+.story-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
+}
+
+.story-step--pair-left .story-text--second {
+  align-self: flex-end;
+  text-align: right;
+}
+
+.story-step--pair-right .story-row {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.story-step--pair-right .story-text--second {
+  align-self: flex-start;
+}
+
+.story-step--center {
+  text-align: center;
+}
+
+.story-step--center .story-text {
+  max-width: 14em;
+}
+
+/* StoryStatement: one sentence in an ordinary full-screen band, so it is
+   laid out in the flow rather than over a pinned stage. */
+.story-step--single {
+  position: static;
+}
+
+.story-step--single .story-text p {
+  margin: 0;
+}
+
+.story-art {
+  flex: none;
+}
+
+/* Elle in a story step's free bottom corner.
+   Generated with Claude Opus 5 (Anthropic), 2026-10-09
+   Purpose: she is taken out of the step's column flow and pinned to the
+   corner the sentences leave empty — bottom left on pair-left, bottom right
+   on pair-right and split. Positioning her rather than adding her
+   to the column means a step's sentences stay exactly where they were, and a
+   tall Elle cannot push them off a short screen. The step is already
+   position: absolute, so it is her containing block. */
+.story-elle {
+  position: absolute;
+  bottom: 0;
+  max-width: min(30rem, 48%);
+  pointer-events: none;
+}
+
+.story-elle--left {
+  left: 0;
+}
+
+.story-elle--right {
+  right: 0;
+}
+
+/* The "quest" step keeps both halves of its sentence in the bottom-left
+   corner, so the right-hand side Elle stands in is narrower there than on the
+   pair layouts — without this she reaches back over the second half. */
+.story-step--split .story-elle {
+  max-width: min(26rem, 40%);
+}
+
+.story-elle .elle {
+  margin: 0;
+}
+
+/* Phones: the step is only just tall enough for its two sentences and the
+   drawing, so a corner Elle would land on top of them. She is flavour rather
+   than content — the sentences carry the meaning — so she steps out here. */
+@media (max-width: 699.98px) {
+  .story-elle {
+    display: none;
+  }
+}
+
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09: bigger, and pushed over
+   to the right-hand side of its row. */
+.story-art--question {
+  position: relative;
+  width: clamp(8rem, 20vw, 15rem);
+  height: clamp(8rem, 20vw, 15rem);
+  margin-inline-start: auto;
+  margin-inline-end: clamp(0rem, 5vw, 5rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.story-art--question span {
+  position: absolute;
+  animation: story-question 3.2s ease-in-out infinite;
+}
+
+.story-art--question span:nth-child(1) {
+  left: 28%;
+  top: 8%;
+  font-size: clamp(6rem, 15.5vw, 12rem);
+  color: #2fa4a9;
+}
+
+.story-art--question span:nth-child(2) {
+  left: 2%;
+  top: 2%;
+  font-size: clamp(2.1rem, 5.4vw, 4.2rem);
+  opacity: 0.55;
+  --tilt: -16deg;
+  animation-duration: 2.6s;
+  animation-delay: -0.9s;
+}
+
+.story-art--question span:nth-child(3) {
+  right: 0;
+  bottom: 6%;
+  font-size: clamp(2.7rem, 6.7vw, 5.4rem);
+  opacity: 0.35;
+  --tilt: 14deg;
+  animation-duration: 3.8s;
+  animation-delay: -1.7s;
+}
+
+@keyframes story-question {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: var(--tilt, 0deg);
+  }
+  50% {
+    translate: 0 -0.12em;
+    rotate: calc(var(--tilt, 0deg) + 8deg);
+  }
+}
+
+.story-art--clock {
+  width: clamp(5.5rem, 13vw, 10rem);
+  height: auto;
+  overflow: visible;
+}
+
+.story-clock-face {
+  fill: currentColor;
+  fill-opacity: 0.06;
+  stroke: currentColor;
+  stroke-width: 4;
+}
+
+.story-clock-mark,
+.story-clock-hand {
+  stroke: currentColor;
+  stroke-linecap: round;
+}
+
+.story-clock-mark {
+  stroke-width: 2;
+}
+
+.story-clock-hand {
+  transform-origin: 50px 50px;
+}
+
+.story-clock-hand--hour {
+  stroke-width: 5;
+  animation: story-clock-turn 240s linear infinite;
+}
+
+.story-clock-hand--minute {
+  stroke-width: 3.5;
+  animation: story-clock-turn 20s linear infinite;
+}
+
+/* One tick a second, a full turn a minute. */
+.story-clock-hand--second {
+  stroke: #2fa4a9;
+  stroke-width: 2;
+  animation: story-clock-turn 60s steps(60) infinite;
+}
+
+.story-clock-pin {
+  fill: #2fa4a9;
+}
+
+@keyframes story-clock-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: the "quest" step — first half of the sentence top left, second
+   half bottom right, and between them a magnifying glass wandering over
+   some gut microbes (MicrobiomeArt in StoryScrollSection.tsx). */
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-09: the glass now fills the
+   top right and the two halves of the sentence sit together in the
+   bottom-left corner, still staggered but much closer than before. */
+.story-step--split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 1rem;
+  padding-top: 4vh;
+  padding-bottom: 4vh;
+}
+
+.story-step--split .story-text {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  align-self: end;
+  justify-self: start;
+  max-width: 15em;
+}
+
+.story-step--split .story-line {
+  margin-top: 0;
+  text-align: left;
+}
+
+.story-step--split .story-line:last-child {
+  margin-top: 0.45em;
+  margin-inline-start: clamp(1rem, 7vw, 6rem);
+  text-align: right;
+}
+
+.story-step--split .story-art {
+  grid-column: 2;
+  grid-row: 1;
+  place-self: center end;
+}
+
+.story-art--microbiome {
+  width: clamp(12rem, 38vw, 30rem);
+  height: auto;
+  max-height: 100%;
+  overflow: visible;
+}
+
+.story-microbe {
+  fill: currentColor;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: story-microbe-wriggle 2.6s ease-in-out infinite;
+}
+
+.story-microbe--teal {
+  fill: #2fa4a9;
+}
+
+.story-microbe--curved {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.story-microbe--curved.story-microbe--teal {
+  stroke: #2fa4a9;
+}
+
+.story-microbes-far {
+  opacity: 0.3;
+}
+
+@keyframes story-microbe-wriggle {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: -6deg;
+  }
+  50% {
+    translate: 0 -2px;
+    rotate: 7deg;
+  }
+}
+
+/* The glass and the hole it leaves in the faint microbes share one path;
+   the close-up inside it runs the same path times -1.8 (the enlargement),
+   which keeps it centred on whatever the lens is over. */
+.story-lens {
+  animation: story-lens-wander 9s ease-in-out infinite;
+}
+
+.story-lens-view {
+  animation: story-lens-view 9s ease-in-out infinite;
+}
+
+.story-lens-rim {
+  fill: currentColor;
+  fill-opacity: 0.05;
+  stroke: currentColor;
+  stroke-width: 4;
+}
+
+.story-lens-handle {
+  stroke: #2fa4a9;
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.story-lens-shine {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: 0.45;
+}
+
+@keyframes story-lens-wander {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  30% {
+    transform: translate(55px, -12px);
+  }
+  55% {
+    transform: translate(75px, 18px);
+  }
+  80% {
+    transform: translate(25px, 25px);
+  }
+}
+
+@keyframes story-lens-view {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  30% {
+    transform: translate(-99px, 21.6px);
+  }
+  55% {
+    transform: translate(-135px, -32.4px);
+  }
+  80% {
+    transform: translate(-45px, -45px);
+  }
+}
+
+/* Phones: no room beside the sentence, so the drawing goes above it and
+   everything is centred, one sentence under the other. */
+@media (max-width: 699.98px) {
+  .story-step--pair-left,
+  .story-step--pair-right {
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .story-step--pair-left .story-row,
+  .story-step--pair-right .story-row {
+    flex-direction: column-reverse;
+    text-align: center;
+    gap: 1.25rem;
+  }
+
+  .story-step--pair-left .story-text--second,
+  .story-step--pair-right .story-text--second {
+    align-self: center;
     text-align: center;
   }
 
-  .body-symptoms-info {
-    max-width: none;
+  .story-art--question {
+    margin-inline: auto;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    @keyframes body-symptoms-figure-in {
-      from {
-        opacity: 0;
-        transform: translateY(100px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+  /* No empty corner left to stand in once the sentences are centred. */
+  .story-mascot {
+    display: none;
+  }
+
+  /* One column: the glass above, then the sentence under it. */
+  .story-step--split {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  .story-step--split .story-text {
+    grid-column: 1;
+    justify-self: center;
+    text-align: center;
+  }
+
+  .story-step--split .story-art {
+    grid-column: 1;
+    place-self: center;
+  }
+
+  .story-step--split .story-line:last-child {
+    margin-inline-start: 0;
+    text-align: center;
   }
 }
 
-/* Clickable organs: cursor affordance + the "selected" highlight.
-   #uterus's positioning matrix now lives on an inner <g> (see
-   BodyDiagram.tsx) specifically so this outer, click-targeted <g id="uterus">
-   has no transform of its own — mixing a baked-in SVG matrix with a CSS
-   transform-origin here previously re-anchored the whole matrix around the
-   shape's center instead of (0,0), visibly shifting it out of place. */
-.body-symptoms-figure svg #brain,
-.body-symptoms-figure svg #uterus,
-.body-symptoms-figure svg #pancreas,
-.body-symptoms-figure svg #heart,
-.body-symptoms-figure svg #hair {
-  cursor: pointer;
-  transform-box: fill-box;
-  transform-origin: center;
+/* No pinning: the sentences are listed one under the other, all shown. */
+.story-scroll--static .story-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  padding: calc(var(--home-nav-h) + 3rem) 0 calc(var(--home-wave-h) + 3rem);
+}
+
+.story-scroll--static .story-step {
+  /* Relative, not static, so Elle still anchors to her own step's corner. */
+  position: relative;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-step,
+  .story-line {
+    transition: none;
+  }
+
+  .story-art--question span,
+  .story-clock-hand,
+  .story-microbe,
+  .story-lens,
+  .story-lens-view {
+    animation: none;
+  }
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-09-24
+   Purpose: gut-microbiome section (TwoGutsSection.tsx) — a gut window with
+   its composition bar.
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: one window on a
+   pinned screen. It starts on the left with the healthy text on the right;
+   with .two-guts--pmos it slides to the right while its cells cross-fade to
+   the PMOS mix, the healthy text fades out and the PMOS text fades in on the
+   left. */
+.two-guts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+  padding: calc(var(--home-nav-h) + 1rem) 0 1rem;
+}
+
+.two-guts-row {
+  --lens: min(400px, 42vw, 46vh);
+  --lens-gap: clamp(1rem, 4vw, 3.5rem);
+  position: relative;
+  width: min(100%, 1000px);
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review: text and
+   figure overlapped in a split-screen window): the window used to be taken
+   out of the flow, with a fixed allowance under the lens for its label and
+   bar. In a narrow window the label wraps onto two or three lines, outgrew
+   that allowance, and the bar ran into the text underneath. The window is
+   now in the flow, so the row is exactly as tall as the window really is
+   (label and bar included), and it slides by its left margin instead. */
+.two-guts-window {
+  position: relative;
+  width: var(--lens);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  transition: margin-left 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.two-guts--pmos .two-guts-window {
+  margin-left: calc(100% - var(--lens));
+}
+
+.two-guts-window-label {
+  order: 1; /* under the lens, above the bar */
+  font-weight: 700;
+  font-size: clamp(0.9rem, 1.6vw, 1.15rem);
+  line-height: 1.3;
+}
+
+.two-guts-window .two-guts-bar {
+  order: 2;
+}
+
+.two-guts-lens {
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+/* The text beside the window: both panels are always laid out, each in the
+   space the window leaves free in its state, and swap by fading. The one
+   coming in waits until the window has nearly arrived. */
+.two-guts-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+  text-align: left;
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  line-height: 1.5;
   transition:
-    transform 0.2s ease,
-    filter 0.2s ease;
+    opacity 0.35s ease,
+    translate 0.35s ease;
 }
 
-.body-organ-selected {
-  transform: scale(1.12);
-  filter: brightness(1.25) saturate(1.3);
+.two-guts-panel p {
+  margin: 0;
+}
+
+.two-guts-panel-title {
+  margin: 0;
+  font-size: clamp(1.5rem, 3.4vw, 2.6rem);
+  line-height: 1.1;
+}
+
+.two-guts-panel--healthy {
+  left: calc(var(--lens) + var(--lens-gap));
+  right: 0;
+}
+
+.two-guts-panel--pmos {
+  left: 0;
+  right: calc(var(--lens) + var(--lens-gap));
+  opacity: 0;
+  translate: -1.5rem 0;
+}
+
+.two-guts:not(.two-guts--pmos) .two-guts-panel--healthy,
+.two-guts--pmos .two-guts-panel--pmos {
+  transition-delay: 0.55s;
+}
+
+.two-guts--pmos .two-guts-panel--healthy {
+  opacity: 0;
+  translate: 1.5rem 0;
+}
+
+.two-guts--pmos .two-guts-panel--pmos {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* A cell that belongs to a different group with PMOS: its two shapes
+   cross-fade, --swap-delay (set per cell) spreading the change out. */
+.two-guts-swap {
+  transition: opacity 0.35s ease var(--swap-delay, 0s);
+}
+
+.two-guts-swap--pmos,
+.two-guts--pmos .two-guts-swap--healthy {
+  opacity: 0;
+}
+
+.two-guts--pmos .two-guts-swap--pmos {
+  opacity: 1;
+}
+
+/* Phones (and narrow split-screen windows): no room for text beside the
+   window, so it goes underneath; the window still slides from the left edge
+   to the right edge. Both sentences share the one grid cell under the
+   window, so the row is as tall as the window plus the longer sentence. */
+@media (max-width: 699.98px) {
+  .two-guts-row {
+    --lens: min(62vw, 30vh);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 1rem;
+  }
+
+  .two-guts-panel {
+    position: static;
+    grid-area: 2 / 1;
+    justify-content: flex-start;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+  }
+
+  .two-guts-legend {
+    font-size: 0.75rem;
+    gap: 0.25rem 0.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .two-guts-window,
+  .two-guts-panel,
+  .two-guts-swap {
+    transition: none;
+  }
+}
+
+.two-guts-lens-bg {
+  fill: currentColor;
+  fill-opacity: 0.05;
+}
+
+.two-guts-lens-rim {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 5;
+}
+
+/* --dx/--dy/--spin and the duration are set per cell in TwoGutsSection.tsx,
+   so each one wanders its own way. */
+.two-guts-cell {
+  animation: two-guts-drift 6s ease-in-out infinite;
+}
+
+@keyframes two-guts-drift {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: 0deg;
+  }
+  30% {
+    translate: var(--dx) calc(var(--dy) * 0.4);
+    rotate: var(--spin);
+  }
+  65% {
+    translate: calc(var(--dx) * -0.6) var(--dy);
+    rotate: calc(var(--spin) * -0.7);
+  }
+}
+
+/* The cell handed over to the BSH section holds still, so the travelling
+   copy can take its place without a jump. */
+.two-guts-cell--still {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .two-guts-cell {
+    animation: none;
+  }
+}
+
+.two-guts-bar {
+  display: flex;
+  flex: none;
+  width: 85%;
+  height: 14px;
+  border-radius: 7px;
+  overflow: hidden;
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.two-guts-bar-segment {
+  flex-basis: 0;
+  min-width: 0;
+  transition: flex-grow 0.9s ease;
+}
+
+.two-guts-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+  max-width: 760px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.95rem;
+}
+
+.two-guts-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.two-guts-legend-swatch {
+  flex: none;
+  width: 0.9em;
+  height: 0.9em;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.28);
+}
+
+.two-guts-note {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  max-width: 560px;
+}
+
+/* BSH STREAM ANIMATION
+   Home-page diagram between "What is PMOS?" and the inflammation slider —
+   see BshStreamAnimation.tsx. Sits in a "home-section--body" band (not
+   --contrast) because the light purple body-bg is close to the original
+   figure's own panel colour, so no separate card background is needed here. */
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-09-24
+   Purpose: styles for the redesigned BshStreamAnimation — flat colours
+   taken from the team's abstract figure (lavender double-membrane cell,
+   pale-blue BSH, pale-yellow conjugated / red deconjugated hexagons,
+   light-blue glycine/taurine group). */
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06: a pinned screen of
+   two steps. With .bsh-stream--meet only the cell shows, enlarged and moved
+   to the left, with its introduction on the right; with .bsh-stream--reaction
+   the diagram is back at its own size and everything marked
+   .bsh-stream-reaction (title, bile acids, labels) has faded in.
+   .bsh-stream--static (reduced motion) shows both, one under the other. */
+.bsh-stream {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: calc(var(--home-nav-h) + 1rem) 0 calc(var(--home-wave-h) + 1rem);
+}
+
+/* The enlarged diagram reaches past the sides of the screen (only its cell
+   is visible then); cut it off at the band so the page cannot scroll
+   sideways. */
+.home-section:has(.bsh-stream) {
+  overflow-x: clip;
+}
+
+.bsh-stream-heading {
+  max-width: 22em;
+  margin: 0 auto 0.5rem;
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-15: what BSH are, under
+   the reaction title. */
+.bsh-stream-subheading {
+  margin: 0 auto 1.5rem;
+  text-align: center;
+  font-size: clamp(0.95rem, 1.6vw, 1.2rem);
+  opacity: 0.85;
+}
+
+/* The slanted species name leans into the space after it (team review,
+   2026-10-06: "is there a space?"), so it gets a little extra room. */
+.bsh-stream-heading em {
+  margin-right: 0.12em;
+}
+
+.bsh-stream-diagram {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  transition:
+    translate 0.9s cubic-bezier(0.65, 0, 0.35, 1),
+    scale 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.bsh-stream--meet .bsh-stream-diagram {
+  translate: -25% 0;
+  scale: 1.6;
+}
+
+.bsh-stream-reaction {
+  transition: opacity 0.45s ease 0.6s; /* after the cell has moved over */
+}
+
+.bsh-stream--meet .bsh-stream-reaction {
+  opacity: 0;
+  transition-delay: 0s;
+}
+
+/* The introduction: fills the half of the screen the cell leaves free. */
+.bsh-stream-meet {
+  position: absolute;
+  inset: 0 0 0 52%;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+}
+
+.bsh-stream-meet-text {
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  line-height: 1.4;
+  transition:
+    opacity 0.35s ease 0.5s,
+    translate 0.35s ease 0.5s;
+}
+
+.bsh-stream-meet-text p {
+  margin: 0;
+}
+
+.bsh-stream-meet-title {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.9rem, 4.6vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1.08;
+}
+
+.bsh-stream--reaction .bsh-stream-meet-text {
+  opacity: 0;
+  translate: 1.5rem 0;
+  transition-delay: 0s;
+}
+
+.bsh-stream--static .bsh-stream-meet {
+  position: static;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+/* Phones: the cell on top, its introduction underneath. */
+@media (max-width: 699.98px) {
+  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-12: the introduction
+     used to start at the middle of the screen, but where the cell ends up
+     depends on how many lines the (hidden) reaction title above it wraps to,
+     so on narrow phones the cell lay over the text. It is now a zero-height
+     flex item straight after the diagram, so the text always starts at the
+     diagram's own lower edge, which the enlarged cell stays clear of; both
+     are lifted by the same --bsh-meet-lift to sit nearer the middle. */
+  .bsh-stream {
+    --bsh-meet-lift: 6rem;
+  }
+
+  .bsh-stream--meet .bsh-stream-diagram {
+    translate: 0 calc(-10% - var(--bsh-meet-lift));
+    scale: 2.2;
+  }
+
+  .bsh-stream:not(.bsh-stream--static) .bsh-stream-meet {
+    position: static;
+    order: 1;
+    height: 0;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: center;
+    translate: 0 calc(0.5rem - var(--bsh-meet-lift));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bsh-stream-diagram,
+  .bsh-stream-reaction,
+  .bsh-stream-meet-text {
+    transition: none;
+  }
+}
+
+.bsh-stream-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Holds the HTML labels so a whole group of them can fade in together
+   during the scroll zoom-in (BshStreamAnimation.tsx). */
+.bsh-stream-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* The cell travelling from the gut window to this diagram while the page
+   scrolls (TravellingBacterium in BshStreamAnimation.tsx): positioned and
+   scaled from JS, above the page content but below the navbar. */
+.bsh-zoom-traveller {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 900;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.bsh-membrane-outer {
+  fill: #f3eef9;
+  stroke: #6e5b9e;
+  stroke-width: 4;
+}
+
+.bsh-membrane-inner {
+  fill: none;
+  stroke: #6e5b9e;
+  stroke-width: 2.5;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): the
+   cell's fimbriae/pili. (Its loop of DNA was removed on 2026-10-15.) */
+.bsh-pili {
+  fill: none;
+  stroke: #6e5b9e;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.bsh-enzyme {
+  fill: #dfe8f7;
+  stroke: #2f4f86;
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+.bsh-arrow {
+  stroke: currentColor;
+  stroke-width: 6;
+  opacity: 0.85;
+}
+
+.bsh-arrow-head {
+  fill: currentColor;
+}
+
+.bsh-hex--conjugated {
+  fill: #f28c28;
+  stroke: #a3520c;
+  stroke-width: 2;
+}
+
+.bsh-hex--deconjugated {
+  fill: #f7d84a;
+  stroke: #a58a10;
+  stroke-width: 2;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-15: the lower stream
+   (BshStreamAnimation.tsx, stream 1) gets its own colours so the two
+   streams read apart. Recoloured the same day (team request: more distinct
+   colours): upper stream orange going in, yellow coming out; lower stream
+   dark purple going in, light purple coming out. The dark purple has a
+   light outline so it stands out on the dark page. */
+.bsh-molecule--1 .bsh-hex--conjugated {
+  fill: #5a2a91;
+  stroke: #c3a6ee;
+}
+
+.bsh-molecule--1 .bsh-hex--deconjugated {
+  fill: #dcc8f7;
+  stroke: #8a68c4;
+}
+
+.bsh-tag {
+  fill: #dfe8f7;
+  stroke: #2f4f86;
+  stroke-width: 1.5;
+}
+
+.bsh-bond {
+  stroke: #2f4f86;
+  stroke-width: 2;
+}
+
+.bsh-stream-caption,
+.bsh-stream-enzyme-label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
+.bsh-stream-enzyme-label {
+  font-size: clamp(0.75rem, 1.9vw, 1.35rem);
+  font-weight: 700;
+  color: #1c2f52;
+  pointer-events: none;
+}
+
+.bsh-stream-caption {
+  font-size: clamp(0.65rem, 1.3vw, 0.95rem);
+  opacity: 0.85;
+}
+
+.bsh-stream-caption--species {
+  font-style: italic;
+  font-weight: 600;
+  opacity: 1;
+}
+
+/* TGR5 STORY
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
+   Purpose: the last home-page sections (Tgr5Story.tsx): the TGR5 diagram
+   with the question that pops up over it, the three consequences joined by
+   a growing line, the "why we engineer" screen and the row of links. The
+   diagrams keep fixed colours in both themes, like the BSH diagram whose
+   palette they share. */
+.tgr5 {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: calc(var(--home-nav-h) + 1rem) 0 calc(var(--home-wave-h) + 1rem);
+}
+
+.tgr5-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  transition:
+    opacity 0.5s ease,
+    filter 0.5s ease,
+    scale 0.5s ease;
+}
+
+/* Added with Claude Opus 5.5 (Anthropic), 2026-10-07
+   Purpose: the overview figure and the ILC3 close-up share one spot on the
+   pinned screen, one fading out as the other comes in. */
+.tgr5-figures {
+  display: grid;
+  width: 100%;
+}
+
+.tgr5-figures > .tgr5-figure {
+  grid-area: 1 / 1;
+  justify-content: center;
+}
+
+.tgr5 .tgr5-figure--away {
+  opacity: 0;
+  scale: 0.96;
+  pointer-events: none;
+}
+
+.tgr5--static .tgr5-figures {
+  gap: 3rem;
+}
+
+.tgr5--static .tgr5-figures > .tgr5-figure {
+  grid-area: auto;
+}
+
+.tgr5-svg.tgr5-svg--overview {
+  width: min(100%, 1000px);
+}
+
+/* The gut wall: one winding band, drawn as a wide line over a slightly wider
+   darker one (its outline), with thin dashes across it for the cells. */
+.tgr5-gut {
+  fill: none;
+  stroke: #f1c3d4;
+  stroke-width: 20;
+}
+
+.tgr5-gut--edge {
+  stroke: #a06a94;
+  stroke-width: 26;
+}
+
+.tgr5-gut--cells {
+  stroke: #a06a94;
+  stroke-dasharray: 2 13;
+}
+
+/* Added with Claude Opus 5.5 (Anthropic), 2026-10-15: the ring that pulses
+   out from a bile acid bound to TGR5, in that bile acid's colour. */
+.tgr5-bind-pulse {
+  fill: none;
+  stroke: #f28c28;
+  stroke-width: 3;
+}
+
+.tgr5-bind-pulse--1 {
+  stroke: #a77de6;
+}
+
+/* The bile acids pour in from above the diagram, so it must not clip them. */
+.tgr5-svg.tgr5-svg--overview {
+  overflow: visible;
+}
+
+.tgr5-node {
+  fill: #f3eef9;
+  stroke: #6e5b9e;
+  stroke-width: 3;
+}
+
+/* Arrows drawn on the band itself follow its text colour. */
+.tgr5-arrow--outer {
+  stroke: currentColor;
+}
+
+.tgr5-arrow-head--outer {
+  fill: currentColor;
+}
+
+.tgr5-label.tgr5-label--start {
+  text-anchor: start;
+}
+
+.tgr5-heading {
+  max-width: 24em;
+  margin: 0;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.tgr5-svg {
+  display: block;
+  width: min(100%, 760px);
+  max-height: 56vh;
+}
+
+.tgr5-cell {
+  fill: #f3eef9;
+  stroke: #6e5b9e;
+  stroke-width: 4;
+}
+
+.tgr5-nucleus {
+  fill: #d6cdea;
+  stroke: #6e5b9e;
+  stroke-width: 3;
+}
+
+.tgr5-receptor rect {
+  fill: #5d86b5;
+  stroke: #2f4f86;
+  stroke-width: 2;
+}
+
+.tgr5-arrow {
+  fill: none;
+  stroke: #33283f;
+  stroke-width: 3;
+}
+
+.tgr5-arrow-head {
+  fill: #33283f;
+}
+
+/* The weakened signal: a broken line whose dashes creep towards the nucleus. */
+.tgr5-arrow--signal {
+  stroke-dasharray: 7 7;
+  animation: tgr5-signal 1.6s linear infinite;
+}
+
+@keyframes tgr5-signal {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+.tgr5-dna {
+  fill: none;
+  stroke: #6e5b9e;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.tgr5-factor {
+  fill: #a06a94;
+  stroke: #6a3a5f;
+  stroke-width: 2;
+}
+
+.tgr5-gene {
+  fill: #7a5fa8;
+  stroke: #4f3f86;
+  stroke-width: 2;
+}
+
+.tgr5-il22 {
+  fill: #5a4699;
+  stroke: #33283f;
+  stroke-width: 3;
+}
+
+.tgr5-down,
+.tgr5-up {
+  fill: none;
+  stroke: #cc4a4a;
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tgr5-svg .tgr5-down,
+.tgr5-bob {
+  animation: tgr5-bob 1.4s ease-in-out infinite;
+}
+
+.tgr5-up.tgr5-bob {
+  --bob: -6px;
+}
+
+@keyframes tgr5-bob {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 var(--bob, 6px);
+  }
+}
+
+.tgr5-label {
+  fill: currentColor;
+  font-size: 22px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+.tgr5-label--dark {
+  fill: #33283f;
+}
+
+.tgr5-label--light {
+  fill: #fff;
+}
+
+.tgr5-label--small {
+  font-size: 17px;
+}
+
+.tgr5-label--cell {
+  font-size: 26px;
+}
+
+.tgr5-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem 1.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.95rem;
+}
+
+.tgr5-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.tgr5-legend svg {
+  height: 1.5em;
+  width: auto;
+}
+
+/* The question: over the whole screen, the diagram fading back behind it. */
+.tgr5-question {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+  opacity: 0;
+  scale: 0.8;
+  pointer-events: none;
+  transition:
+    opacity 0.4s ease,
+    scale 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tgr5-question-text {
+  max-width: none;
+  font-size: clamp(2.4rem, 8.5vw, 6.75rem);
+  text-align: center;
+}
+
+.tgr5--asking .tgr5-figure {
+  opacity: 0.12;
+  filter: blur(3px);
+  scale: 0.96;
+}
+
+.tgr5--asking .tgr5-question {
+  opacity: 1;
+  scale: 1;
+  transition-delay: 0.15s;
+}
+
+.tgr5--static .tgr5-question {
+  position: static;
+  margin-top: 3rem;
+  opacity: 1;
+  scale: 1;
+}
+
+/* The three consequences. --shown (set by the component) is how many are
+   in; --reach is how far the joining line has grown: up to the edge of the
+   newest item's drawing. */
+.tgr5-effects {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(1.5rem, 5vh, 3.5rem);
+  padding: calc(var(--home-nav-h) + 1rem) 0 calc(var(--home-wave-h) + 1rem);
+}
+
+.tgr5-effects-heading {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1.6rem, 4vw, 3rem);
+}
+
+.tgr5-effects-list {
+  --art: clamp(6.5rem, 14vw, 11rem);
+  --reach: calc(
+    (var(--shown) * 2 - 1) / (var(--count) * 2) * 100% - var(--art) / 2
+  );
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--count), minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tgr5-effects-line {
+  position: absolute;
+  left: 0;
+  top: calc(var(--art) / 2 - 3px);
+  width: 100%;
+  height: 6px;
+}
+
+.tgr5-effects-line-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--reach);
+  height: 100%;
+  border-radius: 3px;
+  background: #2fa4a9;
+  transition:
+    width 0.8s cubic-bezier(0.65, 0, 0.35, 1),
+    height 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* A bacterium leading the line. */
+.tgr5-effects-line-head {
+  position: absolute;
+  left: var(--reach);
+  top: 50%;
+  width: 2.4rem;
+  height: 1.1rem;
+  translate: -85% -50%;
+  border-radius: 999px;
+  background: #d9779b;
+  border: 2px solid #9c5670;
+  transition:
+    left 0.8s cubic-bezier(0.65, 0, 0.35, 1),
+    top 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.tgr5-effect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+  text-align: center;
+  opacity: 0;
+  translate: 0 1.5rem;
+  transition:
+    opacity 0.45s ease,
+    translate 0.45s ease;
+}
+
+/* Comes in once the line has reached it. */
+.tgr5-effect--shown {
+  opacity: 1;
+  translate: 0 0;
+  transition-delay: 0.45s;
+}
+
+.tgr5-effect-art {
+  position: relative;
+  flex: none;
+  width: var(--art);
+  height: var(--art);
+  margin-bottom: 0.5rem;
+  border-radius: 50%;
+  border: 4px solid #2fa4a9;
+  background: #f3eef9;
+  color: #33283f;
+}
+
+.tgr5-effect-art svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 14%;
+  overflow: visible;
+}
+
+.tgr5-drop {
+  fill: #e9a3a3;
+  stroke: #8e2626;
+  stroke-width: 3;
+}
+
+.tgr5-ring {
+  fill: #f7f0c8;
+  stroke: #33283f;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.tgr5-effect-title {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.6vw, 2rem);
+}
+
+.tgr5-effect-detail {
+  margin: 0;
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  opacity: 0.85;
+}
+
+/* Phones: the items go under each other, drawing on the left, and the line
+   runs down through the drawings instead. */
+@media (max-width: 699.98px) {
+  .tgr5-effects-list {
+    --art: clamp(5rem, 15vh, 7rem);
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: 1fr;
+    gap: 1.5rem 0;
+    padding: 0 0.5rem;
+  }
+
+  .tgr5-effects-line {
+    left: calc(0.5rem + var(--art) / 2 - 3px);
+    top: -1.5rem;
+    width: 6px;
+    height: calc(100% + 1.5rem);
+  }
+
+  .tgr5-effects-line-fill {
+    width: 100%;
+    height: var(--reach);
+  }
+
+  .tgr5-effects-line-head {
+    left: 50%;
+    top: var(--reach);
+    translate: -50% -85%;
+    rotate: 90deg;
+  }
+
+  .tgr5-effect {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-content: center;
+    align-items: center;
+    gap: 0.25rem 1rem;
+    padding: 0;
+    text-align: left;
+  }
+
+  .tgr5-effect-art {
+    grid-row: 1 / span 2;
+    margin-bottom: 0;
+  }
+
+  .tgr5-effect-title:last-child {
+    grid-row: 1 / span 2;
+  }
+}
+
+/* Why we engineer P. vulgatus. */
+.engineer {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  padding: 0 clamp(0.5rem, 3vw, 2.5rem);
+}
+
+.engineer-text {
+  max-width: none;
+  font-size: clamp(1.8rem, 4.4vw, 3.6rem);
+}
+
+.engineer-svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+  animation: engineer-float 5s ease-in-out infinite;
+}
+
+@keyframes engineer-float {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: -2deg;
+  }
+  50% {
+    translate: 0 -0.6rem;
+    rotate: 2deg;
+  }
+}
+
+.engineer-dna {
+  stroke: #33283f;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.engineer-promoter,
+.engineer-terminator {
+  fill: none;
+  stroke: #33283f;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.engineer-part {
+  stroke: #33283f;
+  stroke-width: 2;
+  animation: engineer-glow 2.4s ease-in-out infinite;
+}
+
+.engineer-part--a {
+  fill: #2fa4a9;
+}
+
+.engineer-part--b {
+  fill: #e0a84a;
+  animation-delay: 0.4s;
+}
+
+@keyframes engineer-glow {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.3);
+  }
+}
+
+/* From the circuit to BSH, ending in the blunt bar that means "inhibits";
+   the dashes run along it towards BSH. */
+.engineer-inhibit {
+  fill: none;
+  stroke: #cc4a4a;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 6 6;
+  animation: tgr5-signal 1.2s linear infinite;
+}
+
+.engineer-bsh {
+  fill: #dfe8f7;
+  fill-opacity: 0.55;
+  stroke: #2f4f86;
+  stroke-width: 3;
+  stroke-dasharray: 5 5;
+}
+
+.engineer-bsh-label {
+  fill: #1c2f52;
+  fill-opacity: 0.7;
+  font-size: 20px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+@media (max-width: 699.98px) {
+  .engineer {
+    grid-template-columns: minmax(0, 1fr);
+    text-align: center;
+  }
+
+  .engineer-svg {
+    width: min(100%, 20rem);
+    margin: 0 auto;
+  }
+}
+
+/* Find out more: links rolling sideways like the sponsor logos (the track
+   holds the set four times over and shifts by half its width per loop). */
+.find-more {
+  text-align: center;
+}
+
+.find-more-heading {
+  margin: 0 0 1.5rem;
+}
+
+.find-more-band {
+  overflow: hidden;
+  margin: 0 calc(-50vw + 50%);
+  padding: 0.5rem 0;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+}
+
+.find-more-track {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;
+  padding-right: 1.5rem;
+  animation: find-more-roll 36s linear infinite;
+}
+
+.find-more-band:hover .find-more-track,
+.find-more-band:focus-within .find-more-track {
+  animation-play-state: paused;
+}
+
+@keyframes find-more-roll {
+  to {
+    translate: -50% 0;
+  }
+}
+
+.find-more-link {
+  flex: none;
+  padding: 0.7rem 1.75rem;
+  border: 3px solid currentColor;
+  border-radius: 999px;
+  color: inherit;
+  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    scale 0.2s ease;
+}
+
+.find-more-link:hover,
+.find-more-link:focus-visible {
+  background-color: #2fa4a9;
+  border-color: #2fa4a9;
+  color: #fff;
+  scale: 1.05;
+}
+
+.find-more-band--static {
+  margin: 0;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.find-more-band--static .find-more-track {
+  flex-wrap: wrap;
+  justify-content: center;
+  width: auto;
+  padding-right: 0;
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tgr5-figure,
+  .tgr5-question,
+  .tgr5-effect,
+  .tgr5-effects-line-fill,
+  .tgr5-effects-line-head {
+    transition: none;
+  }
+
+  .tgr5-arrow--signal,
+  .tgr5-svg .tgr5-down,
+  .tgr5-bob,
+  .engineer-svg,
+  .engineer-part,
+  .engineer-inhibit {
+    animation: none;
+  }
 }
 
 /* INFLAMMATION SLIDER SECTION
@@ -2178,20 +5941,52 @@ body.home-fullscreen {
   }
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-12 (reviewer feedback):
+   400, not 700 — no synthetic bold on Luckiest Guy (see FONTS). */
 .pmos-counter-heading {
   font-size: clamp(1.5rem, 4vw, 2.75rem);
-  font-weight: 700;
-  max-width: 40ch;
+  font-weight: 400;
   margin: 0;
 }
 
+.pmos-counter-rest {
+  display: block;
+  max-width: 24ch;
+  margin: 0 auto;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-03: the figure sits on
+   its own line, far larger than the sentence around it and in the brand
+   teal, so it is the first thing read in this band. Colour set to the
+   brand teal #2fa4a9 on 2026-10-06 (was the darker #1f8a8f). */
 .pmos-counter-number {
-  color: var(--color-text);
+  display: block;
+  width: fit-content;
+  margin: 0.15em auto;
+  color: #2fa4a9;
+  font-size: clamp(2.75rem, 12vw, 8.5rem);
+  line-height: 1.05;
+  white-space: nowrap;
   font-variant-numeric: tabular-nums;
   padding: 0 0.1em;
   /* --color-header-bg (not --color-accent) — accent is identical to the
      body background in light mode, which would make this invisible too. */
-  border-bottom: 0.09em solid var(--color-header-bg);
+  border-bottom: 0.07em solid var(--color-header-bg);
+}
+
+[data-theme="dark"] .pmos-counter-number {
+  color: #5fd3d7;
+}
+
+.pmos-overview-source {
+  max-width: 80ch;
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
+.pmos-overview-source p {
+  margin: 0;
 }
 
 .pmos-globe-loading {
@@ -2199,36 +5994,20 @@ body.home-fullscreen {
   padding: 2rem;
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: the globe always
+   takes the left half of the section, with the text (the invitation, then
+   the clicked continent's figures) on the right. */
 .pmos-globe-wrap {
-  width: min(100%, 520px);
+  width: min(100%, 1050px);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  transition:
-    width 0.4s ease,
-    max-width 0.4s ease,
-    gap 0.4s ease;
-}
-
-/* Once a continent has been picked, the globe shifts to the left half of
-   the section and the info panel takes the right half. */
-.pmos-globe-wrap--split {
-  width: 100%;
-  max-width: 900px;
-  flex-direction: row;
-  align-items: center;
-  gap: 2.5rem;
+  justify-content: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
 }
 
 .pmos-globe-stage {
   flex: none;
-  width: min(100%, 520px);
-  transition: width 0.4s ease;
-}
-
-.pmos-globe-wrap--split .pmos-globe-stage {
-  width: min(45%, 340px);
+  width: min(50%, 520px, 70vh);
 }
 
 /* Pointer cursor while hovering a clickable country — grab otherwise, since
@@ -2243,18 +6022,23 @@ body.home-fullscreen {
 }
 
 .pmos-globe-info {
-  min-height: 2.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.pmos-globe-wrap--split .pmos-globe-info {
   flex: 1;
   min-width: 0;
+  max-width: 28rem;
+  /* Tall enough for the longest continent note, so the globe does not shift
+     when the text changes. */
+  min-height: 16rem;
+  display: flex;
+  flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
   text-align: left;
+}
+
+.pmos-globe-prompt {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.75rem);
+  line-height: 1.05;
 }
 
 .pmos-globe-info-panel {
@@ -2305,8 +6089,8 @@ body.home-fullscreen {
 }
 
 .pmos-globe-info-hint {
-  font-size: 0.9rem;
-  opacity: 0.7;
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  opacity: 0.75;
 }
 
 .pmos-globe-tooltip {
@@ -2320,17 +6104,20 @@ body.home-fullscreen {
 }
 
 @media (max-width: 768px) {
-  .pmos-globe-wrap--split {
+  .pmos-globe-wrap {
     flex-direction: column;
     gap: 1rem;
   }
 
-  .pmos-globe-wrap--split .pmos-globe-stage {
-    width: min(100%, 520px);
+  .pmos-globe-stage {
+    width: min(100%, 360px, 45vh);
   }
 
-  .pmos-globe-wrap--split .pmos-globe-info {
+  .pmos-globe-info {
+    flex: none;
+    min-height: 13rem;
     align-items: center;
+    justify-content: flex-start;
     text-align: center;
   }
 
@@ -2353,19 +6140,22 @@ body.home-fullscreen {
 
 .mic-chart-plot {
   width: 100%;
-  min-height: 520px;
+  min-height: 600px;
   /* Fixed white background: the chart's trace colors are tuned for a light
      canvas and would lose contrast against the site's dark mode. */
   background-color: #ffffff;
   border-radius: 0.5rem;
-  padding: 0.5rem;
+  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): no
+     padding here. Plotly sizes its SVG to this box's full width and height,
+     so padding pushed the chart out past the card's right and bottom edges. */
+  overflow: hidden;
 }
 
 .mic-chart-loading {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 520px;
+  min-height: 600px;
   opacity: 0.6;
   color: #33283f;
 }
@@ -2374,11 +6164,46 @@ body.home-fullscreen {
    Generated with Claude Sonnet 5 (Anthropic), 2026-09-09
    Purpose: grid of member cards on the Team page, each opening a popup with
    a bigger photo on the left and details on the right. */
+/* Light mode's --color-body-bg, fixed (see .team-member-photo-frame). */
+.team-members-grid,
+.team-members-rows,
+.team-member-modal-photo {
+  --team-photo-bg: #c9bde8;
+}
+
 .team-members-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 1.5rem;
   margin: 2rem 0;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-15 (team's "TEAM PAGE"
+   document): a TeamMembers with `rows` lays its cards out in centred rows of
+   the given sizes, every card as wide as one of four in a row; two to a row
+   on phones. */
+.team-members-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.team-members-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.team-members-row > .team-member-card {
+  width: calc((100% - 3 * 1.5rem) / 4);
+}
+
+@media (max-width: 640px) {
+  .team-members-row > .team-member-card {
+    width: calc((100% - 1.5rem) / 2);
+  }
 }
 
 .team-member-card {
@@ -2387,33 +6212,53 @@ body.home-fullscreen {
   align-items: center;
   gap: 0.6rem;
   border: none;
-  background-color: var(--color-page-bg);
-  border-radius: 1rem;
-  padding: 1.25rem 1rem;
+  background: none;
+  padding: 0;
   cursor: pointer;
   color: var(--color-text);
-  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.12);
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+  transition: transform 0.25s ease;
 }
 
 .team-member-card:hover,
 .team-member-card:focus-visible {
   transform: translateY(-0.25rem) scale(1.03);
-  box-shadow: 0 1rem 2.5rem rgba(51, 40, 63, 0.22);
 }
 
+/* Restyled with Claude Opus 5.5 (Anthropic), 2026-10-07
+   Purpose: square photo in a thick dark rounded frame, name underneath. */
 .team-member-card-photo {
   display: block;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  overflow: hidden;
-  background-color: var(--color-body-bg);
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 6.5%;
+  border-radius: 12%;
+  background-color: var(--color-header-bg);
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.18);
+  transition: box-shadow 0.25s ease;
 }
 
-.team-member-card-photo img {
+.team-member-card:hover .team-member-card-photo,
+.team-member-card:focus-visible .team-member-card-photo {
+  box-shadow: 0 1rem 2.5rem rgba(51, 40, 63, 0.3);
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-15 (team request): the
+   photo now sits in its own square frame, so a member's `crop` can scale and
+   shift it inside (see PhotoImg in TeamMembers.tsx). The students' photos
+   are cut-outs, so the frame's background shows round them: it is the light
+   theme's lavender in both themes, so they never sit on a dark backdrop. */
+.team-member-card-photo .team-member-photo-frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 6%;
+  background-color: var(--team-photo-bg);
+}
+
+.team-member-photo-frame img,
+.team-member-modal-photo img {
   display: block;
   width: 100%;
   height: 100%;
@@ -2421,7 +6266,9 @@ body.home-fullscreen {
 }
 
 .team-member-card-name {
+  font-size: 1.15rem;
   font-weight: 700;
+  line-height: 1.2;
   text-align: center;
 }
 
@@ -2477,20 +6324,43 @@ body.home-fullscreen {
   cursor: pointer;
 }
 
+/* The photo with, under it at the left, the member's LinkedIn link. */
+.team-member-modal-side {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.team-member-modal-linkedin {
+  --team-linkedin-fg: #fff;
+  display: block;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: #0a66c2;
+  transition: transform 0.2s ease;
+}
+
+.team-member-modal-linkedin:hover,
+.team-member-modal-linkedin:focus-visible {
+  transform: scale(1.1);
+}
+
+.team-member-modal-linkedin svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .team-member-modal-photo {
+  position: relative;
   flex: none;
   width: 160px;
   height: 160px;
   border-radius: 50%;
   overflow: hidden;
-  background-color: var(--color-body-bg);
-}
-
-.team-member-modal-photo img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  background-color: var(--team-photo-bg);
 }
 
 .team-member-modal-info {
@@ -2511,10 +6381,36 @@ body.home-fullscreen {
   opacity: 0.85;
 }
 
-.team-member-modal-nationality {
-  margin: 0;
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-11
+   Purpose: the facts under a member's name in the popup — nationality, age,
+   studies and subteams. A two-column grid so the labels line up, collapsing
+   to label-over-value on a narrow screen. */
+.team-member-modal-facts {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.2rem 0.75rem;
+  margin: 0.5rem 0 0;
   font-size: 0.9rem;
-  opacity: 0.7;
+}
+
+.team-member-modal-facts dt {
+  font-weight: 600;
+  opacity: 0.6;
+}
+
+.team-member-modal-facts dd {
+  margin: 0;
+}
+
+@media (max-width: 560px) {
+  .team-member-modal-facts {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .team-member-modal-facts dd {
+    margin-bottom: 0.4rem;
+  }
 }
 
 .team-member-modal-bio {
@@ -2531,5 +6427,2842 @@ body.home-fullscreen {
     align-items: center;
     text-align: center;
     padding: 2rem 1.5rem;
+  }
+}
+
+/* HUMAN PRACTICES INTERVIEWS
+   Generated with Claude Sonnet 5 (Anthropic), 2026-09-18
+   Purpose: each stakeholder category (HPSection) is its own bordered card
+   (title + carousel) so sections read as clearly separate blocks, with a
+   context blurb below the card. The carousel auto-scrolls continuously —
+   same duplicate-the-track technique as the footer's .sponsor-carousel,
+   pausing on hover so a moving target can still be clicked — and clicking a
+   person opens a shared modal (same click-to-open convention as
+   .team-member-card / .events-timeline-card, reusing its fade/scale-in
+   keyframes) with their photo on the left and the full interview write-up
+   on the right. */
+.hp-section {
+  margin: 3rem 0;
+}
+
+.hp-section-card {
+  border: 1px solid rgba(51, 40, 63, 0.15);
+  border-radius: 1.25rem;
+  background-color: var(--color-page-bg);
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.08);
+  padding: 1.5rem 1.5rem 0.5rem;
+}
+
+[data-theme="dark"] .hp-section-card {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.hp-section-title {
+  margin: 0 0 1rem;
+}
+
+/* Text-only section card (no interviewee carousel) */
+.hp-section-card--text {
+  padding-bottom: 1.5rem;
+}
+
+.hp-section-text :last-child {
+  margin-bottom: 0;
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-14
+   Purpose: featured-interviewee spotlight above each section's carousel —
+   large photo with a short summary beside it, crossfading to the next
+   person on a timer; the active dot fills up as a countdown. */
+.hp-featured {
+  margin-bottom: 1.5rem;
+}
+
+.hp-featured-body {
+  display: grid;
+  grid-template-columns: minmax(180px, 280px) 1fr;
+  gap: 2rem;
+  align-items: center;
+  min-height: 280px;
+  animation: hp-featured-in 0.5s ease;
+}
+
+.hp-featured-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  border: none;
+  border-radius: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: var(--color-body-bg);
+  box-shadow: 0 0.75rem 2rem rgba(51, 40, 63, 0.18);
+}
+
+.hp-featured-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hp-featured-photo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.hp-featured-text {
+  min-width: 0;
+}
+
+.hp-featured-name {
+  margin: 0;
+}
+
+.hp-featured-role {
+  margin: 0.2rem 0 0;
+  font-size: 0.95rem;
+  opacity: 0.75;
+}
+
+.hp-featured-summary {
+  margin-top: 1rem;
+}
+
+.hp-featured-summary :last-child {
+  margin-bottom: 0;
+}
+
+/* No `summary` prop: show the start of the full write-up, faded out. */
+.hp-featured-summary.is-excerpt {
+  max-height: 9.5em;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, black 60%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent);
+}
+
+.hp-featured-more {
+  margin-top: 1rem;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-accent);
+  cursor: pointer;
+}
+
+.hp-featured-more:hover,
+.hp-featured-more:focus-visible {
+  text-decoration: underline;
+}
+
+.hp-featured-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.hp-featured-dot {
+  position: relative;
+  width: 0.6rem;
+  height: 0.6rem;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: rgba(51, 40, 63, 0.2);
+  transition: width 0.3s ease;
+}
+
+[data-theme="dark"] .hp-featured-dot {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.hp-featured-dot.is-active {
+  width: 2rem;
+}
+
+.hp-featured-dot.is-active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-accent);
+}
+
+.hp-featured-dot.is-running::after {
+  transform-origin: left;
+  animation: hp-featured-countdown var(--hp-feature-duration, 8s) linear forwards;
+}
+
+@keyframes hp-featured-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hp-featured-countdown {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (max-width: 640px) {
+  .hp-featured-body {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    min-height: 0;
+  }
+
+  .hp-featured-photo {
+    max-width: 220px;
+    margin: 0 auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hp-featured-body {
+    animation: none;
+  }
+}
+
+/* Marks the spotlighted person's tile in the carousel below. */
+.hp-carousel-item.is-featured .hp-carousel-photo {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.hp-carousel {
+  overflow: hidden;
+  width: 100%;
+  mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+}
+
+.hp-carousel-track {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  width: max-content;
+  padding: 0.5rem 0 1rem;
+  animation: hp-carousel-scroll var(--hp-carousel-duration, 20s) linear infinite;
+}
+
+.hp-carousel:hover .hp-carousel-track,
+.hp-carousel:focus-within .hp-carousel-track {
+  animation-play-state: paused;
+}
+
+.hp-carousel-item {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  width: 150px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+.hp-carousel-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 0.9rem;
+  overflow: hidden;
+  background-color: var(--color-body-bg);
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.12);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.hp-carousel-item:hover .hp-carousel-photo,
+.hp-carousel-item:focus-visible .hp-carousel-photo {
+  transform: scale(1.05);
+  box-shadow: 0 1rem 2.5rem rgba(51, 40, 63, 0.22);
+}
+
+.hp-carousel-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hp-carousel-photo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.hp-carousel-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+@keyframes hp-carousel-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Reduced motion: stop the auto-scroll, hide the duplicate tiles it needed
+   for a seamless loop, and let the (now un-doubled) track scroll natively
+   instead — every interviewee stays reachable without relying on motion. */
+@media (prefers-reduced-motion: reduce) {
+  .hp-carousel {
+    overflow-x: auto;
+  }
+
+  .hp-carousel-track {
+    animation: none;
+  }
+
+  .hp-carousel-item[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+.hp-section-context {
+  max-width: 72ch;
+  margin-top: 1.25rem;
+  opacity: 0.9;
+}
+
+.hp-section-context :last-child {
+  margin-bottom: 0;
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-15
+   Purpose: Carousel/List toggle above the interviews, and the list view —
+   one row per interviewee with a thumbnail, name, role and summary. */
+.hp-view-toggle {
+  max-width: 18rem;
+  margin: 1.5rem 0 0;
+}
+
+.hp-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 1rem;
+}
+
+.hp-list-item {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 1.25rem;
+  align-items: start;
+  padding: 1.25rem 0;
+  border-top: 1px solid rgba(51, 40, 63, 0.12);
+}
+
+.hp-list-item:first-child {
+  border-top: none;
+  padding-top: 0.25rem;
+}
+
+[data-theme="dark"] .hp-list-item {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.hp-list-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  border: none;
+  border-radius: 0.9rem;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: var(--color-body-bg);
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.12);
+}
+
+.hp-list-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hp-list-text {
+  min-width: 0;
+}
+
+.hp-list-name {
+  margin: 0;
+}
+
+.hp-list-role {
+  margin: 0.2rem 0 0;
+  font-size: 0.95rem;
+  opacity: 0.75;
+}
+
+.hp-list-summary {
+  margin-top: 0.75rem;
+}
+
+.hp-list-summary :last-child {
+  margin-bottom: 0;
+}
+
+.hp-list-summary.is-excerpt {
+  max-height: 6.5em;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, black 50%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent);
+}
+
+.hp-list-item .hp-featured-more {
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 480px) {
+  .hp-list-item {
+    grid-template-columns: 72px 1fr;
+    gap: 1rem;
+  }
+}
+
+/* Interview detail popup */
+.hp-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background-color: rgba(20, 15, 25, 0.72);
+  animation: events-fade-in 0.2s ease;
+}
+
+.hp-modal {
+  position: relative;
+  width: min(900px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
+  background-color: var(--color-page-bg);
+  border-radius: 1.25rem;
+  padding: 2.5rem;
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.35);
+  animation: events-modal-in 0.25s ease;
+}
+
+.hp-modal:focus {
+  outline: none;
+}
+
+.hp-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(51, 40, 63, 0.08);
+  color: var(--color-text);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.hp-modal-body {
+  display: flex;
+  gap: 2.5rem;
+}
+
+.hp-modal-photo-col {
+  flex: none;
+  width: 260px;
+}
+
+.hp-modal-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 1rem;
+  overflow: hidden;
+  background-color: var(--color-body-bg);
+}
+
+.hp-modal-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hp-modal-photo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.hp-modal-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-top: 0.75rem;
+}
+
+.hp-modal-caption strong {
+  font-size: 1.1rem;
+}
+
+.hp-modal-caption span {
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+
+/* Interview date + "Based in" under the name/role */
+.hp-modal-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.9rem 0 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(47, 164, 169, 0.35);
+}
+
+.hp-modal-meta dt {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #2fa4a9;
+}
+
+.hp-modal-meta dd {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.hp-modal-summary-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.hp-modal-summary-label {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.6;
+}
+
+.hp-modal-summary-content :last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 700px) {
+  .hp-modal-body {
+    flex-direction: column;
+  }
+
+  .hp-modal-photo-col {
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto;
+  }
+
+  .hp-modal-caption,
+  .hp-modal-meta {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* MILESTONE ARC
+   Generated with Claude Opus 5.5 (Anthropic), 2026-09-28
+   Purpose: Entrepreneurship "Problem and mission" journey arc (see
+   MilestoneArc.tsx). The page content sits on the lavender --color-body-bg,
+   so the untravelled road uses a translucent --color-text instead of
+   lavender, and the travelled part uses the brand teal, which reads on both
+   the light and dark body backgrounds. */
+.milestone-arc {
+  margin: 1.5rem 0;
+}
+
+.milestone-arc-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.milestone-arc-road,
+.milestone-arc-road-travelled,
+.milestone-arc-road-dashes {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.milestone-arc-road {
+  stroke: var(--color-text);
+  stroke-opacity: 0.18;
+  stroke-width: 22;
+}
+
+.milestone-arc-road-travelled {
+  stroke: #2fa4a9;
+  stroke-width: 22;
+  transition: stroke-dashoffset 0.6s ease;
+}
+
+.milestone-arc-road-dashes {
+  stroke: #eaf4f5;
+  stroke-opacity: 0.85;
+  stroke-width: 3;
+  stroke-dasharray: 16 14;
+}
+
+.milestone-arc-stop {
+  cursor: pointer;
+}
+
+.milestone-arc-hit {
+  fill: transparent;
+}
+
+.milestone-arc-icon {
+  opacity: 0.45;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+.milestone-arc-stop:hover .milestone-arc-icon {
+  opacity: 0.75;
+}
+
+.milestone-arc-stop.active .milestone-arc-icon {
+  opacity: 1;
+  transform: scale(1.12);
+}
+
+.milestone-arc-icon-stroke {
+  stroke: var(--color-text);
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.milestone-arc-icon-bar {
+  fill: var(--color-text);
+}
+
+.milestone-arc-icon-fill-pink {
+  fill: #f1c3d4;
+  stroke: var(--color-text);
+  stroke-width: 6;
+  stroke-linejoin: round;
+}
+
+.milestone-arc-icon-fill-teal {
+  fill: #b9e3e5;
+}
+
+.milestone-arc-icon-fill-teal-strong {
+  fill: #2fa4a9;
+}
+
+.milestone-arc-dot {
+  fill: var(--color-text);
+  stroke: var(--color-body-bg);
+  stroke-width: 4;
+  transition: r 0.25s ease;
+}
+
+.milestone-arc-stop.active .milestone-arc-dot {
+  fill: #2fa4a9;
+}
+
+.milestone-arc-labels {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.milestone-arc-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.6rem 0.75rem;
+  border: 2px solid transparent;
+  border-radius: 0.75rem;
+  background: transparent;
+  color: var(--color-text);
+  text-align: center;
+  opacity: 0.6;
+  transition:
+    opacity 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.milestone-arc-label:hover {
+  opacity: 0.85;
+}
+
+.milestone-arc-label.active {
+  opacity: 1;
+  border-color: #2fa4a9;
+  background-color: rgba(47, 164, 169, 0.12);
+}
+
+.milestone-arc-label-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.milestone-arc-label-subtitle {
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.milestone-arc-content,
+.fan-selector-content {
+  margin-top: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  border-left: 4px solid #2fa4a9;
+  border-radius: 0.5rem;
+  background-color: rgba(234, 244, 245, 0.45);
+  animation: milestone-arc-fade-in 0.3s ease;
+}
+
+[data-theme="dark"] .milestone-arc-content,
+[data-theme="dark"] .fan-selector-content {
+  background-color: rgba(234, 244, 245, 0.06);
+}
+
+.milestone-arc-content-title {
+  margin-bottom: 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.milestone-arc-content > :last-child,
+.fan-selector-content > :last-child {
+  margin-bottom: 0;
+}
+
+@keyframes milestone-arc-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .milestone-arc-labels {
+    grid-template-columns: 1fr;
+  }
+
+  .milestone-arc-label-title {
+    font-size: 1.05rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .milestone-arc-road-travelled,
+  .milestone-arc-icon,
+  .milestone-arc-dot {
+    transition: none;
+  }
+
+  .milestone-arc-content,
+  .fan-selector-content {
+    animation: none;
+  }
+}
+
+/* FAN SELECTOR
+   Generated with Claude Opus 5.5 (Anthropic), 2026-09-28
+   Purpose: hub-and-fan selector for the Entrepreneurship "Risks and
+   mitigation" section (see FanSelector.tsx). The bands use fixed brand
+   colors (soft pink / light background), so their outlines and text use a
+   fixed dark purple rather than the theme-varying --color-text. */
+.fan-selector {
+  margin: 1.5rem 0;
+}
+
+.fan-selector-svg {
+  display: block;
+  width: 100%;
+  max-width: 640px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.fan-selector-band {
+  cursor: pointer;
+  outline: none;
+}
+
+.fan-selector-band path {
+  stroke: #33283f;
+  stroke-width: 3;
+  stroke-linejoin: round;
+  opacity: 0.72;
+  transition:
+    opacity 0.2s ease,
+    stroke 0.2s ease,
+    stroke-width 0.2s ease;
+}
+
+.fan-selector-band:hover path {
+  opacity: 0.9;
+}
+
+.fan-selector-band.active path {
+  opacity: 1;
+  stroke: #2fa4a9;
+  stroke-width: 7;
+}
+
+.fan-selector-band:focus-visible path {
+  stroke: #2fa4a9;
+  stroke-dasharray: 10 6;
+}
+
+.fan-selector-band text {
+  fill: #33283f;
+  pointer-events: none;
+  user-select: none;
+}
+
+.fan-selector-band-label {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.fan-selector-band-subtitle {
+  font-size: 24px;
+}
+
+.fan-selector-band:not(.active) text,
+.fan-selector-band:not(.active) .fan-selector-icon {
+  opacity: 0.75;
+}
+
+.fan-selector-icon {
+  fill: none;
+  stroke: #33283f;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.fan-selector-band.active .fan-selector-icon {
+  stroke: #2fa4a9;
+}
+
+.fan-selector-hub {
+  fill: #33283f;
+  stroke: #eaf4f5;
+  stroke-width: 4;
+}
+
+.fan-selector-hub-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #eaf4f5;
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.fan-selector-tabs {
+  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fan-selector-tab {
+  padding: 0.65rem 1rem;
+  border: 2px solid rgba(51, 40, 63, 0.35);
+  border-radius: 0.5rem;
+  color: #33283f;
+  font-weight: 600;
+  text-align: left;
+  opacity: 0.8;
+}
+
+.fan-selector-tab.active {
+  border-color: #2fa4a9;
+  box-shadow: 0 0 0 2px #2fa4a9;
+  opacity: 1;
+}
+
+.fan-selector-content-title {
+  margin-bottom: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+/* Long three-column risk tables: fixed column proportions, and a minimum
+   width so they scroll inside .table-responsive on phones rather than
+   squeezing each column to a few words. */
+.risk-table {
+  min-width: 640px;
+  table-layout: fixed;
+}
+
+.risk-table th:nth-child(1),
+.risk-table td:nth-child(1) {
+  width: 26%;
+}
+
+.risk-table th:nth-child(2),
+.risk-table td:nth-child(2) {
+  width: 30%;
+}
+
+@media (max-width: 575.98px) {
+  .fan-selector-svg {
+    display: none;
+  }
+
+  .fan-selector-tabs {
+    display: flex;
+  }
+}
+
+/* MARKET RINGS
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-03
+   Purpose: Entrepreneurship "Market and target group" TAM / SAM / SOM rings
+   (see MarketRings.tsx). Ring fills are fixed brand tints, so the labels on
+   them use fixed colours too instead of the theme text colour. Selecting a
+   ring deepens its fill and fades the other two into the background. */
+.market-rings {
+  margin: 1.5rem 0;
+}
+
+.market-rings-svg {
+  display: block;
+  width: 100%;
+  max-width: 460px;
+  height: auto;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.market-ring {
+  cursor: pointer;
+  outline: none;
+}
+
+.market-ring-circle {
+  stroke: rgba(51, 40, 63, 0.25);
+  stroke-width: 2;
+  transition:
+    fill 0.25s ease,
+    stroke 0.25s ease;
+}
+
+.market-ring-0 .market-ring-circle {
+  fill: #e2dbf4;
+}
+
+.market-ring-1 .market-ring-circle {
+  fill: #f1c3d4;
+}
+
+.market-ring-2 .market-ring-circle {
+  fill: #7fc4c7;
+}
+
+/* Unselected rings fade by moving to a paler opaque tint rather than by
+   opacity, which would let the ring behind show through. */
+.market-rings.has-active .market-ring-0 .market-ring-circle {
+  fill: #ebe6f7;
+}
+
+.market-rings.has-active .market-ring-1 .market-ring-circle {
+  fill: #f8e1ea;
+}
+
+.market-rings.has-active .market-ring-2 .market-ring-circle {
+  fill: #bfe1e3;
+}
+
+.market-rings.has-active .market-ring-0.active .market-ring-circle {
+  fill: #a892dc;
+}
+
+.market-rings.has-active .market-ring-1.active .market-ring-circle {
+  fill: #e58fb0;
+}
+
+.market-rings.has-active .market-ring-2.active .market-ring-circle {
+  fill: #23878c;
+}
+
+.market-ring:hover .market-ring-circle,
+.market-ring:focus-visible .market-ring-circle,
+.market-ring.active .market-ring-circle {
+  stroke: #33283f;
+  stroke-width: 3;
+}
+
+.market-ring-title,
+.market-ring-name {
+  fill: #33283f;
+  text-anchor: middle;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.market-ring-title {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.market-rings.has-active .market-ring:not(.active) text {
+  opacity: 0.45;
+}
+
+.market-ring-2.active .market-ring-title,
+.market-ring-2.active .market-ring-name {
+  fill: #ffffff;
+}
+
+.market-rings-hint {
+  margin: 0.75rem 0 0;
+  text-align: center;
+  opacity: 0.75;
+}
+
+.market-rings-content {
+  margin-top: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  border-left: 4px solid #a892dc;
+  border-radius: 0.5rem;
+  background-color: rgba(234, 244, 245, 0.45);
+  animation: milestone-arc-fade-in 0.3s ease;
+}
+
+.market-rings-content-1 {
+  border-left-color: #e58fb0;
+}
+
+.market-rings-content-2 {
+  border-left-color: #23878c;
+}
+
+[data-theme="dark"] .market-rings-content {
+  background-color: rgba(234, 244, 245, 0.06);
+}
+
+.market-rings-content-name {
+  margin-bottom: 0.15rem;
+  font-weight: 700;
+}
+
+.market-rings-content-value {
+  margin-bottom: 0.75rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.market-rings-content > :last-child {
+  margin-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .market-ring-circle,
+  .market-ring-title,
+  .market-ring-name {
+    transition: none;
+  }
+
+  .market-rings-content {
+    animation: none;
+  }
+}
+
+/* STAKEHOLDER ANALYSIS (Human Practices)
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-07
+   Purpose: teal squircle cards per stakeholder category, plus the
+   influence–interest matrix whose slider morphs the initial assessment into
+   the final one (see StakeholderAnalysis.tsx). Squircle corners use
+   `corner-shape: squircle` where supported and fall back to a large
+   border-radius elsewhere. */
+/* Wide horizontal cards stacked down the page: icon beside the title on the
+   left, text on the right. */
+.stakeholder-squircles {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 2rem 0 3rem;
+}
+
+.stakeholder-squircle {
+  display: grid;
+  grid-template-columns: 15rem 1fr;
+  gap: 1.75rem;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-radius: 2.25rem;
+  corner-shape: squircle;
+  background-color: var(--color-page-bg);
+  border: 2px solid rgba(47, 164, 169, 0.35);
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.08);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+@supports (corner-shape: squircle) {
+  .stakeholder-squircle {
+    border-radius: 3.5rem;
+  }
+}
+
+.stakeholder-squircle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 1rem 2rem rgba(51, 40, 63, 0.14);
+}
+
+[data-theme="dark"] .stakeholder-squircle {
+  border-color: rgba(47, 164, 169, 0.55);
+}
+
+.stakeholder-squircle-icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1.1rem;
+  corner-shape: squircle;
+  background-color: #2fa4a9;
+  color: #eaf4f5;
+}
+
+@supports (corner-shape: squircle) {
+  .stakeholder-squircle-icon {
+    border-radius: 1.75rem;
+  }
+}
+
+.stakeholder-squircle-icon svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.stakeholder-squircle-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.stakeholder-squircle-title {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.3;
+  color: #2fa4a9;
+}
+
+/* Justified (block) text like the rest of the page. Selector is long only
+   to out-rank the .page-shell-content :is(p, li) rule. */
+.page-body .page-shell-content .stakeholder-squircle .stakeholder-squircle-body p {
+  margin: 0;
+  line-height: 1.6;
+  text-align: justify;
+}
+
+.stakeholder-squircle-body p + p {
+  margin-top: 0.75rem;
+}
+
+/* Influence–interest matrix */
+.stakeholder-matrix {
+  max-width: 44rem;
+  margin: 2rem auto 3rem;
+  padding: 1.25rem 1.25rem 1.5rem;
+  border-radius: 2.25rem;
+  corner-shape: squircle;
+  background-color: var(--color-page-bg);
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.08);
+}
+
+.stakeholder-matrix-heading {
+  font-family: "Luckiest Guy", "Poppins", sans-serif;
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 0.4rem;
+}
+
+.stakeholder-matrix-phase {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.stakeholder-matrix-phase span {
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  opacity: 0.45;
+  transition:
+    opacity 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.stakeholder-matrix-phase span.is-active {
+  opacity: 1;
+  background-color: var(--color-body-bg);
+}
+
+/* Axis labels sit inside the plot box, positioned just outside its left /
+   bottom edge so they hug the axes. */
+.stakeholder-matrix-axis-label {
+  position: absolute;
+  font-weight: 800;
+  font-size: 1.25rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.stakeholder-matrix-axis-label--y {
+  left: -0.6rem;
+  top: 50%;
+  transform: translate(-100%, -50%) rotate(180deg);
+  writing-mode: vertical-rl;
+}
+
+.stakeholder-matrix-axis-label--x {
+  left: 50%;
+  bottom: -0.6rem;
+  transform: translate(-50%, 100%);
+}
+
+.stakeholder-matrix-plot {
+  position: relative;
+  aspect-ratio: 1000 / 620;
+  /* Left/bottom: room for the axis labels. Top/right: room so edge bubbles
+     (centred on their point) don't spill out of the card. */
+  margin: 1.5rem 4rem 2.5rem 2.75rem;
+  /* Axes with arrowheads, drawn as borders + pseudo-elements */
+  border-left: 2px solid var(--color-text);
+  border-bottom: 2px solid var(--color-text);
+}
+
+.stakeholder-matrix-plot::before,
+.stakeholder-matrix-plot::after {
+  content: "";
+  position: absolute;
+  border: 6px solid transparent;
+}
+
+.stakeholder-matrix-plot::before {
+  top: -10px;
+  left: -7px;
+  border-bottom: 9px solid var(--color-text);
+  border-top: none;
+}
+
+.stakeholder-matrix-plot::after {
+  right: -10px;
+  bottom: -7px;
+  border-left: 9px solid var(--color-text);
+  border-right: none;
+}
+
+.stakeholder-matrix-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.stakeholder-matrix-guide {
+  stroke: var(--color-text);
+  stroke-opacity: 0.12;
+  stroke-dasharray: 4 6;
+}
+
+.stakeholder-matrix-arrow {
+  stroke: #33283f;
+  stroke-width: 2;
+  stroke-dasharray: 7 6;
+  stroke-linecap: round;
+}
+
+.stakeholder-matrix-arrowhead {
+  fill: #33283f;
+}
+
+[data-theme="dark"] .stakeholder-matrix-arrow {
+  stroke: #eaf4f5;
+}
+
+[data-theme="dark"] .stakeholder-matrix-arrowhead {
+  fill: #eaf4f5;
+}
+
+.stakeholder-matrix-bubble,
+.stakeholder-matrix-ghost {
+  position: absolute;
+  transform: translate(-50%, 50%);
+  width: max-content;
+  max-width: 8.5rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 1.2rem;
+  corner-shape: squircle;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+}
+
+@supports (corner-shape: squircle) {
+  .stakeholder-matrix-bubble,
+  .stakeholder-matrix-ghost {
+    border-radius: 2.2rem;
+  }
+}
+
+.stakeholder-matrix-bubble {
+  z-index: 2;
+  background-color: #2fa4a9;
+  color: #ffffff;
+  box-shadow: 0 0.4rem 1rem rgba(51, 40, 63, 0.18);
+}
+
+/* --ghost-fade (0-1) is set inline as the slider moves away from "Initial" */
+.stakeholder-matrix-ghost {
+  z-index: 1;
+  border: 2px dashed #2fa4a9;
+  color: #2fa4a9;
+  opacity: calc(var(--ghost-fade, 0) * 0.55);
+  pointer-events: none;
+}
+
+/* On the dark card the teal outline reads too dim, so lighten it there */
+[data-theme="dark"] .stakeholder-matrix-ghost {
+  border-color: #8fd6d9;
+  color: #b5e6e8;
+  opacity: calc(var(--ghost-fade, 0) * 0.85);
+}
+
+[data-theme="dark"] .stakeholder-matrix-phase span {
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .stakeholder-matrix-phase span.is-active {
+  opacity: 1;
+  background-color: #2fa4a9;
+  color: #ffffff;
+}
+
+.stakeholder-matrix-slider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 32rem;
+  margin: 0.5rem auto 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.stakeholder-matrix-slider input {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    #2fa4a9 var(--stakeholder-progress, 0%),
+    var(--color-body-bg) var(--stakeholder-progress, 0%)
+  );
+  cursor: pointer;
+}
+
+.stakeholder-matrix-slider input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #2fa4a9;
+  border: 3px solid var(--color-page-bg);
+  box-shadow: 0 0 0 2px #2fa4a9;
+}
+
+.stakeholder-matrix-slider input::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #2fa4a9;
+  border: 3px solid var(--color-page-bg);
+  box-shadow: 0 0 0 2px #2fa4a9;
+}
+
+@media (max-width: 700px) {
+  .stakeholder-squircle {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  /* Below this width the bubbles would pile on top of each other, so the
+     plot keeps a readable minimum width and the figure scrolls sideways. */
+  .stakeholder-matrix {
+    padding: 1rem;
+    overflow-x: auto;
+  }
+
+  .stakeholder-matrix-frame {
+    min-width: 560px;
+  }
+
+  .stakeholder-matrix-plot {
+    margin: 1.5rem 3.25rem 2.25rem 2.5rem;
+  }
+
+  .stakeholder-matrix-axis-label {
+    font-size: 1.15rem;
+  }
+
+  .stakeholder-matrix-bubble,
+  .stakeholder-matrix-ghost {
+    max-width: 7.5rem;
+    padding: 0.45rem 0.65rem;
+    font-size: 0.7rem;
+  }
+}
+
+/* ELLE (the mascot as a character on the page)
+   Generated with Claude Opus 5 (Anthropic), 2026-10-09
+   Purpose: styles for ElleSays.tsx — Elle standing next to a speech bubble.
+   The bubble reuses the look of the notebook entry header's bubble (accent
+   tinted over the page background, with a tail formed from a rotated square)
+   so she reads as the same character in both places. The bubble is laid out
+   from the start but only becomes visible once she speaks, so nothing on the
+   page shifts when it arrives. */
+.elle {
+  --elle-size: 7rem;
+  --elle-bubble-bg: color-mix(in srgb, var(--color-accent) 35%, var(--color-page-bg));
+  --elle-bubble-border: color-mix(in srgb, var(--color-text) 25%, transparent);
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin: 2rem 0;
+}
+
+.elle--sm {
+  --elle-size: 5rem;
+}
+
+.elle--md {
+  --elle-size: 7rem;
+}
+
+.elle--lg {
+  --elle-size: clamp(8rem, 14vw, 12rem);
+}
+
+/* Elle on the right of her bubble instead of the left: the row is reversed
+   and the tail flips to the other edge (see the tail rules below). */
+.elle--right {
+  flex-direction: row-reverse;
+}
+
+.elle--center {
+  justify-content: center;
+}
+
+.elle-figure {
+  position: relative;
+  flex: none;
+  width: var(--elle-size);
+}
+
+.elle-mascot {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* A slow bob with a little tilt, so she looks alive without drawing the eye
+   away from the text. Two different durations would drift in and out of sync;
+   one animation on the figure keeps the glass travelling with her. */
+.elle:not(.elle--still) .elle-figure {
+  animation: elle-idle 4.2s ease-in-out infinite;
+  transform-origin: 50% 85%;
+}
+
+@keyframes elle-idle {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-0.5rem) rotate(2deg);
+  }
+}
+
+/* The magnifying glass she holds up, over her lower right side. */
+.elle-glass {
+  position: absolute;
+  right: -12%;
+  bottom: 2%;
+  width: 46%;
+  height: auto;
+  overflow: visible;
+  color: var(--color-text);
+}
+
+.elle-glass-lens {
+  fill: color-mix(in srgb, var(--color-accent) 45%, transparent);
+  stroke: currentColor;
+  stroke-width: 4;
+}
+
+.elle-glass-handle {
+  stroke: currentColor;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.elle-glass-shine {
+  fill: none;
+  stroke: var(--color-page-bg);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: 0.9;
+}
+
+.elle:not(.elle--still) .elle-glass {
+  animation: elle-glass-sweep 3.4s ease-in-out infinite;
+  transform-origin: 70% 70%;
+}
+
+@keyframes elle-glass-sweep {
+  0%,
+  100% {
+    transform: rotate(-9deg);
+  }
+  50% {
+    transform: rotate(9deg);
+  }
+}
+
+.elle-bubble {
+  position: relative;
+  max-width: 24em;
+  margin: 0;
+  padding: 0.9rem 1.25rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  /* Running prose is justified page-wide (see PAGE SHELL); one short spoken
+     line should not be stretched to the bubble's edges. */
+  text-align: left;
+  background-color: var(--elle-bubble-bg);
+  border: 1px solid var(--elle-bubble-border);
+  border-radius: 1.1rem;
+  /* Laid out from the start so the bubble arriving does not move the page. */
+  opacity: 0;
+  transform: translateY(0.4rem) scale(0.97);
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease;
+}
+
+.page-body .elle-bubble {
+  text-align: left;
+}
+
+.elle--speaking .elle-bubble {
+  opacity: 1;
+  transform: none;
+}
+
+.elle--lg .elle-bubble {
+  font-size: clamp(1.1rem, 1.9vw, 1.5rem);
+  max-width: 20em;
+}
+
+/* The tail, a rotated square sharing the bubble's fill and two of its border
+   edges — the same trick as the notebook bubble, which keeps the join
+   seamless without a second background image. */
+.elle-bubble::before {
+  content: "";
+  position: absolute;
+  top: calc(50% - 0.42rem);
+  left: -0.47rem;
+  width: 0.85rem;
+  height: 0.85rem;
+  background-color: var(--elle-bubble-bg);
+  border-left: 1px solid var(--elle-bubble-border);
+  border-bottom: 1px solid var(--elle-bubble-border);
+  border-bottom-left-radius: 0.2rem;
+  transform: rotate(45deg);
+}
+
+.elle--right .elle-bubble::before {
+  left: auto;
+  right: -0.47rem;
+  border-left: none;
+  border-bottom: none;
+  border-right: 1px solid var(--elle-bubble-border);
+  border-top: 1px solid var(--elle-bubble-border);
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 0.2rem;
+}
+
+/* Phones: she sits above her bubble, both centred, and the tail moves to the
+   top edge so it still points at her. */
+@media (max-width: 575.98px) {
+  .elle,
+  .elle--right {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .elle--sm,
+  .elle--md,
+  .elle--lg {
+    --elle-size: 6.5rem;
+  }
+
+  .elle-bubble {
+    font-size: 1rem;
+  }
+
+  .elle--lg .elle-bubble {
+    font-size: 1.05rem;
+  }
+
+  .elle-bubble::before,
+  .elle--right .elle-bubble::before {
+    top: -0.47rem;
+    left: calc(50% - 0.42rem);
+    right: auto;
+    border: none;
+    border-left: 1px solid var(--elle-bubble-border);
+    border-top: 1px solid var(--elle-bubble-border);
+    border-radius: 0;
+    border-top-left-radius: 0.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elle .elle-figure,
+  .elle .elle-glass {
+    animation: none;
+  }
+
+  .elle-bubble {
+    transition: none;
+  }
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-11
+   Purpose: QuestionSelector — a row of "Question N" cards with the selected
+   question's answer shown below — and the InfoCards used inside an answer
+   (Entrepreneurship page, Regulatory strategy). */
+.question-selector {
+  margin: 1.5rem 0;
+}
+
+.question-selector-hint {
+  margin-bottom: 0.75rem;
+  opacity: 0.75;
+}
+
+.question-selector-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.75rem;
+}
+
+.question-selector-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 1rem 1.15rem;
+  border: none;
+  border-radius: 0.9rem;
+  background-color: rgba(47, 164, 169, 0.14);
+  color: var(--color-text);
+  text-align: left;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.question-selector-card:hover {
+  background-color: rgba(47, 164, 169, 0.28);
+}
+
+.question-selector-card:focus-visible {
+  outline: 2px solid #2fa4a9;
+  outline-offset: 2px;
+}
+
+.question-selector-card.active {
+  background-color: #2fa4a9;
+  color: #fff;
+}
+
+.question-selector-card-number {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1f7f84;
+}
+
+[data-theme="dark"] .question-selector-card-number {
+  color: #6fd0d4;
+}
+
+.question-selector-card.active .question-selector-card-number {
+  color: #fff;
+}
+
+.question-selector-card-label {
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.question-selector-content {
+  margin-top: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  border-left: 4px solid #2fa4a9;
+  border-radius: 0.5rem;
+  background-color: rgba(234, 244, 245, 0.45);
+  animation: milestone-arc-fade-in 0.3s ease;
+}
+
+[data-theme="dark"] .question-selector-content {
+  background-color: rgba(234, 244, 245, 0.06);
+}
+
+.question-selector-content-title {
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.question-selector-content > :last-child,
+.info-card > :last-child {
+  margin-bottom: 0;
+}
+
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+/* FEEDBACK CYCLE (Human Practices)
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-09
+   Purpose: Listen → Analyse → Implement section. The text runs on the left
+   and the cycle wheel stays pinned on the right while the section is read,
+   turning so the current step sits at the top; a line drawn on scroll joins
+   the "active implementation" outcome to the Implement step (see
+   FeedbackCycle.tsx). Below 992px the wheel sits above the text instead. */
+.feedback-cycle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 15rem;
+  gap: 2.5rem;
+  margin: 1.5rem 0 3rem;
+}
+
+.feedback-cycle-content {
+  position: relative;
+}
+
+.feedback-cycle-aside {
+  position: sticky;
+  top: 7rem;
+  align-self: start;
+}
+
+.feedback-wheel {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.feedback-wheel-rotor {
+  transform-box: view-box;
+  transform-origin: 200px 200px;
+  transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.feedback-wheel-arrow {
+  fill: #a9d9db;
+  transition: fill 0.4s ease;
+}
+
+.feedback-wheel-step.is-active .feedback-wheel-arrow {
+  fill: #2fa4a9;
+}
+
+.feedback-wheel-label {
+  font-family: "Poppins", sans-serif;
+  font-size: 27px;
+  font-weight: 700;
+  fill: #1f6f73;
+  animation: feedback-label-in 1.1s ease both;
+}
+
+/* Hidden while the wheel turns (0.9s), then fades in */
+@keyframes feedback-label-in {
+  0%,
+  70% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.feedback-wheel-step.is-active .feedback-wheel-label {
+  fill: #ffffff;
+}
+
+.feedback-wheel-count {
+  font-family: "Luckiest Guy", "Poppins", sans-serif;
+  font-size: 64px;
+  fill: #2fa4a9;
+}
+
+.feedback-wheel-of {
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  fill: var(--color-text);
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .feedback-wheel-arrow {
+  fill: #2a5d61;
+}
+
+[data-theme="dark"] .feedback-wheel-label {
+  fill: #a9d9db;
+}
+
+/* Steps */
+.feedback-step + .feedback-step {
+  margin-top: 3rem;
+}
+
+.feedback-step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.info-card {
+  padding: 1rem 1.15rem;
+  text-align: left;
+  border-radius: 0.9rem;
+}
+
+.info-card--teal {
+  background-color: rgba(47, 164, 169, 0.14);
+}
+
+.info-card--lilac {
+  background-color: rgba(201, 189, 232, 0.35);
+}
+
+[data-theme="dark"] .info-card--lilac {
+  background-color: rgba(201, 189, 232, 0.16);
+}
+
+.info-card-title {
+  margin-bottom: 0.35rem;
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .question-selector-content {
+    animation: none;
+  }
+}
+
+.feedback-step-number {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background-color: #2fa4a9;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.feedback-step-title {
+  margin: 0;
+}
+
+/* Analyse outcomes: three squircles side by side */
+.feedback-outcomes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 0;
+}
+
+.feedback-outcome {
+  padding: 1.1rem 1.2rem;
+  border-radius: 1.75rem;
+  corner-shape: squircle;
+  background-color: var(--color-page-bg);
+  border: 2px solid rgba(47, 164, 169, 0.35);
+}
+
+@supports (corner-shape: squircle) {
+  .feedback-outcome {
+    border-radius: 2.75rem;
+  }
+}
+
+.feedback-outcome--active {
+  background-color: #2fa4a9;
+  border-color: #2fa4a9;
+  color: #ffffff;
+}
+
+.feedback-outcome--none {
+  opacity: 0.75;
+}
+
+.feedback-outcome-title {
+  margin: 0 0 0.4rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2fa4a9;
+}
+
+.feedback-outcome--active .feedback-outcome-title {
+  color: #ffffff;
+}
+
+/* Left-aligned: justified text opens wide gaps in a card this narrow.
+   Selector is long only to out-rank the .page-shell-content :is(p, li) rule. */
+.page-body .page-shell-content .feedback-outcome .feedback-outcome-body p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  text-align: left;
+}
+
+/* Line from the active outcome down to the Implement step */
+.feedback-implement-arrow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.feedback-implement-arrow-line {
+  fill: none;
+  stroke: #2fa4a9;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+}
+
+.feedback-implement-arrowhead {
+  fill: #2fa4a9;
+}
+
+/* The Implement step gets some air above it so the line has room to land */
+.feedback-step--implement {
+  padding-top: 2.5rem;
+}
+
+/* Downloadable files */
+.resource-download {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.25rem 0;
+  padding: 0.9rem 1.2rem;
+  border-radius: 1.5rem;
+  corner-shape: squircle;
+  background-color: var(--color-page-bg);
+  border: 2px solid rgba(47, 164, 169, 0.35);
+  color: var(--color-text);
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.resource-download:hover,
+.resource-download:focus-visible {
+  color: var(--color-text);
+  transform: translateY(-2px);
+  box-shadow: 0 0.75rem 1.5rem rgba(51, 40, 63, 0.12);
+}
+
+.resource-download-icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.9rem;
+  background-color: #2fa4a9;
+  color: #ffffff;
+}
+
+.resource-download-icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.resource-download-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.resource-download-title {
+  font-weight: 700;
+}
+
+.resource-download-description {
+  font-size: 0.88rem;
+  opacity: 0.8;
+}
+
+.resource-download-type {
+  margin-left: auto;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background-color: rgba(47, 164, 169, 0.15);
+  color: #1f6f73;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+[data-theme="dark"] .resource-download-type {
+  color: #a9d9db;
+}
+
+@media (max-width: 991.98px) {
+  .feedback-cycle {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+
+  .feedback-cycle-aside {
+    position: static;
+    order: -1;
+    width: min(16rem, 70%);
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .feedback-outcomes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Stacked, the active card goes last so its line drops straight to the
+     Implement step instead of crossing the other two cards. */
+  .feedback-outcome--active {
+    order: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feedback-wheel-rotor {
+    transition: none;
+  }
+
+  .feedback-wheel-label {
+    animation: none;
+  }
+}
+
+/* WET LAB PROTOCOLS: CALCULATORS, NOTE BOXES AND DOWNLOADS
+   Generated with Claude Opus 5 (Anthropic), 2026-10-12
+   Purpose: styles for the protocol pages built from the team's protocol
+   documents. The interactive tables reuse the gridlines and lavender header
+   of the markdown tables inside a dropdown (see MARKDOWN TABLES INSIDE A
+   DROPDOWN above) so a calculated table and a printed one look alike; the
+   difference is the input boxes and the shaded derived cells. */
+
+.protocol-calc {
+  margin: 0 0 1.5rem;
+}
+
+.protocol-calc-caption {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.protocol-calc-hint {
+  display: block;
+  font-size: 0.85rem;
+  opacity: 0.75;
+  font-style: italic;
+}
+
+.protocol-calc-table {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  border-collapse: collapse;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.protocol-calc-table :is(th, td) {
+  border: 1px solid rgba(51, 40, 63, 0.18);
+  padding: 0.5rem 0.85rem;
+  text-align: left;
+  vertical-align: middle;
+}
+
+[data-theme="dark"] .protocol-calc-table :is(th, td) {
+  border-color: rgba(201, 189, 232, 0.25);
+}
+
+.protocol-calc-table thead th {
+  background-color: var(--color-accent);
+  /* The accent fill is light in both themes, so the header text stays dark
+     rather than following --color-text. */
+  color: #33283f;
+  font-weight: 600;
+}
+
+/* Row labels are <th scope="row"> for screen readers, but they are body
+   text, not a second header row — so they get no accent fill. The explicit
+   colour is required: this table sits inside .expandable-content, whose
+   "table th" rule pins every th to the fixed dark #33283f that suits the
+   light accent fill — on a body row that has no fill, it turned the label
+   near-black on the dark theme's background. */
+.protocol-calc-table tbody th {
+  font-weight: 400;
+  background: none;
+  color: var(--color-text);
+}
+
+.protocol-calc-input {
+  width: 100%;
+  max-width: 9rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid rgba(51, 40, 63, 0.45);
+  border-radius: 0.4rem;
+  background-color: var(--color-page-bg);
+  color: var(--color-text);
+  font: inherit;
+}
+
+[data-theme="dark"] .protocol-calc-input {
+  border-color: rgba(201, 189, 232, 0.45);
+}
+
+.protocol-calc-input:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+/* The cells that were left empty in the document, filled in by the page. */
+.protocol-calc-derived {
+  background-color: rgba(201, 189, 232, 0.3);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .protocol-calc-derived {
+  background-color: rgba(201, 189, 232, 0.16);
+}
+
+.protocol-calc-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: baseline;
+  margin-bottom: 0;
+  font-size: 0.85rem;
+}
+
+.protocol-calc-reset {
+  padding: 0.25rem 0.7rem;
+  border: 1px solid rgba(51, 40, 63, 0.45);
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+[data-theme="dark"] .protocol-calc-reset {
+  border-color: rgba(201, 189, 232, 0.45);
+}
+
+.protocol-calc-reset:hover {
+  background-color: rgba(201, 189, 232, 0.25);
+}
+
+.protocol-calc-workbook {
+  opacity: 0.8;
+}
+
+/* NOTE AND CRITICAL BOXES */
+.protocol-note {
+  margin: 0.75rem 0 1rem;
+  padding: 0.7rem 1rem;
+  border-left: 4px solid var(--color-accent);
+  border-radius: 0 0.5rem 0.5rem 0;
+  background-color: rgba(201, 189, 232, 0.22);
+}
+
+[data-theme="dark"] .protocol-note {
+  background-color: rgba(201, 189, 232, 0.12);
+}
+
+/* A critical step has to survive skim-reading, so it is warmer and heavier
+   than a note rather than only differing in its label. */
+.protocol-note--critical {
+  border-left-color: #b4456b;
+  background-color: rgba(180, 69, 107, 0.14);
+}
+
+[data-theme="dark"] .protocol-note--critical {
+  border-left-color: #e8829f;
+  background-color: rgba(232, 130, 159, 0.14);
+}
+
+/* The note's text comes from MDX as its own <p>, a sibling of the label (see
+   ProtocolNote for why it is not wrapped). Making the first paragraph inline
+   lets the label and the opening sentence read as one line; any further
+   paragraph stays a block. */
+.protocol-note > p {
+  margin-bottom: 0;
+  text-align: left;
+}
+
+.protocol-note > p:first-of-type {
+  display: inline;
+}
+
+.protocol-note > p + p {
+  margin-top: 0.5rem;
+}
+
+.protocol-note--critical .protocol-note-label {
+  color: #8d2347;
+}
+
+[data-theme="dark"] .protocol-note--critical .protocol-note-label {
+  color: #f0a6bc;
+}
+
+/* DOWNLOAD ROW */
+.protocol-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.protocol-download {
+  padding: 0.35rem 0.9rem;
+  border: 1px solid rgba(51, 40, 63, 0.45);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+[data-theme="dark"] .protocol-download {
+  border-color: rgba(201, 189, 232, 0.45);
+}
+
+a.protocol-download:hover {
+  background-color: rgba(201, 189, 232, 0.25);
+  text-decoration: none;
+}
+
+/* An asset with no uploaded URL yet: visibly unfinished, not a dead link. */
+.protocol-download--missing {
+  border-style: dashed;
+  opacity: 0.65;
+  font-style: italic;
+}
+
+/* COLLAPSIBLE "CALCULATIONS" SECTION
+   Generated with Claude Opus 5 (Anthropic), 2026-10-12
+   Purpose: a <details> rather than an ExpandableText, so that the 22
+   Calculations sections on the protocols page do not each add a row to the
+   page-wide index (which scans headings). Styled to match the accordions
+   around it. */
+.protocol-calculations {
+  margin: 1.25rem 0;
+  border: 1px solid rgba(51, 40, 63, 0.35);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .protocol-calculations {
+  border-color: rgba(201, 189, 232, 0.3);
+}
+
+.protocol-calculations-summary {
+  padding: 0.6rem 1rem;
+  background-color: var(--color-accent);
+  /* The accent fill is light in both themes, so the label stays dark. */
+  color: #33283f;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.protocol-calculations-summary::-webkit-details-marker {
+  display: none;
+}
+
+.protocol-calculations-summary::before {
+  content: "▸";
+  display: inline-block;
+  margin-right: 0.5rem;
+  transition: transform 0.15s ease;
+}
+
+.protocol-calculations[open] .protocol-calculations-summary::before {
+  transform: rotate(90deg);
+}
+
+.protocol-calculations-summary:hover {
+  filter: brightness(0.96);
+}
+
+.protocol-calculations-body {
+  padding: 1rem 1.25rem;
+}
+
+.protocol-calculations-body > :first-child {
+  margin-top: 0;
+}
+
+.protocol-calculations-body > :last-child {
+  margin-bottom: 0;
+}
+
+/* PHENOTYPE VENN
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
+   Purpose: the interactive phenotype figure on the project description page
+   (see PhenotypeVenn.tsx). The circles are see-through teal, so where they
+   overlap they darken by themselves as in the team's figure. Everything
+   marked .is-lit belongs to what is pointed at or chosen; with .has-active
+   the rest steps back. A lit overlap is a brighter copy drawn on top,
+   slightly enlarged with a shadow, so it looks raised. */
+.phenotype-venn-frame {
+  container-type: inline-size;
+  margin: 1.5rem 0 2.5rem;
+}
+
+.phenotype-venn {
+  --pv-teal: #23878c;
+  --pv-lit: #f1c3d4;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 1.5rem 2rem;
+}
+
+.phenotype-venn-svg {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.phenotype-venn-circle {
+  fill: var(--pv-teal);
+  fill-opacity: 0.38;
+  stroke: var(--color-text);
+  stroke-opacity: 0.45;
+  stroke-width: 1.5;
+  transition:
+    fill-opacity 0.25s ease,
+    stroke-opacity 0.25s ease,
+    stroke-width 0.25s ease;
+}
+
+.phenotype-venn.has-active .phenotype-venn-circle {
+  fill-opacity: 0.14;
+  stroke-opacity: 0.25;
+}
+
+.phenotype-venn.has-active .phenotype-venn-circle.is-lit {
+  fill-opacity: 0.42;
+  stroke-opacity: 0.9;
+  stroke-width: 2.5;
+}
+
+.phenotype-venn-label,
+.phenotype-venn-letter {
+  fill: var(--color-text);
+  text-anchor: middle;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.phenotype-venn-label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.phenotype-venn-label-short {
+  font-weight: 600;
+}
+
+.phenotype-venn.has-active .phenotype-venn-label:not(.is-lit),
+.phenotype-venn.has-active .phenotype-venn-letter:not(.is-lit) {
+  opacity: 0.4;
+}
+
+.phenotype-venn-letter {
+  dominant-baseline: central;
+  font-size: 40px;
+  font-weight: 800;
+}
+
+/* On the pale lit overlap the letter is always dark, in either theme. */
+.phenotype-venn-letter.is-lit {
+  fill: #33283f;
+}
+
+/* The overlap itself is only there to be pointed at and clicked. */
+.phenotype-venn-region {
+  fill: transparent;
+  cursor: pointer;
+}
+
+.phenotype-venn-raised {
+  fill: var(--pv-lit);
+  stroke: #33283f;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  opacity: 0;
+  pointer-events: none;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    opacity 0.2s ease,
+    transform 0.25s ease,
+    filter 0.25s ease;
+}
+
+.phenotype-venn-raised.is-lit {
+  opacity: 1;
+  transform: scale(1.07);
+  filter: drop-shadow(0 6px 8px rgba(51, 40, 63, 0.4));
+}
+
+.phenotype-venn-panel {
+  padding: 1.5rem 1.5rem 1rem;
+  border-radius: 1.25rem;
+  background-color: rgba(234, 244, 245, 0.45);
+}
+
+[data-theme="dark"] .phenotype-venn-panel {
+  background-color: rgba(234, 244, 245, 0.06);
+}
+
+.phenotype-venn-panel-title {
+  margin: 0 0 0.5rem;
+  padding: 0 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.phenotype-venn-list {
+  margin: 0 0 1.25rem;
+  padding: 0;
+  list-style: none;
+}
+
+.phenotype-venn-row {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.45rem 0.75rem;
+  border: 2px solid transparent;
+  border-radius: 0.75rem;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    opacity 0.2s ease,
+    translate 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.phenotype-venn-row--criteria {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.phenotype-venn-row-letter {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.phenotype-venn.has-active .phenotype-venn-row:not(.is-lit) {
+  opacity: 0.5;
+}
+
+.phenotype-venn-row.is-lit {
+  background-color: var(--pv-lit);
+  color: #33283f;
+  translate: 0.35rem 0;
+  box-shadow: 0 4px 10px rgba(51, 40, 63, 0.25);
+}
+
+.phenotype-venn-row[aria-pressed="true"] {
+  border-color: var(--color-text);
+}
+
+.phenotype-venn-row.is-lit[aria-pressed="true"] {
+  border-color: #33283f;
+}
+
+.phenotype-venn-row:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+/* The lists stay beside the drawing for as long as the drawing keeps a
+   readable size (measured on the figure's own width, since the page's side
+   index narrows the column). In a column under 900px they do so in a compact
+   form, with each phenotype's type under its criteria; only under 600px
+   (phones) does the drawing go on top with the lists underneath. */
+@container (max-width: 899.98px) {
+  .phenotype-venn {
+    grid-template-columns: minmax(0, 1fr) 18.5rem;
+    gap: 1.5rem;
+  }
+
+  .phenotype-venn-panel {
+    padding: 1.25rem 0.75rem 0.5rem;
+  }
+
+  .phenotype-venn-row {
+    grid-template-columns: 2rem minmax(0, 1fr);
+    row-gap: 0;
+  }
+
+  .phenotype-venn-row-letter {
+    grid-row: span 2;
+  }
+
+  .phenotype-venn-row-type {
+    grid-column: 2;
+    font-weight: 400;
+  }
+
+  .phenotype-venn-row--criteria {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+@container (max-width: 599.98px) {
+  .phenotype-venn {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Stacked but not phone-narrow: the two lists side by side. */
+@container (min-width: 520px) and (max-width: 599.98px) {
+  .phenotype-venn-panel {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phenotype-venn-circle,
+  .phenotype-venn-label,
+  .phenotype-venn-letter,
+  .phenotype-venn-raised,
+  .phenotype-venn-row {
+    transition: none;
+  }
+}
+
+/* SEARCH
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-14
+   Purpose: the navbar search button and its dialog (src/components/Search.tsx). */
+.navbar-search-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  margin-left: 0.25rem;
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+  color: var(--color-text);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.navbar-search-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.navbar-search-button:hover {
+  background-color: rgba(51, 40, 63, 0.08);
+  color: var(--color-accent);
+}
+
+[data-theme="dark"] .navbar-search-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Below the lg breakpoint the nav links collapse behind the hamburger, and
+   the navbar spreads its remaining items apart; keep search beside the
+   theme toggle on the right instead of floating mid-bar. */
+@media (max-width: 991.98px) {
+  .navbar-search-button {
+    margin-left: auto;
+  }
+}
+
+.search-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1060;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10vh 1rem 1rem;
+  background-color: rgba(51, 40, 63, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: search-fade-in 0.12s ease-out;
+}
+
+.search-dialog {
+  width: 100%;
+  max-width: 640px;
+  max-height: 75vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 14px;
+  background-color: var(--color-page-bg);
+  color: var(--color-text);
+  box-shadow: 0 1.5rem 4rem rgba(51, 40, 63, 0.35);
+}
+
+[data-theme="dark"] .search-dialog {
+  background-color: #33283f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.search-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgba(51, 40, 63, 0.12);
+}
+
+[data-theme="dark"] .search-input-row {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.search-input-row > svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  opacity: 0.6;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font-size: 1.05rem;
+}
+
+.search-input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.search-esc {
+  flex: none;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  background-color: rgba(51, 40, 63, 0.1);
+  color: inherit;
+}
+
+[data-theme="dark"] .search-esc {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.search-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.search-status {
+  margin: 0;
+  padding: 1.25rem 1rem;
+  opacity: 0.7;
+}
+
+.search-results {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+}
+
+.search-result {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.search-result.selected {
+  background-color: rgba(201, 189, 232, 0.45);
+}
+
+[data-theme="dark"] .search-result.selected {
+  background-color: rgba(201, 189, 232, 0.15);
+}
+
+.search-result-path {
+  font-weight: 600;
+}
+
+.search-result-trail {
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.search-result-snippet {
+  font-size: 0.875rem;
+  opacity: 0.8;
+  overflow-wrap: anywhere;
+}
+
+.search-result mark {
+  padding: 0;
+  background-color: rgba(201, 189, 232, 0.9);
+  color: inherit;
+  border-radius: 3px;
+}
+
+[data-theme="dark"] .search-result mark {
+  background-color: rgba(201, 189, 232, 0.35);
+}
+
+@keyframes search-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

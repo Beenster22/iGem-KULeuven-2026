@@ -1,0 +1,10 @@
+name: bacteroides
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - python=3.11
+  - viennarna        # RNAfold, used by constraints/folding.py (5' initiation folding check)
+  - pytest
+  - ipykernel        # only needed to run the dev notebook

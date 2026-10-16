@@ -9,18 +9,17 @@ export { default as Engineering } from "./engineering.mdx";
 export { default as Contribution } from "./contribution.mdx";
 export { default as SafetyAndSecurity } from "./safety-and-security.mdx";
 // Dry Lab
-export { default as Crispr } from "./crispr.mdx";
-export { default as Biocontainment } from "./biocontainment.mdx";
-export { default as PromotersAndRbs } from "./promoters-and-rbs.mdx";
+export { default as DryLab } from "./dry-lab.mdx";
 // Wet Lab
-export { default as Experiments } from "./experiments.mdx";
+export { default as ExperimentalOverview } from "./experimental-overview.mdx";
 export { default as Protocols } from "./protocols.mdx";
+export { default as Parts } from "./parts.mdx";
 export { default as Notebook } from "./notebook.mdx";
 export { default as Results } from "./results.mdx";
-export { default as AlternativePlatform } from "./alternative-platform.mdx";
-export { default as ProofOfConcept } from "./proof-of-concept.mdx";
 // iHP
 export { default as HumanPractices } from "./human-practices.mdx";
 export { default as Events } from "./events.mdx";
 // Entrepreneurship
 export { default as Entrepreneurship } from "./entrepreneurship.mdx";
+// Prizes and Medals / Judging Form
+export { default as Awards } from "./awards.mdx";

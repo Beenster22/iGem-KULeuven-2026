@@ -1,8 +1,8 @@
-// Purpose: home-page section showing engineered P. vulgatis taking over the
+// Purpose: home-page section showing engineered P. vulgatus taking over the
 // microbiome and inflammation easing as a result. One slider drives two
 // synchronized visuals: a circular "magnifying glass" view into the
 // microbiome (bacteria scattered inside, each converting from the generic
-// OtherBacteriumIcon to PVulgatisIcon — see BacteriumIcons.tsx — as
+// OtherBacteriumIcon to EngineeredPVulgatusIcon — see BacteriumIcons.tsx — as
 // abundance rises) and the BodyDiagram SVG reused from BodySymptomsSection,
 // whose organ ids (brain, uterus, pancreas, heart, hair) get a red
 // "inflammation" glow that fades via the --inflammation CSS custom property
@@ -14,7 +14,7 @@
 // reason — see the note above .home-section--contrast in App.css).
 import { useState } from "react";
 import { BodyDiagram } from "./BodyDiagram";
-import { OtherBacteriumIcon, PVulgatisIcon } from "./BacteriumIcons";
+import { OtherBacteriumIcon, EngineeredPVulgatusIcon } from "./BacteriumIcons";
 
 const BACTERIUM_COUNT = 34;
 
@@ -33,7 +33,7 @@ interface MicrobiomeLensProps {
 // A circular "magnifying glass" view into the microbiome: bacteria scattered
 // inside a clipped circle, each rendered as either the generic
 // OtherBacteriumIcon or, once abundance passes that bacterium's own
-// threshold, PVulgatisIcon (same outline, with the artwork's internal
+// threshold, EngineeredPVulgatusIcon (same outline, with the artwork's internal
 // segment dots) — the same per-cell threshold-wave approach as the previous
 // pill grid, now with real bacterium shapes instead of plain pills.
 function MicrobiomeLens({ abundance }: MicrobiomeLensProps) {
@@ -50,7 +50,7 @@ function MicrobiomeLens({ abundance }: MicrobiomeLensProps) {
           const top = 50 + Math.sin(angle) * radius;
           const rotation = Math.round(seededValue(i * 3 + 1) * 360);
           const scale = 0.7 + seededValue(i * 5 + 1) * 0.55;
-          const Icon = engineered ? PVulgatisIcon : OtherBacteriumIcon;
+          const Icon = engineered ? EngineeredPVulgatusIcon : OtherBacteriumIcon;
           return (
             <Icon
               key={i}
@@ -73,12 +73,24 @@ function MicrobiomeLens({ abundance }: MicrobiomeLensProps) {
 // goes on the published wiki.
 function levelBlurb(abundance: number) {
   if (abundance < 34) {
-    return "Few engineered P. vulgatis are established yet — inflammation markers stay elevated across the body.";
+    return (
+      <>
+        Few engineered <em>P. vulgatus</em> are established yet — inflammation markers stay elevated across the body.
+      </>
+    );
   }
   if (abundance < 67) {
-    return "As engineered P. vulgatis takes over the microbiome, inflammation begins to ease.";
+    return (
+      <>
+        As engineered <em>P. vulgatus</em> takes over the microbiome, inflammation begins to ease.
+      </>
+    );
   }
-  return "With engineered P. vulgatis dominant in the microbiome, inflammation markers have receded across the body.";
+  return (
+    <>
+      With engineered <em>P. vulgatus</em> dominant in the microbiome, inflammation markers have receded across the body.
+    </>
+  );
 }
 
 export function InflammationSliderSection() {
@@ -87,7 +99,9 @@ export function InflammationSliderSection() {
 
   return (
     <div>
-      <h3 className="inflammation-section-heading">Engineered P. vulgatis abundance in the microbiome</h3>
+      <h3 className="inflammation-section-heading">
+        Engineered <em>P. vulgatus</em> abundance in the microbiome
+      </h3>
       <div className="inflammation-slider-section">
         <div className="inflammation-slider-track-col">
           <span className="inflammation-slider-tick">High</span>
@@ -98,7 +112,7 @@ export function InflammationSliderSection() {
             max={100}
             value={abundance}
             onChange={(event) => setAbundance(Number(event.target.value))}
-            aria-label="Engineered P. vulgatis abundance in the microbiome"
+            aria-label="Engineered P. vulgatus abundance in the microbiome"
           />
           <span className="inflammation-slider-tick">Low</span>
         </div>

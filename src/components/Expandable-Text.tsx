@@ -2,12 +2,18 @@ import { ReactNode, useState } from "react";
 
 interface ExpandableTextProps {
   title: ReactNode;
+  // Extra labels for the right-hand side of the tab, beside the chevron.
+  // Rendered as a sibling of the title rather than inside it, because the
+  // page-wide index (SectionProgress) takes each row's label from the
+  // heading's textContent — anything nested in the h3 would end up in it.
+  meta?: ReactNode;
   children: ReactNode;
 }
 // Component translated from Astro to React, taken from 2025 Munich team's repo. Original Astro component can be found here: https://gitlab.igem.org/2025/munich/-/blob/1665a99ba477fe5f9ca6e8c41f79ca5d31a1a71e/src/components/ExpandableText.astro
 // Generated with Claude Sonnet 5 (Anthropic), 2026-07-17
 // Purpose: performed the Astro-to-React translation above.
-export function ExpandableText({ title, children }: ExpandableTextProps) {
+// Edited with Claude Opus 5 (Anthropic), 2026-10-09: added the optional meta slot.
+export function ExpandableText({ title, meta, children }: ExpandableTextProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -19,10 +25,12 @@ export function ExpandableText({ title, children }: ExpandableTextProps) {
         onClick={() => setIsOpen((open) => !open)}
       >
         {/* h3 (not a span) so the page-wide left index (SectionProgress, which
-            scans h2/h3) picks up every protocol as a linkable subsection —
-            this component has exactly one consumer (protocols.mdx), so
-            promoting the title to a real heading is safe here. */}
+            scans h2/h3) picks up every protocol / notebook as a linkable
+            subsection — the only consumers are protocols.mdx and
+            NotebookDropdown (notebook.mdx), so promoting the title to a
+            real heading is safe here. */}
         <h3 className="expandable-title">{title}</h3>
+        {meta}
         <svg
           className="expandable-arrow"
           xmlns="http://www.w3.org/2000/svg"
