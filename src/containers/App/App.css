@@ -1926,6 +1926,43 @@ a[data-footnote-ref]:focus {
   opacity: 1;
 }
 
+/* Collapsible index (pages that render [data-toc-collapsible]): a chevron
+   at the right of each main section with subsections toggles them open. */
+.section-progress li.expandable a {
+  padding-right: 1.75rem;
+}
+
+.section-progress-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-text);
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.section-progress-toggle:hover {
+  opacity: 1;
+}
+
+.section-progress-toggle svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  transition: transform 0.15s ease;
+}
+
+.section-progress li.open .section-progress-toggle svg {
+  transform: rotate(180deg);
+}
+
 @media (max-width: 991.98px) {
   .page-shell {
     display: block;

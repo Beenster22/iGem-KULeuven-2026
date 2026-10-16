@@ -18,6 +18,7 @@ interface Heading {
   id: string;
   text: string;
   level: 2 | 3 | 4;
+  parentId?: string;
 }
 
 // h4s are only listed when they opt in with data-toc-sub (the sections inside
@@ -44,6 +45,7 @@ function collectHeadings(container: HTMLElement): Heading[] {
   // group and its protocols used to share one level. A dropdown title that
   // follows a written h3 is listed one level deeper instead.
   let underWrittenH3 = false;
+  let currentParentId: string | undefined;
   return Array.from(container.querySelectorAll(HEADING_SELECTOR)).map((element) => {
     const isDropdownTitle = element.classList.contains("expandable-title");
     if (element.tagName === "H2") underWrittenH3 = false;
@@ -56,7 +58,8 @@ function collectHeadings(container: HTMLElement): Heading[] {
     element.id = slug;
     const level: 2 | 3 | 4 =
       element.tagName === "H4" || (isDropdownTitle && underWrittenH3) ? 4 : element.tagName === "H3" ? 3 : 2;
-    return { id: slug, text, level };
+    if (level === 2) currentParentId = slug;
+    return { id: slug, text, level, parentId: level === 2 ? undefined : currentParentId };
   });
 }
 
@@ -93,6 +96,10 @@ function sameHeadings(a: Heading[], b: Heading[]) {
 export function SectionProgress({ containerRef }: SectionProgressProps) {
   const [headings, setHeadings] = useState<Heading[]>([]);
   const [activeId, setActiveId] = useState("");
+  // Pages opt in by rendering an element with data-toc-collapsible: subsections
+  // then only show under the one expanded h2 (accordion style).
+  const [collapsible, setCollapsible] = useState(false);
+  const [openGroup, setOpenGroup] = useState("");
   const location = useLocation();
   const listRef = useRef<HTMLUListElement>(null);
   // Vertical center of the active row within the list, in px; null until
@@ -111,6 +118,8 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
 
     const found = collectHeadings(container);
     setHeadings(found);
+    setCollapsible(container.querySelector("[data-toc-collapsible]") !== null);
+    setOpenGroup("");
 
     // Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
     // Purpose: heading ids only exist once the scan above has run, so a
@@ -152,6 +161,12 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
       if (frame) window.cancelAnimationFrame(frame);
     };
   }, [containerRef, location.pathname]);
+
+  // Keep the group holding the section being read expanded.
+  useEffect(() => {
+    const active = headings.find((heading) => heading.id === activeId);
+    if (active) setOpenGroup(active.parentId ?? active.id);
+  }, [activeId, headings]);
 
   // Generated with Claude Opus 5.5 (Anthropic), 2026-10-08
   // Purpose: follow the reader's scroll position. Replaces an
@@ -209,7 +224,7 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
     const observer = new ResizeObserver(measure);
     observer.observe(list);
     return () => observer.disconnect();
-  }, [headings, activeId]);
+  }, [headings, activeId, openGroup, collapsible]);
 
   // On long pages the box scrolls internally; keep the active row (and so
   // the mascot) in view. Scrolls the box itself rather than using
@@ -259,6 +274,18 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
 
   if (headings.length < 2) return null;
 
+  const parentsWithChildren = new Set(headings.map((heading) => heading.parentId));
+  const visibleHeadings = collapsible
+    ? headings.filter((heading) => heading.level === 2 || heading.parentId === openGroup)
+    : headings;
+  // If the reader collapses the group they are in, the mascot stays on its
+  // (still visible) section header instead of vanishing.
+  const activeHeading = headings.find((heading) => heading.id === activeId);
+  const shownActiveId =
+    collapsible && activeHeading?.parentId && activeHeading.parentId !== openGroup
+      ? activeHeading.parentId
+      : activeId;
+
   return (
     <nav className="section-progress" aria-label="Page sections">
       <div className="section-progress-box">
@@ -283,22 +310,47 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
               </span>
             </li>
           )}
-          {headings.map((heading) => (
-            <li
-              key={heading.id}
-              className={[
-                activeId === heading.id ? "active" : null,
-                heading.level >= 3 ? "sub" : null,
-                heading.level === 4 ? "sub-sub" : null,
-              ]
-                .filter(Boolean)
-                .join(" ") || undefined}
-            >
-              <a href={`#${heading.id}`} onClick={(event) => handleClick(event, heading.id)}>
-                <span className="section-progress-label">{heading.text}</span>
-              </a>
-            </li>
-          ))}
+          {visibleHeadings.map((heading) => {
+            const expandable = collapsible && parentsWithChildren.has(heading.id);
+            const isOpen = openGroup === heading.id;
+            return (
+              <li
+                key={heading.id}
+                className={[
+                  shownActiveId === heading.id ? "active" : null,
+                  heading.level >= 3 ? "sub" : null,
+                  heading.level === 4 ? "sub-sub" : null,
+                  expandable ? "expandable" : null,
+                  expandable && isOpen ? "open" : null,
+                ]
+                  .filter(Boolean)
+                  .join(" ") || undefined}
+              >
+                <a href={`#${heading.id}`} onClick={(event) => handleClick(event, heading.id)}>
+                  <span className="section-progress-label">{heading.text}</span>
+                </a>
+                {expandable && (
+                  <button
+                    type="button"
+                    className="section-progress-toggle"
+                    aria-expanded={isOpen}
+                    aria-label={`${isOpen ? "Collapse" : "Expand"} ${heading.text}`}
+                    onClick={() => setOpenGroup(isOpen ? "" : heading.id)}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path
+                        d="M6 9l6 6 6-6"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </div>
     </nav>
