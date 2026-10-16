@@ -15,6 +15,7 @@ interface Heading {
   id: string;
   text: string;
   level: 2 | 3;
+  parentId?: string;
 }
 
 interface SectionProgressProps {
@@ -23,6 +24,7 @@ interface SectionProgressProps {
 
 function collectHeadings(container: HTMLElement): Heading[] {
   const seen = new Map<string, number>();
+  let currentParentId: string | undefined;
   return Array.from(
     container.querySelectorAll("h2:not([data-toc-ignore]), h3:not([data-toc-ignore])"),
   ).map((element) => {
@@ -33,7 +35,8 @@ function collectHeadings(container: HTMLElement): Heading[] {
     if (count > 0) slug = `${slug}-${count}`;
     element.id = slug;
     const level: 2 | 3 = element.tagName === "H3" ? 3 : 2;
-    return { id: slug, text, level };
+    if (level === 2) currentParentId = slug;
+    return { id: slug, text, level, parentId: level === 3 ? currentParentId : undefined };
   });
 }
 
@@ -43,6 +46,10 @@ function collectHeadings(container: HTMLElement): Heading[] {
 export function SectionProgress({ containerRef }: SectionProgressProps) {
   const [headings, setHeadings] = useState<Heading[]>([]);
   const [activeId, setActiveId] = useState("");
+  // Pages opt in by rendering an element with data-toc-collapsible: h3
+  // subsections then only show under the one expanded h2 (accordion style).
+  const [collapsible, setCollapsible] = useState(false);
+  const [openGroup, setOpenGroup] = useState("");
   const location = useLocation();
 
   // Page content changes on navigation, so re-scan whenever the route does.
@@ -55,7 +62,15 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
     const found = collectHeadings(container);
     setHeadings(found);
     setActiveId(found[0]?.id ?? "");
+    setCollapsible(container.querySelector("[data-toc-collapsible]") !== null);
+    setOpenGroup("");
   }, [containerRef, location.pathname]);
+
+  // Keep the group holding the section being read expanded.
+  useEffect(() => {
+    const active = headings.find((heading) => heading.id === activeId);
+    if (active) setOpenGroup(active.parentId ?? active.id);
+  }, [activeId, headings]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -90,27 +105,57 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
 
   if (headings.length < 2) return null;
 
+  const parentsWithChildren = new Set(headings.map((heading) => heading.parentId));
+  const visibleHeadings = collapsible
+    ? headings.filter((heading) => heading.level === 2 || heading.parentId === openGroup)
+    : headings;
+
   return (
     <nav className="section-progress" aria-label="Page sections">
       <div className="section-progress-box">
         <p className="section-progress-heading">On this page</p>
         <ul>
-          {headings.map((heading) => (
-            <li
-              key={heading.id}
-              className={[
-                activeId === heading.id ? "active" : null,
-                heading.level === 3 ? "sub" : null,
-              ]
-                .filter(Boolean)
-                .join(" ") || undefined}
-            >
-              <a href={`#${heading.id}`} onClick={(event) => handleClick(event, heading.id)}>
-                <span className="section-progress-dot" />
-                <span className="section-progress-label">{heading.text}</span>
-              </a>
-            </li>
-          ))}
+          {visibleHeadings.map((heading) => {
+            const expandable = collapsible && parentsWithChildren.has(heading.id);
+            const isOpen = openGroup === heading.id;
+            return (
+              <li
+                key={heading.id}
+                className={[
+                  activeId === heading.id ? "active" : null,
+                  heading.level === 3 ? "sub" : null,
+                  expandable ? "expandable" : null,
+                  expandable && isOpen ? "open" : null,
+                ]
+                  .filter(Boolean)
+                  .join(" ") || undefined}
+              >
+                <a href={`#${heading.id}`} onClick={(event) => handleClick(event, heading.id)}>
+                  <span className="section-progress-dot" />
+                  <span className="section-progress-label">{heading.text}</span>
+                </a>
+                {expandable && (
+                  <button
+                    type="button"
+                    className="section-progress-toggle"
+                    aria-expanded={isOpen}
+                    aria-label={`${isOpen ? "Collapse" : "Expand"} ${heading.text}`}
+                    onClick={() => setOpenGroup(isOpen ? "" : heading.id)}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path
+                        d="M6 9l6 6 6-6"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </div>
     </nav>
