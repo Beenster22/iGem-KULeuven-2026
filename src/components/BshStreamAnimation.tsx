@@ -614,7 +614,7 @@ export function BshStreamAnimation() {
           </div>
         </motion.div>
         <h3 className="bsh-stream-heading bsh-stream-reaction">
-          Bile salt hydrolases from are enzymes responsible for bile acid modification.
+          Bile salt hydrolases (BSH) are enzymes responsible for bile acid modification.
         </h3>
         
         <div
