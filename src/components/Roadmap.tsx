@@ -6,7 +6,8 @@
 // component with rm-prefixed classes (see "ROADMAP" in App.css) instead.
 // A Gantt-style swimlane timeline with a detail card that follows the
 // selection; on narrow containers it turns into a stacked list.
-import { CSSProperties, useMemo, useState } from "react";
+import { CSSProperties, ReactNode, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
 type Kind = "inhouse" | "partner" | "licensed" | "funding";
 type Filter = "all" | Kind;
@@ -28,11 +29,17 @@ interface Item {
   label: string;
   title: string;
   when: string;
-  what: string;
-  who: string;
-  why: string;
-  wiki: string;
+  what: ReactNode;
+  who: ReactNode;
+  why: ReactNode;
+  wiki?: ReactNode;
 }
+
+const section = (id: string, text: string) => <a href={`#${id}`}>{text}</a>;
+const TEAM = section("2-2-team-and-skills", "Our team.");
+const IP = section("2-7-ip-and-commercialisation-strategy", "IP and commercialisation strategy.");
+const FINANCE = section("3-4-financial-strategy", "Financial strategy.");
+const TO_DISCUSS_MILICA = "Still to be discussed with Milica.";
 
 const ICONS = {
   flask: (
@@ -137,10 +144,10 @@ const ITEMS: Item[] = [
     label: "Toolkit",
     title: "Toolkit and BSH silencing",
     when: "2026 to end of 2027",
-    what: "We build the genetic toolkit for Phocaeicola vulgatus, identify the most active bile salt hydrolase (BSH) and design a CRISPRi construct to silence it.",
-    who: "Our KU Leuven iGEM team, in our own wetlab.",
-    why: "These are the first two proof-of-concept steps: we can engineer the strain, and we know which enzyme to silence. Everything after this builds on them.",
-    wiki: "Results page and POC and development section.",
+    what: "? Discuss with wetlab what to put in here.",
+    who: "Our KU Leuven iGEM team, in the lab of Professor Vitor Bernardes Pinheiro.",
+    why: "Still to be discussed with wetlab.",
+    wiki: <Link to="/results">Results page.</Link>,
   },
   {
     id: "jam",
@@ -152,9 +159,9 @@ const ITEMS: Item[] = [
     title: "Jamboree",
     when: "12 to 17 November 2026",
     what: "We present the project and its business case to the iGEM judges.",
-    who: "Our team.",
+    who: TEAM,
     why: "What we publish decides what stays patentable, so we do not disclose the BSH sequences we work with.",
-    wiki: "IP and commercialisation strategy.",
+    wiki: IP,
   },
   {
     id: "opt",
@@ -165,10 +172,10 @@ const ITEMS: Item[] = [
     label: "Strain optimisation",
     title: "Strain optimisation",
     when: "2028 to 2029",
-    what: "We make the strain efficient, specific, stable without selection, scalable and safe. The final strain is marker-free, so it carries no antibiotic resistance gene. If CRISPRi is too weak or unstable, plan B is a permanent knock-out of the BSH gene.",
+    what: TO_DISCUSS_MILICA,
     who: "Our spin-out, with a research partner.",
-    why: "A strain that silences weakly, loses its construct or only grows in the lab cannot become a medicine.",
-    wiki: "POC and development, R&D follow-up steps.",
+    why: TO_DISCUSS_MILICA,
+    wiki: TO_DISCUSS_MILICA,
   },
   {
     id: "ip",
@@ -179,38 +186,23 @@ const ITEMS: Item[] = [
     label: "Patent, spin-out",
     title: "Patent filing and spin-out",
     when: "2027",
-    what: "We plan to file a first patent application with KU Leuven Research and Development (LRD) and a patent attorney, and to found our spin-out. LRD later licenses or assigns the IP to the spin-out.",
-    who: "KU Leuven LRD, a patent attorney and our team.",
+    what: "Still for discussion with Milica.",
+    who: "Still in discussion with Milica.",
     why: "A licensee pays for what is protected at the time of the deal. Until filing, we do not publish the details that make the invention patentable.",
-    wiki: "IP and commercialisation strategy.",
+    wiki: IP,
   },
   {
-    id: "cell",
+    id: "preclin",
     row: 2,
     kind: "partner",
     start: 2027.0,
-    end: 2028.0,
-    label: "Human cell tests",
-    title: "Human cell tests",
-    when: "2027",
-    what: "We test the mechanism in human cells: TGR5 reporter cells and human ILC3s or intestinal organoids, with IL-22 as the readout.",
-    who: "Our team with a laboratory partner.",
-    why: "This is the third proof-of-concept step: does silencing BSH restore the bile acid signalling that is lost in PMOS?",
-    wiki: "POC and development, current stage and proof of concept.",
-  },
-  {
-    id: "gm",
-    row: 2,
-    kind: "partner",
-    start: 2029.5,
-    end: 2030.6,
-    label: "Gut and mouse",
-    title: "Gut simulator and mouse studies",
-    when: "From mid 2029, after the seed round closes",
-    what: "We run EMPOWER through validated gut simulators (SHIME or TIM) for survival, effect on the microbiota and a first dose range. Mouse studies then check translocation, interactions and efficacy, with IL-22 as the endpoint.",
-    who: "Gut-simulator providers and an animal-study facility. Mouse studies need ethics approval.",
-    why: "This is the preclinical safety package that regulators expect before a first-in-human trial.",
-    wiki: "POC and development, preclinical and clinical development.",
+    end: 2031.3,
+    label: "Preclinical studies",
+    title: "Preclinical studies",
+    when: "From 2027 until the start of Phase I",
+    what: "A broad programme of preclinical studies that continues until the first-in-human trial starts. The exact studies are still to be defined.",
+    who: "Our team and spin-out, with laboratory and research partners.",
+    why: "This is the preclinical package that regulators expect before a first-in-human trial.",
   },
   {
     id: "ema",
@@ -218,11 +210,11 @@ const ITEMS: Item[] = [
     kind: "partner",
     start: 2027.2,
     end: 2028.7,
-    label: "EMA Scientific Advice",
-    title: "EMA Scientific Advice",
+    label: "EMA and FDA advice",
+    title: "EMA and FDA Scientific Advice",
     when: "Requested in 2027",
-    what: "We ask the EMA which preclinical package is enough, whether a first trial directly in PMOS patients is acceptable, and how an engineered strain is classified. We also meet the Belgian medicines agency and the GMO biosafety authority.",
-    who: "Our spin-out and the regulators.",
+    what: "We ask the EMA and the FDA which preclinical package is enough, whether a first trial directly in PMOS patients is acceptable, and how an engineered strain is classified. We also meet the Belgian medicines agency and the GMO biosafety authority.",
+    who: "Our spin-out and the regulators (EMA and FDA).",
     why: "The regulatory pathway for live biotherapeutics is still new. Early advice avoids building the wrong dossier.",
     wiki: "Regulatory strategy.",
   },
@@ -235,9 +227,9 @@ const ITEMS: Item[] = [
     label: "Advice received",
     title: "Scientific advice received",
     when: "Around the end of 2028",
-    what: "The EMA answers our questions on the preclinical package and the trial design.",
-    who: "EMA.",
-    why: "The answer fixes what we have to deliver before the trial application.",
+    what: "The EMA and the FDA answer our questions on the preclinical package and the trial design.",
+    who: "EMA and FDA.",
+    why: "The answers fix what we have to deliver before the trial applications.",
     wiki: "Regulatory strategy.",
   },
   {
@@ -246,13 +238,13 @@ const ITEMS: Item[] = [
     milestone: true,
     kind: "partner",
     start: 2030.95,
-    label: "Trial application",
-    title: "Trial application",
+    label: "IND and trial application",
+    title: "IND and trial application",
     when: "End of 2030",
-    what: "We submit the Investigational Medicinal Product Dossier (IMPD) with the clinical trial application, together with the biosafety notification for a genetically modified strain.",
+    what: "We submit the Investigational New Drug (IND) application to the FDA and the Investigational Medicinal Product Dossier (IMPD) with the clinical trial application in the EU, together with the biosafety notification for a genetically modified strain.",
     who: "Our spin-out.",
-    why: "No human is dosed before the dossier is approved.",
-    wiki: "Regulatory strategy and POC and development.",
+    why: "No human is dosed before the applications are approved.",
+    wiki: section("2-6-regulatory-strategy", "Regulatory strategy."),
   },
   {
     id: "gmp",
@@ -266,7 +258,12 @@ const ITEMS: Item[] = [
     what: "A GMP manufacturer produces the trial batch of the live anaerobic strain.",
     who: "A GMP manufacturer.",
     why: "Live anaerobic microorganisms need specialised facilities and strict quality control. Manufacturing is also a major source of risk.",
-    wiki: "Value chain analysis and Risks and mitigation.",
+    wiki: (
+      <>
+        {section("2-5-value-chain-analysis", "Value chain analysis")} and{" "}
+        {section("3-3-risks-and-mitigation", "Risks and mitigation")}.
+      </>
+    ),
   },
   {
     id: "fp",
@@ -294,7 +291,7 @@ const ITEMS: Item[] = [
     what: "A first-in-human safety trial in PMOS patients, with sequential enrolment, dose escalation, an independent safety committee and defined stopping rules. We add exploratory bile acid and CRP blood readouts.",
     who: "Our spin-out as sponsor, a hospital clinical site (UZ Leuven Fertility Centre and UZ Brussel PCOS clinic are our preferred options), a trial CRO.",
     why: "The human safety data are the main asset for licensing talks.",
-    wiki: "Value chain analysis and POC and development.",
+    wiki: section("2-5-value-chain-analysis", "Value chain analysis."),
   },
   {
     id: "lic",
@@ -336,8 +333,8 @@ const ITEMS: Item[] = [
     when: "2027",
     what: "Early funding for the spin-out and the first preclinical work. We combine non-dilutive grants with early investors.",
     who: "Grant bodies and early-stage investors.",
-    why: "We never rely on grants alone.",
-    wiki: "Financial strategy.",
+    why: "It makes founding the spin-out and starting the first preclinical work possible, while keeping early dilution low by not relying on equity alone.",
+    wiki: FINANCE,
   },
   {
     id: "seed",
@@ -348,10 +345,10 @@ const ITEMS: Item[] = [
     label: "Seed",
     title: "Seed round",
     when: "Closes in 2029",
-    what: "Funding for the gut simulator and mouse studies, and for the preparation of the GMP batch and the dossiers.",
+    what: "Funding for preclinical development and for preparing manufacturing and the regulatory dossiers.",
     who: "Life-science investors and strategic partners.",
     why: "The preclinical package is the first big cost block.",
-    wiki: "Financial strategy.",
+    wiki: FINANCE,
   },
   {
     id: "sa",
@@ -365,7 +362,7 @@ const ITEMS: Item[] = [
     what: "Funding that carries EMPOWER into clinical development. The amounts are not estimated in our financial strategy.",
     who: "Life-science venture capital and strategic partners.",
     why: "Phase I and GMP manufacturing are among our largest costs.",
-    wiki: "Financial strategy.",
+    wiki: FINANCE,
   },
 ];
 
@@ -389,10 +386,12 @@ function DetailFields({ item }: { item: Item }) {
         <h5>Why it matters</h5>
         <p>{item.why}</p>
       </div>
-      <div>
-        <h5>More on the wiki</h5>
-        <p>{item.wiki}</p>
-      </div>
+      {item.wiki && (
+        <div>
+          <h5>More on the wiki</h5>
+          <p>{item.wiki}</p>
+        </div>
+      )}
     </>
   );
 }
@@ -413,8 +412,9 @@ export function Roadmap() {
   return (
     <div className="roadmap">
       <p className="rm-sub">
-        From the Jamboree to a licensing deal. Select a step to see who carries it out, what happens,
-        and why it matters.
+        From the Jamboree to a licensing deal.
+        <br />
+        <em>Select a step to see who carries it out, what happens, and why it matters.</em>
       </p>
 
       <div className="rm-chips" role="group" aria-label="Filter by who leads the step">
@@ -571,8 +571,11 @@ export function Roadmap() {
 
       <p className="rm-foot">
         Dates are targets and depend on funding, scientific results and regulatory feedback. Timing of the
-        Series A is indicative. Details come from our value chain, regulatory, IP and financial strategy
-        pages.
+        Series A is indicative. Details come from our{" "}
+        {section("2-5-value-chain-analysis", "value chain")},{" "}
+        {section("2-6-regulatory-strategy", "regulatory")},{" "}
+        {section("2-7-ip-and-commercialisation-strategy", "IP")} and{" "}
+        {section("3-4-financial-strategy", "financial strategy")} pages.
       </p>
     </div>
   );
