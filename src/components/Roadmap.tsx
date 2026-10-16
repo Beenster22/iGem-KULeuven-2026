@@ -32,7 +32,7 @@ interface Item {
   what: ReactNode;
   who: ReactNode;
   why: ReactNode;
-  wiki: ReactNode;
+  wiki?: ReactNode;
 }
 
 const section = (id: string, text: string) => <a href={`#${id}`}>{text}</a>;
@@ -147,11 +147,7 @@ const ITEMS: Item[] = [
     what: "? Discuss with wetlab what to put in here.",
     who: "Our KU Leuven iGEM team, in the lab of Professor Vitor Bernardes Pinheiro.",
     why: "Still to be discussed with wetlab.",
-    wiki: (
-      <>
-        <Link to="/results">Results page</Link> and POC and development section.
-      </>
-    ),
+    wiki: <Link to="/results">Results page.</Link>,
   },
   {
     id: "jam",
@@ -207,7 +203,6 @@ const ITEMS: Item[] = [
     what: "A broad programme of preclinical studies that continues until the first-in-human trial starts. The exact studies are still to be defined.",
     who: "Our team and spin-out, with laboratory and research partners.",
     why: "This is the preclinical package that regulators expect before a first-in-human trial.",
-    wiki: "POC and development, preclinical and clinical development.",
   },
   {
     id: "ema",
@@ -249,7 +244,7 @@ const ITEMS: Item[] = [
     what: "We submit the Investigational New Drug (IND) application to the FDA and the Investigational Medicinal Product Dossier (IMPD) with the clinical trial application in the EU, together with the biosafety notification for a genetically modified strain.",
     who: "Our spin-out.",
     why: "No human is dosed before the applications are approved.",
-    wiki: "Regulatory strategy and POC and development.",
+    wiki: section("2-6-regulatory-strategy", "Regulatory strategy."),
   },
   {
     id: "gmp",
@@ -296,7 +291,7 @@ const ITEMS: Item[] = [
     what: "A first-in-human safety trial in PMOS patients, with sequential enrolment, dose escalation, an independent safety committee and defined stopping rules. We add exploratory bile acid and CRP blood readouts.",
     who: "Our spin-out as sponsor, a hospital clinical site (UZ Leuven Fertility Centre and UZ Brussel PCOS clinic are our preferred options), a trial CRO.",
     why: "The human safety data are the main asset for licensing talks.",
-    wiki: "Value chain analysis and POC and development.",
+    wiki: section("2-5-value-chain-analysis", "Value chain analysis."),
   },
   {
     id: "lic",
@@ -391,10 +386,12 @@ function DetailFields({ item }: { item: Item }) {
         <h5>Why it matters</h5>
         <p>{item.why}</p>
       </div>
-      <div>
-        <h5>More on the wiki</h5>
-        <p>{item.wiki}</p>
-      </div>
+      {item.wiki && (
+        <div>
+          <h5>More on the wiki</h5>
+          <p>{item.wiki}</p>
+        </div>
+      )}
     </>
   );
 }
