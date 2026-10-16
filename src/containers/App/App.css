@@ -6753,6 +6753,32 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
+/* Stakeholder-group introduction at the top of a section card (HPIntro) */
+.hp-section-intro {
+  margin: 0 0 1.5rem;
+  padding: 0.9rem 1.25rem;
+  border-left: 4px solid #2fa4a9;
+  border-radius: 0 0.9rem 0.9rem 0;
+  background-color: rgba(47, 164, 169, 0.08);
+}
+
+[data-theme="dark"] .hp-section-intro {
+  background-color: rgba(47, 164, 169, 0.14);
+}
+
+.hp-section-intro-label {
+  margin: 0 0 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #2fa4a9;
+}
+
+.hp-section-intro > :last-child {
+  margin-bottom: 0;
+}
+
 .hp-section-context {
   max-width: 72ch;
   margin-top: 1.25rem;
@@ -6951,6 +6977,62 @@ body:not(.home-fullscreen) .home-hero {
 .hp-modal-caption span {
   font-size: 0.9rem;
   opacity: 0.75;
+}
+
+/* JOINT INTERVIEWS
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-16
+   Purpose: an interview with two people (name2/image2 set) shows both photos
+   side by side as one wide 2:1 image in the spotlight, carousel and list —
+   see PersonPhotos in HumanPracticesInterviews.tsx. */
+.hp-featured-photo.is-pair,
+.hp-carousel-photo.is-pair,
+.hp-list-photo.is-pair {
+  display: flex;
+  aspect-ratio: 2 / 1;
+}
+
+.is-pair > img,
+.is-pair > span {
+  flex: 1 1 50%;
+  min-width: 0;
+  width: 50%;
+}
+
+.hp-featured-body.is-pair {
+  grid-template-columns: minmax(260px, 440px) 1fr;
+}
+
+.hp-carousel-item.is-pair {
+  width: 300px;
+}
+
+.hp-list-item.is-pair {
+  grid-template-columns: 200px 1fr;
+}
+
+@media (max-width: 640px) {
+  .hp-featured-body.is-pair {
+    grid-template-columns: 1fr;
+  }
+
+  .hp-featured-photo.is-pair {
+    max-width: 380px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hp-list-item.is-pair {
+    grid-template-columns: 1fr;
+  }
+
+  .hp-list-photo.is-pair {
+    max-width: 240px;
+  }
+}
+
+/* Second person's photo in the popup, stacked under the first caption */
+.hp-modal-photo--second {
+  margin-top: 1.25rem;
 }
 
 /* Interview date + "Based in" under the name/role */

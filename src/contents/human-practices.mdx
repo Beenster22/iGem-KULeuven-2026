@@ -160,13 +160,24 @@ blurb, shown under the carousel.
 either off to hide it. A section with no `<Interviewee>` entries (like Patients or General
 Public) is shown as a plain text card instead of a carousel.
 
+Put an `<HPIntro>` at the top of a section for the group's introduction (what we wanted to
+learn from them, what we already knew) — it's shown under the section title, above the
+interviews.
+
 </Callout>
 
 <HumanPracticesInterviews>
 
 <HPSection title="Healthcare Professionals">
 
-<Interviewee name="Prof. Dr. Dirk Timmerman" role="PhD Candidate, KU Leuven" date="DD Month 2026" basedIn="City, Country">
+<HPIntro>
+
+Replace this with an introduction to this stakeholder group: what we wanted to learn from them,
+and what we already knew (or didn't know) before talking to them.
+
+</HPIntro>
+
+<Interviewee name="Prof. Dr. Dirk Timmerman" role="Chair in Gynecology & Obstetrics" date="30 April 2026" basedIn="Leuven, Belgium">
 
 **Why did we reach out to them?** — We reached out to Jane Doe, a PhD candidate at KU Leuven, to gather insights on the technical aspects of our project and how it could be applied in a research setting.
 
@@ -186,9 +197,18 @@ Public) is shown as a plain text card instead of a carousel.
 
 </Interviewee>
 
-<Interviewee name="Prof. Dr. Michael De Vos & Prof. Dr. Shari Mackens" role="Fertility Specialists, UZ Brussels" date="15 June 2026" basedIn="Brussels, Belgium" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/michael-de-vos.avif">
+<Interviewee
+  name="Prof. Dr. Michel De Vos"
+  role="Gynecologist & Senior Medical Director, UZ Brussels"
+  image="https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/michael-de-vos.avif"
+  name2="Prof. Dr. Shari Mackens"
+  role2="Gynecologist & Senior Medical Director, UZ Brussels"
+  image2=" "
+  date="15 June 2026"
+  basedIn="Brussels, Belgium"
+>
 
-**Why did we reach out to them?** — To get a second opinion from a PMOS specialist, we reached out to Prof. Dr. Michael De Vos, who is an IVF specialist at UZ Brussels. After hearing about the project, he introduced us to Prof. Dr. Shari Mackens who joined the meeting. She’s a fertility specialist with experience in microbiology. From Prof. Dr. Lie Fong's meeting, we were aware that heterogeneity of PMOS is a thing to keep in mind. Therefore, we inquired about how to actively approach this in our design. 
+**Why did we reach out to them?** — To get a second opinion from a PMOS expert, we reached out to Prof. Dr. Michel De Vos, who is an IVF specialist at UZ Brussels. After hearing about the project, he introduced us to Prof. Dr. Shari Mackens who joined the meeting. She’s a fertility specialist with experience in microbiology. From Prof. Dr. Lie Fong's meeting, we were aware that heterogeneity of PMOS is a thing to keep in mind. Therefore, we inquired about how to actively approach this in our design. 
 
 **What did we learn?** — They explained that patients with hyperandrogenism, obesity, and high C-Reactive Protein (CRP, an inflammation marker) tend to show more severe inflammation and metabolic problems, supporting the heterogeneity of PMOS. Dr. De Vos suggested this subgroup as the most relevant one for our research and doubted targeting a single bacterium would lead to clinically useful results. Both stressed that association should not be confused with causation. Dr. Mackens suggested to focus on the intestinal microbiome as a whole, and not just one bacterium, or to reinforce our case for why we’re focusing on P. vulgatus. For our patient interviews, they suggested asking about acceptance of engineered bacteria, quality of life and diagnosis, while also noting that these interviews are going to give more a perspective rather than a scientific validation. 
 
@@ -196,12 +216,42 @@ Public) is shown as a plain text card instead of a carousel.
 
 </Interviewee>
 
-Replace this with a short overview of who this group of interviewees was and what we hoped to
-learn from them.
+<Interviewee name="Sarah Noelmans" role="Functional Dietitian, Leuven Institute for Fertility & Embryology" date="08 July 2026" basedIn="Leuven, Belgium" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/noelmans-sarah.avif">
+
+**Why did we reach out to them?** — To get a second opinion from a PMOS expert, we reached out to Prof. Dr. Michael De Vos, who is an IVF specialist at UZ Brussels. After hearing about the project, he introduced us to Prof. Dr. Shari Mackens who joined the meeting. She’s a fertility specialist with experience in microbiology. From Prof. Dr. Lie Fong's meeting, we were aware that heterogeneity of PMOS is a thing to keep in mind. Therefore, we inquired about how to actively approach this in our design. 
+
+**What did we learn?** — They explained that patients with hyperandrogenism, obesity, and high C-Reactive Protein (CRP, an inflammation marker) tend to show more severe inflammation and metabolic problems, supporting the heterogeneity of PMOS. Dr. De Vos suggested this subgroup as the most relevant one for our research and doubted targeting a single bacterium would lead to clinically useful results. Both stressed that association should not be confused with causation. Dr. Mackens suggested to focus on the intestinal microbiome as a whole, and not just one bacterium, or to reinforce our case for why we’re focusing on P. vulgatus. For our patient interviews, they suggested asking about acceptance of engineered bacteria, quality of life and diagnosis, while also noting that these interviews are going to give more a perspective rather than a scientific validation. 
+
+**How did we integrate their feedback?** — Their feedback helped us refine our project description, by advising us to narrow our target population toward a more specific population of women affected by PMOS. They also contributed to our patient study by suggesting questions and topics which also helped to sharpen our focus when analyzing a potential market. Additionally, their comment about association and causation shifted our focus. While we made our case stronger to why P. vulgatus is a good way to approach this project, we investigated the bile acid pool in the gut more closely and how it interacts with various different pathways rather than just the one that we focused on at the time.
+
+</Interviewee>
+
+<Interviewee name="Biljana Popovic Todorovic " role="Gynecologist & Head of IVF Clinic, Avala General Hospital" date="15 September 2026" basedIn="Belgrade, Serbia" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/biljana.avif">
+
+**Why did we reach out to them?** — We contacted Dr. Biljana Popovic Todorovic, who is Head of the IVF (In Vitro Fertilization) clinic at the Avala General Hospital in Belgrade, Serbia with international research and treatment experience to better understand the realities of IVF and of fertility care for women with PMOS. Additionally, we hoped she would provide us with a multinational view on the PMOS clinics and how they differ in treatment plans and patient care, considering her broad international work experience.
+
+**What did we learn?** — She named age as the main limit on IVF success, because patients are getting older on average. She also explained how standard IVF differs from a gentler alternative, in vitro maturation (IVM). In IVF, hormone injections stimulate the ovaries to produce several eggs, which are collected once they are mature. This can cause ovarian hyperstimulation syndrome (OHSS), a swelling of the ovaries in reaction to the hormones. Doctors can keep this risk very low, for example by freezing all embryos for a later transfer, but the enlarged ovaries still cause discomfort. In IVM, the ovaries are not stimulated, or only briefly primed with hormones, so there is no risk of OHSS. The eggs are collected before they are mature and ripen in the lab instead.
+She sees little difference in how women with PMOS are treated across countries. The key difference is how long it takes to receive treatment. Women whose main issue is infertility usually see a reproductive specialist first, and those with amenorrhoea (asbent or irregular menstruation), weight gain, obesity, acne or hirsutism see a reproductive endocrinologist first. In her experience, women with PMOS account for about 5–10% of her patients who struggle with fertility. She also mentioned that PMOS is stigmatized and poorly understood: many patients do not realize they have the condition or what it means.
+
+**How did we integrate their feedback?** — Dr. Todorovic provided us with valuable insights on how IVF, which is a common treatment for infertility, and PMOS are looked at from a multinational perspective. From this, we continued to research how phenotype manifest differently in different regions of the world. 
+
+</Interviewee>
+
+These conversations shaped our therapeutic design, in particular pathway validation and our target patient group. In most meetings, we were advised to take the heterogeneity of PMOS into account. We therefore focus first on severely affected women with phenotype A. Our entrepreneurship plan describes how we would widen this group based on preliminary results.
+Almost every expert also questioned the causal link between bile acids and inflammation and stressed the difference between association and causation. As we are still at the stage of fundamental research, we cannot resolve this yet. Thereofe, we addressed it where we could, by reviewing the IL-22 transcriptomic literature and bioinformatically comparing which other bacterial species present in the gut microbiome show BSH activity.
+Finally, Prof. Lie Fong gave us access to patients for our interview study. The experts also shaped how we approach patients, with awareness of how heavily PMOS can affect quality of life, and which topics to cover: quality of life, acceptance of genetically engineered therapeutics and the diagnosis journey.
+
 
 </HPSection>
 
 <HPSection title="Scientific & Technical Experts">
+
+<HPIntro>
+
+Replace this with an introduction to this stakeholder group: what we wanted to learn from them,
+and what we already knew (or didn't know) before talking to them.
+
+</HPIntro>
 
 <Interviewee name="Jane Doe" role="PhD Candidate, KU Leuven" date="DD Month 2026" basedIn="City, Country">
 
@@ -230,6 +280,13 @@ learn from them.
 
 <HPSection title="Biotech Entrepreneurs & Industry">
 
+<HPIntro>
+
+Replace this with an introduction to this stakeholder group: what we wanted to learn from them,
+and what we already knew (or didn't know) before talking to them.
+
+</HPIntro>
+
 <Interviewee name="Firstname Lastname" role="Role, Company" date="DD Month 2026" basedIn="City, Country">
 
 **Why did we reach out to them?** — We reached out to Firstname Lastname, a professional in the biotech industry, to understand the commercial viability and market potential of our project.
@@ -247,12 +304,26 @@ learn from them.
 
 <HPSection title="Patients">
 
+<HPIntro>
+
+Replace this with an introduction to this stakeholder group: what we wanted to learn from them,
+and what we already knew (or didn't know) before talking to them.
+
+</HPIntro>
+
 Replace this with the patients section. No interview popups here — just write the text directly
 inside this section.
 
 </HPSection>
 
 <HPSection title="Advocates & Legislators">
+
+<HPIntro>
+
+Replace this with an introduction to this stakeholder group: what we wanted to learn from them,
+and what we already knew (or didn't know) before talking to them.
+
+</HPIntro>
 
 <Interviewee name="Firstname Lastname" role="Role, Organisation" date="DD Month 2026" basedIn="City, Country">
 
@@ -270,6 +341,13 @@ learn from them.
 </HPSection>
 
 <HPSection title="General Public">
+
+<HPIntro>
+
+Replace this with an introduction to this stakeholder group: what we wanted to learn from them,
+and what we already knew (or didn't know) before talking to them.
+
+</HPIntro>
 
 Replace this with the general public section. No interview popups here — just write the text directly
 inside this section.

@@ -19,6 +19,12 @@ interface IntervieweeProps {
   /** Free text, e.g. "PhD Candidate, KU Leuven" or "Patient advocate". */
   role?: string;
   image?: string;
+  /** Optional second person for a joint interview: their name, role and
+   * photo. The pair is shown as one wide double photo in the spotlight,
+   * carousel and list, and as two stacked photos in the popup. */
+  name2?: string;
+  role2?: string;
+  image2?: string;
   /** When the interview took place, free text, e.g. "12 March 2026". */
   date?: string;
   /** Where the interviewee works from, e.g. "Leuven, Belgium". */
@@ -33,6 +39,21 @@ interface IntervieweeProps {
 // A labeled slot for use inside HPSection. Never rendered directly — the
 // parent reads its props via extractSections instead.
 export function Interviewee(_props: IntervieweeProps) {
+  return null;
+}
+
+// Generated with Claude Opus 5.5 (Anthropic), 2026-10-16
+// Purpose: optional introduction for a stakeholder group — what we wanted to
+// learn from them / what we already knew — shown at the top of the section
+// card, above the interviews. A labeled slot like Interviewee: never rendered
+// directly, the parent reads its children via extractSections.
+interface HPIntroProps {
+  /** Small label above the text; defaults to "Introduction". */
+  label?: string;
+  children: ReactNode;
+}
+
+export function HPIntro(_props: HPIntroProps) {
   return null;
 }
 
@@ -52,6 +73,9 @@ interface FlatInterviewee {
   name: string;
   role?: string;
   image?: string;
+  name2?: string;
+  role2?: string;
+  image2?: string;
   date?: string;
   basedIn?: string;
   summary?: string;
@@ -60,6 +84,7 @@ interface FlatInterviewee {
 
 interface Section {
   title: string;
+  intro?: { label?: string; content: ReactNode };
   interviewees: FlatInterviewee[];
   context: ReactNode[];
 }
@@ -74,13 +99,19 @@ function extractSections(children: ReactNode): Section[] {
     .map((sectionChild) => {
       const interviewees: FlatInterviewee[] = [];
       const context: ReactNode[] = [];
+      let intro: Section["intro"];
       Children.forEach(sectionChild.props.children, (child) => {
-        if (isValidElement<IntervieweeProps>(child) && child.type === Interviewee) {
+        if (isValidElement<HPIntroProps>(child) && child.type === HPIntro) {
+          intro = { label: child.props.label, content: child.props.children };
+        } else if (isValidElement<IntervieweeProps>(child) && child.type === Interviewee) {
           interviewees.push({
             globalIndex: counter++,
             name: child.props.name,
             role: child.props.role,
             image: child.props.image,
+            name2: child.props.name2,
+            role2: child.props.role2,
+            image2: child.props.image2,
             date: child.props.date,
             basedIn: child.props.basedIn,
             summary: child.props.summary,
@@ -90,18 +121,53 @@ function extractSections(children: ReactNode): Section[] {
           context.push(child);
         }
       });
-      return { title: sectionChild.props.title, interviewees, context };
+      return { title: sectionChild.props.title, intro, interviewees, context };
     });
 }
 
+// Titles like "Prof." / "Dr." (any word ending in a dot) are skipped, so
+// "Prof. Dr. Shari Mackens" gives "SM" rather than "PD".
 function initials(name: string) {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
+  const words = name.split(/\s+/).filter(Boolean);
+  const named = words.filter((word) => !word.endsWith("."));
+  return (named.length > 0 ? named : words)
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase())
     .join("");
 }
+
+// Joint interviews (name2 set) show both names, and both roles when they differ.
+function displayName(person: FlatInterviewee) {
+  return person.name2 ? `${person.name} & ${person.name2}` : person.name;
+}
+
+function displayRole(person: FlatInterviewee) {
+  const roles = [person.role, person.role2].filter((role): role is string => Boolean(role));
+  return [...new Set(roles)].join(" · ");
+}
+
+// The photo(s) for one interview: a single photo, or — for a joint interview —
+// both photos side by side, which the parent's "is-pair" class turns into one
+// wide 2:1 image. Missing photos fall back to the person's initials.
+function PersonPhotos({ person, placeholderClass }: { person: FlatInterviewee; placeholderClass: string }) {
+  const people = [{ name: person.name, image: person.image }];
+  if (person.name2) people.push({ name: person.name2, image: person.image2 });
+  return (
+    <>
+      {people.map((p) =>
+        p.image ? (
+          <img key={p.name} src={p.image} alt="" />
+        ) : (
+          <span key={p.name} className={placeholderClass} aria-hidden="true">
+            {initials(p.name)}
+          </span>
+        ),
+      )}
+    </>
+  );
+}
+
+const pairClass = (person: FlatInterviewee) => (person.name2 ? " is-pair" : "");
 
 // Seconds per tile for the auto-scroll — matches SponsorCarousel's ~4s/tile
 // pace at its default speed (150px logo + 32px gap over 25s ÷ ~5 tiles),
@@ -110,13 +176,7 @@ const SECONDS_PER_TILE = 4;
 const MIN_CAROUSEL_SECONDS = 14;
 
 function carouselPhoto(person: FlatInterviewee) {
-  return person.image ? (
-    <img src={person.image} alt="" />
-  ) : (
-    <span className="hp-carousel-photo-placeholder" aria-hidden="true">
-      {initials(person.name)}
-    </span>
-  );
+  return <PersonPhotos person={person} placeholderClass="hp-carousel-photo-placeholder" />;
 }
 
 interface HPCarouselProps {
@@ -143,21 +203,21 @@ function HPCarousel({ title, interviewees, featuredIndex, onOpen }: HPCarouselPr
             key={person.globalIndex}
             type="button"
             role="listitem"
-            className={`hp-carousel-item${person.globalIndex === featuredIndex ? " is-featured" : ""}`}
+            className={`hp-carousel-item${pairClass(person)}${person.globalIndex === featuredIndex ? " is-featured" : ""}`}
             onClick={() => onOpen(person.globalIndex)}
           >
-            <span className="hp-carousel-photo">{carouselPhoto(person)}</span>
-            <span className="hp-carousel-name">{person.name}</span>
+            <span className={`hp-carousel-photo${pairClass(person)}`}>{carouselPhoto(person)}</span>
+            <span className="hp-carousel-name">{displayName(person)}</span>
           </button>
         ))}
         {interviewees.map((person) => (
           <div
             key={`${person.globalIndex}-dup`}
-            className={`hp-carousel-item${person.globalIndex === featuredIndex ? " is-featured" : ""}`}
+            className={`hp-carousel-item${pairClass(person)}${person.globalIndex === featuredIndex ? " is-featured" : ""}`}
             aria-hidden="true"
           >
-            <span className="hp-carousel-photo">{carouselPhoto(person)}</span>
-            <span className="hp-carousel-name">{person.name}</span>
+            <span className={`hp-carousel-photo${pairClass(person)}`}>{carouselPhoto(person)}</span>
+            <span className="hp-carousel-name">{displayName(person)}</span>
           </div>
         ))}
       </div>
@@ -210,24 +270,18 @@ function HPFeatured({ interviewees, position, paused, onSelect, onOpen }: HPFeat
       style={{ "--hp-feature-duration": `${FEATURE_SECONDS}s` } as React.CSSProperties}
     >
       {/* Keyed on the person so each switch remounts and replays the fade-in. */}
-      <div key={person.globalIndex} className="hp-featured-body" aria-live="polite">
+      <div key={person.globalIndex} className={`hp-featured-body${pairClass(person)}`} aria-live="polite">
         <button
           type="button"
-          className="hp-featured-photo"
+          className={`hp-featured-photo${pairClass(person)}`}
           onClick={() => onOpen(person.globalIndex)}
-          aria-label={`Read the full interview with ${person.name}`}
+          aria-label={`Read the full interview with ${displayName(person)}`}
         >
-          {person.image ? (
-            <img src={person.image} alt="" />
-          ) : (
-            <span className="hp-featured-photo-placeholder" aria-hidden="true">
-              {initials(person.name)}
-            </span>
-          )}
+          <PersonPhotos person={person} placeholderClass="hp-featured-photo-placeholder" />
         </button>
         <div className="hp-featured-text">
-          <h3 className="hp-featured-name">{person.name}</h3>
-          {person.role && <p className="hp-featured-role">{person.role}</p>}
+          <h3 className="hp-featured-name">{displayName(person)}</h3>
+          {displayRole(person) && <p className="hp-featured-role">{displayRole(person)}</p>}
           <div className={`hp-featured-summary${person.summary ? "" : " is-excerpt"}`}>
             {person.summary ? <p>{person.summary}</p> : person.content}
           </div>
@@ -245,7 +299,7 @@ function HPFeatured({ interviewees, position, paused, onSelect, onOpen }: HPFeat
               type="button"
               role="tab"
               aria-selected={i === position}
-              aria-label={p.name}
+              aria-label={displayName(p)}
               className={`hp-featured-dot${i === position ? " is-active" : ""}${i === position && rotating ? " is-running" : ""}`}
               onClick={() => onSelect(i)}
             />
@@ -280,18 +334,18 @@ function HPList({ interviewees, onOpen }: HPListProps) {
   return (
     <ul className="hp-list">
       {interviewees.map((person) => (
-        <li key={person.globalIndex} className="hp-list-item">
+        <li key={person.globalIndex} className={`hp-list-item${pairClass(person)}`}>
           <button
             type="button"
-            className="hp-list-photo"
+            className={`hp-list-photo${pairClass(person)}`}
             onClick={() => onOpen(person.globalIndex)}
-            aria-label={`Read the full interview with ${person.name}`}
+            aria-label={`Read the full interview with ${displayName(person)}`}
           >
             {carouselPhoto(person)}
           </button>
           <div className="hp-list-text">
-            <h3 className="hp-list-name">{person.name}</h3>
-            {person.role && <p className="hp-list-role">{person.role}</p>}
+            <h3 className="hp-list-name">{displayName(person)}</h3>
+            {displayRole(person) && <p className="hp-list-role">{displayRole(person)}</p>}
             <div className={`hp-list-summary${person.summary ? "" : " is-excerpt"}`}>
               {person.summary ? <p>{person.summary}</p> : person.content}
             </div>
@@ -302,6 +356,16 @@ function HPList({ interviewees, onOpen }: HPListProps) {
         </li>
       ))}
     </ul>
+  );
+}
+
+function HPIntroBlock({ intro }: { intro: Section["intro"] }) {
+  if (!intro) return null;
+  return (
+    <div className="hp-section-intro">
+      <p className="hp-section-intro-label">{intro.label ?? "Introduction"}</p>
+      {intro.content}
+    </div>
   );
 }
 
@@ -320,6 +384,7 @@ function HPSectionCard({ section, view, paused, onOpen }: HPSectionCardProps) {
     return (
       <div className="hp-section-card">
         <h2 className="hp-section-title">{section.title}</h2>
+        <HPIntroBlock intro={section.intro} />
         <HPList interviewees={section.interviewees} onOpen={onOpen} />
       </div>
     );
@@ -328,6 +393,7 @@ function HPSectionCard({ section, view, paused, onOpen }: HPSectionCardProps) {
   return (
     <div className="hp-section-card">
       <h2 className="hp-section-title">{section.title}</h2>
+      <HPIntroBlock intro={section.intro} />
       <HPFeatured
         interviewees={section.interviewees}
         position={position}
@@ -419,6 +485,7 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
           <section key={section.title} className="hp-section">
             <div className="hp-section-card hp-section-card--text">
               <h2 className="hp-section-title">{section.title}</h2>
+              <HPIntroBlock intro={section.intro} />
               <div className="hp-section-text">{section.context}</div>
             </div>
           </section>
@@ -431,7 +498,7 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
             className="hp-modal"
             role="dialog"
             aria-modal="true"
-            aria-label={openPerson.name}
+            aria-label={displayName(openPerson)}
             ref={modalRef}
             tabIndex={-1}
             onClick={(event) => event.stopPropagation()}
@@ -454,6 +521,23 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
                   <strong>{openPerson.name}</strong>
                   {openPerson.role && <span>{openPerson.role}</span>}
                 </div>
+                {openPerson.name2 && (
+                  <>
+                    <div className="hp-modal-photo hp-modal-photo--second">
+                      {openPerson.image2 ? (
+                        <img src={openPerson.image2} alt="" />
+                      ) : (
+                        <span className="hp-modal-photo-placeholder" aria-hidden="true">
+                          {initials(openPerson.name2)}
+                        </span>
+                      )}
+                    </div>
+                    <div className="hp-modal-caption">
+                      <strong>{openPerson.name2}</strong>
+                      {openPerson.role2 && <span>{openPerson.role2}</span>}
+                    </div>
+                  </>
+                )}
                 {(openPerson.date || openPerson.basedIn) && (
                   <dl className="hp-modal-meta">
                     {openPerson.date && (
