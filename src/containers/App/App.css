@@ -9700,7 +9700,6 @@ a.protocol-download:hover {
 }
 
 .rm-sub {
-  max-width: 62ch;
   margin-bottom: 1rem;
   color: var(--rm-muted);
 }
@@ -10109,7 +10108,6 @@ a.protocol-download:hover {
 }
 
 .rm-foot {
-  max-width: 80ch;
   margin-top: 18px;
   color: var(--rm-muted);
   font-size: 13px;
