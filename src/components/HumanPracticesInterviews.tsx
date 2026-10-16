@@ -108,10 +108,11 @@ function extractSections(children: ReactNode): Section[] {
             globalIndex: counter++,
             name: child.props.name,
             role: child.props.role,
-            image: child.props.image,
+            // Blank values (e.g. image=" ") count as no photo → initials
+            image: child.props.image?.trim() || undefined,
             name2: child.props.name2,
             role2: child.props.role2,
-            image2: child.props.image2,
+            image2: child.props.image2?.trim() || undefined,
             date: child.props.date,
             basedIn: child.props.basedIn,
             summary: child.props.summary,
@@ -211,14 +212,20 @@ function HPCarousel({ title, interviewees, featuredIndex, onOpen }: HPCarouselPr
           </button>
         ))}
         {interviewees.map((person) => (
-          <div
+          // The loop's second copy: hidden from screen readers and the tab
+          // order (the first copy already covers them), but still clickable —
+          // about half the time the tile under the mouse is one of these.
+          <button
             key={`${person.globalIndex}-dup`}
+            type="button"
+            tabIndex={-1}
             className={`hp-carousel-item${pairClass(person)}${person.globalIndex === featuredIndex ? " is-featured" : ""}`}
             aria-hidden="true"
+            onClick={() => onOpen(person.globalIndex)}
           >
             <span className={`hp-carousel-photo${pairClass(person)}`}>{carouselPhoto(person)}</span>
             <span className="hp-carousel-name">{displayName(person)}</span>
-          </div>
+          </button>
         ))}
       </div>
     </div>
@@ -282,7 +289,12 @@ function HPFeatured({ interviewees, position, paused, onSelect, onOpen }: HPFeat
         <div className="hp-featured-text">
           <h3 className="hp-featured-name">{displayName(person)}</h3>
           {displayRole(person) && <p className="hp-featured-role">{displayRole(person)}</p>}
-          <div className={`hp-featured-summary${person.summary ? "" : " is-excerpt"}`}>
+          {/* Clicking the excerpt opens the full interview too; the button
+              below stays the keyboard-accessible way in. */}
+          <div
+            className={`hp-featured-summary is-clickable${person.summary ? "" : " is-excerpt"}`}
+            onClick={() => onOpen(person.globalIndex)}
+          >
             {person.summary ? <p>{person.summary}</p> : person.content}
           </div>
           <button type="button" className="hp-featured-more" onClick={() => onOpen(person.globalIndex)}>
@@ -383,8 +395,6 @@ function HPSectionCard({ section, view, paused, onOpen }: HPSectionCardProps) {
   if (view === "list") {
     return (
       <div className="hp-section-card">
-        <h2 className="hp-section-title">{section.title}</h2>
-        <HPIntroBlock intro={section.intro} />
         <HPList interviewees={section.interviewees} onOpen={onOpen} />
       </div>
     );
@@ -392,8 +402,6 @@ function HPSectionCard({ section, view, paused, onOpen }: HPSectionCardProps) {
 
   return (
     <div className="hp-section-card">
-      <h2 className="hp-section-title">{section.title}</h2>
-      <HPIntroBlock intro={section.intro} />
       <HPFeatured
         interviewees={section.interviewees}
         position={position}
@@ -475,19 +483,23 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
       {sections.map((section) =>
         section.interviewees.length > 0 ? (
           <section key={section.title} className="hp-section">
+            <h2 className="hp-section-title">{section.title}</h2>
+            <HPIntroBlock intro={section.intro} />
             <HPSectionCard section={section} view={view} paused={openIndex !== null} onOpen={setOpenIndex} />
 
             {section.context.length > 0 && <div className="hp-section-context">{section.context}</div>}
           </section>
         ) : (
-          // Text-only section (e.g. Patients, General Public): same card, but
-          // the write-up goes inside it instead of a carousel of interviewees.
+          // Text-only section (e.g. Patients, General Public): same layout, but
+          // the write-up goes inside the card instead of a carousel.
           <section key={section.title} className="hp-section">
-            <div className="hp-section-card hp-section-card--text">
-              <h2 className="hp-section-title">{section.title}</h2>
-              <HPIntroBlock intro={section.intro} />
-              <div className="hp-section-text">{section.context}</div>
-            </div>
+            <h2 className="hp-section-title">{section.title}</h2>
+            <HPIntroBlock intro={section.intro} />
+            {section.context.length > 0 && (
+              <div className="hp-section-card hp-section-card--text">
+                <div className="hp-section-text">{section.context}</div>
+              </div>
+            )}
           </section>
         ),
       )}
