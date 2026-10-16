@@ -9344,3 +9344,218 @@ a.protocol-download:hover {
     opacity: 1;
   }
 }
+
+/* BUSINESS MODEL CANVAS
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-16
+   Purpose: the Entrepreneurship page's business model canvas (see
+   BusinessModelCanvas.tsx) as live content. Blocks use fixed pastel fills with
+   dark text (like .fan-selector bands) so they read the same in both themes;
+   hover or focus deepens the fill, lifts the block and dims the rest, and
+   hovering a legend entry does the same for a whole colour group. */
+.bmc {
+  --bmc-ink: #33283f;
+  margin: 1.5rem 0;
+  color: var(--bmc-ink);
+}
+
+.bmc-subtitle {
+  margin-bottom: 0.75rem;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.bmc-grid {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  grid-template-areas:
+    "partners partners activities activities value value relationships relationships segments segments"
+    "partners partners resources resources value value channels channels segments segments"
+    "costs costs costs costs costs revenue revenue revenue revenue revenue"
+    "advantage advantage advantage advantage advantage advantage advantage advantage advantage advantage";
+  gap: 0.6rem;
+}
+
+.bmc-block {
+  padding: 0.75rem 0.85rem 0.85rem;
+  border: 1.5px solid var(--bmc-border);
+  border-radius: 0.75rem;
+  background-color: var(--bmc-bg);
+  color: var(--bmc-ink);
+  outline: none;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.bmc-product {
+  --bmc-bg: #f1ecfb;
+  --bmc-border: #c9bde8;
+  --bmc-hover: #c9bde8;
+  --bmc-title: #4a3a78;
+}
+
+.bmc-partners {
+  --bmc-bg: #e3f0fa;
+  --bmc-border: #a9cde8;
+  --bmc-hover: #a9cde8;
+  --bmc-title: #1f5f8b;
+}
+
+.bmc-customers {
+  --bmc-bg: #e4f5f5;
+  --bmc-border: #8bd0d3;
+  --bmc-hover: #6cc4c8;
+  --bmc-title: #1f7479;
+}
+
+.bmc-block:hover,
+.bmc-block:focus-visible,
+.bmc-block.bmc-lit {
+  background-color: var(--bmc-hover);
+  border-color: var(--bmc-title);
+  box-shadow: 0 0.6rem 1.4rem rgba(51, 40, 63, 0.18);
+  transform: translateY(-3px);
+}
+
+.bmc-block:hover .bmc-title,
+.bmc-block:focus-visible .bmc-title,
+.bmc-block.bmc-lit .bmc-title {
+  color: var(--bmc-ink);
+}
+
+.bmc-grid:has(.bmc-block:hover, .bmc-block:focus-visible, .bmc-lit) .bmc-block:not(:hover, :focus-visible, .bmc-lit) {
+  opacity: 0.55;
+}
+
+.bmc-title {
+  margin: 0 0 0.45rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--bmc-title);
+  transition: color 0.2s ease;
+}
+
+.bmc-lead {
+  margin: 0 0 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.bmc-block ul {
+  margin: 0;
+  padding-left: 1rem;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.bmc-block li {
+  margin-bottom: 0.3rem;
+}
+
+.bmc-block li:last-child {
+  margin-bottom: 0;
+}
+
+.bmc-bold {
+  font-weight: 700;
+}
+
+.bmc-advantage {
+  --bmc-bg: #ffffff;
+  --bmc-border: #8b6fc4;
+  --bmc-hover: #f1ecfb;
+  --bmc-title: #4a3a78;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1.25rem;
+  padding: 0.6rem 0.85rem;
+  border-width: 2px;
+}
+
+.bmc-advantage .bmc-title {
+  margin: 0;
+}
+
+.bmc-advantage ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bmc-advantage li {
+  margin: 0;
+}
+
+.bmc-advantage li::before {
+  content: "• ";
+}
+
+.bmc-note {
+  margin: 0.9rem 0 0.5rem;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--color-text);
+  opacity: 0.8;
+}
+
+.bmc-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 1.25rem;
+  font-size: 0.78rem;
+  color: var(--color-text);
+}
+
+.bmc-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: default;
+}
+
+.bmc-swatch {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 0.2rem;
+  background-color: var(--bmc-title);
+}
+
+@media (max-width: 767.98px) {
+  .bmc-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "partners"
+      "activities"
+      "resources"
+      "value"
+      "relationships"
+      "channels"
+      "segments"
+      "costs"
+      "revenue"
+      "advantage";
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bmc-block,
+  .bmc-title {
+    transition: none;
+  }
+
+  .bmc-block:hover,
+  .bmc-block:focus-visible,
+  .bmc-block.bmc-lit {
+    transform: none;
+  }
+}

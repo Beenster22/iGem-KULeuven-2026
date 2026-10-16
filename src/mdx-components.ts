@@ -36,6 +36,7 @@ import { MicChart } from "./components/MicChart";
 import { MilestoneArc, Milestone } from "./components/MilestoneArc";
 import { FanSelector, FanBranch } from "./components/FanSelector";
 import { MarketRings, MarketRing } from "./components/MarketRings";
+import { BusinessModelCanvas } from "./components/BusinessModelCanvas";
 import { MicrobeBackdrop } from "./components/MicrobeBackdrop";
 import { TwoGutsSection } from "./components/TwoGutsSection";
 import {
@@ -106,6 +107,7 @@ export const mdxComponents = {
   FanBranch,
   MarketRings,
   MarketRing,
+  BusinessModelCanvas,
   MicrobeBackdrop,
   TwoGutsSection,
   StoryScrollSection,
