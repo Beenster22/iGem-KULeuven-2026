@@ -7233,6 +7233,34 @@ body:not(.home-fullscreen) .home-hero {
    fixed dark purple rather than the theme-varying --color-text. */
 .fan-selector {
   margin: 1.5rem 0;
+  scroll-margin-top: 5rem;
+}
+
+/* Sits at the bottom of each branch so long tables don't force a scroll back
+   up to pick the next category. */
+.fan-selector-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1.25rem;
+  padding: 0.45rem 1rem;
+  border: 2px solid #2fa4a9;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.fan-selector-back:hover {
+  background-color: rgba(47, 164, 169, 0.18);
+}
+
+.fan-selector-back svg {
+  width: 1rem;
+  height: 1rem;
 }
 
 .fan-selector-svg {
