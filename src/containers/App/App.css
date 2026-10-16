@@ -10183,3 +10183,67 @@ a.protocol-download:hover {
     transition: none !important;
   }
 }
+
+/* PHASE PAGER
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-16
+   Purpose: Previous / Next buttons at the bottom of each section on pages
+   that are read one section at a time (see PhasePager.tsx). */
+.content-section {
+  scroll-margin-top: 5rem;
+}
+
+.phase-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(51, 40, 63, 0.18);
+}
+
+[data-theme="dark"] .phase-nav {
+  border-top-color: rgba(234, 244, 245, 0.25);
+}
+
+.phase-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  border: 2px solid #2fa4a9;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text);
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.phase-nav-btn:hover {
+  background-color: rgba(47, 164, 169, 0.18);
+}
+
+.phase-nav-next {
+  margin-left: auto;
+  background-color: #2fa4a9;
+  color: #33283f;
+}
+
+.phase-nav-next:hover {
+  background-color: #2fa4a9;
+  transform: translateX(2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phase-nav-btn {
+    transition: none;
+  }
+
+  .phase-nav-next:hover {
+    transform: none;
+  }
+}
