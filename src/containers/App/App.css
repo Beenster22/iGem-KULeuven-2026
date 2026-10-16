@@ -10247,3 +10247,114 @@ a.protocol-download:hover {
     transform: none;
   }
 }
+
+/* RESULTS PAGE: SUCCESS CARDS AND PIPELINE DIVIDER */
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-16
+   Purpose: the row of headline result cards at the top of the results page
+   (SuccessCards.tsx) and the logo divider that separates them from the
+   Toolkit / Therapeutics selector. The cards are navigation, not decoration,
+   so they are sized to be comfortable tap targets and keep their focus ring.
+   On narrow screens the row becomes a two-column grid rather than shrinking
+   the cards to illegibility. */
+.success-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.success-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 6rem;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid rgba(51, 40, 63, 0.15);
+  border-radius: 1rem;
+  background-color: var(--color-page-bg);
+  color: var(--color-text);
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 0.25rem 0.75rem rgba(51, 40, 63, 0.12);
+  transition:
+    transform 0.15s ease-out,
+    box-shadow 0.15s ease-out;
+}
+
+[data-theme="dark"] .success-card {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.success-card:hover,
+.success-card:focus-visible {
+  color: var(--color-text);
+  transform: translateY(-0.2rem);
+  box-shadow: 0 0.5rem 1.25rem rgba(51, 40, 63, 0.2);
+}
+
+.success-card-arrow {
+  flex: 0 0 auto;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.pipeline-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 2.5rem 0 1.5rem;
+}
+
+/* The two rules are the line either side of the logo. */
+.pipeline-divider::before,
+.pipeline-divider::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background-color: rgba(51, 40, 63, 0.25);
+}
+
+[data-theme="dark"] .pipeline-divider::before,
+[data-theme="dark"] .pipeline-divider::after {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* One logo per theme; the other is taken out of the layout entirely so the
+   divider keeps a single circle in its middle. */
+.pipeline-divider-logo--dark,
+[data-theme="dark"] .pipeline-divider-logo--light {
+  display: none;
+}
+
+[data-theme="dark"] .pipeline-divider-logo--dark {
+  display: block;
+}
+
+.pipeline-divider-logo {
+  flex: 0 0 auto;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color: var(--color-logo-circle-bg);
+  padding: 0.4rem;
+  object-fit: contain;
+}
+
+@media (max-width: 767.98px) {
+  .success-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .success-card {
+    transition: none;
+  }
+
+  .success-card:hover,
+  .success-card:focus-visible {
+    transform: none;
+  }
+}

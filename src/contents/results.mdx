@@ -1,12 +1,74 @@
 <PageLayout>
 
-{/* Text below is the team's "MIC discussion" document, transferred to MDX with
-    Claude Opus 5.5 (Anthropic), 2026-10-01. In-text citations were converted to
-    footnote references; wording and values are the team's own. */}
+{/* Page structure laid out with Claude Opus 5 (Anthropic), 2026-10-16, from
+    the team's sketch of the results page: headline success cards that jump to
+    their section, the Toolkit / Therapeutics split, and an "All data" region
+    per pipeline. The MIC write-up below is the team's own text, moved here
+    unchanged from the previous version of this page.
 
-## Antibiotic susceptibility (MIC)
+    TO FILL IN:
+    - Rename the four "Success #N" cards and their matching headings to the
+      four results they stand for, and move each heading into the pipeline it
+      belongs to. The card's `to` is the slug of its heading text, so a
+      heading "Lower MIC in mGAM" becomes to="lower-mic-in-mgam".
+    - Write the two Introduction paragraphs.
+    - Add the remaining figures and write-ups under "All data". */}
+
+<ElleSays mood="excited" size="md" center>
+
+Here you can find all our results! Isn't it exciting?!
+
+</ElleSays>
+
+<SuccessCards>
+  <SuccessCard to="success-1">Success #1</SuccessCard>
+  <SuccessCard to="success-2">Success #2</SuccessCard>
+  <SuccessCard to="success-3">Success #3</SuccessCard>
+  <SuccessCard to="success-4">Success #4</SuccessCard>
+</SuccessCards>
+
+{/* Two logo files, one per theme, swapped in CSS — the same pair the navbar
+    uses. */}
+<div className="pipeline-divider">
+  <img
+    className="pipeline-divider-logo pipeline-divider-logo--light"
+    src="https://static.igem.wiki/teams/6299/wiki/icons/logo-dark-purple-no-text.avif"
+    alt=""
+  />
+  <img
+    className="pipeline-divider-logo pipeline-divider-logo--dark"
+    src="https://static.igem.wiki/teams/6299/wiki/icons/logo-light-purple-no-text.avif"
+    alt=""
+  />
+</div>
+
+<SegmentedSelector>
+
+<SectionItem label="Toolkit">
+
+## Toolkit
 
 ### Introduction
+
+Placeholder — replace with the introduction to the toolkit pipeline, ending in
+a pointer to the <Link to="/experimental-overview">experimental overview</Link>
+for how these experiments fit together.
+
+### All data
+
+#### Success #1
+
+Placeholder — replace this heading with the first toolkit success and write
+the result underneath it.
+
+#### Success #2
+
+Placeholder — replace this heading with the second toolkit success and write
+the result underneath it.
+
+#### Antibiotic susceptibility (MIC)
+
+##### Introduction
 
 The MIC assay is part of the toolkit development, which has the aim of facilitating research with
 _Phocaeicola vulgatus_. As _P. vulgatus_ is not a model organism, not as much is known about media optimal
@@ -16,7 +78,7 @@ DSM1447/ATCC8482 and fecal strain _P. vulgatus_ RCC1806. An application in the t
 the most effective antibiotic to inhibit _P. vulgatus_, transformed with the CRISPR construct, growth in the
 case of uncontrolled growth.
 
-### Materials and methods
+##### Materials and methods
 
 _P. vulgatus_ DSM1447 was obtained from the research group Molecular Biotechnology of Plants and
 Micro-organisms from KU Leuven by Matt Herdman. The clinical isolate _P. vulgatus_ RCC1806 was obtained from
@@ -35,7 +97,7 @@ as the quantitative measure[^mic-veiga] and taken as the consensus across repeat
 Full plate layouts, dilution ranges and run-by-run records are in the <Link to="/notebook">Notebook</Link>
 (entries MIC-01 to MIC-04).
 
-### Results
+##### Results
 
 The antibiotic with the lowest IC<sub>90%</sub> is the most effective against _P. vulgatus_ and can be used in
 the therapeutics pipeline to inhibit growth if needed. Tetracycline was found to be the most effective
@@ -76,7 +138,7 @@ RCC1806.
   spectinomycin, Gm = gentamicin, Stat = statin (simvastatin), Kan = kanamycin.
 </div>
 
-### Discussion
+##### Discussion
 
 <div className="figure-caption">
   Table 1. Comparison with literature. – No MIC values were found, either experimentally or in literature.
@@ -144,13 +206,42 @@ Gentamycin and kanamycin uptake are dependent on the proton motive force, and so
 were thus not predicted to have an adverse effect on growth[^mic-krause][^mic-webster], and this is indeed
 confirmed by our results.
 
-### Conclusion
+##### Conclusion
 
 Tetracycline, chloramphenicol, and metronidazole were found to be the most effective antibiotics against
 _P. vulgatus_ DSM1447 and RCC1806. As the EUCAST specifically recommends the use of metronidazole when the MIC
 is below 4 mg/L, this antibiotic is most recommended when working with _P. vulgatus_. Ampicillin and
 erythromycin are less encouraged, given the variability between the strains and a negative advice against
 ampicillin by EUCAST.
+
+</SectionItem>
+
+<SectionItem label="Therapeutics">
+
+## Therapeutics
+
+### Introduction
+
+Placeholder — replace with the introduction to the therapeutics pipeline,
+ending in a pointer to the
+<Link to="/experimental-overview">experimental overview</Link> for how these
+experiments fit together.
+
+### All data
+
+#### Success #3
+
+Placeholder — replace this heading with the first therapeutics success and
+write the result underneath it.
+
+#### Success #4
+
+Placeholder — replace this heading with the second therapeutics success and
+write the result underneath it.
+
+</SectionItem>
+
+</SegmentedSelector>
 
 [^mic-escalante]: Escalante, V., Nayak, R. R., Noecker, C., Babdor, J., Spitzer, M., Deutschbauer, A. M., & Turnbaugh, P. J. (2024). Simvastatin induces human gut bacterial cell surface genes. Molecular Microbiology, 122(3), 372–386. https://doi.org/10.1111/mmi.15151
 [^mic-Hayashi]: Vu, H., Hayashi, M., Nguyen, T. N., Khong, D. T., Tran, H. T., Yamamoto, Y., & Tanaka, K. (2021). Comparison of Phenotypic and Genotypic Patterns of Antimicrobial-Resistant Bacteroides fragilis Group Isolated from Healthy Individuals in Vietnam and Japan. Infection and Drug Resistance, Volume 14, 5313–5323. https://doi.org/10.2147/IDR.S341571
