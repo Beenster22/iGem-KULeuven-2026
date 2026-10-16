@@ -22,6 +22,7 @@ import { EventsTimeline, EventEntry } from "./components/EventsTimeline";
 import {
   HumanPracticesInterviews,
   HPSection,
+  HPIntro,
   Interviewee,
 } from "./components/HumanPracticesInterviews";
 import { PmosOverview } from "./components/PmosOverview";
@@ -143,6 +144,7 @@ export const mdxComponents = {
   EventEntry,
   HumanPracticesInterviews,
   HPSection,
+  HPIntro,
   Interviewee,
   StakeholderGroups,
   StakeholderGroup,

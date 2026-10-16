@@ -6609,6 +6609,10 @@ body:not(.home-fullscreen) .home-hero {
   cursor: pointer;
 }
 
+.hp-featured-summary.is-clickable {
+  cursor: pointer;
+}
+
 .hp-featured-more:hover,
 .hp-featured-more:focus-visible {
   text-decoration: underline;
@@ -6803,8 +6807,33 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
+/* Stakeholder-group introduction at the top of a section card (HPIntro) */
+.hp-section-intro {
+  margin: 0 0 1.25rem;
+  padding: 0.9rem 1.25rem;
+  border-left: 4px solid #2fa4a9;
+  border-radius: 0 0.9rem 0.9rem 0;
+  background-color: rgba(47, 164, 169, 0.08);
+}
+
+[data-theme="dark"] .hp-section-intro {
+  background-color: rgba(47, 164, 169, 0.14);
+}
+
+.hp-section-intro-label {
+  margin: 0 0 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #2fa4a9;
+}
+
+.hp-section-intro > :last-child {
+  margin-bottom: 0;
+}
+
 .hp-section-context {
-  max-width: 72ch;
   margin-top: 1.25rem;
   opacity: 0.9;
 }
@@ -6909,7 +6938,7 @@ body:not(.home-fullscreen) .home-hero {
 .hp-modal-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 1100; /* above the fixed navbar (1030) and back-to-top (1040) */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6921,7 +6950,7 @@ body:not(.home-fullscreen) .home-hero {
 .hp-modal {
   position: relative;
   width: min(900px, 100%);
-  max-height: 92vh;
+  max-height: calc(100vh - 4rem);
   overflow-y: auto;
   background-color: var(--color-page-bg);
   border-radius: 1.25rem;
@@ -6935,9 +6964,10 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .hp-modal-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
+  position: sticky;
+  top: 0;
+  float: right;
+  margin: -1.5rem -1.5rem 0 0.5rem;
   width: 2.5rem;
   height: 2.5rem;
   border: none;
@@ -7001,6 +7031,59 @@ body:not(.home-fullscreen) .home-hero {
 .hp-modal-caption span {
   font-size: 0.9rem;
   opacity: 0.75;
+}
+
+/* JOINT INTERVIEWS
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-16
+   Purpose: an interview with two people (name2/image2 set) shows both photos
+   side by side as one wide 2:1 image in the spotlight, carousel and list —
+   see PersonPhotos in HumanPracticesInterviews.tsx. */
+.hp-featured-photo.is-pair,
+.hp-carousel-photo.is-pair,
+.hp-list-photo.is-pair {
+  display: flex;
+}
+
+.hp-featured-photo.is-pair {
+  aspect-ratio: 2 / 1;
+}
+
+.is-pair > img,
+.is-pair > span {
+  flex: 1 1 50%;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Carousel: same square tile as everyone else, the two photos fused into
+   it as two halves. */
+.hp-carousel-photo.is-pair {
+  aspect-ratio: 1;
+}
+
+/* List: the two photos stacked on top of each other in the thumbnail column */
+.hp-list-photo.is-pair {
+  flex-direction: column;
+  aspect-ratio: 1 / 2;
+}
+
+.hp-featured-body.is-pair {
+  grid-template-columns: minmax(260px, 440px) 1fr;
+}
+
+@media (max-width: 640px) {
+  .hp-featured-body.is-pair {
+    grid-template-columns: 1fr;
+  }
+
+  .hp-featured-photo.is-pair {
+    max-width: 380px;
+  }
+}
+
+/* Second person's photo in the popup, stacked under the first caption */
+.hp-modal-photo--second {
+  margin-top: 1.25rem;
 }
 
 /* Interview date + "Based in" under the name/role */
