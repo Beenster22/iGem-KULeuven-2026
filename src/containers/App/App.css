@@ -3510,22 +3510,12 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-15 (team feedback: a
-   trackpad flick skipped straight past "Meet P. vulgatus"): pointer devices
-   snap again, but only onto the steps of pinned sections, which are now one
-   and a half screens apart (see .home-snap-pin), and a flick may not carry
-   the page past one of them (scroll-snap-stop). The ordinary full-screen
-   sections still scroll freely. */
-@media (hover: hover), (pointer: fine) {
-  html.home-snap {
-    scroll-snap-type: y proximity;
-  }
-
-  html.home-snap .home-snap-pin > .home-snap-marker {
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-  }
-}
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-16 (team feedback: the
+   home page catches and hangs while scrolling): pointer devices no longer
+   snap at all, so the page scrolls freely and the pinned steps simply change
+   as the scroll position passes them. The one and a half screens each step
+   stays pinned for (see .home-snap-pin) is what keeps a flick from carrying
+   the page past one. */
 
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-09-24
    Purpose: home-page polish — (1) drop the page-body/footer gaps so the
