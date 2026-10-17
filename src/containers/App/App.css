@@ -17,7 +17,8 @@
    Google Fonts <link>/@import. Files uploaded via the iGEM uploads tool. */
 @font-face {
   font-family: "Poppins";
-  src: url("https://static.igem.wiki/teams/6299/wiki/fonts/poppinsregular400.woff2") format("woff2");
+  src: url("https://static.igem.wiki/teams/6299/wiki/fonts/poppinsregular400.woff2")
+    format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -25,7 +26,8 @@
 
 @font-face {
   font-family: "Poppins";
-  src: url("https://static.igem.wiki/teams/6299/wiki/fonts/poppinssemibold600.woff2") format("woff2");
+  src: url("https://static.igem.wiki/teams/6299/wiki/fonts/poppinssemibold600.woff2")
+    format("woff2");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -33,7 +35,8 @@
 
 @font-face {
   font-family: "Poppins";
-  src: url("https://static.igem.wiki/teams/6299/wiki/fonts/poppinsbold700.woff2") format("woff2");
+  src: url("https://static.igem.wiki/teams/6299/wiki/fonts/poppinsbold700.woff2")
+    format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -41,7 +44,8 @@
 
 @font-face {
   font-family: "Poppins";
-  src: url("https://static.igem.wiki/teams/6299/wiki/fonts/poppinsextrabold800.woff2") format("woff2");
+  src: url("https://static.igem.wiki/teams/6299/wiki/fonts/poppinsextrabold800.woff2")
+    format("woff2");
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -736,7 +740,11 @@ a[data-footnote-ref]:focus {
   width: 12%;
 }
 
-.comp-table-rows.table-responsive-rounded .table-bordered tbody tr:last-child td {
+.comp-table-rows.table-responsive-rounded
+  .table-bordered
+  tbody
+  tr:last-child
+  td {
   background-color: #2fa4a9;
   color: #000000;
 }
@@ -1122,6 +1130,154 @@ a[data-footnote-ref]:focus {
   }
 }
 
+/* APPENDIX TABLES (project description — PMOS prevalence)
+   Generated with Claude Sonnet 5 (Anthropic), 2026-10-17
+   Purpose: the plain markdown tables in the Appendix section render as bare
+   <table>s outside any dropdown, so they need the same accent-header,
+   soft-border treatment as .expandable-content table above (same palette:
+   --color-accent header fill, the site's plum-tinted border colour in both
+   themes). The two short summary tables (search settings; prevalence by
+   continent) hold single words and numbers, so --compact centers them at
+   their natural width instead of stretching edge-to-edge; the locations
+   table holds full sentences and stays left-aligned and full width, same
+   reasoning as the dropdown tables. */
+.appendix-table table {
+  width: 100%;
+  margin: 0 auto 1.25rem;
+  border-collapse: collapse;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.appendix-table table :is(th, td) {
+  border: 1px solid rgba(51, 40, 63, 0.18);
+  padding: 0.6rem 0.85rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+[data-theme="dark"] .appendix-table table :is(th, td) {
+  border-color: rgba(201, 189, 232, 0.25);
+}
+
+.appendix-table table th {
+  background-color: var(--color-accent);
+  /* The accent fill is light in both themes, so the header text is fixed
+     dark rather than the theme-varying --color-text. */
+  color: #33283f;
+  font-weight: 600;
+}
+
+.appendix-table--compact table {
+  width: auto;
+  min-width: 320px;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.appendix-table--compact table :is(th, td) {
+  text-align: center;
+}
+
+@media (max-width: 767.98px) {
+  .appendix-table table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .appendix-table--compact table {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+/* BILE SALT RATIO TABLE (BSA-07, Table 1 in the notebook)
+   Generated with Claude Opus 5 (Anthropic), 2026-10-17
+   Purpose: team report (AL) — the workbook shades the two log columns red and
+   yellow, but a markdown table on the wiki cannot carry that, so the caption
+   described a highlighting nobody could see. BileSaltRatioTable renders the
+   same numbers with a data-band on each log cell; these rules are the colours
+   that band maps to. The U/T and U/G columns stay plain, as in the workbook.
+   The fills are pale in the light theme and translucent in the dark one, so
+   the cell text stays the theme's own --color-text in both rather than being
+   pinned to one colour. A shaded cell also carries a left edge, which is what
+   survives printing, greyscale, and not being able to tell the two fills
+   apart. */
+.bsr {
+  --bsr-high-bg: #f7cfc8;
+  --bsr-high-edge: #b4442f;
+  --bsr-mid-bg: #fbe8ac;
+  --bsr-mid-edge: #b58708;
+}
+
+[data-theme="dark"] .bsr {
+  --bsr-high-bg: rgba(224, 92, 74, 0.3);
+  --bsr-high-edge: #e8826e;
+  --bsr-mid-bg: rgba(233, 185, 60, 0.26);
+  --bsr-mid-edge: #e2b84a;
+}
+
+.bsr-table td[data-band="high"] {
+  background-color: var(--bsr-high-bg);
+  border-left: 3px solid var(--bsr-high-edge);
+}
+
+.bsr-table td[data-band="mid"] {
+  background-color: var(--bsr-mid-bg);
+  border-left: 3px solid var(--bsr-mid-edge);
+}
+
+/* Peak areas, ratios and logs line up on the decimal point, so a column can
+   be read down for magnitude. tabular-nums keeps the digits the same width. */
+.bsr-table .bsr-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* The sample number is a row header, but it should not look like the
+   lavender column headers above it. */
+.bsr-table tbody th {
+  background-color: transparent;
+  color: inherit;
+  font-weight: 600;
+}
+
+.bsr-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+  margin-bottom: 0.6rem;
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+
+.bsr-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.bsr-swatch {
+  flex: 0 0 auto;
+  width: 1.1rem;
+  height: 0.85rem;
+  border-radius: 0.2rem;
+}
+
+.bsr-swatch[data-band="high"] {
+  background-color: var(--bsr-high-bg);
+  border-left: 3px solid var(--bsr-high-edge);
+}
+
+.bsr-swatch[data-band="mid"] {
+  background-color: var(--bsr-mid-bg);
+  border-left: 3px solid var(--bsr-mid-edge);
+}
+
 /* NOTEBOOK DROPDOWN
    Generated with Claude Opus 5.5 (Anthropic), 2026-10-07
    Purpose: what NotebookDropdown adds inside the accordion above — the PDF
@@ -1228,7 +1384,12 @@ a[data-footnote-ref]:focus {
 /* background-image rather than background, so --color-accent stays as the
    background-color underneath if the gradient is ever not painted. */
 .notebook-dropdown .expandable-header {
-  background-image: linear-gradient(100deg, var(--nb-a) 0%, var(--nb-b) 62%, var(--color-accent) 100%);
+  background-image: linear-gradient(
+    100deg,
+    var(--nb-a) 0%,
+    var(--nb-b) 62%,
+    var(--color-accent) 100%
+  );
 }
 
 /* The title takes the slack so the badges sit against the chevron, instead of
@@ -1255,7 +1416,9 @@ a[data-footnote-ref]:focus {
   filter: none;
 }
 
-[data-theme="dark"] .notebook-dropdown .expandable-header[aria-expanded="false"]:hover {
+[data-theme="dark"]
+  .notebook-dropdown
+  .expandable-header[aria-expanded="false"]:hover {
   box-shadow: 0 0.5rem 1.1rem rgba(0, 0, 0, 0.5);
 }
 
@@ -1379,7 +1542,11 @@ a[data-footnote-ref]:focus {
 /* An open entry keeps a wash of the tone behind its header, marking where the
    reader is within a notebook of twenty-odd entries. */
 .notebook-section-header[aria-expanded="true"] {
-  background-color: color-mix(in srgb, var(--nb-edge, var(--color-accent)) 12%, transparent);
+  background-color: color-mix(
+    in srgb,
+    var(--nb-edge, var(--color-accent)) 12%,
+    transparent
+  );
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1445,8 +1612,16 @@ a[data-footnote-ref]:focus {
    sharing that fill and two of the border edges — which keeps the join
    seamless without a second background image. */
 .notebook-meta {
-  --notebook-meta-bg: color-mix(in srgb, var(--color-accent) 35%, var(--color-page-bg));
-  --notebook-meta-border: color-mix(in srgb, var(--color-text) 25%, transparent);
+  --notebook-meta-bg: color-mix(
+    in srgb,
+    var(--color-accent) 35%,
+    var(--color-page-bg)
+  );
+  --notebook-meta-border: color-mix(
+    in srgb,
+    var(--color-text) 25%,
+    transparent
+  );
   display: flex;
   align-items: flex-start;
   gap: 0.9rem;
@@ -1549,7 +1724,11 @@ a[data-footnote-ref]:focus {
 }
 
 [data-theme="dark"] .notebook-gantt {
-  --gantt-tone: color-mix(in srgb, var(--nb-edge, var(--color-accent)) 45%, var(--color-accent));
+  --gantt-tone: color-mix(
+    in srgb,
+    var(--nb-edge, var(--color-accent)) 45%,
+    var(--color-accent)
+  );
 }
 
 .notebook-gantt-caption {
@@ -1624,7 +1803,11 @@ a[data-footnote-ref]:focus {
 }
 
 .notebook-gantt-row .notebook-gantt-track {
-  background-image: linear-gradient(to right, var(--gantt-grid) 1px, transparent 1px);
+  background-image: linear-gradient(
+    to right,
+    var(--gantt-grid) 1px,
+    transparent 1px
+  );
   background-repeat: repeat-x;
 }
 
@@ -1711,13 +1894,21 @@ a[data-footnote-ref]:focus {
 }
 
 .page-body:not(.page-body--home)
-  :is(.page-shell-content, .page-shell-content > .row > [class*="col"], .content-section)
+  :is(
+    .page-shell-content,
+    .page-shell-content > .row > [class*="col"],
+    .content-section
+  )
   > p {
   margin-bottom: 1.35rem;
 }
 
 .page-body:not(.page-body--home)
-  :is(.page-shell-content, .page-shell-content > .row > [class*="col"], .content-section)
+  :is(
+    .page-shell-content,
+    .page-shell-content > .row > [class*="col"],
+    .content-section
+  )
   > :is(ul, ol)
   > li
   + li {
@@ -1725,38 +1916,62 @@ a[data-footnote-ref]:focus {
 }
 
 .page-body:not(.page-body--home)
-  :is(.page-shell-content, .page-shell-content > .row > [class*="col"], .content-section)
+  :is(
+    .page-shell-content,
+    .page-shell-content > .row > [class*="col"],
+    .content-section
+  )
   > :is(h2, h3, h4) {
   margin-bottom: 1rem;
 }
 
 .page-body:not(.page-body--home)
-  :is(.page-shell-content, .page-shell-content > .row > [class*="col"], .content-section)
+  :is(
+    .page-shell-content,
+    .page-shell-content > .row > [class*="col"],
+    .content-section
+  )
   > :not(:first-child):is(h2) {
   margin-top: 3.25rem;
 }
 
 .page-body:not(.page-body--home)
-  :is(.page-shell-content, .page-shell-content > .row > [class*="col"], .content-section)
+  :is(
+    .page-shell-content,
+    .page-shell-content > .row > [class*="col"],
+    .content-section
+  )
   > :not(:first-child):is(h3) {
   margin-top: 2.5rem;
 }
 
 .page-body:not(.page-body--home)
-  :is(.page-shell-content, .page-shell-content > .row > [class*="col"], .content-section)
+  :is(
+    .page-shell-content,
+    .page-shell-content > .row > [class*="col"],
+    .content-section
+  )
   > :not(:first-child):is(h4) {
   margin-top: 1.9rem;
 }
 
 .page-body:not(.page-body--home)
-  :is(.page-shell-content, .page-shell-content > .row > [class*="col"], .content-section)
+  :is(
+    .page-shell-content,
+    .page-shell-content > .row > [class*="col"],
+    .content-section
+  )
   > :is(.table-responsive, figure, blockquote) {
   margin-top: 2rem;
   margin-bottom: 2rem;
 }
 
 .page-body:not(.page-body--home)
-  :is(.page-shell-content, .page-shell-content > .row > [class*="col"], .content-section)
+  :is(
+    .page-shell-content,
+    .page-shell-content > .row > [class*="col"],
+    .content-section
+  )
   > hr {
   margin: 2.75rem 0;
 }
@@ -2484,7 +2699,9 @@ a[data-footnote-ref]:focus {
   border-radius: 0.75rem;
   overflow: hidden;
   background-color: var(--color-body-bg);
-  transition: width 0.25s ease, height 0.25s ease;
+  transition:
+    width 0.25s ease,
+    height 0.25s ease;
 }
 
 /* Photos grow on hover — desktop/pointer devices only, since there is no
@@ -2965,7 +3182,13 @@ footer hr {
 .sponsor-carousel {
   overflow: hidden;
   width: 100%;
-  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 6%,
+    black 94%,
+    transparent
+  );
   -webkit-mask-image: linear-gradient(
     to right,
     transparent,
@@ -2980,7 +3203,8 @@ footer hr {
   align-items: center;
   gap: 2rem;
   width: max-content;
-  animation: sponsor-carousel-scroll var(--sponsor-carousel-duration, 25s) linear infinite;
+  animation: sponsor-carousel-scroll var(--sponsor-carousel-duration, 25s)
+    linear infinite;
 }
 
 .sponsor-carousel:hover .sponsor-carousel-track {
@@ -3171,7 +3395,10 @@ div.sponsor-grid-card:hover {
 }
 
 .sponsor-tier .sponsor-grid {
-  grid-template-columns: repeat(auto-fill, minmax(min(var(--sponsor-tier-col), 100%), 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(var(--sponsor-tier-col), 100%), 1fr)
+  );
   margin: 1.25rem 0 0;
 }
 
@@ -3305,23 +3532,40 @@ body.home-fullscreen {
 }
 
 .home-hero-video {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.home-hero-video--shown {
+  opacity: 1;
 }
 
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
    Purpose: object-fit doesn't apply to an <iframe>, so the 16:9 video embed
    is sized to always cover the hero and centred, letting .home-hero's
-   overflow crop the excess — the same result as object-fit: cover. It's a
-   decorative background, so it takes no pointer input. */
+   overflow crop the excess — the same result as object-fit: cover.
+   Edited with Claude Sonnet 5 (Anthropic), 2026-10-17 (team feedback: the
+   opening and closing frames were being cropped top/bottom on wide, short
+   windows, cutting off the figure and the logo): height no longer grows
+   past 100% — the old `max(100%, 100vw * 9/16)` could push it well past the
+   hero's own height on a wide-but-short viewport, trimming equally off the
+   top and bottom. Width still over-grows the same way for a narrow, tall
+   viewport, which only crops background either side of the centred subject.
+   A wider-than-16:9 window now pillarboxes within the embed instead of
+   cropping vertically. It's a decorative background, so it takes no pointer
+   input. */
 .home-hero-embed {
   position: absolute;
   top: 50%;
   left: 50%;
   width: max(100%, calc(100dvh * 16 / 9));
-  height: max(100%, calc(100vw * 9 / 16));
+  height: 100%;
   transform: translate(-50%, -50%);
   border: 0;
   pointer-events: none;
@@ -3697,14 +3941,18 @@ body:not(.home-fullscreen) .home-hero {
   fill: #f7f0c8;
   stroke: #a28a2c;
   stroke-width: 4;
-  transition: fill 0.3s ease, stroke 0.3s ease;
+  transition:
+    fill 0.3s ease,
+    stroke 0.3s ease;
 }
 
 .bile-acid-deconjugated {
   fill: #cc4a4a;
   stroke: #8e2626;
   stroke-width: 4;
-  transition: fill 0.3s ease, stroke 0.3s ease;
+  transition:
+    fill 0.3s ease,
+    stroke 0.3s ease;
 }
 
 /* BODY SYMPTOMS SECTION ("What is PMOS?")
@@ -3889,10 +4137,16 @@ body:not(.home-fullscreen) .home-hero {
   list-style: none;
   font-size: clamp(0.85rem, 1.3vw, 1rem);
   line-height: 1.3;
-  /* Content pages justify their text, which stretches a wrapped chip. */
-  text-align: left;
 }
 
+/* Edited with Claude Sonnet 5 (Anthropic), 2026-10-17 (team feedback: a
+   wrapped chip like "Dyslipidaemia and raised cardiovascular risk" had its
+   first line stretched edge to edge): content pages justify every `li`
+   directly (see .page-shell-content :is(p, li) above, (0,3,1) to this
+   rule's (0,1,1) — the li only inherits the list's own `text-align: left`,
+   it doesn't match it, so that rule alone couldn't win). !important for the
+   same reason .text-center is above: it's the one override with no higher
+   selector to chase. */
 .symptom-card-list li {
   display: flex;
   align-items: center;
@@ -3900,6 +4154,7 @@ body:not(.home-fullscreen) .home-hero {
   padding: 0.3rem 0.75rem;
   border-radius: 999px;
   border: 1.5px solid color-mix(in srgb, currentColor 25%, transparent);
+  text-align: left !important;
 }
 
 .symptom-card-list li::before {
@@ -5075,7 +5330,9 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): the
-   cell's fimbriae/pili. (Its loop of DNA was removed on 2026-10-15.) */
+   cell's fimbriae/pili. (Its loop of DNA was tried twice on 2026-10-17 —
+   dotted, then a criss-crossing line — and removed again both times: the
+   team decided against it.) */
 .bsh-pili {
   fill: none;
   stroke: #6e5b9e;
@@ -5762,90 +6019,130 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
-/* Find out more: links rolling sideways like the sponsor logos (the track
-   holds the set four times over and shifts by half its width per loop). */
+/* Find out more: boxes linking to the main pages.
+   Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-17 (team request: boxes
+   instead of rolling links, in the EMPOWER style): alternating dark purple and
+   lavender cards with a flat illustration, a title, a short line, and — for
+   the special prizes — a teal "Special prize" badge. The illustrations take
+   their colours from the card (--ic-*). */
 .find-more {
   text-align: center;
 }
 
 .find-more-heading {
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.75rem;
 }
 
-.find-more-band {
-  overflow: hidden;
-  margin: 0 calc(-50vw + 50%);
-  padding: 0.5rem 0;
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 8%,
-    black 92%,
-    transparent
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 8%,
-    black 92%,
-    transparent
-  );
+.find-more-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+  gap: 1rem;
+  max-width: 72rem;
+  margin: 0 auto;
 }
 
-.find-more-track {
+.find-more-card {
   display: flex;
-  gap: 1.5rem;
-  width: max-content;
-  padding-right: 1.5rem;
-  animation: find-more-roll 36s linear infinite;
-}
-
-.find-more-band:hover .find-more-track,
-.find-more-band:focus-within .find-more-track {
-  animation-play-state: paused;
-}
-
-@keyframes find-more-roll {
-  to {
-    translate: -50% 0;
-  }
-}
-
-.find-more-link {
-  flex: none;
-  padding: 0.7rem 1.75rem;
-  border: 3px solid currentColor;
-  border-radius: 999px;
-  color: inherit;
-  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
-  font-weight: 700;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  padding: 1.25rem 1.1rem 1.1rem;
+  border: 2px solid transparent;
+  border-radius: 1.25rem;
+  text-align: left;
   text-decoration: none;
   transition:
-    background-color 0.2s ease,
-    color 0.2s ease,
-    scale 0.2s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
-.find-more-link:hover,
-.find-more-link:focus-visible {
-  background-color: #2fa4a9;
+.find-more-card--dark {
+  --ic-1: #c9bde8;
+  --ic-2: #2fa4a9;
+  --ic-3: #f1c3d4;
+  --ic-line: #33283f;
+  --card-tagline: #7fd6da;
+  background-color: #33283f;
+  border-color: rgba(201, 189, 232, 0.3);
+  color: #eaf4f5;
+}
+
+.find-more-card--light {
+  --ic-1: #33283f;
+  --ic-2: #2fa4a9;
+  --ic-3: #f1c3d4;
+  --ic-line: #eaf4f5;
+  --card-tagline: #1f6a6e;
+  background-color: #c9bde8;
+  color: #33283f;
+}
+
+.find-more-card:hover,
+.find-more-card:focus-visible {
   border-color: #2fa4a9;
-  color: #fff;
-  scale: 1.05;
+  box-shadow: 0 0.9rem 1.8rem rgba(47, 164, 169, 0.35);
+  color: inherit;
+  transform: translateY(-6px);
 }
 
-.find-more-band--static {
-  margin: 0;
-  -webkit-mask-image: none;
-  mask-image: none;
+.find-more-card-art {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.6rem;
 }
 
-.find-more-band--static .find-more-track {
-  flex-wrap: wrap;
-  justify-content: center;
-  width: auto;
-  padding-right: 0;
-  animation: none;
+.find-more-card-art svg {
+  display: block;
+  width: min(100%, 7.5rem);
+  height: auto;
+  margin: 0 auto;
+  transition: transform 0.25s ease;
+}
+
+.find-more-card:hover .find-more-card-art svg,
+.find-more-card:focus-visible .find-more-card-art svg {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.find-more-card-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.find-more-card-tagline {
+  color: var(--card-tagline);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.find-more-card-prize {
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background-color: #2fa4a9;
+  color: #33283f;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.find-more-card-tagline + .find-more-card-prize {
+  margin-top: 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .find-more-card,
+  .find-more-card-art svg {
+    transition: none;
+  }
+
+  .find-more-card:hover,
+  .find-more-card:focus-visible {
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -6684,7 +6981,8 @@ body:not(.home-fullscreen) .home-hero {
 
 .hp-featured-dot.is-running::after {
   transform-origin: left;
-  animation: hp-featured-countdown var(--hp-feature-duration, 8s) linear forwards;
+  animation: hp-featured-countdown var(--hp-feature-duration, 8s) linear
+    forwards;
 }
 
 @keyframes hp-featured-in {
@@ -6735,8 +7033,20 @@ body:not(.home-fullscreen) .home-hero {
 .hp-carousel {
   overflow: hidden;
   width: 100%;
-  mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 4%,
+    black 96%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 4%,
+    black 96%,
+    transparent
+  );
 }
 
 .hp-carousel-track {
@@ -7812,7 +8122,11 @@ body:not(.home-fullscreen) .home-hero {
 
 /* Justified (block) text like the rest of the page. Selector is long only
    to out-rank the .page-shell-content :is(p, li) rule. */
-.page-body .page-shell-content .stakeholder-squircle .stakeholder-squircle-body p {
+.page-body
+  .page-shell-content
+  .stakeholder-squircle
+  .stakeholder-squircle-body
+  p {
   margin: 0;
   line-height: 1.6;
   text-align: justify;
@@ -8093,7 +8407,11 @@ body:not(.home-fullscreen) .home-hero {
    page shifts when it arrives. */
 .elle {
   --elle-size: 7rem;
-  --elle-bubble-bg: color-mix(in srgb, var(--color-accent) 35%, var(--color-page-bg));
+  --elle-bubble-bg: color-mix(
+    in srgb,
+    var(--color-accent) 35%,
+    var(--color-page-bg)
+  );
   --elle-bubble-border: color-mix(in srgb, var(--color-text) 25%, transparent);
   display: flex;
   align-items: center;
@@ -8895,6 +9213,37 @@ body:not(.home-fullscreen) .home-hero {
   background-color: rgba(232, 130, 159, 0.14);
 }
 
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-17
+   Purpose: the "Important" box the notebook documents ask for around a
+   finding that should not be lost in the running text. Teal rather than the
+   critical box's warm red: it marks something worth knowing, not a step that
+   ruins a run. */
+.protocol-note--important {
+  border-left-color: var(--brand-teal);
+  background-color: rgba(47, 164, 169, 0.14);
+}
+
+[data-theme="dark"] .protocol-note--important {
+  border-left-color: #6fd3d7;
+  background-color: rgba(111, 211, 215, 0.14);
+}
+
+.protocol-note--important .protocol-note-label {
+  color: #1d7175;
+}
+
+[data-theme="dark"] .protocol-note--important .protocol-note-label {
+  color: #8fe2e5;
+}
+
+/* A cross-reference from one notebook entry to another, which opens the
+   entry it names (EntryLink). Underlined like any other link; the weight
+   marks it as an entry code rather than a word in the sentence. */
+.notebook-entry-link {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 /* The note's text comes from MDX as its own <p>, a sibling of the label (see
    ProtocolNote for why it is not wrapped). Making the first paragraph inline
    lets the label and the opening sentence read as one line; any further
@@ -9549,7 +9898,8 @@ a.protocol-download:hover {
   color: var(--bmc-ink);
 }
 
-.bmc-grid:has(.bmc-block:hover, .bmc-block:focus-visible, .bmc-lit) .bmc-block:not(:hover, :focus-visible, .bmc-lit) {
+.bmc-grid:has(.bmc-block:hover, .bmc-block:focus-visible, .bmc-lit)
+  .bmc-block:not(:hover, :focus-visible, .bmc-lit) {
   opacity: 0.55;
 }
 
@@ -9834,7 +10184,11 @@ a.protocol-download:hover {
   height: 54px;
   border-radius: 0 8px 8px 0;
   background-color: var(--gbg);
-  background-image: linear-gradient(to right, var(--rm-surface) 0 2px, transparent 2px);
+  background-image: linear-gradient(
+    to right,
+    var(--rm-surface) 0 2px,
+    transparent 2px
+  );
   background-size: 12.5% 100%;
 }
 
@@ -10386,4 +10740,455 @@ a.protocol-download:hover {
   .success-card:focus-visible {
     transform: none;
   }
+}
+
+/* RESULTS PAGE: KEY TAKEAWAYS, FIGURE SLOTS */
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-17
+   Purpose: the two blocks each result section on the results page is built
+   from (ResultsKit.tsx) — the row of "key take aways" cards under a section
+   title, and the dashed placeholder standing in for a figure or table that
+   has not been added yet. Both follow the wiki's own palette; the coral and
+   pink on the team's sketch were there to mark which section belongs to
+   which pipeline, not to be painted onto the page. */
+
+/* The line under a result's title saying what it is about. */
+.results-standfirst {
+  font-size: 1.05rem;
+  opacity: 0.85;
+  max-width: 48rem;
+  margin-bottom: 1.5rem;
+}
+
+/* KEY TAKEAWAYS
+   auto-fit means three cards sit in a row on a wide screen and wrap to two
+   or one as the column narrows, without a breakpoint per count — sections
+   carry anywhere from three to six of them. */
+.key-takeaways {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.key-takeaway {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid rgba(51, 40, 63, 0.2);
+  border-radius: 1rem;
+  background-color: var(--color-page-bg);
+  text-align: left;
+}
+
+[data-theme="dark"] .key-takeaway {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.key-takeaway-value {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.key-takeaway-label {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 0.85rem;
+}
+
+.key-takeaway-body {
+  font-size: 0.92rem;
+  opacity: 0.85;
+}
+
+/* FIGURE SLOTS
+   A deliberately unfinished-looking box standing in for a figure or table
+   that has not been added yet — dashed, muted, and labelled with what
+   belongs there. Each one is deleted as its figure lands. */
+.figure-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 9rem;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border: 2px dashed rgba(51, 40, 63, 0.35);
+  border-radius: 1rem;
+  text-align: center;
+}
+
+[data-theme="dark"] .figure-slot {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.figure-slot-label {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.figure-slot-hint {
+  font-size: 0.92rem;
+  opacity: 0.8;
+  max-width: 34rem;
+  text-align: center;
+}
+
+/* The "ALL DATA" divider between a pipeline's introduction and its sections,
+   as drawn on the sketch: a big, quiet label rather than a heading, so it
+   stays out of the page index. */
+.all-data-label {
+  margin: 3rem 0 2rem;
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  opacity: 0.6;
+}
+
+/* The running text of a content page is justified (see the
+   .page-shell-content :is(p, li) rule above). In a card or a placeholder
+   box a justified line is only a few words wide, which opens rivers of
+   white space, so these set their text ragged-right instead. The selectors
+   are long only to out-rank that rule. */
+.page-body
+  .page-shell-content
+  :is(.success-card, .key-takeaway, .figure-slot, .elle-bubble)
+  :is(p, li) {
+  text-align: left;
+}
+
+.page-body .page-shell-content .figure-slot :is(p, li) {
+  text-align: center;
+}
+
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-17
+   Purpose: one row of a table marked as the one to read first — the type
+   strain in the results page's strain panel, which every other strain is
+   compared against. A tinted background and a heavier first cell, so it is
+   found at a glance without the table turning into a colour chart. */
+.table-row-highlight > td {
+  /* Team dark purple (#33283f) with crisp light text (#eaf4f5 / #fff) in light mode —
+     contrasts sharply with the surrounding lavender card and white table rows. */
+  background-color: #33283f;
+  color: #eaf4f5;
+  border-color: rgba(234, 244, 245, 0.2);
+  box-shadow: none;
+}
+
+.table-row-highlight > td a {
+  color: #eaf4f5;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+[data-theme="dark"] .table-row-highlight > td {
+  /* Team lavender (#c9bde8) with dark text (#33283f) in dark mode —
+     stands out brightly against the dark theme background. */
+  background-color: #c9bde8;
+  color: #33283f;
+  border-color: rgba(51, 40, 63, 0.25);
+}
+
+[data-theme="dark"] .table-row-highlight > td a {
+  color: #33283f;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.table-row-highlight td:first-child {
+  font-weight: 700;
+}
+
+/* The strain panel carries seven columns, two of them full sentences. Left
+   to the width of the text column every row grows into a paragraph stack, so
+   the table keeps a readable minimum width and scrolls sideways inside its
+   .table-responsive wrapper instead. */
+.strain-panel-table {
+  min-width: 56rem;
+}
+
+.strain-panel-table td,
+.strain-panel-table th {
+  font-size: 0.92rem;
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17
+   Purpose: the pBSH-Cas9 component table (results page, "Construct
+   components"). First-column cells carry their own fixed background colour
+   (inline, matching the component's colour on the uploaded plasmid map), so
+   only the shared layout — bold component names, same width in both
+   columns — lives here. */
+.plasmid-legend-table td:first-child {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.plasmid-legend-table td:last-child {
+  width: 70%;
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-17
+   Purpose: the executive summary paragraph beside the plasmid map figure
+   (results page, "CRISPR construct design"), after the team's request to put
+   the construct circle next to the text instead of stacked under its own
+   heading. Stacks below tablet width, image first. */
+.construct-intro {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin: 1rem 0;
+}
+
+.construct-intro-text {
+  flex: 1 1 22rem;
+  min-width: 0;
+}
+
+.construct-intro-text > :last-child {
+  margin-bottom: 0;
+}
+
+.construct-intro-image {
+  flex: 1 1 16rem;
+  max-width: 22rem;
+}
+
+@media (max-width: 767.98px) {
+  .construct-intro {
+    flex-direction: column;
+  }
+
+  .construct-intro-image {
+    max-width: 20rem;
+    margin: 0 auto;
+  }
+}
+
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-17
+   Purpose: the header box's optional right-hand decoration (Header's
+   `aside` prop) — the results page's only user today, for Elle's greeting.
+   The title/lead column is capped to a fixed width rather than left to grow
+   into whatever room the flex row leaves: a lead that is free to fill the
+   full container only ever wraps to one line, which left Elle's row (taller
+   than one line, with her figure and bubble) setting the box's height on its
+   own. Capping the text column keeps the lead at roughly the two lines it
+   would wrap to anyway once a mascot sits beside it, so the two columns
+   settle at close to the same height and the box does not grow past that.
+   Below 768px the two stack, title first, so Elle never crowds the title on
+   a narrow screen. */
+.page-header-box-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* Scoped to .page-header-box-row (present only when `aside` is given, see
+   Header.tsx) rather than to .page-header-box-text alone, which every page's
+   header wears and would otherwise have its width capped too. The cap keeps
+   the lead from stretching into the single very wide line it would get if
+   left to fill all the room the row leaves once Elle's column is taken out,
+   so it instead wraps the way it would on any other page. */
+.page-header-box-row .page-header-box-text {
+  flex: 1 1 28rem;
+  max-width: 42rem;
+}
+
+.page-header-box-aside {
+  flex: 0 0 auto;
+}
+
+/* Elle's own spacing (.elle's 2rem vertical margin, meant for a line of body
+   copy) is more than a header box needs, and left at her speech bubble's
+   default 24em max-width and "md" size she would set the row's height on
+   her own — size="sm" on the ElleSays call handles the mascot, and the
+   bubble is narrowed to match so her line settles into about as many lines
+   as the lead does, rather than spreading wide and short beside it. */
+.page-header-box-aside .elle {
+  margin: 0;
+}
+
+.page-header-box-aside .elle-bubble {
+  max-width: 13em;
+}
+
+@media (max-width: 767.98px) {
+  .page-header-box-row {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .page-header-box-row .page-header-box-text {
+    max-width: none;
+  }
+}
+
+/* PLASMID MAP */
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17
+   Purpose: the pBSH-Cas9 ring (PlasmidMap.tsx, results page). Feature
+   colours are inline (sampled per feature in data/plasmidMap.ts), so nothing
+   here sets them. The ring and the name/role panel sit side by side above
+   tablet width and stack below it. */
+.plasmid-map {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin: 1.5rem 0;
+}
+
+.plasmid-map-svg {
+  flex: 0 0 auto;
+  width: clamp(220px, 32vw, 300px);
+  height: auto;
+  overflow: visible;
+}
+
+.plasmid-map-feature {
+  cursor: pointer;
+  stroke: var(--color-page-bg);
+  stroke-width: 2;
+  outline: none;
+  transition:
+    filter 0.15s ease,
+    stroke-width 0.15s ease;
+}
+
+.plasmid-map-feature:hover,
+.plasmid-map-feature:focus-visible,
+.plasmid-map-feature.active {
+  filter: brightness(1.08) saturate(1.15);
+}
+
+.plasmid-map-feature.active {
+  stroke: var(--color-text);
+  stroke-width: 2.5;
+}
+
+.plasmid-map-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  fill: var(--color-text);
+  pointer-events: none;
+}
+
+.plasmid-map-panel {
+  flex: 1 1 16rem;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border: 1px solid rgba(51, 40, 63, 0.25);
+  border-radius: 0.75rem;
+  padding: 1rem 1.15rem;
+}
+
+[data-theme="dark"] .plasmid-map-panel {
+  border-color: rgba(201, 189, 232, 0.3);
+}
+
+.plasmid-map-panel-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.plasmid-map-panel-role {
+  color: var(--color-text);
+  opacity: 0.85;
+}
+
+.plasmid-map-panel-progress {
+  display: block;
+  margin-top: 0.5rem;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(51, 40, 63, 0.12);
+  overflow: hidden;
+}
+
+[data-theme="dark"] .plasmid-map-panel-progress {
+  background: rgba(201, 189, 232, 0.18);
+}
+
+.plasmid-map-panel-progress-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--color-text);
+  opacity: 0.55;
+  animation: plasmid-map-progress var(--plasmid-map-interval, 3200ms) linear
+    forwards;
+}
+
+.plasmid-map-panel-progress-fill.paused {
+  animation: none;
+  width: 100%;
+  opacity: 0;
+}
+
+@keyframes plasmid-map-progress {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plasmid-map-panel-progress-fill {
+    animation: none;
+    width: 100%;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .plasmid-map {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .plasmid-map-svg {
+    width: min(70vw, 280px);
+    margin: 0 auto;
+  }
+}
+
+/* COMPACT TABLE
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17 (team request: the
+   team table on the Entrepreneurship page was far too big): small type and
+   tight cells, fixed columns so it always fits the width, left-aligned
+   because the cells hold sentences. */
+.table-compact.table-responsive-rounded .table-bordered {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table-compact.table-responsive-rounded .table-bordered th,
+.table-compact.table-responsive-rounded .table-bordered td {
+  min-width: 0;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.74rem;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.table-compact.table-responsive-rounded .table-bordered th:first-child,
+.table-compact.table-responsive-rounded .table-bordered td:first-child {
+  width: 17%;
+}
+
+.table-compact.table-responsive-rounded .table-bordered th:nth-child(2),
+.table-compact.table-responsive-rounded .table-bordered td:nth-child(2) {
+  width: 30%;
 }

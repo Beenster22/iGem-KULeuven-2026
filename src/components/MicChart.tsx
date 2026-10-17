@@ -65,6 +65,13 @@ export function MicChart() {
   const [threshold, setThreshold] = useState<Threshold>("90");
   const [ready, setReady] = useState(false);
   const [narrow, setNarrow] = useState(false);
+  // The legend/axis chrome take up the same space for both thresholds, so
+  // once the real plot height is measured for the current `narrow` layout it
+  // is reused on every later threshold switch — otherwise each switch redraws
+  // once with a rough estimate and once with the measured height, and that
+  // estimate-then-correct step is visible as the plot area briefly changing
+  // height.
+  const measuredHeightRef = useRef<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -102,10 +109,26 @@ export function MicChart() {
     // `plotHeight` is the plot area's height in px, used to space the
     // significance brackets so their stars never touch a line.
     const draw = (plotHeight: number) => {
+      // IC85% carries more significance-bracket rows than IC90%, so on its
+      // own it needs a taller axis top to fit them (spaceBrackets extends
+      // the range when the stack overflows it). Floor every draw at the
+      // larger of the two datasets' own tops so the axis range — and every
+      // tick's pixel position — stays put when switching tabs instead of
+      // shifting down to make room for the other dataset's brackets.
+      const sharedMax = Math.max(
+        ...(Object.values(DATASETS).map(
+          (dataset) =>
+            (
+              spaceBrackets(dataset.data, dataset.layout, plotHeight).layout
+                .yaxis?.range as [number, number] | undefined
+            )?.[1] ?? -Infinity,
+        )),
+      );
       const { data: spacedData, layout } = spaceBrackets(
         rawData,
         rawLayout,
         plotHeight,
+        Number.isFinite(sharedMax) ? sharedMax : undefined,
       );
       // The significance brackets are exported as unnamed line traces; keep
       // them from producing hover tooltips with meaningless coordinates.
@@ -163,17 +186,20 @@ export function MicChart() {
     };
 
     // The plot area's real height only exists once Plotly has laid the chart
-    // out (automargin depends on the legend and axis titles), so draw with an
-    // estimate first and redraw once with the measured value.
+    // out (automargin depends on the legend and axis titles). Once measured
+    // for this `narrow` layout, reuse it instead of re-deriving (and
+    // re-correcting) an estimate on every threshold switch.
     let cancelled = false;
-    const estimate = Math.max(
-      el.clientHeight - margin.t - margin.b - PLOT_CHROME_ALLOWANCE,
-      100,
-    );
+    const estimate =
+      measuredHeightRef.current ??
+      Math.max(el.clientHeight - margin.t - margin.b - PLOT_CHROME_ALLOWANCE, 100);
     void draw(estimate).then(() => {
       if (cancelled) return;
       const measured = (el as PlotlyElement)._fullLayout?._size.h;
-      if (measured && Math.abs(measured - estimate) > 2) void draw(measured);
+      if (measured && Math.abs(measured - estimate) > 2) {
+        measuredHeightRef.current = measured;
+        void draw(measured);
+      }
     });
     return () => {
       cancelled = true;
@@ -185,7 +211,11 @@ export function MicChart() {
     if (!el) return;
     const observer = new ResizeObserver((entries) => {
       const width = entries[0]?.contentRect.width ?? 0;
-      setNarrow(width > 0 && width < NARROW_BREAKPOINT);
+      const isNarrow = width > 0 && width < NARROW_BREAKPOINT;
+      setNarrow((prev) => {
+        if (prev !== isNarrow) measuredHeightRef.current = null;
+        return isNarrow;
+      });
       if (plotlyRef.current) void plotlyRef.current.Plots.resize(el);
     });
     observer.observe(el);

@@ -2,6 +2,7 @@
 // Purpose: segmented bar selector for switching between labeled content panes.
 import { ReactNode, useMemo, useState } from "react";
 import { extractLabeledChildren } from "../utils/extractLabeledChildren";
+import { useHashPanel } from "./useHashPanel";
 
 interface SegmentedSelectorProps {
   children: ReactNode;
@@ -15,6 +16,8 @@ interface SegmentedSelectorProps {
 export function SegmentedSelector({ children, orientation = "row" }: SegmentedSelectorProps) {
   const items = useMemo(() => extractLabeledChildren(children), [children]);
   const [activeIndex, setActiveIndex] = useState(0);
+  // A link from elsewhere may name a heading inside a segment that is not open.
+  useHashPanel(items, setActiveIndex);
   const active = items[activeIndex];
 
   return (

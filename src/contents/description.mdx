@@ -1,17 +1,5 @@
 <PageLayout>
 
-<Callout title="Bronze Medal Criterion #1: Wiki">
-
-Describe how and why you chose your iGEM project.[ref: this is a reference that should be first in the list of references]
-
----
-
-Visit the [Medals page](https://competition.igem.org/judging/awards/medals) for more information.
-
-</Callout>
-
-This is the project description page. we will talk ab our project in detail [ref: this is a reference that should be second in the list of references] lets see how this works for the back button
-
 <ExpandableText title="Want to know more about the history of PMOS and name change?">
 
 This condition was first identified in 1844, when Chereau described enlarged ovaries studded with small peripheral cysts. After this, multiple names followed (sclerocystic ovaries, follicular degeneration, chronic cystic oophoritis). Additionally, it was originally described as inflammation of the female genital organs (Chereau, 1844; Polk, 1895; reviewed in Adashi et al., 2022).
@@ -22,7 +10,7 @@ After years of advocacy on this matter, in May 2026, following a global consensu
 
 </ExpandableText>
 
-## What does PMOS look like?
+<ExpandableText title="What does PMOS look like?">
 
 {/* Moved here from the home page (2026-10-15) so it can be worked on on
     this page; the home page now has the simpler "How does PMOS affect
@@ -30,6 +18,8 @@ After years of advocacy on this matter, in May 2026, following a global consensu
     team ("Text for HOME PAGE", Section 4) — see BodySymptomsSection.tsx. */}
 
 <SymptomGroups />
+
+</ExpandableText>
 
 <ExpandableText title="What are the Rotterdam criteria for diagnosing PMOS?">
 
@@ -39,13 +29,15 @@ The 2023 International Evidence-based Guideline retained this two-of-three struc
 
 </ExpandableText>
 
-## Phenotypes
+<ExpandableText title="Phenotypes">
 
 {/* The team's phenotype figure, made interactive: choosing an overlap, a
     phenotype or a criteria set lights up everything that belongs with it.
     Its text lives in PhenotypeVenn.tsx. */}
 
 <PhenotypeVenn />
+
+</ExpandableText>
 
 <ExpandableText title="Learn more about the different hypotheses of PMOS etiology">
 
@@ -58,17 +50,17 @@ As the actual cause of this condition remains unknown, over the years there have
 
 </ExpandableText>
 
-<ExpandableText title="More about the name change from Bacteroides to Phocaeicola?">
+<ExpandableText title={<>More about the name change from <em>Bacteroides</em> to <em>Phocaeicola</em>?</>}>
 
-If you look up the bacteria with the name Phocaeicola vulgatus, you will encounter only a small number of papers written in the past years. However, if you search for Bacteroides vulgatus, you will find plenty. Initially, the name was given in 1933[ref: https://pmc.ncbi.nlm.nih.gov/articles/PMC533498/] by Eggerth and Gagnon by isolating it from human faeces and naming it vulgatus (common). Then bacterial genera were defined by what could be observed physically and measured based on cell shape, oxygen tolerance... However, when bioinformatic methods arrived the classification of bacteria shifted toward analyzing the 16s rRNA gene which consists of around 1500 nucleotides. In 2019 García-López et al.[ref: https://www.frontiersin.org/journals/microbiology/articles/10.3389/fmicb.2019.02083/full] claimed Bacteroidetes classification is limited to interpretation of poorly resolved 16S rRNA gene trees and a limited number of phenotypic features. They have used draft genome sequences from over Bacteroidetes and outgroup type strains to phylogenetic trees from genome-scale data.
+If you look up the bacteria with the name *Phocaeicola vulgatus*, you will encounter only a small number of papers written in the past years. However, if you search for *Bacteroides vulgatus*, you will find plenty. Initially, the name was given in 1933[ref: https://pmc.ncbi.nlm.nih.gov/articles/PMC533498/] by Eggerth and Gagnon by isolating it from human faeces and naming it *vulgatus* (common). Then bacterial genera were defined by what could be observed physically and measured based on cell shape, oxygen tolerance... However, when bioinformatic methods arrived the classification of bacteria shifted toward analyzing the 16s rRNA gene which consists of around 1500 nucleotides. In 2019 García-López et al.[ref: https://www.frontiersin.org/journals/microbiology/articles/10.3389/fmicb.2019.02083/full] claimed Bacteroidetes classification is limited to interpretation of poorly resolved 16S rRNA gene trees and a limited number of phenotypic features. They have used draft genome sequences from over Bacteroidetes and outgroup type strains to phylogenetic trees from genome-scale data.
 
-On those trees, Bacteroides vulgatus and thirteen other Bacteroides species turned out to be more closely related to Phocaeicola than to B. fragilis, the type species that defines the genus Bacteroides. Before this study between the two genera, the mainly accepted phenotypic difference was their motility. The authors claim Phocaeicola was wrongfully interpreted as having a flagellum although the method used to stain the bacteria was not appropriate to identify it. Hence, they have rejected the motility distinction and rebuilt the boundary between both genera with no consistent phenotypic difference but rather based on where the organisms sit on the genome tree, measuring relatedness by comparing the complete protein content of every genome against every other by BLAST. As a result, B. vulgatus name was changed to P. vulgatus by correcting its place on the phylogenetic tree. The name later became formally valid in 2020.
+On those trees, *Bacteroides vulgatus* and thirteen other *Bacteroides* species turned out to be more closely related to *Phocaeicola* than to *B. fragilis*, the type species that defines the genus *Bacteroides*. Before this study between the two genera, the mainly accepted phenotypic difference was their motility. The authors claim *Phocaeicola* was wrongfully interpreted as having a flagellum although the method used to stain the bacteria was not appropriate to identify it. Hence, they have rejected the motility distinction and rebuilt the boundary between both genera with no consistent phenotypic difference but rather based on where the organisms sit on the genome tree, measuring relatedness by comparing the complete protein content of every genome against every other by BLAST. As a result, *B. vulgatus* name was changed to *P. vulgatus* by correcting its place on the phylogenetic tree. The name later became formally valid in 2020.
 
 </ExpandableText>
 
 <ExpandableText title="Association vs. causation — a misconception in the scientific community">
 
-One of biggest misconceptions in microbiome discussions is observing a bacterium that goes up in a disease and concluding it causes the disease. Although P. vulgatus levels are enriched in PMOS, the same condition of dysbiosis appears in other diseases too but not always in the same role. In the context of inflammatory bowel disease, overabundance of P. vulgatus proteases may worsen the disease and even inhibiting them[ref: https://pmc.ncbi.nlm.nih.gov/articles/PMC8852248/] was reported as a possible therapeutic route similar to our approach for BSH enzyme. However, its role in obesity is reversed, and it was reported as protective since its metabolite cholic acid provides improvement in lipid profiles for high-fat-diet-induced obesity[ref: https://pubmed.ncbi.nlm.nih.gov/39569932/]. Hence, P. vulgatus should not be classified as a pathogenic bacterium. It is a commensal and one of the most abundant species in the healthy human gut. Its role depends on the context and cannot be given as a causal element for PMOS. Hence, in human cases increased levels of the same bacteria may cause disease in one model and protection in the other.
+One of biggest misconceptions in microbiome discussions is observing a bacterium that goes up in a disease and concluding it causes the disease. Although *P. vulgatus* levels are enriched in PMOS, the same condition of dysbiosis appears in other diseases too but not always in the same role. In the context of inflammatory bowel disease, overabundance of *P. vulgatus* proteases may worsen the disease and even inhibiting them[ref: https://pmc.ncbi.nlm.nih.gov/articles/PMC8852248/] was reported as a possible therapeutic route similar to our approach for BSH enzyme. However, its role in obesity is reversed, and it was reported as protective since its metabolite cholic acid provides improvement in lipid profiles for high-fat-diet-induced obesity[ref: https://pubmed.ncbi.nlm.nih.gov/39569932/]. Hence, *P. vulgatus* should not be classified as a pathogenic bacterium. It is a commensal and one of the most abundant species in the healthy human gut. Its role depends on the context and cannot be given as a causal element for PMOS. Hence, in human cases increased levels of the same bacteria may cause disease in one model and protection in the other.
 
 Hence, the association observed in human remains correlative and abundance of bacteria may already reflect a gut environment that has already changed due to several factors. Additionally, it is also worth remembering that PMOS is not a single-cause condition. Even if the gut microbiome contributes, it is only one of the many reasons that are apart of the whole self-sustaining cycle. The direction of association remains unsolved since while the mice study tests bacteria causing the disease, another study by Kelley et al. (2016)[ref: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0146509] highlights inducing hyperandrogenism in mice caused shift in gut microbiome without any change in diet. As explained thoroughly, change in human gut microbiota cannot imply a causation with PMOS. Therefore, instead of aiming the dysbiosis in the gut, we aim targeting the enzymatic activity as a potential treatment method.
 
@@ -84,15 +76,15 @@ The healthy bile salt human pool is roughly 3–5 g, of which about 95% is activ
 
 Gut-derived bile salt hydrolase (BSH) catalyses the reaction of the wider bile acid modification pathway, shaping the bile acid landscape and mediating crosstalk between the microbiome and host. Only after deconjugation can the rest follow. First, 7α-dehydroxylation generates the secondary bile acids deoxycholic acid (DCA) and lithocholic acid (LCA), while hydroxysteroid dehydrogenases oxidise and epimerise the ring hydroxyls. Bacteria are also able to re-conjugate a class of microbially conjugated bile acids, linked to amino acids such as phenylalanine, leucine and tyrosine, which has recently been described and found elevated in IBD and cystic fibrosis.[^fimmu2022]
 
-Why we care. The pool arriving at any receptor is not a fixed liver output but a shape, set largely by which microbial enzymes are present. BSH sits at the top of that cascade and is an enzyme P. vulgatus Bv46 encodes and shows deconjugating activity on plate assay, with supplementation shifting the faecal pool toward unconjugated and secondary bile acids in hyperlipidaemic rats[ref: https://doi.org/10.3389/fendo.2026.1758707]. Downstream, bile acid signaling reaches well beyond the gut: bile acid metabolism and gut dysbiosis have been proposed as components of a gut–liver axis linked to ovarian function, and TGR5 is an established mediator of metabolic effects.[^apsb2024]
+Why we care. The pool arriving at any receptor is not a fixed liver output but a shape, set largely by which microbial enzymes are present. BSH sits at the top of that cascade and is an enzyme *P. vulgatus* Bv46 encodes and shows deconjugating activity on plate assay, with supplementation shifting the faecal pool toward unconjugated and secondary bile acids in hyperlipidaemic rats[ref: https://doi.org/10.3389/fendo.2026.1758707]. Downstream, bile acid signaling reaches well beyond the gut: bile acid metabolism and gut dysbiosis have been proposed as components of a gut–liver axis linked to ovarian function, and TGR5 is an established mediator of metabolic effects.[^apsb2024]
 
 </ExpandableText>
 
 <ExpandableText title="More about this pathway">
 
-Bacteroides, specifically P. vulgatus, is enriched in patients with PMOS[ref: https://doi.org/10.1210/jc.2017-02153][ref: https://doi.org/10.3389/fmicb.2017.00324][ref: https://doi.org/10.1371/journal.pone.0168390]. These high P. vulgatus levels are negatively associated with the levels of bile acids, especially GDCA and TUDCA[^s41591]. TGR5 (Takeda G-protein coupled receptor) is the most active bile acid receptor present on ILC3 (innate lymphoid cells type 3), but also on certain enterocytes[^chiang2017]. When bile acids bind TGR5, it activates the transcription factor GATA3 and thus IL-22 expression[^s41591]. This IL-22 can bind its receptors in the ovaries, leading to the expression of ovulation-related genes via JAK-STAT signaling[ref: https://doi.org/10.1093/molehr/gaae037].
+*Bacteroides*, specifically *P. vulgatus*, is enriched in patients with PMOS[ref: https://doi.org/10.1210/jc.2017-02153][ref: https://doi.org/10.3389/fmicb.2017.00324][ref: https://doi.org/10.1371/journal.pone.0168390]. These high *P. vulgatus* levels are negatively associated with the levels of bile acids, especially GDCA and TUDCA[^s41591]. TGR5 (Takeda G-protein coupled receptor) is the most active bile acid receptor present on ILC3 (innate lymphoid cells type 3), but also on certain enterocytes[^chiang2017]. When bile acids bind TGR5, it activates the transcription factor GATA3 and thus IL-22 expression[^s41591]. This IL-22 can bind its receptors in the ovaries, leading to the expression of ovulation-related genes via JAK-STAT signaling[ref: https://doi.org/10.1093/molehr/gaae037].
 
-As P. vulgatus is upregulated in PMOS, bsh expression is increased as well[^s41591]. Bile salt hydrolases deconjugate bile acids, so women with PMOS have a disrupted bile acid pool. As TGR5 binds conjugated bile acids with a higher affinity than deconjugated bile acids, the entire pathway is downregulated[ref: https://doi.org/10.3390/ijms26146547]. This can lead to anovulation.
+As *P. vulgatus* is upregulated in PMOS, bsh expression is increased as well[^s41591]. Bile salt hydrolases deconjugate bile acids, so women with PMOS have a disrupted bile acid pool. As TGR5 binds conjugated bile acids with a higher affinity than deconjugated bile acids, the entire pathway is downregulated[ref: https://doi.org/10.3390/ijms26146547]. This can lead to anovulation.
 
 </ExpandableText>
 
@@ -102,7 +94,7 @@ Insulin resistance and hyperandrogenism are symptoms of PMOS that interplay with
 
 </ExpandableText>
 
-## Our project at a glance
+<ExpandableText title="Our project at a glance">
 
 {/* The wet lab wheel in its "side" layout: smaller, and the selected wedge
     turns to the right to point at its content instead of down. Same seven
@@ -115,7 +107,7 @@ Insulin resistance and hyperandrogenism are symptoms of PMOS that interplay with
 
 ## Strain selection
 
-Choosing which P. vulgatus strains to work with was a crucial part of the project. We chose 6 strains, aiming to compare a well-characterized type-strain from literature with clinically relevant fecal isolates.
+Choosing which *P. vulgatus* strains to work with was a crucial part of the project. We chose 6 strains, aiming to compare a well-characterized type-strain from literature with clinically relevant fecal isolates.
 
 </SectionItem>
 
@@ -123,7 +115,7 @@ Choosing which P. vulgatus strains to work with was a crucial part of the projec
 
 ## Antibiotic selection
 
-Strain-specific literature on antibiotic susceptibility in P. vulgatus is sparse. So, we gathered the data, completing an extensive MIC panel across two strains, separating the antibiotics that stopped growth from those that didn't have any effect.
+Strain-specific literature on antibiotic susceptibility in *P. vulgatus* is sparse. So, we gathered the data, completing an extensive MIC panel across two strains, separating the antibiotics that stopped growth from those that didn't have any effect.
 
 </SectionItem>
 
@@ -131,7 +123,7 @@ Strain-specific literature on antibiotic susceptibility in P. vulgatus is sparse
 
 ## Reporter gene output
 
-Promoters are essential tools for tuning gene expression. To visualize promoter expression, we measured GFP, mCherry, KOFP-7, and NanoLuc, hoping to test their compatibility with P. vulgatus and functionality in anaerobic conditions.
+Promoters are essential tools for tuning gene expression. To visualize promoter expression, we measured GFP, mCherry, KOFP-7, and NanoLuc, hoping to test their compatibility with *P. vulgatus* and functionality in anaerobic conditions.
 
 </SectionItem>
 
@@ -139,7 +131,7 @@ Promoters are essential tools for tuning gene expression. To visualize promoter 
 
 ## Medium comparison
 
-Finding which medium gives reproducibility and strong growth was done by testing four different media types. Growth curves gave us insight into which components are essential for P. vulgatus survival!
+Finding which medium gives reproducibility and strong growth was done by testing four different media types. Growth curves gave us insight into which components are essential for *P. vulgatus* survival!
 
 </SectionItem>
 
@@ -147,7 +139,7 @@ Finding which medium gives reproducibility and strong growth was done by testing
 
 ## Conjugation efficiency testing
 
-To be able to deliver constructs, we had to know how and if conjugation works into P. vulgatus as heat shock and electroporation have a low success rate. Different plasmids were transferred from E. coli S17-1 λpir into our six strains.
+To be able to deliver constructs, we had to know how and if conjugation works into *P. vulgatus* as heat shock and electroporation have a low success rate. Different plasmids were transferred from *E. coli* S17-1 λpir into our six strains.
 
 </SectionItem>
 
@@ -155,7 +147,7 @@ To be able to deliver constructs, we had to know how and if conjugation works in
 
 ## Promotor screening
 
-There is almost no characterized promoter toolbox for P. vulgatus, so we assembled a library of literature-derived promoters into a reporter construct and carried each one through to the organism itself.
+There is almost no characterized promoter toolbox for *P. vulgatus*, so we assembled a library of literature-derived promoters into a reporter construct and carried each one through to the organism itself.
 
 </SectionItem>
 
@@ -163,11 +155,78 @@ There is almost no characterized promoter toolbox for P. vulgatus, so we assembl
 
 ## Codon Optimization & Harmonization tool
 
-Expression in a non-model organism depends on the codons its ribosomes recognize, so we built a tool that adapts a gene sequence to P. vulgatus rather than simply maximizing codon frequency.
+Expression in a non-model organism depends on the codons its ribosomes recognize, so we built a tool that adapts a gene sequence to *P. vulgatus* rather than simply maximizing codon frequency.
 
 </SectionItem>
 
 </WheelSelector>
+
+</ExpandableText>
+
+<ExpandableText title="Appendix: How many people live with PMOS?">
+
+In order to understand the scale of the problem we're addressing, finding the most accurate estimate of how many women are affected by this condition and how these cases are distributed across the world is crucial[ref: Lin T, Xie B, Yang J, et al. Changes in the global burden of polycystic ovary syndrome from 1990 to 2021. Reproductive Health 22, 86 (2025).]. Most published studies report results for large statistical regions rather than specific continents, so we calculated the continent totals ourselves from openly available data.
+
+We used the Global Burden of Disease (GBD) Results, made available by the Institute for Health Metrics and Evaluation (IHME)[ref: GBD 2023, Institute for Health Metrics and Evaluation (IHME); GBD Results Tool. https://ghdx.healthdata.org/]. GBD is the most comprehensive dataset on disease burden worldwide. It provides standardized estimates for 204 countries and territories, which makes numbers comparable between countries.
+
+Every search we used the same settings:
+
+<div className="appendix-table appendix-table--compact">
+
+| Field | Selection |
+| --- | --- |
+| GBD estimate | Cause of death or injury |
+| Measure | Prevalence |
+| Metric | Number |
+| Cause | Polycystic ovarian syndrome |
+| Sex | Female |
+| Age | All ages |
+| Year | **2023** (most recent available) |
+
+</div>
+
+What we changed between each search was the location. GBD groups countries into 21 regions that do not follow continental borders. We therefore ran one search per continent and selected regions or individual countries so that every country was counted in the right continent.
+
+<div className="appendix-table">
+
+| Continent | Locations selected |
+| --- | --- |
+| Africa | African Union (all African countries) |
+| Asia | East Asia, South Asia, Southeast Asia, High-income Asia Pacific, Central Asia, and 15 Middle Eastern countries (Afghanistan, Bahrain, Iran, Iraq, Jordan, Kuwait, Lebanon, Oman, Palestine, Qatar, Saudi Arabia, Syria, Türkiye, United Arab Emirates, Yemen) |
+| Europe | Western Europe, Central Europe, Eastern Europe |
+| North America | High-income North America; Caribbean minus Guyana and Suriname; Mexico, Guatemala, Honduras, El Salvador, Nicaragua, Costa Rica, Panama |
+| South America | Andean, Tropical and Southern Latin America; Colombia, Venezuela, Guyana, Suriname |
+| Oceania | Australasia, Oceania |
+| Global | Global |
+
+</div>
+
+For each continent, we summarized the case numbers of the selected locations. As a reference, we searched for global total data separately. The six continent totals add up to 67.93 million, compared to the global GBD value of 67.91 million, a difference of 0.03%. This confirms that no region was missed or counted twice.
+
+<div className="appendix-table appendix-table--compact">
+
+| Continent | Women with PMOS (2023) | Share of recorded cases |
+| --- | --- | --- |
+| Asia | 39.8 million | 58.6% |
+| North America | 8.9 million | 13.1% |
+| Europe | 7.8 million | 11.5% |
+| Africa | 7.0 million | 10.4% |
+| South America | 3.5 million | 5.1% |
+| Oceania | 0.85 million | 1.2% |
+| **Global** | **67.9 million** | |
+
+</div>
+
+<Callout title="Disclaimer: how to interpret the data">
+
+- What we present here are **case counts**. Asia has the most cases largely because most of the world's population lives there. The numbers show where the most affected women live, not where PMOS is most common per person.
+- The real number is much higher. GBD mostly counts diagnosed cases, however PMOS is known to be heavily underdiagnosed. The international consensus that renamed the condition estimates it affects about 1 in 8 women worldwide, which is well over 170 million people[^lancet2026]. The gap between ~68 million recorded cases and this estimate represent women who have never been diagnosed.
+- Furthermore, underdiagnosis is not even. Regions with limited healthcare access record very low numbers. This most likely reflects missed diagnoses rather than fewer cases.
+- Lastly, all GBD values are model-based estimates and come with a 95% uncertainty interval. For the global total, this means the true number of recorded cases lies between roughly 48 and 93 million women.
+
+</Callout>
+
+</ExpandableText>
 
 </PageLayout>
 
