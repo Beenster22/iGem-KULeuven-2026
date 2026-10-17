@@ -59,7 +59,10 @@ export const SPONSORS: Sponsor[] = [
     tier: "gold",
   },
   {
-    name: "Merck Healthcare & Fertility",
+    name: "Technovation Hub",
+    src: "https://static.igem.wiki/teams/6299/wiki/sponsors/technovation-hub.avif",
+    href: "https://lrd.kuleuven.be/kuleuvenkick/technovation-hub",
+    footerZoom: 1.2,
     tier: "silver",
   },
   {
@@ -71,13 +74,6 @@ export const SPONSORS: Sponsor[] = [
     src: "https://static.igem.wiki/teams/6299/wiki/sponsors/sarstedt.avif",
     href: "https://www.sarstedt.com/en/BE",
     footerZoom: 1.15,
-    tier: "bronze",
-  },
-  {
-    name: "Technovation Hub",
-    src: "https://static.igem.wiki/teams/6299/wiki/sponsors/technovation-hub.avif",
-    href: "https://lrd.kuleuven.be/kuleuvenkick/technovation-hub",
-    footerZoom: 1.2,
     tier: "bronze",
   },
   {
