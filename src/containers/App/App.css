@@ -1130,6 +1130,70 @@ a[data-footnote-ref]:focus {
   }
 }
 
+/* APPENDIX TABLES (project description — PMOS prevalence)
+   Generated with Claude Sonnet 5 (Anthropic), 2026-10-17
+   Purpose: the plain markdown tables in the Appendix section render as bare
+   <table>s outside any dropdown, so they need the same accent-header,
+   soft-border treatment as .expandable-content table above (same palette:
+   --color-accent header fill, the site's plum-tinted border colour in both
+   themes). The two short summary tables (search settings; prevalence by
+   continent) hold single words and numbers, so --compact centers them at
+   their natural width instead of stretching edge-to-edge; the locations
+   table holds full sentences and stays left-aligned and full width, same
+   reasoning as the dropdown tables. */
+.appendix-table table {
+  width: 100%;
+  margin: 0 auto 1.25rem;
+  border-collapse: collapse;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.appendix-table table :is(th, td) {
+  border: 1px solid rgba(51, 40, 63, 0.18);
+  padding: 0.6rem 0.85rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+[data-theme="dark"] .appendix-table table :is(th, td) {
+  border-color: rgba(201, 189, 232, 0.25);
+}
+
+.appendix-table table th {
+  background-color: var(--color-accent);
+  /* The accent fill is light in both themes, so the header text is fixed
+     dark rather than the theme-varying --color-text. */
+  color: #33283f;
+  font-weight: 600;
+}
+
+.appendix-table--compact table {
+  width: auto;
+  min-width: 320px;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.appendix-table--compact table :is(th, td) {
+  text-align: center;
+}
+
+@media (max-width: 767.98px) {
+  .appendix-table table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .appendix-table--compact table {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
 /* BILE SALT RATIO TABLE (BSA-07, Table 1 in the notebook)
    Generated with Claude Opus 5 (Anthropic), 2026-10-17
    Purpose: team report (AL) — the workbook shades the two log columns red and
