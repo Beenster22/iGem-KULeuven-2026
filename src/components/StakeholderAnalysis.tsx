@@ -13,7 +13,7 @@ import { ReactNode, useId, useState } from "react";
 
 /* ---------- Icons ---------- */
 
-type IconName = "healthcare" | "science" | "industry" | "patients" | "legislation";
+type IconName = "healthcare" | "science" | "industry" | "patients" | "legislation" | "public";
 
 const ICON_PATHS: Record<IconName, ReactNode> = {
   // Stethoscope
@@ -49,6 +49,17 @@ const ICON_PATHS: Record<IconName, ReactNode> = {
       <path d="M3.5 20a5.5 5.5 0 0 1 11 0" />
       <circle cx="17" cy="9" r="2.4" />
       <path d="M15.5 14.2A4.5 4.5 0 0 1 21 18.5" />
+    </>
+  ),
+  // A crowd of three — one in front, two behind
+  public: (
+    <>
+      <circle cx="12" cy="6.4" r="2.7" />
+      <path d="M7.6 13.6a4.6 4.6 0 0 1 8.8 0" />
+      <circle cx="4.7" cy="11" r="2.1" />
+      <path d="M1.4 17.6a3.7 3.7 0 0 1 4.4-3" />
+      <circle cx="19.3" cy="11" r="2.1" />
+      <path d="M22.6 17.6a3.7 3.7 0 0 0-4.4-3" />
     </>
   ),
   // Scales of justice
@@ -125,6 +136,7 @@ const CATEGORIES: MatrixCategory[] = [
   { id: "science", initialLabel: "Scientific & Technical Experts", initial: { x: 71, y: 77 }, final: { x: 88, y: 90 } },
   { id: "industry", initialLabel: "Biotech & Industry", initial: { x: 51, y: 50 }, final: { x: 57, y: 50 } },
   { id: "healthcare", initialLabel: "Healthcare Professionals", initial: { x: 88, y: 45 }, final: { x: 70, y: 29 } },
+  { id: "public", initialLabel: "Public", initial: { x: 50, y: 30 }, final: { x: 90, y: 29 } },
   { id: "ethics", initialLabel: "Safety & Bioethical Regulations", final: { x: 13, y: 79 } },
 ];
 
