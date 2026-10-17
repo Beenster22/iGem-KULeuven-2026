@@ -71,15 +71,40 @@ const READING_LINE_PX = 92;
 // if the browser never reports the end of the scroll.
 const CLICK_LOCK_MS = 1500;
 
+// Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-17 (team feedback: on the
+// Team page the mascot never followed the reader down to "Principal
+// Investigators" and "Advisors"): the last sections of a page are often
+// shorter than the screen, so their headings can never scroll up to the
+// reading line. Over the final screenful of the page the line therefore moves
+// down to the bottom of the screen, so each of those headings counts as read
+// in turn as the page runs out.
+// Edited 2026-10-17 (the mascot still stayed behind on the Team page): the line
+// itself now sits 40% down the screen instead of just under the navbar, so a
+// section counts as the current one once it fills the middle of the screen,
+// not only after its heading has scrolled all the way to the top. Short
+// sections near the end of a page then get their turn well before the page
+// runs out.
+function readingLine(): number {
+  const viewport = window.innerHeight;
+  const base = Math.max(READING_LINE_PX, viewport * 0.4);
+  const remaining = Math.max(
+    0,
+    document.documentElement.scrollHeight - viewport - window.scrollY,
+  );
+  if (remaining >= viewport) return base;
+  return base + (viewport - base) * (1 - remaining / viewport);
+}
+
 // The section being read: the last heading at or above the reading line.
 function currentHeadingId(headings: Heading[]): string {
   let current = "";
+  const line = readingLine();
   for (const heading of headings) {
     const element = document.getElementById(heading.id);
     // Headings inside a hidden section (see PhasePager) have no layout box.
     if (!element || element.getClientRects().length === 0) continue;
     if (!current) current = heading.id;
-    if (element.getBoundingClientRect().top > READING_LINE_PX) break;
+    if (element.getBoundingClientRect().top > line) break;
     current = heading.id;
   }
   return current || (headings[0]?.id ?? "");
