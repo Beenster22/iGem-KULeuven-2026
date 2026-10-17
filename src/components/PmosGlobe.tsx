@@ -214,7 +214,7 @@ export function PmosGlobe() {
               See the prevalence by continent
             </h2>
             <span className="pmos-globe-info-hint">
-              Click a continent on the globe
+              <em>Click a continent on the globe</em>
             </span>
           </div>
         )}

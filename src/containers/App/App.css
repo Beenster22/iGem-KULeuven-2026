@@ -3201,7 +3201,7 @@ footer hr {
 .sponsor-carousel-track {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
   width: max-content;
   animation: sponsor-carousel-scroll var(--sponsor-carousel-duration, 25s)
     linear infinite;
@@ -3216,15 +3216,16 @@ footer hr {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 150px;
-  height: 76px;
+  width: 210px;
+  height: 108px;
   border-radius: 0.75rem;
   background-color: rgba(255, 255, 255, 0.95);
-  /* 1rem top/bottom keeps every logo's clear space at >= half the height of
-     the KU Leuven Group SET logomark within it (its brand guideline's
-     minimum), since that's the tallest padding requirement of any sponsor
-     sharing this tile size — bumped from 0.75rem for that reason. */
-  padding: 1rem 1.25rem;
+  /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18 (team request: use
+     the tile's space, logos must stay readable): the tile grew from 150x76 to
+     210x108 and its padding shrank from 1rem 1.25rem to 0.55rem 0.8rem, so the
+     logo area went from about 110x44 to about 184x76 pixels. The per-logo
+     enlargement (SponsorCarousel.tsx) is eased off to match. */
+  padding: 0.55rem 0.8rem;
   /* Logos enlarged with `zoom` (SponsorCarousel.tsx) may reach into the
      padding; this keeps them inside the tile's rounded corners. */
   overflow: hidden;
@@ -3243,7 +3244,7 @@ footer hr {
 
 .sponsor-carousel-placeholder {
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 1rem;
   text-align: center;
   color: var(--color-text);
   opacity: 0.6;
