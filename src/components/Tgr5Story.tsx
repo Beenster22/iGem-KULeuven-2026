@@ -893,7 +893,8 @@ export function Tgr5ConsequencesSection() {
       <div
         className={`tgr5-effects${prefersReducedMotion ? " tgr5-effects--static" : " home-snap-stage"}`}
       >
-        {/* Retitled on Marie's review (2026-10-08): TGR5 is not inactivated. */}
+        {/* Retitled on Marie's review (2026-10-08): TGR5 is not inactivated.
+            Reworded on team request (2026-10-16). */}
         <h3 className="tgr5-effects-heading">
           When bile acid pool is not balanced, it can lead to
         </h3>

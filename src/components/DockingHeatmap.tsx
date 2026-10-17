@@ -3,6 +3,9 @@
 // rebuilt from the team's static plot as an interactive grid — clicking a
 // cell shows the docking pose image for that protein-ligand pair underneath.
 // Data lives in data/dockingAffinities.ts.
+// Edited with Claude Opus 5 (Anthropic), 2026-10-17
+// Purpose: the pose images are now uploaded under the BSH names, so the image
+// URL is built from the row's `homolog` again instead of the species slug.
 import { useMemo, useState } from "react";
 import { BILE_SALTS, DOCKING_AFFINITIES } from "./data/dockingAffinities";
 
@@ -58,8 +61,8 @@ interface Selection {
 interface DockingHeatmapProps {
   // Folder the per-pair pose images live in on static.igem.wiki, without a
   // trailing slash. Each image is expected to be named
-  // `<homolog>-<bile salt>-acid.<imageExtension>`, e.g.
-  // "bgal-taurocholic-acid.avif" — the team's `bgal__taurocholic_acid.png`
+  // `<homolog>-<bile salt>-acid.<imageExtension>`, lowercased, e.g.
+  // "bsh3-taurocholic-acid.avif" — the team's `bsh3__taurocholic_acid.png`
   // after the iGEM uploads tool has hyphenated and converted it.
   // Leave it out until the images are uploaded — the panel below the grid
   // then says so instead of showing a broken image.
@@ -85,7 +88,7 @@ export function DockingHeatmap({
 
   const imageUrl =
     imageBaseUrl && selected
-      ? `${imageBaseUrl}/${selected.homolog}-${selected.salt}-acid.${imageExtension}`
+      ? `${imageBaseUrl}/${selected.homolog.toLowerCase()}-${selected.salt}-acid.${imageExtension}`
       : null;
 
   return (
