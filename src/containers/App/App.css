@@ -10746,18 +10746,37 @@ a.protocol-download:hover {
    compared against. A tinted background and a heavier first cell, so it is
    found at a glance without the table turning into a colour chart. */
 .table-row-highlight > td {
-  /* Bootstrap paints every cell with --bs-table-bg and an inset shadow, so
-     the tint has to go on the cells, not on the row. */
-  background-color: rgba(201, 189, 232, 0.45);
+  /* Team dark purple (#33283f) with crisp light text (#eaf4f5 / #fff) in light mode —
+     contrasts sharply with the surrounding lavender card and white table rows. */
+  background-color: #33283f;
+  color: #eaf4f5;
+  border-color: rgba(234, 244, 245, 0.2);
   box-shadow: none;
 }
 
+.table-row-highlight > td a {
+  color: #eaf4f5;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 [data-theme="dark"] .table-row-highlight > td {
-  background-color: rgba(201, 189, 232, 0.18);
+  /* Team lavender (#c9bde8) with dark text (#33283f) in dark mode —
+     stands out brightly against the dark theme background. */
+  background-color: #c9bde8;
+  color: #33283f;
+  border-color: rgba(51, 40, 63, 0.25);
+}
+
+[data-theme="dark"] .table-row-highlight > td a {
+  color: #33283f;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .table-row-highlight td:first-child {
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /* The strain panel carries seven columns, two of them full sentences. Left
@@ -10771,4 +10790,64 @@ a.protocol-download:hover {
 .strain-panel-table td,
 .strain-panel-table th {
   font-size: 0.92rem;
+}
+
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-17
+   Purpose: the header box's optional right-hand decoration (Header's
+   `aside` prop) — the results page's only user today, for Elle's greeting.
+   The title/lead column is capped to a fixed width rather than left to grow
+   into whatever room the flex row leaves: a lead that is free to fill the
+   full container only ever wraps to one line, which left Elle's row (taller
+   than one line, with her figure and bubble) setting the box's height on its
+   own. Capping the text column keeps the lead at roughly the two lines it
+   would wrap to anyway once a mascot sits beside it, so the two columns
+   settle at close to the same height and the box does not grow past that.
+   Below 768px the two stack, title first, so Elle never crowds the title on
+   a narrow screen. */
+.page-header-box-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* Scoped to .page-header-box-row (present only when `aside` is given, see
+   Header.tsx) rather than to .page-header-box-text alone, which every page's
+   header wears and would otherwise have its width capped too. The cap keeps
+   the lead from stretching into the single very wide line it would get if
+   left to fill all the room the row leaves once Elle's column is taken out,
+   so it instead wraps the way it would on any other page. */
+.page-header-box-row .page-header-box-text {
+  flex: 1 1 28rem;
+  max-width: 42rem;
+}
+
+.page-header-box-aside {
+  flex: 0 0 auto;
+}
+
+/* Elle's own spacing (.elle's 2rem vertical margin, meant for a line of body
+   copy) is more than a header box needs, and left at her speech bubble's
+   default 24em max-width and "md" size she would set the row's height on
+   her own — size="sm" on the ElleSays call handles the mascot, and the
+   bubble is narrowed to match so her line settles into about as many lines
+   as the lead does, rather than spreading wide and short beside it. */
+.page-header-box-aside .elle {
+  margin: 0;
+}
+
+.page-header-box-aside .elle-bubble {
+  max-width: 13em;
+}
+
+@media (max-width: 767.98px) {
+  .page-header-box-row {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .page-header-box-row .page-header-box-text {
+    max-width: none;
+  }
 }

@@ -1,21 +1,11 @@
 <PageLayout>
 
 {/* Page structure laid out with Claude Opus 5 (Anthropic), 2026-10-17, from the team's sketch of the results page (Notes_261017). */}
-{/* The title sits top left, Elle greets from the right, four headline success cards jump to their section, and the page then splits into the Toolkit and Therapeutics pipelines. */}
+{/* The title sits top left, Elle greets from the right — both in the page header box itself, see App.tsx's HEADER_ASIDE — and the four headline success cards start the content, jumping to their section before the page splits into the Toolkit and Therapeutics pipelines. */}
 {/* The MIC write-up is the team's own text, carried over unchanged from the previous version of this page. */}
 {/* TO FILL IN: every "Placeholder" paragraph; every <FigureSlot>, which names the figure or table that belongs there and is meant to be deleted once the real one is in; the explanation line on each <Takeaway>, plus a real label for the cryptic ones ("salt -> LB", "H2O", "X"); and the four <SuccessCard> labels at the top. */}
 {/* A <SuccessCard>'s `to` is the slug of its target heading, so "### Bile salt deconjugation by 15 bile salt hydrolases" is reached with to="bile-salt-deconjugation-by-15-bile-salt-hydrolases". */}
 {/* Keep every comment on this page to a single line: prettier reflows a multi-line MDX comment into markdown and breaks the page. */}
-
-{/* Elle greets the reader from the right-hand side; the page title "Results" sits top left, in the page header above this content. */}
-
-<div className="results-greeting">
-  <ElleSays mood="excited" size="md" side="right">
-
-Here you can find all our results! Isn't it exciting?!
-
-  </ElleSays>
-</div>
 
 <SuccessCards>
   <SuccessCard to="antibiotic-susceptibility-of-p-vulgatus">
@@ -53,13 +43,17 @@ Here you can find all our results! Isn't it exciting?!
 
 ## Toolkit
 
+<ResultSection>
+
 ### Introduction
 
 Placeholder — replace with the introduction to the toolkit pipeline, ending in
 a pointer to the <Link to="/experimental-overview">experimental overview</Link>
 for how these experiments fit together.
 
-<div className="all-data-label">All data</div>
+</ResultSection>
+
+<ResultSection>
 
 ### Selecting a _P. vulgatus_ strain panel
 
@@ -201,13 +195,6 @@ Together this panel covers healthy human gut, clinical and inflamed murine origi
   <em>Predicted</em> is inferred from resistance genes in the genome and has not been tested.
 </div>
 
-<ElleSays mood="happy" size="sm" side="right">
-
-Want the numbers behind those antibiotic notes? See our MIC results, further
-down this page!
-
-</ElleSays>
-
 #### BSH annotation status
 
 Only the type strain has characterised BSH loci. Its genome carries three choloylglycine hydrolase (_cgh_/_bsh_) genes, with activity confirmed both in vitro and in vivo. These serve as the query set for annotating the remaining strains.
@@ -222,6 +209,17 @@ Only the type strain has characterised BSH loci. Its genome carries three choloy
 | BVU_RS13575 | BSH coding sequence used as the annotation query |
 
 </ExpandableText>
+
+<ElleSays mood="happy" size="sm" side="right">
+
+Want the numbers behind those antibiotic notes? See our
+<Link to="/results#antibiotic-susceptibility-of-p-vulgatus">MIC results</Link>, further down this page!
+
+</ElleSays>
+
+</ResultSection>
+
+<ResultSection>
 
 ### Antibiotic susceptibility of _P. vulgatus_
 
@@ -467,6 +465,10 @@ is below 4 mg/L, this antibiotic is most recommended when working with _P. vulga
 erythromycin are less encouraged, given the variability between the strains and a negative advice against
 ampicillin by EUCAST.
 
+</ResultSection>
+
+<ResultSection>
+
 ### A characterized promoter library for _P. vulgatus_
 
 <div className="results-standfirst">
@@ -586,11 +588,15 @@ Placeholder — whether carrying a construct cost the strain anything in growth.
 
 Placeholder — what the library gives a future team.
 
+</ResultSection>
+
 </SectionItem>
 
 <SectionItem label="Therapeutics">
 
 ## Therapeutics
+
+<ResultSection>
 
 ### Introduction
 
@@ -599,6 +605,10 @@ ending in a pointer to the <Link to="/experimental-overview">experimental overvi
 for how these experiments fit together.
 
 <div className="all-data-label">All data</div>
+
+</ResultSection>
+
+<ResultSection>
 
 ### Screening BSH activity on bile salt plates
 
@@ -652,6 +662,10 @@ like.
 
 Placeholder — the plate screening results (the rest of this section follows the
 Word document).
+
+</ResultSection>
+
+<ResultSection>
 
 ### Bile salt deconjugation by 15 bile salt hydrolases
 
@@ -747,32 +761,85 @@ Placeholder — what the 15-hydrolase screen settled.
 
 Placeholder — what a next team should do with this.
 
+</ResultSection>
+
+<ResultSection>
+
 ### CRISPR construct design
 
+{/* The team's own "Construct Planning FINAL" document, transferred as written; only typography was adjusted (species names in italics, R6K γ ori, en dashes) and the document's own headings were kept as the structure below. */}
+{/* TODO(team): the document's unresolved comments are not carried onto the page — the open ones are flagged with TODO comments where they apply. */}
+
 <div className="results-standfirst">
-  Placeholder — one line on what the construct is meant to do.
+  A CRISPR construct that swaps the native bile salt hydrolase of a patient's
+  own <em>P. vulgatus</em> for a homolog with a different substrate preference.
 </div>
 
 #### Executive summary
 
-Placeholder — the construct in a paragraph.
+Our approach involves isolating *P. vulgatus* from a patient's fecal sample,
+CRISPR engineering it in vitro, and administering it to the same patient. The
+CRISPR system, introduced through conjugation, uses the guide RNA (gRNA) to
+target the native BSH and replaces it with a BSH homolog of different substrate
+preference, so that the bile salts with the strongest TGR5 affinity remain. The
+homologous recombination system of *P. vulgatus* can use the designed homology
+arms flanking our BSH of interest to insert it into the genome after double
+strand break induction. The intended effect is a restored bile salt pool for
+balanced immune and metabolic modulation.
 
 #### The construct
+
+{/* TODO(team): the higher-resolution plasmid map is still to be uploaded (Alec) — the uploads tool takes PNG/JPG, so export the map as an image rather than the .mp4. */}
 
 <FigureSlot label="Figure 1">
   The pBSH–Cas9 plasmid map, with each component named and given a one-sentence
   role.
 </FigureSlot>
 
+{/* TODO(team): the document asks for each component's cell to be shaded in the colour it has in the plasmid map — waiting on the map above. */}
+
+| Component | Role |
+| --- | --- |
+| oriT | Origin of transfer for mobilization |
+| AmpR | Selection marker (*E. coli*) |
+| R6K γ ori | Conditional origin (*pir*-specific replication origin) |
+| pB8-51 | *Bacteroides* plasmid replication origin |
+| Cat | Chloramphenicol selection marker (*P. vulgatus*) |
+| P<sub>Cas9</sub> | Cfx promoter to drive Cas9 expression |
+| rpiL RBS | Ribosome binding site |
+| Cas9 | Coding sequence |
+| P<sub>gRNA</sub> | Bfp promoter to drive gRNA expression |
+| rrnB T1 terminator | Transcription terminator |
+| HA<sub>L</sub> | Homology arm (left) |
+| HA<sub>R</sub> | Homology arm (right) |
+| Replacement BSH | Coding sequence (BSH enzyme) |
+
 #### Integration strategy
 
-Placeholder — how the construct gets into the genome, step by step.
+The construct must replicate and express in *E. coli* and *P. vulgatus* for
+conjugation.
+
+{/* TODO(team): the source document still carries both "tetracycline" and "erythromycin" in the second point below, and Alec's comment argues from the MIC data that erythromycin selects in strain 1447 but not 1806 — so the cassette is named generically here until the team settles which one it is. The component legend above lists Cat (chloramphenicol) as the *P. vulgatus* marker. */}
+
+- In *E. coli* S17 λ *pir*, R6K γ ori is used as an established origin of
+  replication for stable plasmid number upkeep, while an ampicillin resistance
+  cassette is expressed to select for transformed colonies.
+- Upon conjugative transfer to *P. vulgatus* using oriT, the resistance cassette
+  is used to select for positive transformants.
+- pB8-51 ori is used as a *Bacteroides* origin of replication once inside
+  *P. vulgatus*.
+- The promoter used *P. vulgatus*-specific expression for the gRNA, which
+  combines with Cas9 and targets the native BSH to induce a double strand break.
+- The plasmid backbone does not integrate so it can be cured, leaving a scarless
+  gene replacement.
 
 <FigureSlot label="Figure 2">The integration strategy.</FigureSlot>
 
 <Callout title="Note">
 
-Placeholder — the caveat that goes with the strategy above.
+Though integrative plasmids exist, the CRISPR system enables precise engineering
+and site of integration flexibility using the native RecA homology directed
+repair (HDR) system in *P. vulgatus*.
 
 </Callout>
 
@@ -780,30 +847,60 @@ Placeholder — the caveat that goes with the strategy above.
 
 {/* The same four steps as the validation plan on the entrepreneurship page — keep the two in sync. */}
 
+Successful integration could be confirmed by:
+
 <KeyTakeaways>
-  <Takeaway value="1" label="(step name)">
-    Placeholder — one line.
+  <Takeaway value="1" label="junction PCR">
+    PCR and amplicon sequencing spanning outside the integration junction, using
+    primers flanking HA<sub>L</sub> and HA<sub>R</sub> to amplify the integrated
+    cassette from genomic DNA.
   </Takeaway>
-  <Takeaway value="2" label="(step name)">
-    Placeholder — one line.
+  <Takeaway value="2" label="Cas9 expression">
+    Early-stage validation will also include confirming Cas9 expression at the
+    RNA level (qRT-PCR) in the recipient strain.
   </Takeaway>
-  <Takeaway value="3" label="(step name)">
-    Placeholder — one line.
+  <Takeaway value="3" label="BSH activity">
+    BSH activity measured via bile salt assays comparing wild-type to
+    integrated-construct strains.
   </Takeaway>
-  <Takeaway value="4" label="(step name)">
-    Placeholder — one line.
+  <Takeaway value="4" label="stability">
+    Stability confirmed by serial passage without selection, to ensure the
+    cassette does not excise or degrade.
   </Takeaway>
 </KeyTakeaways>
 
-Placeholder — the explanation under the four steps.
+For additional information about risk and safety see the <Link to="/safety-and-security">safety page</Link>.
 
-#### Data gaps
+#### Data gaps and future iterations
 
-Placeholder — the five gaps left open, as a numbered list.
+1. **BSH variant selection** — dependent on the outcome of the BSH assay with a
+   wider range of bile salts.
+2. **gRNA spacer design** — 4–5 gRNAs will be designed and tested to maximize
+   editing efficiency.
+3. **Homology arm design** — will be specified and tested as a next step, to
+   understand optimal sequences and lengths.
+4. **HDR** — once the system is tested in vivo, the editing efficiency will be
+   indicative of the strength of the native HDR system. If it is not sufficient,
+   systems such as the phage-derived Lambda red recombineering cassette can be
+   implemented.
+5. **Inducible promoter for Cas9 expression** — shown to increase editing
+   efficiency if needed[^construct-crispr-gut].
+
+<ResourceDownload
+  href="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/construct-planning-final.pdf"
+  title="Construct planning"
+  type="PDF"
+>
+  The full construct design document, as written by the team.
+</ResourceDownload>
+
+</ResultSection>
 
 </SectionItem>
 
 </SegmentedSelector>
+
+[^construct-crispr-gut]: CRISPR-Cas-based genome editing for human gut commensals. ACS Synthetic Biology, 11(1), 464. https://pubs.acs.org/asbcd6/article-abstract/11/1/464/1497030/CRISPR-Cas-Based-Genome-Editing-for-Human-Gut
 
 [^strain-forster]: Forster, S. C., Kumar, N., Anonye, B. O., Almeida, A., Viciani, E., Stares, M. D., Dunn, M., Mkandawire, T. T., Zhu, A., Shao, Y., Pike, L. J., Louie, T., Browne, H. P., Mitchell, A. L., Neville, B. A., Finn, R. D., & Lawley, T. D. (2019). A human gut bacterial genome and culture collection for improved metagenomic analyses. Nature Biotechnology, 37(2), 186–192. https://doi.org/10.1038/s41587-018-0009-7
 

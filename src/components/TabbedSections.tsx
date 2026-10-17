@@ -2,6 +2,7 @@
 // Purpose: tab switcher for browsing labeled content sections.
 import { ReactNode, useMemo, useState } from "react";
 import { extractLabeledChildren } from "../utils/extractLabeledChildren";
+import { useHashPanel } from "./useHashPanel";
 
 interface TabSectionProps {
   label: string;
@@ -21,6 +22,8 @@ interface TabbedSectionsProps {
 export function TabbedSections({ children }: TabbedSectionsProps) {
   const tabs = useMemo(() => extractLabeledChildren(children), [children]);
   const [activeIndex, setActiveIndex] = useState(0);
+  // A link from elsewhere may name a heading inside a tab that is not open.
+  useHashPanel(tabs, setActiveIndex);
   const active = tabs[activeIndex];
 
   return (

@@ -1,7 +1,16 @@
 // Generated with Claude Opus 5 (Anthropic), 2026-10-17
-// Purpose: the three building blocks the results page is laid out with, from
-// the team's sketch of that page:
+// Purpose: the building blocks the results page is laid out with, from the
+// team's sketch of that page:
 //
+//   <ResultSection>  one result's worth of content, boxed off from the next
+//                    the same way entrepreneurship.mdx's "## Phase N"
+//                    sections are — a tinted, rounded card. That page gets
+//                    its boxes for free from rehypeSections, which only
+//                    groups "## " headings that sit directly inside
+//                    <PageLayout>; the results page's "### " result headings
+//                    live inside the Toolkit/Therapeutics tabs instead, so
+//                    they are boxed by hand with this wrapper, reusing the
+//                    same .content-section CSS class so the two pages match.
 //   <KeyTakeaways>   the row of "key take aways" cards under a result's
 //                    title: a number, a short label, and room for one line
 //                    of explanation.
@@ -13,6 +22,10 @@
 // the page index (SectionProgress) and the success cards at the top of the
 // page keep finding them by their slug.
 import type { ReactNode } from "react";
+
+export function ResultSection({ children }: { children: ReactNode }) {
+  return <section className="content-section">{children}</section>;
+}
 
 export function KeyTakeaways({ children }: { children: ReactNode }) {
   return (

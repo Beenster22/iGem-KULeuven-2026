@@ -59,7 +59,7 @@ import { HomeSnapScroll } from "./components/HomeSnapScroll";
 import { ZoomableImage } from "./components/ZoomableImage";
 import { ElleSays } from "./components/ElleSays";
 import { SuccessCards, SuccessCard } from "./components/SuccessCards";
-import { KeyTakeaways, Takeaway, FigureSlot } from "./components/ResultsKit";
+import { ResultSection, KeyTakeaways, Takeaway, FigureSlot } from "./components/ResultsKit";
 import {
   StakeholderGroups,
   StakeholderGroup,
@@ -138,6 +138,7 @@ export const mdxComponents = {
   // Generated with Claude Opus 5 (Anthropic), 2026-10-17
   // Purpose: the results page's layout kit — the key-takeaway cards and the
   // placeholder boxes for figures that have not been added yet.
+  ResultSection,
   KeyTakeaways,
   Takeaway,
   FigureSlot,
