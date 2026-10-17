@@ -3532,23 +3532,40 @@ body.home-fullscreen {
 }
 
 .home-hero-video {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.home-hero-video--shown {
+  opacity: 1;
 }
 
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
    Purpose: object-fit doesn't apply to an <iframe>, so the 16:9 video embed
    is sized to always cover the hero and centred, letting .home-hero's
-   overflow crop the excess — the same result as object-fit: cover. It's a
-   decorative background, so it takes no pointer input. */
+   overflow crop the excess — the same result as object-fit: cover.
+   Edited with Claude Sonnet 5 (Anthropic), 2026-10-17 (team feedback: the
+   opening and closing frames were being cropped top/bottom on wide, short
+   windows, cutting off the figure and the logo): height no longer grows
+   past 100% — the old `max(100%, 100vw * 9/16)` could push it well past the
+   hero's own height on a wide-but-short viewport, trimming equally off the
+   top and bottom. Width still over-grows the same way for a narrow, tall
+   viewport, which only crops background either side of the centred subject.
+   A wider-than-16:9 window now pillarboxes within the embed instead of
+   cropping vertically. It's a decorative background, so it takes no pointer
+   input. */
 .home-hero-embed {
   position: absolute;
   top: 50%;
   left: 50%;
   width: max(100%, calc(100dvh * 16 / 9));
-  height: max(100%, calc(100vw * 9 / 16));
+  height: 100%;
   transform: translate(-50%, -50%);
   border: 0;
   pointer-events: none;
@@ -4120,10 +4137,16 @@ body:not(.home-fullscreen) .home-hero {
   list-style: none;
   font-size: clamp(0.85rem, 1.3vw, 1rem);
   line-height: 1.3;
-  /* Content pages justify their text, which stretches a wrapped chip. */
-  text-align: left;
 }
 
+/* Edited with Claude Sonnet 5 (Anthropic), 2026-10-17 (team feedback: a
+   wrapped chip like "Dyslipidaemia and raised cardiovascular risk" had its
+   first line stretched edge to edge): content pages justify every `li`
+   directly (see .page-shell-content :is(p, li) above, (0,3,1) to this
+   rule's (0,1,1) — the li only inherits the list's own `text-align: left`,
+   it doesn't match it, so that rule alone couldn't win). !important for the
+   same reason .text-center is above: it's the one override with no higher
+   selector to chase. */
 .symptom-card-list li {
   display: flex;
   align-items: center;
@@ -4131,6 +4154,7 @@ body:not(.home-fullscreen) .home-hero {
   padding: 0.3rem 0.75rem;
   border-radius: 999px;
   border: 1.5px solid color-mix(in srgb, currentColor 25%, transparent);
+  text-align: left !important;
 }
 
 .symptom-card-list li::before {
@@ -5306,12 +5330,24 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): the
-   cell's fimbriae/pili. (Its loop of DNA was removed on 2026-10-15.) */
+   cell's fimbriae/pili. */
 .bsh-pili {
   fill: none;
   stroke: #6e5b9e;
   stroke-width: 1.6;
   stroke-linecap: round;
+}
+
+/* The cell's genome (BshStreamAnimation.tsx DNA_LOOP_PATH): a tangled loop,
+   drawn as a dotted strand so it still reads as genetic material rather
+   than another membrane line. Removed 2026-10-15, re-added on team feedback
+   2026-10-17 (it should be visible in "Meet Phocaeicola vulgatus"). */
+.bsh-dna {
+  fill: none;
+  stroke: #6e5b9e;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-dasharray: 0 8;
 }
 
 .bsh-enzyme {
@@ -10856,6 +10892,20 @@ a.protocol-download:hover {
   font-size: 0.92rem;
 }
 
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17
+   Purpose: the pBSH-Cas9 component table (results page). First-column cells
+   carry their own fixed background colour (inline, matching PlasmidMap.tsx),
+   so only the shared layout — bold component names, same width in both
+   columns — lives here. */
+.plasmid-legend-table td:first-child {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.plasmid-legend-table td:last-child {
+  width: 70%;
+}
+
 /* Generated with Claude Opus 5 (Anthropic), 2026-10-17
    Purpose: the header box's optional right-hand decoration (Header's
    `aside` prop) — the results page's only user today, for Elle's greeting.
@@ -10913,5 +10963,135 @@ a.protocol-download:hover {
 
   .page-header-box-row .page-header-box-text {
     max-width: none;
+  }
+}
+
+/* PLASMID MAP */
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17
+   Purpose: the pBSH-Cas9 ring (PlasmidMap.tsx, results page). Feature
+   colours are inline (sampled per feature in data/plasmidMap.ts), so nothing
+   here sets them. The ring and the name/role panel sit side by side above
+   tablet width and stack below it. */
+.plasmid-map {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin: 1.5rem 0;
+}
+
+.plasmid-map-svg {
+  flex: 0 0 auto;
+  width: clamp(220px, 32vw, 300px);
+  height: auto;
+  overflow: visible;
+}
+
+.plasmid-map-feature {
+  cursor: pointer;
+  stroke: var(--color-page-bg);
+  stroke-width: 2;
+  outline: none;
+  transition:
+    filter 0.15s ease,
+    stroke-width 0.15s ease;
+}
+
+.plasmid-map-feature:hover,
+.plasmid-map-feature:focus-visible,
+.plasmid-map-feature.active {
+  filter: brightness(1.08) saturate(1.15);
+}
+
+.plasmid-map-feature.active {
+  stroke: var(--color-text);
+  stroke-width: 2.5;
+}
+
+.plasmid-map-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  fill: var(--color-text);
+  pointer-events: none;
+}
+
+.plasmid-map-panel {
+  flex: 1 1 16rem;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border: 1px solid rgba(51, 40, 63, 0.25);
+  border-radius: 0.75rem;
+  padding: 1rem 1.15rem;
+}
+
+[data-theme="dark"] .plasmid-map-panel {
+  border-color: rgba(201, 189, 232, 0.3);
+}
+
+.plasmid-map-panel-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.plasmid-map-panel-role {
+  color: var(--color-text);
+  opacity: 0.85;
+}
+
+.plasmid-map-panel-progress {
+  display: block;
+  margin-top: 0.5rem;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(51, 40, 63, 0.12);
+  overflow: hidden;
+}
+
+[data-theme="dark"] .plasmid-map-panel-progress {
+  background: rgba(201, 189, 232, 0.18);
+}
+
+.plasmid-map-panel-progress-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--color-text);
+  opacity: 0.55;
+  animation: plasmid-map-progress var(--plasmid-map-interval, 3200ms) linear
+    forwards;
+}
+
+.plasmid-map-panel-progress-fill.paused {
+  animation: none;
+  width: 100%;
+  opacity: 0;
+}
+
+@keyframes plasmid-map-progress {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plasmid-map-panel-progress-fill {
+    animation: none;
+    width: 100%;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .plasmid-map {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .plasmid-map-svg {
+    width: min(70vw, 280px);
+    margin: 0 auto;
   }
 }

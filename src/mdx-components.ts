@@ -59,7 +59,12 @@ import { HomeSnapScroll } from "./components/HomeSnapScroll";
 import { ZoomableImage } from "./components/ZoomableImage";
 import { ElleSays } from "./components/ElleSays";
 import { SuccessCards, SuccessCard } from "./components/SuccessCards";
-import { ResultSection, KeyTakeaways, Takeaway, FigureSlot } from "./components/ResultsKit";
+import {
+  ResultSection,
+  KeyTakeaways,
+  Takeaway,
+  FigureSlot,
+} from "./components/ResultsKit";
 import {
   StakeholderGroups,
   StakeholderGroup,
@@ -81,6 +86,7 @@ import {
   InfoCard,
 } from "./components/QuestionSelector";
 import { PhenotypeVenn } from "./components/PhenotypeVenn";
+import { PlasmidMap } from "./components/PlasmidMap";
 import { Link } from "react-router-dom";
 
 export const mdxComponents = {
@@ -184,4 +190,7 @@ export const mdxComponents = {
   // Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
   // Purpose: the interactive phenotype Venn diagram on the description page.
   PhenotypeVenn,
+  // Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17
+  // Purpose: the pBSH-Cas9 plasmid map on the results page.
+  PlasmidMap,
 };

@@ -894,9 +894,14 @@ export function Tgr5ConsequencesSection() {
         className={`tgr5-effects${prefersReducedMotion ? " tgr5-effects--static" : " home-snap-stage"}`}
       >
         {/* Retitled on Marie's review (2026-10-08): TGR5 is not inactivated.
-            Reworded on team request (2026-10-16). */}
+            Reworded on team request (2026-10-16). Reworded again on team
+            feedback (2026-10-17): the jump from the binding diagram above to
+            this screen read as a non sequitur, so the title now names "this
+            binding" explicitly and states the causal step (unbalanced pool
+            -> less binding) before its consequences. */}
         <h3 className="tgr5-effects-heading">
-          When bile acid pool is not balanced, it can lead to
+          If the bile acid pool is unbalanced, this binding happens less.
+          This may lead to:
         </h3>
         <ol
           className="tgr5-effects-list"

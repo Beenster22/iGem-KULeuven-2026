@@ -789,43 +789,55 @@ balanced immune and metabolic modulation.
 
 #### The construct
 
-{/* TODO(team): the higher-resolution plasmid map is still to be uploaded (Alec) — the uploads tool takes PNG/JPG, so export the map as an image rather than the .mp4. */}
+{/* The plasmid map (PlasmidMap.tsx) is an inline SVG recreation of the team's higher-resolution map, after the docx's comment that a better-resolution version was attached: the uploads tool does not take SVG, so it ships as a component instead of an upload, the same way other interactive diagrams on this wiki do. */}
 
-<FigureSlot label="Figure 1">
-  The pBSH–Cas9 plasmid map, with each component named and given a one-sentence
-  role.
-</FigureSlot>
+<PlasmidMap />
 
-{/* TODO(team): the document asks for each component's cell to be shaded in the colour it has in the plasmid map — waiting on the map above. */}
+{/* Row shading reuses PlasmidMap.tsx's own colours (data/plasmidMap.ts), per the docx comment asking for it. */}
 
-| Component | Role |
-| --- | --- |
-| oriT | Origin of transfer for mobilization |
-| AmpR | Selection marker (*E. coli*) |
-| R6K γ ori | Conditional origin (*pir*-specific replication origin) |
-| pB8-51 | *Bacteroides* plasmid replication origin |
-| Cat | Chloramphenicol selection marker (*P. vulgatus*) |
-| P<sub>Cas9</sub> | Cfx promoter to drive Cas9 expression |
-| rpiL RBS | Ribosome binding site |
-| Cas9 | Coding sequence |
-| P<sub>gRNA</sub> | Bfp promoter to drive gRNA expression |
-| rrnB T1 terminator | Transcription terminator |
-| HA<sub>L</sub> | Homology arm (left) |
-| HA<sub>R</sub> | Homology arm (right) |
-| Replacement BSH | Coding sequence (BSH enzyme) |
+<div className="table-responsive table-responsive-rounded my-3">
+
+<table className="table table-bordered align-middle plasmid-legend-table">
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style={{ backgroundColor: "#d6d6da", color: "#2b2136" }}>oriT</td><td>Origin of transfer for mobilization</td></tr>
+    <tr><td style={{ backgroundColor: "#2b2136", color: "#f5f0fa" }}>AmpR</td><td>Selection marker (<em>E. coli</em>)</td></tr>
+    <tr><td style={{ backgroundColor: "#74747c", color: "#f5f0fa" }}>R6K γ ori</td><td>Conditional origin (<em>pir</em>-specific replication origin)</td></tr>
+    <tr><td style={{ backgroundColor: "#8a8a91", color: "#2b2136" }}>pB8-51</td><td><em>Bacteroides</em> plasmid replication origin</td></tr>
+    <tr><td style={{ backgroundColor: "#2b2136", color: "#f5f0fa" }}>Cat</td><td>Chloramphenicol selection marker (<em>P. vulgatus</em>)</td></tr>
+    <tr><td style={{ backgroundColor: "#3a3a42", color: "#f5f0fa" }}>P<sub>Cas9</sub></td><td>Cfx promoter to drive Cas9 expression</td></tr>
+    <tr><td style={{ backgroundColor: "#c3c3c8", color: "#2b2136" }}>rpiL RBS</td><td>Ribosome binding site</td></tr>
+    <tr><td style={{ backgroundColor: "#7d5a9e", color: "#f5f0fa" }}>Cas9</td><td>Coding sequence</td></tr>
+    <tr><td style={{ backgroundColor: "#3a3a42", color: "#f5f0fa" }}>P<sub>gRNA</sub></td><td>Bfp promoter to drive gRNA expression</td></tr>
+    <tr><td style={{ backgroundColor: "#b7bcc2", color: "#2b2136" }}>rrnB T1 terminator</td><td>Transcription terminator</td></tr>
+    <tr><td style={{ backgroundColor: "#54a2a7", color: "#f5f0fa" }}>HA<sub>L</sub></td><td>Homology arm (left)</td></tr>
+    <tr><td style={{ backgroundColor: "#54a2a7", color: "#f5f0fa" }}>HA<sub>R</sub></td><td>Homology arm (right)</td></tr>
+    <tr><td style={{ backgroundColor: "#e6f3f3", color: "#2b2136" }}>Replacement BSH</td><td>Coding sequence (BSH enzyme)</td></tr>
+  </tbody>
+</table>
+
+</div>
 
 #### Integration strategy
 
 The construct must replicate and express in *E. coli* and *P. vulgatus* for
 conjugation.
 
-{/* TODO(team): the source document still carries both "tetracycline" and "erythromycin" in the second point below, and Alec's comment argues from the MIC data that erythromycin selects in strain 1447 but not 1806 — so the cassette is named generically here until the team settles which one it is. The component legend above lists Cat (chloramphenicol) as the *P. vulgatus* marker. */}
-
 - In *E. coli* S17 λ *pir*, R6K γ ori is used as an established origin of
   replication for stable plasmid number upkeep, while an ampicillin resistance
   cassette is expressed to select for transformed colonies.
-- Upon conjugative transfer to *P. vulgatus* using oriT, the resistance cassette
-  is used to select for positive transformants.
+- Upon conjugative transfer to *P. vulgatus* using oriT, a chloramphenicol
+  resistance cassette (Cat) is used to select for positive transformants.
+  Erythromycin is the usual choice for this step in the conjugation protocol,
+  but our own <Link to="/results#antibiotic-susceptibility-of-p-vulgatus">MIC
+  results</Link> show it only inhibits strain DSM1447, not the faecal isolate
+  RCC1806 — chloramphenicol, tetracycline and metronidazole all inhibit both,
+  and chloramphenicol was chosen as the marker here.
 - pB8-51 ori is used as a *Bacteroides* origin of replication once inside
   *P. vulgatus*.
 - The promoter used *P. vulgatus*-specific expression for the gRNA, which

@@ -468,6 +468,36 @@ const PILI_PATHS = (() => {
   }).join(" ");
 })();
 
+// The cell's genome: a tangled loop of DNA in the free left half of the
+// capsule (the right half holds BSH once the reaction stage shows it).
+// Built the same way as the pili — points round a circle with a seeded
+// radius wobble — then joined through their midpoints for a closed, organic
+// scribble rather than a neat ring. Re-added on team feedback (2026-10-17);
+// see the 2026-10-15 edit note above for why it was removed before.
+const DNA_CENTER = { x: BAC_X + 58, y: BAC_MID_Y };
+const DNA_POINT_COUNT = 11;
+const DNA_LOOP_PATH = (() => {
+  const points = Array.from({ length: DNA_POINT_COUNT }, (_, i) => {
+    const angle = (i / DNA_POINT_COUNT) * Math.PI * 2;
+    const radius = 15 + seededValue(i * 13 + 501) * 13;
+    return {
+      x: DNA_CENTER.x + radius * Math.cos(angle),
+      y: DNA_CENTER.y + radius * Math.sin(angle) * 0.82,
+    };
+  });
+  const mid = (a: { x: number; y: number }, b: { x: number; y: number }) => ({
+    x: (a.x + b.x) / 2,
+    y: (a.y + b.y) / 2,
+  });
+  const start = mid(points[DNA_POINT_COUNT - 1], points[0]);
+  const segments = points.map((p, i) => {
+    const next = points[(i + 1) % DNA_POINT_COUNT];
+    const m = mid(p, next);
+    return `Q${p.x.toFixed(1)},${p.y.toFixed(1)} ${m.x.toFixed(1)},${m.y.toFixed(1)}`;
+  });
+  return `M${start.x.toFixed(1)},${start.y.toFixed(1)} ${segments.join(" ")} Z`;
+})();
+
 // BSH as a static pac-man, mouth open to the right, in the right half of
 // the cell; its "BSH" label sits beside it in the left half.
 const ENZYME = { cx: BAC_X + BAC_W / 2 + 28, r: 34 };
@@ -501,6 +531,7 @@ function BacteriumShapes() {
         height={BAC_H - 16}
         rx={(BAC_H - 16) / 2}
       />
+      <path className="bsh-dna" d={DNA_LOOP_PATH} />
       {/* Only with the reaction, where its "BSH" label is shown too. */}
       <g className="bsh-stream-reaction">
         <path className="bsh-enzyme" d={PACMAN_PATH} />
@@ -667,7 +698,7 @@ export function BshStreamAnimation() {
               className="bsh-stream-caption bsh-stream-caption--species"
               style={{ left: "50%", top: pctY(40) }}
             >
-              Phocaeicola vulgatus
+              <em>Phocaeicola vulgatus</em>
             </span>
             <span
               className="bsh-stream-enzyme-label"

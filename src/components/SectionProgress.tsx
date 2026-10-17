@@ -141,9 +141,22 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
     const container = containerRef.current;
     if (!container) return;
 
+    // Edited with Claude Opus 5 (Anthropic), 2026-10-17
+    // Purpose: the rescan used to be latched behind a single rAF handle, so
+    // a frame that never arrives — a backgrounded tab, a window that is not
+    // painting — left the latch set and the observer deaf from then on. A
+    // timeout runs alongside the frame and whichever arrives first wins, so
+    // the index still catches up on a page nobody is looking at yet.
     let frame = 0;
-    const rescan = () => {
+    let timer = 0;
+    const cancelScheduled = () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      if (timer) window.clearTimeout(timer);
       frame = 0;
+      timer = 0;
+    };
+    const rescan = () => {
+      cancelScheduled();
       const found = collectHeadings(container);
       setHeadings((current) => (sameHeadings(current, found) ? current : found));
       // If the current section was inside a dropdown that just closed, fall
@@ -155,12 +168,22 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
     };
 
     const observer = new MutationObserver(() => {
-      if (!frame) frame = window.requestAnimationFrame(rescan);
+      if (frame || timer) return;
+      frame = window.requestAnimationFrame(rescan);
+      timer = window.setTimeout(rescan, 100);
     });
-    observer.observe(container, { childList: true, subtree: true });
+    // Edited with Claude Opus 5 (Anthropic), 2026-10-17
+    // Purpose: characterData matters as much as childList here. Switching a
+    // tab or segment (TabbedSections, SegmentedSelector) swaps one panel's
+    // content for another's, and React reuses the heading elements it
+    // already has, rewriting their text in place. Without characterData
+    // that is invisible to this observer, so every heading kept the id
+    // slugified from the *previous* panel's text — and a link to
+    // /results#crispr-construct-design found no such id on the page.
+    observer.observe(container, { childList: true, subtree: true, characterData: true });
     return () => {
       observer.disconnect();
-      if (frame) window.cancelAnimationFrame(frame);
+      cancelScheduled();
     };
   }, [containerRef, location.pathname]);
 
