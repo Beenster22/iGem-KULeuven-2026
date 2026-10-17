@@ -37,25 +37,17 @@
   />
 </div>
 
-<SegmentedSelector>
+<ExpandableText title="Toolkit">
 
-<SectionItem label="Toolkit">
-
-## Toolkit
-
-<ResultSection>
-
-### Introduction
+<ExpandableText title="Introduction">
 
 Placeholder — replace with the introduction to the toolkit pipeline, ending in
 a pointer to the <Link to="/experimental-overview">experimental overview</Link>
 for how these experiments fit together.
 
-</ResultSection>
+</ExpandableText>
 
-<ResultSection>
-
-### Selecting a _P. vulgatus_ strain panel
+<ExpandableText title={<>Selecting a <em>P. vulgatus</em> strain panel</>}>
 
 <div className="results-standfirst">
   Six strains spanning the type strain, the Sanger human gut collection, a
@@ -217,11 +209,9 @@ Want the numbers behind those antibiotic notes? See our
 
 </ElleSays>
 
-</ResultSection>
+</ExpandableText>
 
-<ResultSection>
-
-### Antibiotic susceptibility of _P. vulgatus_
+<ExpandableText title={<>Antibiotic susceptibility of <em>P. vulgatus</em></>}>
 
 <div className="results-standfirst">
   Which antibiotics inhibit <em>P. vulgatus</em>, and which one to reach for
@@ -465,11 +455,9 @@ is below 4 mg/L, this antibiotic is most recommended when working with _P. vulga
 erythromycin are less encouraged, given the variability between the strains and a negative advice against
 ampicillin by EUCAST.
 
-</ResultSection>
+</ExpandableText>
 
-<ResultSection>
-
-### A characterized promoter library for _P. vulgatus_
+<ExpandableText title={<>A characterized promoter library for <em>P. vulgatus</em></>}>
 
 <div className="results-standfirst">
   Placeholder — one line on what the library is and what it is for.
@@ -588,17 +576,13 @@ Placeholder — whether carrying a construct cost the strain anything in growth.
 
 Placeholder — what the library gives a future team.
 
-</ResultSection>
+</ExpandableText>
 
-</SectionItem>
+</ExpandableText>
 
-<SectionItem label="Therapeutics">
+<ExpandableText title="Therapeutics">
 
-## Therapeutics
-
-<ResultSection>
-
-### Introduction
+<ExpandableText title="Introduction">
 
 Placeholder — replace with the introduction to the therapeutics pipeline,
 ending in a pointer to the <Link to="/experimental-overview">experimental overview</Link>
@@ -606,11 +590,9 @@ for how these experiments fit together.
 
 <div className="all-data-label">All data</div>
 
-</ResultSection>
+</ExpandableText>
 
-<ResultSection>
-
-### Screening BSH activity on bile salt plates
+<ExpandableText title="Screening BSH activity on bile salt plates">
 
 <div className="results-standfirst">
   Placeholder — one line on what the plate assay tests and why it comes first.
@@ -663,11 +645,9 @@ like.
 Placeholder — the plate screening results (the rest of this section follows the
 Word document).
 
-</ResultSection>
+</ExpandableText>
 
-<ResultSection>
-
-### Bile salt deconjugation by 15 bile salt hydrolases
+<ExpandableText title="Bile salt deconjugation by 15 bile salt hydrolases">
 
 <div className="results-standfirst">
   Placeholder — one line on which hydrolases were tested and on what substrates.
@@ -761,11 +741,9 @@ Placeholder — what the 15-hydrolase screen settled.
 
 Placeholder — what a next team should do with this.
 
-</ResultSection>
+</ExpandableText>
 
-<ResultSection>
-
-### CRISPR construct design
+<ExpandableText title="CRISPR construct design">
 
 {/* The team's own "Construct Planning FINAL" document, transferred as written; only typography was adjusted (species names in italics, R6K γ ori, en dashes) and the document's own headings were kept as the structure below. */}
 {/* TODO(team): the document's unresolved comments are not carried onto the page — the open ones are flagged with TODO comments where they apply. */}
@@ -906,11 +884,9 @@ For additional information about risk and safety see the <Link to="/safety-and-s
   The full construct design document, as written by the team.
 </ResourceDownload>
 
-</ResultSection>
+</ExpandableText>
 
-</SectionItem>
-
-</SegmentedSelector>
+</ExpandableText>
 
 [^construct-crispr-gut]: CRISPR-Cas-based genome editing for human gut commensals. ACS Synthetic Biology, 11(1), 464. https://pubs.acs.org/asbcd6/article-abstract/11/1/464/1497030/CRISPR-Cas-Based-Genome-Editing-for-Human-Gut
 

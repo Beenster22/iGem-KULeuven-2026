@@ -9,7 +9,7 @@
 
 <PageLayout>
 
-## 1. Risk Identification and Mitigation during Experimentation
+<ExpandableText title="1. Risk Identification and Mitigation during Experimentation">
 
 EMPOWER treats safety with the highest priority from the start. The experimental pipeline involved
 *Escherichia coli* DH5α and S17-1 λpir for cloning and conjugation, and *Phocaeicola vulgatus*, a
@@ -28,6 +28,8 @@ are the first contacts for questions and incident reports. Both gave in-depth sa
 instrument handling, proper PPE, and emergency response information. Risks were identified by
 working through each sub-experiment, including its organisms, chemicals, equipment, and waste
 streams.
+
+</ExpandableText>
 
 <ExpandableText title="Biological safety">
 
@@ -61,9 +63,7 @@ cabinets and anaerobic workstations, personal protective equipment (PPE) and tho
 
 </ExpandableText>
 
----
-
-## 2. Risk Identification and Mitigation during Project Design
+<ExpandableText title="2. Risk Identification and Mitigation during Project Design">
 
 A live biotherapeutic product is a living organism given to a patient, so the safety case reaches
 beyond the laboratory. Before any clinical use, an engineered *P. vulgatus* strain would need to
@@ -73,16 +73,16 @@ from a patient's fecal sample, engineering it in the laboratory, and returning i
 patient. Each step in that loop, including the handling of patient material, would need its own risk
 analysis and consent framework.
 
-### Risk 1: Altered homeostasis due to *P. vulgatus*
+</ExpandableText>
 
-<ExpandableText title="More about the risk">
+<ExpandableText title={<>Risk 1: Altered homeostasis due to <em>P. vulgatus</em> — more about the risk</>}>
 
 Further dysregulation of the gut microbiomes of PMOS patients after reimplantation is a potential
 risk. The risk of altered homeostasis accompanies the administration of any LBP.
 
 </ExpandableText>
 
-<ExpandableText title="Mitigation strategy">
+<ExpandableText title={<>Risk 1: Altered homeostasis due to <em>P. vulgatus</em> — mitigation strategy</>}>
 
 {/* TODO: the team's document has "(source)" twice in this paragraph — the
     citations still need to be added as footnotes. */}
@@ -99,9 +99,7 @@ by suppressing gut inflammation and regulating host metabolic pathways (source).
 
 </ExpandableText>
 
-### Risk 2: Horizontal Gene Transfer (HGT)
-
-<ExpandableText title="More about the risk">
+<ExpandableText title={<>Risk 2: Horizontal Gene Transfer (HGT) — more about the risk</>}>
 
 Horizontal gene transfer involves the exchange of genetic materials between related bacterial
 species, a process of frequent occurrence in the intestinal environment. Because of this, it is
@@ -109,7 +107,7 @@ critical to consider that genetic material inside our LBP can spread into other 
 
 </ExpandableText>
 
-<ExpandableText title="Mitigation strategy">
+<ExpandableText title={<>Risk 2: Horizontal Gene Transfer (HGT) — mitigation strategy</>}>
 
 To avoid HGT of sensitive genetic material, we 1) cure the plasmids containing antibiotic resistance
 genes and the CRISPR cassette before administration, 2) make minimal and stable genome edits,
@@ -121,9 +119,7 @@ gene are not needed.
 
 </ExpandableText>
 
-### Risk 3: Uncontrolled colonization / excessive persistence
-
-<ExpandableText title="More about the risk">
+<ExpandableText title={<>Risk 3: Uncontrolled colonization / excessive persistence — more about the risk</>}>
 
 Genetically modified bacteria escaping or overgrowing its intended niche can be detrimental for the
 patient and the environment. Biocontainment regulations must continue to be developed to fit the
@@ -131,7 +127,7 @@ need.
 
 </ExpandableText>
 
-<ExpandableText title="Mitigation strategy">
+<ExpandableText title={<>Risk 3: Uncontrolled colonization / excessive persistence — mitigation strategy</>}>
 
 The first line of defense against unwanted growth of *P. vulgatus* lies in its strict anaerobic
 nature as it is not motile and has limited oxygen tolerance[^saf-1]. As a second line of defense, it
@@ -143,7 +139,7 @@ environmental persistence and off-target transmission.
 
 </ExpandableText>
 
-### Current Regulatory Influence
+<ExpandableText title="Current Regulatory Influence">
 
 {/* TODO: the team's document ends this section with "See more!" — add the
     <Link to="..."> to the page it should point to (entrepreneurship?). */}
@@ -155,9 +151,9 @@ Administration (FDA) that evaluates safety and chemistry controls through an Inv
 evaluating translocation (the LBP crossing the mucosal barrier into systemic circulation) and general
 pathogenicity in animal models. This is where our biocontainment plan integrates.
 
----
+</ExpandableText>
 
-## 3. Ethical Engagement
+<ExpandableText title="3. Ethical Engagement">
 
 To ensure appropriate patient data protection for patient interviews, we submitted a formal study
 application to the Ethical Committee for Research (EC Research) of UZ Leuven. The study was approved
@@ -170,7 +166,7 @@ general public views genetic engineering for diseases with limited treatment opt
 to the Social and Societal Ethics Committee (SMEC) of KU Leuven for formal review. It has been
 approved for meeting the standard for academic research (ref.-number: G-2026-11849-R2(MIN))
 
----
+</ExpandableText>
 
 <Callout title="Safety and Security Award">
 
