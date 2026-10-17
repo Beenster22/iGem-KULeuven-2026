@@ -80,18 +80,18 @@ function labelPath(centre: number, upright: boolean) {
 
 function CycleWheel({ active }: { active: number }) {
   const idPrefix = `feedback-wheel-${useId().replace(/:/g, "")}`;
-  // Turn the wheel so the active step's arrow sits at the top. The angle is
-  // kept cumulative (rather than reset into 0-360 each time) so the wheel
-  // always takes the short way round — a third of a turn clockwise to the
-  // next step, and the same back to the previous one — instead of unwinding
-  // the long way whenever the value would wrap past 180 degrees.
+  // Turn the wheel so the active step's arrow sits at the top, always turning
+  // anticlockwise (to the left) to get there. The angle is kept cumulative
+  // rather than reset into 0-360 each time, so the wheel keeps going the same
+  // way instead of snapping back when the value wraps past a full turn.
   const rotationRef = useRef(-STEPS[active].angle);
   const [rotation, setRotation] = useState(rotationRef.current);
 
   useEffect(() => {
     const target = -STEPS[active].angle;
-    // Shortest signed distance from where the wheel is now to the target.
-    const delta = ((((target - rotationRef.current) % 360) + 540) % 360) - 180;
+    // Distance from where the wheel is now to the target, measured
+    // anticlockwise, so delta is never positive and it never turns right.
+    const delta = -((((rotationRef.current - target) % 360) + 360) % 360);
     rotationRef.current += delta;
     setRotation(rotationRef.current);
   }, [active]);
