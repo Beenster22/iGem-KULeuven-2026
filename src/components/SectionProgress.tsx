@@ -19,6 +19,33 @@ interface Heading {
   text: string;
   level: 2 | 3 | 4;
   parentId?: string;
+  // The heading's content as plain-vs-italic runs (e.g. "Selecting a "
+  // + italic "P. vulgatus" + " strain panel"), so a species name italicised
+  // on the page (see App.css / description.mdx etc.) stays italicised in
+  // this index instead of flattening to plain text.
+  segments: HeadingSegment[];
+}
+
+interface HeadingSegment {
+  text: string;
+  italic: boolean;
+}
+
+function headingSegments(element: Element): HeadingSegment[] {
+  const segments: HeadingSegment[] = [];
+  const walk = (node: ChildNode, italic: boolean) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent ?? "";
+      if (text) segments.push({ text, italic });
+      return;
+    }
+    if (node.nodeType !== Node.ELEMENT_NODE) return;
+    const el = node as Element;
+    const nowItalic = italic || el.tagName === "EM" || el.tagName === "I";
+    el.childNodes.forEach((child) => walk(child, nowItalic));
+  };
+  element.childNodes.forEach((child) => walk(child, false));
+  return segments;
 }
 
 // h4s are only listed when they opt in with data-toc-sub (the sections inside
@@ -59,7 +86,13 @@ function collectHeadings(container: HTMLElement): Heading[] {
     const level: 2 | 3 | 4 =
       element.tagName === "H4" || (isDropdownTitle && underWrittenH3) ? 4 : element.tagName === "H3" ? 3 : 2;
     if (level === 2) currentParentId = slug;
-    return { id: slug, text, level, parentId: level === 2 ? undefined : currentParentId };
+    return {
+      id: slug,
+      text,
+      level,
+      parentId: level === 2 ? undefined : currentParentId,
+      segments: headingSegments(element),
+    };
   });
 }
 
@@ -379,7 +412,11 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
                   .join(" ") || undefined}
               >
                 <a href={`#${heading.id}`} onClick={(event) => handleClick(event, heading.id)}>
-                  <span className="section-progress-label">{heading.text}</span>
+                  <span className="section-progress-label">
+                    {heading.segments.map((segment, i) =>
+                      segment.italic ? <em key={i}>{segment.text}</em> : segment.text,
+                    )}
+                  </span>
                 </a>
                 {expandable && (
                   <button

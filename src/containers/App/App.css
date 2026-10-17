@@ -5330,24 +5330,14 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): the
-   cell's fimbriae/pili. */
+   cell's fimbriae/pili. (Its loop of DNA was tried twice on 2026-10-17 —
+   dotted, then a criss-crossing line — and removed again both times: the
+   team decided against it.) */
 .bsh-pili {
   fill: none;
   stroke: #6e5b9e;
   stroke-width: 1.6;
   stroke-linecap: round;
-}
-
-/* The cell's genome (BshStreamAnimation.tsx DNA_LOOP_PATH): a tangled loop,
-   drawn as a dotted strand so it still reads as genetic material rather
-   than another membrane line. Removed 2026-10-15, re-added on team feedback
-   2026-10-17 (it should be visible in "Meet Phocaeicola vulgatus"). */
-.bsh-dna {
-  fill: none;
-  stroke: #6e5b9e;
-  stroke-width: 3.5;
-  stroke-linecap: round;
-  stroke-dasharray: 0 8;
 }
 
 .bsh-enzyme {
@@ -10933,9 +10923,10 @@ a.protocol-download:hover {
 }
 
 /* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17
-   Purpose: the pBSH-Cas9 component table (results page). First-column cells
-   carry their own fixed background colour (inline, matching PlasmidMap.tsx),
-   so only the shared layout — bold component names, same width in both
+   Purpose: the pBSH-Cas9 component table (results page, "Construct
+   components"). First-column cells carry their own fixed background colour
+   (inline, matching the component's colour on the uploaded plasmid map), so
+   only the shared layout — bold component names, same width in both
    columns — lives here. */
 .plasmid-legend-table td:first-child {
   font-weight: 700;
@@ -10944,6 +10935,43 @@ a.protocol-download:hover {
 
 .plasmid-legend-table td:last-child {
   width: 70%;
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-17
+   Purpose: the executive summary paragraph beside the plasmid map figure
+   (results page, "CRISPR construct design"), after the team's request to put
+   the construct circle next to the text instead of stacked under its own
+   heading. Stacks below tablet width, image first. */
+.construct-intro {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin: 1rem 0;
+}
+
+.construct-intro-text {
+  flex: 1 1 22rem;
+  min-width: 0;
+}
+
+.construct-intro-text > :last-child {
+  margin-bottom: 0;
+}
+
+.construct-intro-image {
+  flex: 1 1 16rem;
+  max-width: 22rem;
+}
+
+@media (max-width: 767.98px) {
+  .construct-intro {
+    flex-direction: column;
+  }
+
+  .construct-intro-image {
+    max-width: 20rem;
+    margin: 0 auto;
+  }
 }
 
 /* Generated with Claude Opus 5 (Anthropic), 2026-10-17

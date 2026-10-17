@@ -755,6 +755,12 @@ Placeholder — what a next team should do with this.
 
 #### Executive summary
 
+{/* The plasmid map sits beside the executive summary rather than under its own heading, with the uploaded figure (pbsh-cas9-transparent.avif) standing in for "The construct" as a heading. */}
+
+<div className="construct-intro">
+
+<div className="construct-intro-text">
+
 Our approach involves isolating *P. vulgatus* from a patient's fecal sample,
 CRISPR engineering it in vitro, and administering it to the same patient. The
 CRISPR system, introduced through conjugation, uses the guide RNA (gRNA) to
@@ -765,13 +771,20 @@ arms flanking our BSH of interest to insert it into the genome after double
 strand break induction. The intended effect is a restored bile salt pool for
 balanced immune and metabolic modulation.
 
-#### The construct
+</div>
 
-{/* The plasmid map (PlasmidMap.tsx) is an inline SVG recreation of the team's higher-resolution map, after the docx's comment that a better-resolution version was attached: the uploads tool does not take SVG, so it ships as a component instead of an upload, the same way other interactive diagrams on this wiki do. */}
+<div className="construct-intro-image">
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/pbsh-cas9-transparent.avif"
+    alt="The pBSH-Cas9 plasmid map: oriT, R6K γ ori, AmpR, pB8-51 and Cat around the backbone, PCas9 driving Cas9, PgRNA driving the gRNA, and the BSH replacement flanked by its left and right homology arms."
+  />
+</div>
 
-<PlasmidMap />
+</div>
 
-{/* Row shading reuses PlasmidMap.tsx's own colours (data/plasmidMap.ts), per the docx comment asking for it. */}
+#### Construct components
+
+{/* Row shading matches the component's colour on the map above. */}
 
 <div className="table-responsive table-responsive-rounded my-3">
 
@@ -823,7 +836,10 @@ conjugation.
 - The plasmid backbone does not integrate so it can be cured, leaving a scarless
   gene replacement.
 
-<FigureSlot label="Figure 2">The integration strategy.</FigureSlot>
+<ZoomableImage
+  src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/crispr-conjugation-horizontal2x.avif"
+  alt="In vivo engineering with the CRISPR plasmid: the construct conjugates from E. coli into P. vulgatus, then performs CRISPR-based gene replacement at the native BSH locus."
+/>
 
 <Callout title="Note">
 
@@ -877,7 +893,7 @@ For additional information about risk and safety see the <Link to="/safety-and-s
    efficiency if needed[^construct-crispr-gut].
 
 <ResourceDownload
-  href="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/construct-planning-final.pdf"
+  href="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/therapeutic-part-2-section-6-crispr.pdf"
   title="Construct planning"
   type="PDF"
 >
