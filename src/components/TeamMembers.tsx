@@ -9,6 +9,9 @@
 // the subteam rows are replaced by a favourite movie/book and a fun fact, a
 // member can have a LinkedIn link (under the photo in the popup), and `rows`
 // sets how many cards go on each row.
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-17 (team request): an
+// advisor's job title and affiliation go in `position`, shown in the popup
+// instead of under their name on the card.
 import {
   Children,
   CSSProperties,
@@ -24,6 +27,8 @@ import {
 interface TeamMemberCardProps {
   name: string;
   role: string;
+  /** Job title and affiliation (advisors), shown only in the popup. */
+  position?: string;
   nationality?: string;
   /** Age, as collected from the team (students only). */
   age?: number;
@@ -54,6 +59,7 @@ export function TeamMemberCard(_props: TeamMemberCardProps) {
 interface Member {
   name: string;
   role: string;
+  position?: string;
   nationality?: string;
   age?: number;
   study?: string;
@@ -72,6 +78,7 @@ function extractMembers(children: ReactNode): Member[] {
     .map((child) => ({
       name: child.props.name,
       role: child.props.role,
+      position: child.props.position,
       nationality: child.props.nationality,
       age: child.props.age,
       study: child.props.study,
@@ -267,6 +274,12 @@ export function TeamMembers({ rows, children }: TeamMembersProps) {
                   optional — the PIs, advisors and coaches have none of them,
                   and their rows simply do not appear. */}
               <dl className="team-member-modal-facts">
+                {openMember.position && (
+                  <>
+                    <dt>Position</dt>
+                    <dd>{openMember.position}</dd>
+                  </>
+                )}
                 {openMember.nationality && (
                   <>
                     <dt>Nationality</dt>

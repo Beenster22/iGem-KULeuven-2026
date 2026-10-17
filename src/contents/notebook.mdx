@@ -82,7 +82,7 @@ notebook further down this page, with one dropdown per entry.
 
 **Goal.** Determine which *P. vulgatus* strains the project would be valuable to include in the further downstream project.
 
-**Hypothesis.** Based on the work of García-López M, the most valuable strain to use would be the type strain DSMZ 1447/ ATCC 8482. Thanks to the Raes lab and our PI, Ruben Vazquez Uribe, we were able to work with a fecal derived strain which could give us more insight in human-derived *P. vuglatus* strains. Other strains described in literature could be useful for downstream use to compare different experimental processes and techniques.
+**Hypothesis.** Based on the work of García-López M, the most valuable strain to use would be the type strain DSMZ 1447/ ATCC 8482. Thanks to the Raes lab and our PI, Ruben Vazquez-Uribe, we were able to work with a fecal derived strain which could give us more insight in human-derived *P. vuglatus* strains. Other strains described in literature could be useful for downstream use to compare different experimental processes and techniques.
 
 **Method.** Two strains were taken to research in more detail from the start: the type strain *P. vulgatus* DSM1447/ ATCC8482 (‘1447’) and the fecal isolate RC1806 (‘1806’). For the later, colonies from an existing plate provided by the Raes lab, were streaked onto WC and mGAM plates and inoculated into broth to confirm viability.
 
@@ -1328,7 +1328,7 @@ Taken together the two routes are complementary. ParB gives a same-day yes or no
 
 **Method.** Heat shock transformation of pNBU2 into *E. coli* DH5α and into *E. coli* λpir in parallel, plated on LB + Amp.
 
-**Protocol.** Transformation protocol.
+**Protocol.** <Link to="/protocols#chemical-transformation">Chemical Transformation</Link>.
 
 **Materials used.** pNBU2 (from Matt); *E. coli* DH5α; *E. coli* λpir; LB + Amp plates; LB + Kan + MGFP plate as a separate load-capacity control.
 
@@ -1360,7 +1360,13 @@ Taken together the two routes are complementary. ParB gives a same-day yes or no
 
 **Conclusion.** pNBU2 cannot be maintained in DH5α. λpir is the host.
 
-**Discussion.** The reason is the origin: pNBU2 carries an R6K ori, which requires the pir gene product to replicate. pir is absent from DH5α and BL21 and present only in λpir strains. R6K lets the plasmid replicate in *E. coli* λpir as a normal plasmid, at a somewhat lower copy number than other origins but still giving plenty of plasmid.
+**Discussion.**
+
+<ProtocolNote kind="important">
+
+The reason is the origin: pNBU2 carries an R6K ori, which requires the pir gene product to replicate. pir is absent from DH5α and BL21 and present only in λpir strains. R6K lets the plasmid replicate in *E. coli* λpir as a normal plasmid, at a somewhat lower copy number than other origins but still giving plenty of plasmid.
+
+</ProtocolNote>
 
 **Next step.** Miniprep pNBU2 from λpir: PRM-03.
 
@@ -1400,7 +1406,7 @@ Taken together the two routes are complementary. ParB gives a same-day yes or no
 
 **Results.** 45 promoters in total: 25 from the literature plus 20 computational variants of PBT1311. Thirteen RBSs catalogued but not taken forward. Four promoters selected for the screen, appearing in the constructs as Bfp, BT, PBT and Cfx.
 
-**Reporter choice.** Ruben's guidance on 2026-07-08 was that iLOV does not work well for weak promoters, being too dim, while GFP and mCherry are good choices because both mature in the presence of oxygen. That guidance reads differently in hindsight: the constructs that used KOFP-7 are the ones most exposed to the detection problem found in CNJ-07, where no fluorescence could be seen at all.
+**Reporter choice.** Ruben's guidance on 2026-07-08 was that iLOV does not work well for weak promoters, being too dim, while GFP and mCherry are good choices because both mature in the presence of oxygen. That guidance reads differently in hindsight: the constructs that used KOFP-7 are the ones most exposed to the detection problem found in <EntryLink to="CNJ-07" />, where no fluorescence could be seen at all.
 
 |  | Members |
 | --- | --- |
@@ -1431,9 +1437,9 @@ Taken together the two routes are complementary. ParB gives a same-day yes or no
 
 **Method.** Overnight culture of *E. coli* S17 λpir carrying pNBU2 from cryostock, then plasmid miniprep and nanodrop.
 
-**Protocol.** *(to be added)*
+**Protocol.** <Link to="/protocols#plasmid-miniprep-thermo-fisher-genejet-kit">Plasmid Miniprep: Thermo Fisher GeneJET Kit</Link>.
 
-**Materials used.** *E. coli* S17 λpir (pNBU2) cryostock; GeneJET Plasmid Miniprep Kit.
+**Materials used.** *E. coli* S17 λpir (pNBU2) cryostock; <Link to="/protocols#plasmid-miniprep-thermo-fisher-genejet-kit">GeneJET Plasmid Miniprep Kit</Link>.
 
 **In-lab notes.** Ruben had flagged on 2026-08-10 that the S17 pNBU2 cryostock should be miniprepped so a purified plasmid was on hand rather than being prepared under time pressure later.
 
@@ -1467,7 +1473,7 @@ Taken together the two routes are complementary. ParB gives a same-day yes or no
 
 **Method.** PCR with Q5 polymerase and the BB_primers, run as a temperature gradient. Product checked on a gel to confirm the amplicon and its size, the band cut out and cleaned up, and the extracted DNA nanodropped for concentration and purity. Annealing temperatures checked against the NEB Tm calculator.
 
-**Protocol.** 1. pNBU2 BB amplification - 01/09/2026, then 1. pNBU2 BB amplification - 02/09/2026.
+**Protocol.** <Link to="/protocols#backbone-amplification-pcr">Backbone Amplification PCR</Link>, run on 01/09/2026 and again on 02/09/2026.
 
 **Deviations from protocol.** Only five reactions were run rather than a wider gradient, to conserve Q5.
 
@@ -1513,7 +1519,11 @@ Taken together the two routes are complementary. ParB gives a same-day yes or no
 
 **Discussion.** Each of the three attempts failed for a different reason, and only one of them was about the reaction: try 1 was a genuine amplification failure, try 2 amplified fine and was lost at the clean-up to a wash buffer made up without ethanol, and try 3 worked once that was corrected.
 
+<ProtocolNote kind="important">
+
 Why gel extraction rather than a straight clean-up. The point is to remove the original pNBU2 template. Without it (or with only a partial clean-up such as DpnI treatment) transformation gives a mixture of colonies, some carrying the newly cloned vector and some the original. For a single construct that would just mean more colony PCR. With roughly 16 promoters being cloned at once it becomes unmanageable, so gel extraction is what makes the downstream screening tractable: whatever grows on the plate should carry a new vector.
+
+</ProtocolNote>
 
 **Next step.** PRM-05.
 
@@ -1535,9 +1545,9 @@ Why gel extraction rather than a straight clean-up. The point is to remove the o
 
 **Method.** Gibson assembly ligating the amplified pNBU2 backbone to the ordered gBlocks, which were resuspended in milliQ on arrival as they came freeze-dried. Run 20-fold, one reaction per gBlock, giving 20 constructs for downstream use.
 
-**Protocol.** 2. Gibson assembly - 03/09/2026.
+**Protocol.** <Link to="/protocols#gibson-assembly">Gibson Assembly</Link>, 03/09/2026.
 
-**Materials used.** Amplified pNBU2 backbone; promoter–reporter gBlocks (20 constructs); NEBuilder HiFi.
+**Materials used.** Amplified pNBU2 backbone; promoter–reporter gBlocks (20 constructs); <Link to="/protocols#gibson-assembly">NEBuilder HiFi</Link>.
 
 **Results.** Assembly reactions prepared for transformation.
 
@@ -1573,7 +1583,7 @@ Construct numbers are given, which are used downstream in the project. BT + mChe
 
 **Goal.** Make chemically competent S17 λpir for transformation of the Gibson products.
 
-**Protocol.** *(to be added)*
+**Protocol.** <Link to="/protocols#making-chemically-competent-cells">Making Chemically Competent Cells</Link>.
 
 **In-lab notes.** An earlier attempt at electrocompetent DH5α on 2026-07-09 was abandoned when black stipples appeared in the overnight culture. The bottles were not clean and the culture was taken as contaminated. The LB used on 2026-07-08 had also been contaminated and was replaced.
 
@@ -1599,7 +1609,7 @@ Construct numbers are given, which are used downstream in the project. BT + mChe
 
 **Method.** Competent cells thawed on ice, 2 µL of cloning reaction added, held on ice 20–30 min until the DNA was homogeneous, heat shocked at 47 °C for 30 s, chilled 5 min, recovered in 450 µL pre-warmed LB and shaken at 37 °C for 45 min. 50 µL plated on one half of an LB + Amp plate; the remainder centrifuged at 3000 g for 3 min, resuspended in 100 µL and 50 µL plated on the other half. Incubated overnight at 37 °C.
 
-**Protocol.** 4. Transformation of *E. coli* S17 - 03/09/2026. 5. cPCR + sequencing + cryostock - 07/09/2026.
+**Protocol.** <Link to="/protocols#chemical-transformation">Chemical Transformation</Link> of *E. coli* S17, 03/09/2026; <Link to="/protocols#colony-pcr">Colony PCR</Link>, <Link to="/protocols#sanger-sequencing-sample-preparation">Sanger Sequencing Sample Preparation</Link> and <Link to="/protocols#cryostock-generation">Cryostock Generation</Link>, 07/09/2026.
 
 **Deviations from protocol.** Recovery was 45 min, within the 20–60 min the protocol allows.
 
@@ -1645,13 +1655,13 @@ Construct numbers are given, which are used downstream in the project. BT + mChe
   followedBy="PRM-09, PRM-10"
 />
 
-**Goal.** Recover the eight constructs that gave no colonies in PRM-07 and didn’t gave a band on the gel when checking for the presence of the gBLOCK in *E. coli* S17 (PRM-12).
+**Goal.** Recover the eight constructs that gave no colonies in <EntryLink to="PRM-07" /> and didn’t gave a band on the gel when checking for the presence of the gBLOCK in *E. coli* S17 (<EntryLink to="PRM-12" />).
 
 **Hypothesis.** The failures were a transformation efficiency problem rather than a problem with the assemblies, so repeating the heat shock should recover most of them.
 
 **Method.** As PRM-07. Colonies then screened by colony PCR with the sequencing primers and run on a gel.
 
-**Protocol.** 4. Transformation of *E. coli* S17 - 03/09/2026; 5. cPCR + sequencing + cryostock - 07/09/2026.
+**Protocol.** <Link to="/protocols#chemical-transformation">Chemical Transformation</Link> of *E. coli* S17, 03/09/2026; <Link to="/protocols#colony-pcr">Colony PCR</Link>, <Link to="/protocols#sanger-sequencing-sample-preparation">Sanger Sequencing Sample Preparation</Link> and <Link to="/protocols#cryostock-generation">Cryostock Generation</Link>, 07/09/2026.
 
 **Deviations from protocol.** Two changes were made for the second attempt: 3 µL of DNA solution instead of 5 µL, and the recovery at 37 °C extended to 60 minutes. The reasoning recorded at the time was that more DNA would not improve the outcome, so the same amount was used and the cells given longer to recover, then concentrated and plated in full. On 2026-09-14 the colony PCR was repeated with a 5 min initial denaturation step rather than the standard time.
 
@@ -1708,7 +1718,7 @@ Construct numbers are given, which are used downstream in the project. BT + mChe
 
 **Hypothesis.** Electroporation is more efficient than heat shock and should recover constructs that heat shock could not.
 
-**Protocol.** Making electrocompetent cells.
+**Protocol.** <Link to="/protocols#electroporation">Electroporation</Link>, including the preparation of electrocompetent cells.
 
 **Deviations from protocol.** The 2026-09-14 electroporation of constructs 3 and 5 was plated on LB without antibiotics.
 
@@ -1752,7 +1762,7 @@ Construct numbers are given, which are used downstream in the project. BT + mChe
 
 **Goal.** Recover constructs 3, 5, 6, 9, 15, 16 and 18 by repeating the heat shock.
 
-**Protocol.** 4. Transformation of *E. coli* S17 - 03/09/2026; 5. cPCR + sequencing + cryostock - 07/09/2026.
+**Protocol.** <Link to="/protocols#chemical-transformation">Chemical Transformation</Link> of *E. coli* S17, 03/09/2026; <Link to="/protocols#colony-pcr">Colony PCR</Link>, <Link to="/protocols#sanger-sequencing-sample-preparation">Sanger Sequencing Sample Preparation</Link> and <Link to="/protocols#cryostock-generation">Cryostock Generation</Link>, 07/09/2026.
 
 **Results.**
 
@@ -1797,7 +1807,7 @@ Cryostocks made on 2026-09-18 of 3.2, 5, 6.1, 9.1, 15.1, 16.1 and 18. Clones 10 
 
 **Goal.** Move the promoter–reporter constructs from S17 into *P. vulgatus* 1447 by conjugation, so promoter strength can be measured in the target organism.
 
-**Protocol.** 6. Conjugation Protocol week of 07/09/2026.
+**Protocol.** <Link to="/protocols#conjugation-of-pnbu2-plasmids-into-p-vulgatus">Conjugation of pNBU2 Plasmids into *P. vulgatus*</Link>, week of 07/09/2026.
 
 **Deviations from protocol.** The donor overnight was diluted 1:100 rather than the 1:1000 used previously: 25 mL LB + 25 µL Amp + 250 µL of the overnight.
 
@@ -1821,7 +1831,7 @@ Cryostocks made on 2026-09-18 of 3.2, 5, 6.1, 9.1, 15.1, 16.1 and 18. Clones 10 
 
 *Figure 16: Conjugation plates from PRM-11, the promoter constructs moved from *E. coli* S17 λpir into *P. vulgatus* 1447 and plated on mGAM + Gm + Ery. The dilution spots have run together on several plates: the anaerobic chamber was not level when these were poured and plated, which is why colony counts could not be taken for this batch.*
 
-**Conclusion.** Conjugation of the promoter constructs into 1447 worked for both heat shock batches — transconjugants grew on mGAM + Gm + Ery throughout but no efficiency can be reported because the spots ran together on the unlevel chamber surface and the colony counts were never taken. The constructs are in 1447; how efficiently they got there is not recorded.
+**Conclusion.** Conjugation of the promoter constructs into 1447 worked for both heat shock batches — transconjugants grew on mGAM + Gm + Ery throughout but no efficiency can be reported because the spots ran together on the unlevel chamber surface and the colony counts were never taken. The constructs are in 1447; how efficiently they got there is not recorded. Only construct 17 showed no colonies after conjugation — see the per-construct <EntryLink to="PRM-extra">overview tables</EntryLink>.
 
 **Discussion.** The unlevel chamber is worth noting as a practical constraint: spot plating a dilution series onto a surface that is not horizontal makes counting unreliable, and it cost the colony counts for this batch. Spreading rather than spotting, or levelling the chamber, would avoid it.
 
@@ -1847,7 +1857,7 @@ Cryostocks made on 2026-09-18 of 3.2, 5, 6.1, 9.1, 15.1, 16.1 and 18. Clones 10 
 
 **Method.** Colony PCR with Seq-fwd and Seq-rev on each conjugated 1447 clone, run on gels.
 
-**Protocol.** 5. cPCR + sequencing + cryostock - 07/09/2026.
+**Protocol.** <Link to="/protocols#colony-pcr">Colony PCR</Link>, <Link to="/protocols#sanger-sequencing-sample-preparation">Sanger Sequencing Sample Preparation</Link> and <Link to="/protocols#cryostock-generation">Cryostock Generation</Link>, 07/09/2026.
 
 **In-lab notes.** Every conjugated 1447 carrying a gBlock needs to be screened this way; the run on this date covered part of the set.
 
@@ -1885,13 +1895,13 @@ Cryostocks made on 2026-09-18 of 3.2, 5, 6.1, 9.1, 15.1, 16.1 and 18. Clones 10 
 
 **Hypothesis.** Promoters that differ in strength should give proportionally different reporter output per cell, so the specific fluorescence of each construct, normalised to OD and measured against wild-type 1447, should rank them.
 
-**Protocol.** 7. Promotor strength characterization - 18/09/2026, revised after discussion with Ruben.
+**Protocol.** <Link to="/protocols#promoter-reporter-screen">Promoter-Reporter Screen</Link>, 18/09/2026, revised after discussion with Ruben.
 
 <ZoomableImage src="https://static.igem.wiki/teams/6299/wiki/wet-lab/figures/notebook/prm-table1.avif" alt="Plate layout for the PRM-13 reporter-assay pilot across rows B to E of a 96-well plate." />
 
 *Table 1: Plate layout for the PRM-13 reporter-assay pilot. Rows B–E of a 96-well plate, columns 2–8 carrying BSP-KOFP, BSP-GFP, PBT-KOFP, PBT-mCherry, CFX-GFP, PAM-mCherry and an *E. coli*-GFP positive control in LB, with 1447 in mGAM in column 9 and mGAM and LB blanks in columns 10 and 12. The column numbers are the series numbers used in Figure 19.*
 
-**Materials used.** Conjugated 1447 clones carrying the promoter–reporter constructs; wild-type 1447; mGAM. Reporter reference: [KOFP-7 on FPBase](https://www.fpbase.org/protein/kofp-7/).
+**Materials used.** Conjugated 1447 clones carrying the promoter–reporter constructs; wild-type 1447; mGAM; <Link to="/protocols#plate-reader-sample-preparation">plate reader sample preparation</Link>. Reporter reference: [KOFP-7 on FPBase](https://www.fpbase.org/protein/kofp-7/).
 
 **In-lab notes.**
 
@@ -1909,9 +1919,9 @@ Cryostocks made on 2026-09-18 of 3.2, 5, 6.1, 9.1, 15.1, 16.1 and 18. Clones 10 
 
 *Figure 19: Reporter-assay pilot (PRM-13): raw plate-reader traces over the afternoon of 2026-09-18. Panels are the GFP, mCherry and KOFP-7 channels and OD600; series numbers are the plate columns given in Table 1.*
 
-**Conclusion.** The pilot works as a method test rather than a measurement. It shows the plate reader and the plate layout give usable traces, that the *E. coli*-GFP control behaves as expected, and that KOFP-7 is unusable. The signal is negative after blank correction, which is what the CNJ-07 autofluorescence problem predicts.
+**Conclusion.** The pilot works as a method test rather than a measurement. It shows the plate reader and the plate layout give usable traces, that the *E. coli*-GFP control behaves as expected, and that KOFP-7 is unusable. The signal is negative after blank correction, which is what the <EntryLink to="CNJ-07" /> autofluorescence problem predicts.
 
-**Discussion.** The readout rests on CNJ-07: cells must be washed thoroughly in PBS before any fluorescence measurement, since additional medium is autofluorescent in the KOFP-7 range, and KOFP-7 itself is dim against the natural autofluorescence of anaerobes. Constructs using GFP, mCherry and nanoluc don’t have this problem as much, so if the KOFP constructs give a poor signal-to-noise ratio that is expected rather than a failed experiment.
+**Discussion.** The readout rests on <EntryLink to="CNJ-07" />: cells must be washed thoroughly in PBS before any fluorescence measurement, since additional medium is autofluorescent in the KOFP-7 range, and KOFP-7 itself is dim against the natural autofluorescence of anaerobes. Constructs using GFP, mCherry and nanoluc don’t have this problem as much, so if the KOFP constructs give a poor signal-to-noise ratio that is expected rather than a failed experiment.
 
 **Next step.** Repeat with replicates and the full construct set, and add NanoLuc as a reporter: PRM-14.
 
@@ -1933,7 +1943,7 @@ Cryostocks made on 2026-09-18 of 3.2, 5, 6.1, 9.1, 15.1, 16.1 and 18. Clones 10 
 
 **Method.** Overnight cultures of the conjugated clones, loaded into a 96-well plate and read on a plate reader at the excitation and emission settings for each reporter, with wild-type 1447 as the baseline. Reporter spectra checked against FPBase.
 
-**Protocol.** 7. Promotor strenght characterization - 30/09/2026, revised after discussion with Ruben.
+**Protocol.** <Link to="/protocols#promoter-reporter-screen">Promoter-Reporter Screen</Link>, 30/09/2026, revised after discussion with Ruben.
 
 **Results.** Fluorescence gave nothing (Figure 20): with each construct measured against wild-type 1447 and normalised to OD, none of the promoter–reporter combinations separates from zero in the GFP, mCherry or KOFP-7 channel, while the *E. coli*+GFP control reads 69–72k a.u and so confirms the instrument settings were right. NanoLuc did work (Figure 21).
 
@@ -1945,9 +1955,21 @@ Cryostocks made on 2026-09-18 of 3.2, 5, 6.1, 9.1, 15.1, 16.1 and 18. Clones 10 
 
 *Figure 21: NanoLuc luminescence of the four promoters in *P. vulgatus* 1447, as raw RLU (left) and normalised to OD and to the 1447 reference (right), both on a log scale. Dashed lines mark the 1447 strain and the mGAM blank. The Cfx promoter gives 1,292× blank and the Bfp promoter 90× blank, while BT (2.1×) and PBT (1.1×) sit at or just above background.*
 
-**Conclusion.** NanoLuc is the only reporter of the four that produced a measurable signal in *P. vulgatus* 1447, and it ranks the promoters clearly: Cfx > Bfp > BT = PBT, with the last two indistinguishable from the blank. The fluorescent reporters — GFP, mCherry and KOFP-7 — all read at background in 1447 despite a working *E. coli* control, which places the problem in the host rather than in the plate reader: an obligate anaerobe cannot mature an oxygen-dependent chromophore, and its own autofluorescence clouds what little signal there is. Any future promoter characterisation in this organism should be built on a luminescent reporter.
+**Conclusion.** NanoLuc is the only reporter of the four that produced a measurable signal in *P. vulgatus* 1447, and it ranks the promoters clearly: Cfx > Bfp > BT = PBT, with the last two indistinguishable from the blank. The fluorescent reporters — GFP, mCherry and KOFP-7 — all read at background in 1447 despite a working *E. coli* control, which places the problem in the host rather than in the plate reader.
 
-**Discussion.** The readout rests on CNJ-07: cells must be washed thoroughly in PBS before any fluorescence measurement, since residual medium is autofluorescent in the KOFP-7 range, and KOFP-7 itself is dim against the natural autofluorescence of anaerobes. Constructs using GFP, mCherry and nanoluc are less exposed to that problem than the KOFP ones, so if the KOFP constructs give a poor signal-to-noise ratio that is expected rather than a failed experiment.
+<ProtocolNote kind="important">
+
+An obligate anaerobe cannot mature an oxygen-dependent chromophore, and its own autofluorescence clouds what little signal there is. Any future promoter characterisation in this organism should be built on a luminescent reporter.
+
+</ProtocolNote>
+
+**Discussion.**
+
+<ProtocolNote kind="important">
+
+The readout rests on <EntryLink to="CNJ-07" />: cells must be washed thoroughly in PBS before any fluorescence measurement, since residual medium is autofluorescent in the KOFP-7 range, and KOFP-7 itself is dim against the natural autofluorescence of anaerobes. Constructs using GFP, mCherry and nanoluc are less exposed to that problem than the KOFP ones, so if the KOFP constructs give a poor signal-to-noise ratio that is expected rather than a failed experiment.
+
+</ProtocolNote>
 
 **Next step.** Carry the Cfx and Bfp promoters forward, and use a luminescent reporter for any further promoter work in 1447.
 
@@ -2623,7 +2645,7 @@ The gel giving the same result as the first run. At least two independently pick
 
 **Results.** A 15-minute gradient brings all three compounds off the column in the second half of the run. TUDCA elutes at roughly 8.4 min (m/z 498.1), GUDCA at roughly 8.3 min (m/z 448.1) and UDCA at roughly 9.3 min (m/z 391.1).
 
-{/* TODO: upload the reference chromatogram figure with the iGEM uploads tool and add it here as <ZoomableImage src="..." alt="..." /> above this caption. */}
+<ZoomableImage src="https://static.igem.wiki/teams/6299/wiki/wet-lab/figures/notebook/bsa06-fig05-reference-chromatograms.avif" alt="Three stacked extracted-ion chromatograms over a 15-minute gradient, each normalised to its own peak maximum. TUDCA (m/z 498.1) gives a single sharp peak at about 8.4 min, GUDCA (m/z 448.1) one at about 8.3 min, and UDCA (m/z 391.1) one at about 9.3 min; the baseline is flat elsewhere in all three." />
 
 *Figure 5: Reference chromatograms for the three bile acids the assay follows, each shown as the extracted ion trace for its [M−H]⁻ ion over the 15-minute gradient: TUDCA at m/z 498.1, GUDCA at m/z 448.1 and UDCA at m/z 391.1, with relative intensity normalised to the peak maximum in each panel.*
 
@@ -2671,44 +2693,9 @@ The gel giving the same result as the first run. At least two independently pick
 
 **Results.**
 
-*Table 1: LC-MS peak areas for UDCA, TUDCA and GUDCA in the culture supernatants of BSA-07, with the UDCA/TUDCA (U/T) and UDCA/GUDCA (U/G) ratios and their base-10 logarithms. Samples are numbered 17–50 as they were handed in. In the original workbook, red highlighting marks ratios above 1 (log > 0), i.e. more free UDCA than conjugated substrate left at the end of the run; yellow marks intermediate ratios of roughly 0.2–1 (log between −0.8 and 0), i.e. partial conversion.*
+<BileSaltRatioTable />
 
-| Sample | Well | Construct | UDCA | TUDCA | GUDCA | U/T | log(U/T) | U/G | log(U/G) |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 17 | A1 | BSH1 | 27982.0 | 2809.7 | 252.5 | 9.959 | 0.998 | 110.820 | 2.045 |
-| 18 | B1 | BSH2 | 674.6 | 43100.5 | 60456.2 | 0.016 | -1.805 | 0.011 | -1.952 |
-| 19 | C1 | BSH3 | 15263.2 | 1613.1 | 1873.4 | 9.462 | 0.976 | 8.147 | 0.911 |
-| 20 | D1 | BSH4 | 673.8 | 39087.1 | 51985.8 | 0.017 | -1.764 | 0.013 | -1.887 |
-| 21 | E1 | BSH5 | 14430.4 | 26455.5 | 1353.7 | 0.545 | -0.263 | 10.660 | 1.028 |
-| 22 | F1 | BSH6 | 15705.3 | 20609.3 | 4947.3 | 0.762 | -0.118 | 3.175 | 0.502 |
-| 23 | G1 | BSH7 | 9291.3 | 27294.4 | 17789.3 | 0.340 | -0.468 | 0.522 | -0.282 |
-| 24 | H1 | BSH8 | 7552.4 | 15764.3 | 42159.3 | 0.479 | -0.320 | 0.179 | -0.747 |
-| 25 | A2 | BSH9 | 230.4 | 29261.8 | 38318.8 | 0.008 | -2.104 | 0.006 | -2.221 |
-| 26 | B2 | BSH10 | 2037.9 | 89027.6 | 92488.9 | 0.023 | -1.640 | 0.022 | -1.657 |
-| 27 | C2 | BSH11 | 17786.9 | 1020.2 | 45362.0 | 17.435 | 1.241 | 0.392 | -0.407 |
-| 28 | D2 | BSH12 | 195.1 | 40214.4 | 52725.9 | 0.005 | -2.314 | 0.004 | -2.432 |
-| 29 | E2 | BSH13 | 107.3 | 22983.1 | 30545.3 | 0.005 | -2.331 | 0.004 | -2.454 |
-| 30 | F2 | BSH14 | 12744.6 | 28923.4 | 18831.6 | 0.441 | -0.356 | 0.677 | -0.170 |
-| 31 | G2 | BSH15 | 23843.6 | 4601.9 | 303.7 | 5.181 | 0.714 | 78.510 | 1.895 |
-| 32 | H2 | sfGFP | 760.9 | 40878.8 | 53363.6 | 0.019 | -1.730 | 0.014 | -1.846 |
-| 33 | A1 | BSH1 | 156.6 | 51387.0 | 54531.9 | 0.003 | -2.516 | 0.003 | -2.542 |
-| 34 | B1 | BSH2 | 197.8 | 43550.1 | 47701.3 | 0.005 | -2.343 | 0.004 | -2.382 |
-| 35 | C1 | BSH3 | 20786.4 | 439.5 | 174.8 | 47.296 | 1.675 | 118.915 | 2.075 |
-| 36 | D1 | BSH4 | 238.5 | 60990.2 | 67644.7 | 0.004 | -2.408 | 0.004 | -2.453 |
-| 37 | E1 | BSH5 | 16146.3 | 30161.3 | 173.3 | 0.535 | -0.271 | 93.154 | 1.969 |
-| 38 | F1 | BSH6 | 32785.5 | 58683.7 | 18395.9 | 0.559 | -0.253 | 1.782 | 0.251 |
-| 39 | G1 | BSH7 | 10359.5 | 27087.9 | 42796.4 | 0.382 | -0.417 | 0.242 | -0.616 |
-| 40 | H1 | BSH8 | 10898.2 | 27485.8 | 57187.5 | 0.397 | -0.402 | 0.191 | -0.720 |
-| 41 | A2 | BSH9 | 24838.6 | 1980.6 | 281.6 | 12.541 | 1.098 | 88.205 | 1.945 |
-| 42 | B2 | BSH10 | 722.1 | 37860.6 | 42757.6 | 0.019 | -1.720 | 0.017 | -1.772 |
-| 43 | C2 | BSH11 | 12111.0 | 1042.6 | 28912.9 | 11.616 | 1.065 | 0.419 | -0.378 |
-| 44 | D2 | BSH12 | 170.8 | 34363.4 | 37823.4 | 0.005 | -2.304 | 0.005 | -2.345 |
-| 45 | E2 | BSH13 | 129.4 | 32481.0 | 36310.9 | 0.004 | -2.400 | 0.004 | -2.448 |
-| 46 | F2 | BSH14 | 11630.3 | 32438.6 | 16935.7 | 0.359 | -0.445 | 0.687 | -0.163 |
-| 47 | G2 | BSH15 | 15617.7 | 2790.0 | 148.2 | 5.598 | 0.748 | 105.383 | 2.023 |
-| 48 | H2 | sfGFP | 178.7 | 37400.7 | 41241.2 | 0.005 | -2.321 | 0.004 | -2.363 |
-| 49 |  |  | 11.0 | 29.0 | 44.0 | 0.379 | -0.421 | 0.250 | -0.602 |
-| 50 |  |  | 170.6 | 50822.4 | 63148.9 | 0.003 | -2.474 | 0.003 | -2.568 |
+*Table 1: LC-MS peak areas for UDCA, TUDCA and GUDCA in the culture supernatants of BSA-07, with the UDCA/TUDCA (U/T) and UDCA/GUDCA (U/G) ratios and their base-10 logarithms. Samples are numbered 17–50 as they were handed in. The shading on the two log columns is the one used in the original workbook: red marks ratios above 1 (log > 0), i.e. more free UDCA than conjugated substrate left at the end of the run; yellow marks intermediate ratios of roughly 0.2–1 (log between −0.8 and 0), i.e. partial conversion. Samples 49 and 50 are left unshaded, as in the workbook: they have no recorded well or construct, and the peak areas of sample 49 are low enough that its ratios carry no meaning.*
 
 **Conclusion.** Deconjugation is detectable by LC-MS and is strongly sample-dependent. The asymmetry that BSA-08 later resolves per construct is already visible: more samples clear GUDCA than TUDCA. The result cannot yet be assigned to individual BSHs, because samples 17–50 have no recorded construct key.
 
@@ -2780,17 +2767,17 @@ The gel giving the same result as the first run. At least two independently pick
 
 **Protocol.** *(to be added)*
 
-**Materials used.** *E. coli* DH5α carrying F1 (Bwex) and A2 (Lrham); LB + Kan.
+**Materials used.** *E. coli* DH5α carrying F1 (BSH6) and A2 (BSH9); LB + Kan.
 
-**In-lab notes.** Overnight cultures of F1 (Bwex) and A2 (Lrham) diluted 1:100 and grown to OD600 = 0.43 before the series was made. Each dilution spread with beads. Imaged in RESHAPE (job 64c3e81a-b875-4046-a9e2-a41a1b2b74fd).
+**In-lab notes.** Overnight cultures of F1 (BSH6) and A2 (BSH9) diluted 1:100 and grown to OD600 = 0.43 before the series was made. Each dilution spread with beads. Imaged in RESHAPE (job 64c3e81a-b875-4046-a9e2-a41a1b2b74fd).
 
 **Results.**
 
-<ZoomableImage src="https://static.igem.wiki/teams/6299/wiki/wet-lab/figures/notebook/fit-fig01.avif" alt="RESHAPE plate images of constructs F1 (Bwex) and A2 (Lrham) plated on LB plus kanamycin across dilutions of 10 to the minus 1 through 10 to the minus 7." />
+<ZoomableImage src="https://static.igem.wiki/teams/6299/wiki/wet-lab/figures/notebook/fit-fig01.avif" alt="RESHAPE plate images of constructs F1 (BSH6) and A2 (BSH9) plated on LB plus kanamycin across dilutions of 10 to the minus 1 through 10 to the minus 7." />
 
-*Figure 1: Pictures 1-7 are the construct F1 (Bwex) with dilution series 10⁻¹ till 10⁻⁷. Pictures 8-14 = constructs A2 (Lrham) with dilution series 10⁻¹ till 10⁻⁷. Each construct was plated on LB administered with Kanamycin. Pictures were made with RESHAPE plate reader after 30h at 37°C.*
+*Figure 1: Pictures 1-7 are the construct F1 (BSH6) with dilution series 10⁻¹ till 10⁻⁷. Pictures 8-14 = constructs A2 (BSH9) with dilution series 10⁻¹ till 10⁻⁷. Each construct was plated on LB administered with Kanamycin. Pictures were made with RESHAPE plate reader after 30h at 37°C.*
 
-**Conclusion.** The countable range is 10⁻⁶ to 10⁻⁷ for a spread plate from a culture at OD600 +/- 0.4–0.5. Dilutions 10⁻¹ to 10⁻⁴ give confluent lawns for both constructs, 10⁻⁵ is dense but no longer confluent, and 10⁻⁶ and 10⁻⁷ give well-separated single colonies. F1 (Bwex) and A2 (Lrham) behave the same way across the series, so the dilution window is a property of the plating method instead of the construct. The fitness cost assay was therefore set up in FIT-02.
+**Conclusion.** The countable range is 10⁻⁶ to 10⁻⁷ for a spread plate from a culture at OD600 +/- 0.4–0.5. Dilutions 10⁻¹ to 10⁻⁴ give confluent lawns for both constructs, 10⁻⁵ is dense but no longer confluent, and 10⁻⁶ and 10⁻⁷ give well-separated single colonies. F1 (BSH6) and A2 (BSH9) behave the same way across the series, so the dilution window is a property of the plating method instead of the construct. The fitness cost assay was therefore set up in FIT-02.
 
 **Discussion.** Only two constructs were tested, chosen for testing of the protocol and way of administration. If a construct with a heavy fitness cost plates an order of magnitude lower, its 10⁻⁷ drop will be empty at the dilution chosen here, which is what later had to be worked around in FIT-03. Plating all three dilutions per construct, as was done from FIT-02 onwards, is the protection against that.
 
@@ -2824,7 +2811,7 @@ The gel giving the same result as the first run. At least two independently pick
 
 **In-lab notes.** RESHAPE run of 30 h at 37 °C (job 979728bb-2ea7-46e7-b740-10059c299eb9). The three replicate plates were scored against each other before any construct comparison was made.
 
-**Results.** All three replicate plates gave the same result. Colony numbers differ markedly between constructs at the same dilution. A1 (Blong), E1 (Lreu), A2 (Lrham) and B2 (Ppleb) are among those showing the fewest colonies.
+**Results.** All three replicate plates gave the same result. Colony numbers differ markedly between constructs at the same dilution. A1 (BSH1), E1 (BSH5), A2 (BSH9) and B2 (BSH10) are among those showing the fewest colonies.
 
 <ZoomableImage src="https://static.igem.wiki/teams/6299/wiki/wet-lab/figures/notebook/fit-fig02.avif" alt="Fitness cost assay run 1: three replicate LB plus kanamycin Omnitray plates carrying all sixteen constructs in an 8 by 2 grid, imaged in RESHAPE." />
 

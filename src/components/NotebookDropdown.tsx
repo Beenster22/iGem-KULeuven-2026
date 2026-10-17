@@ -8,6 +8,10 @@
 // notebooks are split up with <NotebookSection>, each its own smaller
 // dropdown inside the notebook. A button offers the notebook (or a single
 // section) as a PDF once it has been uploaded.
+// Edited with Claude Opus 5 (Anthropic), 2026-10-17: entries can be linked to
+// from anywhere on the page with <EntryLink to="CNJ-07" />, which opens the
+// notebook and the entry it names; the notebook's open state moved up here
+// from ExpandableText for that.
 // Edited with Claude Opus 5.5 (Anthropic), 2026-10-15: an opened notebook now
 // starts with a timeline of its entries (NotebookGantt), read from each
 // entry's <NotebookEntryMeta>; sections carry an id so a timeline row can
@@ -136,6 +140,56 @@ function timelineEntries(children: ReactNode): GanttEntry[] {
   });
 }
 
+// Asks the page to open one notebook entry, by its code ("CNJ-07"). The
+// notebook that holds it opens first (its sections only exist in the DOM once
+// it does), then the entry itself. See EntryLink below.
+export const OPEN_ENTRY_EVENT = "notebook-open-entry";
+
+function openEntry(code: string) {
+  const targetId = `notebook-${code.toLowerCase()}`;
+
+  // Three things have to happen in order, each one a React render apart: the
+  // notebook opens, the entry inside it opens, and only then is it in the
+  // right place to scroll to. Rather than guess at the timing, the event is
+  // re-sent until the entry's content is actually on the page. The notebooks
+  // are long, so opening one can take appreciably longer than a frame —
+  // hence polling on a timer for a couple of seconds rather than on
+  // requestAnimationFrame.
+  let tries = 0;
+  const open = () => {
+    const el = document.getElementById(targetId);
+    el?.dispatchEvent(new Event(OPEN_SECTION_EVENT));
+    if (el?.querySelector(".notebook-section-content")) {
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      return;
+    }
+    if (tries++ < 40) setTimeout(open, 50);
+  };
+
+  document.dispatchEvent(new CustomEvent(OPEN_ENTRY_EVENT, { detail: code }));
+  setTimeout(open, 0);
+}
+
+
+// A cross-reference to another notebook entry, written in .mdx as
+// <EntryLink to="CNJ-07" />. Clicking it opens that entry — and the notebook
+// it lives in, if that is still closed — and scrolls to it.
+export function EntryLink({ to, children }: { to: string; children?: ReactNode }) {
+  return (
+    <a
+      className="notebook-entry-link"
+      href={`#notebook-${to.toLowerCase()}`}
+      onClick={(event) => {
+        event.preventDefault();
+        openEntry(to);
+      }}
+    >
+      {children ?? to}
+    </a>
+  );
+}
+
 export function NotebookDropdown({
   title,
   pdfUrl,
@@ -146,6 +200,17 @@ export function NotebookDropdown({
   const badge = code ?? codeFromTitle(title);
   const sections = countSections(children);
   const timeline = timelineEntries(children);
+  const [isOpen, setIsOpen] = useState(false);
+
+  // An EntryLink somewhere on the page asks for one of our entries.
+  useEffect(() => {
+    const onOpenEntry = (event: Event) => {
+      const entryCode = (event as CustomEvent<string>).detail;
+      if (badge && entryCode.startsWith(badge)) setIsOpen(true);
+    };
+    document.addEventListener(OPEN_ENTRY_EVENT, onOpenEntry);
+    return () => document.removeEventListener(OPEN_ENTRY_EVENT, onOpenEntry);
+  }, [badge]);
 
   return (
     // The tone travels as a data attribute on a wrapper instead of a prop on
@@ -154,6 +219,8 @@ export function NotebookDropdown({
     <div className="notebook-dropdown" data-tone={tone ?? badge?.toLowerCase()}>
       <ExpandableText
         title={title}
+        open={isOpen}
+        onOpenChange={setIsOpen}
         meta={
           <span className="notebook-dropdown-meta">
             {sections > 0 && (

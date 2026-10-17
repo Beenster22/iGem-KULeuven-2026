@@ -3,6 +3,7 @@
 // section index (left) with the actual content (right, filling the rest of
 // the row) so the index reserves its own column instead of floating.
 import { ReactNode, useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { SectionProgress } from "./SectionProgress";
 
 // Generated with Claude Sonnet 5 (Anthropic), 2026-09-03
@@ -25,6 +26,10 @@ export function PageShell({
   hideIndex?: boolean;
 }) {
   const contentRef = useRef<HTMLDivElement>(null);
+  // Both routes render a PageShell, so React keeps this component mounted
+  // across a navigation: without the route in the effect's dependencies, a
+  // link to another page's section would never run the jump below.
+  const { pathname, hash } = useLocation();
   // Generated with Claude Sonnet 5 (Anthropic), 2026-09-03
   // Purpose: id of the in-text [n] citation the reader last followed into
   // the References panel — shown as a single floating "return" button
@@ -37,7 +42,34 @@ export function PageShell({
     if (!container) return;
 
     // Covers landing directly on a shared #user-content-fn-n link.
-    if (location.hash) openDetailsFor(location.hash.slice(1));
+    if (hash) openDetailsFor(hash.slice(1));
+
+    // Generated with Claude Opus 5 (Anthropic), 2026-10-17
+    // Purpose: a link from another page to a section of this one, e.g. the
+    // notebook pointing at a protocol with <Link to="/protocols#colony-pcr">.
+    // The browser cannot jump there itself: the page is rendered by React
+    // after the navigation, and the heading ids are assigned once it is (see
+    // SectionProgress). So the jump is made here, after that first paint.
+    let jump = 0;
+    if (hash) {
+      const id = hash.slice(1);
+      // Two things make a single jump unreliable on these pages: the heading
+      // ids are handed out by SectionProgress once the page has rendered,
+      // and the page keeps growing afterwards as its figures load, which
+      // leaves an early jump short of the target. So it is repeated until
+      // the target sits at the top of the viewport, or for two seconds.
+      // "instant" matters: the page sets scroll-behavior: smooth, and a
+      // smooth scroll restarts from where it is each time it is asked
+      // again, so a repeated smooth jump never arrives anywhere.
+      let tries = 0;
+      const scrollToHash = () => {
+        const target = document.getElementById(id);
+        target?.scrollIntoView({ block: "start", behavior: "instant" });
+        const landed = target && Math.abs(target.getBoundingClientRect().top) < 120;
+        if (!landed && tries++ < 20) jump = window.setTimeout(scrollToHash, 100);
+      };
+      scrollToHash();
+    }
 
     const onClick = (event: MouseEvent) => {
       const link = (event.target as HTMLElement).closest("a[href^='#']");
@@ -48,8 +80,11 @@ export function PageShell({
       if (citationLink?.id) setReturnToId(citationLink.id);
     };
     container.addEventListener("click", onClick);
-    return () => container.removeEventListener("click", onClick);
-  }, []);
+    return () => {
+      clearTimeout(jump);
+      container.removeEventListener("click", onClick);
+    };
+  }, [pathname, hash]);
 
   function returnToReading() {
     const target = returnToId ? document.getElementById(returnToId) : null;

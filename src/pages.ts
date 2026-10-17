@@ -33,7 +33,9 @@ class Page implements Base {
   title: string | undefined;
   path: string | undefined;
   component: React.FC | undefined;
-  lead: string | undefined;
+  // Optional: pages whose lead has not been written yet show the title alone
+  // (see Header.tsx) instead of iGEM's own judging prompt.
+  lead?: string;
 }
 
 const Pages: (Page | Folder)[] = [
@@ -42,7 +44,6 @@ const Pages: (Page | Folder)[] = [
     title: "Home",
     path: "/",
     component: Home,
-    lead: "CYSTBUSTERSSS LET'S GET THESE BITCHES",
   },
   {
     name: "Project",
@@ -52,28 +53,28 @@ const Pages: (Page | Folder)[] = [
         title: "Project Description",
         path: "/description",
         component: Description,
-        lead: "Describe how and why you chose your iGEM project.",
+        lead: "What PMOS is, how it is diagnosed, and why we went looking for its roots in the gut.",
       },
       {
         name: "Engineering Success",
         title: "Engineering Success",
         path: "/engineering",
         component: Engineering,
-        lead: "Demonstrate engineering success in a technical aspect of your project by going through at least one iteration of the engineering design cycle.",
+        lead: "The design-build-test-learn cycles behind EMPOWER, and what each round changed about our design.",
       },
       {
         name: "Contribution",
         title: "Contribution",
         path: "/contribution",
         component: Contribution,
-        lead: "Make a useful contribution for future iGEM teams and document it on this page.",
+        lead: "What we are leaving behind for the teams that come after us, and how to build on it.",
       },
       {
         name: "Safety",
         title: "Safety and Security",
         path: "/safety-and-security",
         component: SafetyAndSecurity,
-        lead: "Detail the safety and security considerations of your project, adressing potential risks and outlining the measures taken to mitigate them.",
+        lead: "The risks we identified in the lab, the containment measures and training behind every protocol, and how we thought about safety beyond the bench.",
       },
     ],
   },
@@ -92,7 +93,7 @@ const Pages: (Page | Folder)[] = [
         title: "Experimental Overview",
         path: "/experimental-overview",
         component: ExperimentalOverview,
-        lead: "Describe the research, experiments, and protocols you used in your project. It is designed to provide sufficient information for other teams to replicate our work.",
+        lead: "How our wet lab work fits together, from strain and antibiotic selection through conjugation and promoter screening, across the Toolkit and Therapeutics lines.",
       },
       {
         name: "Protocols",
@@ -113,14 +114,14 @@ const Pages: (Page | Folder)[] = [
         title: "Notebook",
         path: "/notebook",
         component: Notebook,
-        lead: "This serves as a chronological record of your team's progress throughout the season. It documents your daily activities, experiments, discussions, and decisions.",
+        lead: "A chronological record of our wet lab work, one notebook per research line, each entry also downloadable as a PDF.",
       },
       {
         name: "Results",
         title: "Results",
         path: "/results",
         component: Results,
-        lead: "Present the results of your project, along with a detailed analysis and discussion of their significance. Also outline future plans and reflections on the impact of your project.",
+        lead: "What came out of the Toolkit and Therapeutics pipelines, from the promoter library to bile salt deconjugation by our hydrolase candidates.",
       },
     ],
   },
@@ -132,7 +133,7 @@ const Pages: (Page | Folder)[] = [
         title: "Integrated Human Practices",
         path: "/human-practices",
         component: HumanPractices,
-        lead: "We ask every team to think deeply and creatively about whether their project is responsible and good for the world. Consider how the world affects your work and how your work affects the world.",
+        lead: "The five stakeholder groups we spoke with, how their feedback reached the project, and what it changed.",
       },
       {
         name: "Events",
@@ -148,7 +149,7 @@ const Pages: (Page | Folder)[] = [
     title: "Entrepreneurship",
     path: "/entrepreneurship",
     component: Entrepreneurship,
-    lead: "This award recognizes exceptional effort to build a business case and commercialize an iGEM project, whether new or carried over from a previous year.",
+    lead: "The business case for EMPOWER, phase by phase, from mission and problem to market, funding and a sustainable venture.",
   },
   {
     name: "Prizes and Medals",
@@ -179,7 +180,7 @@ const Pages: (Page | Folder)[] = [
         title: "Sponsors",
         path: "/sponsors",
         component: Sponsors,
-        lead: "The organisations that helped bring EMPOWER to life.",
+        lead: "EMPOWER is made possible by the organisations on this page. Thank you for supporting our project!",
       },
     ],
   },

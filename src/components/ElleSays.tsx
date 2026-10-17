@@ -132,7 +132,11 @@ export function ElleSays({
         />
         {glass && <MagnifyingGlass />}
       </div>
-      <p className="elle-bubble">{children}</p>
+      {/* Edited with Claude Opus 5 (Anthropic), 2026-10-17: a div, not a p.
+          In MDX her line arrives already wrapped in its own <p>, and a <p>
+          inside a <p> is invalid HTML — React logs a hydration warning and
+          the browser silently closes the outer paragraph early. */}
+      <div className="elle-bubble">{children}</div>
     </div>
   );
 }

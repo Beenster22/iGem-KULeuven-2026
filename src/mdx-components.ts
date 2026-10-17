@@ -16,6 +16,7 @@ import { ExpandableText } from "./components/Expandable-Text";
 import {
   NotebookDropdown,
   NotebookSection,
+  EntryLink,
 } from "./components/NotebookDropdown";
 import { NotebookEntryMeta } from "./components/NotebookEntryMeta";
 import { EventsTimeline, EventEntry } from "./components/EventsTimeline";
@@ -58,6 +59,7 @@ import { HomeSnapScroll } from "./components/HomeSnapScroll";
 import { ZoomableImage } from "./components/ZoomableImage";
 import { ElleSays } from "./components/ElleSays";
 import { SuccessCards, SuccessCard } from "./components/SuccessCards";
+import { ResultSection, KeyTakeaways, Takeaway, FigureSlot } from "./components/ResultsKit";
 import {
   StakeholderGroups,
   StakeholderGroup,
@@ -71,6 +73,7 @@ import {
   ResourceDownload,
 } from "./components/FeedbackCycle";
 import { DockingHeatmap } from "./components/DockingHeatmap";
+import { BileSaltRatioTable } from "./components/BileSaltRatioTable";
 import {
   QuestionSelector,
   Question,
@@ -132,7 +135,18 @@ export const mdxComponents = {
   // Purpose: the headline result cards at the top of the results page.
   SuccessCards,
   SuccessCard,
+  // Generated with Claude Opus 5 (Anthropic), 2026-10-17
+  // Purpose: the results page's layout kit — the key-takeaway cards and the
+  // placeholder boxes for figures that have not been added yet.
+  ResultSection,
+  KeyTakeaways,
+  Takeaway,
+  FigureSlot,
   DockingHeatmap,
+  // Generated with Claude Opus 5 (Anthropic), 2026-10-17
+  // Purpose: BSA-07's Table 1 in the notebook, with the workbook's red/yellow
+  // highlighting on the ratio columns, which a markdown table cannot carry.
+  BileSaltRatioTable,
   QuestionSelector,
   Question,
   InfoCards,
@@ -148,6 +162,10 @@ export const mdxComponents = {
   ExpandableText,
   NotebookDropdown,
   NotebookSection,
+  // Generated with Claude Opus 5 (Anthropic), 2026-10-17
+  // Purpose: <EntryLink to="CNJ-07" /> — a cross-reference from one notebook
+  // entry to another, which opens the notebook and entry it names.
+  EntryLink,
   NotebookEntryMeta,
   EventsTimeline,
   EventEntry,

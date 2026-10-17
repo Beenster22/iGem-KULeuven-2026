@@ -128,17 +128,16 @@ ModelFinder and Q.PFAM+I+G4 selected by BIC, with the proportion of invariable s
 by performing 1000 ultrafast bootstrap replicates and 1000 SH-aLRT replicates.
 
 The resulting tree was created using iTOL and separates the candidate set into two broad groups. One
-contains the characterised *Bifidobacterium* enzyme together with the *Collinsella*, *Lactobacillus*
-and *Blautia* sequences. The second contains the Bacteroidota sequences: *Bacteroides dorei*,
-*Phocaeicola vulgatus*, *Phocaeicola plebeius* and *Parabacteroides merdae*, and is separated from
-the first by substantially longer branches.
+contains the characterised *Bifidobacterium* reference enzyme together with the candidates from the
+Actinomycetota and Bacillota donors. The second contains the Bacteroidota candidates, BSH8, BSH10,
+BSH11 and BSH12, and is separated from the first by substantially longer branches.
 
 Two observations follow from this. First, sequence similarity to a known BSH is a weak guide within
 our candidate set: the Bacteroidota candidates are distant enough from the characterised enzymes that
 homology alone does not establish what reaction they catalyse. This is the concern that motivated our
-docking analysis, we discuss further in the wiki. Second, the two *P. vulgatus* sequences in our set
-do not group together. `HMPREF1058_00373` resolves alongside *B. dorei*, while `HMPREF1058_02605`
-resolves with *P. merdae* on a long branch, indicating that this single strain carries two divergent
+docking analysis, we discuss further in the wiki. Second, the two candidates drawn from the same
+donor strain do not group together: BSH8 resolves alongside BSH11, while the second sequence from
+that strain resolves with BSH12 on a long branch, indicating that the strain carries two divergent
 members of the choloylglycine hydrolase family rather than two copies of one enzyme.
 
 <div className="text-center my-3">
@@ -159,7 +158,7 @@ Bile salt hydrolases (BSHs) are N-terminal nucleophile hydrolases (Ntn) and thei
 nucleophile is a cysteine at position 2, exposed by autocatalytic cleavage[^bsh-1][^bsh-2]. A
 candidate without a cysteine at this position does not match the canonical BSH catalytic
 architecture. We therefore checked this residue in all 15 predicted structures. Eleven candidates
-carry Cys2 and were treated as canonical. Four (bdor, pmer, ppleb and pvul1) have no cysteine at
+carry Cys2 and were treated as canonical. Four (BSH8, BSH10, BSH11 and BSH12) have no cysteine at
 position 2. Instead they carry an N-terminal extension with the profile of a signal peptide (a
 hydrophobic stretch followed by a polar region), and the first cysteine downstream of it sits at
 position 20–26. For these four we took that cysteine as the putative catalytic residue, assuming the
