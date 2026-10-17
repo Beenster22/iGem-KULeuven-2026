@@ -5330,24 +5330,14 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): the
-   cell's fimbriae/pili. */
+   cell's fimbriae/pili. (Its loop of DNA was tried twice on 2026-10-17 —
+   dotted, then a criss-crossing line — and removed again both times: the
+   team decided against it.) */
 .bsh-pili {
   fill: none;
   stroke: #6e5b9e;
   stroke-width: 1.6;
   stroke-linecap: round;
-}
-
-/* The cell's genome (BshStreamAnimation.tsx DNA_LOOP_PATH): a tangled loop,
-   drawn as a dotted strand so it still reads as genetic material rather
-   than another membrane line. Removed 2026-10-15, re-added on team feedback
-   2026-10-17 (it should be visible in "Meet Phocaeicola vulgatus"). */
-.bsh-dna {
-  fill: none;
-  stroke: #6e5b9e;
-  stroke-width: 3.5;
-  stroke-linecap: round;
-  stroke-dasharray: 0 8;
 }
 
 .bsh-enzyme {
@@ -10893,9 +10883,10 @@ a.protocol-download:hover {
 }
 
 /* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17
-   Purpose: the pBSH-Cas9 component table (results page). First-column cells
-   carry their own fixed background colour (inline, matching PlasmidMap.tsx),
-   so only the shared layout — bold component names, same width in both
+   Purpose: the pBSH-Cas9 component table (results page, "Construct
+   components"). First-column cells carry their own fixed background colour
+   (inline, matching the component's colour on the uploaded plasmid map), so
+   only the shared layout — bold component names, same width in both
    columns — lives here. */
 .plasmid-legend-table td:first-child {
   font-weight: 700;
@@ -10904,6 +10895,43 @@ a.protocol-download:hover {
 
 .plasmid-legend-table td:last-child {
   width: 70%;
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-17
+   Purpose: the executive summary paragraph beside the plasmid map figure
+   (results page, "CRISPR construct design"), after the team's request to put
+   the construct circle next to the text instead of stacked under its own
+   heading. Stacks below tablet width, image first. */
+.construct-intro {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin: 1rem 0;
+}
+
+.construct-intro-text {
+  flex: 1 1 22rem;
+  min-width: 0;
+}
+
+.construct-intro-text > :last-child {
+  margin-bottom: 0;
+}
+
+.construct-intro-image {
+  flex: 1 1 16rem;
+  max-width: 22rem;
+}
+
+@media (max-width: 767.98px) {
+  .construct-intro {
+    flex-direction: column;
+  }
+
+  .construct-intro-image {
+    max-width: 20rem;
+    margin: 0 auto;
+  }
 }
 
 /* Generated with Claude Opus 5 (Anthropic), 2026-10-17
@@ -10963,135 +10991,5 @@ a.protocol-download:hover {
 
   .page-header-box-row .page-header-box-text {
     max-width: none;
-  }
-}
-
-/* PLASMID MAP */
-/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17
-   Purpose: the pBSH-Cas9 ring (PlasmidMap.tsx, results page). Feature
-   colours are inline (sampled per feature in data/plasmidMap.ts), so nothing
-   here sets them. The ring and the name/role panel sit side by side above
-   tablet width and stack below it. */
-.plasmid-map {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  margin: 1.5rem 0;
-}
-
-.plasmid-map-svg {
-  flex: 0 0 auto;
-  width: clamp(220px, 32vw, 300px);
-  height: auto;
-  overflow: visible;
-}
-
-.plasmid-map-feature {
-  cursor: pointer;
-  stroke: var(--color-page-bg);
-  stroke-width: 2;
-  outline: none;
-  transition:
-    filter 0.15s ease,
-    stroke-width 0.15s ease;
-}
-
-.plasmid-map-feature:hover,
-.plasmid-map-feature:focus-visible,
-.plasmid-map-feature.active {
-  filter: brightness(1.08) saturate(1.15);
-}
-
-.plasmid-map-feature.active {
-  stroke: var(--color-text);
-  stroke-width: 2.5;
-}
-
-.plasmid-map-name {
-  font-size: 1.1rem;
-  font-weight: 700;
-  fill: var(--color-text);
-  pointer-events: none;
-}
-
-.plasmid-map-panel {
-  flex: 1 1 16rem;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  border: 1px solid rgba(51, 40, 63, 0.25);
-  border-radius: 0.75rem;
-  padding: 1rem 1.15rem;
-}
-
-[data-theme="dark"] .plasmid-map-panel {
-  border-color: rgba(201, 189, 232, 0.3);
-}
-
-.plasmid-map-panel-name {
-  font-weight: 700;
-  font-size: 1.05rem;
-}
-
-.plasmid-map-panel-role {
-  color: var(--color-text);
-  opacity: 0.85;
-}
-
-.plasmid-map-panel-progress {
-  display: block;
-  margin-top: 0.5rem;
-  height: 3px;
-  border-radius: 999px;
-  background: rgba(51, 40, 63, 0.12);
-  overflow: hidden;
-}
-
-[data-theme="dark"] .plasmid-map-panel-progress {
-  background: rgba(201, 189, 232, 0.18);
-}
-
-.plasmid-map-panel-progress-fill {
-  display: block;
-  height: 100%;
-  width: 0;
-  background: var(--color-text);
-  opacity: 0.55;
-  animation: plasmid-map-progress var(--plasmid-map-interval, 3200ms) linear
-    forwards;
-}
-
-.plasmid-map-panel-progress-fill.paused {
-  animation: none;
-  width: 100%;
-  opacity: 0;
-}
-
-@keyframes plasmid-map-progress {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .plasmid-map-panel-progress-fill {
-    animation: none;
-    width: 100%;
-  }
-}
-
-@media (max-width: 767.98px) {
-  .plasmid-map {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .plasmid-map-svg {
-    width: min(70vw, 280px);
-    margin: 0 auto;
   }
 }

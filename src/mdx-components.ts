@@ -86,7 +86,6 @@ import {
   InfoCard,
 } from "./components/QuestionSelector";
 import { PhenotypeVenn } from "./components/PhenotypeVenn";
-import { PlasmidMap } from "./components/PlasmidMap";
 import { Link } from "react-router-dom";
 
 export const mdxComponents = {
@@ -190,7 +189,4 @@ export const mdxComponents = {
   // Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
   // Purpose: the interactive phenotype Venn diagram on the description page.
   PhenotypeVenn,
-  // Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17
-  // Purpose: the pBSH-Cas9 plasmid map on the results page.
-  PlasmidMap,
 };
