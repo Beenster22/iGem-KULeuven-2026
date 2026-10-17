@@ -79,14 +79,14 @@ const CLICK_LOCK_MS = 1500;
 // down to the bottom of the screen, so each of those headings counts as read
 // in turn as the page runs out.
 // Edited 2026-10-17 (the mascot still stayed behind on the Team page): the line
-// itself now sits 40% down the screen instead of just under the navbar, so a
+// itself now sits halfway down the screen instead of just under the navbar, so a
 // section counts as the current one once it fills the middle of the screen,
 // not only after its heading has scrolled all the way to the top. Short
 // sections near the end of a page then get their turn well before the page
 // runs out.
 function readingLine(): number {
   const viewport = window.innerHeight;
-  const base = Math.max(READING_LINE_PX, viewport * 0.4);
+  const base = Math.max(READING_LINE_PX, viewport * 0.5);
   const remaining = Math.max(
     0,
     document.documentElement.scrollHeight - viewport - window.scrollY,
