@@ -19,8 +19,7 @@
 //    from one to the next with a bacterium at its head.
 //  - EngineerSection: the team's closing statement beside P. vulgatus drawn
 //    with a genetic circuit inside.
-//  - FindOutMore: links to the main pages, rolling sideways like the sponsor
-//    logos.
+//  - FindOutMore: boxes linking to the main pages (and the special prizes).
 // The drawings are ILLUSTRATIONS of the mechanism as the team describes it,
 // not data. All wording is the team's; nothing was added where the team's
 // notes are still open (see CONSEQUENCES). Motion is off under
@@ -36,6 +35,13 @@ import {
 import { Link } from "react-router-dom";
 import { useReducedMotion } from "framer-motion";
 import { SnapSteps } from "./HomeSnapScroll";
+import {
+  BubblesIcon,
+  LightbulbIcon,
+  MagnifierIcon,
+  RocketIcon,
+  RulerIcon,
+} from "./FindOutMoreIcons";
 import { usePinnedStep } from "./usePinnedStep";
 
 function seededValue(seed: number) {
@@ -1020,44 +1026,75 @@ export function EngineerSection() {
 /* Find out more                                                       */
 /* ------------------------------------------------------------------ */
 
-// The pages the team lists; "wet lab" and "dry lab" go to the first page of
-// those menus (see pages.ts).
-const MORE_LINKS = [
-  { label: "Project description", to: "/description" },
-  { label: "Wet lab", to: "/experimental-overview" },
-  { label: "Dry lab", to: "/dry-lab" },
-  { label: "Integrated Human Practices", to: "/human-practices" },
-  { label: "Entrepreneurship", to: "/entrepreneurship" },
+// The pages the team lists, as boxes (the team's note of 2026-10-17). The two
+// prizes' pages are the pages themselves; "Best Measurement" has no page of
+// its own yet, so it goes to its section on the Prizes and Medals page.
+interface MoreCard {
+  title: string;
+  tagline: string;
+  to: string;
+  icon: ReactNode;
+  specialPrize?: boolean;
+}
+
+const MORE_CARDS: MoreCard[] = [
+  {
+    title: "Project Description",
+    tagline: "Find the details here",
+    to: "/description",
+    icon: <LightbulbIcon />,
+  },
+  {
+    title: "Results",
+    tagline: "See what we discovered",
+    to: "/results",
+    icon: <MagnifierIcon />,
+  },
+  {
+    title: "Best Measurement",
+    tagline: "Our measurement work",
+    to: "/awards#best-measurement",
+    icon: <RulerIcon />,
+    specialPrize: true,
+  },
+  {
+    title: "Integrated Human Practices",
+    tagline: "How people shaped EMPOWER",
+    to: "/human-practices",
+    icon: <BubblesIcon />,
+    specialPrize: true,
+  },
+  {
+    title: "Entrepreneurship",
+    tagline: "From idea to licensing deal",
+    to: "/entrepreneurship",
+    icon: <RocketIcon />,
+    specialPrize: true,
+  },
 ];
 
 export function FindOutMore() {
-  const prefersReducedMotion = useReducedMotion();
-  // Enough copies of the set to fill a wide screen twice over, so the loop
-  // (which shifts the track by one half) never shows a gap. Only the first
-  // set is announced and reachable by keyboard.
-  const copies = prefersReducedMotion ? 1 : 4;
-
   return (
     <div className="find-more">
       <h3 className="find-more-heading">Find out more about EMPOWER:</h3>
-      <div
-        className={`find-more-band${prefersReducedMotion ? " find-more-band--static" : ""}`}
-      >
-        <div className="find-more-track">
-          {Array.from({ length: copies }, (_, copy) =>
-            MORE_LINKS.map((link) => (
-              <Link
-                key={`${copy}-${link.to}`}
-                className="find-more-link"
-                to={link.to}
-                aria-hidden={copy > 0 || undefined}
-                tabIndex={copy > 0 ? -1 : undefined}
-              >
-                {link.label}
-              </Link>
-            )),
-          )}
-        </div>
+      <div className="find-more-cards">
+        {MORE_CARDS.map((card, index) => (
+          <Link
+            key={card.to}
+            className={`find-more-card find-more-card--${index % 2 === 0 ? "dark" : "light"}`}
+            to={card.to}
+          >
+            <span className="find-more-card-art">{card.icon}</span>
+            <span className="find-more-card-title">{card.title}</span>
+            <span className="find-more-card-tagline">{card.tagline}</span>
+            {card.specialPrize && (
+              <span className="find-more-card-prize">
+                <span aria-hidden="true">★</span> Special prize{" "}
+                <span aria-hidden="true">★</span>
+              </span>
+            )}
+          </Link>
+        ))}
       </div>
     </div>
   );

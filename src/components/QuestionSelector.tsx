@@ -32,7 +32,9 @@ export function QuestionSelector({ children }: { children: ReactNode }) {
 
   return (
     <div className="question-selector">
-      <p className="question-selector-hint">Select a question.</p>
+      <p className="question-selector-hint">
+        <em>Select a question to see our answer.</em>
+      </p>
       <div className="question-selector-cards" role="tablist">
         {questions.map((question, index) => (
           <button
