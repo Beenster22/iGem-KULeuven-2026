@@ -133,8 +133,126 @@ each person; `image` takes a photo URL uploaded via
 [the uploads tool](https://teams.igem.org/go/deliverables/wiki/uploads) (leave it off to show
 initials instead) and the interviewee's `children` is the full write-up shown in their popup
 under "Interview Summary". Any plain paragraph text written inside `<HPSection>` alongside the
-`<Interviewee>` entries becomes that section's context blurb, shown under the carousel. */}
+`<Interviewee>` entries becomes that section's context blurb, shown under the carousel.
 
-*Content to follow.*
+`date` and `basedIn` (where they work from) are shown in the popup under their name — leave
+either off to hide it. A section with no `<Interviewee>` entries (like Patients or General
+Public) is shown as a plain text card instead of a carousel. */}
+
+<HumanPracticesInterviews>
+
+<HPSection title="Healthcare Professionals">
+
+<Interviewee name="Prof. Dr. Dirk Timmerman" role="PhD Candidate, KU Leuven" date="DD Month 2026" basedIn="City, Country">
+
+**Why did we reach out to them?** — We reached out to Jane Doe, a PhD candidate at KU Leuven, to gather insights on the technical aspects of our project and how it could be applied in a research setting.
+
+**What did we learn?** — Jane provided valuable perspectives on the experimental design and the potential applications of our approach in studying PMOS. She highlighted the importance of considering the complexity of the disease when designing studies.
+
+**How did we integrate their feedback?** — Their input helped us refine our experimental protocols and better understand the research landscape surrounding PMOS.
+
+</Interviewee>
+
+<Interviewee name="Prof. Dr. Sharon Lie Fong" role="Gynecologist & fertility specialist, UZ Leuven Fertility Centre" date="13 May 2026" basedIn="Leuven, Belgium" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/sharon-lie-fong.avif">
+
+**Why did we reach out to them?** — Referred to by Prof. Timmerman, we reached out to Prof. Dr. Sharon Lie Fong, who is a professor of gynecology and a fertility specialist at the UZ Leuven Fertility Centre with expertise in PMOS to collect more clinical perspectives on our project.
+
+**What did we learn?** — Although she stated she was not familiar with IL-22 as a biomarker for PMOS-related inflammation, she emphasized that it is likely only one of many factors that are involved, and that we would need a stronger justification for focusing on it. PMOS is highly multifactorial and can present differently in lean and obesity-associated patients. Therefore, no single diet or intervention suits all patients, partially also because gut microbiome research is confounded by many other factors. From her experience, patients’ main challenges are low self-esteem and difficulty getting pregnant. She named genetics as an important blind spot in PMOS research.
+
+**How did we integrate their feedback?** — Her feedback pushed us to take the heterogeneity of PMOS into account for therapeutic design. She agreed to help connect us with PMOS patients, which initiated the process of submitting a study application to the ethical committee of the UZ Leuven, and thereby the development of our patient interview study and IHP page. Her clinical insights helped shape interview topics around self-esteem and problems with current treatment methods.
+
+</Interviewee>
+
+<Interviewee name="Prof. Dr. Michael De Vos & Prof. Dr. Shari Mackens" role="Fertility Specialists, UZ Brussels" date="15 June 2026" basedIn="Brussels, Belgium" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/michael-de-vos.avif">
+
+**Why did we reach out to them?** — To get a second opinion from a PMOS specialist, we reached out to Prof. Dr. Michael De Vos, who is an IVF specialist at UZ Brussels. After hearing about the project, he introduced us to Prof. Dr. Shari Mackens who joined the meeting. She’s a fertility specialist with experience in microbiology. From Prof. Dr. Lie Fong's meeting, we were aware that heterogeneity of PMOS is a thing to keep in mind. Therefore, we inquired about how to actively approach this in our design. 
+
+**What did we learn?** — They explained that patients with hyperandrogenism, obesity, and high C-Reactive Protein (CRP, an inflammation marker) tend to show more severe inflammation and metabolic problems, supporting the heterogeneity of PMOS. Dr. De Vos suggested this subgroup as the most relevant one for our research and doubted targeting a single bacterium would lead to clinically useful results. Both stressed that association should not be confused with causation. Dr. Mackens suggested to focus on the intestinal microbiome as a whole, and not just one bacterium, or to reinforce our case for why we’re focusing on P. vulgatus. For our patient interviews, they suggested asking about acceptance of engineered bacteria, quality of life and diagnosis, while also noting that these interviews are going to give more a perspective rather than a scientific validation. 
+
+**How did we integrate their feedback?** — Their feedback helped us refine our project description, by advising us to narrow our target population toward a more specific population of women affected by PMOS. They also contributed to our patient study by suggesting questions and topics which also helped to sharpen our focus when analyzing a potential market. Additionally, their comment about association and causation shifted our focus. While we made our case stronger to why P. vulgatus is a good way to approach this project, we investigated the bile acid pool in the gut more closely and how it interacts with various different pathways rather than just the one that we focused on at the time.
+
+</Interviewee>
+
+Replace this with a short overview of who this group of interviewees was and what we hoped to
+learn from them.
+
+</HPSection>
+
+<HPSection title="Scientific & Technical Experts">
+
+<Interviewee name="Jane Doe" role="PhD Candidate, KU Leuven" date="DD Month 2026" basedIn="City, Country">
+
+**Why did we reach out to them?** — We reached out to Jane Doe, a PhD candidate at KU Leuven, to gather insights on the technical aspects of our project and how it could be applied in a research setting.
+
+**What did we learn?** — Jane provided valuable perspectives on the experimental design and the potential applications of our approach in studying PMOS. She highlighted the importance of considering the complexity of the disease when designing studies.
+
+**How did we integrate their feedback?** — Their input helped us refine our experimental protocols and better understand the research landscape surrounding PMOS.
+
+</Interviewee>
+
+<Interviewee name="John Smith" role="Postdoctoral Researcher, KU Leuven" date="DD Month 2026" basedIn="City, Country">
+
+**Why did we reach out to them?** — We reached out to John Smith, a postdoctoral researcher at KU Leuven, to gain insights into the technical challenges and opportunities in implementing our project.
+
+**What did we learn?** — John shared his expertise on the technical aspects of our project and provided suggestions for improving the experimental design.
+
+**How did we integrate their feedback?** — Their input helped us refine our experimental protocols and better understand the research landscape surrounding PMOS.
+
+</Interviewee>
+
+Replace this with a short overview of who this group of interviewees was and what we hoped to
+learn from them.
+
+</HPSection>
+
+<HPSection title="Biotech Entrepreneurs & Industry">
+
+<Interviewee name="Firstname Lastname" role="Role, Company" date="DD Month 2026" basedIn="City, Country">
+
+**Why did we reach out to them?** — We reached out to Firstname Lastname, a professional in the biotech industry, to understand the commercial viability and market potential of our project.
+
+**What did we learn?** — They provided insights into the current market landscape and the challenges of translating research into practical applications.
+
+**How did we integrate their feedback?** — Their input helped us refine our business model and better understand the needs of potential users.
+
+</Interviewee>
+
+Replace this with a short overview of who this group of interviewees was and what we hoped to
+learn from them.
+
+</HPSection>
+
+<HPSection title="Patients">
+
+Replace this with the patients section. No interview popups here — just write the text directly
+inside this section.
+
+</HPSection>
+
+<HPSection title="Advocates & Legislators">
+
+<Interviewee name="Firstname Lastname" role="Role, Organisation" date="DD Month 2026" basedIn="City, Country">
+
+**Why did we reach out to them?** — We reached out to Firstname Lastname, a professional in the advocacy and legislative space, to understand the policy implications and regulatory considerations of our project.
+
+**What did we learn?** — They provided insights into the current regulatory landscape and the potential impact of our work on patient care and public health policies.
+
+**How did we integrate their feedback?** — Their input helped us navigate the regulatory environment and better align our project with the needs of patients and healthcare providers.
+
+</Interviewee>
+
+Replace this with a short overview of who this group of interviewees was and what we hoped to
+learn from them.
+
+</HPSection>
+
+<HPSection title="General Public">
+
+Replace this with the general public section. No interview popups here — just write the text directly
+inside this section.
+
+</HPSection>
+
+</HumanPracticesInterviews>
 
 </PageLayout>

@@ -2,7 +2,7 @@
 // Purpose: "hub and fan" selector — a central circle with bands fanning out to
 // the right, one per <FanBranch>. Clicking a band shows that branch's content
 // below. Used for the Entrepreneurship page's Risks and mitigation section.
-import { Children, ReactElement, ReactNode, isValidElement, useMemo, useState } from "react";
+import { Children, ReactElement, ReactNode, isValidElement, useMemo, useRef, useState } from "react";
 
 type FanIcon = "flask" | "scales" | "coins" | "chart" | "gear";
 
@@ -85,6 +85,7 @@ export function FanSelector({ hub, children }: FanSelectorProps) {
   );
   const [activeIndex, setActiveIndex] = useState(0);
   const active = branches[activeIndex];
+  const rootRef = useRef<HTMLDivElement>(null);
 
   const count = branches.length;
   const height = TOP * 2 + count * BAND_HEIGHT;
@@ -112,7 +113,7 @@ export function FanSelector({ hub, children }: FanSelectorProps) {
   drawOrder.push(activeIndex);
 
   return (
-    <div className="fan-selector">
+    <div className="fan-selector" ref={rootRef}>
       <svg className="fan-selector-svg" viewBox={`0 0 ${WIDTH} ${height}`} role="tablist" aria-label={hub}>
         {drawOrder.map((index) => {
           const branch = branches[index];
@@ -181,6 +182,22 @@ export function FanSelector({ hub, children }: FanSelectorProps) {
             {active.label} {active.subtitle}
           </p>
           {active.children}
+          <button
+            type="button"
+            className="fan-selector-back"
+            onClick={() => rootRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
+          >
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M6 15l6-6 6 6"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            Back to overview
+          </button>
         </div>
       )}
     </div>
