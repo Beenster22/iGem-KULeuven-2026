@@ -73,14 +73,16 @@ const CLICK_LOCK_MS = 1500;
 
 // The section being read: the last heading at or above the reading line.
 function currentHeadingId(headings: Heading[]): string {
-  let current = headings[0]?.id ?? "";
+  let current = "";
   for (const heading of headings) {
     const element = document.getElementById(heading.id);
-    if (!element) continue;
+    // Headings inside a hidden section (see PhasePager) have no layout box.
+    if (!element || element.getClientRects().length === 0) continue;
+    if (!current) current = heading.id;
     if (element.getBoundingClientRect().top > READING_LINE_PX) break;
     current = heading.id;
   }
-  return current;
+  return current || (headings[0]?.id ?? "");
 }
 
 function sameHeadings(a: Heading[], b: Heading[]) {
@@ -261,6 +263,8 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
 
   function handleClick(event: MouseEvent<HTMLAnchorElement>, id: string) {
     event.preventDefault();
+    // A heading inside a hidden section (see PhasePager) has to be revealed first.
+    window.dispatchEvent(new CustomEvent("reveal-section", { detail: id }));
     const target = document.getElementById(id);
     if (!target) return;
     target.scrollIntoView({ behavior: "smooth", block: "start" });

@@ -22,6 +22,7 @@ import { EventsTimeline, EventEntry } from "./components/EventsTimeline";
 import {
   HumanPracticesInterviews,
   HPSection,
+  HPIntro,
   Interviewee,
 } from "./components/HumanPracticesInterviews";
 import { PmosOverview } from "./components/PmosOverview";
@@ -36,6 +37,9 @@ import { MicChart } from "./components/MicChart";
 import { MilestoneArc, Milestone } from "./components/MilestoneArc";
 import { FanSelector, FanBranch } from "./components/FanSelector";
 import { MarketRings, MarketRing } from "./components/MarketRings";
+import { BusinessModelCanvas } from "./components/BusinessModelCanvas";
+import { Roadmap } from "./components/Roadmap";
+import { PhasePager } from "./components/PhasePager";
 import { MicrobeBackdrop } from "./components/MicrobeBackdrop";
 import { TwoGutsSection } from "./components/TwoGutsSection";
 import {
@@ -53,6 +57,7 @@ import { SponsorGrid } from "./components/SponsorGrid";
 import { HomeSnapScroll } from "./components/HomeSnapScroll";
 import { ZoomableImage } from "./components/ZoomableImage";
 import { ElleSays } from "./components/ElleSays";
+import { SuccessCards, SuccessCard } from "./components/SuccessCards";
 import {
   StakeholderGroups,
   StakeholderGroup,
@@ -106,6 +111,9 @@ export const mdxComponents = {
   FanBranch,
   MarketRings,
   MarketRing,
+  BusinessModelCanvas,
+  Roadmap,
+  PhasePager,
   MicrobeBackdrop,
   TwoGutsSection,
   StoryScrollSection,
@@ -120,6 +128,10 @@ export const mdxComponents = {
   HomeSnapScroll,
   ZoomableImage,
   ElleSays,
+  // Generated with Claude Opus 5 (Anthropic), 2026-10-16
+  // Purpose: the headline result cards at the top of the results page.
+  SuccessCards,
+  SuccessCard,
   DockingHeatmap,
   QuestionSelector,
   Question,
@@ -141,6 +153,7 @@ export const mdxComponents = {
   EventEntry,
   HumanPracticesInterviews,
   HPSection,
+  HPIntro,
   Interviewee,
   StakeholderGroups,
   StakeholderGroup,

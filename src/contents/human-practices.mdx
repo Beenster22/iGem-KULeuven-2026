@@ -137,13 +137,23 @@ under "Interview Summary". Any plain paragraph text written inside `<HPSection>`
 
 `date` and `basedIn` (where they work from) are shown in the popup under their name — leave
 either off to hide it. A section with no `<Interviewee>` entries (like Patients or General
-Public) is shown as a plain text card instead of a carousel. */}
+Public) is shown as a plain text card instead of a carousel.
+
+Put an `<HPIntro>` at the top of a section for the group's introduction (what we wanted to
+learn from them, what we already knew) — it's shown under the section title, above the
+interviews. */}
 
 <HumanPracticesInterviews>
 
 <HPSection title="Healthcare Professionals">
 
-<Interviewee name="Prof. Dr. Dirk Timmerman" role="PhD Candidate, KU Leuven" date="DD Month 2026" basedIn="City, Country">
+<HPIntro>
+
+To get a clinical perspective on PMOS and its treatment, we spoke with six healthcare professionals who treat women with PMOS in different ways, from classical medical treatment and lifestyle advice to IVF for infertility. We wanted to learn where current treatment falls short and where more research is needed. We also sought international experience to see how treatment and patient experience differ between countries.
+
+</HPIntro>
+
+<Interviewee name="Prof. Dr. Dirk Timmerman" role="Chair in Gynecology & Obstetrics" date="30 April 2026" basedIn="Leuven, Belgium">
 
 **Why did we reach out to them?** — We reached out to Jane Doe, a PhD candidate at KU Leuven, to gather insights on the technical aspects of our project and how it could be applied in a research setting.
 
@@ -163,9 +173,18 @@ Public) is shown as a plain text card instead of a carousel. */}
 
 </Interviewee>
 
-<Interviewee name="Prof. Dr. Michael De Vos & Prof. Dr. Shari Mackens" role="Fertility Specialists, UZ Brussels" date="15 June 2026" basedIn="Brussels, Belgium" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/michael-de-vos.avif">
+<Interviewee
+  name="Prof. Dr. Michel De Vos"
+  role="Gynecologist & Senior Medical Director, UZ Brussels"
+  image="https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/michael-de-vos.avif"
+  name2="Prof. Dr. Shari Mackens"
+  role2="Gynecologist & Senior Medical Director, UZ Brussels"
+  image2=" "
+  date="15 June 2026"
+  basedIn="Brussels, Belgium"
+>
 
-**Why did we reach out to them?** — To get a second opinion from a PMOS specialist, we reached out to Prof. Dr. Michael De Vos, who is an IVF specialist at UZ Brussels. After hearing about the project, he introduced us to Prof. Dr. Shari Mackens who joined the meeting. She’s a fertility specialist with experience in microbiology. From Prof. Dr. Lie Fong's meeting, we were aware that heterogeneity of PMOS is a thing to keep in mind. Therefore, we inquired about how to actively approach this in our design. 
+**Why did we reach out to them?** — To get a second opinion from a PMOS expert, we reached out to Prof. Dr. Michel De Vos, who is an IVF specialist at UZ Brussels. After hearing about the project, he introduced us to Prof. Dr. Shari Mackens who joined the meeting. She’s a fertility specialist with experience in microbiology. From Prof. Dr. Lie Fong's meeting, we were aware that heterogeneity of PMOS is a thing to keep in mind. Therefore, we inquired about how to actively approach this in our design. 
 
 **What did we learn?** — They explained that patients with hyperandrogenism, obesity, and high C-Reactive Protein (CRP, an inflammation marker) tend to show more severe inflammation and metabolic problems, supporting the heterogeneity of PMOS. Dr. De Vos suggested this subgroup as the most relevant one for our research and doubted targeting a single bacterium would lead to clinically useful results. Both stressed that association should not be confused with causation. Dr. Mackens suggested to focus on the intestinal microbiome as a whole, and not just one bacterium, or to reinforce our case for why we’re focusing on P. vulgatus. For our patient interviews, they suggested asking about acceptance of engineered bacteria, quality of life and diagnosis, while also noting that these interviews are going to give more a perspective rather than a scientific validation. 
 
@@ -173,47 +192,264 @@ Public) is shown as a plain text card instead of a carousel. */}
 
 </Interviewee>
 
-Replace this with a short overview of who this group of interviewees was and what we hoped to
-learn from them.
+<Interviewee name="Sarah Noelmans" role="Functional Dietitian, Leuven Institute for Fertility & Embryology" date="08 July 2026" basedIn="Leuven, Belgium" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/noelmans-sarah.avif">
+
+**Why did we reach out to them?** — We contacted Sarah Noelmans, an independent functional dietitian and founder of Harmona, a multidisciplinary practice for hormonal health, after listening to her podcast series on PMOS, in which she discusses nutrition, lifestyle and physical activity. She works as a consulting dietitian at LIFE (Leuven Institute for Fertility and Embryology) and focuses on the hormonal angle of the condition. We reached out to ask about how her treatment methods differ from the classical approaches, her experience with patients and the PMOS community, and what she recommends in terms of science communication.
+
+**What did we learn?** — Ms. Noelmans stated that she aims to individualise every treatment plan, thereby addressing the heterogeneity of PMOS. Regarding dietary recommendations, she avoids ketogenic diets, as very low-carbohydrate diets are often low in fermentable fibre and may reduce microbial diversity. She is also cautious with probiotics, since certain strains (for example some Lactobacillus strains) can increase histamine production. She found live engineered probiotics a promising idea, although this lies outside her area of expertise. In her experience, stress, perfectionism and shame are often harder to change than diet. Women need to hear that PMOS is not their fault and that drastically cutting carbohydrates is not the answer.She sees lean PMOS being overlooked and the gut microbiome as understudied, noting that PMOS is barely covered in dietetics training. Since we inquired what we could focus on with our social media content, she recommended meals rich in protein and fiber with complex carbohydrates and legumes, and pointed us to therapists, sexologists and acceptance and commitment therapy (ACT) as further support.
+
+**How did we integrate their feedback?** — Their feedback helped us refine our project description, by advising us to narrow our target population toward a more specific population of women affected by PMOS. They also contributed to our patient study by suggesting questions and topics which also helped to sharpen our focus when analyzing a potential market. Additionally, their comment about association and causation shifted our focus. While we made our case stronger to why P. vulgatus is a good way to approach this project, we investigated the bile acid pool in the gut more closely and how it interacts with various different pathways rather than just the one that we focused on at the time.
+
+</Interviewee>
+
+<Interviewee name="Dr. Biljana Popovic Todorovic " role="Gynecologist & Head of IVF Clinic, Avala General Hospital" date="15 September 2026" basedIn="Belgrade, Serbia" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/biljana.avif">
+
+**Why did we reach out to them?** — We contacted Dr. Biljana Popovic Todorovic, who is Head of the IVF (In Vitro Fertilization) clinic at the Avala General Hospital in Belgrade, Serbia with international research and treatment experience to better understand the realities of IVF and of fertility care for women with PMOS. Additionally, we hoped she would provide us with a multinational view on the PMOS clinics and how they differ in treatment plans and patient care, considering her broad international work experience.
+
+**What did we learn?** — She named age as the main limit on IVF success, because patients are getting older on average. She also explained how standard IVF differs from a gentler alternative, in vitro maturation (IVM). In IVF, hormone injections stimulate the ovaries to produce several eggs, which are collected once they are mature. This can cause ovarian hyperstimulation syndrome (OHSS), a swelling of the ovaries in reaction to the hormones. Doctors can keep this risk very low, for example by freezing all embryos for a later transfer, but the enlarged ovaries still cause discomfort. In IVM, the ovaries are not stimulated, or only briefly primed with hormones, so there is no risk of OHSS. The eggs are collected before they are mature and ripen in the lab instead.
+She sees little difference in how women with PMOS are treated across countries. The key difference is how long it takes to receive treatment. Women whose main issue is infertility usually see a reproductive specialist first, and those with amenorrhoea (asbent or irregular menstruation), weight gain, obesity, acne or hirsutism see a reproductive endocrinologist first. In her experience, women with PMOS account for about 5–10% of her patients who struggle with fertility. She also mentioned that PMOS is stigmatized and poorly understood: many patients do not realize they have the condition or what it means.
+
+**How did we integrate their feedback?** — Dr. Popovic Todorovic provided us with valuable insights on how IVF, which is a common treatment for infertility, and PMOS are looked at from a multinational perspective. From this, we continued to research how phenotype manifest differently in different regions of the world. 
+
+</Interviewee>
+
+These conversations shaped our therapeutic design, in particular pathway validation and our target patient group. In most meetings, we were advised to take the heterogeneity of PMOS into account. We therefore focus first on severely affected women with phenotype A. Our entrepreneurship plan describes how we would widen this group based on preliminary results.
+Almost every expert also questioned the causal link between bile acids and inflammation and stressed the difference between association and causation. As we are still at the stage of fundamental research, we cannot resolve this yet. Thereofe, we addressed it where we could, by reviewing the IL-22 transcriptomic literature and bioinformatically comparing which other bacterial species present in the gut microbiome show BSH activity.
+Finally, Prof. Lie Fong gave us access to patients for our interview study. The experts also shaped how we approach patients, with awareness of how heavily PMOS can affect quality of life, and which topics to cover: quality of life, acceptance of genetically engineered therapeutics and the diagnosis journey.
+
+
+
+
+
+
+
 
 </HPSection>
 
 <HPSection title="Scientific & Technical Experts">
 
-<Interviewee name="Jane Doe" role="PhD Candidate, KU Leuven" date="DD Month 2026" basedIn="City, Country">
+<HPIntro>
 
-**Why did we reach out to them?** — We reached out to Jane Doe, a PhD candidate at KU Leuven, to gather insights on the technical aspects of our project and how it could be applied in a research setting.
+To judge the feasibility and design of our engineering approach, we spoke with twelve scientific and technical experts. They cover microbiology and fermentation, synthetic biology and biocontainment, probiotics, reproductive research, and engineered microbial therapeutics. We wanted to know whether P. vulgatus is a suitable organism, how best to deliver and verify our genetic constructs, and how to make the system safe. Several experts also supported us directly, with strains, protocols and lab access.
 
-**What did we learn?** — Jane provided valuable perspectives on the experimental design and the potential applications of our approach in studying PMOS. She highlighted the importance of considering the complexity of the disease when designing studies.
+</HPIntro>
 
-**How did we integrate their feedback?** — Their input helped us refine our experimental protocols and better understand the research landscape surrounding PMOS.
+<Interviewee name="Dr. Ruben Vazquez Uribe " role="Staff Scientist & Research Manager in Gut Microbiome, VIB-KU Leuven Center for Microbiology " date="02 April 2026" basedIn="Leuven, Belgium" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/ruben.avif">
 
-</Interviewee>
+**Why did we reach out to them?** — At the start of the project, we just concluded that we want to work on regulating the bile-salt metabolism through the gut bacterium P. vulgatus but lacked the experimental expertise to judge whether this was feasible. Therefore, we contacted Dr. Ruben Vazquez Uribe, who is a research scientist and Head of Fermentations at the VIB-KU Leuven Center for Microbiology, for advice on engineering gut bacteria and microbiome research.
 
-<Interviewee name="John Smith" role="Postdoctoral Researcher, KU Leuven" date="DD Month 2026" basedIn="City, Country">
+**What did we learn?** — Initially, Dr. Uribe advised us not to build our project on P. vulgatus, since it is not a model organism and its limited genetic tools could make the project too ambitious for the iGEM timeline. He pointed out that different BSH enzymes differ in substrate activity and should not be treated as equals and suggested investigating more efficient alternatives. Bile acids are chemically very similar and hard to measure, so he recommended LC-MS, chromatography or bile-acid-sensitive biosensors. He also raised CRISPR as a method to selectively kill P. vulgatus, with bacterial conjugation as a more realistic delivery method than phages. However, he emphasized that the main challenge would be delivering the CRISPR system into the bacterium. While phage-based delivery would likely be difficult to establish, bacterial conjugation could provide a more realistic alternative. He encouraged us looking into modifying disease-relevant molecules that are already present in the gut, rather than making the entire project dependent P. vulgatus. 
 
-**Why did we reach out to them?** — We reached out to John Smith, a postdoctoral researcher at KU Leuven, to gain insights into the technical challenges and opportunities in implementing our project.
-
-**What did we learn?** — John shared his expertise on the technical aspects of our project and provided suggestions for improving the experimental design.
-
-**How did we integrate their feedback?** — Their input helped us refine our experimental protocols and better understand the research landscape surrounding PMOS.
+**How did we integrate their feedback?** — We compared the activities of different BSH enzymes and explored how we can incorporate E. coli as a model host instead of working directly in P. vulgatus. As a result, we transformed different BSH variants into E. coli to characterize them instead of doing it in P. vulgatus directly. We have also investigated alternative enzymes that could also affect bile-acid metabolism as advised but decided to continue working with BSH as our target. We also focused more on bacterial conjugation as a possible way to deliver genetic material into P. vulgatus. This led us to discuss how CRISPR could potentially be included in our system. This was one of many meetings with Dr. Uribe, who agreed to be our  co-Principal Investigator for the project. He kindly provided us with facilities of Raes laboratory such as anaerobic chambers, to investigate conjugation mechanisms with P. vulgatus and to fully develop our toolkit. 
+Besides incredibly valuable scientific advice provided by Ruben, another way he shaped our IHP was through his professional network. Considering his expertise is reflecting our project, his network was invaluable to shape our IHP progress.
 
 </Interviewee>
 
-Replace this with a short overview of who this group of interviewees was and what we hoped to
-learn from them.
+<Interviewee name="Dr. Matthew Herdman" role="Postdoctoral Researcher, Govers Lab, KU Leuven" date="28 April 2026" basedIn="Leuven, Belgium" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/matthew-herdman.avif">
+
+**Why did we reach out to them?** — One of our members met Dr. Matthew Herdman per chance. After introducing EMPOWER, it turned out he actually works with P. vulgatus as part of postdoctoral research project in the Govers Lab in the Department of Biology at KU Leuven. 
+
+**How did we integrate their feedback?** — Dr. Herdman supplied the starting point for the whole project: P. vulgatus DSM 1447 and E. coli DH5α the E. coli S17-1 λpir donor strain carrying pRham_KOFP7 that we used in every conjugation, hemin and gentamicin. He also gave us access to the fluorescence microscope at the Bioscience Center, and he ran and returned the imaging himself. Our conjugation work is built on his Bacteroides protocol (day 0 to day 3), and we followed his sample preparation for fluorescence microscopy. Furthermore, he advised us on results, interpretation and following experiment planning, thereby playing a key part in our Wet Lab’s success.
+
+</Interviewee>
+
+<Interviewee 
+name="Prof. Dr. Joris Vriens"
+  role="Principle Investigator, POPPYe group, KU Leuven"
+  name2="Dr. Lena Luyckx"
+  role2="Postdoctoral Researcher, POPPYe group, KU Leuven"
+  image2=" "
+  date="15 June 2026"
+  basedIn="Leuven, Belgium"
+  >
+
+**Why did we reach out to them?** — At this point, we were evaluating whether our PMOS idea was feasible and whether focusing on P. vulgatus was an efficient approach. Dr. Lena Luyckx is a postdoctoral researcher in Prof. Joris Vriens` POPPYe group at KU Leuven (Implantation, Placentation, Pregnancy & Endometriosis). Her research focuses on PMOS-related reproductive dysfunction, including the endometrium, fertility, inflammation, and pregnancy. 
+
+**What did we learn?** — Although, their knowledge on mechanisms of the gut microbiome in PMOS was limited, they acknowledged the novelty of our idea. They raised possible competition between gut bacteria such as Prevotella and how diet could influence these interactions. Since their group works with PMOS mice models, they suggested using fecal samples for analysis to contribute to our project.
+
+**How did we integrate their feedback?** — Their feedback encouraged us to look beyond P. vulgatus at other microbiome mechanisms linked to endocrine function. We considered testing fecal samples from the mouse model for bacterial species or bile salts, but dropped the idea, as our project focuses on P. vulgatus, not on validating the microbiome as a whole. 
+
+</Interviewee>
+
+<Interviewee name="Prof. Dr. Patrick Van Dijck" role="Principle Investigator, Van Dijck Lab, KU Leuven" date="10 April 2026" basedIn="Leuven, Belgium">
+
+**Why did we reach out to them?** — At this stage of the brainstorming we were comparing two project ideas, one on PMOS and one on bacterial vaginosis. Because the second idea concerned vaginal health, we contacted Prof. Patrick Van Dijck, professor at the KU Leuven Department of Biology, who has extensive expertise in vaginal candidiasis.
+
+**What did we learn?** — For the bacterial vaginosis idea, we discussed methods to verify enzyme production and quantify G. vaginalis biofilms. Prof. Van Dijck referred us to Sarah Lebeer (University of Antwerp) for Lactobacillus expertise and Hans Steenackers (KU Leuven) for biofilms. For the PMOS idea, he questioned how strong the link was with the overall syndrome and warned that the immunological component could make the project more complex. He also suggested Joleen Masschelein and Sander Govers as contacts.
+
+**How did we integrate their feedback?** — The feedback informed our choice between the two ideas, and we continued with the PMOS project. He also pointed us to contacts we later met, including Sarah Lebeer and Joleen Masschelein.
+
+</Interviewee>
+
+<Interviewee name="Prof. Dr. Sarah Lebeer" role="Principle Investigator, Laboratory for Applied Microbiology and Biotechnology, University of Antwerp" date="21 May 2026" basedIn="Antwerp, Belgium" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/sarah-lebeer.avif">
+
+**Why did we reach out to them?** — Prof. Sarah Lebeer leads the Lab of Applied Microbiology and Biotechnology at the University of Antwerp and has extensive expertise in vaginal microbiome research and probiotics. We wanted to reach out to get her input on bacterial strains relevant to PMOS and on how to involve them in our therapeutic. Beyond the scientific, Prof. Lebeer is also known to conduct impactful outreach through the ISALA Platform.
+
+**What did we learn?** — She described PMOS as a chicken-and-egg problem: the cause is not yet known, it will never be a single one, and it is unclear what comes first. She advised a multifactorial, multi-omics view as this gives a broad bandwidth of information (metabolomics, metagenomics). Generally, diagnosis is well described in the literature but much less known among general practitioners and affected women, and that the variety and extensiveness of symptoms mean that treatment design is challenging.
+She suggested employing Lactobacillus as a possible control to our P. vulgatus, since BSH enzymes have been extensively characterized and studied in it. For our outreach, she advised us to include not only diagnosed patients but also women with symptoms who may not yet have a diagnosis. She suggested combining qualitative interviews with a quantitative survey and offered the ISALA platform as a possible way to reach a broader audience.
+
+**How did we integrate their feedback?** — We integrated her feedback by introducing Lactobacillus BSH as a comparison. For this, we BLASTed previously characterized BSH genes from different Lactobacillus species against our P. vulgatus genes. Some of them were later transformed into E. coli to have multiple comparisons. She also strongly influenced our outreach strategy by encouraging a combination of patient interviews and a broader public survey. Unfortunately, we did not have the resources to implement any multi-omics approaches into our data acquisition.
+
+</Interviewee>
+
+<Interviewee name="Prof. Dr. Weston Whitaker" role="Assistant Professor, Penn State University" date="13 July 2026" basedIn="University Park, PA, USA" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/weston-whitaker.avif">
+
+**Why did we reach out to them?** — Prof. Dr. Weston Whitaker is the founder of Novome Biotechnologies and a synthetic biologist who engineered P. vulgatus for a therapeutic that reached the clinical stage, one of the closest real-world precedents to our project. We contacted him for advice on promoter and reporter selection, delivery and engraftment, biocontainment, regulation and patient acceptance of engineered bacteria.
+
+**What did we learn?** — Dr. Weston Whitaker advised us on several practical aspects of engineering P. vulgatus. He explained that strong constitutive expression can be difficult, especially when constructs are integrated into the genome. For expression systems in P. vulgatus, he recommended strong promoters that have been well-established and a common RBS. He advised Nanoluciferase as an effective reporter, since GFP does not work in anaerobic conditions, and recommended avoiding antibiotic resistance markers and using inducible or feedback-controlled promoters to regulate activity. He noted that conjugation works better than electroporation in Bacteroides. 
+On delivery, he found that in-situ editing would add a considerable amount of complexity and advised engineering one well-characterized strain and introducing it with a defined metabolic niche to allow engraftment (Novome used porphyrin). He considered our approach safer and more predictable than delivering IL-22 directly and stressed involving patients throughout development.
+
+**How did we integrate their feedback?** — Based on his approach from Novome, we reconsidered our delivery strategy by comparing in-situ conjugation with introducing an ex-vivo engineered strain with a defined metabolic niche. For the wet lab, we implemented several of the promoters he recommended, Nanoluciferase, and avoided antibiotic resistance markers. He also strengthened our safety rationale for targeting BSH.
+
+</Interviewee>
+
+<Interviewee name="Dr. Mark Charbonneau" role="Chief Scientific Officer, Seco Bio" date="04 August 2026" basedIn="Cambridge, MA, USA">
+
+**Why did we reach out to them?** — Dr. Mark Charbonneau has experience developing and modelling engineered microbial therapeutics at Synlogic, including pharmacokinetics, clinical translation and regulatory development. We expected that his expertise could be especially relevant for evaluating our delivery strategy and dry-lab possibilities.
+
+**What did we learn?** — While he liked our approach, Dr. Charbonneau doubted how reliable and specific the P. vulgatus pathway is, since other gut bacteria may perform similar reactions. He stressed that we needed to clearly define where in the gastrointestinal tract our therapeutic acts: bile acids in the colon are already largely deconjugated, making changes difficult to measure there. He suggested considering alternative sampling strategies and biomarkers. He also recommended bioinformatically investigating other BSH-producing species. 
+For delivery, he highlighted that the strain might need protection from stomach acid, and that colonization and selective pressure are key issues. Clinical translation of engineered microbes is possible, but manufacturing, scale-up and patient recruitment are major bottlenecks. 
+
+**How did we integrate their feedback?** — We integrated his recommendations, by investigating the specificity of P. vulgatus and BSH more closely, as this was also critiqued previously. Therefore, other BSH-producing gut bacteria were analyzed in our dry-lab work. Acid-resistant delivery, pharmacokinetics, target location and biomarkers were beyond what we could test this season, so we recorded them as requirements for future development.
+
+</Interviewee>
+
+<Interviewee name="Prof. Dr. Joleen Masschelein" role="Principle Investigator, Laboratory for Biomolecular Discovery & Engineering, KU Leuven" date="12 August 2026" basedIn="Leuven, Belgium" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/joleen-masschelein.avif">
+
+**Why did we reach out to them?** — Prof. Joleen Masschelein is a researcher at KU Leuven's Center for Microbiology with a specialty in synthetic biology, genetic system design, and biocontainment. As we were continuously looking for comparisons of our two engineering approaches, we wanted her opinion on the feasibility and safety as well as on suitable reporters, genetic verification methods, and possible bioinformatic strategies.
+
+**What did we learn?** — We presented two delivery strategies and our initial idea of a bile-acid-dependent kill switch. She called direct engineering of P. vulgatus technically challenging and warned that in-situ conjugation lacks specificity, because genetic material can also transfer to other Bacteroides species. She encouraged us to keep evaluating both.
+For biocontainment, she suggested a bile-acid-dependent system in which the absence of bile acids triggers cell death, for example through CRISPR targeting of housekeeping genes or toxin-antitoxin systems. She stressed genetic stability and fitness cost. For verification, she recommended Nanoluciferase under anaerobic conditions and colony PCR, and suggested HMMER and remote-homology searches to find other BSH-carrying organisms.
+
+**How did we integrate their feedback?** — Her suggestions, CRISPR targeting of housekeeping genes or toxin-antitoxin systems controlled by bile acids, became options in our biocontainment design. Her feedback also refined our wet-lab strategy. She connected us with her postdoc, Dr. Aaron Angles Pantoja, to explore circuit design and biocontainment in more detail.
+
+</Interviewee>
+
+<Interviewee name="Prof. Dr. Tae Seok Moon" role="Professor, J. Craig Venter Institute" date="19 August 2026" basedIn="Rockville, MD, USA" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/tae-seok-moon-jpg.avif">
+
+**Why did we reach out to them?** — Prof. Tae Seok Moon is a professor at the J. Craig Venter Institute whose research focuses on synthetic biology, engineered probiotics, and genetic biocontainment. His experience developing CRISPR-based kill switches made him particularly relevant to the safety aspects of our expression system. We wanted some feedback on the two engineering approaches, kill-switch strategy, whether CRISPR works in P. vulgatus.
+
+**What did we learn?** — He responded positively to the overall project but emphasized the importance of verifying whether CRISPR systems could function reliably in P. vulgatus before incorporating them into our design. Interestingly, he explained a kill switch is scientifically not strictly necessary, since engineered strains rarely out-compete natives and anaerobes technically die under aerobic conditions. 
+Prof. Moon discussed several possible biocontainment strategies, including CRISPR-Cas9 systems targeting multiple essential genes and genes and a bile-acid-responsive circuit based on the BreR biosensor, which he found especially promising as a form of dynamic control. He also encouraged us to highlight the prevalence of the condition among menopausal women.
+
+**How did we integrate their feedback?** — Led by his advice, biocontainment is framed as a must for the EU context in our design and safety narrative. We identified his published CRISPR-Cas9 kill-switch system and the BreR-based bile-acid sensor as possible starting points for our own design, which also led to us reaching out to the developer of the system, Dr. Mao Taketani. We also recognized the need to improve our toolkit for future studies by validating the CRISPR activity in P. vulgatus. Finally, we incorporated a stronger emphasis on how PMOS manifests throughout different age groups and menopause.
+
+</Interviewee>
+
+<Interviewee name="Dr. Aaron Angles Pantoja " role="Postdoctoral Researcher, Laboratory for Biomolecular Discovery & Engineering, KU Leuven" date="20 August 2026" basedIn="Leuven, Belgium" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/aaron.avif">
+
+**Why did we reach out to them?** — Dr. Aaron Angles Pantoja is a postdoctoral researcher working on genetic system design and microbial engineering in Joleen Masschelein's laboratory. Followed by our discussion with Prof. Masschelein, we contacted him to explore how genetic circuits and biocontainment systems work in practice. At this point, we were also weighing a simpler engineering concept, which entails exchanging the original BSH gene in P. vulgatus for a related variant with lower affinity for the target bile salts, which reduces their deconjugation.
+
+**What did we learn?** — He stressed that the safety profile of P. vulgatus needs careful consideration, because it can behave as an opportunistic bacterium, and advised us to check our strain for toxin-producing capability with bioinformatic tools. He added that, depending on the therapeutic application, biocontainment may matter less than expected. He suggested a CRISPR-Cas12-based kill switch that degrades the chromosome, but he also supported our idea of exchanging the BSH for a variant with lower affinity. For biocontainment, he pointed to auxotrophy as a simple option, as Dr. Whitaker had applied in his work in Novome. He also recommended an anaerobic-maturing GFP variant as a reporter for oxygen-sensitive bacteria.
+
+**How did we integrate their feedback?** — Dr. Pantoja kindly provided the anaerobic-compatible GFP variant, which became an additional reporter in our toolkit, and his advice on different origins of replication informed how we plan circuits with several genetic components. While his CRISPR-Cas12 kill switch widened the biocontainment options we investigated, he strongly advocated for using the BSH exchange approach. Finally, he kindly contributed to constructing the Safety Plan. 
+
+</Interviewee>
+
+<Interviewee name="Dr. Mao Taketani" role="Synthetic biologist" date="27 August 2026" basedIn="Cambridge, MA, USA" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/mao-taketani.avif">
+
+**Why did we reach out to them?** — Mao Taketani developed the BreR bile-acid sensing system in Bacteroides, which Tae Seok Moon considered a promising basis for our biocontainment circuit. We contacted her to learn how the sensor was built and how well it could be adapted to our design.
+
+**What did we learn?** — BreR worked in Bacteroides unexpectedly: it comes from a different bacterial species, and Bacteroides has an unusual promoter and RBS structure that normally breaks foreign genetic parts. Two other candidate sensors (CmeR and KstR) did not work at all in this host. Sensitivity differs between bile acids, and a good sensor needs a dynamic range of 100- to 1,000-fold. She recommended strong phage promoters, which worked very well in Bacteroides, and Weston Whitaker's tunable expression tools as a basis for an inducible system, for example a phage promoter combined with BreR.
+On the business side, she advised us to research potential buyers or licensees before building a company, since a start-up needs an exit through licensing or acquisition. She also advised filing a patent before publishing anything, bringing the PIs on board, and using KU Leuven R&D, which handles much of the process.
+
+**How did we integrate their feedback?** — The meeting gave us concrete design parameters for a BreR-based sensor (strong phage promoters and a dynamic range of at least 100-fold) and papers to build on. Unfortunately, it has not been actively implemented for now due to time and resource limitations but will be re-investigated in future circuit designs. 
+
+</Interviewee>
+
+Several experts questioned whether a non-model organism like P. vulgatus is the right foundation for the project, and how specific the BSH pathway really is. We took this seriously. For practicality, we characterized BSH variants in E. coli instead of only in P. vulgatus, compared them with Lactobacillus BSH, and analyzed other BSH-producing gut bacteria in our dry lab. We kept BSH as our target and use bacterial conjugation to introduce genetic material into P. vulgatus in the lab.
+Their practical advice shaped our wet lab. Dr. Herdman and Dr. Vazquez Uribe provided strains, protocols and lab access, and Dr. Vazquez Uribe became our co-Principal Investigator. Dr. Pantoja gave us an anaerobic-compatible GFP variant. Advice on media, dilutions and verification optimized our experiments.
+These exchanges also shaped our therapeutic strategy. Dr. Whitaker’s ex-vivo approach, an engineered strain with a defined metabolic niche, and Prof. Masschelein’s warning that conjugation inside the gut lacks specificity, led us to reconsider our initial in-situ conjugation idea. We asked most experts which approach was better. In our final design, we exchange the high-activity BSH for a variant with lower affinity towards TUDCA and GDCA, which reduces the deconjugation of these bile salts. Dr. Vazquez Uribe and Dr. Pantoja recommended this approach, and we judged it the least complex one. For biocontainment we use auxotrophy, which was done previously by Dr. Whitaker for P. vulgatus. We considered CRISPR kill switches (Prof. Moon, Prof. Masschelein, Dr. Pantoja) and the BreR sensor (Dr. Taketani) but did not pursue them, as the simpler design no longer needs them.
+Some advice was beyond what we could do this season: multi-omics, acid-resistant delivery and pharmacokinetics. We also chose not to test the wider microbiome in PMOS mouse models, partly due to time and budget constraints and partly to keep our focus on P. vulgatus. Prof. Lebeer significantly shaped our outreach by agreeing to present our project on the ISALA platform and by encouraging a broader public survey.
+
+
+
+
+
+
+
+
 
 </HPSection>
 
 <HPSection title="Biotech Entrepreneurs & Industry">
 
-<Interviewee name="Firstname Lastname" role="Role, Company" date="DD Month 2026" basedIn="City, Country">
+<HPIntro>
 
-**Why did we reach out to them?** — We reached out to Firstname Lastname, a professional in the biotech industry, to understand the commercial viability and market potential of our project.
+Replace this with an introduction to this stakeholder group: what we wanted to learn from them,
+and what we already knew (or didn't know) before talking to them.
 
-**What did we learn?** — They provided insights into the current market landscape and the challenges of translating research into practical applications.
+</HPIntro>
 
-**How did we integrate their feedback?** — Their input helped us refine our business model and better understand the needs of potential users.
+<Interviewee name="Dr. Gaelle Boulet" role="Freelance consultant, GaeteuX BV; Business Development Specialist, University of Antwerp" date="40 April 2026" basedIn="Antwerp, Belgium">
+
+**Why did we reach out to them?** — Gaelle Boulet is a freelance consultant specializing in communication and pitching. Early in EMPOWER, we needed advice on communicating the project to audiences with different levels of scientific knowledge and on presenting the link between the gut microbiome and PMOS convincingly.
+
+**What did we learn?** — She advised strengthening the evidence for the microbiome–PMOS link with multiple studies instead of a single paper and saw our mechanistic view as a strength to keep. She said our presentation needed a clearer structure: establish the problem first, explain why it matters, then introduce the solution, in a crisp, TED-style narrative with back-up slides and the IL-22 pathway on one slide. Funding pitches should be technical, and the pitch should be adapted to the audience in front of us.
+For outreach, she asked whether our objectives were clearly defined and encouraged us to move from simply communicating our project to actively creating awareness and societal impact.
+
+**How did we integrate their feedback?** — Following her advice the pitch restructured around a crisp problem-solution story with the pathway slide. As we redefined our objective, her comments also encouraged us to define awareness and education as central objectives of our outreach activities, which we continuously strived to implement during our events as well as our content on social media. 
+
+</Interviewee>
+
+<Interviewee name="Astrid Hart De Ruijter" role="Founder, Nutriome BV; Entrepreneur, imec" date="25 May 2026" basedIn="Ghent, Belgium">
+
+**Why did we reach out to them?** — Astrid Hart De Ruijter is a biotechnology go-to-market strategist and product marketing expert with experience in microbiome technologies. We contacted her to assess the commercial potential of EMPOWER: the market opportunities and the evidence future investors would need to see.
+
+**What did we learn?** — She questioned whether engineered strains are the most practical route to the clinic, as they face a hard regulatory path in the EU, and called the production of strains for the gut a major bottleneck. She recommended exploring natural variation between bacterial strains to find therapeutic properties without genetic modification and saw commercial value in a toolkit independent of a single strain.
+She noted that women's health projects are underfunded but that VLAIO (Flanders) is a helpful funder and advised making our case personal: the daily and financial burden, half the population, and effects on whole families. She also urged us to develop our kill-switch plan further and suggested other experts to contact.
+
+**How did we integrate their feedback?** — We weighed our engineering strategy against regulatory and production barriers, not only lab feasibility. We put more emphasis on natural strain variation in our toolkit and on the value of the toolkit independent of a single therapeutic strain. For our business case and pitch, we integrated a more patient-centered narrative that links the science to the daily and economic burden of PMOS, which is also something we discuss in patient interviews. 
+
+</Interviewee>
+
+<Interviewee name="Dr. Xander Spotbeen"
+  role="Medical Affair Manager in Fertility, Merck Healthcare"
+  name2="Dr. Filippo De Lorenzo"
+  image1=" "
+  role2="Medical Director Belgium & Luxembourg, Merck Healthcare"
+  image2=" "
+  date="23 July 2026"
+  basedIn="Leuven, Belgium">
+
+**Why did we reach out to them?** — While fundraising and looking for collaborations where different companies could support our project, we reached out to Merck Life Science. Through them, we were put into contact with Dr. Xander Spotbeen, and Dr. Filippo De Lorenzo, who both work at Merck Healthcare, a pharmaceutical company working in fertility, oncology and rare tumors to explore sponsorship, funding and cooperation. We aimed to gather insights on developing a microbiome-based therapeutic from the perspective of a fertility-focused company.
+
+**What did we learn?** — They advised a simple, structured, patient-centered business case that non-scientists can follow, explaining how the project fits their business in recombinant IVF hormones and why our treatment could beat existing options such as letrozole. For funding, they recommended a specific request with a clear budget and milestones.
+Scientifically, they suggested checking IL-22 in patient transcriptomic databases and sequencing the P. vulgatus genome to identify its BSH genes, since BSH enzymes differ in substrate affinity, and asked whether P. vulgatus might already deconjugate too strongly. They urged us to keep the scope realistic, comparable to a PhD project, and suggested contacting MRM Health and Prodigest.
+
+**How did we integrate their feedback?** — Based on this meeting, we integrated various new analyses into our entrepreneurship: comparison with existing treatments, funding requests with budget, milestones and timeline. Additionally, we have identified publications on IL-22 in patient transcriptomics data. Whole-genome sequencing of P. vulgatus to identify its BSH genes was noted as a possible task, but not feasible due to time and budget constraints. Additionally, they challenged us to take into consideration patient’s perspective and how our potential product would benefit them more than anything else that’s already on the market. 
+
+</Interviewee>
+
+<Interviewee name="Dr. Johan E.T. van Hylckama Vleig" role="Cofounder and CSO, Freya Biosciences; Chief Executive Officer, Caelus Life Sciences" date="31 August 2026" basedIn="Delft, Netherlands" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/johan.avif">
+
+**Why did we reach out to them?** — Dr. Johan van Hylckama Vlieg is the co-founder and Chief Scientific Officer of Freya Biosciences, a company developing microbiome-based therapeutics for women's health. He has a lot of experience with building companies and is also an advisory board member of the Gates foundation. His work lies at the intersection of microbiome research and women's healthcare, making him particularly relevant to EMPOWER. We reached out while developing our business case and exploring how a microbiome-based therapy could progress from an academic project into a commercially viable product.
+
+**What did we learn?** — He emphasized that investors look at scientific-clinical rationale, commercial plan, manufacturing, regulation, access to capital and unmet medical need, the latter being the strongest starting point. He emphasized that microbiome therapeutics are hard to fund and that investors want positive phase II data before investing substantially. He advised using non-dilutive grants to generate preclinical data first. Women's health investing has changed since 2017 and is now seen as a potential long-term exit through big pharma. He also discussed the regulatory challenges of engineered microbial therapeutics and urged us to examine how much changing this bacterium would really affect symptoms. He also shared some personal insight about the recent change when it comes to investing in research related to women which encouraged us to develop our business plan further.
+
+**How did we integrate their feedback?** — His input helped us strengthen the structure of our business case framing it on quantified unmet need. We learned the importance of developing a realistic funding strategy, starting with grants to support preclinical research before seeking venture capital investment. His advice to present the problem, our solution and what makes EMPOWER unique also shaped our pitch structure.
+
+</Interviewee>
+
+<Interviewee name="Dr. Aoife Brennan" role="President & CEO, Climb Bio; Non Executive Director, Xilio Therapeutics, Cerevance" date="02 September 2026" basedIn="Cambridge, MA, USA" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/aoife-brennan.avif">
+
+**Why did we reach out to them?** — Aoife Brennan is a physician and former CEO of Synlogic, a company developing engineered microbial therapeutics. We contacted her to discuss the commercial viability, investment opportunities, and regulatory challenges of developing a microbiome-based therapeutic for women's health.
+
+**What did we learn?** — She explained that live engineered bacteria are difficult to scale up and maintain stable, as pharmaceutical supply chains are primarily designed for proteins and small molecules. Many companies have previously failed, particularly due European regulation. Selling the product as a supplement, referring to companies such as ZBiotics, is possible, but production costs and out-of-pocket payments are limiting challenges. She noted that PMOS patients may be willing to pay because their symptoms are visible. 
+Investors ask whether it will work and whether it will make money and want to know the potential exit and acquirer. She advised us to understand the etiology beyond the existing literature, to have a clear plan before approaching funders, and to investigate why earlier companies failed.
+
+**How did we integrate their feedback?** —  Her feedback highlighted that our business plan needs an explicit exit/acquirer story and an angle that emphasizes why other comparable products failed and how our product bypasses these risks. We considered selling our treatment as a supplement rather than a therapeutic as this route gives for better marketing and faster transition to the market. Additionally, we identified the stability and robustness of our engineered strain as important challenges to address.
+
+</Interviewee>
+
+<Interviewee name="Dr. Pedro Correa de Sampaio" role="Co-Founder and CEO, Neobe Therapeutics" date="15 September 2026" basedIn="London,England">
+
+**Why did we reach out to them?** — Dr. Pedro Correa de Sampaio is the founder and CEO of Neobe Therapeutics, a company developing engineered bacterial therapeutics. We contacted him to discuss how EMPOWER could become a start-up, what we would need to demonstrate first, and how to approach fundraising.
+
+**What did we learn?** — He shared his experience with us when it comes to different approaches we had regarding our plan of action to bring this therapeutic to the market. He explained that a therapeutic cannot be treated as a supplement and emphasized the importance of clinical studies. He recommended generating initial clinical data quickly and at lower costs, potentially in the US or China, before raising funds for larger European studies. He highlighted that preclinical fundraising is extremely difficult and advised us to reduce risks as early as possible with an effective translational model. Regarding investment, he emphasized that investors expect a positive return on investment and encouraged us to sell the vision, claim only what you can prove and then claim it strongly. He noted that many investors are interested in women's health because it is understudied. 
+
+**How did we integrate their feedback?** — Our initial strategy was to examine how we could bring our engineered bacteria to the market as a probiotic but after our discussion with Pedro, it was clear that in our case, it’s hard to take that route.  His feedback helped us refine our start-up roadmap by prioritizing efficacy evidence from a translational model. We also eliminated the supplement route for our therapeutic approach. Finally, thanks to Pedro’s recommendation, we reached out to Sara Holland from Potter Clarkson for intellectual property advice based on his referral, given her experience with iGEM start-ups in Europe.
+
 
 </Interviewee>
 
@@ -224,12 +460,26 @@ learn from them.
 
 <HPSection title="Patients">
 
+<HPIntro>
+
+Replace this with an introduction to this stakeholder group: what we wanted to learn from them,
+and what we already knew (or didn't know) before talking to them.
+
+</HPIntro>
+
 Replace this with the patients section. No interview popups here — just write the text directly
 inside this section.
 
 </HPSection>
 
 <HPSection title="Advocates & Legislators">
+
+<HPIntro>
+
+Replace this with an introduction to this stakeholder group: what we wanted to learn from them,
+and what we already knew (or didn't know) before talking to them.
+
+</HPIntro>
 
 <Interviewee name="Firstname Lastname" role="Role, Organisation" date="DD Month 2026" basedIn="City, Country">
 
@@ -247,6 +497,13 @@ learn from them.
 </HPSection>
 
 <HPSection title="General Public">
+
+<HPIntro>
+
+Replace this with an introduction to this stakeholder group: what we wanted to learn from them,
+and what we already knew (or didn't know) before talking to them.
+
+</HPIntro>
 
 Replace this with the general public section. No interview popups here — just write the text directly
 inside this section.

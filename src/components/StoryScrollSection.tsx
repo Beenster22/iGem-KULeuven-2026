@@ -85,7 +85,8 @@ const STEPS: StoryStep[] = [
       says: <>Hey, I’m Elle! Want to go on a journey with me?</>,
       corner: "left",
       mood: "happy",
-      delay: 2600,
+      // After all three parts of this screen's text are in.
+      delay: 4200,
     },
   },
   {
@@ -146,7 +147,8 @@ function QuestionArt() {
   );
 }
 
-// A clock whose second hand ticks round while the minute hand creeps on.
+// A wall clock — teal rim, light face, dark hands — whose second hand sweeps
+// round while the minute hand creeps on.
 function ClockArt() {
   return (
     <svg
@@ -154,40 +156,53 @@ function ClockArt() {
       viewBox="0 0 100 100"
       aria-hidden="true"
     >
-      <circle className="story-clock-face" cx={50} cy={50} r={44} />
-      {Array.from({ length: 12 }, (_, i) => (
-        <line
-          key={i}
-          className="story-clock-mark"
-          x1={50}
-          y1={i % 3 === 0 ? 10 : 12}
-          x2={50}
-          y2={17}
-          transform={`rotate(${i * 30} 50 50)`}
-        />
-      ))}
+      <circle className="story-clock-face" cx={50} cy={50} r={45} />
+      <circle className="story-clock-ring" cx={50} cy={50} r={45} />
+      {Array.from({ length: 12 }, (_, i) =>
+        i % 3 === 0 ? (
+          <line
+            key={i}
+            className="story-clock-mark"
+            x1={50}
+            y1={13}
+            x2={50}
+            y2={21}
+            transform={`rotate(${i * 30} 50 50)`}
+          />
+        ) : (
+          <circle
+            key={i}
+            className="story-clock-dot"
+            cx={50}
+            cy={16.5}
+            r={1.6}
+            transform={`rotate(${i * 30} 50 50)`}
+          />
+        ),
+      )}
       <line
         className="story-clock-hand story-clock-hand--hour"
         x1={50}
-        y1={50}
+        y1={54}
         x2={50}
-        y2={30}
+        y2={29}
       />
       <line
         className="story-clock-hand story-clock-hand--minute"
         x1={50}
-        y1={50}
+        y1={56}
         x2={50}
-        y2={20}
+        y2={19}
       />
       <line
         className="story-clock-hand story-clock-hand--second"
         x1={50}
-        y1={56}
+        y1={62}
         x2={50}
-        y2={16}
+        y2={15}
       />
-      <circle className="story-clock-pin" cx={50} cy={50} r={3} />
+      <circle className="story-clock-pin" cx={50} cy={50} r={4} />
+      <circle className="story-clock-pin-core" cx={50} cy={50} r={1.5} />
     </svg>
   );
 }
