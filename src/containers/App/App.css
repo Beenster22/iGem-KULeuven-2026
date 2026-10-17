@@ -4865,12 +4865,12 @@ body:not(.home-fullscreen) .home-hero {
   gap: 0.4rem;
 }
 
+/* Each group's cell shape, as drawn in the window, so the legend can be read
+   by shape as well as by colour. */
 .two-guts-legend-swatch {
   flex: none;
-  width: 0.9em;
-  height: 0.9em;
-  border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, 0.28);
+  width: 2.6em;
+  height: 1.8em;
 }
 
 .two-guts-note {

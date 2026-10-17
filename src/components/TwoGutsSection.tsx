@@ -29,6 +29,9 @@
 // and tritan colour blindness (checked by simulation; only the three "other"
 // shades, which share one legend entry, stay close), and fewer Escherichia
 // and Shigella cells are drawn with PMOS, the difference going to Bacteroides.
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-17 (team request): the
+// legend shows each group's cell shape instead of a coloured dot, so it can
+// be read without telling the colours apart.
 // Purpose: home-page gut-microbiome section, the step between "What is
 // PMOS?" and the BSH diagram. A circular window into the gut: with PMOS two
 // groups have increased at the expense of the others, so diversity is
@@ -449,16 +452,19 @@ export function TwoGutsSection() {
         <ul className="two-guts-legend">
           {LEGEND.map((entry) => (
             <li key={entry.name} className="two-guts-legend-item">
-              {entry.groupIds.map((id) => (
-                <span
-                  key={id}
-                  className="two-guts-legend-swatch"
-                  style={{
-                    backgroundColor: GROUPS.find((g) => g.id === id)?.color,
-                  }}
-                  aria-hidden="true"
-                />
-              ))}
+              {entry.groupIds.map((id) => {
+                const group = GROUPS.find((g) => g.id === id)!;
+                return (
+                  <svg
+                    key={id}
+                    viewBox="-20 -14 40 28"
+                    className="two-guts-legend-swatch"
+                    aria-hidden="true"
+                  >
+                    <CellShape shape={group.shape} color={group.color} />
+                  </svg>
+                );
+              })}
               <span>
                 {entry.italic
                   ? entry.name.split(" and ").map((name, i) => (
