@@ -6029,90 +6029,130 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
-/* Find out more: links rolling sideways like the sponsor logos (the track
-   holds the set four times over and shifts by half its width per loop). */
+/* Find out more: boxes linking to the main pages.
+   Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-17 (team request: boxes
+   instead of rolling links, in the EMPOWER style): alternating dark purple and
+   lavender cards with a flat illustration, a title, a short line, and — for
+   the special prizes — a teal "Special prize" badge. The illustrations take
+   their colours from the card (--ic-*). */
 .find-more {
   text-align: center;
 }
 
 .find-more-heading {
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.75rem;
 }
 
-.find-more-band {
-  overflow: hidden;
-  margin: 0 calc(-50vw + 50%);
-  padding: 0.5rem 0;
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 8%,
-    black 92%,
-    transparent
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 8%,
-    black 92%,
-    transparent
-  );
+.find-more-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+  gap: 1rem;
+  max-width: 72rem;
+  margin: 0 auto;
 }
 
-.find-more-track {
+.find-more-card {
   display: flex;
-  gap: 1.5rem;
-  width: max-content;
-  padding-right: 1.5rem;
-  animation: find-more-roll 36s linear infinite;
-}
-
-.find-more-band:hover .find-more-track,
-.find-more-band:focus-within .find-more-track {
-  animation-play-state: paused;
-}
-
-@keyframes find-more-roll {
-  to {
-    translate: -50% 0;
-  }
-}
-
-.find-more-link {
-  flex: none;
-  padding: 0.7rem 1.75rem;
-  border: 3px solid currentColor;
-  border-radius: 999px;
-  color: inherit;
-  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
-  font-weight: 700;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  padding: 1.25rem 1.1rem 1.1rem;
+  border: 2px solid transparent;
+  border-radius: 1.25rem;
+  text-align: left;
   text-decoration: none;
   transition:
-    background-color 0.2s ease,
-    color 0.2s ease,
-    scale 0.2s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
-.find-more-link:hover,
-.find-more-link:focus-visible {
-  background-color: #2fa4a9;
+.find-more-card--dark {
+  --ic-1: #c9bde8;
+  --ic-2: #2fa4a9;
+  --ic-3: #f1c3d4;
+  --ic-line: #33283f;
+  --card-tagline: #7fd6da;
+  background-color: #33283f;
+  border-color: rgba(201, 189, 232, 0.3);
+  color: #eaf4f5;
+}
+
+.find-more-card--light {
+  --ic-1: #33283f;
+  --ic-2: #2fa4a9;
+  --ic-3: #f1c3d4;
+  --ic-line: #eaf4f5;
+  --card-tagline: #1f6a6e;
+  background-color: #c9bde8;
+  color: #33283f;
+}
+
+.find-more-card:hover,
+.find-more-card:focus-visible {
   border-color: #2fa4a9;
-  color: #fff;
-  scale: 1.05;
+  box-shadow: 0 0.9rem 1.8rem rgba(47, 164, 169, 0.35);
+  color: inherit;
+  transform: translateY(-6px);
 }
 
-.find-more-band--static {
-  margin: 0;
-  -webkit-mask-image: none;
-  mask-image: none;
+.find-more-card-art {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.6rem;
 }
 
-.find-more-band--static .find-more-track {
-  flex-wrap: wrap;
-  justify-content: center;
-  width: auto;
-  padding-right: 0;
-  animation: none;
+.find-more-card-art svg {
+  display: block;
+  width: min(100%, 7.5rem);
+  height: auto;
+  margin: 0 auto;
+  transition: transform 0.25s ease;
+}
+
+.find-more-card:hover .find-more-card-art svg,
+.find-more-card:focus-visible .find-more-card-art svg {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.find-more-card-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.find-more-card-tagline {
+  color: var(--card-tagline);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.find-more-card-prize {
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background-color: #2fa4a9;
+  color: #33283f;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.find-more-card-tagline + .find-more-card-prize {
+  margin-top: 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .find-more-card,
+  .find-more-card-art svg {
+    transition: none;
+  }
+
+  .find-more-card:hover,
+  .find-more-card:focus-visible {
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
