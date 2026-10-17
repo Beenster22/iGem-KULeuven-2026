@@ -27,6 +27,11 @@ export function spaceBrackets(
   data: Data[],
   layout: Partial<Layout>,
   plotHeightPx: number,
+  // A floor for the computed axis top, in the same log10 units as `range`.
+  // Passing the larger of two datasets' own computed tops keeps the axis
+  // range — and so the pixel position of every tick — identical when toggling
+  // between them, even though they carry different numbers of bracket rows.
+  minRangeMax?: number,
 ): { data: Data[]; layout: Partial<Layout> } {
   const range = layout.yaxis?.range as [number, number] | undefined;
   const rows = [
@@ -40,15 +45,28 @@ export function spaceBrackets(
         .map((y) => Math.log10(y[0])),
     ),
   ].sort((a, b) => a - b);
-  if (!range || rows.length === 0) return { data, layout };
+  if (!range || rows.length === 0) {
+    if (range && minRangeMax !== undefined && minRangeMax > range[1]) {
+      return {
+        data,
+        layout: { ...layout, yaxis: { ...layout.yaxis, range: [range[0], minRangeMax] } },
+      };
+    }
+    return { data, layout };
+  }
 
   const [rangeMin, rangeMax] = range;
   // Each row moves at least ROW_GAP_PX above the one below it. The gap in axis
   // units depends on the final axis span, which grows if the stack overflows
-  // the exported range, so settle it by iterating (converges in a few steps).
-  let max = rangeMax;
+  // the exported range, so settle it by iterating. Each step's growth shrinks
+  // geometrically, but a deep stack (several rows all needing extension) can
+  // take well over a dozen steps to settle under a pixel — 8 was cutting it
+  // short (IC85%'s 4-row stack was still ~0.008 log-units, ~2px, short of its
+  // fixed point), which `MicChart` then needs to be exact for since it floors
+  // every draw at the max of both datasets' own convergence.
+  let max = Math.max(rangeMax, minRangeMax ?? rangeMax);
   let placed: number[] = [];
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 40; i++) {
     const decadesPerPx = (max - rangeMin) / plotHeightPx;
     placed = [];
     rows.forEach((row, index) => {
@@ -60,6 +78,7 @@ export function spaceBrackets(
     });
     max = Math.max(
       rangeMax,
+      minRangeMax ?? rangeMax,
       placed[placed.length - 1] + HEADROOM_PX * decadesPerPx,
     );
   }

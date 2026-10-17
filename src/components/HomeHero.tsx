@@ -220,13 +220,6 @@ export function HomeHero() {
   useEmbedEnded(iframeRef, handleEnded);
 
   if (HERO_VIDEO_EMBED_SRC) {
-    if (videoEnded) {
-      return (
-        <div className="home-hero">
-          <img className="home-hero-video" src={FINAL_FRAME_SRC} alt={`${import.meta.env.VITE_TEAM_NAME} logo`} />
-        </div>
-      );
-    }
     return (
       <div className="home-hero">
         <iframe
@@ -236,6 +229,14 @@ export function HomeHero() {
           src={HERO_VIDEO_EMBED_SRC}
           allow="autoplay; fullscreen"
           sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+        />
+        {/* Faded in over the embed rather than swapped for it, so the
+            handoff has no frame where neither is on screen (see App.css
+            .home-hero-video, 2026-10-17 team feedback). */}
+        <img
+          className={`home-hero-video${videoEnded ? " home-hero-video--shown" : ""}`}
+          src={FINAL_FRAME_SRC}
+          alt={`${import.meta.env.VITE_TEAM_NAME} logo`}
         />
       </div>
     );
