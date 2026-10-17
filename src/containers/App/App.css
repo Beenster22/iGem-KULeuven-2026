@@ -11135,3 +11135,32 @@ a.protocol-download:hover {
     margin: 0 auto;
   }
 }
+
+/* COMPACT TABLE
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17 (team request: the
+   team table on the Entrepreneurship page was far too big): small type and
+   tight cells, fixed columns so it always fits the width, left-aligned
+   because the cells hold sentences. */
+.table-compact.table-responsive-rounded .table-bordered {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table-compact.table-responsive-rounded .table-bordered th,
+.table-compact.table-responsive-rounded .table-bordered td {
+  min-width: 0;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.74rem;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.table-compact.table-responsive-rounded .table-bordered th:first-child,
+.table-compact.table-responsive-rounded .table-bordered td:first-child {
+  width: 17%;
+}
+
+.table-compact.table-responsive-rounded .table-bordered th:nth-child(2),
+.table-compact.table-responsive-rounded .table-bordered td:nth-child(2) {
+  width: 30%;
+}
