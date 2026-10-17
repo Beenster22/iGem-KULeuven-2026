@@ -166,7 +166,7 @@ function layerTarget(index: number, stageIndex: number) {
 // of playback is detected below.
 const HERO_VIDEO_ORIGIN = "https://video.igem.org";
 const HERO_VIDEO_EMBED_SRC =
-  `${HERO_VIDEO_ORIGIN}/videos/embed/iCBcuNaKri4k2PfQsXQXrj` +
+  `${HERO_VIDEO_ORIGIN}/videos/embed/gPW5SeamwAPrw1aD6Z6NK7` +
   "?autoplay=1&muted=1&loop=0&controls=0&controlBar=0&title=0&warningTitle=0&peertubeLink=0&p2p=0&api=1";
 
 // The frame the intro video ends on (logo + banner) — once the video

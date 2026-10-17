@@ -1,17 +1,5 @@
 <PageLayout>
 
-<Callout title="Bronze Medal Criterion #1: Wiki">
-
-Describe how and why you chose your iGEM project.[ref: this is a reference that should be first in the list of references]
-
----
-
-Visit the [Medals page](https://competition.igem.org/judging/awards/medals) for more information.
-
-</Callout>
-
-This is the project description page. we will talk ab our project in detail [ref: this is a reference that should be second in the list of references] lets see how this works for the back button
-
 <ExpandableText title="Want to know more about the history of PMOS and name change?">
 
 This condition was first identified in 1844, when Chereau described enlarged ovaries studded with small peripheral cysts. After this, multiple names followed (sclerocystic ovaries, follicular degeneration, chronic cystic oophoritis). Additionally, it was originally described as inflammation of the female genital organs (Chereau, 1844; Polk, 1895; reviewed in Adashi et al., 2022).
@@ -168,6 +156,71 @@ Expression in a non-model organism depends on the codons its ribosomes recognize
 </SectionItem>
 
 </WheelSelector>
+
+## Appendix
+
+### How many people live with PMOS?
+
+In order to understand the scale of the problem we're addressing, finding the most accurate estimate of how many women are affected by this condition and how these cases are distributed across the world is crucial[ref: Lin T, Xie B, Yang J, et al. Changes in the global burden of polycystic ovary syndrome from 1990 to 2021. Reproductive Health 22, 86 (2025).]. Most published studies report results for large statistical regions rather than specific continents, so we calculated the continent totals ourselves from openly available data.
+
+We used the Global Burden of Disease (GBD) Results, made available by the Institute for Health Metrics and Evaluation (IHME)[ref: GBD 2023, Institute for Health Metrics and Evaluation (IHME); GBD Results Tool. https://ghdx.healthdata.org/]. GBD is the most comprehensive dataset on disease burden worldwide. It provides standardized estimates for 204 countries and territories, which makes numbers comparable between countries.
+
+Every search we used the same settings:
+
+<div className="appendix-table appendix-table--compact">
+
+| Field | Selection |
+| --- | --- |
+| GBD estimate | Cause of death or injury |
+| Measure | Prevalence |
+| Metric | Number |
+| Cause | Polycystic ovarian syndrome |
+| Sex | Female |
+| Age | All ages |
+| Year | **2023** (most recent available) |
+
+</div>
+
+What we changed between each search was the location. GBD groups countries into 21 regions that do not follow continental borders. We therefore ran one search per continent and selected regions or individual countries so that every country was counted in the right continent.
+
+<div className="appendix-table">
+
+| Continent | Locations selected |
+| --- | --- |
+| Africa | African Union (all African countries) |
+| Asia | East Asia, South Asia, Southeast Asia, High-income Asia Pacific, Central Asia, and 15 Middle Eastern countries (Afghanistan, Bahrain, Iran, Iraq, Jordan, Kuwait, Lebanon, Oman, Palestine, Qatar, Saudi Arabia, Syria, Türkiye, United Arab Emirates, Yemen) |
+| Europe | Western Europe, Central Europe, Eastern Europe |
+| North America | High-income North America; Caribbean minus Guyana and Suriname; Mexico, Guatemala, Honduras, El Salvador, Nicaragua, Costa Rica, Panama |
+| South America | Andean, Tropical and Southern Latin America; Colombia, Venezuela, Guyana, Suriname |
+| Oceania | Australasia, Oceania |
+| Global | Global |
+
+</div>
+
+For each continent, we summarized the case numbers of the selected locations. As a reference, we searched for global total data separately. The six continent totals add up to 67.93 million, compared to the global GBD value of 67.91 million, a difference of 0.03%. This confirms that no region was missed or counted twice.
+
+<div className="appendix-table appendix-table--compact">
+
+| Continent | Women with PMOS (2023) | Share of recorded cases |
+| --- | --- | --- |
+| Asia | 39.8 million | 58.6% |
+| North America | 8.9 million | 13.1% |
+| Europe | 7.8 million | 11.5% |
+| Africa | 7.0 million | 10.4% |
+| South America | 3.5 million | 5.1% |
+| Oceania | 0.85 million | 1.2% |
+| **Global** | **67.9 million** | |
+
+</div>
+
+<Callout title="Disclaimer: how to interpret the data">
+
+- What we present here are **case counts**. Asia has the most cases largely because most of the world's population lives there. The numbers show where the most affected women live, not where PMOS is most common per person.
+- The real number is much higher. GBD mostly counts diagnosed cases, however PMOS is known to be heavily underdiagnosed. The international consensus that renamed the condition estimates it affects about 1 in 8 women worldwide, which is well over 170 million people[^lancet2026]. The gap between ~68 million recorded cases and this estimate represent women who have never been diagnosed.
+- Furthermore, underdiagnosis is not even. Regions with limited healthcare access record very low numbers. This most likely reflects missed diagnoses rather than fewer cases.
+- Lastly, all GBD values are model-based estimates and come with a 95% uncertainty interval. For the global total, this means the true number of recorded cases lies between roughly 48 and 93 million women.
+
+</Callout>
 
 </PageLayout>
 

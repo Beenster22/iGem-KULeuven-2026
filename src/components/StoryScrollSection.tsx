@@ -85,7 +85,8 @@ const STEPS: StoryStep[] = [
       says: <>Hey, I’m Elle! Want to go on a journey with me?</>,
       corner: "left",
       mood: "happy",
-      delay: 2600,
+      // After all three parts of this screen's text are in.
+      delay: 4200,
     },
   },
   {

@@ -1,12 +1,247 @@
 <PageLayout>
 
-{/* Text below is the team's "MIC discussion" document, transferred to MDX with
-    Claude Opus 5.5 (Anthropic), 2026-10-01. In-text citations were converted to
-    footnote references; wording and values are the team's own. */}
+{/* Page structure laid out with Claude Opus 5 (Anthropic), 2026-10-17, from the team's sketch of the results page (Notes_261017). */}
+{/* The title sits top left, Elle greets from the right — both in the page header box itself, see App.tsx's HEADER_ASIDE — and the four headline success cards start the content, jumping to their section before the page splits into the Toolkit and Therapeutics pipelines. */}
+{/* The MIC write-up is the team's own text, carried over unchanged from the previous version of this page. */}
+{/* TO FILL IN: every "Placeholder" paragraph; every <FigureSlot>, which names the figure or table that belongs there and is meant to be deleted once the real one is in; the explanation line on each <Takeaway>, plus a real label for the cryptic ones ("salt -> LB", "H2O", "X"); and the four <SuccessCard> labels at the top. */}
+{/* A <SuccessCard>'s `to` is the slug of its target heading, so "### Bile salt deconjugation by 15 bile salt hydrolases" is reached with to="bile-salt-deconjugation-by-15-bile-salt-hydrolases". */}
+{/* Keep every comment on this page to a single line: prettier reflows a multi-line MDX comment into markdown and breaks the page. */}
 
-## Antibiotic susceptibility (MIC)
+<SuccessCards>
+  <SuccessCard to="antibiotic-susceptibility-of-p-vulgatus">
+    Three antibiotics inhibit <em>P. vulgatus</em>
+  </SuccessCard>
+  <SuccessCard to="a-characterized-promoter-library-for-p-vulgatus">
+    A 20/20 promoter library
+  </SuccessCard>
+  <SuccessCard to="screening-bsh-activity-on-bile-salt-plates">
+    BSH activity on bile salt plates
+  </SuccessCard>
+  <SuccessCard to="bile-salt-deconjugation-by-15-bile-salt-hydrolases">
+    5 of 15 hydrolases are active
+  </SuccessCard>
+</SuccessCards>
+
+{/* Two logo files, one per theme, swapped in CSS — the same pair the navbar uses. */}
+
+<div className="pipeline-divider">
+  <img
+    className="pipeline-divider-logo pipeline-divider-logo--light"
+    src="https://static.igem.wiki/teams/6299/wiki/icons/logo-dark-purple-no-text.avif"
+    alt=""
+  />
+  <img
+    className="pipeline-divider-logo pipeline-divider-logo--dark"
+    src="https://static.igem.wiki/teams/6299/wiki/icons/logo-light-purple-no-text.avif"
+    alt=""
+  />
+</div>
+
+<SegmentedSelector>
+
+<SectionItem label="Toolkit">
+
+## Toolkit
+
+<ResultSection>
 
 ### Introduction
+
+Placeholder — replace with the introduction to the toolkit pipeline, ending in
+a pointer to the <Link to="/experimental-overview">experimental overview</Link>
+for how these experiments fit together.
+
+</ResultSection>
+
+<ResultSection>
+
+### Selecting a _P. vulgatus_ strain panel
+
+<div className="results-standfirst">
+  Six strains spanning the type strain, the Sanger human gut collection, a
+  clinical isolate and a direct faecal isolate.
+</div>
+
+<KeyTakeaways>
+  <Takeaway value="6" label="strains, three origins">
+    Four of human faecal origin, one clinical isolate from a retroperitoneal
+    abscess, and one direct faecal isolate.
+  </Takeaway>
+  <Takeaway value="3" label="BSH loci in the type strain">
+    DSM 1447 carries three choloylglycine hydrolase loci, with activity
+    confirmed in vitro and in vivo.
+  </Takeaway>
+  <Takeaway value="4" label="strains with no BSH data">
+    The Sanger gut isolates and the clinical strain have no reported BSH
+    activity — one of the gaps this panel is built to close.
+  </Takeaway>
+</KeyTakeaways>
+
+#### Strain selection
+
+For our experiments, we selected six _Phocaeicola vulgatus_ strains spanning distinct isolation sources, so the strain-level variation within the species could be assessed.
+
+Four are of human faecal origin: the type strain DSM 1447, also known as ATCC 8482, together with the human gut isolates DSM 108222 (H4_2), DSM 108228 (H5_1) and DSM 108234 (H6_5). DSM 3289 (WAL 1887) was included as a clinical isolate recovered from a retroperitoneal abscess. Finally, RCC1806 is a direct faecal isolate obtained from the laboratory of <Link to="/attributions">Jeroen Raes</Link>. All DSM strains were obtained from [DSMZ](https://www.dsmz.de/)[^strain-dsmz].
+
+<ProtocolNote kind="important">
+
+Together this panel covers healthy human gut, clinical and inflamed murine origins, allowing strain level variation within the species to be assessed. The type strain is used as reference, considering it is the only member with a complete genome, documented BSH loci and established genetic tools. This way BSH gene content coming from other strains can be compared against it to reveal whether conserved loci are suitable CRISPR-based gene replacement targets or whether strain-variable BSH paralogs exist.
+
+</ProtocolNote>
+
+#### The panel
+
+<div className="table-responsive table-responsive-rounded my-3">
+
+<table className="table table-bordered align-middle text-center strain-panel-table">
+  <thead>
+    <tr>
+      <th>Strain</th>
+      <th>Origin</th>
+      <th>Genome</th>
+      <th>NCBI</th>
+      <th>Reference</th>
+      <th>BSH activity reported</th>
+      <th>Antibiotic notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    {/* The type strain is the reference every other strain is read against,
+        so its row is marked rather than left to be picked out by eye. */}
+    <tr className="table-row-highlight">
+      <td>DSM 1447 / ATCC 8482 (type strain)</td>
+      <td>Human faeces</td>
+      <td>Complete</td>
+      <td>
+        <a href="https://www.ncbi.nlm.nih.gov/nuccore/CP000139" target="_blank" rel="noopener noreferrer">
+          CP000139
+        </a>
+      </td>
+      <td>Segura Munoz et al. 2022[^strain-segura]</td>
+      <td>Confirmed GDCA, TUDCA</td>
+      <td className="text-start">
+        Measured: susceptible to Tet, Cm and Met (IC<sub>90%</sub> 1–4 mg/L); Amp 4 mg/L, above the EUCAST
+        anaerobe breakpoint. No inhibition by Gm or Kan.
+      </td>
+    </tr>
+    <tr>
+      <td>DSM 108222 (H4_2)</td>
+      <td>Human faeces (UK)</td>
+      <td>Shotgun</td>
+      <td>
+        <a href="https://www.ncbi.nlm.nih.gov/nuccore/CYZI00000000.1/" target="_blank" rel="noopener noreferrer">
+          CYZI00000000
+        </a>
+      </td>
+      <td>Forster et al. 2019[^strain-forster]</td>
+      <td>No data</td>
+      <td className="text-start">Predicted: <em>tetQ</em> (tetracycline) and <em>cepA</em> from the genome. Not yet measured.</td>
+    </tr>
+    <tr>
+      <td>DSM 108228 (H5_1)</td>
+      <td>Human faeces</td>
+      <td>Draft</td>
+      <td>
+        <a href="https://www.ncbi.nlm.nih.gov/nuccore/CZAN00000000" target="_blank" rel="noopener noreferrer">
+          CZAN00000000
+        </a>
+      </td>
+      <td>Forster et al. 2019[^strain-forster]</td>
+      <td>No data</td>
+      <td>/</td>
+    </tr>
+    <tr>
+      <td>DSM 108234 (H6_5)</td>
+      <td>Human faeces (UK)</td>
+      <td>Draft</td>
+      <td>
+        <a href="https://www.ncbi.nlm.nih.gov/nuccore/CZBK00000000" target="_blank" rel="noopener noreferrer">
+          CZBK00000000
+        </a>
+      </td>
+      <td>Forster et al. 2019[^strain-forster]</td>
+      <td>No data</td>
+      <td>/</td>
+    </tr>
+    <tr>
+      <td>DSM 3289 / ATCC 29327 / WAL 1887</td>
+      <td>Retroperitoneal abscess</td>
+      <td>None</td>
+      <td>–</td>
+      <td>Nuding et al. 2009[^strain-nuding]</td>
+      <td>Substrate preference only (tauro &gt; glyco)</td>
+      <td>/</td>
+    </tr>
+    <tr>
+      <td>RCC1806 (direct faecal isolate)</td>
+      <td>Raes lab</td>
+      <td>None</td>
+      <td>–</td>
+      <td>Unpublished</td>
+      <td>No data</td>
+      <td className="text-start">
+        Measured: Tet 1, Cm 2 and Met 4 mg/L; Amp 64 and Ery 256 mg/L; Gm 256 mg/L; no inhibition by Kan.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+<div className="figure-caption">
+  Table 1. Identity, isolation source, genome availability and prior characterisation for the six strains.
+  All DSM strains are classified BSL1 under German regulations, and all are obligate anaerobes grown at
+  37 °C. Susceptibility marked <em>Measured</em> is our own IC<sub>90%</sub> data from the MIC assay;{" "}
+  <em>Predicted</em> is inferred from resistance genes in the genome and has not been tested.
+</div>
+
+#### BSH annotation status
+
+Only the type strain has characterised BSH loci. Its genome carries three choloylglycine hydrolase (_cgh_/_bsh_) genes, with activity confirmed both in vitro and in vivo. These serve as the query set for annotating the remaining strains.
+
+<ExpandableText title="BSH loci in DSM 1447 and how the other strains were annotated">
+
+| Locus tag | Role |
+| --- | --- |
+| BVU_RS09890 | Choloylglycine hydrolase locus |
+| BVU_RS12045 | Choloylglycine hydrolase locus |
+| BVU_RS20465 | Choloylglycine hydrolase locus |
+| BVU_RS13575 | BSH coding sequence used as the annotation query |
+
+</ExpandableText>
+
+<ElleSays mood="happy" size="sm" side="right">
+
+Want the numbers behind those antibiotic notes? See our
+<Link to="/results#antibiotic-susceptibility-of-p-vulgatus">MIC results</Link>, further down this page!
+
+</ElleSays>
+
+</ResultSection>
+
+<ResultSection>
+
+### Antibiotic susceptibility of _P. vulgatus_
+
+<div className="results-standfirst">
+  Which antibiotics inhibit <em>P. vulgatus</em>, and which one to reach for
+  when a culture has to be stopped.
+</div>
+
+<KeyTakeaways>
+  <Takeaway value="Tet · Cm · Met" label="most effective">
+    Tetracycline, chloramphenicol and metronidazole gave the lowest IC
+    <sub>90%</sub> values.
+  </Takeaway>
+  <Takeaway value="Amp · Ery" label="not carried forward">
+    Too variable between the two strains to rely on.
+  </Takeaway>
+  <Takeaway value="4 mg/L" label="metronidazole is the recommendation">
+    At the EUCAST breakpoint for both strains.
+  </Takeaway>
+</KeyTakeaways>
+
+#### Introduction
 
 The MIC assay is part of the toolkit development, which has the aim of facilitating research with
 _Phocaeicola vulgatus_. As _P. vulgatus_ is not a model organism, not as much is known about media optimal
@@ -16,11 +251,11 @@ DSM1447/ATCC8482 and fecal strain _P. vulgatus_ RCC1806. An application in the t
 the most effective antibiotic to inhibit _P. vulgatus_, transformed with the CRISPR construct, growth in the
 case of uncontrolled growth.
 
-### Materials and methods
+#### Materials and methods
 
 _P. vulgatus_ DSM1447 was obtained from the research group Molecular Biotechnology of Plants and
 Micro-organisms from KU Leuven by Matt Herdman. The clinical isolate _P. vulgatus_ RCC1806 was obtained from
-the Raes lab of Bioinformatics and (Eco-)Systems Biology by Ruben Vazquez Uribe. Ampicillin, chloramphenicol,
+the Raes lab of Bioinformatics and (Eco-)Systems Biology by Ruben Vazquez-Uribe. Ampicillin, chloramphenicol,
 erythromycin, metronidazole, kanamycin, spectinomycin, tetracycline and gentamicin were tested, together with
 simvastatin — not an antibiotic, but reported to inhibit the growth of _P. vulgatus_
 DSM1447[^mic-escalante]. Starting concentrations for the two-fold dilution series in mGAM were taken from
@@ -35,7 +270,7 @@ as the quantitative measure[^mic-veiga] and taken as the consensus across repeat
 Full plate layouts, dilution ranges and run-by-run records are in the <Link to="/notebook">Notebook</Link>
 (entries MIC-01 to MIC-04).
 
-### Results
+#### Results
 
 The antibiotic with the lowest IC<sub>90%</sub> is the most effective against _P. vulgatus_ and can be used in
 the therapeutics pipeline to inhibit growth if needed. Tetracycline was found to be the most effective
@@ -57,72 +292,150 @@ RCC1806.
 <MicChart />
 
 <div className="figure-caption">
-  Figure 1 (IC<sub>90%</sub> tab). IC<sub>90%</sub> of <em>P. vulgatus</em> DSM1447 and RCC1806 in response to
-  different antibiotics. Each dot represents one replicate. The striped bars indicate that no
-  IC<sub>90%</sub> was found for the antibiotic, as there was still growth at the highest concentration of the
-  dilution series. Kruskal–Wallis and Dunn’s post hoc test was performed to compare IC<sub>90%</sub> of
-  different antibiotics within a strain. \* = p &lt; 0.05, Amp = ampicillin, Cm = chloramphenicol, Ery =
-  erythromycin, Met = metronidazole, Tet = tetracycline, Spc = spectinomycin, Gm = gentamicin, Stat = statin
-  (simvastatin), Kan = kanamycin.
+  Figure 1 (IC<sub>90%</sub> tab). IC<sub>90%</sub> of <em>P. vulgatus</em>{" "}
+  DSM1447 and RCC1806 in response to different antibiotics. Each dot represents
+  one replicate. The striped bars indicate that no IC<sub>90%</sub> was found
+  for the antibiotic, as there was still growth at the highest concentration of
+  the dilution series. Kruskal–Wallis and Dunn’s post hoc test was performed to
+  compare IC<sub>90%</sub> of different antibiotics within a strain. \* = p &lt;
+  0.05, Amp = ampicillin, Cm = chloramphenicol, Ery = erythromycin, Met =
+  metronidazole, Tet = tetracycline, Spc = spectinomycin, Gm = gentamicin, Stat
+  = statin (simvastatin), Kan = kanamycin.
 </div>
 
 <div className="figure-caption">
-  Figure 2 (IC<sub>85%</sub> tab). IC<sub>90%</sub> of <em>P. vulgatus</em> DSM1447 and RCC1806 in response to
-  different antibiotics, at a cutoff value of 85%. Each dot represents one replicate. The striped bars
-  indicate that no IC<sub>90%</sub> was found for the antibiotic, as there was still growth at the highest
-  concentration of the dilution series. Kruskal–Wallis and Dunn’s post hoc test was performed to compare
-  IC<sub>90%</sub> of different antibiotics within a strain. \* = p &lt; 0.05, \*\* = p &lt; 0.01, Amp =
-  ampicillin, Cm = chloramphenicol, Ery = erythromycin, Met = metronidazole, Tet = tetracycline, Spc =
-  spectinomycin, Gm = gentamicin, Stat = statin (simvastatin), Kan = kanamycin.
+  Figure 2 (IC<sub>85%</sub> tab). IC<sub>90%</sub> of <em>P. vulgatus</em>{" "}
+  DSM1447 and RCC1806 in response to different antibiotics, at a cutoff value of
+  85%. Each dot represents one replicate. The striped bars indicate that no IC
+  <sub>90%</sub> was found for the antibiotic, as there was still growth at the
+  highest concentration of the dilution series. Kruskal–Wallis and Dunn’s post
+  hoc test was performed to compare IC<sub>90%</sub> of different antibiotics
+  within a strain. \* = p &lt; 0.05, \*\* = p &lt; 0.01, Amp = ampicillin, Cm =
+  chloramphenicol, Ery = erythromycin, Met = metronidazole, Tet = tetracycline,
+  Spc = spectinomycin, Gm = gentamicin, Stat = statin (simvastatin), Kan =
+  kanamycin.
 </div>
 
-### Discussion
+#### Discussion
 
 <div className="figure-caption">
-  Table 1. Comparison with literature. – No MIC values were found, either experimentally or in literature.
-  \* Literature reported MIC50 or MIC90 values for clinical or intestinal isolates, not for
-  <em>P. vulgatus</em> DSM1447, excepting source d. Brackets indicate the range of the found MICs. \*\* S =
-  susceptible, a therapeutic is likely to be successful when using this concentration[^mic-eucast-bp]. The
-  numbers found in literature were found after a thorough literature search.
+  Table 1. Comparison with literature. – No MIC values were found, either
+  experimentally or in literature. \* Literature reported MIC50 or MIC90 values
+  for clinical or intestinal isolates, not for
+  <em>P. vulgatus</em> DSM1447, excepting source d. Brackets indicate the range
+  of the found MICs. \*\* S = susceptible, a therapeutic is likely to be
+  successful when using this concentration[^mic-eucast-bp]. The numbers found in
+  literature were found after a thorough literature search.
 </div>
 
 <div className="table-responsive table-responsive-rounded my-3">
 
 <table className="table table-bordered align-middle text-center">
-<thead>
-<tr>
-<th colSpan={5}>Comparison of IC<sub>90%</sub> values (mg/L) to literature</th>
-</tr>
-<tr>
-<th rowSpan={2}></th>
-<th colSpan={2}>IC<sub>90%</sub> (mg/L)</th>
-<th rowSpan={2}>Literature*</th>
-<th rowSpan={2}>Relation to breakpoint</th>
-</tr>
-<tr>
-<th>DSM1447</th>
-<th>RCC1806</th>
-</tr>
-</thead>
-<tbody>
-<tr><td>Amp</td><td>4 (1-32)</td><td>64</td><td>128<sup>a</sup>, 4-512<sup>b</sup></td><td></td></tr>
-<tr><td>Cm</td><td>2 (2-16)</td><td>2</td><td>4 (0.125-8)<sup>a</sup></td><td></td></tr>
-<tr><td>Ery</td><td>4 (0.5-32)</td><td>256 (256-512)</td><td>–</td><td></td></tr>
-<tr><td>Met</td><td>4 (1-4)</td><td>4</td><td>0.5<sup>c</sup>, 0.06-4<sup>b</sup></td><td>S **</td></tr>
-<tr><td>Tet</td><td>1 (0.125-16)</td><td>1</td><td>32<sup>c</sup></td><td></td></tr>
-<tr><td>Spc</td><td>128</td><td>64 (64-128)</td><td>–</td><td></td></tr>
-<tr><td>Gm</td><td>–</td><td>256 (128-512)</td><td>–</td><td></td></tr>
-<tr><td>Stat</td><td>64 (32-64)</td><td>–</td><td>25<sup>d</sup></td><td></td></tr>
-<tr><td>Kan</td><td>–</td><td>–</td><td>–</td><td></td></tr>
-</tbody>
+  <thead>
+    <tr>
+      <th colSpan={5}>
+        Comparison of IC<sub>90%</sub> values (mg/L) to literature
+      </th>
+    </tr>
+    <tr>
+      <th rowSpan={2}></th>
+      <th colSpan={2}>
+        IC<sub>90%</sub> (mg/L)
+      </th>
+      <th rowSpan={2}>Literature*</th>
+      <th rowSpan={2}>Relation to breakpoint</th>
+    </tr>
+    <tr>
+      <th>DSM1447</th>
+      <th>RCC1806</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Amp</td>
+      <td>4 (1-32)</td>
+      <td>64</td>
+      <td>
+        128<sup>a</sup>, 4-512<sup>b</sup>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Cm</td>
+      <td>2 (2-16)</td>
+      <td>2</td>
+      <td>
+        4 (0.125-8)<sup>a</sup>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Ery</td>
+      <td>4 (0.5-32)</td>
+      <td>256 (256-512)</td>
+      <td>–</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Met</td>
+      <td>4 (1-4)</td>
+      <td>4</td>
+      <td>
+        0.5<sup>c</sup>, 0.06-4<sup>b</sup>
+      </td>
+      <td>S **</td>
+    </tr>
+    <tr>
+      <td>Tet</td>
+      <td>1 (0.125-16)</td>
+      <td>1</td>
+      <td>
+        32<sup>c</sup>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Spc</td>
+      <td>128</td>
+      <td>64 (64-128)</td>
+      <td>–</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Gm</td>
+      <td>–</td>
+      <td>256 (128-512)</td>
+      <td>–</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Stat</td>
+      <td>64 (32-64)</td>
+      <td>–</td>
+      <td>
+        25<sup>d</sup>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Kan</td>
+      <td>–</td>
+      <td>–</td>
+      <td>–</td>
+      <td></td>
+    </tr>
+  </tbody>
 </table>
 
 </div>
 
 <div className="figure-caption">
-  <sup>a</sup> From Sóki et al. (2020)[^mic-soki]<br />
-  <sup>b</sup> From EUCAST (n.d.)[^mic-eucast-dist]<br />
-  <sup>c</sup> From Boiten et al. (2024)[^mic-boiten]<br />
+  <sup>a</sup> From Sóki et al. (2020)[^mic-soki]
+  <br />
+  <sup>b</sup> From EUCAST (n.d.)[^mic-eucast-dist]
+  <br />
+  <sup>c</sup> From Boiten et al. (2024)[^mic-boiten]
+  <br />
   <sup>d</sup> From Escalante et al. (2024)[^mic-escalante]
 </div>
 
@@ -144,7 +457,7 @@ Gentamycin and kanamycin uptake are dependent on the proton motive force, and so
 were thus not predicted to have an adverse effect on growth[^mic-krause][^mic-webster], and this is indeed
 confirmed by our results.
 
-### Conclusion
+#### Conclusion
 
 Tetracycline, chloramphenicol, and metronidazole were found to be the most effective antibiotics against
 _P. vulgatus_ DSM1447 and RCC1806. As the EUCAST specifically recommends the use of metronidazole when the MIC
@@ -152,19 +465,477 @@ is below 4 mg/L, this antibiotic is most recommended when working with _P. vulga
 erythromycin are less encouraged, given the variability between the strains and a negative advice against
 ampicillin by EUCAST.
 
+</ResultSection>
+
+<ResultSection>
+
+### A characterized promoter library for _P. vulgatus_
+
+<div className="results-standfirst">
+  Placeholder — one line on what the library is and what it is for.
+</div>
+
+<KeyTakeaways>
+  <Takeaway value="1,292×" label="CFX is the strongest promoter">
+    Placeholder — one line.
+  </Takeaway>
+  <Takeaway value="80×" label="BFP as usable second">
+    Placeholder — one line.
+  </Takeaway>
+  <Takeaway value="20/20" label="full library assembled">
+    Placeholder — one line.
+  </Takeaway>
+  <Takeaway value="1.1 & 1.1" label="BT & PBT no different from blank">
+    Placeholder — one line.
+  </Takeaway>
+  <Takeaway value="1/13" label="fluorescent constructs report">
+    Placeholder — one line.
+  </Takeaway>
+</KeyTakeaways>
+
+#### Introduction
+
+Placeholder — why a promoter library was needed for _P. vulgatus_ and what this
+section reports.
+
+<ElleSays mood="smile" size="sm" glass side="right">
+
+Curious how we measured all this? Have a look at our <Link to="/experimental-overview">measurement page</Link>!
+
+</ElleSays>
+
+#### The library
+
+<FigureSlot label="Table 1">
+  Every promoter in the library: name, origin, construct, and whether it was
+  assembled and measured.
+</FigureSlot>
+
+<Callout title="Important note">
+
+Placeholder — the caveat the reader needs before reading the numbers below.
+
+</Callout>
+
+#### Reporter gene output
+
+<SegmentedSelector>
+
+<SectionItem label="Bioluminescence: NanoLuc">
+
+##### NanoLuc-based promoter separation
+
+Placeholder — what the NanoLuc read-out shows about how far apart the promoters
+sit.
+
+<FigureSlot label="Figure 1">NanoLuc output per promoter.</FigureSlot>
+
+<FigureSlot label="Table 2">
+  The same values, with fold-change over the blank.
+</FigureSlot>
+
+</SectionItem>
+
+<SectionItem label="Fluorescence: GFP, mCherry, …">
+
+##### Fluorescent reporters read at background
+
+Placeholder — the fluorescent reporters sat at background, with one exception.
+
+{/* The three reporters as a selector: one figure per reporter. */}
+
+<SegmentedSelector>
+
+<SectionItem label="GFP">
+
+<FigureSlot label="Figure 1">GFP output per promoter.</FigureSlot>
+
+</SectionItem>
+
+<SectionItem label="mCherry">
+
+<FigureSlot label="Figure 1">mCherry output per promoter.</FigureSlot>
+
+</SectionItem>
+
+<SectionItem label="KOFP2">
+
+<FigureSlot label="Figure 1">KOFP2 output per promoter.</FigureSlot>
+
+</SectionItem>
+
+</SegmentedSelector>
+
+<ExpandableText title="Why the fluorescent reporters stayed at background">
+
+Placeholder — the longer explanation behind the figures above.
+
+</ExpandableText>
+
+</SectionItem>
+
+</SegmentedSelector>
+
+#### Growth over the whole library
+
+Placeholder — whether carrying a construct cost the strain anything in growth.
+
+<FigureSlot label="Figure 3">
+  Growth curves across the whole library.
+</FigureSlot>
+
+#### Conclusion
+
+Placeholder — what the library gives a future team.
+
+</ResultSection>
+
+</SectionItem>
+
+<SectionItem label="Therapeutics">
+
+## Therapeutics
+
+<ResultSection>
+
+### Introduction
+
+Placeholder — replace with the introduction to the therapeutics pipeline,
+ending in a pointer to the <Link to="/experimental-overview">experimental overview</Link>
+for how these experiments fit together.
+
+<div className="all-data-label">All data</div>
+
+</ResultSection>
+
+<ResultSection>
+
+### Screening BSH activity on bile salt plates
+
+<div className="results-standfirst">
+  Placeholder — one line on what the plate assay tests and why it comes first.
+</div>
+
+<KeyTakeaways>
+  <Takeaway value="salt → LB" label="(name this takeaway)">
+    Placeholder — one line.
+  </Takeaway>
+  <Takeaway value="H₂O" label="(name this takeaway)">
+    Placeholder — one line.
+  </Takeaway>
+  <Takeaway value="100 mg/mL" label="(name this takeaway)">
+    Placeholder — one line.
+  </Takeaway>
+  <Takeaway value="14/14" label="(name this takeaway)">
+    Placeholder — one line.
+  </Takeaway>
+  <Takeaway value="✗" label="(name this takeaway)">
+    Placeholder — one line.
+  </Takeaway>
+  <Takeaway value="LC–MS" label="(name this takeaway)">
+    Placeholder — one line.
+  </Takeaway>
+</KeyTakeaways>
+
+#### Introduction
+
+Placeholder — the reaction the assay reads out, and what a positive plate looks
+like.
+
+##### In the agar
+
+{/* The sketch shows the small BSH reaction panel here. The scrolling version of it, <BshStreamAnimation />, is not used on this page: it brings its own headings, which would end up in the page index between the results. */}
+
+<FigureSlot label="Figure 1">
+  The BSH reaction in the agar: conjugated bile acids in, deconjugated bile
+  acids out.
+</FigureSlot>
+
+##### On the plate
+
+<FigureSlot label="Figure 2">
+  The two plates side by side: active BSH with its opaque halo, and the sfGFP
+  control with no halo.
+</FigureSlot>
+
+#### Results
+
+Placeholder — the plate screening results (the rest of this section follows the
+Word document).
+
+</ResultSection>
+
+<ResultSection>
+
+### Bile salt deconjugation by 15 bile salt hydrolases
+
+<div className="results-standfirst">
+  Placeholder — one line on which hydrolases were tested and on what substrates.
+</div>
+
+<KeyTakeaways>
+  <Takeaway value="5/15" label="active hydrolases">
+    Placeholder — one line.
+  </Takeaway>
+  <Takeaway value="> 96%" label="GUDCA is the easier substrate">
+    Placeholder — one line.
+  </Takeaway>
+  <Takeaway value="< 6%" label="two are GUDCA-specific">
+    Placeholder — one line.
+  </Takeaway>
+  <Takeaway value="3" label="dual-substrate genes">
+    Placeholder — one line.
+  </Takeaway>
+  <Takeaway value="✗" label="docking did not predict activity">
+    Placeholder — one line.
+  </Takeaway>
+  <Takeaway value="Cys" label="catalytic residue">
+    Placeholder — one line.
+  </Takeaway>
+</KeyTakeaways>
+
+#### Introduction
+
+Placeholder — the 15 candidates, where they came from, and how activity was
+measured.
+
+<ExpandableText title="Deconjugation per condition">
+
+Placeholder — short lead-in to the figures below.
+
+{/* One figure per substrate condition; the reader picks the condition. */}
+
+<SegmentedSelector>
+
+<SectionItem label="GUDCA 0.1%">
+
+<FigureSlot label="Figure 1">
+  Deconjugation per hydrolase, GUDCA 0.1%.
+</FigureSlot>
+
+</SectionItem>
+
+<SectionItem label="TUDCA 0.1%">
+
+<FigureSlot label="Figure 1">
+  Deconjugation per hydrolase, TUDCA 0.1%.
+</FigureSlot>
+
+</SectionItem>
+
+<SectionItem label="GUDCA + TUDCA 0.5%">
+
+<FigureSlot label="Figure 1">
+  Deconjugation per hydrolase, GUDCA + TUDCA 0.5%.
+</FigureSlot>
+
+</SectionItem>
+
+</SegmentedSelector>
+
+Placeholder — the text that goes with the figure the reader has selected.
+
+</ExpandableText>
+
+#### Predicted affinity does not track observed activity
+
+Placeholder — docking scores against measured deconjugation. The docking heat
+map itself lives on the <Link to="/dry-lab">dry lab</Link> page.
+
+<FigureSlot label="Table 1">
+  Predicted affinity next to measured activity, per hydrolase.
+</FigureSlot>
+
+<ExpandableText title="Sequence and structure of the active hydrolases">
+
+Placeholder — the catalytic residue and whatever else the active hydrolases
+have in common.
+
+</ExpandableText>
+
+#### Conclusions
+
+Placeholder — what the 15-hydrolase screen settled.
+
+#### Future prospects
+
+Placeholder — what a next team should do with this.
+
+</ResultSection>
+
+<ResultSection>
+
+### CRISPR construct design
+
+{/* The team's own "Construct Planning FINAL" document, transferred as written; only typography was adjusted (species names in italics, R6K γ ori, en dashes) and the document's own headings were kept as the structure below. */}
+{/* TODO(team): the document's unresolved comments are not carried onto the page — the open ones are flagged with TODO comments where they apply. */}
+
+<div className="results-standfirst">
+  A CRISPR construct that swaps the native bile salt hydrolase of a patient's
+  own <em>P. vulgatus</em> for a homolog with a different substrate preference.
+</div>
+
+#### Executive summary
+
+Our approach involves isolating *P. vulgatus* from a patient's fecal sample,
+CRISPR engineering it in vitro, and administering it to the same patient. The
+CRISPR system, introduced through conjugation, uses the guide RNA (gRNA) to
+target the native BSH and replaces it with a BSH homolog of different substrate
+preference, so that the bile salts with the strongest TGR5 affinity remain. The
+homologous recombination system of *P. vulgatus* can use the designed homology
+arms flanking our BSH of interest to insert it into the genome after double
+strand break induction. The intended effect is a restored bile salt pool for
+balanced immune and metabolic modulation.
+
+#### The construct
+
+{/* TODO(team): the higher-resolution plasmid map is still to be uploaded (Alec) — the uploads tool takes PNG/JPG, so export the map as an image rather than the .mp4. */}
+
+<FigureSlot label="Figure 1">
+  The pBSH–Cas9 plasmid map, with each component named and given a one-sentence
+  role.
+</FigureSlot>
+
+{/* TODO(team): the document asks for each component's cell to be shaded in the colour it has in the plasmid map — waiting on the map above. */}
+
+| Component | Role |
+| --- | --- |
+| oriT | Origin of transfer for mobilization |
+| AmpR | Selection marker (*E. coli*) |
+| R6K γ ori | Conditional origin (*pir*-specific replication origin) |
+| pB8-51 | *Bacteroides* plasmid replication origin |
+| Cat | Chloramphenicol selection marker (*P. vulgatus*) |
+| P<sub>Cas9</sub> | Cfx promoter to drive Cas9 expression |
+| rpiL RBS | Ribosome binding site |
+| Cas9 | Coding sequence |
+| P<sub>gRNA</sub> | Bfp promoter to drive gRNA expression |
+| rrnB T1 terminator | Transcription terminator |
+| HA<sub>L</sub> | Homology arm (left) |
+| HA<sub>R</sub> | Homology arm (right) |
+| Replacement BSH | Coding sequence (BSH enzyme) |
+
+#### Integration strategy
+
+The construct must replicate and express in *E. coli* and *P. vulgatus* for
+conjugation.
+
+{/* TODO(team): the source document still carries both "tetracycline" and "erythromycin" in the second point below, and Alec's comment argues from the MIC data that erythromycin selects in strain 1447 but not 1806 — so the cassette is named generically here until the team settles which one it is. The component legend above lists Cat (chloramphenicol) as the *P. vulgatus* marker. */}
+
+- In *E. coli* S17 λ *pir*, R6K γ ori is used as an established origin of
+  replication for stable plasmid number upkeep, while an ampicillin resistance
+  cassette is expressed to select for transformed colonies.
+- Upon conjugative transfer to *P. vulgatus* using oriT, the resistance cassette
+  is used to select for positive transformants.
+- pB8-51 ori is used as a *Bacteroides* origin of replication once inside
+  *P. vulgatus*.
+- The promoter used *P. vulgatus*-specific expression for the gRNA, which
+  combines with Cas9 and targets the native BSH to induce a double strand break.
+- The plasmid backbone does not integrate so it can be cured, leaving a scarless
+  gene replacement.
+
+<FigureSlot label="Figure 2">The integration strategy.</FigureSlot>
+
+<Callout title="Note">
+
+Though integrative plasmids exist, the CRISPR system enables precise engineering
+and site of integration flexibility using the native RecA homology directed
+repair (HDR) system in *P. vulgatus*.
+
+</Callout>
+
+#### Validation plan
+
+{/* The same four steps as the validation plan on the entrepreneurship page — keep the two in sync. */}
+
+Successful integration could be confirmed by:
+
+<KeyTakeaways>
+  <Takeaway value="1" label="junction PCR">
+    PCR and amplicon sequencing spanning outside the integration junction, using
+    primers flanking HA<sub>L</sub> and HA<sub>R</sub> to amplify the integrated
+    cassette from genomic DNA.
+  </Takeaway>
+  <Takeaway value="2" label="Cas9 expression">
+    Early-stage validation will also include confirming Cas9 expression at the
+    RNA level (qRT-PCR) in the recipient strain.
+  </Takeaway>
+  <Takeaway value="3" label="BSH activity">
+    BSH activity measured via bile salt assays comparing wild-type to
+    integrated-construct strains.
+  </Takeaway>
+  <Takeaway value="4" label="stability">
+    Stability confirmed by serial passage without selection, to ensure the
+    cassette does not excise or degrade.
+  </Takeaway>
+</KeyTakeaways>
+
+For additional information about risk and safety see the <Link to="/safety-and-security">safety page</Link>.
+
+#### Data gaps and future iterations
+
+1. **BSH variant selection** — dependent on the outcome of the BSH assay with a
+   wider range of bile salts.
+2. **gRNA spacer design** — 4–5 gRNAs will be designed and tested to maximize
+   editing efficiency.
+3. **Homology arm design** — will be specified and tested as a next step, to
+   understand optimal sequences and lengths.
+4. **HDR** — once the system is tested in vivo, the editing efficiency will be
+   indicative of the strength of the native HDR system. If it is not sufficient,
+   systems such as the phage-derived Lambda red recombineering cassette can be
+   implemented.
+5. **Inducible promoter for Cas9 expression** — shown to increase editing
+   efficiency if needed[^construct-crispr-gut].
+
+<ResourceDownload
+  href="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/construct-planning-final.pdf"
+  title="Construct planning"
+  type="PDF"
+>
+  The full construct design document, as written by the team.
+</ResourceDownload>
+
+</ResultSection>
+
+</SectionItem>
+
+</SegmentedSelector>
+
+[^construct-crispr-gut]: CRISPR-Cas-based genome editing for human gut commensals. ACS Synthetic Biology, 11(1), 464. https://pubs.acs.org/asbcd6/article-abstract/11/1/464/1497030/CRISPR-Cas-Based-Genome-Editing-for-Human-Gut
+
+[^strain-forster]: Forster, S. C., Kumar, N., Anonye, B. O., Almeida, A., Viciani, E., Stares, M. D., Dunn, M., Mkandawire, T. T., Zhu, A., Shao, Y., Pike, L. J., Louie, T., Browne, H. P., Mitchell, A. L., Neville, B. A., Finn, R. D., & Lawley, T. D. (2019). A human gut bacterial genome and culture collection for improved metagenomic analyses. Nature Biotechnology, 37(2), 186–192. https://doi.org/10.1038/s41587-018-0009-7
+
+[^strain-nuding]: Nuding, S., Fellermann, K., Wehkamp, J., & Stange, E. F. (2009). Reduced mucosal antimicrobial activity in Crohn's disease of the colon. Gut, 56(9), 1240–1247.
+
+[^strain-segura]: Segura Munoz, R. R., Mantz, S., Martínez, I., Li, F., Schmaltz, R. J., Pudlo, N. A., Urs, K., Martens, E. C., Walter, J., & Ramer-Tait, A. E. (2022). Experimental evaluation of ecological principles to understand and modulate the outcome of bacterial strain competition in gut microbiomes. The ISME Journal, 16(6), 1594–1604. https://doi.org/10.1038/s41396-022-01208-9
+
+[^strain-dsmz]: German Collection of Microorganisms and Cell Cultures (DSMZ). Strain catalogue. https://www.dsmz.de/
+
 [^mic-escalante]: Escalante, V., Nayak, R. R., Noecker, C., Babdor, J., Spitzer, M., Deutschbauer, A. M., & Turnbaugh, P. J. (2024). Simvastatin induces human gut bacterial cell surface genes. Molecular Microbiology, 122(3), 372–386. https://doi.org/10.1111/mmi.15151
+
 [^mic-Hayashi]: Vu, H., Hayashi, M., Nguyen, T. N., Khong, D. T., Tran, H. T., Yamamoto, Y., & Tanaka, K. (2021). Comparison of Phenotypic and Genotypic Patterns of Antimicrobial-Resistant Bacteroides fragilis Group Isolated from Healthy Individuals in Vietnam and Japan. Infection and Drug Resistance, Volume 14, 5313–5323. https://doi.org/10.2147/IDR.S341571
+
 [^mic-veiga]: Veiga, A., Toledo, M. D. G. T., Rossa, L. S., Mengarda, M., Stofella, N. C. F., Oliveira, L. J., Gonçalves, A. G., & Murakami, F. S. (2019). Colorimetric microdilution assay: Validation of a standard method for determination of MIC, IC50%, and IC90% of antimicrobial compounds. Journal of Microbiological Methods, 162, 50–61. https://doi.org/10.1016/j.mimet.2019.05.003
+
 [^mic-eucast-bp]: The European Committee on Antimicrobial Susceptibility Testing. (2026a, June 24). Breakpoint tables for interpretation of MICs and zone diameters. Version 16.1. https://www.eucast.org/bacteria/clinical-breakpoints-and-interpretation/clinical-breakpoint-tables/
+
 [^mic-soki]: Sóki, J., Wybo, I., Hajdú, E., Toprak, N. U., Jeverica, S., Stingu, C.-S., Tierney, D., Perry, J. D., Matuz, M., Urbán, E., & Nagy, E. (2020). A Europe-wide assessment of antibiotic resistance rates in _Bacteroides_ and _Parabacteroides_ isolates from intestinal microbiota of healthy subjects. Anaerobe, 62, 102182. https://doi.org/10.1016/j.anaerobe.2020.102182
+
 [^mic-eucast-dist]: The European Committee on Antimicrobial Susceptibility Testing. (n.d.). MIC and Zone diameter distributions. Retrieved 3 September 2026, from https://mic.eucast.org/search/?search%5Bmethod%5D=mic&search%5Bantibiotic%5D=-1&search%5Bspecies%5D=78&search%5Bdisk_content%5D=-1&search%5Blimit%5D=50
+
 [^mic-boiten]: Boiten, K. E., Notermans, D. W., Rentenaar, R. J., Van Prehn, J., Bode, L. G. M., Maat, I., Van Der Zwet, W., Jansz, A., Siebers, T. J. H., Rossen, J. W. A., De Greeff, S. C., Hendrickx, A. P. A., Kuijper, E. J., & Veloo, A. C. M. (2024). Antimicrobial susceptibility profile of clinically relevant _Bacteroides_, _Phocaeicola_, _Parabacteroides_ and _Prevotella_ species, isolated by eight laboratories in the Netherlands. Journal of Antimicrobial Chemotherapy, 79(4), 868–874. https://doi.org/10.1093/jac/dkae043
+
 [^mic-mahmood]: Mahmood, B., Sárvári, K. P., Orosz, L., Nagy, E., & Sóki, J. (2024). Novel and rare β-lactamase genes of _Bacteroides fragilis_ group species: Detection of the genes and characterization of their genetic backgrounds. Anaerobe, 86, 102832. https://doi.org/10.1016/j.anaerobe.2024.102832
+
 [^mic-parker]: Parker, A. C., & Smith, C. J. (1993). Genetic and biochemical analysis of a novel Ambler class A beta-lactamase responsible for cefoxitin resistance in _Bacteroides_ species. Antimicrobial Agents and Chemotherapy, 37(5), 1028–1036. https://doi.org/10.1128/AAC.37.5.1028
+
 [^mic-sabunwala]: Sabunwala, S. A., Patel, P., & Patel, A. R. (2026). Ampicillin. In StatPearls. StatPearls Publishing. http://www.ncbi.nlm.nih.gov/books/NBK519569/
+
 [^mic-eucast-nobp]: The European Committee on Antimicrobial Susceptibility Testing. (2026b, July 10). When there are no breakpoints? https://www.eucast.org/bacteria/clinical-breakpoints-and-interpretation/when-there-are-no-breakpoints/
+
 [^mic-markowska]: Markowska-Michalak, K., Majewska, A., & Pituch, H. (2026). Metronidazole Susceptibility Patterns in European _Bacteroides_, _Phocaeicola_, and _Parabacteroides_ Clinical Isolates—A Systematic Review and Meta-Analysis. Medical Sciences, 14(4), 424. https://doi.org/10.3390/medsci14040424
+
 [^mic-krause]: Krause, K. M., Serio, A. W., Kane, T. R., & Connolly, L. E. (2016). Aminoglycosides: An Overview. Cold Spring Harbor Perspectives in Medicine, 6(6), a027029. https://doi.org/10.1101/cshperspect.a027029
+
 [^mic-webster]: Webster, C. M., Woody, A. M., Fusseini, S., Holmes, L. G., Robinson, G. K., & Shepherd, M. (2022). Proton motive force underpins respiration-mediated potentiation of aminoglycoside lethality in pathogenic _Escherichia coli_. Archives of Microbiology, 204(1), 120. https://doi.org/10.1007/s00203-021-02710-y
 
 </PageLayout>
