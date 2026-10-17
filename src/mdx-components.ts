@@ -57,6 +57,7 @@ import { SponsorGrid } from "./components/SponsorGrid";
 import { HomeSnapScroll } from "./components/HomeSnapScroll";
 import { ZoomableImage } from "./components/ZoomableImage";
 import { ElleSays } from "./components/ElleSays";
+import { SuccessCards, SuccessCard } from "./components/SuccessCards";
 import {
   StakeholderGroups,
   StakeholderGroup,
@@ -127,6 +128,10 @@ export const mdxComponents = {
   HomeSnapScroll,
   ZoomableImage,
   ElleSays,
+  // Generated with Claude Opus 5 (Anthropic), 2026-10-16
+  // Purpose: the headline result cards at the top of the results page.
+  SuccessCards,
+  SuccessCard,
   DockingHeatmap,
   QuestionSelector,
   Question,

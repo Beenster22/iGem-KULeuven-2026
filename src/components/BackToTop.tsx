@@ -3,7 +3,10 @@
 // the reader has scrolled down a bit.
 import { useEffect, useState } from "react";
 
-const SHOW_AFTER_PX = 400;
+// Appears as soon as the reader has scrolled at all, so that long pages (the
+// notebook page in particular, where several notebooks can be open at once)
+// always offer a way back to the top.
+const SHOW_AFTER_PX = 80;
 
 export function BackToTop() {
   const [visible, setVisible] = useState(false);
