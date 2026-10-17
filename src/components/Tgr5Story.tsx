@@ -895,7 +895,7 @@ export function Tgr5ConsequencesSection() {
       >
         {/* Retitled on Marie's review (2026-10-08): TGR5 is not inactivated. */}
         <h3 className="tgr5-effects-heading">
-          Deconjugation of bile acids leads to
+          When bile acid pool is not balanced, it can lead to
         </h3>
         <ol
           className="tgr5-effects-list"
