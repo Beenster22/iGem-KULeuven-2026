@@ -33,7 +33,9 @@ class Page implements Base {
   title: string | undefined;
   path: string | undefined;
   component: React.FC | undefined;
-  lead: string | undefined;
+  // Optional: pages whose lead has not been written yet show the title alone
+  // (see Header.tsx) instead of iGEM's own judging prompt.
+  lead?: string;
 }
 
 const Pages: (Page | Folder)[] = [
@@ -42,7 +44,6 @@ const Pages: (Page | Folder)[] = [
     title: "Home",
     path: "/",
     component: Home,
-    lead: "CYSTBUSTERSSS LET'S GET THESE BITCHES",
   },
   {
     name: "Project",
@@ -52,28 +53,24 @@ const Pages: (Page | Folder)[] = [
         title: "Project Description",
         path: "/description",
         component: Description,
-        lead: "Describe how and why you chose your iGEM project.",
       },
       {
         name: "Engineering Success",
         title: "Engineering Success",
         path: "/engineering",
         component: Engineering,
-        lead: "Demonstrate engineering success in a technical aspect of your project by going through at least one iteration of the engineering design cycle.",
       },
       {
         name: "Contribution",
         title: "Contribution",
         path: "/contribution",
         component: Contribution,
-        lead: "Make a useful contribution for future iGEM teams and document it on this page.",
       },
       {
         name: "Safety",
         title: "Safety and Security",
         path: "/safety-and-security",
         component: SafetyAndSecurity,
-        lead: "Detail the safety and security considerations of your project, adressing potential risks and outlining the measures taken to mitigate them.",
       },
     ],
   },
@@ -92,7 +89,6 @@ const Pages: (Page | Folder)[] = [
         title: "Experimental Overview",
         path: "/experimental-overview",
         component: ExperimentalOverview,
-        lead: "Describe the research, experiments, and protocols you used in your project. It is designed to provide sufficient information for other teams to replicate our work.",
       },
       {
         name: "Protocols",
@@ -113,14 +109,12 @@ const Pages: (Page | Folder)[] = [
         title: "Notebook",
         path: "/notebook",
         component: Notebook,
-        lead: "This serves as a chronological record of your team's progress throughout the season. It documents your daily activities, experiments, discussions, and decisions.",
       },
       {
         name: "Results",
         title: "Results",
         path: "/results",
         component: Results,
-        lead: "Present the results of your project, along with a detailed analysis and discussion of their significance. Also outline future plans and reflections on the impact of your project.",
       },
     ],
   },
@@ -132,7 +126,6 @@ const Pages: (Page | Folder)[] = [
         title: "Integrated Human Practices",
         path: "/human-practices",
         component: HumanPractices,
-        lead: "We ask every team to think deeply and creatively about whether their project is responsible and good for the world. Consider how the world affects your work and how your work affects the world.",
       },
       {
         name: "Events",
@@ -148,7 +141,6 @@ const Pages: (Page | Folder)[] = [
     title: "Entrepreneurship",
     path: "/entrepreneurship",
     component: Entrepreneurship,
-    lead: "This award recognizes exceptional effort to build a business case and commercialize an iGEM project, whether new or carried over from a previous year.",
   },
   {
     name: "Prizes and Medals",
@@ -179,7 +171,7 @@ const Pages: (Page | Folder)[] = [
         title: "Sponsors",
         path: "/sponsors",
         component: Sponsors,
-        lead: "The organisations that helped bring EMPOWER to life.",
+        lead: "EMPOWER is made possible by the organisations on this page. Thank you for supporting our project!",
       },
     ],
   },

@@ -10,7 +10,9 @@ export function Header({ title, lead }: HeaderProps) {
     <header className="page-header-box">
       <div className="container">
         <h1 className="display-4 mb-2">{title}</h1>
-        <p className="lead mb-0">{renderItalics(lead)}</p>
+        {/* Pages whose lead has not been written yet get the title alone
+            rather than an empty paragraph. */}
+        {lead && <p className="lead mb-0">{renderItalics(lead)}</p>}
       </div>
     </header>
   );
