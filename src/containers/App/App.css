@@ -4131,7 +4131,8 @@ body:not(.home-fullscreen) .home-hero {
 .story-step--active .story-line {
   opacity: 1;
   translate: 0 0;
-  transition-delay: calc(0.3s + var(--line) * 0.7s);
+  /* A generous gap between parts, so each can be read before the next. */
+  transition-delay: calc(0.3s + var(--line) * 1.6s);
 }
 
 /* The key words: marked with the brand teal rather than coloured in it,
