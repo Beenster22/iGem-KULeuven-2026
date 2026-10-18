@@ -14,14 +14,12 @@ import {
   Measurement,
   Members,
   Notebook,
-  Parts,
   Protocols,
   Results,
   SafetyAndSecurity,
   Sponsors,
 } from "./contents";
 import {
-  BlocksIcon,
   CalendarIcon,
   ClipboardIcon,
   CodeIcon,
@@ -121,14 +119,6 @@ const Pages: (Page | Folder)[] = [
         component: Contribution,
         lead: "What we are leaving behind for the teams that come after us, and how to build on it.",
         icon: PuzzleIcon,
-      },
-      {
-        name: "Parts",
-        title: "Parts",
-        path: "/parts",
-        component: Parts,
-        lead: "The DNA parts built and used in this project, each linked to the notebook entry where it was made or characterised.",
-        icon: BlocksIcon,
       },
       {
         name: "Safety",
