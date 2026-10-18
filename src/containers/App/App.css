@@ -4206,6 +4206,43 @@ body:not(.home-fullscreen) .home-hero {
   text-underline-offset: 0.2em;
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
+   panels come in one per scroll step, left to right (.is-shown, set by
+   PmosEffectsSection.tsx). The first circle is where the globe lands, so it
+   appears at once — the globe has just turned into it — and only its
+   drawing and label fade in. */
+.pmos-effect,
+.pmos-effects-more {
+  transition:
+    opacity 0.5s ease,
+    translate 0.5s ease;
+}
+
+.pmos-effect:not(.is-shown),
+.pmos-effects-more:not(.is-shown) {
+  opacity: 0;
+  translate: -1.5rem 0;
+}
+
+.pmos-effect.symptom-group--hormonal:not(.is-shown) {
+  opacity: 1;
+  translate: none;
+}
+
+.pmos-effect:not(.is-shown) .pmos-effect-art {
+  visibility: hidden;
+}
+
+.pmos-effect.symptom-group--hormonal .pmos-effect-art svg,
+.pmos-effect.symptom-group--hormonal .pmos-effect-label {
+  transition: opacity 0.5s ease;
+}
+
+.pmos-effect.symptom-group--hormonal:not(.is-shown) .pmos-effect-art svg,
+.pmos-effect.symptom-group--hormonal:not(.is-shown) .pmos-effect-label {
+  opacity: 0;
+}
+
 /* Tablets and phones: two by two. */
 @media (max-width: 799.98px) {
   .pmos-effects-grid {
@@ -6265,6 +6302,52 @@ body:not(.home-fullscreen) .home-hero {
 
 .pmos-globe-stage.is-hovering canvas {
   cursor: pointer !important;
+}
+
+/* GLOBE DROP
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-18
+   Purpose: the globe falling onto the next screen's first circle (see
+   useGlobeDrop in PmosGlobe.tsx, which sets the transform, --fly-scale and
+   --morph). While it falls it must paint over the band below, which comes
+   later in the page and would otherwise cover it. */
+.pmos-globe-fly {
+  position: relative;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.pmos-globe-wrap.is-dropping {
+  z-index: 5;
+}
+
+.pmos-globe-wrap.is-dropping .pmos-globe-fly {
+  pointer-events: none;
+}
+
+.pmos-globe-wrap.is-dropping .pmos-globe-fly > :not(.pmos-globe-morph) {
+  opacity: calc(1 - var(--morph, 0));
+}
+
+/* Matches .pmos-effect-art (border and disc colour), sized to the sphere
+   (SPHERE_FRACTION in PmosGlobe.tsx); the border is divided by the scale so
+   it lands at the circle's own 4px. */
+.pmos-globe-morph {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 70.5%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  border: calc(4px / var(--fly-scale, 1)) solid var(--symptom-color);
+  background-color: color-mix(in srgb, var(--symptom-color) 22%, #fff);
+  opacity: var(--morph, 0);
+  pointer-events: none;
+}
+
+/* Landed: the real circle has taken over. */
+.pmos-globe-wrap.is-landed .pmos-globe-fly {
+  visibility: hidden;
 }
 
 .pmos-globe-info {
