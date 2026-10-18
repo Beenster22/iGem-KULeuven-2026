@@ -14,6 +14,9 @@ export default async ({ mode }: ConfigEnv) => {
 
   return defineConfig({
     base: process.env.GITHUB_PAGES ? "/iGem-KULeuven-2026/" : `/${stringToSlug(env.VITE_TEAM_NAME)}/`,
+    server: {
+      port: Number(process.env.PORT) || 5173,
+    },
     plugins: [
       react(),
       mdx({

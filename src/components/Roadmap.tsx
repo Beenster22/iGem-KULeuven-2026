@@ -6,8 +6,7 @@
 // component with rm-prefixed classes (see "ROADMAP" in App.css) instead.
 // A Gantt-style swimlane timeline with a detail card that follows the
 // selection; on narrow containers it turns into a stacked list.
-import { CSSProperties, ReactNode, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { CSSProperties, useMemo, useState } from "react";
 
 type Kind = "inhouse" | "partner" | "licensed" | "funding";
 type Filter = "all" | Kind;
@@ -29,17 +28,7 @@ interface Item {
   label: string;
   title: string;
   when: string;
-  what: ReactNode;
-  who: ReactNode;
-  why: ReactNode;
-  wiki?: ReactNode;
 }
-
-const section = (id: string, text: string) => <a href={`#${id}`}>{text}</a>;
-const TEAM = section("2-2-team-and-skills", "Our team.");
-const IP = section("2-7-ip-and-commercialisation-strategy", "IP and commercialisation strategy.");
-const FINANCE = section("3-4-financial-strategy", "Financial strategy.");
-const TO_DISCUSS_MILICA = "Still to be discussed with Milica.";
 
 const ICONS = {
   flask: (
@@ -144,10 +133,6 @@ const ITEMS: Item[] = [
     label: "Toolkit",
     title: "Toolkit and BSH silencing",
     when: "2026 to end of 2027",
-    what: "? Discuss with wetlab what to put in here.",
-    who: "Our KU Leuven iGEM team, in the lab of Professor Vitor Bernardes Pinheiro.",
-    why: "Still to be discussed with wetlab.",
-    wiki: <Link to="/results">Results page.</Link>,
   },
   {
     id: "jam",
@@ -158,10 +143,6 @@ const ITEMS: Item[] = [
     label: "Jamboree",
     title: "Jamboree",
     when: "12 to 17 November 2026",
-    what: "We present the project and its business case to the iGEM judges.",
-    who: TEAM,
-    why: "What we publish decides what stays patentable, so we do not disclose the BSH sequences we work with.",
-    wiki: IP,
   },
   {
     id: "opt",
@@ -172,10 +153,6 @@ const ITEMS: Item[] = [
     label: "Strain optimisation",
     title: "Strain optimisation",
     when: "2028 to 2029",
-    what: TO_DISCUSS_MILICA,
-    who: "Our spin-out, with a research partner.",
-    why: TO_DISCUSS_MILICA,
-    wiki: TO_DISCUSS_MILICA,
   },
   {
     id: "ip",
@@ -186,10 +163,6 @@ const ITEMS: Item[] = [
     label: "Patent, spin-out",
     title: "Patent filing and spin-out",
     when: "2027",
-    what: "Still for discussion with Milica.",
-    who: "Still in discussion with Milica.",
-    why: "A licensee pays for what is protected at the time of the deal. Until filing, we do not publish the details that make the invention patentable.",
-    wiki: IP,
   },
   {
     id: "preclin",
@@ -200,9 +173,6 @@ const ITEMS: Item[] = [
     label: "Preclinical studies",
     title: "Preclinical studies",
     when: "From 2027 until the start of Phase I",
-    what: "A broad programme of preclinical studies that continues until the first-in-human trial starts. The exact studies are still to be defined.",
-    who: "Our team and spin-out, with laboratory and research partners.",
-    why: "This is the preclinical package that regulators expect before a first-in-human trial.",
   },
   {
     id: "ema",
@@ -213,10 +183,6 @@ const ITEMS: Item[] = [
     label: "EMA and FDA advice",
     title: "EMA and FDA Scientific Advice",
     when: "Requested in 2027",
-    what: "We ask the EMA and the FDA which preclinical package is enough, whether a first trial directly in PMOS patients is acceptable, and how an engineered strain is classified. We also meet the Belgian medicines agency and the GMO biosafety authority.",
-    who: "Our spin-out and the regulators (EMA and FDA).",
-    why: "The regulatory pathway for live biotherapeutics is still new. Early advice avoids building the wrong dossier.",
-    wiki: "Regulatory strategy.",
   },
   {
     id: "adv",
@@ -227,10 +193,6 @@ const ITEMS: Item[] = [
     label: "Advice received",
     title: "Scientific advice received",
     when: "Around the end of 2028",
-    what: "The EMA and the FDA answer our questions on the preclinical package and the trial design.",
-    who: "EMA and FDA.",
-    why: "The answers fix what we have to deliver before the trial applications.",
-    wiki: "Regulatory strategy.",
   },
   {
     id: "cta",
@@ -241,10 +203,6 @@ const ITEMS: Item[] = [
     label: "IND and trial application",
     title: "IND and trial application",
     when: "End of 2030",
-    what: "We submit the Investigational New Drug (IND) application to the FDA and the Investigational Medicinal Product Dossier (IMPD) with the clinical trial application in the EU, together with the biosafety notification for a genetically modified strain.",
-    who: "Our spin-out.",
-    why: "No human is dosed before the applications are approved.",
-    wiki: section("2-6-regulatory-strategy", "Regulatory strategy."),
   },
   {
     id: "gmp",
@@ -255,15 +213,6 @@ const ITEMS: Item[] = [
     label: "GMP batch",
     title: "GMP trial batch",
     when: "2030",
-    what: "A GMP manufacturer produces the trial batch of the live anaerobic strain.",
-    who: "A GMP manufacturer.",
-    why: "Live anaerobic microorganisms need specialised facilities and strict quality control. Manufacturing is also a major source of risk.",
-    wiki: (
-      <>
-        {section("2-5-value-chain-analysis", "Value chain analysis")} and{" "}
-        {section("3-3-risks-and-mitigation", "Risks and mitigation")}.
-      </>
-    ),
   },
   {
     id: "fp",
@@ -274,10 +223,6 @@ const ITEMS: Item[] = [
     label: "First patient",
     title: "First patient dosed",
     when: "2031",
-    what: "The first person receives EMPOWER.",
-    who: "The clinical site.",
-    why: "This is the first time the product meets a person, and the start of our human safety data.",
-    wiki: "Value chain analysis.",
   },
   {
     id: "p1",
@@ -288,10 +233,6 @@ const ITEMS: Item[] = [
     label: "Phase I",
     title: "Phase I clinical trial",
     when: "2031 to end of 2032",
-    what: "A first-in-human safety trial in PMOS patients, with sequential enrolment, dose escalation, an independent safety committee and defined stopping rules. We add exploratory bile acid and CRP blood readouts.",
-    who: "Our spin-out as sponsor, a hospital clinical site (UZ Leuven Fertility Centre and UZ Brussel PCOS clinic are our preferred options), a trial CRO.",
-    why: "The human safety data are the main asset for licensing talks.",
-    wiki: section("2-5-value-chain-analysis", "Value chain analysis."),
   },
   {
     id: "lic",
@@ -302,10 +243,6 @@ const ITEMS: Item[] = [
     label: "Licensing talks",
     title: "Licensing talks",
     when: "During Phase I until end of 2033",
-    what: "We start talks with potential partners during Phase I, with the safety data as the main asset. A licensee then takes over Phase II/III, scale-up, marketing authorisation and distribution.",
-    who: "Our spin-out, KU Leuven LRD and potential licensing partners.",
-    why: "These steps cost far more than a spin-out can fund. The deal brings upfront, milestone and royalty payments.",
-    wiki: "Commercialisation and Financial strategy.",
   },
   {
     id: "deal",
@@ -317,10 +254,6 @@ const ITEMS: Item[] = [
     label: "Deal",
     title: "Licensing deal",
     when: "Target: end of 2033",
-    what: "We sign a licence with a partner that carries EMPOWER to patients.",
-    who: "Our spin-out and the licensee.",
-    why: "The exact timing depends on scientific, regulatory and funding milestones.",
-    wiki: "Financial strategy and Risks and mitigation.",
   },
   {
     id: "pre",
@@ -331,10 +264,6 @@ const ITEMS: Item[] = [
     label: "Pre-seed",
     title: "Pre-seed funding",
     when: "2027",
-    what: "Early funding for the spin-out and the first preclinical work. We combine non-dilutive grants with early investors.",
-    who: "Grant bodies and early-stage investors.",
-    why: "It makes founding the spin-out and starting the first preclinical work possible, while keeping early dilution low by not relying on equity alone.",
-    wiki: FINANCE,
   },
   {
     id: "seed",
@@ -345,10 +274,6 @@ const ITEMS: Item[] = [
     label: "Seed",
     title: "Seed round",
     when: "Closes in 2029",
-    what: "Funding for preclinical development and for preparing manufacturing and the regulatory dossiers.",
-    who: "Life-science investors and strategic partners.",
-    why: "The preclinical package is the first big cost block.",
-    wiki: FINANCE,
   },
   {
     id: "sa",
@@ -359,10 +284,6 @@ const ITEMS: Item[] = [
     label: "Series A",
     title: "Series A",
     when: "Indicative timing, around 2031",
-    what: "Funding that carries EMPOWER into clinical development. The amounts are not estimated in our financial strategy.",
-    who: "Life-science venture capital and strategic partners.",
-    why: "Phase I and GMP manufacturing are among our largest costs.",
-    wiki: FINANCE,
   },
 ];
 
@@ -371,34 +292,8 @@ const ORDER = [...ITEMS].sort((a, b) => a.start - b.start || a.row - b.row);
 const pct = (x: number) => ((x - X0) / (X1 - X0)) * 100;
 const kindColor = (kind: Kind) => ({ "--bc": `var(--rm-${kind})` }) as CSSProperties;
 
-function DetailFields({ item }: { item: Item }) {
-  return (
-    <>
-      <div>
-        <h5>What happens</h5>
-        <p>{item.what}</p>
-      </div>
-      <div>
-        <h5>Who</h5>
-        <p>{item.who}</p>
-      </div>
-      <div>
-        <h5>Why it matters</h5>
-        <p>{item.why}</p>
-      </div>
-      {item.wiki && (
-        <div>
-          <h5>More on the wiki</h5>
-          <p>{item.wiki}</p>
-        </div>
-      )}
-    </>
-  );
-}
-
 export function Roadmap() {
   const [filter, setFilter] = useState<Filter>("all");
-  const [selected, setSelected] = useState("rd");
 
   const today = useMemo(() => {
     const now = new Date();
@@ -406,15 +301,12 @@ export function Roadmap() {
     return year >= X0 && year <= X1 ? year : null;
   }, []);
 
-  const current = ITEMS.find((item) => item.id === selected);
-  const index = current ? ORDER.indexOf(current) : -1;
-
   return (
     <div className="roadmap">
       <p className="rm-sub">
         From the Jamboree to a licensing deal.
         <br />
-        <em>Select a step to see who carries it out, what happens, and why it matters.</em>
+        <em>Use the filters to see who leads each step.</em>
       </p>
 
       <div className="rm-chips" role="group" aria-label="Filter by who leads the step">
@@ -453,35 +345,34 @@ export function Roadmap() {
               <div className="rm-track">
                 {ITEMS.filter((item) => item.row === rowIndex).map((item) => {
                   const dim = filter !== "all" && item.kind !== filter;
-                  const sel = item.id === selected;
                   const common = {
-                    type: "button" as const,
                     "aria-label": `${item.title}, ${item.when}`,
                     title: `${item.title} (${item.when})`,
-                    onClick: () => setSelected(item.id),
                   };
                   if (item.milestone) {
                     return (
-                      <button
+                      <div
                         key={item.id}
                         {...common}
-                        className={`rm-ms rm-k-${item.kind}${item.alignEnd ? " rm-end" : ""}${dim ? " rm-dim" : ""}${sel ? " rm-sel" : ""}`}
+                        role="img"
+                        className={`rm-ms rm-k-${item.kind}${item.alignEnd ? " rm-end" : ""}${dim ? " rm-dim" : ""}`}
                         style={{ left: `${pct(item.start)}%` }}
                       >
                         <span className="rm-dia" />
                         <span className="rm-t">{item.label}</span>
-                      </button>
+                      </div>
                     );
                   }
                   return (
-                    <button
+                    <div
                       key={item.id}
                       {...common}
-                      className={`rm-bar rm-k-${item.kind}${item.id === "rd" ? " rm-right" : ""}${dim ? " rm-dim" : ""}${sel ? " rm-sel" : ""}`}
+                      role="img"
+                      className={`rm-bar rm-k-${item.kind}${item.id === "rd" ? " rm-right" : ""}${dim ? " rm-dim" : ""}`}
                       style={{ left: `${pct(item.start)}%`, width: `${pct(item.end ?? item.start) - pct(item.start)}%` }}
                     >
                       {item.label}
-                    </button>
+                    </div>
                   );
                 })}
               </div>
@@ -510,63 +401,20 @@ export function Roadmap() {
         </div>
       </section>
 
-      {current && (
-        <section className="rm-detail" style={kindColor(current.kind)} aria-live="polite">
-          <div className="rm-dhead">
-            <h4>{current.title}</h4>
-            <span className="rm-tag" style={kindColor(current.kind)}>
-              {KINDS[current.kind]}
-            </span>
-            <span className="rm-when">{current.when}</span>
-          </div>
-          <div className="rm-dgrid">
-            <DetailFields item={current} />
-          </div>
-          <div className="rm-nav">
-            <button type="button" disabled={index === 0} onClick={() => setSelected(ORDER[index - 1].id)}>
-              Previous step
-            </button>
-            <button
-              type="button"
-              disabled={index === ORDER.length - 1}
-              onClick={() => setSelected(ORDER[index + 1].id)}
-            >
-              Next step
-            </button>
-            <span className="rm-pos">
-              Step {index + 1} of {ORDER.length}
-            </span>
-          </div>
-        </section>
-      )}
-
       <div className="rm-list">
-        {ORDER.filter((item) => filter === "all" || item.kind === filter).map((item) => {
-          const open = selected === item.id;
-          return (
-            <div key={item.id} className="rm-li" style={kindColor(item.kind)}>
-              <button
-                type="button"
-                className="rm-li-head"
-                aria-expanded={open}
-                onClick={() => setSelected(open ? "" : item.id)}
-              >
-                <span className="rm-tag" style={kindColor(item.kind)}>
-                  {KINDS[item.kind]}
-                </span>
-                <b>{item.title}</b>
-                <span>
-                  {item.when} · {ROWS[item.row].name}
-                </span>
-              </button>
-              {open && (
-                <div className="rm-li-body">
-                  <DetailFields item={item} />
-                </div>
-              )}
+        {ORDER.filter((item) => filter === "all" || item.kind === filter).map((item) => (
+          <div key={item.id} className="rm-li" style={kindColor(item.kind)}>
+            <div className="rm-li-head">
+              <span className="rm-tag" style={kindColor(item.kind)}>
+                {KINDS[item.kind]}
+              </span>
+              <b>{item.title}</b>
+              <span>
+                {item.when} · {ROWS[item.row].name}
+              </span>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
 
       <p className="rm-foot">
