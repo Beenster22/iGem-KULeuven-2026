@@ -63,7 +63,7 @@ function baselineOffset(el: HTMLElement, boxHeight: number) {
 // Bottom edge of the navigation bar in the window. On the home page the bar
 // is hidden until opened (see App.tsx), so fall back to its usual height.
 const NAV_HEIGHT_FALLBACK = 64;
-function navBottom() {
+export function navBottom() {
   const nav = document.querySelector(".navbar-empower");
   const bottom = nav ? nav.getBoundingClientRect().bottom : 0;
   return bottom > 0 ? bottom : NAV_HEIGHT_FALLBACK;

@@ -8,6 +8,7 @@
 // straight to the DOM each frame (like useGlobeDrop in PmosGlobe.tsx), so
 // scrolling doesn't re-render anything.
 import { useEffect, type RefObject } from "react";
+import { navBottom } from "./useFallingM";
 
 // The sphere's share of the globe canvas — same as SPHERE_FRACTION in
 // PmosGlobe.tsx (globe.gl's 50° camera at altitude 2.2).
@@ -17,7 +18,15 @@ const SPHERE_FRACTION = Math.tan(Math.asin(1 / 3.2)) / Math.tan((25 * Math.PI) /
 const CLOSED_AT = 0.85;
 const POINTS = 96;
 
-const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+// The halo's ring width in px (--halo-w on .pmos-globe-halo), which the line
+// thins down to as it closes, so the two match at the hand-over.
+function haloWidth(stage: HTMLElement) {
+  const halo = stage.querySelector(".pmos-globe-halo");
+  const width = halo ? parseFloat(getComputedStyle(halo).borderTopWidth) : NaN;
+  return Number.isFinite(width) && width > 0 ? width : 4;
+}
+
+const clamp01 =(v: number) => Math.min(1, Math.max(0, v));
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
 
@@ -73,10 +82,16 @@ export function useLineToGlobe({
     let stage: HTMLElement | null = null;
     let frame: number | null = null;
 
-    const reset = () => {
-      overlay.style.visibility = "hidden";
-      line.classList.remove("is-detached");
-      if (stage) stage.style.opacity = "";
+    // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback):
+    // the line now stays under "170 Million" until that line has scrolled up
+    // to the navigation bar, and only then drops onto the globe, closing
+    // round it as the globe screen settles. Once closed it stays on as the
+    // globe's halo (.pmos-globe-halo in PmosGlobe.tsx, drawn in exactly the
+    // same place, so the hand-over is invisible) instead of fading away.
+    const show = (globe: number, halo: number) => {
+      if (!stage) return;
+      stage.style.opacity = globe >= 1 ? "" : String(globe);
+      stage.style.setProperty("--halo", String(halo));
     };
 
     const update = () => {
@@ -85,29 +100,54 @@ export function useLineToGlobe({
       // to curl onto.
       stage = section.querySelector<HTMLElement>(".pmos-globe-stage");
       const canvas = stage?.querySelector("canvas");
-      const g = clamp01(1 - section.getBoundingClientRect().top / window.innerHeight);
-      if (!stage || !canvas || g <= 0) {
-        reset();
+      if (!stage || !canvas) {
+        overlay.style.visibility = "hidden";
+        line.classList.remove("is-detached");
         return;
       }
 
-      // From: the underline as it sits now (a bar along the bottom of the
-      // figure's line, see .pmos-counter-number::after).
-      const from = line.getBoundingClientRect();
+      // Scroll positions where the line lets go (its "170 Million" reaches
+      // the nav bar) and where the ring has closed round the globe.
+      const lineBox = line.getBoundingClientRect();
+      const releaseAt = lineBox.top + window.scrollY - navBottom();
+      const closedAt =
+        section.getBoundingClientRect().top + window.scrollY -
+        window.innerHeight * (1 - CLOSED_AT);
+      const q =
+        closedAt > releaseAt
+          ? (window.scrollY - releaseAt) / (closedAt - releaseAt)
+          : window.scrollY >= releaseAt ? 1 : 0;
+
+      if (q <= 0) {
+        // Still in place under the figure; the globe waits for it.
+        overlay.style.visibility = "hidden";
+        line.classList.remove("is-detached");
+        show(0, 0);
+        return;
+      }
+      if (q >= 1) {
+        // Closed: the globe's own halo takes over.
+        overlay.style.visibility = "hidden";
+        line.classList.add("is-detached");
+        show(1, 1);
+        return;
+      }
+
+      // From: the underline where it let go (a bar along the bottom of the
+      // figure's line, see .pmos-counter-number::after), held at the nav bar.
+      const shift = window.scrollY - releaseAt;
       const fromThickness = parseFloat(getComputedStyle(line).fontSize) * 0.07;
+      const fromX = lineBox.left + lineBox.width / 2;
+      const fromY = lineBox.bottom + shift - fromThickness / 2;
       // To: the globe's sphere, centred in its canvas.
       const to = canvas.getBoundingClientRect();
       const radius = (to.width * SPHERE_FRACTION) / 2;
-      const toThickness = Math.max(3, fromThickness * 0.6);
+      const toThickness = haloWidth(stage);
 
-      const e = easeInOut(clamp01(g / CLOSED_AT));
-      const mx = lerp(from.left + from.width / 2, to.left + to.width / 2, e);
-      const my = lerp(
-        from.bottom - fromThickness / 2,
-        to.top + to.height / 2 + radius,
-        e,
-      );
-      const length = lerp(from.width, 2 * Math.PI * radius, e);
+      const e = easeInOut(q);
+      const mx = lerp(fromX, to.left + to.width / 2, e);
+      const my = lerp(fromY, to.top + to.height / 2 + radius, e);
+      const length = lerp(lineBox.width, 2 * Math.PI * radius, e);
       path.setAttribute("d", arcPath(mx, my, length, 2 * Math.PI * e));
       path.setAttribute("stroke-width", String(lerp(fromThickness, toThickness, e)));
       // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request):
@@ -115,10 +155,9 @@ export function useLineToGlobe({
       path.style.setProperty("--tint", String(clamp01((e - 0.35) / 0.65)));
 
       overlay.style.visibility = "";
-      overlay.style.opacity = String(1 - clamp01((g - CLOSED_AT) / (1 - CLOSED_AT)));
       line.classList.add("is-detached");
       // The globe fills in inside the ring as it closes.
-      stage.style.opacity = String(clamp01((g - 0.6) / (CLOSED_AT - 0.6)));
+      show(clamp01((q - 0.6) / 0.4), 0);
     };
     const onScroll = () => {
       if (frame === null) frame = requestAnimationFrame(update);
@@ -131,7 +170,11 @@ export function useLineToGlobe({
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       if (frame !== null) cancelAnimationFrame(frame);
-      reset();
+      line.classList.remove("is-detached");
+      if (stage) {
+        stage.style.opacity = "";
+        stage.style.removeProperty("--halo");
+      }
       overlay.remove();
     };
   }, [lineRef, globeSectionRef, active, skip]);
