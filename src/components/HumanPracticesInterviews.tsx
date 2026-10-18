@@ -485,7 +485,7 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
       // Park the page on the interviews behind the popup, so closing it does
       // not leave the reader at the top of the page.
       window.setTimeout(
-        () => document.getElementById("interviews")?.scrollIntoView({ block: "start", behavior: "instant" }),
+        () => document.getElementById("feedback-cycle-and-interviews")?.scrollIntoView({ block: "start", behavior: "instant" }),
         0,
       );
     };
