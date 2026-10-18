@@ -83,6 +83,11 @@ export function Navbar() {
           }}
         >
           {item.name}
+          {item.folder.some((subpage) => subpage.specialPrize) && (
+            <span className="nav-link-prize-star" aria-label="Special prize">
+              ★
+            </span>
+          )}
           <svg
             className="nav-link-caret"
             viewBox="0 0 12 8"
@@ -189,7 +194,13 @@ export function Navbar() {
                 {activeFolder.map((subpage, subpageIndex) => {
                   if (!subpage.path) return null;
                   const Icon = subpage.icon;
-                  return (
+                  return [
+                    subpage.menuDivider && (
+                      <div
+                        key={`mega-divider-${openMenu}-${subpageIndex}`}
+                        className="mega-menu-divider"
+                      />
+                    ),
                     <Link
                       key={`mega-${openMenu}-${subpageIndex}`}
                       to={subpage.path}
@@ -216,8 +227,8 @@ export function Navbar() {
                           </span>
                         )}
                       </span>
-                    </Link>
-                  );
+                    </Link>,
+                  ];
                 })}
               </Container>
             </div>

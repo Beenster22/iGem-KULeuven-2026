@@ -1,7 +1,15 @@
 {/* Transcribed from the team's protocol documents (refined October 2026) with
     Claude Opus 5 (Anthropic), 2026-10-12. The wording, values, safety tables
     and references are the team's; the calculator tables reproduce the
-    formulas written in each protocol's Calculations section. */}
+    formulas written in each protocol's Calculations section.
+
+    Edited with Claude Sonnet 5 (Anthropic), 2026-10-18: added "LC-MS
+    Quantification of Bile Acid Deconjugation" under B. Bile Salt Hydrolase
+    Characterization > Activity Assay, transcribed from the team's protocol
+    document of the same name. Its three calculator tables (methanol
+    precipitation, net dilution, percentage of deconjugation) were checked
+    against the real Protocol_Calculators.xlsx workbook, tab "LC-MS
+    deconjugation" — formulas and worked-example values match. */}
 
 <PageLayout>
 
@@ -5267,6 +5275,472 @@ in the injected sample stays within the range of the LC-MS method.
 - Sigma-Aldrich. (n.d.-f). *Methanol, suitable for HPLC, ≥99.9%* (Product No. 34860) [Product information]. Retrieved October 11, 2026, from https://www.sigmaaldrich.com/BE/en/product/sigald/34860
 - Sigma-Aldrich. (n.d.-g). *Sodium bicarbonate* (Product No. S5761) [Product information]. Retrieved October 11, 2026, from https://www.sigmaaldrich.com/BE/en/product/sigma/s5761
 - Sigma-Aldrich. (n.d.-h). *Sodium tauroursodeoxycholate* (Product No. T0266) [Product information]. Retrieved October 11, 2026, from https://www.sigmaaldrich.com/BE/en/product/sigma/t0266
+
+</ExpandableText>
+
+<ExpandableText title="LC-MS Quantification of Bile Acid Deconjugation">
+
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/lc-ms-quantification-of-bile-acid-deconjugation.pdf" workbookTab="LC-MS deconjugation" />
+
+#### Introduction
+
+Bile salt hydrolase cleaves the amide bond that joins a bile acid to its
+conjugated amino acid, releasing the free bile acid. In this project the
+substrates are glycoursodeoxycholic acid (GUDCA) and tauroursodeoxycholic acid
+(TUDCA), and the product of both reactions is ursodeoxycholic acid (UDCA). The
+extent of that conversion is what this method measures.
+
+Substrate and product differ in mass and in retention, so they can be
+separated on a reversed-phase column and detected individually by mass
+spectrometry. The eluate is monitored in negative electrospray ionization at
+the deprotonated mass of each of the three compounds, and the result is
+reported as a percentage of deconjugation: the signal of UDCA as a fraction of
+the signal of UDCA plus the remaining conjugate.
+
+The measurement is relative rather than absolute. No calibration curve and no
+internal standard are used, and the calculation assumes that the three
+compounds give a similar response in the source. The output is therefore a
+comparison between samples, which is what the ranking of the constructs
+requires, and not a concentration.
+
+The samples are the culture supernatants of the liquid bile salt assay.
+Proteins are removed by precipitation with cold methanol before injection,
+because protein carried onto the column fouls it and suppresses ionization
+(Want et al., 2011).
+
+#### Attributions
+
+The experimental method described here was supplied by Jef Rozenski, Professor
+of Medicinal Chemistry (Rega Institute) and Faculty of Pharmaceutical Sciences
+at KU Leuven, who performed the LC-MS analysis for the iGEM KU Leuven 2026
+team. The instrument settings, the gradient, the monitored masses and the
+calculation of the percentage of deconjugation are his. The rationale for
+removing protein before reversed-phase separation of bile acids follows the
+published application of the technique to biological fluids (Want et al.,
+2011).
+
+#### Materials
+
+**Samples**
+
+| Item | Specification and quantity |
+|---|---|
+| Culture supernatant from the liquid bile salt assay | 100 µL per sample; see the protocol "Liquid Bile Salt Assay (LC-MS readout)" |
+
+**Reagents**
+
+| Item | Specification and quantity |
+|---|---|
+| Methanol, HPLC grade | 400 µL per sample for the precipitation, kept at 4 °C; and 50% (v/v) in MQ water for the reconstitution |
+| Acetonitrile, gradient grade for HPLC | Mobile phase B |
+| Ammonium formate, eluent additive for LC-MS | 0.05 M in MQ water; mobile phase A |
+| MQ water (Milli-Q) | For the mobile phase and the reconstitution solvent |
+| UDCA, GUDCA and TUDCA reference standards | For establishing the retention times before the samples are run |
+
+**Consumables and tools**
+
+| Item | Specification and quantity |
+|---|---|
+| Microcentrifuge tubes, 1.5 mL | Two per sample |
+| HPLC vials with low-volume inserts and caps | One per sample |
+| Micropipettes and sterile tips | 20–200 µL and 100–1000 µL |
+
+**Instruments**
+
+| Item | Specification and quantity |
+|---|---|
+| Microcentrifuge | 6000 × g for the cell debris and 14,000 × g for the precipitated protein |
+| Freezer | −20 °C, for the precipitation step |
+| Vacuum concentrator (SpeedVac) | For evaporating the extract to dryness |
+| HPLC system | Waters Alliance, with a Waters XBridge C18 column, 100 × 2.1 mm, 3.5 µm particle size |
+| Tandem mass spectrometer | Waters Quattro Premier with an electrospray ionization source |
+
+**Software**
+
+| Item | Specification and quantity |
+|---|---|
+| Chromatography data system of the mass spectrometer | For acquisition in selected ion recording and for integrating the ion chromatograms |
+
+**Personal protective equipment**
+
+| Item | Specification and quantity |
+|---|---|
+| Lab coat | Worn closed at all times |
+| Nitrile gloves | Changed after contact with reagents or cultures |
+| Safety glasses | Required when handling hot liquids and irritant powders |
+
+#### Safety and safety data sheets
+
+Hazard classifications were taken from the supplier safety data sheets (SDS)
+and product pages cited in the table below. The SDS of the exact product and
+lot in use should be consulted before starting, because classifications can
+differ between suppliers and product grades.
+
+Methanol and acetonitrile are both volatile and toxic. All pipetting of these
+solvents, the preparation of the mobile phases and the reconstitution step are
+carried out in a fume hood, and the solvents are kept away from ignition
+sources. The vacuum concentrator is vented into the fume hood or fitted with a
+solvent trap.
+
+**Table 1.** Hazard classification and safety data sheets (SDS) of the reagents used.
+
+| Substance | CAS no. | Classification (GHS/CLP) | Precautions | SDS |
+|---|---|---|---|---|
+| Methanol | 67-56-1 | Danger. H225: highly flammable liquid and vapour. H301 + H311 + H331: toxic if swallowed, in contact with skin or if inhaled. H370: causes damage to organs. | Handle in a fume hood. Wear gloves and safety glasses. Keep away from ignition sources. | Sigma-Aldrich (n.d.-d) Product page; SDS under "Documentation" |
+| Acetonitrile | 75-05-8 | Danger. H225: highly flammable liquid and vapour. H302 + H312 + H332: harmful if swallowed, in contact with skin or if inhaled. H319: causes serious eye irritation. | Handle in a fume hood. Wear gloves and safety glasses. Keep away from ignition sources. | Sigma-Aldrich (n.d.-a) Product page; SDS under "Documentation" |
+| Ammonium formate | 540-69-2 | Warning. H315: causes skin irritation. H319: causes serious eye irritation. H335: may cause respiratory irritation. | Avoid dust formation when weighing. Wear gloves and safety glasses. | Sigma-Aldrich (n.d.-b) Product page; SDS under "Documentation" |
+| Ursodeoxycholic acid (UDCA) | 128-13-2 | No hazard statements listed on the product page. | Avoid dust formation. The SDS of the product in use should be consulted. | Sigma-Aldrich (n.d.-f) Product page |
+| Glycoursodeoxycholic acid (GUDCA) | 64480-66-6 | No hazard statements listed on the product page. | Avoid dust formation. The SDS of the product in use should be consulted. | Sigma-Aldrich (n.d.-c) Product page |
+| Sodium tauroursodeoxycholate (TUDCA) | 35807-85-3 | No hazard statements listed on the product page. | Avoid dust formation. The SDS of the product in use should be consulted. | Sigma-Aldrich (n.d.-e) Product page |
+| Bacterial strains and transformants | n/a | Biological agents. Transformants are genetically modified micro-organisms (contained use). | Work under the containment level approved for the laboratory. Inactivate all cultures, plates and contaminated consumables by autoclaving. | No SDS: see the institutional biosafety guidelines |
+
+**Waste disposal.** All cultures and contaminated consumables are inactivated
+by autoclaving before disposal. Methanol and acetonitrile, and any sample
+extract containing them, are collected as halogen-free organic solvent waste
+and are not poured down the sink. The waste and disposal instructions of the
+laboratory in use apply.
+
+#### Procedure
+
+**Sample preparation: removing cells and protein**
+
+1. Centrifuge the culture medium samples at 6000 × g for 5 minutes to remove
+   cell debris.
+
+<ProtocolNote>
+
+The samples come from the liquid bile salt assay. Whether they were handled in
+any other way before this step has not been recorded; see the notes from the
+bench.
+
+</ProtocolNote>
+
+2. Transfer a 100 µL aliquot of the resulting supernatant to a
+   microcentrifuge tube.
+3. Add 400 µL of ice-cold methanol at 4 °C to precipitate the proteins, and
+   mix (Table 2).
+
+<ProtocolCalculator
+  number={2}
+  title="Methanol precipitation of protein."
+  workbookTab="LC-MS deconjugation"
+  rows={[
+    { key: "vSample", label: "Culture supernatant taken", value: 100, unit: "µL", input: true },
+    { key: "vMeOH", label: "Ice-cold methanol added", value: 400, unit: "µL", input: true },
+    { key: "vTotal", label: "Extract after mixing", unit: "µL", decimals: 0, compute: (v) => v.vSample + v.vMeOH },
+    { key: "pOrganic", label: "Methanol content of the extract", unit: "% (v/v)", decimals: 1, compute: (v) => (v.vMeOH / v.vTotal) * 100 },
+  ]}
+/>
+
+<ProtocolNote>
+
+Four volumes of methanol to one volume of sample gives a final organic content
+of 80%, which is what precipitates the protein. The methanol is used cold
+because the precipitation is more complete and the bile acids are more stable
+at low temperature.
+
+</ProtocolNote>
+
+4. Incubate the samples at −20 °C for 1 hour.
+5. Centrifuge the samples at 14,000 × g for 15 minutes.
+
+<ProtocolNote kind="critical">
+
+The supernatant transferred in the next step must be clear. Any precipitate
+carried into the vial reaches the column and shortens its life.
+
+</ProtocolNote>
+
+**Sample preparation: concentrating and reconstituting**
+
+6. Transfer a 200 µL aliquot of the clear supernatant to a separate tube.
+7. Evaporate the aliquot to complete dryness in the vacuum concentrator.
+
+<ProtocolNote kind="critical">
+
+The samples are dried to complete dryness, however long that takes. One hour
+in the vacuum concentrator is not enough for 200 µL of 80% methanol, and a
+residue that still holds solvent gives a reconstitution volume that is not the
+volume assumed in the calculation.
+
+</ProtocolNote>
+
+8. Reconstitute the dried residue in 100 µL of 50% (v/v) methanol.
+
+<ProtocolNote>
+
+The reconstitution solvent is weaker than the extract it replaces, which keeps
+the sample compatible with the starting conditions of the gradient. A sample
+injected in a solvent stronger than the mobile phase elutes as a broadened or
+split peak.
+
+</ProtocolNote>
+
+9. Calculate the net dilution of the sample relative to the original culture
+   medium, and record it with the data (Table 3).
+
+<ProtocolCalculator
+  number={3}
+  title="Net dilution of the sample."
+  workbookTab="LC-MS deconjugation"
+  rows={[
+    { key: "vSample", label: "Culture supernatant taken", value: 100, unit: "µL", input: true },
+    { key: "vTotal", label: "Extract after mixing", value: 500, unit: "µL", input: true },
+    { key: "vAliquot", label: "Clear supernatant taken forward and dried", value: 200, unit: "µL", input: true },
+    { key: "vRecon", label: "50% methanol used for the reconstitution", value: 100, unit: "µL", input: true },
+    { key: "dExtract", label: "Dilution caused by the precipitation", unit: "fold", decimals: 2, compute: (v) => v.vTotal / v.vSample },
+    { key: "cAliquot", label: "Concentration by drying and reconstitution", unit: "fold", decimals: 2, compute: (v) => v.vAliquot / v.vRecon },
+    { key: "dNet", label: "Net dilution relative to the culture medium", unit: "fold", decimals: 2, compute: (v) => v.dExtract / v.cAliquot },
+  ]}
+/>
+
+10. Transfer the reconstituted samples to HPLC vials with inserts.
+
+**Chromatographic separation**
+
+11. Install the Waters XBridge C18 column, 100 × 2.1 mm with a 3.5 µm particle
+    size, on the Waters Alliance HPLC system.
+12. Prepare mobile phase A as 0.05 M ammonium formate in MQ water, and use
+    acetonitrile as mobile phase B.
+
+<ProtocolNote>
+
+Ammonium formate is volatile and compatible with electrospray ionization; a
+non-volatile buffer such as phosphate would deposit in the source and
+suppress the signal.
+
+</ProtocolNote>
+
+13. Set the flow rate to 200 µL/min and the injection volume to 5 µL.
+14. Program the linear gradient (Table 4).
+
+**Table 4.** Gradient elution program. Mobile phase A is 0.05 M ammonium
+formate in MQ water and mobile phase B is acetonitrile.
+
+| Time (min) | Mobile phase A (%) | Mobile phase B (%) | Profile |
+|---|---|---|---|
+| 0 | 85 | 15 | Initial |
+| 1 | 85 | 15 | Isocratic hold |
+| 10 | 10 | 90 | Linear decrease of A from 85% to 10% |
+| 15 | 10 | 90 | Isocratic hold |
+
+15. Inject the UDCA, GUDCA and TUDCA reference standards before the samples
+    and record the retention time of each.
+
+<ProtocolNote kind="critical">
+
+The three compounds are identified by retention time as well as by mass. The
+two conjugates are more polar than the free bile acid and elute earlier;
+without the standards run on the same column and the same gradient, a peak
+cannot be assigned with confidence.
+
+</ProtocolNote>
+
+**Mass spectrometric detection**
+
+16. Couple the HPLC system to the Waters Quattro Premier tandem mass
+    spectrometer and operate the electrospray source in negative ionization
+    mode.
+
+<ProtocolNote>
+
+Bile acids carry a carboxylic acid or a sulfonic acid group and deprotonate
+readily, so the negative mode gives a far better response than the positive
+mode.
+
+</ProtocolNote>
+
+17. Set the capillary voltage to −3 kV, the cone voltage to 30 V and the
+    source temperature to 120 °C.
+18. Acquire the data in selected ion recording, monitoring the three masses
+    with a dwell time of 0.1 s each (Table 5).
+
+**Table 5.** Masses monitored in selected ion recording. The values are those
+of the deprotonated molecule in negative ionization mode.
+
+| Compound | m/z | Role in the assay | Dwell time |
+|---|---|---|---|
+| Tauro-ursodeoxycholic acid (TUDCA) | 498.1 | Conjugated substrate | 0.1 s |
+| Glyco-ursodeoxycholic acid (GUDCA) | 448.1 | Conjugated substrate | 0.1 s |
+| Ursodeoxycholic acid (UDCA) | 391.1 | Deconjugated product | 0.1 s |
+
+<ProtocolNote>
+
+Selected ion recording measures only these three masses rather than scanning
+the whole range, which raises the number of measurements per peak and
+therefore the sensitivity. Nothing outside the three masses is recorded, so an
+unexpected product would not be seen.
+
+</ProtocolNote>
+
+**Data processing**
+
+19. Integrate the ion chromatogram of each of the three masses for every
+    sample.
+20. Calculate the percentage of deconjugation for each conjugate from the
+    integrated peak areas (Table 6).
+
+<ProtocolCalculator
+  number={6}
+  title="Percentage of deconjugation."
+  workbookTab="LC-MS deconjugation"
+  rows={[
+    { key: "areaUDCA", label: "Peak area of UDCA (m/z 391.1)", value: 142000, unit: "counts", input: true },
+    { key: "areaGUDCA", label: "Peak area of GUDCA (m/z 448.1)", value: 331000, unit: "counts", input: true },
+    { key: "areaTUDCA", label: "Peak area of TUDCA (m/z 498.1)", value: 414000, unit: "counts", input: true },
+    { key: "pGUDCA", label: "Deconjugation of GUDCA", unit: "%", decimals: 1, compute: (v) => (v.areaUDCA / (v.areaUDCA + v.areaGUDCA)) * 100 },
+    { key: "pTUDCA", label: "Deconjugation of TUDCA", unit: "%", decimals: 1, compute: (v) => (v.areaUDCA / (v.areaUDCA + v.areaTUDCA)) * 100 },
+  ]}
+/>
+
+<ProtocolNote kind="critical">
+
+The calculation assumes that UDCA and the conjugate give a similar response in
+the source. That assumption is what allows peak areas to stand in for amounts
+without a calibration curve, and it is also what makes the result a comparison
+rather than a concentration. Absolute quantification requires calibration
+curves of the authentic standards, and ideally isotope-labelled internal
+standards.
+
+</ProtocolNote>
+
+21. Report the percentage of deconjugation per sample, alongside the strain,
+    the bile salt and the concentration it was grown with.
+
+<ProtocolCalculations>
+
+This section explains the calculations used in this protocol. The symbols are
+defined for each equation, and the worked example uses the values printed in
+the corresponding table.
+
+**Methanol precipitation of protein**
+
+*V*total = *V*sample + *V*MeOH  and  organic % = *V*MeOH / *V*total × 100
+
+in which:
+
+- *V*sample = volume of culture supernatant taken (µL)
+- *V*MeOH = volume of ice-cold methanol added (µL)
+- *V*total = volume of the extract after mixing (µL)
+- organic % = methanol content of the extract, as a percentage by volume
+
+Protein precipitates when the organic content of the solution is high enough
+that the solvent no longer keeps it folded and in solution. Four volumes of
+methanol to one of sample puts the extract at 80% methanol, which is the usual
+working point for this kind of sample. The methanol is used cold, which makes
+the precipitation more complete and limits degradation of the bile acids.
+
+**Worked example.** For 100 µL of supernatant and 400 µL of methanol: *V*total
+= 100 + 400 = 500 µL and the organic content is 400 / 500 × 100 = 80.0%.
+
+**Net dilution of the sample**
+
+*D*extract = *V*total / *V*sample  ·  *C*aliquot = *V*aliquot / *V*reconstitution  ·  *D*net = *D*extract / *C*aliquot
+
+in which:
+
+- *D*extract = dilution of the sample caused by the precipitation step (fold)
+- *V*total = volume of the extract after mixing (µL)
+- *V*sample = volume of culture supernatant taken (µL)
+- *V*aliquot = volume of clear supernatant taken forward and dried (µL)
+- *V*reconstitution = volume of 50% methanol the residue is taken up in (µL)
+- *C*aliquot = concentration factor of the drying and reconstitution step (fold)
+- *D*net = net dilution of the injected sample relative to the original
+  culture medium (fold)
+
+The drying step does not change the amount of bile acid in the aliquot, only
+the volume it sits in, so taking 200 µL forward and reconstituting in 100 µL
+concentrates it twofold. That twofold concentration partly undoes the fivefold
+dilution of the precipitation. The net figure is what any later conversion
+back to the culture medium depends on; the percentage of deconjugation itself
+is a ratio within one sample and is not affected by it.
+
+**Worked example.** For 100 µL of sample in 500 µL of extract, with 200 µL
+dried and reconstituted in 100 µL: *D*extract = 500 / 100 = 5.00, *C*aliquot =
+200 / 100 = 2.00, and *D*net = 5.00 / 2.00 = 2.50. The injected sample is
+2.5-fold more dilute than the culture medium it came from.
+
+**Percentage of GUDCA deconjugation**
+
+% deconjugation = area UDCA / (area UDCA + area GUDCA) × 100
+
+in which:
+
+- area UDCA = integrated peak area at m/z 391.1, the deconjugated product
+- area GUDCA = integrated peak area at m/z 448.1, the glycine conjugate
+
+The denominator is the total of product plus remaining substrate, so the
+result is the fraction of the bile acid pool that has been converted. A value
+of 0% is no conversion and 100% is complete conversion. The calculation
+assumes that both compounds give a similar response in the source; without
+that assumption a calibration curve for each compound would be required.
+
+**Worked example.** For a sample grown with GUDCA giving an area of 1.42 × 10⁵
+for UDCA and 3.31 × 10⁵ for GUDCA: 1.42 × 10⁵ / (1.42 × 10⁵ + 3.31 × 10⁵) × 100
+= 1.42 / 4.73 × 100 = 30.0% deconjugation.
+
+**Percentage of TUDCA deconjugation**
+
+% deconjugation = area UDCA / (area UDCA + area TUDCA) × 100
+
+in which:
+
+- area UDCA = integrated peak area at m/z 391.1, the deconjugated product
+- area TUDCA = integrated peak area at m/z 498.1, the taurine conjugate
+
+The equation is the same as for GUDCA, applied to the samples grown with
+TUDCA. The two bile salts are run as separate samples, so for any one sample
+only one of the two percentages is meaningful; the table holds both so that
+either can be worked out from the same UDCA area.
+
+**Worked example.** For a sample grown with TUDCA giving an area of 1.42 × 10⁵
+for UDCA and 4.14 × 10⁵ for TUDCA: 1.42 × 10⁵ / (1.42 × 10⁵ + 4.14 × 10⁵) × 100
+= 1.42 / 5.56 × 100 = 25.5% deconjugation.
+
+</ProtocolCalculations>
+
+#### Notes from the bench
+
+This section collects the experience of the team with this protocol: what was
+changed between runs, what went wrong and what is worth knowing before
+starting. Members of the team are encouraged to add their own entries, each
+starting with the month and year.
+
+<ProtocolNote date="October 2026">
+
+The original method text gives one hour in the vacuum concentrator. One hour
+is not enough to dry 200 µL of 80% methanol, and the samples are instead dried
+to complete dryness however long that takes. The protocol has been written
+with the corrected instruction.
+
+</ProtocolNote>
+
+<ProtocolNote date="October 2026">
+
+It has not been recorded whether the culture samples were handled in any way
+between the end of the liquid bile salt assay and the first centrifugation
+step of this method. This needs to be confirmed and added, because any
+additional dilution changes the net dilution factor in Table 3.
+
+</ProtocolNote>
+
+<ProtocolNote date="October 2026">
+
+No calibration curve and no internal standard were used, so the results of
+different runs can only be compared as percentages of deconjugation and not as
+concentrations.
+
+</ProtocolNote>
+
+#### References
+
+- Sigma-Aldrich. (n.d.-a). *Acetonitrile, suitable for HPLC, gradient grade, ≥99.9%* (Product No. 34851) [Product information]. Retrieved October 11, 2026, from https://www.sigmaaldrich.com/BE/en/product/sigald/34851
+- Sigma-Aldrich. (n.d.-b). *Ammonium formate, LiChropur, eluent additive for LC-MS* (Product No. 70221) [Product information]. Retrieved October 11, 2026, from https://www.sigmaaldrich.com/BE/en/product/sial/70221
+- Sigma-Aldrich. (n.d.-c). *Glycoursodeoxycholic acid* (Product No. 06863) [Product information]. Retrieved October 11, 2026, from https://www.sigmaaldrich.com/BE/en/product/sigma/06863
+- Sigma-Aldrich. (n.d.-d). *Methanol, suitable for HPLC, ≥99.9%* (Product No. 34860) [Product information]. Retrieved October 11, 2026, from https://www.sigmaaldrich.com/BE/en/product/sigald/34860
+- Sigma-Aldrich. (n.d.-e). *Sodium tauroursodeoxycholate* (Product No. T0266) [Product information]. Retrieved October 11, 2026, from https://www.sigmaaldrich.com/BE/en/product/sigma/t0266
+- Sigma-Aldrich. (n.d.-f). *Ursodeoxycholic acid* (Product No. U5127) [Product information]. Retrieved October 11, 2026, from https://www.sigmaaldrich.com/BE/en/product/sigma/u5127
+- Want, E. J., Coen, M., Masson, P., Keun, H. C., Pearce, J. T. M., Reily, M. D., Robertson, D., Rohde, C. M., Holmes, E., Lindon, J., Plumb, R. S., McDonald, S., & Nicholson, J. K. (2011). *The application of UPLC-MSE for the analysis of bile acids in biological fluids* (Application Note No. 720004007). Waters Corporation. Retrieved October 11, 2026, from https://www.waters.com/nextgen/kr/ko/library/application-notes/2011/The-Application-of-UPLC-MSE-for-the-Analysis-of-Bile-Acids-in-Biological-Fluids.html
 
 </ExpandableText>
 
