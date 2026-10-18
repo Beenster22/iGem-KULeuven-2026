@@ -12378,7 +12378,7 @@ a.protocol-download:hover {
 .dbtl-pill.active { background: var(--dbtl-c); color: #33283f; }
 .dbtl-pill:hover { background: var(--dbtl-c); color: #33283f; }
 .dbtl-pill:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
-.dbtl-title { margin: 0 0 1rem; }
+.dbtl-title { margin: 0 0 1rem; min-height: 2.8em; } /* two lines, so a long title does not shift the wheel */
 .dbtl-body {
   display: grid;
   grid-template-columns: minmax(220px, 340px) 1fr;
@@ -12403,9 +12403,15 @@ a.protocol-download:hover {
 .dbtl-wheel-label { fill: var(--dbtl-t); font-size: 36px; font-weight: 700; pointer-events: none; }
 .dbtl-wheel-centre { fill: currentColor; font-size: 28px; font-weight: 600; }
 .dbtl-box {
-  padding: 0.5rem 0.25rem;
-  min-height: 14rem;
+  height: clamp(20rem, 62vh, 30rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.5rem 0.75rem 0.5rem 0.25rem;
 }
+.dbtl-box:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+/* Keep figures compact; they open fullscreen on click anyway. */
+.dbtl-box .figure-panel { margin: 1rem 0; }
+.dbtl-box .zoomable-image-trigger img { max-height: 180px; width: 100%; object-fit: contain; }
 .dbtl-box-label { font-weight: 700; font-size: 1.2rem; margin-bottom: 0.5rem; }
 @media (max-width: 720px) {
   .dbtl-body { grid-template-columns: 1fr; }
