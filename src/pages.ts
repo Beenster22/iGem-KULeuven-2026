@@ -73,6 +73,11 @@ class Page implements Base {
   // header (Header.tsx / App.tsx). Only prizes with a page of their own carry
   // this.
   specialPrize?: boolean;
+  // Optional: a thin divider line before this tile in the navbar's mega-menu
+  // (see Navbar.tsx), pushing it onto its own row. Used once today — Dry Lab
+  // in the Lab folder, set apart from the four wet-lab-specific pages above
+  // it (team request, 2026-10-18).
+  menuDivider?: boolean;
 }
 
 const Pages: (Page | Folder)[] = [
@@ -159,14 +164,6 @@ const Pages: (Page | Folder)[] = [
         specialPrize: true,
       },
       {
-        name: "Dry Lab",
-        title: "Dry Lab",
-        path: "/dry-lab",
-        component: DryLab,
-        lead: "A toolkit for engineering Bacteroides species, and the computational screening that narrowed our bile salt hydrolase candidates.",
-        icon: CodeIcon,
-      },
-      {
         name: "Notebook",
         title: "Notebook",
         path: "/notebook",
@@ -181,6 +178,15 @@ const Pages: (Page | Folder)[] = [
         component: Protocols,
         lead: "Detailed, step-by-step protocols used throughout the project so other teams can replicate our work.",
         icon: ClipboardIcon,
+      },
+      {
+        name: "Dry Lab",
+        title: "Dry Lab",
+        path: "/dry-lab",
+        component: DryLab,
+        lead: "A toolkit for engineering Bacteroides species, and the computational screening that narrowed our bile salt hydrolase candidates.",
+        icon: CodeIcon,
+        menuDivider: true,
       },
     ],
   },

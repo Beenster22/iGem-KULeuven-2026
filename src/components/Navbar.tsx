@@ -194,7 +194,13 @@ export function Navbar() {
                 {activeFolder.map((subpage, subpageIndex) => {
                   if (!subpage.path) return null;
                   const Icon = subpage.icon;
-                  return (
+                  return [
+                    subpage.menuDivider && (
+                      <div
+                        key={`mega-divider-${openMenu}-${subpageIndex}`}
+                        className="mega-menu-divider"
+                      />
+                    ),
                     <Link
                       key={`mega-${openMenu}-${subpageIndex}`}
                       to={subpage.path}
@@ -221,8 +227,8 @@ export function Navbar() {
                           </span>
                         )}
                       </span>
-                    </Link>
-                  );
+                    </Link>,
+                  ];
                 })}
               </Container>
             </div>

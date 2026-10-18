@@ -600,6 +600,18 @@ a[data-footnote-ref]:focus {
   padding: 1.25rem 1rem;
 }
 
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: team request — a thin rule setting Dry Lab apart from the other
+   Lab-folder tiles above it (Results, Measurement, Notebook, Protocols).
+   Spans every column so it reads as a full-width row break rather than a
+   divider between two tiles. */
+.mega-menu-divider {
+  grid-column: 1 / -1;
+  height: 1px;
+  margin: 0.25rem 0;
+  background-color: rgba(201, 189, 232, 0.35);
+}
+
 .mega-menu-link {
   display: flex;
   align-items: center;
