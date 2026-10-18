@@ -6987,11 +6987,23 @@ body:not(.home-fullscreen) .home-hero {
   overflow: visible;
 }
 
+/* --tint (0 → 1, set per frame) shifts the line from its own colour to the
+   globe's atmosphere colour (--color-accent, see atmosphereColor in
+   PmosGlobe.tsx) and gives it that glow as the ring closes. */
 .line-to-globe path {
+  --tint: 0;
   fill: none;
-  stroke: var(--color-header-bg);
+  stroke: color-mix(
+    in srgb,
+    var(--color-accent) calc(var(--tint) * 100%),
+    var(--color-header-bg)
+  );
   stroke-linecap: round;
   stroke-linejoin: round;
+  filter: drop-shadow(
+    0 0 calc(var(--tint) * 14px)
+      color-mix(in srgb, var(--color-accent) calc(var(--tint) * 90%), transparent)
+  );
 }
 
 .falling-m,

@@ -110,6 +110,9 @@ export function useLineToGlobe({
       const length = lerp(from.width, 2 * Math.PI * radius, e);
       path.setAttribute("d", arcPath(mx, my, length, 2 * Math.PI * e));
       path.setAttribute("stroke-width", String(lerp(fromThickness, toThickness, e)));
+      // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request):
+      // takes on the globe's atmosphere colour and glow as it closes round it.
+      path.style.setProperty("--tint", String(clamp01((e - 0.35) / 0.65)));
 
       overlay.style.visibility = "";
       overlay.style.opacity = String(1 - clamp01((g - CLOSED_AT) / (1 - CLOSED_AT)));
