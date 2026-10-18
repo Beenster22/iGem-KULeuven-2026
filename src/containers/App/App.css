@@ -4827,10 +4827,16 @@ body:not(.home-fullscreen) .home-hero {
   transition-delay: calc(var(--i) * 0.25s);
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback: going
+   back up wasn't smooth): leaving, they now go one after another too, in
+   reverse — the link first, the circle next to the globe last — quicker
+   than they came in so the globe has its room back as it rises. */
 .pmos-effects:not(.is-landed) .pmos-effect,
 .pmos-effects:not(.is-landed) .pmos-effects-more {
   opacity: 0;
   translate: -1.5rem 0;
+  transition-duration: 0.35s;
+  transition-delay: calc((4 - var(--i)) * 0.08s);
 }
 
 .pmos-effects:not(.is-landed) .pmos-effect.symptom-group--hormonal {

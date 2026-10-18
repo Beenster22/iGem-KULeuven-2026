@@ -19,7 +19,12 @@ import {
 } from "react";
 import { Link } from "react-router-dom";
 import { useReducedMotion } from "framer-motion";
-import { GLOBE_LANDED, globeDropProgress, PMOS_EFFECTS_ID } from "./globeDrop";
+import {
+  GLOBE_LANDED,
+  globeDropProgress,
+  globeDropRange,
+  PMOS_EFFECTS_ID,
+} from "./globeDrop";
 import { BrainOrgan, UterusOrgan } from "./BodyOrgans";
 import {
   LIVER_DRAWING_HEIGHT,
@@ -196,12 +201,15 @@ function useGlobeDropAutoScroll(enabled: boolean) {
       lastY = y;
       lastTime = now;
       if (performance.now() < busyUntil) return;
-      const section = document.getElementById(PMOS_EFFECTS_ID);
       const progress = globeDropProgress();
-      if (!section || progress === null || progress <= 0 || progress >= 1)
+      const range = globeDropRange();
+      if (!range || progress === null || progress <= 0 || progress >= 1)
         return;
-      const sectionTop = y + section.getBoundingClientRect().top;
-      glide(down ? sectionTop : sectionTop - window.innerHeight);
+      // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback:
+      // going back up wasn't smooth): back up, the glide now ends exactly
+      // where the drop starts (it used to aim a screen above this one, which
+      // could leave the globe half-dropped and set off a second glide).
+      glide(down ? range.end : range.start);
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
