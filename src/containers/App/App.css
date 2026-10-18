@@ -7163,6 +7163,11 @@ body:not(.home-fullscreen) .home-hero {
   pointer-events: none;
 }
 
+/* The drop's fade (above) must not bring a faded-out halo back. */
+.pmos-globe-wrap.is-dropping .pmos-globe-fly > .pmos-globe-halo {
+  opacity: calc(var(--halo, 1) * (1 - var(--morph, 0)));
+}
+
 /* Landed: the real circle has taken over. */
 .pmos-globe-wrap.is-landed .pmos-globe-fly {
   visibility: hidden;
