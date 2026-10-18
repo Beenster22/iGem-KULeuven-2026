@@ -594,44 +594,46 @@ a[data-footnote-ref]:focus {
    short, sized for a horizontal dropdown strip rather than the home page's
    tall vertical cards. */
 /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
-   Purpose: team request — a fixed 3 columns instead of auto-fit, so a wide
-   folder (4+ tiles) never crowds 4 onto one row; it wraps to 3 then
-   2-or-3 instead. See layoutMegaMenu in Navbar.tsx, which works out how
-   many tiles land in that trailing row and pads it out with Elle
-   (.mega-menu-filler) when it is short of 3. */
+   Purpose: team request — 3 tiles per row, never 4. Each .mega-menu-row is
+   its own flex row (see layoutMegaMenu in Navbar.tsx, which chunks a
+   folder's tiles into groups of 3); a full row's tiles share the width
+   equally, a short trailing row of 1-2 is centered instead of padded or
+   left stuck to the left edge. */
 .mega-menu-content {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 0.85rem;
   padding: 1.25rem 1rem;
 }
 
-/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
-   Purpose: team request — a thin rule setting Dry Lab apart from the other
-   Lab-folder tiles above it (Results, Measurement, Notebook, Protocols).
-   Spans every column so it reads as a full-width row break rather than a
-   divider between two tiles. */
-.mega-menu-divider {
-  grid-column: 1 / -1;
-  height: 1px;
-  margin: 0.25rem 0;
-  background-color: rgba(201, 189, 232, 0.35);
+.mega-menu-row {
+  display: flex;
+  gap: 0.85rem;
 }
 
-/* Elle, filling out a trailing row that falls short of 3 tiles (see
-   layoutMegaMenu). Same silent-mascot sizing idea as .mega-menu-link-icon,
-   just bigger and alone in its cell since she isn't sitting next to a
-   label here. */
-.mega-menu-filler {
-  display: flex;
-  align-items: center;
+.mega-menu-row .mega-menu-link {
+  flex: 1 1 calc((100% - 1.7rem) / 3);
+}
+
+.mega-menu-row--centered {
   justify-content: center;
 }
 
-.mega-menu-filler img {
-  width: 4.5rem;
-  height: auto;
-  opacity: 0.85;
+/* A short row's tiles stay the same width as a full row's (not stretched
+   to fill the leftover space) — that's what makes "centered" read as a
+   smaller row, not just left-aligned tiles with room to spare. */
+.mega-menu-row--centered .mega-menu-link {
+  flex: 0 0 calc((100% - 1.7rem) / 3);
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: team request — a thin rule setting a tile apart from the row(s)
+   above it (see menuDivider in pages.ts; unused today, kept for whichever
+   page needs it next). */
+.mega-menu-divider {
+  height: 1px;
+  margin: 0.25rem 0;
+  background-color: rgba(201, 189, 232, 0.35);
 }
 
 .mega-menu-link {
@@ -762,14 +764,18 @@ a[data-footnote-ref]:focus {
   }
 
   .mega-menu-content {
-    grid-template-columns: 1fr;
     padding: 0.5rem 0.5rem 1rem;
   }
 
-  /* A single column has no "empty cell" to fill — Elle would just be an
-     unexplained image stacked into the middle of the link list. */
-  .mega-menu-filler {
-    display: none;
+  /* Every tile stacks full-width on a narrow screen — the row grouping and
+     centering above only make sense once there is room for 3 across. */
+  .mega-menu-row {
+    flex-direction: column;
+  }
+
+  .mega-menu-row .mega-menu-link,
+  .mega-menu-row--centered .mega-menu-link {
+    flex: 1 1 auto;
   }
 }
 

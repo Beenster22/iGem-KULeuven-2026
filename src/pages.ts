@@ -176,7 +176,6 @@ const Pages: (Page | Folder)[] = [
         component: DryLab,
         lead: "A toolkit for engineering Bacteroides species, and the computational screening that narrowed our bile salt hydrolase candidates.",
         icon: CodeIcon,
-        menuDivider: true,
       },
     ],
   },
