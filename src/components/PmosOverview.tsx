@@ -11,8 +11,10 @@ import {
   type ReactNode,
 } from "react";
 import { useReducedMotion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { PMOS_TOTAL } from "./pmosContinentStats";
 import { MicrobeBackdrop } from "./MicrobeBackdrop";
+import { ElleSays } from "./ElleSays";
 
 // three.js + globe.gl add ~700KB (gzipped) to the bundle — lazy-loaded so
 // that weight is only fetched once a visitor actually scrolls this far,
@@ -106,6 +108,12 @@ export function PmosOverview({ children }: { children?: ReactNode }) {
         data-snap=""
       >
         <MicrobeBackdrop count={4} seed={6} />
+        <div className="pmos-prevalence-elle">
+          <ElleSays size="lg" side="right">
+            To find out more how we got these numbers click{" "}
+            <Link to="/description#how-many-people-live-with-pmos">HERE</Link>.
+          </ElleSays>
+        </div>
         <Suspense
           fallback={<div className="pmos-globe-loading">Loading globe…</div>}
         >

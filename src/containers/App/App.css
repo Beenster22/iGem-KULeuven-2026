@@ -6906,6 +6906,39 @@ body:not(.home-fullscreen) .home-hero {
   line-height: 1.4;
 }
 
+/* PREVALENCE ELLE (Elle + "how we got these numbers", in PmosOverview.tsx)
+   Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
+   Purpose: Elle (ElleSays.tsx) stands in the corner of the globe section with
+   her line already in a speech bubble, rather than behind a click-to-open
+   info button — pinned to the section itself (not the globe/text pair) so
+   she stays in the same spot whether .pmos-globe-wrap is a row (desktop) or
+   a stacked column (mobile, see the media query below). The ">" selector
+   beats the specificity of the ".pmos-overview > :not(.microbe-backdrop)"
+   rule above that would otherwise force this back to position: relative. */
+.pmos-overview > .pmos-prevalence-elle {
+  position: absolute;
+  top: clamp(0.5rem, 3vh, 1.5rem);
+  right: clamp(0.5rem, 3vw, 1.5rem);
+  z-index: 3;
+  max-width: min(34rem, calc(100vw - 2rem));
+}
+
+.pmos-prevalence-elle .elle {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .pmos-overview > .pmos-prevalence-elle {
+    position: static;
+    margin: 0 auto 1rem;
+  }
+
+  .pmos-prevalence-elle .elle {
+    --elle-size: clamp(6rem, 24vw, 8rem);
+    justify-content: center;
+  }
+}
+
 @media (max-width: 768px) {
   .pmos-globe-wrap {
     flex-direction: column;
