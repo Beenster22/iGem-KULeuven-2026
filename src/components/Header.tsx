@@ -22,17 +22,19 @@ export function Header({ title, lead, icon: Icon, aside }: HeaderProps) {
     <header className="page-header-box">
       <div className={`container${aside ? " page-header-box-row" : ""}`}>
         <div className="page-header-box-text">
-          <div className="page-header-box-title-row">
+          <div className="page-header-box-icon-row">
             {Icon && (
               <span className="page-header-icon" aria-hidden="true">
                 <Icon />
               </span>
             )}
-            <h1 className="display-4 mb-2">{title}</h1>
+            <div>
+              <h1 className="display-4 mb-2">{title}</h1>
+              {/* Pages whose lead has not been written yet get the title
+                  alone rather than an empty paragraph. */}
+              {lead && <p className="lead mb-0">{renderItalics(lead)}</p>}
+            </div>
           </div>
-          {/* Pages whose lead has not been written yet get the title alone
-              rather than an empty paragraph. */}
-          {lead && <p className="lead mb-0">{renderItalics(lead)}</p>}
         </div>
         {aside && <div className="page-header-box-aside">{aside}</div>}
       </div>

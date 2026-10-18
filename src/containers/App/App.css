@@ -345,18 +345,15 @@ a[data-footnote-ref]:focus {
 /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
    Purpose: team request — every page's title now carries the same icon as
    its navbar mega-menu tile (see pages.ts `icon`, Header.tsx), sitting to
-   its left. The header box is always the same dark plum (--color-header-bg),
-   so the --ic-* illustration variables are fixed to that card's palette
-   rather than switching with the site's light/dark theme toggle. */
-.page-header-box-title-row {
+   its left and spanning the full height of the title + lead stack (not just
+   the title line). The header box is always the same dark plum
+   (--color-header-bg), so the --ic-* illustration variables are fixed to
+   that card's palette rather than switching with the site's light/dark
+   theme toggle. */
+.page-header-box-icon-row {
   display: flex;
   align-items: center;
-  gap: 1.1rem;
-  margin-bottom: 0.5rem;
-}
-
-.page-header-box-title-row h1 {
-  margin-bottom: 0;
+  gap: 1.5rem;
 }
 
 .page-header-icon {
@@ -366,7 +363,7 @@ a[data-footnote-ref]:focus {
   --ic-line: #33283f;
   flex: none;
   display: block;
-  width: 3.75rem;
+  width: 6rem;
 }
 
 .page-header-icon svg {
@@ -376,8 +373,12 @@ a[data-footnote-ref]:focus {
 }
 
 @media (max-width: 575.98px) {
+  .page-header-box-icon-row {
+    gap: 1rem;
+  }
+
   .page-header-icon {
-    width: 2.75rem;
+    width: 3.75rem;
   }
 }
 

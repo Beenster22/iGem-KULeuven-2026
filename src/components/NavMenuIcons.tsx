@@ -15,13 +15,18 @@ const common = {
 } as const;
 
 // A Design-Build-Test-Learn cycle: four arced arrows chasing each other
-// clockwise around a circle, one colour per stage.
+// clockwise around a circle, one colour per stage. Deliberately cycles only
+// --ic-1/2/3 (never --ic-line) — ic-line is meant to match whichever
+// background the icon sits on (used elsewhere as a "cutout" detail inside a
+// filled shape), so a freestanding arrow drawn in it would vanish on that
+// same background, which is exactly what happened on the (always dark)
+// page header before this fix.
 export function DbtlCycleIcon(props: SVGProps<SVGSVGElement>) {
   const arcs = [
     { d: "M60 22A38 38 0 0 1 95.7 47", color: "var(--ic-1)", tip: [95.7, 47], rotate: 70 },
     { d: "M98 60A38 38 0 0 1 73 95.7", color: "var(--ic-2)", tip: [73, 95.7], rotate: 160 },
     { d: "M60 98A38 38 0 0 1 24.3 73", color: "var(--ic-3)", tip: [24.3, 73], rotate: 250 },
-    { d: "M22 60A38 38 0 0 1 47 24.3", color: "var(--ic-line)", tip: [47, 24.3], rotate: 340 },
+    { d: "M22 60A38 38 0 0 1 47 24.3", color: "var(--ic-1)", tip: [47, 24.3], rotate: 340 },
   ];
   return (
     <svg {...common} {...props}>
@@ -86,7 +91,7 @@ export function ShieldIcon(props: SVGProps<SVGSVGElement>) {
 export function FlaskIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...common} {...props}>
-      <path d="M48 12h24" stroke="var(--ic-line)" strokeWidth="8" strokeLinecap="round" />
+      <path d="M48 12h24" stroke="var(--ic-2)" strokeWidth="8" strokeLinecap="round" />
       <path
         d="M51 14v26L26 86a10 10 0 0 0 9 15h50a10 10 0 0 0 9-15L69 40V14Z"
         fill="var(--ic-1)"
@@ -124,7 +129,7 @@ export function BlocksIcon(props: SVGProps<SVGSVGElement>) {
       <rect x="14" y="40" width="34" height="34" rx="7" fill="var(--ic-1)" />
       <rect x="72" y="40" width="34" height="34" rx="7" fill="var(--ic-2)" />
       <rect x="43" y="68" width="34" height="34" rx="7" fill="var(--ic-3)" />
-      <rect x="43" y="12" width="34" height="34" rx="7" fill="none" stroke="var(--ic-line)" strokeWidth="5" />
+      <rect x="43" y="12" width="34" height="34" rx="7" fill="none" stroke="var(--ic-2)" strokeWidth="5" />
     </svg>
   );
 }
@@ -148,7 +153,7 @@ export function CalendarIcon(props: SVGProps<SVGSVGElement>) {
     <svg {...common} {...props}>
       <rect x="14" y="26" width="92" height="80" rx="12" fill="var(--ic-1)" />
       <rect x="14" y="26" width="92" height="24" rx="12" fill="var(--ic-2)" />
-      <g stroke="var(--ic-line)" strokeWidth="8" strokeLinecap="round">
+      <g stroke="var(--ic-2)" strokeWidth="8" strokeLinecap="round">
         <path d="M38 14v20M82 14v20" />
       </g>
       <g fill="var(--ic-3)">
