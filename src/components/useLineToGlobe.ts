@@ -144,8 +144,10 @@ export function useLineToGlobe({
       const fromY = lineBox.bottom + shift - fromThickness / 2;
       // To: the globe's sphere, centred in its canvas.
       const to = canvas.getBoundingClientRect();
-      const radius = (to.width * SPHERE_FRACTION) / 2;
+      // The closed ring is the halo exactly: its stroke centred half a ring
+      // width outside the sphere's edge (see .pmos-globe-halo).
       const toThickness = haloWidth(stage);
+      const radius = (to.width * SPHERE_FRACTION) / 2 + toThickness / 2;
 
       // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback:
       // it dipped, then jumped to line up): the ring's position is now
@@ -167,7 +169,9 @@ export function useLineToGlobe({
       path.setAttribute("stroke-width", String(lerp(fromThickness, toThickness, e)));
       // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request):
       // takes on the globe's atmosphere colour and glow as it closes round it.
-      path.style.setProperty("--tint", String(clamp01((e - 0.35) / 0.65)));
+      // Edited again 2026-10-18 (team feedback): the shift starts the moment
+      // the line lets go and runs the whole way, ending on the halo's colour.
+      path.style.setProperty("--tint", String(clamp01(e)));
 
       overlay.style.visibility = "";
       line.classList.add("is-detached");
