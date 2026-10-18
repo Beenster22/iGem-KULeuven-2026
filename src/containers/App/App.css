@@ -495,11 +495,6 @@ a[data-footnote-ref]:focus {
   border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
-[data-theme="dark"] .mega-menu-link:hover,
-[data-theme="dark"] .mega-menu-link:focus {
-  background-color: rgba(201, 189, 232, 0.15);
-}
-
 @keyframes mega-menu-fade-in {
   from {
     opacity: 0;
@@ -511,44 +506,68 @@ a[data-footnote-ref]:focus {
   }
 }
 
+/* Edited with Claude Sonnet 5 (Anthropic), 2026-10-18
+   Purpose: team request to match another team's wiki, whose mega-menu shows
+   each page as an icon tile in a grid rather than a left-aligned list with a
+   description line. Tiles use the site's own palette (lavender tint,
+   teal icon) instead of copying their colours. */
 .mega-menu-content {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 1.5rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
   padding: 1.5rem 1rem;
 }
 
 .mega-menu-link {
-  flex: 1 1 180px;
-  max-width: 260px;
   text-decoration: none;
   color: var(--color-text);
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  transition: background-color 0.15s ease;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem 1rem;
+  border-radius: 1rem;
+  background-color: color-mix(in srgb, var(--brand-lavender) 22%, transparent);
+  text-align: center;
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
 }
 
 .mega-menu-link:hover,
 .mega-menu-link:focus {
-  background-color: rgba(201, 189, 232, 0.5);
+  background-color: color-mix(in srgb, var(--brand-lavender) 45%, transparent);
+  transform: translateY(-2px);
+}
+
+[data-theme="dark"] .mega-menu-link {
+  background-color: color-mix(in srgb, var(--brand-lavender) 12%, transparent);
+}
+
+[data-theme="dark"] .mega-menu-link:hover,
+[data-theme="dark"] .mega-menu-link:focus {
+  background-color: color-mix(in srgb, var(--brand-lavender) 22%, transparent);
+}
+
+.mega-menu-link-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: var(--brand-teal);
+}
+
+.mega-menu-link-icon svg {
+  width: 100%;
+  height: 100%;
 }
 
 .mega-menu-link-name {
   font-weight: 600;
-  font-size: 1.05rem;
-}
-
-.mega-menu-link-lead {
-  font-size: 0.85rem;
-  opacity: 0.75;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 @media (max-width: 991.98px) {
@@ -563,12 +582,8 @@ a[data-footnote-ref]:focus {
   }
 
   .mega-menu-content {
-    flex-direction: column;
-    padding: 0.5rem 0 0.5rem 1rem;
-  }
-
-  .mega-menu-link {
-    max-width: none;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    padding: 0.5rem 0.5rem 1rem;
   }
 }
 

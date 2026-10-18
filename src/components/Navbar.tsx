@@ -5,7 +5,6 @@ import BootstrapNavbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
 import Pages from "../pages.ts";
 import { useThemeMode } from "../ThemeModeContext";
-import { renderItalics } from "../utils/renderItalics";
 import { SearchButton } from "./Search";
 
 // Generated with Claude Sonnet 5 (Anthropic), 2026-09-08
@@ -181,23 +180,25 @@ export function Navbar() {
             <div className="mega-menu-bridge" />
             <div className="mega-menu">
               <Container className="mega-menu-content">
-                {activeFolder.map((subpage, subpageIndex) =>
-                  subpage.path ? (
+                {activeFolder.map((subpage, subpageIndex) => {
+                  if (!subpage.path) return null;
+                  const Icon = subpage.icon;
+                  return (
                     <Link
                       key={`mega-${openMenu}-${subpageIndex}`}
                       to={subpage.path}
                       className="mega-menu-link"
                       onClick={closeNow}
                     >
-                      <span className="mega-menu-link-name">{subpage.name}</span>
-                      {subpage.lead && (
-                        <span className="mega-menu-link-lead">
-                          {renderItalics(subpage.lead)}
+                      {Icon && (
+                        <span className="mega-menu-link-icon" aria-hidden="true">
+                          <Icon />
                         </span>
                       )}
+                      <span className="mega-menu-link-name">{subpage.name}</span>
                     </Link>
-                  ) : null,
-                )}
+                  );
+                })}
               </Container>
             </div>
           </>

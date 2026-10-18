@@ -1,3 +1,4 @@
+import type { SVGProps } from "react";
 import {
   Attributions,
   Awards,
@@ -18,6 +19,22 @@ import {
   SafetyAndSecurity,
   Sponsors,
 } from "./contents";
+import {
+  BlocksIcon,
+  CalendarIcon,
+  ChartIcon,
+  ClipboardIcon,
+  DescriptionIcon,
+  FlaskIcon,
+  GearIcon,
+  HandshakeIcon,
+  NotebookIcon,
+  PeopleIcon,
+  PuzzleIcon,
+  RibbonIcon,
+  ShieldIcon,
+  SpeechHeartIcon,
+} from "./components/NavMenuIcons";
 
 interface Base {
   name: string | undefined;
@@ -36,6 +53,10 @@ class Page implements Base {
   // Optional: pages whose lead has not been written yet show the title alone
   // (see Header.tsx) instead of iGEM's own judging prompt.
   lead?: string;
+  // Optional: shown above the name in the navbar's mega-menu (see
+  // Navbar.tsx) for pages inside a folder. Top-level (non-folder) pages
+  // don't use this — they render as plain links, no tile.
+  icon?: React.FC<SVGProps<SVGSVGElement>>;
 }
 
 const Pages: (Page | Folder)[] = [
@@ -54,6 +75,7 @@ const Pages: (Page | Folder)[] = [
         path: "/description",
         component: Description,
         lead: "What PMOS is, how it is diagnosed, and why we went looking for its roots in the gut.",
+        icon: DescriptionIcon,
       },
       {
         name: "Engineering Success",
@@ -61,6 +83,7 @@ const Pages: (Page | Folder)[] = [
         path: "/engineering",
         component: Engineering,
         lead: "The design-build-test-learn cycles behind EMPOWER, and what each round changed about our design.",
+        icon: GearIcon,
       },
       {
         name: "Contribution",
@@ -68,6 +91,7 @@ const Pages: (Page | Folder)[] = [
         path: "/contribution",
         component: Contribution,
         lead: "What we are leaving behind for the teams that come after us, and how to build on it.",
+        icon: PuzzleIcon,
       },
       {
         name: "Safety",
@@ -75,6 +99,7 @@ const Pages: (Page | Folder)[] = [
         path: "/safety-and-security",
         component: SafetyAndSecurity,
         lead: "The risks we identified in the lab, the containment measures and training behind every protocol, and how we thought about safety beyond the bench.",
+        icon: ShieldIcon,
       },
     ],
   },
@@ -94,6 +119,7 @@ const Pages: (Page | Folder)[] = [
         path: "/experimental-overview",
         component: ExperimentalOverview,
         lead: "How our wet lab work fits together, from strain and antibiotic selection through conjugation and promoter screening, across the Toolkit and Therapeutics lines.",
+        icon: FlaskIcon,
       },
       {
         name: "Protocols",
@@ -101,6 +127,7 @@ const Pages: (Page | Folder)[] = [
         path: "/protocols",
         component: Protocols,
         lead: "Detailed, step-by-step protocols used throughout the project so other teams can replicate our work.",
+        icon: ClipboardIcon,
       },
       {
         name: "Parts",
@@ -108,6 +135,7 @@ const Pages: (Page | Folder)[] = [
         path: "/parts",
         component: Parts,
         lead: "The DNA parts built and used in this project, each linked to the notebook entry where it was made or characterised.",
+        icon: BlocksIcon,
       },
       {
         name: "Notebook",
@@ -115,6 +143,7 @@ const Pages: (Page | Folder)[] = [
         path: "/notebook",
         component: Notebook,
         lead: "A chronological record of our wet lab work, one notebook per research line, each entry also downloadable as a PDF.",
+        icon: NotebookIcon,
       },
       {
         name: "Results",
@@ -122,6 +151,7 @@ const Pages: (Page | Folder)[] = [
         path: "/results",
         component: Results,
         lead: "What came out of the Toolkit and Therapeutics pipelines, from the promoter library to bile salt deconjugation by our hydrolase candidates.",
+        icon: ChartIcon,
       },
     ],
   },
@@ -134,6 +164,7 @@ const Pages: (Page | Folder)[] = [
         path: "/human-practices",
         component: HumanPractices,
         lead: "The five stakeholder groups we spoke with, how their feedback reached the project, and what it changed.",
+        icon: SpeechHeartIcon,
       },
       {
         name: "Events",
@@ -141,6 +172,7 @@ const Pages: (Page | Folder)[] = [
         path: "/events",
         component: Events,
         lead: "A timeline of the talks, workshops, meetups, and outreach activities our team took part in throughout the season.",
+        icon: CalendarIcon,
       },
     ],
   },
@@ -167,6 +199,7 @@ const Pages: (Page | Folder)[] = [
         path: "/attributions",
         component: Attributions,
         lead: "See who contributed to each part of the project.",
+        icon: RibbonIcon,
       },
       {
         name: "Team",
@@ -174,6 +207,7 @@ const Pages: (Page | Folder)[] = [
         path: "/team",
         component: Members,
         lead: "Get to know the team behind EMPOWER.",
+        icon: PeopleIcon,
       },
       {
         name: "Sponsors",
@@ -181,6 +215,7 @@ const Pages: (Page | Folder)[] = [
         path: "/sponsors",
         component: Sponsors,
         lead: "EMPOWER is made possible by the organisations on this page. Thank you for supporting our project!",
+        icon: HandshakeIcon,
       },
     ],
   },
