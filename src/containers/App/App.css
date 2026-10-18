@@ -4026,72 +4026,49 @@ body.home-fullscreen {
   background-color: var(--color-accent);
 }
 
-/* Deliberately NOT sharing .home-hero-embed's cover formula below
-   (2026-10-18, team call): a 16:9 asset can't both fill a wider-than-16:9
-   window edge-to-edge AND show its full height uncropped — one has to give.
-   Cropping the logo was ruled unacceptable, so this stays full "contain"
-   (never grows past 100% either dimension, so never crops vertically); on a
-   wide/short window the resting logo leaves a themed-colour margin on the
-   sides instead, and there's a brief zoom at the handoff on those windows
-   until FINAL_FRAME_SRC's video is re-exported on a wider canvas — see the
-   .home-hero-embed comment. */
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18: the still now starts
-   out at exactly the embed's cover geometry so the crossfade is pixel-aligned
-   with the video's last frame, and only once it's fully opaque
-   (--settled) eases to the uncropped "contain" size below — instead of
-   popping between the two sizes at the handoff. */
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback): the
+   video's bacterium -> logo morph is the final transition, so the still sits
+   at exactly the embed's geometry and is swapped in instantly (no dissolve,
+   no resize afterwards) — it just holds the video's last frame on screen.
+   Both are sized to fit entirely inside the hero ("contain", so the logo is
+   never cropped on any window shape, per the earlier team call) and then
+   shrunk slightly by --home-hero-video-scale. The video's edges are the same
+   lavender as .home-hero's background, so the margin this leaves blends in. */
+.home-hero {
+  container-type: size;
+  --home-hero-video-scale: 0.85;
+}
+
 .home-hero-video {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: max(100%, calc(100dvh * 16 / 9));
-  height: max(100%, calc(100vw * 9 / 16));
-  transform: translate(-50%, -50%);
+  width: min(100cqw, calc(100cqh * 16 / 9));
+  height: min(100cqh, calc(100cqw * 9 / 16));
+  transform: translate(-50%, -50%) scale(var(--home-hero-video-scale));
   object-fit: cover;
   display: block;
   opacity: 0;
-  transition:
-    opacity 0.6s ease,
-    width 1.4s cubic-bezier(0.45, 0, 0.2, 1),
-    height 1.4s cubic-bezier(0.45, 0, 0.2, 1);
 }
 
 .home-hero-video--shown {
   opacity: 1;
 }
 
-.home-hero-video--settled {
-  width: calc(100dvh * 16 / 9);
-  height: 100%;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .home-hero-video {
-    transition: opacity 0.6s ease;
-  }
-}
-
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
    Purpose: object-fit doesn't apply to an <iframe>, so the 16:9 video embed
-   is sized to always cover the hero and centred, letting .home-hero's
-   overflow crop the excess — the same result as object-fit: cover.
-   Edited with Claude Sonnet 5 (Anthropic), 2026-10-18 (team call: the live
-   video stays full-bleed/cropped — it only plays once, briefly — but the
-   resting logo it hands off to must never be cropped; see .home-hero-video,
-   which intentionally does NOT share this formula anymore). Width and
-   height both over-grow symmetrically, so the box always covers the hero
-   fully in both dimensions. A narrow/tall window crops the sides; a
-   wide/short window crops top/bottom. This is an interim CSS-only trade-off
-   — the real fix is re-exporting the source video (and FINAL_FRAME_SRC) on
-   a wider canvas with margin around the subject, so nothing needs cropping
-   or margins on any window shape; ask when that's ready. */
+   is sized and centred by hand.
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback): no
+   longer full-bleed/cropped — it now uses the exact same "contain" box as
+   .home-hero-video above, so its last frame and the still line up
+   pixel-for-pixel and the logo is never cropped or oversized. */
 .home-hero-embed {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: max(100%, calc(100dvh * 16 / 9));
-  height: max(100%, calc(100vw * 9 / 16));
-  transform: translate(-50%, -50%);
+  width: min(100cqw, calc(100cqh * 16 / 9));
+  height: min(100cqh, calc(100cqw * 9 / 16));
+  transform: translate(-50%, -50%) scale(var(--home-hero-video-scale));
   border: 0;
   pointer-events: none;
 }
@@ -6925,14 +6902,137 @@ body:not(.home-fullscreen) .home-hero {
   line-height: 1.05;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
-  padding: 0 0.1em;
-  /* --color-header-bg (not --color-accent) — accent is identical to the
-     body background in light mode, which would make this invisible too. */
-  border-bottom: 0.07em solid var(--color-header-bg);
+  padding: 0 0.1em 0.07em;
+  position: relative;
+}
+
+/* The underline: --color-header-bg (not --color-accent) — accent is
+   identical to the body background in light mode, which would make this
+   invisible too. Drawn as a bar (not a border) so it can sweep in. */
+.pmos-counter-number::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0.07em;
+  background: var(--color-header-bg);
+  transform: scaleX(0);
+  transition: transform 0.7s cubic-bezier(0.3, 0, 0.2, 1);
 }
 
 [data-theme="dark"] .pmos-counter-number {
   color: #5fd3d7;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
+   counter screen starts blank. The M of "Million" falls in from the PMOS
+   acrostic and climbs a bar-chart staircase (useFallingM.ts); once it is in
+   place "illion" appears around it (--landed), and once the stairs are gone
+   the figure, the underline and the sentence follow (--revealed). Every
+   part keeps its space throughout, so nothing moves as it appears.
+   inline-block gives the M's slot a box exactly one line high, which the
+   flying M copies. */
+.pmos-counter-figure {
+  display: inline-block;
+  text-align: right;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.pmos-counter-m {
+  display: inline-block;
+  visibility: hidden;
+}
+
+.pmos-counter-illion {
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.pmos-counter-rest {
+  opacity: 0;
+  transition: opacity 0.6s ease 0.35s;
+}
+
+.pmos-counter--landed .pmos-counter-m {
+  visibility: visible;
+}
+
+.pmos-counter--landed .pmos-counter-illion,
+.pmos-counter--revealed .pmos-counter-figure,
+.pmos-counter--revealed .pmos-counter-rest {
+  opacity: 1;
+}
+
+.pmos-counter--revealed .pmos-counter-number::after {
+  transform: scaleX(1);
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): while
+   the underline is curling up into the globe (useLineToGlobe.ts) the
+   overlay draws it, so the real one steps aside. */
+.pmos-counter--revealed .pmos-counter-number.is-detached::after {
+  transition: none;
+  opacity: 0;
+}
+
+.line-to-globe {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* --tint (0 → 1, set per frame) shifts the line from its own colour to the
+   globe's atmosphere colour (--color-accent, see atmosphereColor in
+   PmosGlobe.tsx) and gives it that glow as the ring closes. */
+.line-to-globe path {
+  --tint: 0;
+  fill: none;
+  stroke: color-mix(
+    in srgb,
+    var(--color-accent) calc(var(--tint) * 100%),
+    var(--color-header-bg)
+  );
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(
+    0 0 calc(var(--tint) * 14px)
+      color-mix(in srgb, var(--color-accent) calc(var(--tint) * 90%), transparent)
+  );
+}
+
+.falling-m,
+.falling-m-stairs {
+  left: 0;
+  top: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Fixed while it falls with the scroll, absolute (page coordinates) once
+   it is climbing — set from useFallingM.ts. */
+.falling-m {
+  display: block;
+  transform-origin: 0 0;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.falling-m-stairs {
+  position: absolute;
+  overflow: visible;
+}
+
+.falling-m-stairs rect {
+  fill: var(--color-header-bg);
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transform: scaleY(0);
 }
 
 .pmos-overview-source {
@@ -12397,7 +12497,7 @@ a.protocol-download:hover {
 .dbtl-pill.active { background: var(--dbtl-c); color: #33283f; }
 .dbtl-pill:hover { background: var(--dbtl-c); color: #33283f; }
 .dbtl-pill:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
-.dbtl-title { margin: 0 0 1rem; }
+.dbtl-title { margin: 0 0 1rem; min-height: 2.8em; } /* two lines, so a long title does not shift the wheel */
 .dbtl-body {
   display: grid;
   grid-template-columns: minmax(220px, 340px) 1fr;
@@ -12422,9 +12522,15 @@ a.protocol-download:hover {
 .dbtl-wheel-label { fill: var(--dbtl-t); font-size: 36px; font-weight: 700; pointer-events: none; }
 .dbtl-wheel-centre { fill: currentColor; font-size: 28px; font-weight: 600; }
 .dbtl-box {
-  padding: 0.5rem 0.25rem;
-  min-height: 14rem;
+  height: clamp(20rem, 62vh, 30rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.5rem 0.75rem 0.5rem 0.25rem;
 }
+.dbtl-box:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+/* Keep figures compact; they open fullscreen on click anyway. */
+.dbtl-box .figure-panel { margin: 1rem 0; }
+.dbtl-box .zoomable-image-trigger img { max-height: 180px; width: 100%; object-fit: contain; }
 .dbtl-box-label { font-weight: 700; font-size: 1.2rem; margin-bottom: 0.5rem; }
 @media (max-width: 720px) {
   .dbtl-body { grid-template-columns: 1fr; }
