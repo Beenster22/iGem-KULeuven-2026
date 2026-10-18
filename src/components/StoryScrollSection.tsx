@@ -40,8 +40,9 @@ interface StoryStep {
   id: string;
   // How the screen is laid out (see .story-step--* in App.css). "pair-left"
   // puts the first sentence top left and the second bottom right;
-  // "pair-right" is its mirror image; "center" is one sentence in the middle.
-  position: "pair-left" | "pair-right" | "split" | "center";
+  // "pair-right" is its mirror image; "presentation" is Elle as a professor
+  // pointing at the sentence on a presentation screen.
+  position: "pair-left" | "pair-right" | "split" | "presentation";
   art?: "clock" | "microbiome";
   lines: ReactNode[];
   // The screen's second sentence (the pair layouts).
@@ -67,11 +68,12 @@ const STEPS: StoryStep[] = [
   // "So many symptoms… but no known etiology" and its question marks moved
   // to the end of Elle's tour of the body (ElleTour.tsx), and Elle's
   // "Hey, I'm Elle! Want to go on a journey with me?" introduction is
-  // removed for now (the team will place it again later), leaving this
-  // screen's second sentence on its own.
+  // removed for now (the team will place it again later). This screen's
+  // remaining sentence is now on a presentation screen, with Elle — who
+  // arrives here from the tour — in glasses pointing at it.
   {
     id: "therapy",
-    position: "center",
+    position: "presentation",
     lines: [
       <>
         There is currently no actual therapeutic solution that tackles{" "}
@@ -125,6 +127,46 @@ const STEPS: StoryStep[] = [
     },
   },
 ];
+
+const MASCOT_BASE = "https://static.igem.wiki/teams/6299/wiki/mascot";
+
+// Generated with Claude Opus 5.5 (Anthropic), 2026-10-18
+// Purpose: Elle as a professor — still with the sad face she arrives with
+// from her tour (team request), glasses on (drawn over her eyes, which on
+// that artwork sit at 36.3% / 47.4% and 60.6% / 46.5% across / down) and a
+// pointer stick from her right-hand ovary to the presentation screen beside
+// her. Hidden until
+// Elle arrives from her tour of the body: ElleTour.tsx flies her here over
+// this element (data-elle-professor) and then adds "is-here", when the
+// glasses and stick appear.
+function Professor({ here }: { here: boolean }) {
+  return (
+    <div
+      className={`story-professor${here ? " is-here" : ""}`}
+      data-elle-professor=""
+      aria-hidden="true"
+    >
+      <img
+        className="story-professor-elle"
+        src={`${MASCOT_BASE}/uterus-sad.avif`}
+        alt=""
+      />
+      <svg className="story-professor-glasses" viewBox="0 0 100 40">
+        <circle cx={21.6} cy={20.8} r={16} />
+        <circle cx={78.1} cy={19.2} r={16} />
+        <path d="M37.6 19.5 Q49.9 13 62.1 18.5 M5.6 20 L0 15 M94.1 18.5 L100 13.5" />
+      </svg>
+      <svg
+        className="story-professor-stick"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+      >
+        <line x1={0} y1={100} x2={100} y2={0} />
+        <line className="story-professor-stick-tip" x1={92} y1={8} x2={100} y2={0} />
+      </svg>
+    </div>
+  );
+}
 
 // A wall clock — teal rim, light face, dark hands — whose second hand sweeps
 // round while the minute hand creeps on.
@@ -407,7 +449,12 @@ export function StoryScrollSection() {
               // Only the sentences on screen are read out and reachable.
               inert={state !== "active"}
             >
-              {entry.second ? (
+              {entry.position === "presentation" ? (
+                <>
+                  <Professor here={!!prefersReducedMotion} />
+                  <div className="story-screen">{text(entry.lines, 0)}</div>
+                </>
+              ) : entry.second ? (
                 <>
                   <div className="story-row">
                     {text(entry.lines, 0)}
