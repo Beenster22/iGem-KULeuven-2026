@@ -34,6 +34,7 @@
 // Purpose: home-page "What is PMOS?" definition (PmosDefinition), and — the definition on its own
 // the team's four symptom groups as cards (SymptomGroups, description page).
 import type { ReactNode } from "react";
+import { FALLING_M_SOURCE_ATTR } from "./useFallingM";
 
 // Wording supplied by the team ("Text for HOME PAGE", Section 3) — keep as
 // written. Edited with Claude Opus 5.5 (Anthropic), 2026-10-06: the team's
@@ -135,7 +136,14 @@ export function PmosDefinition() {
           >
             {PMOS_WORDS.map((word) => (
               <span key={word} aria-hidden="true">
-                <span className="body-symptoms-acrostic-letter">{word[0]}</span>
+                {/* The M of "Metabolic" later falls down into the counter
+                    below and becomes the M of "Million" (useFallingM.ts). */}
+                <span
+                  className="body-symptoms-acrostic-letter"
+                  {...(word === "Metabolic" ? { [FALLING_M_SOURCE_ATTR]: "" } : {})}
+                >
+                  {word[0]}
+                </span>
                 {word.slice(1)}
               </span>
             ))}

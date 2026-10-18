@@ -6912,6 +6912,54 @@ body:not(.home-fullscreen) .home-hero {
   color: #5fd3d7;
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18: the M of "Million"
+   flies in from the PMOS acrostic (useFallingM.ts) — its slot keeps its
+   space but stays hidden until the flying M lands on it, and the sentence
+   underneath fades in after. inline-block gives the slot a box exactly one
+   line high, which the flying M copies. */
+.pmos-counter-figure {
+  display: inline-block;
+  text-align: right;
+}
+
+.pmos-counter-m {
+  display: inline-block;
+  visibility: hidden;
+}
+
+.pmos-counter-m--landed {
+  visibility: visible;
+}
+
+.pmos-counter-rest {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.pmos-counter-rest--shown {
+  opacity: 1;
+}
+
+.falling-m,
+.falling-m-stairs {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.falling-m {
+  display: block;
+  transform-origin: 0 0;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.falling-m-stairs {
+  overflow: visible;
+}
+
 .pmos-overview-source {
   max-width: 80ch;
   margin: 0;

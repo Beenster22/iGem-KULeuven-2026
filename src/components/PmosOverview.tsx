@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { PMOS_TOTAL } from "./pmosContinentStats";
 import { MicrobeBackdrop } from "./MicrobeBackdrop";
 import { ElleSays } from "./ElleSays";
+import { useFallingM } from "./useFallingM";
 
 // three.js + globe.gl add ~700KB (gzipped) to the bundle — lazy-loaded so
 // that weight is only fetched once a visitor actually scrolls this far,
@@ -82,7 +83,17 @@ export function PmosOverview({ children }: { children?: ReactNode }) {
     return () => observer.disconnect();
   }, []);
 
-  const millions = useCountUp(PMOS_TOTAL / 1_000_000, inView);
+  const totalMillions = PMOS_TOTAL / 1_000_000;
+  const millions = useCountUp(totalMillions, inView);
+
+  // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
+  // M of "Million" arrives from the PMOS acrostic above, climbing a little
+  // staircase while the figure counts up; the rest of the sentence appears
+  // once it has landed (useFallingM.ts).
+  const prefersReducedMotion = useReducedMotion();
+  const mSlotRef = useRef<HTMLSpanElement>(null);
+  const [mLanded, setMLanded] = useState(false);
+  useFallingM(inView, mSlotRef, () => setMLanded(true), !!prefersReducedMotion);
 
   return (
     <>
@@ -95,9 +106,31 @@ export function PmosOverview({ children }: { children?: ReactNode }) {
           {/* Wording as asked for by the team; the figure (PMOS_TOTAL, in
               millions) counts up, on its own line and much larger than the
               words under it. */}
-          <h2 className="pmos-counter-heading">
-            <span className="pmos-counter-number">{millions} million</span>{" "}
-            <span className="pmos-counter-rest">
+          <h2
+            className="pmos-counter-heading"
+            aria-label={`${totalMillions} Million women affected during their reproductive years`}
+          >
+            <span className="pmos-counter-number" aria-hidden="true">
+              {/* Fixed width for the final figure, so the line (and the
+                  M's landing spot) doesn't shift while it counts up. */}
+              <span
+                className="pmos-counter-figure"
+                style={{ minWidth: `${String(totalMillions).length}ch` }}
+              >
+                {millions}
+              </span>{" "}
+              <span
+                ref={mSlotRef}
+                className={`pmos-counter-m${mLanded ? " pmos-counter-m--landed" : ""}`}
+              >
+                M
+              </span>
+              illion
+            </span>{" "}
+            <span
+              className={`pmos-counter-rest${mLanded ? " pmos-counter-rest--shown" : ""}`}
+              aria-hidden="true"
+            >
               women affected during their reproductive years
             </span>
           </h2>
