@@ -17,9 +17,13 @@ const GLOBE_STAGE_SELECTOR = ".pmos-globe-stage";
 const SPHERE_FRACTION = Math.tan(Math.asin(1 / 3.2)) / Math.tan((25 * Math.PI) / 180);
 // The halo ring round the sphere (--halo-w on .pmos-globe-halo).
 const HALO_WIDTH = 4;
+// How far below the top of the globe (as a share of its diameter) the
+// navigation bar has to reach before the drop starts (team request,
+// 2026-10-18: "a little bit lower than the top").
+const START_BELOW_TOP = 0.15;
 
-// How far the drop has got: 0 until the top of the globe (its halo) has
-// scrolled up to the navigation bar, 1 once the effects screen's top has
+// How far the drop has got: 0 until a point just below the top of the
+// globe (START_BELOW_TOP) has scrolled up to the navigation bar, 1 once the effects screen's top has
 // reached the top of the window (and from then on). Null when the screen
 // isn't on the page.
 // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback): it
@@ -33,9 +37,10 @@ export function globeDropProgress(): number | null {
   let start = end - window.innerHeight;
   if (stage) {
     const box = stage.getBoundingClientRect();
-    const globeTop =
-      box.top + box.height / 2 - (box.width * SPHERE_FRACTION) / 2 - HALO_WIDTH;
-    const globeStart = globeTop + window.scrollY - navBottom();
+    const diameter = box.width * SPHERE_FRACTION;
+    const globeTop = box.top + box.height / 2 - diameter / 2 - HALO_WIDTH;
+    const trigger = globeTop + diameter * START_BELOW_TOP;
+    const globeStart = trigger + window.scrollY - navBottom();
     // Leave the drop at least a third of a screen to play out in.
     start = Math.min(globeStart, end - window.innerHeight / 3);
   }
