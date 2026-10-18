@@ -115,15 +115,20 @@ Together this panel covers healthy human gut, clinical and inflamed murine origi
       <td>Human faeces</td>
       <td>Complete</td>
       <td>
-        <a href="https://www.ncbi.nlm.nih.gov/nuccore/CP000139" target="_blank" rel="noopener noreferrer">
+        <a
+          href="https://www.ncbi.nlm.nih.gov/nuccore/CP000139"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           CP000139
         </a>
       </td>
       <td>Segura Munoz et al. 2022[^strain-segura]</td>
       <td>Confirmed GDCA, TUDCA</td>
       <td className="text-start">
-        Measured: susceptible to Tet, Cm and Met (IC<sub>90%</sub> 1–4 mg/L); Amp 4 mg/L, above the EUCAST
-        anaerobe breakpoint. No inhibition by Gm or Kan.
+        Measured: susceptible to Tet, Cm and Met (IC<sub>90%</sub> 1–4 mg/L);
+        Amp 4 mg/L, above the EUCAST anaerobe breakpoint. No inhibition by Gm or
+        Kan.
       </td>
     </tr>
     <tr>
@@ -131,20 +136,31 @@ Together this panel covers healthy human gut, clinical and inflamed murine origi
       <td>Human faeces (UK)</td>
       <td>Shotgun</td>
       <td>
-        <a href="https://www.ncbi.nlm.nih.gov/nuccore/CYZI00000000.1/" target="_blank" rel="noopener noreferrer">
+        <a
+          href="https://www.ncbi.nlm.nih.gov/nuccore/CYZI00000000.1/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           CYZI00000000
         </a>
       </td>
       <td>Forster et al. 2019[^strain-forster]</td>
       <td>No data</td>
-      <td className="text-start">Predicted: <em>tetQ</em> (tetracycline) and <em>cepA</em> from the genome. Not yet measured.</td>
+      <td className="text-start">
+        Predicted: <em>tetQ</em> (tetracycline) and <em>cepA</em> from the
+        genome. Not yet measured.
+      </td>
     </tr>
     <tr>
       <td>DSM 108228 (H5_1)</td>
       <td>Human faeces</td>
       <td>Draft</td>
       <td>
-        <a href="https://www.ncbi.nlm.nih.gov/nuccore/CZAN00000000" target="_blank" rel="noopener noreferrer">
+        <a
+          href="https://www.ncbi.nlm.nih.gov/nuccore/CZAN00000000"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           CZAN00000000
         </a>
       </td>
@@ -157,7 +173,11 @@ Together this panel covers healthy human gut, clinical and inflamed murine origi
       <td>Human faeces (UK)</td>
       <td>Draft</td>
       <td>
-        <a href="https://www.ncbi.nlm.nih.gov/nuccore/CZBK00000000" target="_blank" rel="noopener noreferrer">
+        <a
+          href="https://www.ncbi.nlm.nih.gov/nuccore/CZBK00000000"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           CZBK00000000
         </a>
       </td>
@@ -182,7 +202,8 @@ Together this panel covers healthy human gut, clinical and inflamed murine origi
       <td>Unpublished</td>
       <td>No data</td>
       <td className="text-start">
-        Measured: Tet 1, Cm 2 and Met 4 mg/L; Amp 64 and Ery 256 mg/L; Gm 256 mg/L; no inhibition by Kan.
+        Measured: Tet 1, Cm 2 and Met 4 mg/L; Amp 64 and Ery 256 mg/L; Gm 256
+        mg/L; no inhibition by Kan.
       </td>
     </tr>
   </tbody>
@@ -191,10 +212,12 @@ Together this panel covers healthy human gut, clinical and inflamed murine origi
 </div>
 
 <div className="figure-caption">
-  Table 1. Identity, isolation source, genome availability and prior characterisation for the six strains.
-  All DSM strains are classified BSL1 under German regulations, and all are obligate anaerobes grown at
-  37 °C. Susceptibility marked <em>Measured</em> is our own IC<sub>90%</sub> data from the MIC assay;{" "}
-  <em>Predicted</em> is inferred from resistance genes in the genome and has not been tested.
+  Table 1. Identity, isolation source, genome availability and prior
+  characterisation for the six strains. All DSM strains are classified BSL1
+  under German regulations, and all are obligate anaerobes grown at 37 °C.
+  Susceptibility marked <em>Measured</em> is our own IC<sub>90%</sub> data from
+  the MIC assay; <em>Predicted</em> is inferred from resistance genes in the
+  genome and has not been tested.
 </div>
 
 #### BSH annotation status
@@ -203,11 +226,11 @@ Only the type strain has characterised BSH loci. Its genome carries three choloy
 
 <ExpandableText title="BSH loci in DSM 1447 and how the other strains were annotated">
 
-| Locus tag | Role |
-| --- | --- |
-| BVU_RS09890 | Choloylglycine hydrolase locus |
-| BVU_RS12045 | Choloylglycine hydrolase locus |
-| BVU_RS20465 | Choloylglycine hydrolase locus |
+| Locus tag   | Role                                             |
+| ----------- | ------------------------------------------------ |
+| BVU_RS09890 | Choloylglycine hydrolase locus                   |
+| BVU_RS12045 | Choloylglycine hydrolase locus                   |
+| BVU_RS20465 | Choloylglycine hydrolase locus                   |
 | BVU_RS13575 | BSH coding sequence used as the annotation query |
 
 </ExpandableText>
@@ -215,9 +238,982 @@ Only the type strain has characterised BSH loci. Its genome carries three choloy
 <ElleSays mood="happy" size="sm" side="right">
 
 Want the numbers behind those antibiotic notes? See our
-<Link to="/results#antibiotic-susceptibility-of-p-vulgatus">MIC results</Link>, further down this page!
+
+<Link to="/results#antibiotic-susceptibility-of-p-vulgatus">MIC results</Link>,
+further down this page!
 
 </ElleSays>
+
+</ResultSection>
+
+<ResultSection>
+
+### Growth curves and medium comparison
+
+<div className="results-standfirst">
+  Which of four anaerobic media makes <em>P. vulgatus</em> grow fastest and most
+  reproducibly, and which of mGAM's own ingredients can explain the gap.
+</div>
+
+<KeyTakeaways>
+  <Takeaway value="mGAM" label="fastest, most reproducible growth">
+    Followed by Wilkins–Chalgren (WC), which gives a more sigmoidal curve.
+  </Takeaway>
+  <Takeaway value="0" label="growth in unsupplemented BHI">
+    Agrees with the literature: hemin and vitamin K are required by many
+    _Bacteroides_ and relatives[^growth-gibbons].
+  </Takeaway>
+  <Takeaway value="2³" label="factorial supplementation design">
+    The in-house minimal medium (MM) was written off within a 24 h window but
+    grew once the read was extended, prompting a full-factorial supplementation
+    study.
+  </Takeaway>
+</KeyTakeaways>
+
+#### Introduction
+
+Growth of each condition was characterized by fitting its optical density
+(OD) data over time, which yields parameters describing how quickly cells
+grow, how long they take to begin dividing, and how much biomass they
+accumulate. These parameters allow comparison of the _P. vulgatus_ type
+strain (DSM 1447) and the fecal isolate (RCC 1806) across four anaerobic
+media: Brain–Heart Infusion (BHI), Wilkins–Chalgren (WC)[^growth-wc], mGAM[^growth-hirano],
+and an LB-based minimal medium (MM). Four iterations were run in 96-well
+plates, reading optical density every 30 minutes for 24 to 48 h and fitting
+by Gaussian-process regression with the DGrowthR
+package[^growth-dgrowthr][^growth-keitel2025].
+
+<ElleSays mood="smile" size="sm" side="right">
+
+Curious how we measured all this? Have a look at our <Link to="/experimental-overview">measurement page</Link>!
+
+</ElleSays>
+
+#### Materials and methods
+
+BHI, WC and mGAM were used at the manufacturer's formulation, while MM was a
+laboratory recipe. The media were chosen based on reported anaerobic growth
+conditions in the literature: Keitel et al. (2024) establish BHI as a
+sufficient medium to revive and maintain _P. vulgatus_ (DSM 1447), the same
+strain used by EMPOWER[^growth-keitel2024]. WC was originally designed for
+testing the minimal inhibitory concentration of antibiotics against anaerobic
+bacteria[^growth-wc]. mGAM, the richest medium tested, performed best at
+recovering gut bacteria for growth optimization in the literature and is used
+here as our reference[^growth-rettedal]. We also tested a simplified
+laboratory recipe kindly provided by Ruben Vazquez-Uribe.
+
+A summary of medium compositions is given below — crucial for the next steps
+of the project, since it gives a fair starting point from which to attribute
+a growth advantage to specific components.
+
+<ExpandableText title="Table 1a–d. Medium compositions (BHI, WC, mGAM, MM)">
+
+**Table 1a. Composition of Brain Heart Infusion (BHI).** BD Difco, Franklin
+Lakes, NJ, USA. Used at the manufacturer's formulation.
+
+<div className="table-responsive table-responsive-rounded table-responsive-sticky-head my-3">
+
+<table className="table table-bordered align-middle text-center">
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Amount per litre</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Calf brain infusion solids</td>
+      <td>7.7 g</td>
+    </tr>
+    <tr>
+      <td>Beef heart infusion solids</td>
+      <td>9.8 g</td>
+    </tr>
+    <tr>
+      <td>Proteose peptone</td>
+      <td>10.0 g</td>
+    </tr>
+    <tr>
+      <td>Dextrose</td>
+      <td>2.0 g</td>
+    </tr>
+    <tr>
+      <td>Sodium chloride</td>
+      <td>5.0 g</td>
+    </tr>
+    <tr>
+      <td>Disodium phosphate</td>
+      <td>2.5 g</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+**Table 1b. Composition of Wilkins–Chalgren Anaerobe Broth (WC).** CM0643,
+Oxoid, Thermo Fisher Scientific, Basingstoke, UK[^growth-wc-insert].
+Reconstituted at 33 g L⁻¹.
+
+<div className="table-responsive table-responsive-rounded table-responsive-sticky-head my-3">
+
+<table className="table table-bordered align-middle text-center">
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Amount per litre</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Tryptone</td>
+      <td>10.0 g</td>
+    </tr>
+    <tr>
+      <td>Gelatine peptone</td>
+      <td>10.0 g</td>
+    </tr>
+    <tr>
+      <td>Yeast extract</td>
+      <td>5.0 g</td>
+    </tr>
+    <tr>
+      <td>Glucose</td>
+      <td>1.0 g</td>
+    </tr>
+    <tr>
+      <td>Sodium chloride</td>
+      <td>5.0 g</td>
+    </tr>
+    <tr>
+      <td>L-Arginine</td>
+      <td>1.0 g</td>
+    </tr>
+    <tr>
+      <td>Sodium pyruvate</td>
+      <td>1.0 g</td>
+    </tr>
+    <tr>
+      <td>Hemin</td>
+      <td>5 mg</td>
+    </tr>
+    <tr>
+      <td>Menadione (vitamin K₃)</td>
+      <td>0.5 mg</td>
+    </tr>
+    <tr>
+      <td>L-Cysteine hydrochloride *</td>
+      <td>0.3 g</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+<div className="figure-caption">
+  * Added as a reducing agent; not part of the manufacturer's formulation.
+</div>
+
+**Table 1c. Composition of Modified Gifu Anaerobic Medium (mGAM).** Shimadzu
+Diagnostics, Tokyo, Japan[^growth-mgam-catalogue]. Total 41.7 g L⁻¹.
+
+<div className="table-responsive table-responsive-rounded table-responsive-sticky-head my-3">
+
+<table className="table table-bordered align-middle text-center">
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Amount per litre</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Peptone</td>
+      <td>5.0 g</td>
+    </tr>
+    <tr>
+      <td>Soya peptone</td>
+      <td>3.0 g</td>
+    </tr>
+    <tr>
+      <td>Proteose peptone</td>
+      <td>5.0 g</td>
+    </tr>
+    <tr>
+      <td>Digested serum</td>
+      <td>10.0 g</td>
+    </tr>
+    <tr>
+      <td>Yeast extract</td>
+      <td>2.5 g</td>
+    </tr>
+    <tr>
+      <td>Meat extract</td>
+      <td>2.2 g</td>
+    </tr>
+    <tr>
+      <td>Liver extract</td>
+      <td>1.2 g</td>
+    </tr>
+    <tr>
+      <td>Dextrose</td>
+      <td>0.5 g</td>
+    </tr>
+    <tr>
+      <td>Soluble starch</td>
+      <td>5.0 g</td>
+    </tr>
+    <tr>
+      <td>L-Tryptophan</td>
+      <td>0.2 g</td>
+    </tr>
+    <tr>
+      <td>L-Cysteine hydrochloride</td>
+      <td>0.3 g</td>
+    </tr>
+    <tr>
+      <td>Sodium thioglycollate</td>
+      <td>0.3 g</td>
+    </tr>
+    <tr>
+      <td>L-Arginine</td>
+      <td>1.0 g</td>
+    </tr>
+    <tr>
+      <td>Vitamin K₁</td>
+      <td>5 mg</td>
+    </tr>
+    <tr>
+      <td>Hemin</td>
+      <td>10 mg</td>
+    </tr>
+    <tr>
+      <td>Potassium dihydrogen phosphate</td>
+      <td>2.5 g</td>
+    </tr>
+    <tr>
+      <td>Sodium chloride</td>
+      <td>3.0 g</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+**Table 1d. Composition of the simplified laboratory medium (LB-based, MM).**
+Prepared in-house. LB powder from Sigma-Aldrich, St. Louis, MO, USA.
+
+<div className="table-responsive table-responsive-rounded table-responsive-sticky-head my-3">
+
+<table className="table table-bordered align-middle text-center">
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Amount per litre</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>LB powder</td>
+      <td>10.0 g</td>
+    </tr>
+    <tr>
+      <td>Sodium bicarbonate</td>
+      <td>1.25 g</td>
+    </tr>
+    <tr>
+      <td>Glucose</td>
+      <td>0.2 g</td>
+    </tr>
+    <tr>
+      <td>L-Cysteine</td>
+      <td>0.5 g</td>
+    </tr>
+    <tr>
+      <td>Hemin</td>
+      <td>10 mg</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+</ExpandableText>
+
+Full protocol, plate layouts and run-by-run records are in the{" "}
+
+<Link to="/protocols">Protocols</Link> (Chassis Characterization → Medium
+Comparison Growth Assay) and the <Link to="/notebook">Notebook</Link> (entries
+STR-01 to STR-03).
+
+#### Component analysis
+
+The main differences in medium components create differences in growth
+performance. The following components are the most prominent differences
+between the media, discussed here to work out which are responsible for the
+higher-performing media.
+
+<ExpandableText title="Hemin">
+
+WC contains 5 mg L⁻¹ hemin, whereas mGAM and MM contain 10 mg L⁻¹; BHI
+contains no added hemin. Hemin supplies haem for haem-containing proteins
+involved in electron transport. Hemin supplementation has been shown to
+improve _B. vulgatus_ growth[^growth-lee]. Its importance may relate to
+haem-dependent electron transport: in the related species _B. fragilis_,
+hemin was required for functional fumarate reduction and substantially
+increased growth rate and biomass yield[^growth-macy].
+
+</ExpandableText>
+
+<ExpandableText title="Vitamin K compounds">
+
+mGAM contains vitamin K₁ (5 mg L⁻¹), whereas WC contains menadione
+(0.5 mg L⁻¹); neither BHI nor MM contains an explicit vitamin K supplement.
+These compounds are relevant because vitamin K₂ helps bacteria transfer
+electrons to produce energy. However, _B. vulgatus_ can produce its own
+vitamin K₂, and adding certain vitamin K compounds did not improve its growth
+under the conditions tested[^growth-fenn]. Vitamin K₁ itself was not tested
+there, so whether it improves growth in our medium needed to be determined
+experimentally.
+
+</ExpandableText>
+
+<ExpandableText title="Starch">
+
+Only mGAM contains soluble starch, at 5 g L⁻¹. Starch has been shown to
+support rapid growth and high bacterial yields in tested _B. vulgatus_
+strains, which also produced more starch-digesting enzymes when grown on
+starch than on glucose[^growth-mccarthy]. Starch may therefore improve growth
+in mGAM by providing an additional source of carbon and energy.
+
+</ExpandableText>
+
+<ExpandableText title="Glucose and complex nutrients">
+
+Glucose concentrations are 2.0 g L⁻¹ in BHI, 1.0 in WC, 0.5 in mGAM and 0.2 in
+MM. Glucose provides carbon and energy for _B. vulgatus_, which has been
+successfully cultivated in a defined medium using glucose as its main carbon
+source[^growth-keitel2024]. These differences may therefore affect growth,
+but more glucose does not mean better growth — other nutrients must also be
+considered, particularly starch in mGAM, which _B. vulgatus_ can use as an
+additional carbon source[^growth-mccarthy].
+
+</ExpandableText>
+
+<ExpandableText title="Bicarbonate">
+
+Only MM contains added sodium bicarbonate, at 1.25 g L⁻¹. Bicarbonate
+provides a source of dissolved CO₂ and helps resist changes in pH, which is
+relevant because _P. vulgatus_ requires CO₂ for growth: changing CO₂
+availability has been shown to affect bacterial growth and organic acid
+production[^growth-keitel2023]. Bicarbonate may therefore influence growth,
+although CO₂ supplied through the cultivation atmosphere must also be
+considered.
+
+</ExpandableText>
+
+<ExpandableText title="Reducing agents">
+
+mGAM contains cysteine hydrochloride and sodium thioglycollate, WC was
+supplemented with cysteine hydrochloride, and MM contains cysteine. These
+reducing agents help remove dissolved oxygen and maintain conditions suitable
+for anaerobic growth. Increased oxygen exposure has been shown to impair
+_P. vulgatus_ growth, with cysteine suggested to reduce oxygen-related
+damage[^growth-keitel2023]. Differences in reducing agents may therefore
+affect growth by changing the bacteria's exposure to oxygen.
+
+</ExpandableText>
+
+Because these media differ in several components simultaneously, superior
+growth in one medium cannot be attributed to a single ingredient. Subsequent
+experiments therefore varied starch, vitamin K₁ and pH individually to assess
+their contributions.
+
+mGAM was the clear winner: it grew fastest and reached a final OD of about
+0.41, against only 0.13 in WC. It is hard to attribute this to only one
+component. Starch (both amylose and amylopectin) is a likely factor, since it
+is known to give rapid growth and high yields in
+_B. vulgatus_[^growth-mccarthy]. Hemin may also have helped[^growth-lee], and
+the reducing agents would have kept conditions properly anaerobic — though
+this experiment cannot separate out what each ingredient contributed. Even
+so, mGAM's advantage was large enough to make it the natural starting medium
+for testing starch, vitamin K₁ and pH one at a time.
+
+#### Results
+
+Growth curves across the five iterations are shown in Figure 1 (panels
+A–E); the fitted parameters for every condition are in Table 2.
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-a-1.avif"
+    alt="OD growth curves, Pilot — DSM 1447 in BHI, WC, MM and mGAM over 24 h."
+  />
+  <div className="figure-caption">
+    Figure 1A. Pilot — DSM 1447 in BHI, WC, MM and mGAM over 24 h.
+  </div>
+</figure>
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-b-1.avif"
+    alt="OD growth curves, Pilot continuation — the same plate, read for a further 24 h."
+  />
+  <div className="figure-caption">
+    Figure 1B. Pilot continuation — the same plate, read for a further 24 h.
+  </div>
+</figure>
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-c-1.avif"
+    alt="OD growth curves, Strain effect — DSM 1447 and RCC 1806 in BHI, WC, MM and mGAM over 48 h."
+  />
+  <div className="figure-caption">
+    Figure 1C. Strain effect — DSM 1447 and RCC 1806 in BHI, WC, MM and mGAM
+    over 48 h.
+  </div>
+</figure>
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-d-1.avif"
+    alt="OD growth curves, Lag reduction — both strains inoculated from fresh plate colonies, plus BHI at increased cell density."
+  />
+  <div className="figure-caption">
+    Figure 1D. Lag reduction — both strains inoculated from fresh plate
+    colonies, plus BHI at increased cell density.
+  </div>
+</figure>
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-e-1.avif"
+    alt="OD growth curves, Full-factorial design — MM with every combination of starch, vitamin K1 and pH adjustment, against the mGAM reference."
+  />
+  <div className="figure-caption">
+    Figure 1E. Full-factorial design — MM with every combination of starch,
+    vitamin K₁ and pH adjustment, against the mGAM reference.
+  </div>
+</figure>
+
+</div>
+
+<div className="figure-caption">
+  Figure 1A–E. Growth of <em>P. vulgatus</em> fitted by Gaussian-process
+  regression (DGrowthR); click any panel to enlarge it. Panels correspond to the
+  five iterations in Table 2 below.
+</div>
+
+<ExpandableText title="Why Gaussian process (GP) regression?">
+
+Bacterial growth curves have a lag phase, an exponential phase, and a
+plateau. Parametric models such as the logistic impose a fixed shape on all
+three, which can bias the estimated rate when the real curve deviates from
+that shape. A GP makes no assumption about the functional form: it instead
+fits a smooth curve to the data and returns a posterior distribution at every
+time point. Because we fit to ln(OD), the derivative of the fitted curve
+gives the instantaneous specific growth rate μ(t), with confidence bounds.
+This lets us identify the exponential phase from the data instead of
+choosing a window by eye, and it propagates measurement uncertainty into μ.
+
+</ExpandableText>
+
+<ExpandableText title="What does each variable describe?">
+
+- **ΔOD** is the total increase in optical density, which reflects the final
+  biomass the culture reaches.
+- **t<sub>d</sub>** is the time needed for the population to double at that
+  rate, giving an intuitive measure of generation time.
+- **μ<sub>max</sub>** is the fastest rate at which the population increases
+  during exponential growth, reflecting how quickly cells can replicate under
+  the given conditions — which depends on nutrient availability, stress, and
+  the metabolic state of the cells.
+- **Lag time (λ)** is the period after inoculation during which cells adjust
+  to the new environment, for example by inducing enzymes or repairing
+  damage, before they begin dividing; a longer lag usually indicates greater
+  stress or a less favorable condition.
+- **AUC** integrates the growth curve over the whole measurement, so it
+  captures overall growth across lag, exponential and plateau phases in one
+  value, combining how fast cells grow with how long they keep growing.
+
+</ExpandableText>
+
+<ExpandableText title="How are the calculations performed?">
+
+ΔOD is the difference between the maximum and initial OD over the
+measurement: ΔOD = OD<sub>max</sub> − OD<sub>initial</sub>.
+
+Maximum specific growth rate (μ<sub>max</sub>) is the peak of the first
+derivative of the fitted ln(OD) curve. During exponential growth, the
+population grows as OD<sub>t</sub> = OD<sub>0</sub>e<sup>μt</sup>. Taking the
+natural log linearizes this to ln(OD<sub>t</sub>) = ln(OD<sub>0</sub>) + μt,
+so the slope of ln(OD) against time is the specific growth rate μ, in units
+of inverse time, with no conversion factor. The doubling time follows
+directly: t<sub>d</sub> = ln(2) / μ<sub>max</sub>.
+
+Lag time λ is the time at which the tangent to the fitted ln(OD) curve at
+μ<sub>max</sub> intersects the baseline ln(OD). Area under the curve (AUC) is
+the integral of the fitted ln(OD) curve over the whole measurement.
+
+</ExpandableText>
+
+<ExpandableText title="What do the † and ‡ quality flags mean in Table 2?">
+
+**† (marginal):** conditions with a ΔOD of 0.03 or less. At this level the
+growth signal is close to the noise of the measurement, so the estimated
+parameters are unreliable.
+
+**‡ (not fitted):** conditions the package did not fit because they contained
+three or fewer distinct optical densities.
+
+A tight standard deviation describes the model's confidence in its fit. It
+does not confirm that the fit reflects real growth, since the GP will return
+a numeric fit for almost any input. For † rows in particular, the error bars
+are best read alongside the ΔOD value rather than on their own.
+
+</ExpandableText>
+
+<div className="table-responsive table-responsive-rounded table-responsive-sticky-head my-3">
+
+<table className="table table-bordered align-middle text-center growth-params-table">
+  <thead>
+    <tr>
+      <th>Iteration</th>
+      <th>Media</th>
+      <th>Strain</th>
+      <th>
+        t<sub>total</sub> (h)
+      </th>
+      <th>ΔOD</th>
+      <th>
+        t<sub>d</sub>
+      </th>
+      <th>
+        μ<sub>max</sub> (h⁻¹)
+      </th>
+      <th>λ (h)</th>
+      <th>AUC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowSpan={4}>1 — Pilot</td>
+      <td>mGAM</td>
+      <td rowSpan={4}>DSM 1447</td>
+      <td rowSpan={4}>24</td>
+      <td>+0.398</td>
+      <td>46 ± 1 min</td>
+      <td>0.902 ± 0.007</td>
+      <td>1.0 ± 0.3</td>
+      <td>75.4 ± 0.0</td>
+    </tr>
+    <tr>
+      <td>WC</td>
+      <td>+0.132</td>
+      <td>1.60 ± 0.07</td>
+      <td>0.434 ± 0.018</td>
+      <td>9.2 ± 1.0</td>
+      <td>28.0 ± 0.2</td>
+    </tr>
+    <tr>
+      <td>MM †</td>
+      <td>+0.01</td>
+      <td>11.97 ± 3.41</td>
+      <td>0.062 ± 0.015</td>
+      <td>16.2 ± 4.9</td>
+      <td>0.7 ± 0.3</td>
+    </tr>
+    <tr>
+      <td>BHI ‡</td>
+      <td>+0.002</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td rowSpan={4}>2 — Pilot continuation</td>
+      <td>mGAM †</td>
+      <td rowSpan={4}>DSM 1447</td>
+      <td rowSpan={4}>24</td>
+      <td>0.028</td>
+      <td>107.52 ± 3.91</td>
+      <td>0.01 ± 0.00</td>
+      <td>11.1 ± 4.5</td>
+      <td>0.5 ± 0.0</td>
+    </tr>
+    <tr>
+      <td>WC †</td>
+      <td>0.012</td>
+      <td>39.99 ± 11.16</td>
+      <td>0.02 ± 0.00</td>
+      <td>16.1 ± 5.2</td>
+      <td>1.0 ± 0.1</td>
+    </tr>
+    <tr>
+      <td>MM</td>
+      <td>0.048</td>
+      <td>3.48 ± 0.41</td>
+      <td>0.20 ± 0.02</td>
+      <td>7.2 ± 1.3</td>
+      <td>17.8 ± 0.9</td>
+    </tr>
+    <tr>
+      <td>BHI ‡</td>
+      <td>-0.001</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td rowSpan={8}>3 — Strain effect</td>
+      <td>mGAM</td>
+      <td rowSpan={4}>RCC 1806</td>
+      <td rowSpan={8}>48</td>
+      <td>+0.490</td>
+      <td>1.02 ± 0.04</td>
+      <td>0.680 ± 0.023</td>
+      <td>24.2 ± 0.3</td>
+      <td>77.3 ± 0.3</td>
+    </tr>
+    <tr>
+      <td>WC</td>
+      <td>+0.110</td>
+      <td>3.50 ± 0.17</td>
+      <td>0.199 ± 0.010</td>
+      <td>8.9 ± 1.2</td>
+      <td>76.5 ± 0.5</td>
+    </tr>
+    <tr>
+      <td>MM</td>
+      <td>+0.085</td>
+      <td>1.93 ± 0.06</td>
+      <td>0.359 ± 0.011</td>
+      <td>14.8 ± 0.3</td>
+      <td>63.3 ± 0.2</td>
+    </tr>
+    <tr>
+      <td>BHI</td>
+      <td>+0.073</td>
+      <td>4.41 ± 0.10</td>
+      <td>0.157 ± 0.004</td>
+      <td>18.1 ± 0.7</td>
+      <td>45.7 ± 0.1</td>
+    </tr>
+    <tr>
+      <td>mGAM</td>
+      <td rowSpan={4}>DSM 1447</td>
+      <td>+0.462</td>
+      <td>48 ± 1 min</td>
+      <td>0.863 ± 0.008</td>
+      <td>0.6 ± 1.1</td>
+      <td>164.6 ± 0.0</td>
+    </tr>
+    <tr>
+      <td>WC †</td>
+      <td>+0.035</td>
+      <td>6.49 ± 0.52</td>
+      <td>0.107 ± 0.008</td>
+      <td>17.7 ± 2.7</td>
+      <td>25.9 ± 0.3</td>
+    </tr>
+    <tr>
+      <td>MM †</td>
+      <td>+0.024</td>
+      <td>2.78 ± 0.50</td>
+      <td>0.256 ± 0.043</td>
+      <td>41.9 ± 1.1</td>
+      <td>3.4 ± 0.7</td>
+    </tr>
+    <tr>
+      <td>BHI ‡</td>
+      <td>+0.000</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td rowSpan={10}>4 — Lag reduction</td>
+      <td>mGAM</td>
+      <td rowSpan={5}>DSM 1447</td>
+      <td rowSpan={10}>42</td>
+      <td>+0.328</td>
+      <td>41 ± 1 min</td>
+      <td>1.004 ± 0.017</td>
+      <td>2.5 ± 1.9</td>
+      <td>119.7 ± 0.1</td>
+    </tr>
+    <tr>
+      <td>WC</td>
+      <td>+0.131</td>
+      <td>4.61 ± 0.38</td>
+      <td>0.151 ± 0.012</td>
+      <td>6.4 ± 2.7</td>
+      <td>63.5 ± 1.8</td>
+    </tr>
+    <tr>
+      <td>MM</td>
+      <td>+0.063</td>
+      <td>6.32 ± 1.24</td>
+      <td>0.113 ± 0.019</td>
+      <td>26.5 ± 5.4</td>
+      <td>9.6 ± 1.9</td>
+    </tr>
+    <tr>
+      <td>BHI †</td>
+      <td>+0.010</td>
+      <td>38.44 ± 8.89</td>
+      <td>0.019 ± 0.004</td>
+      <td>7.9 ± 8.0</td>
+      <td>11.4 ± 1.8</td>
+    </tr>
+    <tr>
+      <td>BHI (10×) ‡</td>
+      <td>−0.005</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>mGAM</td>
+      <td rowSpan={5}>RCC 1806</td>
+      <td>+0.484</td>
+      <td>50 ± 1 min</td>
+      <td>0.833 ± 0.012</td>
+      <td>6.0 ± 0.0</td>
+      <td>121.6 ± 0.1</td>
+    </tr>
+    <tr>
+      <td>WC †</td>
+      <td>+0.011</td>
+      <td>11.48 ± 2.33</td>
+      <td>0.063 ± 0.012</td>
+      <td>36.6 ± 6.3</td>
+      <td>0.4 ± 0.2</td>
+    </tr>
+    <tr>
+      <td>MM ‡</td>
+      <td>+0.002</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>BHI †</td>
+      <td>+0.008</td>
+      <td>21.94 ± 4.17</td>
+      <td>0.033 ± 0.006</td>
+      <td>16.9 ± 6.4</td>
+      <td>7.8 ± 1.2</td>
+    </tr>
+    <tr>
+      <td>BHI (10×) ‡</td>
+      <td>−0.016</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td rowSpan={9}>5 — Full-factorial design</td>
+      <td>mGAM (ref) *</td>
+      <td rowSpan={9}>DSM 1447</td>
+      <td rowSpan={9}>48</td>
+      <td>+0.180</td>
+      <td>3.49 ± 0.06</td>
+      <td>0.199 ± 0.003</td>
+      <td>&lt;0.1 ± 0.0</td>
+      <td>24.1 ± 0.0</td>
+    </tr>
+    <tr>
+      <td>MM + starch + vitK + pH</td>
+      <td>+0.047</td>
+      <td>12.30 ± 2.02</td>
+      <td>0.058 ± 0.009</td>
+      <td>10.3 ± 6.1</td>
+      <td>22.8 ± 0.8</td>
+    </tr>
+    <tr>
+      <td>MM + vitK + pH</td>
+      <td>+0.044</td>
+      <td>9.54 ± 1.08</td>
+      <td>0.074 ± 0.008</td>
+      <td>12.4 ± 3.4</td>
+      <td>28.8 ± 0.9</td>
+    </tr>
+    <tr>
+      <td>MM + starch + pH</td>
+      <td>+0.032</td>
+      <td>18.39 ± 3.72</td>
+      <td>0.039 ± 0.008</td>
+      <td>10.4 ± 10.3</td>
+      <td>16.4 ± 0.8</td>
+    </tr>
+    <tr>
+      <td>MM + vitK †</td>
+      <td>+0.014</td>
+      <td>16.98 ± 2.46</td>
+      <td>0.042 ± 0.006</td>
+      <td>23.4 ± 4.8</td>
+      <td>8.5 ± 0.5</td>
+    </tr>
+    <tr>
+      <td>MM + pH †</td>
+      <td>−0.001</td>
+      <td>25.41 ± 5.26</td>
+      <td>0.028 ± 0.006</td>
+      <td>10.8 ± 5.2</td>
+      <td>11.8 ± 0.8</td>
+    </tr>
+    <tr>
+      <td>MM + starch + vitK †</td>
+      <td>−0.003</td>
+      <td>71.15 ± 19.69</td>
+      <td>0.010 ± 0.003</td>
+      <td>10.6 ± 10.5</td>
+      <td>6.2 ± 0.6</td>
+    </tr>
+    <tr>
+      <td>MM + starch †</td>
+      <td>−0.002</td>
+      <td>79.80 ± 34.90</td>
+      <td>0.010 ± 0.003</td>
+      <td>5.3 ± 6.5</td>
+      <td>6.4 ± 0.7</td>
+    </tr>
+    <tr>
+      <td>MM (unsuppl.) †</td>
+      <td>−0.016</td>
+      <td>13.75 ± 1.60</td>
+      <td>0.051 ± 0.006</td>
+      <td>&lt;0.1 ± 0.0</td>
+      <td>2.6 ± 0.0</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+<div className="figure-caption">
+  Table 2. Growth-curve fitting parameters across all five iterations, by medium
+  and strain. t<sub>d</sub> is given in the unit shown for each row (minutes
+  where marked, hours otherwise). † marginal (ΔOD ≤ 0.03); ‡ not fitted (≤ 3
+  distinct ODs); — not applicable. * mGAM wells in panel E started at 0.30 OD
+  with little headroom; its 3.49 h mean doubling time describes the approach to
+  a plateau, not exponential growth.
+</div>
+
+{/* The source cell for iteration 2's mGAM AUC read "0.5 ± 00" in the team's draft, almost certainly a dropped decimal — transcribed here as 0.5 ± 0.0 to match the column's formatting; worth the team double-checking against the raw DGrowthR output. */}
+
+#### Discussion
+
+**Experiment 1: Pilot.** The first pilot established that medium choice
+mattered more than any other variable we tested. mGAM supported growth in
+every well, reaching 0.40 OD above background with a doubling time of
+~46 min, the fastest condition we recorded. This fits its reputation as a
+medium that supports a broad range of predominant gut
+anaerobes[^growth-hirano]. WC also grew in every well, but its exponential
+phase started eight hours later, it doubled half as fast, and it reached
+only a third of mGAM's density. WC nonetheless resolved all three growth
+phases cleanly, so we would favour it where kinetic readouts matter more
+than final biomass. Unsupplemented BHI and MM did not grow within the 24 h
+window (+0.010 OD, marginal), but as the second pilot day showed, that
+result reflects the assay length rather than a permanent failure.
+
+**Experiment 2: Pilot continuation.** The second day changed how we read MM.
+Its lag of ≈ 7 h into Day 2 means growth began roughly 31 h after
+inoculation, and once started it gained +0.048 OD. A standard 24 h assay
+would have scored it as a failure, which is why every later plate was run
+for 42 to 48 h. mGAM and WC were already at plateau by the end of Day 1 and
+gained only 0.028 and 0.012 OD on Day 2, so they showed no further growth,
+and BHI stayed flat, as in Experiment 1. The result also shows that the lag
+values from the GP fit are measured from the start of each day's read, not
+from inoculation, so lags must be compared with that in mind.
+
+**Experiment 3: Strain dependency.** This was the first place where the
+faecal isolate (RCC 1806) and the type strain (DSM 1447) behaved
+differently. The isolate reached higher densities in every medium, in
+places threefold, but it started consistently later: in mGAM the type
+strain was already dividing at the first reading (mean lag 0.6 h), while the
+isolate waited 24.2 h. Most unexpectedly, the isolate grew in unsupplemented
+BHI, where the type strain did not, on the same plate read at the same time.
+Since RCC 1806 is recorded as a faecal isolate, the explanation for this can
+only be an assumption without further experiments. The LB-based minimal
+medium gave a divided result: two of its three DSM 1447 wells grew and one
+did not, so the pooled +0.024 OD describes neither. It sits just under the
+0.03 OD marking line, and summarising by mean instead of median puts it just
+over — that is the whole distance between reading the condition as dead and
+reading it as alive, so we treat it as unreliable. Its 41.9 ± 1.1 h lag is
+the latest in the study and fits the slow, inconsistent behaviour this
+medium showed throughout.
+
+**Experiment 4: Reducing lag times.** On Laurie Comstock's advice that most
+of an overnight culture is dead by the time it is subcultured, we inoculated
+both strains in the morning from colonies on a fresh plate. This cut the
+isolate's mGAM lag from 24.2 h to 6.0 h, a four-fold reduction, while the
+type strain went from essentially no lag to 2.5 ± 1.9 h, an interval wide
+enough that the change is not resolvable. Both then doubled quickly, at
+0.83 ± 0.01 h and 0.69 ± 0.01 h. The preculture change also reversed which
+strain grew in Wilkins–Chalgren and in the LB-based minimal medium relative
+to Experiment 2: here DSM 1447 grew in both and RCC 1806 in neither, where
+previously it had been the other way round. Preculture state is therefore
+the largest uncontrolled variable in this study, and growth parameters are
+not comparable between plates without it. This plate was read at 630 nm
+rather than 600 nm, so its absolute densities cannot be compared with other
+experiments, although rates and lags are unaffected since each curve shares
+its wavelength and blank. The run was interrupted at 20 h, and every well
+jumped by up to 0.2 OD across three readings before returning to its
+previous trend, so those readings were excluded. Roughly half the BHI wells
+then showed a sustained rise starting at the gap, most likely a residual
+artefact of the disturbance rather than growth. BHI run at increased cell
+density supported no growth at all, which supports our conclusion that
+supplemented BHI is needed to sustain _P. vulgatus_.
+
+**Experiment 5: Full factorial study.** Soluble starch, vitamin K and a pH
+adjustment to 7.2 were tested in all eight combinations of a 2³ factorial in
+the LB-based minimal medium, with six wells per condition over 48 h. Vitamin
+K was chosen because many _Bacteroides_ and related species cannot
+synthesise it[^growth-gibbons], and the pH adjustment was needed because the
+medium as made came out at pH 8.7–8.8. All three supplements together gave
+the largest gain (+0.047 OD), vitamin K with pH gave +0.044, and starch with
+pH gave +0.032, while vitamin K alone gained only +0.014. The pH adjustment
+appeared in all three working combinations and in none of the failures, so
+it appears necessary but not sufficient. Mean doubling times in the working
+combinations were long (9.5–18.4 h) with lags spanning up to ±10 h, so no
+ordering among them is meaningful.
+
+We found that the base medium was contaminated. Filter sterilisation appears
+to have worked, since uninoculated wells drifted by only 0.002 OD over 48 h,
+but compounds the contaminant had already consumed cannot be filtered out.
+This is the most likely reason the unsupplemented medium, which had
+supported growth in every earlier experiment, grew in none of its wells
+here. A permutation test put the largest likelihood ratios where the
+largest ΔOD differences were, but the strongest comparison (full combination
+against starch plus vitamin K) gave p = 0.043 before and 0.151 after
+Benjamini–Hochberg correction across seven comparisons[^growth-bh]. With six
+wells per condition the design is underpowered for this
+question[^growth-tonner], so the result reflects a limitation of the
+experiment rather than evidence that the supplements do not differ.
+
+#### Conclusion
+
+These four cycles were as much a learning curve for EMPOWER as for
+_P. vulgatus_. They showed that the assay must match the organism, since a
+standard 24 h read would have wrongly excluded the minimal medium, and that
+preculture is a controllable variable that shifted lags more than strain
+choice did. The factorial work points toward a minimal medium that can
+support _P. vulgatus_ growth with pH adjustment and vitamin K, but it does
+not yet match mGAM and still needs dose–response fine-tuning, so mGAM
+remains our reference medium. Open questions include a clean re-run of the
+unsupplemented control on uncontaminated base medium, a larger experiment to
+rank the supplements, and a direct test of supplemented BHI, which the
+literature suggests is a credible alternative[^growth-gibbons].
 
 </ResultSection>
 
@@ -785,12 +1781,12 @@ Placeholder — what a next team should do with this.
 
 <div className="construct-intro-text">
 
-Our approach involves isolating *P. vulgatus* from a patient's fecal sample,
+Our approach involves isolating _P. vulgatus_ from a patient's fecal sample,
 CRISPR engineering it in vitro, and administering it to the same patient. The
 CRISPR system, introduced through conjugation, uses the guide RNA (gRNA) to
 target the native BSH and replaces it with a BSH homolog of different substrate
 preference, so that the bile salts with the strongest TGR5 affinity remain. The
-homologous recombination system of *P. vulgatus* can use the designed homology
+homologous recombination system of _P. vulgatus_ can use the designed homology
 arms flanking our BSH of interest to insert it into the genome after double
 strand break induction. The intended effect is a restored bile salt pool for
 balanced immune and metabolic modulation.
@@ -820,19 +1816,80 @@ balanced immune and metabolic modulation.
     </tr>
   </thead>
   <tbody>
-    <tr><td style={{ backgroundColor: "#d6d6da", color: "#2b2136" }}>oriT</td><td>Origin of transfer for mobilization</td></tr>
-    <tr><td style={{ backgroundColor: "#2b2136", color: "#f5f0fa" }}>AmpR</td><td>Selection marker (<em>E. coli</em>)</td></tr>
-    <tr><td style={{ backgroundColor: "#74747c", color: "#f5f0fa" }}>R6K γ ori</td><td>Conditional origin (<em>pir</em>-specific replication origin)</td></tr>
-    <tr><td style={{ backgroundColor: "#8a8a91", color: "#2b2136" }}>pB8-51</td><td><em>Bacteroides</em> plasmid replication origin</td></tr>
-    <tr><td style={{ backgroundColor: "#2b2136", color: "#f5f0fa" }}>Cat</td><td>Chloramphenicol selection marker (<em>P. vulgatus</em>)</td></tr>
-    <tr><td style={{ backgroundColor: "#3a3a42", color: "#f5f0fa" }}>P<sub>Cas9</sub></td><td>Cfx promoter to drive Cas9 expression</td></tr>
-    <tr><td style={{ backgroundColor: "#c3c3c8", color: "#2b2136" }}>rpiL RBS</td><td>Ribosome binding site</td></tr>
-    <tr><td style={{ backgroundColor: "#7d5a9e", color: "#f5f0fa" }}>Cas9</td><td>Coding sequence</td></tr>
-    <tr><td style={{ backgroundColor: "#3a3a42", color: "#f5f0fa" }}>P<sub>gRNA</sub></td><td>Bfp promoter to drive gRNA expression</td></tr>
-    <tr><td style={{ backgroundColor: "#b7bcc2", color: "#2b2136" }}>rrnB T1 terminator</td><td>Transcription terminator</td></tr>
-    <tr><td style={{ backgroundColor: "#54a2a7", color: "#f5f0fa" }}>HA<sub>L</sub></td><td>Homology arm (left)</td></tr>
-    <tr><td style={{ backgroundColor: "#54a2a7", color: "#f5f0fa" }}>HA<sub>R</sub></td><td>Homology arm (right)</td></tr>
-    <tr><td style={{ backgroundColor: "#e6f3f3", color: "#2b2136" }}>Replacement BSH</td><td>Coding sequence (BSH enzyme)</td></tr>
+    <tr>
+      <td style={{ backgroundColor: "#d6d6da", color: "#2b2136" }}>oriT</td>
+      <td>Origin of transfer for mobilization</td>
+    </tr>
+    <tr>
+      <td style={{ backgroundColor: "#2b2136", color: "#f5f0fa" }}>AmpR</td>
+      <td>
+        Selection marker (<em>E. coli</em>)
+      </td>
+    </tr>
+    <tr>
+      <td style={{ backgroundColor: "#74747c", color: "#f5f0fa" }}>
+        R6K γ ori
+      </td>
+      <td>
+        Conditional origin (<em>pir</em>-specific replication origin)
+      </td>
+    </tr>
+    <tr>
+      <td style={{ backgroundColor: "#8a8a91", color: "#2b2136" }}>pB8-51</td>
+      <td>
+        <em>Bacteroides</em> plasmid replication origin
+      </td>
+    </tr>
+    <tr>
+      <td style={{ backgroundColor: "#2b2136", color: "#f5f0fa" }}>Cat</td>
+      <td>
+        Chloramphenicol selection marker (<em>P. vulgatus</em>)
+      </td>
+    </tr>
+    <tr>
+      <td style={{ backgroundColor: "#3a3a42", color: "#f5f0fa" }}>
+        P<sub>Cas9</sub>
+      </td>
+      <td>Cfx promoter to drive Cas9 expression</td>
+    </tr>
+    <tr>
+      <td style={{ backgroundColor: "#c3c3c8", color: "#2b2136" }}>rpiL RBS</td>
+      <td>Ribosome binding site</td>
+    </tr>
+    <tr>
+      <td style={{ backgroundColor: "#7d5a9e", color: "#f5f0fa" }}>Cas9</td>
+      <td>Coding sequence</td>
+    </tr>
+    <tr>
+      <td style={{ backgroundColor: "#3a3a42", color: "#f5f0fa" }}>
+        P<sub>gRNA</sub>
+      </td>
+      <td>Bfp promoter to drive gRNA expression</td>
+    </tr>
+    <tr>
+      <td style={{ backgroundColor: "#b7bcc2", color: "#2b2136" }}>
+        rrnB T1 terminator
+      </td>
+      <td>Transcription terminator</td>
+    </tr>
+    <tr>
+      <td style={{ backgroundColor: "#54a2a7", color: "#f5f0fa" }}>
+        HA<sub>L</sub>
+      </td>
+      <td>Homology arm (left)</td>
+    </tr>
+    <tr>
+      <td style={{ backgroundColor: "#54a2a7", color: "#f5f0fa" }}>
+        HA<sub>R</sub>
+      </td>
+      <td>Homology arm (right)</td>
+    </tr>
+    <tr>
+      <td style={{ backgroundColor: "#e6f3f3", color: "#2b2136" }}>
+        Replacement BSH
+      </td>
+      <td>Coding sequence (BSH enzyme)</td>
+    </tr>
   </tbody>
 </table>
 
@@ -840,22 +1897,22 @@ balanced immune and metabolic modulation.
 
 #### Integration strategy
 
-The construct must replicate and express in *E. coli* and *P. vulgatus* for
+The construct must replicate and express in _E. coli_ and _P. vulgatus_ for
 conjugation.
 
-- In *E. coli* S17 λ *pir*, R6K γ ori is used as an established origin of
+- In _E. coli_ S17 λ _pir_, R6K γ ori is used as an established origin of
   replication for stable plasmid number upkeep, while an ampicillin resistance
   cassette is expressed to select for transformed colonies.
-- Upon conjugative transfer to *P. vulgatus* using oriT, a chloramphenicol
+- Upon conjugative transfer to _P. vulgatus_ using oriT, a chloramphenicol
   resistance cassette (Cat) is used to select for positive transformants.
   Erythromycin is the usual choice for this step in the conjugation protocol,
   but our own <Link to="/results#antibiotic-susceptibility-of-p-vulgatus">MIC
   results</Link> show it only inhibits strain DSM1447, not the faecal isolate
   RCC1806 — chloramphenicol, tetracycline and metronidazole all inhibit both,
   and chloramphenicol was chosen as the marker here.
-- pB8-51 ori is used as a *Bacteroides* origin of replication once inside
-  *P. vulgatus*.
-- The promoter used *P. vulgatus*-specific expression for the gRNA, which
+- pB8-51 ori is used as a _Bacteroides_ origin of replication once inside
+  _P. vulgatus_.
+- The promoter used _P. vulgatus_-specific expression for the gRNA, which
   combines with Cas9 and targets the native BSH to induce a double strand break.
 - The plasmid backbone does not integrate so it can be cured, leaving a scarless
   gene replacement.
@@ -870,7 +1927,7 @@ conjugation.
 
 Though integrative plasmids exist, the CRISPR system enables precise engineering
 and site of integration flexibility using the native RecA homology directed
-repair (HDR) system in *P. vulgatus*.
+repair (HDR) system in _P. vulgatus_.
 
 </Callout>
 
@@ -968,5 +2025,37 @@ For additional information about risk and safety see the <Link to="/safety-and-s
 [^mic-krause]: Krause, K. M., Serio, A. W., Kane, T. R., & Connolly, L. E. (2016). Aminoglycosides: An Overview. Cold Spring Harbor Perspectives in Medicine, 6(6), a027029. https://doi.org/10.1101/cshperspect.a027029
 
 [^mic-webster]: Webster, C. M., Woody, A. M., Fusseini, S., Holmes, L. G., Robinson, G. K., & Shepherd, M. (2022). Proton motive force underpins respiration-mediated potentiation of aminoglycoside lethality in pathogenic _Escherichia coli_. Archives of Microbiology, 204(1), 120. https://doi.org/10.1007/s00203-021-02710-y
+
+[^growth-dgrowthr]: Feldl, M., Olayo-Alarcon, R., Amstalden, M. K., Zannoni, A., Peschel, S., Sharma, C. M., Brochado, A. R., & Müller, C. L. (2025). Statistical end-to-end analysis of large-scale microbial growth data with DGrowthR. bioRxiv 2025.03.25.645164. https://doi.org/10.1101/2025.03.25.645164
+
+[^growth-keitel2025]: Keitel, L., Schick, B., Pohen, G., Yordanov, S., & Büchs, J. (2025). Online monitored characterization of _Phocaeicola vulgatus_ for organic acid production using anaerobic microtiter plate cultivations. Biotechnology Progress, 41(2), e3526. https://doi.org/10.1002/btpr.3526
+
+[^growth-hirano]: Hirano, R., Nishita, I., Nakai, R., Bito, A., Sasabe, R., & Kurihara, S. (2023). Development of culture methods capable of culturing a wide range of predominant species of intestinal bacteria. Frontiers in Cellular and Infection Microbiology, 13, 1056866. https://doi.org/10.3389/fcimb.2023.1056866
+
+[^growth-wc]: Wilkins, T. D., & Chalgren, S. (1976). Medium for use in antibiotic susceptibility testing of anaerobic bacteria. Antimicrobial Agents and Chemotherapy, 10(6), 926–928. https://doi.org/10.1128/AAC.10.6.926
+
+[^growth-gibbons]: Gibbons, R. J., & Macdonald, J. B. (1960). Hemin and vitamin K compounds as required factors for the cultivation of certain strains of _Bacteroides melaninogenicus_. Journal of Bacteriology, 80(2), 164–170.
+
+[^growth-bh]: Benjamini, Y., & Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. Journal of the Royal Statistical Society, Series B, 57(1), 289–300.
+
+[^growth-tonner]: Tonner, P. D., Darnell, C. L., Engelhardt, B. E., & Schmid, A. K. (2017). Detecting differential growth of microbial populations with Gaussian process regression. Genome Research, 27(2), 320–333. https://doi.org/10.1101/gr.210286.116
+
+[^growth-wc-insert]: Oxoid / Thermo Fisher Scientific. Wilkins–Chalgren Anaerobe Broth (CM0643) product insert. https://assets.fishersci.com/TFS-Assets/MBD/Instructions/MBD-BT-IFU-0559%20CM0643R%20WILKINS%20CHALGREN%20ANAEROBE%20BROTH
+
+[^growth-mgam-catalogue]: Shimadzu Diagnostics. Culture media catalogue. https://www.diagnostics-eu.shimadzu.com/wp-content/uploads/2024/08/culture-media-catalogue.pdf
+
+[^growth-rettedal]: Rettedal, E., Gumpert, H., & Sommer, M. (2014). Cultivation-based multiplex phenotyping of human gut microbiota allows targeted recovery of previously uncultured bacteria. Nature Communications, 5, 4714. https://doi.org/10.1038/ncomms5714
+
+[^growth-lee]: Lee, S., Choi, A., Park, K. H., et al. (2023). Single-cell hemoprotein (heme-SCP) exerts the prebiotic potential to establish a healthy gut microbiota in small pet dogs. Food Science and Biotechnology, 32, 489–496. https://doi.org/10.1007/s10068-022-01195-9
+
+[^growth-macy]: Macy, J., Probst, I., & Gottschalk, G. (1975). Evidence for cytochrome involvement in fumarate reduction and adenosine 5'-triphosphate synthesis by _Bacteroides fragilis_ grown in the presence of hemin. Journal of Bacteriology, 123(2), 436–442. https://doi.org/10.1128/jb.123.2.436-442.1975
+
+[^growth-fenn]: Fenn, K., Strandwitz, P., Stewart, E. J., et al. (2017). Quinones are growth factors for the human gut microbiota. Microbiome, 5, 161. https://doi.org/10.1186/s40168-017-0380-5
+
+[^growth-mccarthy]: McCarthy, R. E., Pajeau, M., & Salyers, A. A. (1988). Role of starch as a substrate for _Bacteroides vulgatus_ growing in the human colon. Applied and Environmental Microbiology, 54(8), 1911–1916. https://doi.org/10.1128/aem.54.8.1911-1916.1988
+
+[^growth-keitel2024]: Keitel, L., Miebach, K., Rummel, L., et al. (2024). Process analysis of the anaerobe _Phocaeicola vulgatus_ in a shake flasks and fermenter reveals pH and product inhibition. Annals of Microbiology, 74, 7. https://doi.org/10.1186/s13213-023-01745-4
+
+[^growth-keitel2023]: Keitel, L., Braun, K., Finger, M., et al. (2023). Carbon dioxide and trace oxygen concentrations impact growth and product formation of the gut bacterium _Phocaeicola vulgatus_. BMC Microbiology, 23, 391. https://doi.org/10.1186/s12866-023-03127-x
 
 </PageLayout>
