@@ -33,15 +33,13 @@ export function IntegrationPoint(_props: IntegrationPointProps) {
 }
 
 interface IntegrationSummaryProps {
-  /** Heading above the summary; pass an empty string to leave it off. */
+  /** Optional heading above the summary. Left off by default — the column
+   *  headings already say what the two sides are. */
   title?: string;
   children: ReactNode;
 }
 
-export function IntegrationSummary({
-  title = "What we learned and how we integrated it",
-  children,
-}: IntegrationSummaryProps) {
+export function IntegrationSummary({ title, children }: IntegrationSummaryProps) {
   const points = useMemo(
     () =>
       Children.toArray(children)

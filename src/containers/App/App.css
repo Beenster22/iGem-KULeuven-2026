@@ -12781,13 +12781,8 @@ a.protocol-download:hover {
    that separate the rows, so the three columns read as the main split. */
 .integration-summary-integrated,
 .integration-summary-impact {
-  border-left: 3px solid rgba(51, 40, 63, 0.22);
+  border-left: 3px solid rgba(47, 164, 169, 0.6);
   padding-left: 1.5rem;
-}
-
-[data-theme="dark"] .integration-summary-integrated,
-[data-theme="dark"] .integration-summary-impact {
-  border-left-color: rgba(255, 255, 255, 0.2);
 }
 
 /* The marker sits further right than the rule, so it clears the column line */
