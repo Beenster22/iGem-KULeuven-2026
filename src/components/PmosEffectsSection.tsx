@@ -9,7 +9,14 @@
 // drawing for this one), then the team's own uterus and ovaries and brain
 // (BodyOrgans.tsx) and liver (LiverDrawing.tsx). Colours match the symptom
 // groups' (.symptom-group--*).
-import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+  type RefObject,
+} from "react";
 import { Link } from "react-router-dom";
 import { useReducedMotion } from "framer-motion";
 import { GLOBE_LANDED, globeDropProgress, PMOS_EFFECTS_ID } from "./globeDrop";
@@ -75,7 +82,16 @@ const EFFECTS: Effect[] = [
 ];
 
 // Whether the globe has landed on the first circle (see globeDrop.ts).
-function useGlobeLanded(enabled: boolean) {
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback: a
+// glitch just before the circle appears): the section's "is-landed" class
+// is now also set straight on the element in the same frame the globe hides
+// itself (useGlobeDrop in PmosGlobe.tsx), rather than only through React
+// state, whose re-render could land a frame later and leave neither the
+// globe nor the circle on screen for that frame.
+function useGlobeLanded(
+  enabled: boolean,
+  sectionRef: RefObject<HTMLElement | null>,
+) {
   const [landed, setLanded] = useState(!enabled);
 
   useEffect(() => {
@@ -83,7 +99,9 @@ function useGlobeLanded(enabled: boolean) {
     let frame: number | null = null;
     const update = () => {
       frame = null;
-      setLanded((globeDropProgress() ?? 0) >= GLOBE_LANDED);
+      const now = (globeDropProgress() ?? 0) >= GLOBE_LANDED;
+      sectionRef.current?.classList.toggle("is-landed", now);
+      setLanded(now);
     };
     const onScroll = () => {
       if (frame === null) frame = requestAnimationFrame(update);
@@ -96,7 +114,7 @@ function useGlobeLanded(enabled: boolean) {
       window.removeEventListener("resize", onScroll);
       if (frame !== null) cancelAnimationFrame(frame);
     };
-  }, [enabled]);
+  }, [enabled, sectionRef]);
 
   return landed;
 }
@@ -105,8 +123,16 @@ const DROP_DURATION_MS = 1100;
 // Wheel and touch input arriving just after the drop (a trackpad's momentum)
 // is still swallowed for this long, so it doesn't carry the page on.
 const DROP_SETTLE_MS = 400;
-const EASE_IN_OUT_CUBIC = (t: number) =>
-  t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+// 0 → 1 over t = 0 … 1, leaving 0 at slope `startRate` and arriving at 1
+// at rest (a cubic Hermite curve). Edited with Claude Opus 5.5 (Anthropic),
+// 2026-10-18 (team feedback: a glitch as the drop began): the glide used to
+// start from a standstill (ease-in-out), so a page already being scrolled
+// stopped dead for a moment and then sped up again; it now carries on at
+// the speed the page was already moving and eases to a stop.
+const GLIDE = (t: number, startRate: number) =>
+  startRate * (t ** 3 - 2 * t ** 2 + t) + (3 * t ** 2 - 2 * t ** 3);
+// Above 3 the curve would overshoot the target before settling back.
+const MAX_START_RATE = 3;
 
 // Generated with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request: the
 // whole drop in one scroll): as soon as the page is scrolled into the
@@ -119,6 +145,8 @@ function useGlobeDropAutoScroll(enabled: boolean) {
   useEffect(() => {
     if (!enabled) return;
     let lastY = window.scrollY;
+    let lastTime = performance.now();
+    let velocity = 0; // px per ms, smoothed
     let busyUntil = 0;
     let frame: number | null = null;
 
@@ -135,23 +163,38 @@ function useGlobeDropAutoScroll(enabled: boolean) {
 
     const glide = (to: number) => {
       const from = window.scrollY;
+      const distance = to - from;
       const start = performance.now();
       busyUntil = start + DROP_DURATION_MS + DROP_SETTLE_MS;
+      // The page's current speed, as a slope of the 0 → 1 curve (only if
+      // it is already heading the right way).
+      const startRate =
+        distance !== 0 && Math.sign(velocity) === Math.sign(distance)
+          ? Math.min(MAX_START_RATE, (velocity * DROP_DURATION_MS) / distance)
+          : 0;
       const tick = (now: number) => {
         const t = Math.min(1, (now - start) / DROP_DURATION_MS);
         window.scrollTo({
-          top: from + (to - from) * EASE_IN_OUT_CUBIC(t),
+          top: from + distance * GLIDE(t, startRate),
           behavior: "instant",
         });
         frame = t < 1 ? requestAnimationFrame(tick) : null;
       };
-      frame = requestAnimationFrame(tick);
+      tick(start);
     };
 
     const onScroll = () => {
       const y = window.scrollY;
+      const now = performance.now();
       const down = y > lastY;
+      const dt = now - lastTime;
+      if (dt > 0) {
+        const sample = (y - lastY) / dt;
+        // A gap of more than a few frames means the page had come to rest.
+        velocity = dt > 100 ? sample : velocity * 0.5 + sample * 0.5;
+      }
       lastY = y;
+      lastTime = now;
       if (performance.now() < busyUntil) return;
       const section = document.getElementById(PMOS_EFFECTS_ID);
       const progress = globeDropProgress();
@@ -183,11 +226,13 @@ function useGlobeDropAutoScroll(enabled: boolean) {
 // (the delays are --i in App.css).
 export function PmosEffectsSection() {
   const prefersReducedMotion = useReducedMotion();
-  const landed = useGlobeLanded(!prefersReducedMotion);
+  const sectionRef = useRef<HTMLElement>(null);
+  const landed = useGlobeLanded(!prefersReducedMotion, sectionRef);
   useGlobeDropAutoScroll(!prefersReducedMotion);
 
   return (
     <section
+      ref={sectionRef}
       id={PMOS_EFFECTS_ID}
       className={`pmos-effects${landed ? " is-landed" : ""}`}
       data-snap=""
