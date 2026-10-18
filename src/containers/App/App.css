@@ -342,6 +342,74 @@ a[data-footnote-ref]:focus {
   color: var(--color-header-text);
 }
 
+/* Purpose: title-row badge marking this as a special prize's dedicated page
+   (see pages.ts `specialPrize`) — same teal pill as the home page's
+   FindOutMore "Special prize" badge (App.css .find-more-card-prize),
+   repeated here and in the navbar (.nav-link-prize-star,
+   .mega-menu-link-prize) so the prize is visible wherever the page is
+   reached, not only from the home page. */
+.page-header-box-title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.page-header-prize-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background-color: #2fa4a9;
+  color: #33283f;
+  font-size: 0.8rem;
+  font-weight: 800;
+  white-space: nowrap;
+  margin-bottom: 0.5rem;
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: team request — every page's title now carries the same icon as
+   its navbar mega-menu tile (see pages.ts `icon`, Header.tsx), sitting to
+   its left and spanning the full height of the title + lead stack (not just
+   the title line). The header box is always the same dark plum
+   (--color-header-bg), so the --ic-* illustration variables are fixed to
+   that card's palette rather than switching with the site's light/dark
+   theme toggle. */
+.page-header-box-icon-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.page-header-icon {
+  --ic-1: #c9bde8;
+  --ic-2: #2fa4a9;
+  --ic-3: #f1c3d4;
+  --ic-line: #33283f;
+  /* DbtlCycleIcon's centre text fills with currentColor rather than an
+     --ic-* var (it sits over the open middle, not over a filled shape) —
+     needs its own color since nothing above it in the header sets one. */
+  color: var(--color-header-text);
+  flex: none;
+  display: block;
+  width: 6rem;
+}
+
+.page-header-icon svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 575.98px) {
+  .page-header-box-icon-row {
+    gap: 1rem;
+  }
+
+  .page-header-icon {
+    width: 3.75rem;
+  }
+}
+
 /* NAVBAR */
 .navbar-empower {
   background-color: var(--color-page-bg);
@@ -390,6 +458,15 @@ a[data-footnote-ref]:focus {
 
 .navbar-empower .nav-link-dropdown.show .nav-link-caret {
   transform: rotate(-180deg);
+}
+
+/* Purpose: small star marking a top-level nav link as a special prize's
+   dedicated page (see pages.ts `specialPrize`, .page-header-prize-badge
+   above). Kept to a bare star rather than the full "Special prize" pill —
+   there isn't room for the pill text beside the nav link label. */
+.nav-link-prize-star {
+  color: #2fa4a9;
+  margin-left: 0.3rem;
 }
 
 .navbar-empower .nav-link::after {
@@ -495,11 +572,6 @@ a[data-footnote-ref]:focus {
   border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
-[data-theme="dark"] .mega-menu-link:hover,
-[data-theme="dark"] .mega-menu-link:focus {
-  background-color: rgba(201, 189, 232, 0.15);
-}
-
 @keyframes mega-menu-fade-in {
   from {
     opacity: 0;
@@ -511,44 +583,137 @@ a[data-footnote-ref]:focus {
   }
 }
 
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: team request to match another team's wiki — wide landscape tiles
+   (icon beside the text, not stacked above it) rather than a left-aligned
+   list with a description line. Reuses the exact card system the home
+   page's "Find out more about EMPOWER" cards already use (find-more-card /
+   FindOutMoreIcons.tsx — alternating dark-plum and lavender, flat
+   illustrations coloured through --ic-1/2/3/line), so the two match instead
+   of the navbar inventing its own look. Cards are wide (minmax 15rem) and
+   short, sized for a horizontal dropdown strip rather than the home page's
+   tall vertical cards. */
 .mega-menu-content {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 1.5rem 2rem;
-  padding: 1.5rem 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 0.85rem;
+  padding: 1.25rem 1rem;
 }
 
 .mega-menu-link {
-  flex: 1 1 180px;
-  max-width: 260px;
-  text-decoration: none;
-  color: var(--color-text);
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  transition: background-color 0.15s ease;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.4rem;
+  border: 2px solid transparent;
+  border-radius: 1rem;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.mega-menu-link--dark {
+  --ic-1: #c9bde8;
+  --ic-2: #2fa4a9;
+  --ic-3: #f1c3d4;
+  --ic-line: #33283f;
+  background-color: #33283f;
+  border-color: rgba(201, 189, 232, 0.3);
+  color: #eaf4f5;
+}
+
+.mega-menu-link--light {
+  --ic-1: #33283f;
+  --ic-2: #2fa4a9;
+  --ic-3: #f1c3d4;
+  --ic-line: #eaf4f5;
+  background-color: #c9bde8;
+  color: #33283f;
 }
 
 .mega-menu-link:hover,
 .mega-menu-link:focus {
-  background-color: rgba(201, 189, 232, 0.5);
+  border-color: #2fa4a9;
+  box-shadow: 0 0.6rem 1.4rem rgba(47, 164, 169, 0.3);
+  color: inherit;
+  transform: translateY(-3px);
+}
+
+.mega-menu-link-icon {
+  flex: none;
+  display: block;
+  width: 2.75rem;
+}
+
+.mega-menu-link-icon svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.25s ease;
+}
+
+.mega-menu-link:hover .mega-menu-link-icon svg,
+.mega-menu-link:focus .mega-menu-link-icon svg {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.mega-menu-link-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
 }
 
 .mega-menu-link-name {
-  font-weight: 600;
-  font-size: 1.05rem;
+  font-weight: 800;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+/* Purpose: "Special prize" pill on a mega-menu tile whose page is a special
+   prize's dedicated page (see pages.ts `specialPrize`). Fixed teal/plum
+   rather than the tile's own dark/light colors so it reads the same as the
+   home page's FindOutMore badge and the page header's. */
+.mega-menu-link-prize {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background-color: #2fa4a9;
+  color: #33283f;
+  font-size: 0.7rem;
+  font-weight: 800;
+  vertical-align: middle;
 }
 
 .mega-menu-link-lead {
-  font-size: 0.85rem;
-  opacity: 0.75;
+  /* Same colour as the title (white on the dark tiles, plum on the light
+     ones) rather than the teal/blue tagline colour the home page cards use
+     — team feedback: the tinted tagline read as "blue" and they wanted
+     plain white here instead. */
+  color: inherit;
+  opacity: 0.85;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mega-menu-link,
+  .mega-menu-link-icon svg {
+    transition: none;
+  }
+
+  .mega-menu-link:hover,
+  .mega-menu-link:focus {
+    transform: none;
+  }
 }
 
 @media (max-width: 991.98px) {
@@ -563,12 +728,8 @@ a[data-footnote-ref]:focus {
   }
 
   .mega-menu-content {
-    flex-direction: column;
-    padding: 0.5rem 0 0.5rem 1rem;
-  }
-
-  .mega-menu-link {
-    max-width: none;
+    grid-template-columns: 1fr;
+    padding: 0.5rem 0.5rem 1rem;
   }
 }
 
@@ -910,6 +1071,11 @@ a[data-footnote-ref]:focus {
 .docking-heatmap-grid {
   border-collapse: separate;
   border-spacing: 2px;
+  /* Centers the grid when it's narrower than the scroll container; has no
+     effect (auto margins resolve to 0) once it's wide enough to need the
+     sideways scroll, so nothing is ever clipped off the left edge. */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .docking-heatmap-caption {
@@ -922,15 +1088,26 @@ a[data-footnote-ref]:focus {
 }
 
 .docking-heatmap-col-head {
+  position: relative;
   vertical-align: bottom;
+  /* Fixed height reserves room for the diagonal label below, regardless of
+     name length. */
+  height: 7.5rem;
   padding: 0 0 0.4rem;
-  font-size: 0.72rem;
-  font-weight: 600;
-  /* Ten full bile salt names will not fit side by side at column width, so
-     they are set vertically, as in the original figure's angled labels. */
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
+}
+
+.docking-heatmap-col-head span {
+  /* Angled labels (as in the original figure) read far more easily than
+     fully vertical text, while still fitting ten full bile salt names side
+     by side at column width. */
+  position: absolute;
+  left: 0.3rem;
+  bottom: 0.5rem;
+  transform: rotate(-45deg);
+  transform-origin: left bottom;
   white-space: nowrap;
+  font-size: 0.74rem;
+  font-weight: 600;
 }
 
 .docking-heatmap-corner {
@@ -3443,6 +3620,17 @@ div.sponsor-grid-card:hover {
   max-width: min(100%, 46rem);
   height: auto;
   margin-inline: auto;
+}
+
+/* Added with Claude Sonnet 5 (Anthropic), 2026-10-18
+   Purpose: opt-in style for a single figure, via
+   <ZoomableImage className="framed" ... /> — a visible border around the
+   image plus a larger column cap, for a diagram the reader should linger on. */
+.zoomable-image-trigger img.framed {
+  max-width: min(100%, 56rem);
+  border: 2px solid color-mix(in srgb, var(--color-text) 45%, transparent);
+  border-radius: 0.75rem;
+  padding: 0.5rem;
 }
 
 .zoomable-image-dialog {

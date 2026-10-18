@@ -24,14 +24,15 @@ interface StepInfo {
   name: StepName;
   label: string;
   /** Where the middle of this step's arrow sits on the wheel, in degrees
-   *  clockwise from the top (matches the team's cycle drawing). */
+   *  clockwise from the top. The steps run anticlockwise around the wheel so
+   *  that bringing the next one to the top turns the wheel clockwise. */
   angle: number;
 }
 
 const STEPS: StepInfo[] = [
-  { name: "listen", label: "Listen", angle: -60 },
-  { name: "analyse", label: "Analyse", angle: 60 },
-  { name: "implement", label: "Implement", angle: 180 },
+  { name: "listen", label: "Listen", angle: 60 },
+  { name: "analyse", label: "Analyse", angle: -60 },
+  { name: "implement", label: "Implement", angle: -180 },
 ];
 
 /* ---------- Wheel ---------- */
@@ -47,21 +48,21 @@ function polar(angle: number, r: number) {
   return `${(C + r * Math.sin(rad)).toFixed(2)} ${(C - r * Math.cos(rad)).toFixed(2)}`;
 }
 
-// One curved arrow: notched tail at `start`, band running clockwise to
-// `end`, arrowhead tip at `tip`.
+// One curved arrow: notched tail at `start`, band running anticlockwise to
+// `end`, arrowhead tip at `tip` — pointing the way the steps run.
 function arrowPath(centre: number) {
-  const start = centre - 52;
-  const end = centre + 40;
-  const tip = centre + 54;
-  const notch = start + 12;
+  const start = centre + 52;
+  const end = centre - 40;
+  const tip = centre - 54;
+  const notch = start - 12;
   return [
     `M ${polar(start, R_OUT)}`,
-    `A ${R_OUT} ${R_OUT} 0 0 1 ${polar(end, R_OUT)}`,
+    `A ${R_OUT} ${R_OUT} 0 0 0 ${polar(end, R_OUT)}`,
     `L ${polar(end, R_OUT + HEAD)}`,
     `L ${polar(tip, R_MID)}`,
     `L ${polar(end, R_IN - HEAD)}`,
     `L ${polar(end, R_IN)}`,
-    `A ${R_IN} ${R_IN} 0 0 0 ${polar(start, R_IN)}`,
+    `A ${R_IN} ${R_IN} 0 0 1 ${polar(start, R_IN)}`,
     `L ${polar(notch, R_MID)}`,
     "Z",
   ].join(" ");
@@ -70,8 +71,8 @@ function arrowPath(centre: number) {
 // Arc along the middle of an arrow for its word to follow. On the lower half
 // of the wheel the arc runs anticlockwise, so the word still reads upright.
 function labelPath(centre: number, upright: boolean) {
-  const from = centre - 50;
-  const to = centre + 38;
+  const from = centre - 38;
+  const to = centre + 50;
   return upright
     ? `M ${polar(from, R_MID)} A ${R_MID} ${R_MID} 0 0 1 ${polar(to, R_MID)}`
     : `M ${polar(to, R_MID)} A ${R_MID} ${R_MID} 0 0 0 ${polar(from, R_MID)}`;
@@ -79,8 +80,21 @@ function labelPath(centre: number, upright: boolean) {
 
 function CycleWheel({ active }: { active: number }) {
   const idPrefix = `feedback-wheel-${useId().replace(/:/g, "")}`;
-  // Turn the wheel so the active step's arrow sits at the top.
-  const rotation = -STEPS[active].angle;
+  // Turn the wheel so the active step's arrow sits at the top, always turning
+  // anticlockwise (to the left) to get there. The angle is kept cumulative
+  // rather than reset into 0-360 each time, so the wheel keeps going the same
+  // way instead of snapping back when the value wraps past a full turn.
+  const rotationRef = useRef(-STEPS[active].angle);
+  const [rotation, setRotation] = useState(rotationRef.current);
+
+  useEffect(() => {
+    const target = -STEPS[active].angle;
+    // Distance from where the wheel is now to the target, measured
+    // anticlockwise, so delta is never positive and it never turns right.
+    const delta = -((((rotationRef.current - target) % 360) + 360) % 360);
+    rotationRef.current += delta;
+    setRotation(rotationRef.current);
+  }, [active]);
 
   return (
     <svg

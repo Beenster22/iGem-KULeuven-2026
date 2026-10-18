@@ -59,6 +59,9 @@ export function HPIntro(_props: HPIntroProps) {
 
 interface HPSectionProps {
   title: string;
+  /** false when the surrounding phase heading already names this group, so
+   *  the card would otherwise repeat it (e.g. the Patients phase). */
+  showTitle?: boolean;
   children: ReactNode;
 }
 
@@ -84,6 +87,7 @@ interface FlatInterviewee {
 
 interface Section {
   title: string;
+  showTitle: boolean;
   intro?: { label?: string; content: ReactNode };
   interviewees: FlatInterviewee[];
   context: ReactNode[];
@@ -122,7 +126,13 @@ function extractSections(children: ReactNode): Section[] {
           context.push(child);
         }
       });
-      return { title: sectionChild.props.title, intro, interviewees, context };
+      return {
+        title: sectionChild.props.title,
+        showTitle: sectionChild.props.showTitle !== false,
+        intro,
+        interviewees,
+        context,
+      };
     });
 }
 
@@ -328,6 +338,11 @@ function HPFeatured({ interviewees, position, paused, onSelect, onOpen }: HPFeat
 // still opening the shared modal for the full write-up.
 type HPView = "carousel" | "list";
 const VIEW_STORAGE_KEY = "hp-interviews-view";
+// The page splits its interviews across several <HumanPracticesInterviews>
+// blocks (one per phase). They each render their own toggle, so switching
+// view in one tells the others to follow instead of leaving the page in two
+// different layouts at once.
+const VIEW_CHANGE_EVENT = "hp-interviews-view-change";
 
 function readStoredView(): HPView {
   try {
@@ -432,8 +447,15 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
   const [view, setView] = useState<HPView>(readStoredView);
   const modalRef = useRef<HTMLDivElement | null>(null);
 
+  useEffect(() => {
+    const onViewChange = (event: Event) => setView((event as CustomEvent<HPView>).detail);
+    window.addEventListener(VIEW_CHANGE_EVENT, onViewChange);
+    return () => window.removeEventListener(VIEW_CHANGE_EVENT, onViewChange);
+  }, []);
+
   function changeView(next: HPView) {
     setView(next);
+    window.dispatchEvent(new CustomEvent<HPView>(VIEW_CHANGE_EVENT, { detail: next }));
     try {
       window.localStorage.setItem(VIEW_STORAGE_KEY, next);
     } catch {
@@ -466,6 +488,7 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
 
   return (
     <>
+      {flat.length > 0 && (
       <div className="segmented-selector-bar hp-view-toggle" role="group" aria-label="Interview layout">
         {(["carousel", "list"] as const).map((option) => (
           <button
@@ -479,11 +502,12 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
           </button>
         ))}
       </div>
+      )}
 
       {sections.map((section) =>
         section.interviewees.length > 0 ? (
           <section key={section.title} className="hp-section">
-            <h2 className="hp-section-title">{section.title}</h2>
+            {section.showTitle && <h2 className="hp-section-title">{section.title}</h2>}
             <HPIntroBlock intro={section.intro} />
             <HPSectionCard section={section} view={view} paused={openIndex !== null} onOpen={setOpenIndex} />
 
@@ -493,7 +517,7 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
           // Text-only section (e.g. Patients, General Public): same layout, but
           // the write-up goes inside the card instead of a carousel.
           <section key={section.title} className="hp-section">
-            <h2 className="hp-section-title">{section.title}</h2>
+            {section.showTitle && <h2 className="hp-section-title">{section.title}</h2>}
             <HPIntroBlock intro={section.intro} />
             {section.context.length > 0 && (
               <div className="hp-section-card hp-section-card--text">
