@@ -2,14 +2,18 @@
 // Purpose: an image that opens fullscreen when clicked, for detailed figures
 // that are hard to read at column width. Use in .mdx as
 // <ZoomableImage src="…" alt="…" />; click anywhere or press Esc to close.
+// Edited with Claude Sonnet 5 (Anthropic), 2026-10-18: added optional
+// `className`, passed through to the thumbnail <img> so individual figures
+// can opt into extra styling (e.g. a "framed" border + larger size) via CSS.
 import { useRef } from "react";
 
 interface ZoomableImageProps {
   src: string;
   alt: string;
+  className?: string;
 }
 
-export function ZoomableImage({ src, alt }: ZoomableImageProps) {
+export function ZoomableImage({ src, alt, className }: ZoomableImageProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   return (
@@ -20,7 +24,11 @@ export function ZoomableImage({ src, alt }: ZoomableImageProps) {
         aria-label={`View fullscreen: ${alt}`}
         onClick={() => dialogRef.current?.showModal()}
       >
-        <img src={src} alt={alt} className="img-fluid rounded" />
+        <img
+          src={src}
+          alt={alt}
+          className={`img-fluid rounded${className ? ` ${className}` : ""}`}
+        />
       </button>
       <dialog
         ref={dialogRef}
