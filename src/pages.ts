@@ -11,6 +11,7 @@ import {
   ExperimentalOverview,
   Home,
   HumanPractices,
+  Measurement,
   Members,
   Notebook,
   Parts,
@@ -42,6 +43,7 @@ import {
   LightbulbIcon,
   MagnifierIcon,
   RocketIcon,
+  RulerIcon,
 } from "./components/FindOutMoreIcons";
 
 interface Base {
@@ -69,7 +71,7 @@ class Page implements Base {
   // is competing for (see the home page's FindOutMore "Special prize" badge,
   // Tgr5Story.tsx). Shown in the navbar (Navbar.tsx) and on the page's own
   // header (Header.tsx / App.tsx). Only prizes with a page of their own carry
-  // this — "Best Measurement" has none yet, so it isn't flagged anywhere.
+  // this.
   specialPrize?: boolean;
 }
 
@@ -92,6 +94,14 @@ const Pages: (Page | Folder)[] = [
         icon: LightbulbIcon,
       },
       {
+        name: "Experimental Overview",
+        title: "Experimental Overview",
+        path: "/experimental-overview",
+        component: ExperimentalOverview,
+        lead: "How our wet lab work fits together, from strain and antibiotic selection through conjugation and promoter screening, across the Toolkit and Therapeutics lines.",
+        icon: FlaskIcon,
+      },
+      {
         name: "Engineering Success",
         title: "Engineering Success",
         path: "/engineering",
@@ -108,6 +118,14 @@ const Pages: (Page | Folder)[] = [
         icon: PuzzleIcon,
       },
       {
+        name: "Parts",
+        title: "Parts",
+        path: "/parts",
+        component: Parts,
+        lead: "The DNA parts built and used in this project, each linked to the notebook entry where it was made or characterised.",
+        icon: BlocksIcon,
+      },
+      {
         name: "Safety",
         title: "Safety and Security",
         path: "/safety-and-security",
@@ -118,23 +136,15 @@ const Pages: (Page | Folder)[] = [
     ],
   },
   {
-    name: "Dry Lab",
-    title: "Dry Lab",
-    path: "/dry-lab",
-    component: DryLab,
-    lead: "A toolkit for engineering Bacteroides species, and the computational screening that narrowed our bile salt hydrolase candidates.",
-    icon: CodeIcon,
-  },
-  {
     name: "Wet Lab",
     folder: [
       {
-        name: "Experimental Overview",
-        title: "Experimental Overview",
-        path: "/experimental-overview",
-        component: ExperimentalOverview,
-        lead: "How our wet lab work fits together, from strain and antibiotic selection through conjugation and promoter screening, across the Toolkit and Therapeutics lines.",
-        icon: FlaskIcon,
+        name: "Dry Lab",
+        title: "Dry Lab",
+        path: "/dry-lab",
+        component: DryLab,
+        lead: "A toolkit for engineering Bacteroides species, and the computational screening that narrowed our bile salt hydrolase candidates.",
+        icon: CodeIcon,
       },
       {
         name: "Protocols",
