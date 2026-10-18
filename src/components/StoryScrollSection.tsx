@@ -40,9 +40,9 @@ interface StoryStep {
   id: string;
   // How the screen is laid out (see .story-step--* in App.css). "pair-left"
   // puts the first sentence top left and the second bottom right;
-  // "pair-right" is its mirror image.
-  position: "pair-left" | "pair-right" | "split";
-  art?: "question" | "clock" | "microbiome";
+  // "pair-right" is its mirror image; "center" is one sentence in the middle.
+  position: "pair-left" | "pair-right" | "split" | "center";
+  art?: "clock" | "microbiome";
   lines: ReactNode[];
   // The screen's second sentence (the pair layouts).
   second?: ReactNode[];
@@ -63,31 +63,21 @@ interface StoryStep {
 }
 
 const STEPS: StoryStep[] = [
+  // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request):
+  // "So many symptoms… but no known etiology" and its question marks moved
+  // to the end of Elle's tour of the body (ElleTour.tsx), and Elle's
+  // "Hey, I'm Elle! Want to go on a journey with me?" introduction is
+  // removed for now (the team will place it again later), leaving this
+  // screen's second sentence on its own.
   {
-    id: "etiology",
-    position: "pair-left",
-    art: "question",
+    id: "therapy",
+    position: "center",
     lines: [
-      <>So many symptoms…</>,
-      <>
-        …but no known <strong>etiology</strong>
-      </>,
-    ],
-    second: [
       <>
         There is currently no actual therapeutic solution that tackles{" "}
         <strong>all of the symptoms at once!</strong>
       </>,
     ],
-    // The first step she appears on, so this is where she introduces herself.
-    // Wording as supplied by the team (2026-10-09).
-    elle: {
-      says: <>Hey, I’m Elle! Want to go on a journey with me?</>,
-      corner: "left",
-      mood: "happy",
-      // After all three parts of this screen's text are in.
-      delay: 4200,
-    },
   },
   {
     id: "diagnosis",
@@ -135,17 +125,6 @@ const STEPS: StoryStep[] = [
     },
   },
 ];
-
-// Three question marks of different sizes, each bobbing on its own beat.
-function QuestionArt() {
-  return (
-    <div className="story-art story-art--question" aria-hidden="true">
-      <span>?</span>
-      <span>?</span>
-      <span>?</span>
-    </div>
-  );
-}
 
 // A wall clock — teal rim, light face, dark hands — whose second hand sweeps
 // round while the minute hand creeps on.
@@ -399,7 +378,6 @@ export function StoryScrollSection() {
           );
           const art = (
             <>
-              {entry.art === "question" && <QuestionArt />}
               {entry.art === "clock" && <ClockArt />}
               {entry.art === "microbiome" && <MicrobiomeArt />}
             </>

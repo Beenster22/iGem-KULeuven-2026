@@ -4883,6 +4883,207 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
+/* ELLE'S TOUR
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-18
+   Purpose: the screen after the circles (see ElleTour.tsx), where Elle tours
+   the lady from the home-page video and ends up beside her next to "So many
+   symptoms… but no known etiology". The screen stays pinned for a little
+   scrolling while the tour plays. --fig-h is the lady's height; Elle is 0.3
+   of it wide (ELLE_SIZE). Opacity and placement of the parts that move are
+   set from the script every frame. */
+.elle-tour {
+  position: relative;
+  height: calc(100vh + 50vh);
+  height: calc(100svh + 50vh);
+}
+
+.elle-tour-stage {
+  --fig-h: min(
+    calc(100svh - var(--home-nav-h) - var(--home-wave-h) - 4rem),
+    46rem
+  );
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: grid;
+  grid-template-columns: auto auto minmax(0, max-content);
+  justify-content: center;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  padding: calc(var(--home-nav-h) + 1.5rem) clamp(0.5rem, 3vw, 2.5rem)
+    calc(var(--home-wave-h) + 1.5rem);
+}
+
+/* Her picture is the video frame, on the video's own near-black; "lighten"
+   against the band's (lighter) colour hides that, so only she shows. The
+   band's colour is repeated on her own box because blending only reaches
+   as far as the nearest stacking context (the sticky stage, and her own
+   faded box), not the band itself. Same colour the band resolves to in each
+   theme (see .home-section--contrast). A transparent PNG works the same. */
+.elle-tour-lady {
+  height: var(--fig-h);
+  aspect-ratio: 976 / 1644;
+  background-color: var(--color-header-bg);
+  opacity: 0;
+}
+
+[data-theme="dark"] .elle-tour-lady {
+  background-color: var(--color-body-bg);
+}
+
+.elle-tour-lady img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: lighten;
+}
+
+.elle-tour-slot {
+  width: calc(var(--fig-h) * 0.3);
+  aspect-ratio: 1668 / 1211;
+}
+
+.elle-tour-words {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(0.5rem, 3vh, 1.5rem);
+}
+
+.elle-tour-line {
+  display: block;
+  opacity: 0;
+}
+
+.elle-tour-line + .elle-tour-line {
+  margin-top: 0.35em;
+}
+
+.elle-tour-questions-wrap {
+  opacity: 0;
+  transform-origin: left center;
+}
+
+/* The old etiology screen's question marks, at half their size. */
+.elle-tour-questions {
+  zoom: 0.5;
+  margin: 0;
+}
+
+/* The fixed layer Elle and the close-ups are drawn on. */
+.elle-tour-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.elle-tour-elle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  container-type: size;
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+.elle-tour-elle > img,
+.elle-tour-uterus {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  overflow: visible;
+}
+
+/* Placed in shares of Elle's width (cqw), matching GLASS_* in ElleTour.tsx
+   so the lens centre lands exactly where the script expects it. */
+.elle-tour-glass-wrap {
+  position: absolute;
+  left: calc(var(--glass-left) * 100cqw);
+  top: calc(var(--glass-top) * 100cqw);
+  width: calc(var(--glass-size) * 100cqw);
+  aspect-ratio: 1;
+}
+
+.elle-tour-glass {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.elle-tour-glass-handle {
+  stroke: #5a2d4a;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.elle-tour-glass-lens {
+  fill: rgba(234, 244, 245, 0.25);
+  stroke: #2fa4a9;
+  stroke-width: 3.5;
+}
+
+.elle-tour-glass-shine {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.8;
+}
+
+/* A close-up: the same disc as its circle (.pmos-effect-art), growing out
+   of Elle's lens. */
+.elle-tour-close-up {
+  position: absolute;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 4px solid var(--symptom-color);
+  background-color: color-mix(in srgb, var(--symptom-color) 22%, #fff);
+  box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.35);
+  transform-origin: center;
+  will-change: transform;
+}
+
+.elle-tour-close-up.symptom-group--reproductive {
+  --symptom-color: #b9a3f0;
+}
+
+/* The drawing inside, with the same 18% margin as in its circle. */
+.elle-tour-close-up svg {
+  position: absolute;
+  left: 18%;
+  top: 18%;
+  width: 64%;
+  height: 64%;
+  overflow: visible;
+}
+
+/* Phones: the lady on top, Elle and the sentence side by side under her. */
+@media (max-width: 699.98px) {
+  .elle-tour-stage {
+    --fig-h: min(46svh, 26rem);
+    grid-template-columns: auto minmax(0, 1fr);
+    align-content: center;
+    row-gap: 1rem;
+  }
+
+  .elle-tour-lady {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+
+  .elle-tour-words .story-text {
+    font-size: 1.3rem;
+  }
+}
+
 /* STORY SCROLL
    Generated with Claude Opus 5.5 (Anthropic), 2026-10-06
    Purpose: the big-sentence screens between the symptoms and the gut section

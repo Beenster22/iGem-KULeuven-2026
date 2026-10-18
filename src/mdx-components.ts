@@ -32,6 +32,7 @@ import {
   PmosDefinition,
 } from "./components/BodySymptomsSection";
 import { PmosEffectsSection } from "./components/PmosEffectsSection";
+import { ElleTour } from "./components/ElleTour";
 import { InflammationSliderSection } from "./components/InflammationSliderSection";
 import { BshStreamAnimation } from "./components/BshStreamAnimation";
 import { MicChart } from "./components/MicChart";
@@ -111,6 +112,7 @@ export const mdxComponents = {
   PmosOverview,
   SymptomGroups,
   PmosEffectsSection,
+  ElleTour,
   PmosDefinition,
   BshStreamAnimation,
   InflammationSliderSection,
