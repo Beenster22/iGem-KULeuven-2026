@@ -6969,6 +6969,31 @@ body:not(.home-fullscreen) .home-hero {
   transform: scaleX(1);
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): while
+   the underline is curling up into the globe (useLineToGlobe.ts) the
+   overlay draws it, so the real one steps aside. */
+.pmos-counter--revealed .pmos-counter-number.is-detached::after {
+  transition: none;
+  opacity: 0;
+}
+
+.line-to-globe {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.line-to-globe path {
+  fill: none;
+  stroke: var(--color-header-bg);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .falling-m,
 .falling-m-stairs {
   left: 0;

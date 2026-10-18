@@ -16,6 +16,7 @@ import { PMOS_TOTAL } from "./pmosContinentStats";
 import { MicrobeBackdrop } from "./MicrobeBackdrop";
 import { ElleSays } from "./ElleSays";
 import { useFallingM } from "./useFallingM";
+import { useLineToGlobe } from "./useLineToGlobe";
 
 // three.js + globe.gl add ~700KB (gzipped) to the bundle — lazy-loaded so
 // that weight is only fetched once a visitor actually scrolls this far,
@@ -86,6 +87,18 @@ export function PmosOverview({ children }: { children?: ReactNode }) {
   const totalMillions = PMOS_TOTAL / 1_000_000;
   const millions = useCountUp(totalMillions, stage === "revealed");
 
+  // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
+  // counter's underline then curls up into the globe on the next screen
+  // (useLineToGlobe.ts).
+  const lineRef = useRef<HTMLSpanElement>(null);
+  const globeSectionRef = useRef<HTMLElement>(null);
+  useLineToGlobe({
+    lineRef,
+    globeSectionRef,
+    active: stage === "revealed",
+    skip: !!prefersReducedMotion,
+  });
+
   return (
     <>
       <section
@@ -108,7 +121,7 @@ export function PmosOverview({ children }: { children?: ReactNode }) {
             className="pmos-counter-heading"
             aria-label={`${totalMillions} Million women affected during their reproductive years`}
           >
-            <span className="pmos-counter-number" aria-hidden="true">
+            <span ref={lineRef} className="pmos-counter-number" aria-hidden="true">
               {/* Fixed width for the final figure, so the line (and the
                   M's landing spot) doesn't shift while it counts up. */}
               <span
@@ -129,6 +142,7 @@ export function PmosOverview({ children }: { children?: ReactNode }) {
         </div>
       </section>
       <section
+        ref={globeSectionRef}
         className="pmos-overview home-section--body home-snap-screen home-section--wave-top"
         data-snap=""
       >
