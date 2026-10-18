@@ -61,12 +61,10 @@ const BLOCKS: Block[] = [
     title: "Value Propositions",
     group: "product",
     area: "value",
-    lead: "For licensees:",
     items: [
-      { text: "First-in-class, non-hormonal PMOS therapeutic" },
-      { text: "Novel microbiome-based mechanism that targets a proposed upstream disease pathway" },
-      { text: "Clinical asset with Phase I safety data at licensing" },
-      { text: "Protectable IP and expansion potential" },
+      { text: "Addresses multiple dimensions of PMOS through a single upstream mechanism" },
+      { text: "Highly differentiated therapeutic opportunity in an underserved women's health market" },
+      { text: "Novel microbiome-based platform with expansion opportunities beyond PMOS" },
     ],
   },
   {

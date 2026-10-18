@@ -1,9 +1,13 @@
-{/* Page formatted with Claude Opus 5 (Anthropic), 2026-10-06.
-    Purpose: the team's "Dry lab" document as a single page (replacing the
-    former Promoters/Codon tool/BSH screening dropdown), numbered like the
-    Entrepreneurship page. The prose is the team's own text, transferred
-    verbatim; only typography was adjusted (species names in italics, gene
-    IDs as code, prime/≥ characters, footnote-style references). */}
+{/* Page formatted with Claude Opus 5 (Anthropic), 2026-10-06; content updated
+    and the "Tool design" subsection turned into a dropdown with Claude
+    Sonnet 5 (Anthropic), 2026-10-18, from the team's finished page text
+    (Virulence analysis, Promoter expression analysis and Antibiotic
+    selection are new; Tool design gained Usage/Limitations subsections).
+    The prose is the team's own text, transferred verbatim where possible;
+    only typography was adjusted (species names in italics, gene IDs as
+    code, prime/≥ characters, footnote-style references) and a few review
+    answers from the team's own draft comments were folded in (genome
+    annotation completeness, Linux-only tooling). */}
 
 <PageLayout>
 
@@ -20,9 +24,210 @@ easier engineering of *Bacteroides* species.
 
 ## 1. Toolkit
 
-*Tools we needed ourselves, built so others can use them too.*
+*Checking P. vulgatus before engineering it, assembling genetic parts with a realistic chance of
+working in Bacteroides, and building the codon tool we wished already existed.*
 
-### 1.1 Codon optimization tool
+### 1.1 Virulence analysis
+
+*Phocaeicola vulgatus* is a non-model organism that is sparsely represented in curated databases.
+Before starting our laboratory work we were determined to check this organism for resistances and
+possible interference with our lab work. We performed all these analyses on publicly available
+web-based tools, using *P. vulgatus* strain ATCC 8482 as the reference genome, retrieved from NCBI
+(assembly GCF_000012825.1 / ASM1282v1; RefSeq NC_009614.1; taxid 435590). We chose this strain
+because it is one of the few *P. vulgatus* isolates with a well-annotated genome (approximately 87%
+annotated — above the completeness NCBI recommends for a reliable reference).
+
+This choice was of great importance for the interpretation of our results. Homology-based searches
+can only be as good as their reference databases. For an organism as understudied as *P. vulgatus*,
+the absence of a hit may reflect the genuine absence of a gene, or simply a missing database entry.
+
+**Virulence factors and pathogenic potential.** Our first analysis checked whether any virulence
+factors are present in the *P. vulgatus* genome. We used VirulenceFinder[^vir-1], a web tool
+maintained by the Center for Genomic Epidemiology (CGE, TU Denmark), which searches a curated
+database of experimentally characterised virulence genes. No virulence genes in the CGE database
+were detected. We then cross-checked this with PathogenFinder2[^pf2-1], an online server and
+standalone program that uses a protein language model to predict human pathogenic capacity from the
+genome, rather than matching individual genes. Because it does not depend on a reference database, it
+complements the homology-based approach and reports both the proteins driving the classification and
+an embedding that locates the genome within the Pathogenic Bacteria Landscape. The results were
+consistent with VirulenceFinder: both indicate that *P. vulgatus* ATCC 8482 is classified as
+non-pathogenic to humans.
+
+**Prophage content.** Lastly, we used PHASTEST[^phastest-1], which identified a single prophage
+region of approximately 24.6 kb (positions 3,608,142–3,632,769) containing 19 coding sequences (CDS).
+The region scored "questionable" on PHASTEST's three-tier scale (intact &gt;90, questionable 70–90,
+incomplete &lt;70) — a score determined by the identity percentage of the matched phage proteins, the
+number of phage features found in the query sequence, and the size of the prophage sequence. The
+region contains multiple genes with strong similarity to bacteriophage genes: a head-and-packaging
+module (major capsid protein, prohead protease, portal protein and both terminase subunits), an
+integrase and recombinase for lysogeny, and a replication module. However, no recognizable tail or
+lysis genes were detected. Their absence, combined with the relatively small number of CDS, suggests
+that the region represents an incomplete or degraded prophage that is unlikely to be inducible, and we
+therefore do not expect it to interfere with our engineering work.
+
+<div className="table-responsive table-responsive-rounded table-responsive-sticky-head my-3">
+
+<table className="table table-bordered align-middle">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>CDS position</th>
+      <th>Predicted product</th>
+      <th>Closest phage match</th>
+      <th>E-value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td>3,608,142–3,609,830</td><td>major capsid protein</td><td>PHAGE_Pseudo_Pq0</td><td>3.24e-12</td></tr>
+    <tr><td>2</td><td>3,609,856–3,610,911</td><td>phage prohead protease protein</td><td>PHAGE_Cellul_phi10</td><td>1.33e-30</td></tr>
+    <tr><td>3</td><td>3,610,859–3,612,286</td><td>portal protein</td><td>PHAGE_Geobac_GBK2</td><td>3.91e-09</td></tr>
+    <tr><td>4</td><td>3,612,415–3,614,433</td><td>terminase, large subunit</td><td>PHAGE_Flavob_vB_FspM_lotta8_1</td><td>3.94e-96</td></tr>
+    <tr><td>5</td><td>3,614,497–3,615,042</td><td>terminase, small subunit</td><td>PHAGE_Salmon_SPN3UB</td><td>4.94e-14</td></tr>
+    <tr><td>6</td><td>3,615,138–3,615,941</td><td>putative NAD-dependent epimerase</td><td>PHAGE_Prochl_P_TIM68</td><td>8.58e-13</td></tr>
+    <tr><td>7</td><td>3,615,993–3,616,772</td><td>primase</td><td>PHAGE_Faecal_FP_Toutatis</td><td>2.22e-07</td></tr>
+    <tr><td>8</td><td>3,616,814–3,617,386</td><td>AAA+ ATPase</td><td>PHAGE_Microb_KaiHaiDragon</td><td>1.15e-37</td></tr>
+    <tr><td>9</td><td>3,618,221–3,618,874</td><td>hypothetical protein</td><td>PHAGE_Leptos_LE3</td><td>5.9e-49</td></tr>
+    <tr><td>10</td><td>3,619,342–3,620,211</td><td>putative phosphoadenosine phosphosulfate reductase-like</td><td>PHAGE_Acinet_phiAC_1</td><td>1.87e-25</td></tr>
+    <tr><td>11</td><td>3,620,238–3,621,230</td><td>hypothetical protein</td><td>PHAGE_Thalas_BA3</td><td>3.11e-20</td></tr>
+    <tr><td>12</td><td>3,621,187–3,622,293</td><td>integrase</td><td>PHAGE_Erysip_SE_1</td><td>2.33e-16</td></tr>
+    <tr><td>13</td><td>3,626,752–3,627,711</td><td>recombinase</td><td>PHAGE_Entero_phiFL3A</td><td>8.92e-53</td></tr>
+    <tr><td>14</td><td>3,627,723–3,628,097</td><td>putative endodeoxyribonuclease</td><td>PHAGE_Ralsto_RSK1</td><td>1.86e-09</td></tr>
+    <tr><td>15</td><td>3,628,100–3,629,257</td><td>helicase</td><td>PHAGE_Cellul_phi4</td><td>2.04e-59</td></tr>
+    <tr><td>16</td><td>3,630,254–3,630,706</td><td>putative DNA base-flipping protein</td><td>PHAGE_Vibrio_PVA1</td><td>1.25e-05</td></tr>
+    <tr><td>17</td><td>3,630,706–3,631,083</td><td>single-stranded DNA-binding protein</td><td>PHAGE_Burkho_DC1</td><td>2.68e-23</td></tr>
+    <tr><td>18</td><td>3,631,070–3,631,990</td><td>hypothetical protein</td><td>PHAGE_Bacter_Bl24_14</td><td>6.26e-60</td></tr>
+    <tr><td>19</td><td>3,631,987–3,632,769</td><td>putative translation initiation factor</td><td>PHAGE_Rhodot_RM378</td><td>4.53e-13</td></tr>
+  </tbody>
+</table>
+
+</div>
+
+<p className="figure-caption small mt-2 mb-0">Table 1. PHASTEST "questionable" prophage region (Region 1, 19 CDS) identified in *P. vulgatus* strain ATCC 8482 (NCBI assembly GCF_000012825.1 / ASM1282v1; RefSeq NC_009614.1; taxid 435590), condensed from the PHASTEST PHAGE_GENES output.</p>
+
+### 1.2 Promoter expression analysis
+
+Unlike the model organism *E. coli*, Bacteroidaceae initiate transcription from promoters with −7 and
+−33 consensus elements[^prom-mastro], and *P. vulgatus* lacks validated native promoters. Our
+approach was then to borrow from the closest well-characterized relatives: *B. thetaiotaomicron* and
+*B. fragilis*. A short literature survey yielded twenty-four promoters validated within *Bacteroides*
+spp. (Table 2), from which we selected 5, keeping time constraints in mind. Each was combined with 4
+reporters to rigorously test expression strength, resulting in a library of twenty constructs (see the
+[Promoter-Reporter Screen](/protocols#promoter-reporter-screen) protocol for the assay itself).
+
+Characterized inducible promoters do exist for *Bacteroides*, but validating an inducible system means
+testing the promoter, the regulator and the inducer dose-response, which is a substantially larger
+experiment than testing a constitutive promoter. Due to time constraints it was reasonable to
+prioritize constitutive promoters. The five selected promoters — P<sub>BT4001</sub>,
+P<sub>BT1311</sub>, P<sub>PAM3</sub>, P<sub>cfxA</sub> and P<sub>BfP1E6</sub> — span different classes,
+namely native housekeeping, engineered, native resistance-gene and phage-derived origins. This
+diversity was chosen to reduce the loss of promoter activity on transfer and increase the chance of
+finding a functional one.
+
+<ExpandableText title="Table 2. Literature-validated promoters in Bacteroides spp.">
+
+The five promoters we characterized experimentally are shown in **bold**.
+
+<div className="table-responsive table-responsive-rounded my-3">
+
+<table className="table table-bordered align-middle">
+  <thead>
+    <tr>
+      <th>Promoter</th>
+      <th>Symbol</th>
+      <th>Source gene / origin</th>
+      <th>Species isolated</th>
+      <th>Type</th>
+      <th>Validation</th>
+      <th>Inducer</th>
+      <th>Sequence (5′→3′)</th>
+      <th>Source</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>BT4001 16S rRNA promoter</strong></td><td><strong>P<sub>BT4001</sub></strong></td><td>16S rRNA</td><td><em>B. thetaiotaomicron</em></td><td>constitutive</td><td>achieved LUC expression</td><td>—</td><td><code>CGATAAAGTTTGGAAGATAAAGCTAAAAGTTCTTATCTTTGCAGTCCGAT</code></td><td>[^prom-mastro]</td></tr>
+    <tr><td><strong>BT1311 promoter</strong></td><td><strong>P<sub>BT1311</sub></strong></td><td>housekeeping sigma factor BT1311</td><td><em>B. thetaiotaomicron</em></td><td>constitutive</td><td>achieved LUC expression</td><td>—</td><td><code>GTTTTATTAGTTGAAAATATAGTGAAAAAGTTGCCTAAATATGTATGTTAACAAATTATTTGTCGTAACTTTGCACTCC</code></td><td>[^prom-mimee]</td></tr>
+    <tr><td><strong>Constitutive reference promoter</strong></td><td><strong>P<sub>PAM3</sub></strong></td><td>engineered variant of housekeeping sigma factor BT1311</td><td><em>B. thetaiotaomicron</em></td><td>constitutive</td><td>achieved LUC expression</td><td>—</td><td><code>TGATCTGGAAGAAGCAATGAAAGCTGCTGTTAAGTCTCCGAATCAGGTATTGTTCCTGACAGGTGTATTCCATCTCGGTAAACGGGATACTTTGCAGTTGATCTGACTCAGGAATAAATTATATAAATTAAGGTGTAGGAGATTGTAGAGAAAAAAGGATGCCGTCACACAACTTGTCGGCATTCTTTTTTGTTTTATTAGTTGAAAATATAGTGAAAACTTTGCAACAGCATAGCTCAGCACAGATTATTTGTCGTAACTTTGCACTCC</code></td><td>[^prom-taketani]</td></tr>
+    <tr><td><strong>cfxA promoter</strong></td><td><strong>P<sub>cfxA</sub></strong></td><td>native <em>Bacteroides</em> cephalosporinase (cfxA β-lactamase) gene promoter</td><td><em>B. thetaiotaomicron</em></td><td>constitutive</td><td>achieved LUC expression</td><td>—</td><td><code>ttacaaagaaaattcgacaaactgttatttttctatctatttatttgggtgggaaactttagttatgtacctttgtcggc</code></td><td>[^prom-taketani][^prom-mimee]</td></tr>
+    <tr><td><strong>Phage promoter</strong></td><td><strong>P<sub>BfP1E6</sub></strong></td><td>pulled from genome, identified phage elements</td><td><em>B. fragilis</em></td><td>constitutive</td><td>—</td><td>—</td><td><code>gataaaacgaaaggctcagtcgaaagactgggcctttcgttttacaattgggctaccttttttttgttttgtttgcaatggttaatctattgttaaaatttaaagtttcacttgaactttcaaataatgttcttatatttgcagTgtcgaaagaaacaaagtag</code></td><td>[^prom-whitaker]</td></tr>
+    <tr><td>BT4001 16S rRNA promoter</td><td>P2</td><td>16S rRNA</td><td><em>B. thetaiotaomicron</em></td><td>constitutive</td><td>achieved LUC expression</td><td>—</td><td><code>CGAAAACATTTGGTAGTTAAAATAAAACCTCTTACCTTTGCACCCGCTTT</code></td><td>[^prom-mastro]</td></tr>
+    <tr><td>modified BT4001 16S rRNA promoter</td><td>P1 −33</td><td>16S rRNA</td><td><em>B. thetaiotaomicron</em></td><td>constitutive</td><td>achieved LUC expression</td><td>—</td><td><code>CGATAAAGAAACGAAGATAAAGCTAAAAGTTCTTATCTTTGCAGTCCGAT</code></td><td>[^prom-mastro]</td></tr>
+    <tr><td>modified BT4001 16S rRNA promoter</td><td>P1 −7 downstream</td><td>16S rRNA</td><td><em>B. thetaiotaomicron</em></td><td>constitutive</td><td>achieved LUC expression</td><td>—</td><td><code>CGATAAAGTTTGGAAGATAAAGCTAAAAGTTCTTATCAAACCAGTCCGAT</code></td><td>[^prom-mastro]</td></tr>
+    <tr><td>modified BT4001 16S rRNA promoter</td><td>P1 −7 upstream</td><td>16S rRNA</td><td><em>B. thetaiotaomicron</em></td><td>constitutive</td><td>achieved LUC expression</td><td>—</td><td><code>CGATAAAGTTTGGAAGATAAAGCTAAAAGTTCTATTCTTTGCAGTCCGAT</code></td><td>[^prom-mastro]</td></tr>
+    <tr><td>modified BT4001 16S rRNA promoter</td><td>P1 no upstream seq</td><td>16S rRNA</td><td><em>B. thetaiotaomicron</em></td><td>constitutive</td><td>achieved LUC expression</td><td>—</td><td><code>GTTTGGAAGATAAAGCTAAAAGTTCTTATCTTTGCAGTCCGAT</code></td><td>[^prom-mastro]</td></tr>
+    <tr><td>Synthetic IPTG-inducible promoter</td><td>PLacO12</td><td>synthetic</td><td>—</td><td>inducible</td><td>achieved LUC expression</td><td>IPTG</td><td><code>TTACAAAGAAAATTCGACAAACTGTTATTTTTCTATCTATTTAAATTGTGAGCGGATAACAATTTGAATTGTGAGCGGATAACAATTACCTTTGTCGGCAAA</code></td><td>[^prom-mimee]</td></tr>
+    <tr><td>Synthetic IPTG-inducible promoter</td><td>PLacO13</td><td>synthetic</td><td>—</td><td>inducible</td><td>achieved LUC expression</td><td>IPTG</td><td><code>TTACAAAGAAAATTCGACAAACTGTTATTTTTCTATCTATTTAAATTGTGAGCGGATAACAATTTGGGTGGGAAACTTTAGTTATGTACCTTTGTCGGCAATTGTGAGCGGATAACAATTAAA</code></td><td>[^prom-mimee]</td></tr>
+    <tr><td>Synthetic IPTG-inducible promoter</td><td>PLacO23</td><td>synthetic</td><td>—</td><td>inducible</td><td>achieved LUC expression</td><td>IPTG</td><td><code>TTACAAAGAAAATTCGACAAACTGTTATTTTTCTATCTATTTATTTGAATTGTGAGCGGATAACAATTACCTTTGTCGGCAATTGTGAGCGGATAACAATTAAA</code></td><td>[^prom-mimee]</td></tr>
+    <tr><td>Rha-inducible promoter</td><td>P_BT3763</td><td>PUL promoter</td><td><em>B. thetaiotaomicron</em></td><td>inducible</td><td>achieved LUC expression</td><td>rhamnose</td><td><code>TATTTCGGAGAAAACATGCATAAATCATGCTTTTTTTGCATAAAAAGTAAAATTTATACTGATGTAAGGTTTGGCTATGCAGATTTGTGTCAAAATGCACATCCTTTCTATCAAAATGCGTAAGGAAAAGGAGGAAGGAACCGCCTATCTTTGCAATGTAGGTAAATGGATACCTTAAATA</code></td><td>[^prom-mimee]</td></tr>
+    <tr><td>ChS-inducible promoter</td><td>P_BT3324</td><td>PUL promoter</td><td><em>B. thetaiotaomicron</em></td><td>inducible</td><td>achieved LUC expression</td><td>chondroitin sulfate</td><td><code>TATTTATAAGAGATAGCACATAATTTGAACTATTTTGTACGATTTGAACCCCTCTTTCCAACAAAAAGGGGTTTCTTTGCATTCGGGAGAAGAACAAGTGATCTCTCTCTGTAAATACCGGCTAATGATAAACCGATTTACCATCGGACCTAAAACGATATATTCTATGATAAAGCAATCTTTT</code></td><td>[^prom-mimee]</td></tr>
+    <tr><td>AG-inducible promoter</td><td>P_BT0268</td><td>PUL promoter</td><td><em>B. thetaiotaomicron</em></td><td>inducible</td><td>achieved LUC expression</td><td>arabinogalactan</td><td><code>TAAAATACACAAGTACGCGTCTTAATGGAAGATGCGTACTTTTCCATATATCAATGATCTATCCCATTTGAATGATTCCTGAACTTATATTGAACGATTTTTAGACCTGTTATAGTTAATAGCGATTATGGTCCAATTTTGGAAGTTTTTGAATGATTAGAGAACTTCTTTCTACTGGATAACTCGCACTTTTGTGACGCATTTGATGCACAACTAATACTTATTTGGTCTAAATAACTT</code></td><td>[^prom-mimee]</td></tr>
+    <tr><td>Bile-acid (deoxycholic acid)-inducible promoter</td><td>PBA</td><td>synthetic</td><td><em>B. thetaiotaomicron</em></td><td>inducible</td><td>achieved LUC expression</td><td>DCA</td><td><code>TTACAAAGAAAATTCGACAAACTGTTATTTTTCTATCTATTTA-AATGTACAC-CCG-TTTG-TTTACTTT-ACTTTAGTTATGTACCTTTGTCGGC-AATGTACAC-CCGAAA-GTTTACTTT</code></td><td>[^prom-taketani]</td></tr>
+    <tr><td>VFA0359-operator promoter</td><td>PphBA</td><td>synthetic</td><td><em>B. thetaiotaomicron</em></td><td>inducible</td><td>achieved LUC expression</td><td>not confirmed</td><td><code>CAATTGGGCTACCTTTTTTTGTTTTGTTTGCAATGGTTAATCTATTGTTAAAA-AATGTACACCCG-TTTG-TTTACTTT-AATAATGTTCTTATATTTGCAGTG-AATGTACACCCGAAAGTTTACTTT</code></td><td>[^prom-taketani]</td></tr>
+    <tr><td>Anhydrotetracycline-inducible promoter</td><td>P1TDP</td><td>synthetic</td><td><em>B. thetaiotaomicron</em></td><td>inducible</td><td>achieved LUC expression</td><td>aTc</td><td><code>TTTTGCACCCGCTTTCCAAGAGAAGAAAGCCTTGGTTAAATTGACTTAGTGTAAAAGCGCAGTACTGCTTGACCATAAGAACAAAAAAA-TCTCTATCACTGATAGGGA-TAAAGTTTGGAAGATAAAGCTAAAAGTTCTTATCTTTGCAGTG-TCCCTATCAGTGATAGAGA-CGCA</code></td><td>[^prom-taketani]</td></tr>
+    <tr><td>Candidate bile-acid-sensing promoter</td><td>Psmlt2112 / Pxcc0233 / Pvfa0088</td><td>synthetic</td><td><em>B. thetaiotaomicron</em></td><td>inducible</td><td>achieved LUC expression</td><td>not confirmed</td><td><code>TTA-CAGTGTAGTTTCGGC-TTTG-CCAAAAGTACACTG-GTTATGTACCTTTGTCGGC-CAGTGTAGTTTCGGC-GAAA-CCAAAAGTACACTG</code></td><td>[^prom-taketani]</td></tr>
+    <tr><td><em>B. ovatus</em> xylanase promoter</td><td>Pxyl</td><td>native</td><td><em>B. ovatus</em></td><td>inducible</td><td>validated via production of a real therapeutic payload</td><td>xylan</td><td><code>GGAATAAATGATTTTATAACGATTAAAGAAGGGGAGAGTGAGGGTTACAGTAGTTGTTATTATCTTGGAGTGGATCAAATGAATAACAATAACTACTGTAATCCGCTCGTTCTAAAACTTTCCCTTTCCTCTTGTTTATCGGTGGTTTCAGCTTGAATGTAACATTGCAACAAGTTTTTGTAACATACGTAAACGATGATGTAACAAGCGAGTAATGATTTGAATCAGAATTTCTGGGTAAGTGGGAAGAAACTTCCTAAGTTTGCAAAGTGGAATCCCGATGGATTTCTTCTCTTGCTAAATTATCATGAAATAAAGACATATAAAAGAAAGACAGAATGAATAAGTATTGGTTTTATAAGGTAGGGT</code></td><td>[^prom-hamady]</td></tr>
+    <tr><td>Rhamnose-inducible promoter</td><td>PRhaKIPAO</td><td><em>B. thetaiotaomicron</em> rhamnulose kinase gene (locus BT_3763)</td><td><em>B. thetaiotaomicron</em></td><td>inducible</td><td>achieved LUC expression</td><td>rhamnose</td><td><code>tatttcggagaaaacatgcataaatcatgctttttttgcataaaaagtaaaatttatactgatgtaaggtttggctatgcagatttgtgtcaaaatgcacatcctttctatcaaaatgcgtaaggaaaaggaggaaggaaccgcctatctttgcaatgtaggtaaatggataccttaaatatatagacaaaatacc</code></td><td>[^prom-luck]</td></tr>
+    <tr><td>Native ldh promoter (BVU_2499)</td><td>ldh promoter</td><td>native to <em>P. vulgatus</em>, unmodified 250 bp native upstream region</td><td><em>B. vulgatus</em></td><td>constitutive</td><td>measured directly via qPCR transcript quantification, an enzymatic D-LDH activity assay, and metabolite quantification of lactate output</td><td>—</td><td><code>TGCAGAATTGTCCGATGAGGAGATCGATTATTATATCCGGGTTTACAAGCCGATGGATAAGGCTGGTTCTTATGGTATACAAGAGTGGATAGGTTTCATTGGTGTCCGTGGTATTTCAGGTAGTTACTTCAATGTGATGGGGCTTCCTGTACAGCGCCTGTACACGGAACTGAAAAAACTATAAGTCAGTATGTGAACAGTAGGGGCCGTGTTTTTGTTATTTATATGAACTATAAATGGAAAAACAATT</code></td><td>[^prom-luck]</td></tr>
+  </tbody>
+</table>
+
+</div>
+
+</ExpandableText>
+
+The reporters we chose were superfolder GFP (sfGFP), KOFP-7, mCherry and NanoLuc. sfGFP and mCherry
+are well-established fluorescent proteins that give single-cell resolution with good spectral
+separation, but both require molecular oxygen for chromophore maturation. Since *P. vulgatus* is an
+obligate anaerobe, this restricts them to endpoint measurements after exposure to oxygen. We therefore
+also included an oxygen-independent reporter, KOFP-7, a flavin-binding fluorescent protein that
+fluoresces under anaerobic conditions at both population and single-cell level[^reporter-1]. NanoLuc,
+an engineered luciferase[^reporter-2], requires oxygen for the light-producing reaction itself but
+needs no maturation step, so enzyme accumulated during anaerobic growth is fully active the moment
+substrate is added. Together these allow promoter strength to be cross-validated by two independent
+detection principles, and permit measurement under anaerobic conditions as well as aerobic conditions.
+
+On top of finding promoters we set out to find an array of ribosome binding sites of various
+strengths that were validated in *Bacteroides* spp. For this promoter expression analysis we decided
+to use one RBS sequence, namely rpiL\*, which was described as strong and reliable in the
+literature[^prom-mimee][^prom-taketani]. Holding it constant across all twenty constructs means that
+any difference in output can be attributed to the promoter or the reporter rather than translation
+efficiency.
+
+<ExpandableText title="Table 3. Ribosome binding sites considered">
+
+<div className="table-responsive table-responsive-rounded my-3">
+
+<table className="table table-bordered align-middle">
+  <thead>
+    <tr>
+      <th>RBS</th>
+      <th>Source gene / origin</th>
+      <th>Relative strength</th>
+      <th>Sequence (5′→3′)</th>
+      <th>Source</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>rpiL*</strong></td><td>ribosomal protein</td><td>"strong"</td><td><code>CGCATTTTAAAATAAAATAAATTATTTATTTAATTAAACGAAT</code></td><td>[^prom-mimee][^prom-taketani]</td></tr>
+    <tr><td>RC500</td><td>constructed</td><td>"weak"</td><td><code>AATAGGCCTTTCGGTCCACACTCTCTATAGGCAAA</code></td><td>[^prom-mimee]</td></tr>
+    <tr><td>GH022</td><td>RBS</td><td>one order of magnitude lower</td><td><code>CATATAAAAGAAAAGACACC</code></td><td>[^prom-mimee]</td></tr>
+    <tr><td>GH023</td><td>RBS</td><td>one order of magnitude lower</td><td><code>GAAATAAAGACATATAAAAGAAAAGACACC</code></td><td>[^prom-mimee]</td></tr>
+    <tr><td>GH078</td><td>RBS</td><td>one order of magnitude lower</td><td><code>AAAAGGATCTATTATAAGGAGGCACTCACC</code></td><td>[^prom-mimee]</td></tr>
+    <tr><td>NN1</td><td>synthetic</td><td>very weak (library created)</td><td><code>TCCCGCATTTTAAAATAAAATAAATTATTCGTTTAATTAAACGAAT</code></td><td>[^prom-mimee]</td></tr>
+    <tr><td>NN2</td><td>synthetic</td><td>very weak (library created)</td><td><code>TCCCGCATTTTAAAATAAAATAAATTATTCGTTTATTTAAACGAAT</code></td><td>[^prom-mimee]</td></tr>
+    <tr><td>NN3</td><td>synthetic</td><td>very weak (library created)</td><td><code>TCCCGCATTTTAAAATAAAATAAATTATTCGTTTACTTAAACGAAT</code></td><td>[^prom-mimee]</td></tr>
+    <tr><td>NN4</td><td>synthetic</td><td>very weak (library created)</td><td><code>TCCCGCATTTTAAAATAAAATAAATTATTCGTTTAGTTAAACGAAT</code></td><td>[^prom-mimee]</td></tr>
+    <tr><td>LacRBS</td><td>—</td><td>not measured</td><td><code>TAAAGATATTCTCGTCAAACAAATATAAATAATATAAAC</code></td><td>[^prom-mimee]</td></tr>
+    <tr><td>Rha</td><td>found within the Rha promoter sequence — "best guess" at the RBS it contains</td><td>—</td><td><code>TATAGACAAAATACC</code></td><td>[^prom-mimee]</td></tr>
+    <tr><td>Chs</td><td>found within the ChS promoter sequence — "best guess" at the RBS it contains</td><td>—</td><td><code>ACTCTGTCAGTGACA</code></td><td>[^prom-mimee]</td></tr>
+    <tr><td>AG</td><td>found within the AG promoter sequence — "best guess" at the RBS it contains</td><td>—</td><td><code>TATAAATCTAATAGT</code></td><td>[^prom-mimee]</td></tr>
+  </tbody>
+</table>
+
+</div>
+
+</ExpandableText>
+
+### 1.3 Codon optimization tool
 
 While planning our constructs in the wet lab we ran into a gap. There existed no online tool to
 perform codon optimization or harmonization for *Bacteroides* species. Existing tools target
@@ -36,11 +241,11 @@ translation speed and therefore heterologous expression. What it does not accoun
 The genetic code is redundant, and evolution can make a rare codon functionally important by
 introducing a pause which causes it to give the nascent chain a window in which to fold
 co-translationally[^cod-1]. Remove those pauses and the protein may misfold, producing an enzyme
-that is abundantly expressed but yield some inactive version. Codon harmonization preserves this
+that is abundantly expressed but yields some inactive version. Codon harmonization preserves this
 pattern instead of erasing it, mapping the relative codon usage of the native sequence onto the
 host.
 
-### 1.2 Tool design
+<ExpandableText title="1.4 Tool design">
 
 #### Aim
 
@@ -71,16 +276,20 @@ warns when the source table is too small to rank reliably.
 A sequence that is optimal on paper is still useless if it cannot be cloned or translated. Four
 constraint modules run over every candidate sequence:
 
-- **5′ folding:** strong secondary structure around the start codon block initiation. Rather than a
-  fixed ΔG cutoff, we compute the minimum free energy of the initiation window with ViennaRNA and
-  convert it to a z-score against a null distribution of shuffled sequences.
-- **Repeats:** direct and inverted repeats of ≥11 bp, with fuzzy matching allowing up to two
-  mismatches, since near-identical repeats are enough to cause synthesis failure for a lot of
-  manufacturers.
-- **GC content:** global GC and a sliding window, with an upper ceiling only. No floor is imposed,
-  because low GC is the normal state for this genus rather than a defect.
-- **Restriction sites:** a fixed panel of nine enzymes covering common Golden Gate and the biobrick
-  enzymes (BsaI, PaqCI, SapI, BbsI, EcoRI, NotI, XbaI, SpeI, PstI), checked on both strands.
+- **Restriction sites:** a fixed panel of nine enzymes covering common Golden Gate and BioBrick
+  cloning cutters (BsaI, PaqCI, SapI, BbsI, EcoRI, NotI, XbaI, SpeI, PstI), checked on both strands.
+  The panel can be replaced by the user.
+- **GC content:** an upper ceiling of 70%, applied to the whole sequence and to a sliding 30 bp
+  window. There is no lower limit, because low GC is the normal state for this genus rather than a
+  defect. The ceiling mainly catches GC-rich, hairpin-prone or hard-to-synthesise regions, including
+  those that substitutions made for other constraints could introduce.
+- **Repeats:** direct and inverted repeats of at least 11 bp, with fuzzy matching allowing up to two
+  mismatches, since near-identical repeats can cause recombination during cloning and synthesis
+  failures at many manufacturers (see Limitations below).
+- **5′ folding:** strong secondary structure around the start codon blocks translation initiation.
+  Instead of a fixed ΔG cutoff, we compute the minimum free energy of the first 15 codons (plus an
+  optional 5′ UTR) with ViennaRNA and convert it into a z-score against 100 shuffled versions of the
+  same sequence. A z-score below −2.0 is flagged.
 
 #### Repair
 
@@ -91,24 +300,66 @@ for a worse one.
 
 #### Output
 
-Every run produces a diagnostics report: per-constraint summaries, the full log of substitutions
-made, and any violations that could not be resolved, flagged as warnings. A sequence that cannot be
-made fully compliant is still returned, with the remaining problems made explicit, so the user can
-decide whether to accept it or redesign.
+The tool returns the resulting sequence as a FASTA file together with a diagnostics report. The
+report summarises each constraint (violations found, resolved and remaining), lists the unresolved
+violations with their positions, and gives an overall status. A JSON version of the report also
+contains the full log of every substitution made. A sequence that cannot be made fully compliant is
+still returned, marked as partially compliant, with the remaining problems made explicit, so the
+user can decide whether to accept it or redesign it.
 
-### 1.3 Availability
+#### Usage
+
+The tool is a Python command-line application. A typical run looks like this:
+
+```
+python cli.py --mode optimize --species thetaiotaomicron_VPI-5482 input.fasta -o output.fasta
+```
+
+The input is a FASTA file containing in-frame coding sequences. Harmonization additionally accepts
+a Kazusa-format codon table for the source organism.
+
+#### Limitations
+
+- **Repeat threshold.** The repeat check flags direct and inverted repeats of at least 11 bp with up
+  to two mismatches. This fuzzy rule is too strict for full-length genes: in a sequence of several
+  hundred base pairs, near-identical 11 bp stretches arise by chance. In our test on a 717 bp GFP
+  coding sequence, the tool removed all exact repeats and restriction sites and kept GC content and
+  5′ folding within limits, but 139 fuzzy repeats remained. The tool therefore reports such sequences
+  as partially compliant, with the remaining repeats listed, rather than claiming full compliance.
+  These residual repeats are a consequence of the threshold, not necessarily a sign that the sequence
+  is unusable — but we have not yet benchmarked whether they cause problems in practice. Users should
+  treat the unresolved-repeat list as advisory.
+- **No experimental validation.** The tool has been tested on synthetic sequences and a GFP coding
+  sequence, checking that the protein is unchanged and that constraints are met. We have not yet
+  tested whether its output expresses better in *Bacteroides* than the original sequence, and the
+  default thresholds (GC ceiling, repeat length, folding cutoff, enzyme panel) have not been
+  benchmarked against expression data.
+- **Codon usage data.** The tables are averages over all annotated genes of a genome, so highly
+  expressed genes may follow a different codon usage pattern. Only two *Bacteroides* strains are
+  currently supported. The quality of harmonization depends on the source organism's table, and the
+  fallback of ranking codons within the input sequence is noisy for short genes.
+- **What is not modelled.** Codons are selected using usage frequency and the four constraints only.
+  The tool does not consider mRNA stability, promoter or ribosome-binding-site context, internal
+  Shine–Dalgarno-like sequences, or other *Bacteroides*-specific regulatory motifs. Folding is
+  evaluated only at the 5′ end of the transcript, and the 5′ folding check is stochastic, so results
+  can vary slightly between runs.
+- **Greedy repair.** Substitutions are made one at a time in priority order, so the tool can stop with
+  a constraint unresolved even when a different combination of substitutions might have worked.
+  "Unresolved" therefore means "the tool could not fix it", not "it cannot be fixed".
+- **Scope and speed.** The tool accepts in-frame coding sequences in plain DNA letters, not whole
+  plasmids, introns or ambiguous bases. A 717 bp gene takes around half a minute; longer genes will
+  take longer.
+
+</ExpandableText>
+
+### 1.5 Availability
 
 The tool is open source under the MIT License and lives in our wiki repository, under
 [software/codon-optimization-tool](https://gitlab.igem.org/2026/kuleuven/-/tree/main/software/codon-optimization-tool).
-It is written in Python and runs as a command line application: clone the repository, create the
-conda environment described in the tool's README, and run `python cli.py` on a FASTA file of
-in-frame coding sequences. There is no web version — the tool runs on your own machine.
-
-### 1.4 Promoters and ribosome binding sites
-
-{/* TODO: carried over from the former standalone page — content still to be written by the team. */}
-
-*Content to follow.*
+It is written in Python and runs as a command line application (tested on Linux): clone the
+repository, create the conda environment described in the tool's README, and run `python cli.py` on
+a FASTA file of in-frame coding sequences. There is no web version — the tool runs on your own
+machine.
 
 ## 2. Therapeutics
 
@@ -126,30 +377,87 @@ hydrolase of *Bifidobacterium longum* (UniProt Q9KK62) as a reference point.
 
 Prior to generating our tree we aligned the sequences with MAFFT version 7 and G-INS-1 as strategy,
 after trimming we were left with 309 aligned positions, of which 289 were parsimony-informative. A
-maximum likelihood tree was inferred in IQ-TREE 3.1.2., substitution models were screened with
+maximum likelihood tree was inferred in IQ-TREE 3.1.2, substitution models were screened with
 ModelFinder and Q.PFAM+I+G4 selected by BIC, with the proportion of invariable sites estimated at
 0.040 and a Gamma shape parameter of 1.96 across four rate categories. Branch support was assessed
 by performing 1000 ultrafast bootstrap replicates and 1000 SH-aLRT replicates.
 
 The resulting tree was created using iTOL and separates the candidate set into two broad groups. One
-contains the characterised *Bifidobacterium* reference enzyme together with the candidates from the
-Actinomycetota and Bacillota donors. The second contains the Bacteroidota candidates, BSH8, BSH10,
-BSH11 and BSH12, and is separated from the first by substantially longer branches.
+contains the characterised *Bifidobacterium* enzyme together with the *Collinsella*, *Lactobacillus*
+and *Blautia* sequences. The second contains the Bacteroidota sequences — *Bacteroides dorei*,
+*Phocaeicola vulgatus*, *Phocaeicola plebeius* and *Parabacteroides merdae* — and is separated from
+the first by substantially longer branches.
 
 Two observations follow from this. First, sequence similarity to a known BSH is a weak guide within
 our candidate set: the Bacteroidota candidates are distant enough from the characterised enzymes that
 homology alone does not establish what reaction they catalyse. This is the concern that motivated our
-docking analysis, we discuss further in the wiki. Second, the two candidates drawn from the same
-donor strain do not group together: BSH8 resolves alongside BSH11, while the second sequence from
-that strain resolves with BSH12 on a long branch, indicating that the strain carries two divergent
-members of the choloylglycine hydrolase family rather than two copies of one enzyme.
+docking analysis, discussed further below. Second, the two *P. vulgatus* sequences in our set do not
+group together. *Phocaeicola vulgatus* 1 resolves alongside *B. dorei*, while *Phocaeicola vulgatus*
+2 resolves with *P. merdae* on a long branch, indicating that this single strain carries two
+divergent members of the choloylglycine hydrolase family rather than two copies of one enzyme.
 
 <div className="text-center my-3">
 <ZoomableImage src="https://static.igem.wiki/teams/6299/wiki/dry-lab/phylum-tree.avif" alt="Maximum likelihood phylogenetic tree of the bile salt hydrolase candidate panel together with characterized reference sequences, with the 24 sequences grouped by phylogenetic character" />
 <p className="figure-caption small mt-2 mb-0">Figure 1. Maximum likelihood phylogeny of the bile salt hydrolase candidate panel. Twenty-four sequences comprising the full candidate panel and characterized reference sequences were aligned with MAFFT v7 (G-INS-1) and the tree inferred in IQ-TREE 3.1.2 under Q.PFAM+I+G4, with 1000 ultrafast bootstrap and 1000 SH-aLRT replicates. The 24 sequences are grouped according to their phylogenetic character. The tree was visualized using iTOL.</p>
 </div>
 
-### 2.2 BSH–bile salt interaction using AutoDock Vina
+### 2.2 Antibiotic selection
+
+Establishing what *P. vulgatus* is susceptible to served two purposes: it gives us a containment
+route, and it establishes a clinical fallback should an engineered strain ever need to be cleared
+from a patient. Here too we encountered the database-sparsity problem, as the resources did not
+agree.
+
+ResFinder[^resf-1], another open-source bioinformatics tool and curated database maintained by CGE
+(TU Denmark), is used to identify acquired antimicrobial resistance genes (ARGs) and chromosomal
+resistance mutations. It returned no determinants for tetracyclines or fluoroquinolones. CARD's RGI
+(Resistance Gene Identifier), a bioinformatic tool used to predict antibiotic resistomes[^card-1],
+returned two hits when run on the same genome:
+
+<div className="table-responsive table-responsive-rounded my-3">
+
+<table className="table table-bordered align-middle">
+  <thead>
+    <tr>
+      <th>Gene</th>
+      <th>Mechanism</th>
+      <th>Associated classes</th>
+      <th>ARO accession</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><em>adeF</em></td><td>antibiotic efflux (RND pump component)</td><td>tetracyclines, fluoroquinolones</td><td>ARO:37157</td></tr>
+    <tr><td><em>vanT</em></td><td>antibiotic target alteration</td><td>glycopeptides</td><td>ARO:39406</td></tr>
+  </tbody>
+</table>
+
+</div>
+
+<p className="figure-caption small mt-2 mb-0">Table 4. Chromosomal resistance-gene homologues identified by CARD's RGI in *P. vulgatus* ATCC 8482.</p>
+
+The two tools do not contradict each other, as they work on different principles. ResFinder reports
+only genes that were acquired from other bacteria and have been shown experimentally to cause
+resistance, while RGI also reports chromosomal homologues of resistance genes, which are often
+present in a genome without making the organism actually resistant. The Bacterial and Viral
+Bioinformatics Resource Center (BV-BRC)[^bvbrc-1], a web-based information system and research
+platform that aggregates curated genotype and phenotype data across published studies, reports no
+resistance marker for ATCC 8482 under its AMR phenotypes. However, for a strain with little
+published characterization, this may equally reflect an absence of submitted phenotype data rather
+than confirmed susceptibility.
+
+No further genotype prediction can resolve which reading is correct, and this is the gap our
+[MIC assay](/protocols#minimum-inhibitory-concentration-testing) can experimentally close. The
+contested classes gave us a starting point for designing the panel: tetracyclines, fluoroquinolones
+and glycopeptides each had to be measured to settle the disagreement between the tools. We then
+extended the panel well beyond these, to agents that would realistically be used clinically against a
+Gram-negative anaerobe. This was done so that the resulting profile could support a genuine clinical
+fallback rather than only resolving the in silico conflict.
+
+Together these analyses gave us a foundation to rely on before starting experiments: a safety profile
+for a strain with little published characterization, a set of genetic parts with a realistic prospect
+of functioning in *P. vulgatus*, and an empirically grounded susceptibility profile.
+
+### 2.3 BSH–bile salt interaction using AutoDock Vina
 
 Sequence-level evidence alone is not enough to call a gene a bile salt hydrolase (BSH). BSHs belong
 to the cholylglycine hydrolase family, which also contains enzymes with different substrate
@@ -162,20 +470,20 @@ Bile salt hydrolases (BSHs) are N-terminal nucleophile hydrolases (Ntn) and thei
 nucleophile is a cysteine at position 2, exposed by autocatalytic cleavage[^bsh-1][^bsh-2]. A
 candidate without a cysteine at this position does not match the canonical BSH catalytic
 architecture. We therefore checked this residue in all 15 predicted structures. Eleven candidates
-carry Cys2 and were treated as canonical. Four (BSH8, BSH10, BSH11 and BSH12) have no cysteine at
-position 2. Instead they carry an N-terminal extension with the profile of a signal peptide (a
-hydrophobic stretch followed by a polar region), and the first cysteine downstream of it sits at
-position 20–26. For these four we took that cysteine as the putative catalytic residue, assuming the
-extension is cleaved to expose it. The assignment is inferred from sequence features and has not been
-confirmed experimentally, so we flag these candidates as divergent from canonical BSHs regardless of
-their docking results.
+carry Cys2 and were treated as canonical. Four — *Bacteroides dorei*, *Parabacteroides merdae*,
+*Phocaeicola plebeius* and *Phocaeicola vulgatus* 1 — have no cysteine at position 2. Instead they
+carry an N-terminal extension with the profile of a signal peptide (a hydrophobic stretch followed by
+a polar region), and the first cysteine downstream of it sits at position 20–26. For these four we
+took that cysteine as the putative catalytic residue, assuming the extension is cleaved to expose it.
+The assignment is inferred from sequence features and has not been confirmed experimentally, so we
+flag these candidates as divergent from canonical BSHs regardless of their docking results.
 
 We predicted the structure of each of the 15 candidates with AlphaFold3 and docked them against a
-panel of bile salts using AutoDock Vina, run in Google Colab so that the entire pipeline is
-reproducible by anyone without local installation or licensed software. The docking search box was
-centered on the catalytic cysteine of each protein. For each protein-ligand pair we recorded the
-binding affinity of the top-scoring pose and inspected the pose relative to the catalytic residue,
-since a favorable score in the wrong pocket says nothing useful.
+panel of bile salts using AutoDock Vina[^vina-1][^vina-2], run in Google Colab so that the entire
+pipeline is reproducible by anyone without local installation or licensed software. The docking
+search box was centered on the catalytic cysteine of each protein. For each protein-ligand pair we
+recorded the binding affinity of the top-scoring pose and inspected the pose relative to the
+catalytic residue, since a favorable score in the wrong pocket says nothing useful.
 
 <div className="my-4">
 <DockingHeatmap imageBaseUrl="https://static.igem.wiki/teams/6299/wiki/dry-lab/pics" />
@@ -195,5 +503,21 @@ interpret the BSH assay and LC-MS results rather than to replace them.
 [^cod-1]: Mignon, C., Mariano, N., Stadthagen, G., Lugari, A., Lagoutte, P., Donnat, S., Chenavas, S., Perot, C., Sodoyer, R., & Werle, B. (2018). Codon harmonization – going beyond the speed limit for protein expression. FEBS Letters, 592(9), 1554–1564. https://doi.org/10.1002/1873-3468.13046
 [^bsh-1]: Asar, R., Dhindwal, P., & Ruzzini, A. (2024). Structural and functional analysis of a bile salt hydrolase from the bison microbiome. Journal of Biological Chemistry, 300(10). https://doi.org/10.1016/j.jbc.2024.107769
 [^bsh-2]: Xu, F., Hu, X.-J., Singh, W., Geng, W., Tikhonova, I. G., & Lin, J. (2019). The complex structure of bile salt hydrolase from Lactobacillus salivarius reveals the structural basis of substrate specificity. Scientific Reports, 9(1), 12438. https://doi.org/10.1038/s41598-019-48850-6
+[^vina-1]: Eberhardt, J., Santos-Martins, D., Tillack, A. F., & Forli, S. (2021). AutoDock Vina 1.2.0: New docking methods, expanded force field, and python bindings. Journal of Chemical Information and Modeling.
+[^vina-2]: Trott, O., & Olson, A. J. (2010). AutoDock Vina: improving the speed and accuracy of docking with a new scoring function, efficient optimization and multithreading. Journal of Computational Chemistry, 31, 455–461.
+[^vir-1]: Scheutz, F., Nielsen, C. H., & von Mentzer, A. (2024). Construction of the ETECFinder database for the characterization of enterotoxigenic Escherichia coli (ETEC) and revision of the VirulenceFinder web tool at the CGE website. Journal of Clinical Microbiology, 62(6). https://doi.org/10.1128/jcm.00570-23
+[^pf2-1]: Ferrer Florensa, A., Almagro Armenteros, J. J., Kaas, R. S., Clausen, P. T. L. C., Nielsen, H., Rost, B., & Aarestrup, F. M. (2026). Whole-genome prediction of bacterial pathogenic capacity on novel bacteria using protein language models with PathogenFinder2. Bioinformatics. https://doi.org/10.1093/bioinformatics/btag129
+[^phastest-1]: Wishart, D. S., Han, S., Saha, S., Oler, E., Peters, H., Grant, J., Stothard, P., & Gautam, V. (2023). PHASTEST: faster than PHASTER, better than PHAST. Nucleic Acids Research (Web Server Issue). https://doi.org/10.1093/nar/gkad382
+[^prom-mastro]: Mastropaolo, M. D., Thorson, M. L., & Stevens, A. M. (2009). Comparison of Bacteroides thetaiotaomicron and Escherichia coli 16S rRNA gene expression signals. Microbiology, 155, 2683–2693. https://doi.org/10.1099/mic.0.027748-0
+[^prom-mimee]: Mimee, M., Tucker, A. C., Voigt, C. A., & Lu, T. K. (2015). Programming a human commensal bacterium, Bacteroides thetaiotaomicron, to sense and respond to stimuli in the murine gut microbiota. Cell Systems, 1(1), 62–71. https://doi.org/10.1016/j.cels.2015.06.001
+[^prom-taketani]: Taketani, M., Zhang, J., Zhang, S., Triassi, A. J., Huang, Y. J., Griffith, L. G., & Voigt, C. A. (2020). Genetic circuit design automation for the gut resident species Bacteroides thetaiotaomicron. Nature Biotechnology, 38, 962–969. https://doi.org/10.1038/s41587-020-0468-5
+[^prom-whitaker]: Whitaker, W. R., Shepherd, E. S., & Sonnenburg, J. L. (2017). Tunable expression tools enable single-cell strain distinction in the gut microbiome. Cell, 169(3), 538–546.e12. https://doi.org/10.1016/j.cell.2017.03.041
+[^prom-hamady]: Hamady, Z. Z. R., Farrar, M. D., Whitehead, T. R., Holland, K. T., Lodge, J. P. A., & Carding, S. R. (2008). Identification and use of the putative Bacteroides ovatus xylanase promoter for the inducible production of recombinant human proteins. Microbiology, 154(10), 3165–3174. https://doi.org/10.1099/mic.0.2008/019109-0
+[^prom-luck]: Lück, R., & Deppenmeier, U. (2022). Genetic tools for the redirection of the central carbon flow towards the production of lactate in the human gut bacterium Phocaeicola (Bacteroides) vulgatus. Applied Microbiology and Biotechnology, 106, 1211–1225. https://doi.org/10.1007/s00253-022-11777-6
+[^reporter-1]: Agranier, E., Crétin, P., Joublin-Delavat, A., Veillard, L., Touahri, K., & Delavat, F. (2024). Development and utilization of new O2-independent bioreporters. Microbiology Spectrum, 12, e04091-23. https://doi.org/10.1128/spectrum.04091-23
+[^reporter-2]: Hall, M. P., Unch, J., Binkowski, B. F., Valley, M. P., Butler, B. L., Wood, M. G., Otto, P., Zimmerman, K., Vidugiris, G., Machleidt, T., Robers, M. B., Benink, H. A., Eggers, C. T., Slater, M. R., Meisenheimer, P. L., Klaubert, D. H., Fan, F., Encell, L. P., & Wood, K. V. (2012). Engineered luciferase reporter from a deep sea shrimp utilizing a novel imidazopyrazinone substrate. ACS Chemical Biology, 7(11), 1848–1857. https://doi.org/10.1021/cb3002478
+[^resf-1]: Bortolaia, V., Kaas, R. S., Ruppe, E., et al. (2020). ResFinder 4.0 for predictions of phenotypes from genotypes. Journal of Antimicrobial Chemotherapy, 75(12), 3491–3500. https://doi.org/10.1093/jac/dkaa345
+[^card-1]: Alcock, B. P., Huynh, W., Chalil, R., et al. (2023). CARD 2023: expanded curation, support for machine learning, and resistome prediction at the Comprehensive Antibiotic Resistance Database. Nucleic Acids Research, 51, D690–D699. https://doi.org/10.1093/nar/gkac920
+[^bvbrc-1]: Olson, R. D., Assaf, R., Brettin, T., et al. (2023). Introducing the Bacterial and Viral Bioinformatics Resource Center (BV-BRC): a resource combining PATRIC, IRD and ViPR. Nucleic Acids Research, 51, D678–D689. https://doi.org/10.1093/nar/gkac1003
 
 </PageLayout>

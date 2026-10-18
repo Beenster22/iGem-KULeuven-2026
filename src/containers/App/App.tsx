@@ -79,7 +79,10 @@ const App = () => {
       {/* Header and PageContent */}
       <Routes>
         {Object.entries(pathMapping).map(
-          ([path, { title, lead, icon, component: Component }]) =>
+          ([
+            path,
+            { title, lead, icon, specialPrize, component: Component },
+          ]) =>
             path === HOME_PATH ? (
               <Route
                 key={path}
@@ -106,6 +109,7 @@ const App = () => {
                       lead={lead || ""}
                       icon={icon}
                       aside={HEADER_ASIDE[path]}
+                      specialPrize={specialPrize}
                     />
                     <main className="page-body">
                       <PageShell>

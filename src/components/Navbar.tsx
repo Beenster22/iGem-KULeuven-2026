@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type SVGProps } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import BootstrapNavbar from "react-bootstrap/Navbar";
@@ -17,6 +17,57 @@ const NAVBAR_BRAND_MARK_BY_MODE = {
     "https://static.igem.wiki/teams/6299/wiki/icons/empower-stylized-name-light-mode.avif",
   dark: "https://static.igem.wiki/teams/6299/wiki/icons/empower-stylized-name-dark-mode.avif",
 } as const;
+
+// The handful of fields a mega-menu tile actually needs — a local shape
+// rather than importing pages.ts's own Page class, which isn't exported.
+interface MegaMenuEntry {
+  name: string | undefined;
+  path: string | undefined;
+  icon?: React.FC<SVGProps<SVGSVGElement>>;
+  lead?: string;
+  specialPrize?: boolean;
+  menuDivider?: boolean;
+}
+
+type MegaMenuTile = { subpage: MegaMenuEntry; tileIndex: number };
+type MegaMenuGroup =
+  | { kind: "row"; tiles: MegaMenuTile[]; centered: boolean; key: string }
+  | { kind: "divider"; key: string };
+
+// Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+// Purpose: team request — 3 tiles per row, never 4; a folder whose tile
+// count isn't a multiple of 3 gets a shorter trailing row of 1 or 2,
+// centered rather than left-aligned (see .mega-menu-row--centered) or
+// padded with filler content. A menuDivider tile still starts a fresh row
+// of its own (see Dry Lab... though nothing uses it right now).
+function layoutMegaMenu(folder: MegaMenuEntry[]): MegaMenuGroup[] {
+  const groups: MegaMenuGroup[] = [];
+  let current: MegaMenuTile[] = [];
+
+  const flushRows = () => {
+    for (let i = 0; i < current.length; i += 3) {
+      const tiles = current.slice(i, i + 3);
+      groups.push({
+        kind: "row",
+        tiles,
+        centered: tiles.length < 3,
+        key: `row-${tiles[0].tileIndex}`,
+      });
+    }
+    current = [];
+  };
+
+  folder.forEach((subpage, tileIndex) => {
+    if (subpage.menuDivider) {
+      flushRows();
+      groups.push({ kind: "divider", key: `divider-${tileIndex}` });
+    }
+    current.push({ subpage, tileIndex });
+  });
+  flushRows();
+
+  return groups;
+}
 
 export function Navbar() {
   const { mode, toggleMode } = useThemeMode();
@@ -83,6 +134,11 @@ export function Navbar() {
           }}
         >
           {item.name}
+          {item.folder.some((subpage) => subpage.specialPrize) && (
+            <span className="nav-link-prize-star" aria-label="Special prize">
+              ★
+            </span>
+          )}
           <svg
             className="nav-link-caret"
             viewBox="0 0 12 8"
@@ -108,6 +164,11 @@ export function Navbar() {
           onClick={closeNow}
         >
           {item.name}
+          {item.specialPrize && (
+            <span className="nav-link-prize-star" aria-label="Special prize">
+              ★
+            </span>
+          )}
         </Nav.Link>
       );
     }
@@ -181,32 +242,57 @@ export function Navbar() {
             <div className="mega-menu-bridge" />
             <div className="mega-menu">
               <Container className="mega-menu-content">
-                {activeFolder.map((subpage, subpageIndex) => {
-                  if (!subpage.path) return null;
-                  const Icon = subpage.icon;
-                  return (
-                    <Link
-                      key={`mega-${openMenu}-${subpageIndex}`}
-                      to={subpage.path}
-                      className={`mega-menu-link mega-menu-link--${subpageIndex % 2 === 0 ? "dark" : "light"}`}
-                      onClick={closeNow}
-                    >
-                      {Icon && (
-                        <span className="mega-menu-link-icon" aria-hidden="true">
-                          <Icon />
-                        </span>
-                      )}
-                      <span className="mega-menu-link-text">
-                        <span className="mega-menu-link-name">{subpage.name}</span>
-                        {subpage.lead && (
-                          <span className="mega-menu-link-lead">
-                            {renderItalics(subpage.lead)}
-                          </span>
-                        )}
-                      </span>
-                    </Link>
-                  );
-                })}
+                {layoutMegaMenu(activeFolder.filter((subpage) => subpage.path)).map(
+                  (group) => {
+                    if (group.kind === "divider") {
+                      return (
+                        <div
+                          key={`mega-${openMenu}-${group.key}`}
+                          className="mega-menu-divider"
+                        />
+                      );
+                    }
+                    return (
+                      <div
+                        key={`mega-${openMenu}-${group.key}`}
+                        className={`mega-menu-row${group.centered ? " mega-menu-row--centered" : ""}`}
+                      >
+                        {group.tiles.map(({ subpage, tileIndex }) => {
+                          const Icon = subpage.icon;
+                          return (
+                            <Link
+                              key={`mega-${openMenu}-${tileIndex}`}
+                              to={subpage.path!}
+                              className={`mega-menu-link mega-menu-link--${tileIndex % 2 === 0 ? "dark" : "light"}`}
+                              onClick={closeNow}
+                            >
+                              {Icon && (
+                                <span className="mega-menu-link-icon" aria-hidden="true">
+                                  <Icon />
+                                </span>
+                              )}
+                              <span className="mega-menu-link-text">
+                                <span className="mega-menu-link-name">
+                                  {subpage.name}
+                                  {subpage.specialPrize && (
+                                    <span className="mega-menu-link-prize">
+                                      <span aria-hidden="true">★</span> Special prize
+                                    </span>
+                                  )}
+                                </span>
+                                {subpage.lead && (
+                                  <span className="mega-menu-link-lead">
+                                    {renderItalics(subpage.lead)}
+                                  </span>
+                                )}
+                              </span>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    );
+                  },
+                )}
               </Container>
             </div>
           </>

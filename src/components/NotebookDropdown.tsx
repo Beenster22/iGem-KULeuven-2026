@@ -25,9 +25,12 @@ import {
   useRef,
   useState,
 } from "react";
+import { useLocation } from "react-router-dom";
 import { ExpandableText } from "./Expandable-Text";
 import { NotebookEntryMeta } from "./NotebookEntryMeta";
 import { GanttEntry, NotebookGantt, OPEN_SECTION_EVENT } from "./NotebookGantt";
+import { headingSlugs, textOf } from "./useHashPanel";
+import { stringToSlug } from "../utils/stringToSlug";
 
 interface NotebookDropdownProps {
   title: ReactNode;
@@ -211,6 +214,20 @@ export function NotebookDropdown({
     document.addEventListener(OPEN_ENTRY_EVENT, onOpenEntry);
     return () => document.removeEventListener(OPEN_ENTRY_EVENT, onOpenEntry);
   }, [badge]);
+
+  // A link from another page (e.g. results.mdx pointing at this notebook, or
+  // at one of its entries) names us by the URL hash. ExpandableText does this
+  // itself, but only when it owns its own open state — here that state is
+  // ours instead (open / onOpenChange below), so the same check is repeated.
+  const { hash } = useLocation();
+  useEffect(() => {
+    const slug = decodeURIComponent(hash.slice(1));
+    if (!slug) return;
+    if (stringToSlug(textOf(title)) === slug || headingSlugs(children).includes(slug)) {
+      setIsOpen(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hash]);
 
   return (
     // The tone travels as a data attribute on a wrapper instead of a prop on

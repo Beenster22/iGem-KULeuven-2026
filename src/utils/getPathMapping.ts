@@ -9,6 +9,7 @@ export const getPathMapping = () => {
       component: React.FC;
       lead: string | undefined;
       icon: React.FC<SVGProps<SVGSVGElement>> | undefined;
+      specialPrize: boolean | undefined;
     };
   }>((map, item) => {
     if ("path" in item && item.path && item.component) {
@@ -18,6 +19,7 @@ export const getPathMapping = () => {
         component: item.component,
         lead: item.lead,
         icon: item.icon,
+        specialPrize: item.specialPrize,
       };
     } else if ("folder" in item && item.folder) {
       item.folder.forEach((page) => {
@@ -28,6 +30,7 @@ export const getPathMapping = () => {
             component: page.component,
             lead: page.lead,
             icon: page.icon,
+            specialPrize: page.specialPrize,
           };
         }
       });

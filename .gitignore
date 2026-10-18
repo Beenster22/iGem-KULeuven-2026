@@ -27,3 +27,7 @@ dist-ssr
 # Video Universe. Nothing references it any more — never commit it; per
 # README.md, video must be served from iGEM infrastructure.
 /public/temp-preview/
+
+# Local PDF working copies (branded PDFs to upload to static.igem.wiki)
+/wiki-pdfs/
+/wiki-pdfs-branded/

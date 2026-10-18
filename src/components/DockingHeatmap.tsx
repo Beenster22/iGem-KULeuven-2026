@@ -6,6 +6,19 @@
 // Edited with Claude Opus 5 (Anthropic), 2026-10-17
 // Purpose: the pose images are now uploaded under the BSH names, so the image
 // URL is built from the row's `homolog` again instead of the species slug.
+// Edited with Claude Sonnet 5 (Anthropic), 2026-10-18
+// Purpose: selecting a cell pops the pose image in below.
+// Edited with Claude Sonnet 5 (Anthropic), 2026-10-18
+// Purpose: on wide viewports, selecting a cell now splits the layout side by
+// side — the grid shrinks into the left half, the pose image takes the right
+// half — so both are visible together instead of needing to scroll between
+// them. Narrow viewports keep the original stacked layout (the CSS media
+// query handles that; this component doesn't need to know the width).
+// Edited with Claude Sonnet 5 (Anthropic), 2026-10-18
+// Purpose: dropped the auto-scroll-to-image and "back to heatmap" button —
+// with the split layout both the grid and the image are already on screen
+// together, so the scroll was unnecessary and, worse, could jump the page
+// past the whole section while the grid was mid-transition.
 import { useMemo, useState } from "react";
 import { BILE_SALTS, DOCKING_AFFINITIES } from "./data/dockingAffinities";
 
@@ -92,85 +105,94 @@ export function DockingHeatmap({
       : null;
 
   return (
-    <div className="docking-heatmap">
-      <div className="docking-heatmap-scroll">
-        <table className="docking-heatmap-grid">
-          <caption className="docking-heatmap-caption">
-            Binding affinity (kcal/mol); more negative means stronger predicted
-            binding. Select a cell to see its docking pose.
-          </caption>
-          <thead>
-            <tr>
-              <th scope="col" className="docking-heatmap-corner">
-                BSH homolog
-              </th>
-              {BILE_SALTS.map((salt) => (
-                <th scope="col" key={salt} className="docking-heatmap-col-head">
-                  <span>{salt}</span>
+    <div className={`docking-heatmap${selected ? " is-split" : ""}`}>
+      <div className="docking-heatmap-top">
+        <div className="docking-heatmap-scroll">
+          <table className="docking-heatmap-grid">
+            <caption className="docking-heatmap-caption">
+              Binding affinity (kcal/mol); more negative means stronger
+              predicted binding. Select a cell to see its docking pose.
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col" className="docking-heatmap-corner">
+                  BSH homolog
                 </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {DOCKING_AFFINITIES.map((row) => (
-              <tr key={row.homolog}>
-                <th scope="row" className="docking-heatmap-row-head">
-                  {row.homolog}
-                </th>
-                {row.affinities.map((value, index) => {
-                  const salt = BILE_SALTS[index];
-                  const isSelected =
-                    selected?.homolog === row.homolog &&
-                    selected?.salt === salt;
-                  return (
-                    <td key={salt} className="docking-heatmap-cell-wrap">
-                      <button
-                        type="button"
-                        className={`docking-heatmap-cell${isSelected ? " selected" : ""}`}
-                        style={cellColor(value, limit)}
-                        aria-pressed={isSelected}
-                        aria-label={`${row.homolog} with ${salt}: ${value.toFixed(1)} kcal per mol`}
-                        onClick={() =>
-                          setSelected(
-                            isSelected
-                              ? null
-                              : { homolog: row.homolog, salt, value },
-                          )
-                        }
-                      >
-                        {value.toFixed(1)}
-                      </button>
-                    </td>
-                  );
-                })}
+                {BILE_SALTS.map((salt) => (
+                  <th
+                    scope="col"
+                    key={salt}
+                    className="docking-heatmap-col-head"
+                  >
+                    <span>{salt}</span>
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {DOCKING_AFFINITIES.map((row) => (
+                <tr key={row.homolog}>
+                  <th scope="row" className="docking-heatmap-row-head">
+                    {row.homolog}
+                  </th>
+                  {row.affinities.map((value, index) => {
+                    const salt = BILE_SALTS[index];
+                    const isSelected =
+                      selected?.homolog === row.homolog &&
+                      selected?.salt === salt;
+                    return (
+                      <td key={salt} className="docking-heatmap-cell-wrap">
+                        <button
+                          type="button"
+                          className={`docking-heatmap-cell${isSelected ? " selected" : ""}`}
+                          style={cellColor(value, limit)}
+                          aria-pressed={isSelected}
+                          aria-label={`${row.homolog} with ${salt}: ${value.toFixed(1)} kcal per mol`}
+                          onClick={() =>
+                            setSelected(
+                              isSelected
+                                ? null
+                                : { homolog: row.homolog, salt, value },
+                            )
+                          }
+                        >
+                          {value.toFixed(1)}
+                        </button>
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="docking-heatmap-legend" aria-hidden="true">
+          <span>{(-limit).toFixed(1)}</span>
+          <span
+            className="docking-heatmap-legend-bar"
+            style={{
+              backgroundImage: `linear-gradient(to right, ${[
+                0, 0.25, 0.5, 0.75, 1,
+              ]
+                .map((stop) => {
+                  const [r, g, b] = sampleRdBu(1 - stop);
+                  return `rgb(${r}, ${g}, ${b})`;
+                })
+                .join(", ")})`,
+            }}
+          />
+          <span>+{limit.toFixed(1)}</span>
+          <span className="docking-heatmap-legend-label">
+            Binding affinity (kcal/mol)
+          </span>
+        </div>
       </div>
 
-      <div className="docking-heatmap-legend" aria-hidden="true">
-        <span>{(-limit).toFixed(1)}</span>
-        <span
-          className="docking-heatmap-legend-bar"
-          style={{
-            backgroundImage: `linear-gradient(to right, ${[
-              0, 0.25, 0.5, 0.75, 1,
-            ]
-              .map((stop) => {
-                const [r, g, b] = sampleRdBu(1 - stop);
-                return `rgb(${r}, ${g}, ${b})`;
-              })
-              .join(", ")})`,
-          }}
-        />
-        <span>+{limit.toFixed(1)}</span>
-        <span className="docking-heatmap-legend-label">
-          Binding affinity (kcal/mol)
-        </span>
-      </div>
-
-      <div className="docking-heatmap-detail" aria-live="polite">
+      <div
+        className={`docking-heatmap-detail${selected ? " has-selection" : ""}`}
+        aria-live="polite"
+      >
         {selected ? (
           <>
             <p className="docking-heatmap-detail-head">
@@ -183,7 +205,7 @@ export function DockingHeatmap({
               <img
                 src={imageUrl}
                 alt={`Docking pose of ${selected.homolog} with ${selected.salt}`}
-                className="img-fluid rounded"
+                className="img-fluid rounded docking-heatmap-detail-image"
               />
             ) : (
               <p className="docking-heatmap-detail-placeholder">

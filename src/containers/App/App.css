@@ -342,6 +342,30 @@ a[data-footnote-ref]:focus {
   color: var(--color-header-text);
 }
 
+/* Purpose: title-row badge marking this as a special prize's dedicated page
+   (see pages.ts `specialPrize`) — same teal pill as the home page's
+   FindOutMore "Special prize" badge (App.css .find-more-card-prize),
+   repeated here and in the navbar (.nav-link-prize-star,
+   .mega-menu-link-prize) so the prize is visible wherever the page is
+   reached, not only from the home page. */
+.page-header-box-title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.page-header-prize-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background-color: #2fa4a9;
+  color: #33283f;
+  font-size: 0.8rem;
+  font-weight: 800;
+  white-space: nowrap;
+  margin-bottom: 0.5rem;
+}
+
 /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
    Purpose: team request — every page's title now carries the same icon as
    its navbar mega-menu tile (see pages.ts `icon`, Header.tsx), sitting to
@@ -434,6 +458,15 @@ a[data-footnote-ref]:focus {
 
 .navbar-empower .nav-link-dropdown.show .nav-link-caret {
   transform: rotate(-180deg);
+}
+
+/* Purpose: small star marking a top-level nav link as a special prize's
+   dedicated page (see pages.ts `specialPrize`, .page-header-prize-badge
+   above). Kept to a bare star rather than the full "Special prize" pill —
+   there isn't room for the pill text beside the nav link label. */
+.nav-link-prize-star {
+  color: #2fa4a9;
+  margin-left: 0.3rem;
 }
 
 .navbar-empower .nav-link::after {
@@ -560,11 +593,47 @@ a[data-footnote-ref]:focus {
    of the navbar inventing its own look. Cards are wide (minmax 15rem) and
    short, sized for a horizontal dropdown strip rather than the home page's
    tall vertical cards. */
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: team request — 3 tiles per row, never 4. Each .mega-menu-row is
+   its own flex row (see layoutMegaMenu in Navbar.tsx, which chunks a
+   folder's tiles into groups of 3); a full row's tiles share the width
+   equally, a short trailing row of 1-2 is centered instead of padded or
+   left stuck to the left edge. */
 .mega-menu-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 0.85rem;
   padding: 1.25rem 1rem;
+}
+
+.mega-menu-row {
+  display: flex;
+  gap: 0.85rem;
+}
+
+.mega-menu-row .mega-menu-link {
+  flex: 1 1 calc((100% - 1.7rem) / 3);
+}
+
+.mega-menu-row--centered {
+  justify-content: center;
+}
+
+/* A short row's tiles stay the same width as a full row's (not stretched
+   to fill the leftover space) — that's what makes "centered" read as a
+   smaller row, not just left-aligned tiles with room to spare. */
+.mega-menu-row--centered .mega-menu-link {
+  flex: 0 0 calc((100% - 1.7rem) / 3);
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: team request — a thin rule setting a tile apart from the row(s)
+   above it (see menuDivider in pages.ts; unused today, kept for whichever
+   page needs it next). */
+.mega-menu-divider {
+  height: 1px;
+  margin: 0.25rem 0;
+  background-color: rgba(201, 189, 232, 0.35);
 }
 
 .mega-menu-link {
@@ -604,8 +673,21 @@ a[data-footnote-ref]:focus {
 .mega-menu-link:focus {
   border-color: #2fa4a9;
   box-shadow: 0 0.6rem 1.4rem rgba(47, 164, 169, 0.3);
-  color: inherit;
   transform: translateY(-3px);
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: hover used `color: inherit`, which resolved to the mega-menu's
+   dark text rather than the tile's own color, so the text vanished on the
+   dark tiles. Each variant now keeps its own text color on hover/focus. */
+.mega-menu-link--dark:hover,
+.mega-menu-link--dark:focus {
+  color: #eaf4f5;
+}
+
+.mega-menu-link--light:hover,
+.mega-menu-link--light:focus {
+  color: #33283f;
 }
 
 .mega-menu-link-icon {
@@ -637,6 +719,22 @@ a[data-footnote-ref]:focus {
   font-weight: 800;
   font-size: 1rem;
   line-height: 1.2;
+}
+
+/* Purpose: "Special prize" pill on a mega-menu tile whose page is a special
+   prize's dedicated page (see pages.ts `specialPrize`). Fixed teal/plum
+   rather than the tile's own dark/light colors so it reads the same as the
+   home page's FindOutMore badge and the page header's. */
+.mega-menu-link-prize {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background-color: #2fa4a9;
+  color: #33283f;
+  font-size: 0.7rem;
+  font-weight: 800;
+  vertical-align: middle;
 }
 
 .mega-menu-link-lead {
@@ -679,8 +777,18 @@ a[data-footnote-ref]:focus {
   }
 
   .mega-menu-content {
-    grid-template-columns: 1fr;
     padding: 0.5rem 0.5rem 1rem;
+  }
+
+  /* Every tile stacks full-width on a narrow screen — the row grouping and
+     centering above only make sense once there is room for 3 across. */
+  .mega-menu-row {
+    flex-direction: column;
+  }
+
+  .mega-menu-row .mega-menu-link,
+  .mega-menu-row--centered .mega-menu-link {
+    flex: 1 1 auto;
   }
 }
 
@@ -881,6 +989,30 @@ a[data-footnote-ref]:focus {
   }
 }
 
+/* STICKY TABLE HEADER
+   Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
+   Purpose: a long results table (e.g. the growth-curve fitting parameters,
+   results page) scrolls vertically inside a capped-height wrapper instead
+   of stretching the page, with its header row pinned to the top of that
+   scroll area so the column labels stay readable throughout. Stacks with
+   .table-responsive-rounded, whose own overflow-y: hidden (kept for the
+   rounded corners) is overridden back to auto here. The sticky cells'
+   background is the enclosing .content-section's own tint rather than the
+   page background, so the header stays opaque over scrolled rows without
+   mismatching the card around it; short tables that never reach the capped
+   height simply never scroll, so this is safe to apply everywhere. */
+.table-responsive-sticky-head {
+  max-height: 28rem;
+  overflow-y: auto;
+}
+
+.table-responsive-sticky-head thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--content-section-bg, var(--color-page-bg));
+}
+
 /* CALLOUT */
 .bd-callout {
   padding: 1.25rem;
@@ -1009,9 +1141,34 @@ a[data-footnote-ref]:focus {
    The grid is wider than the content column, so it scrolls sideways with
    the homolog column pinned to the left edge. Cell colours are inline
    styles (computed per value in DockingHeatmap.tsx), so nothing here sets
-   them. */
+   them.
+   Edited with Claude Sonnet 5 (Anthropic), 2026-10-18
+   Purpose: .docking-heatmap is always a flex row of its two children (the
+   grid and the detail panel), both at 100% basis so they stack normally.
+   Adding .is-split (on selection, wide viewports only — see the media query
+   below) narrows both to ~50% so the shrinking grid and the appearing image
+   are visibly two halves of the same row, with a transition on flex-basis so
+   the move is animated rather than an instant snap. The grid itself also
+   gets smaller type/padding under .is-split so the full width stays mostly
+   visible instead of relying only on its sideways scroll. */
 .docking-heatmap {
   margin: 1.5rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.docking-heatmap-top {
+  flex: 1 1 100%;
+  min-width: 0;
+  transition: flex-basis 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 769px) {
+  .docking-heatmap.is-split .docking-heatmap-top {
+    flex-basis: calc(50% - 0.75rem);
+  }
 }
 
 .docking-heatmap-scroll {
@@ -1022,6 +1179,11 @@ a[data-footnote-ref]:focus {
 .docking-heatmap-grid {
   border-collapse: separate;
   border-spacing: 2px;
+  /* Centers the grid when it's narrower than the scroll container; has no
+     effect (auto margins resolve to 0) once it's wide enough to need the
+     sideways scroll, so nothing is ever clipped off the left edge. */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .docking-heatmap-caption {
@@ -1034,15 +1196,28 @@ a[data-footnote-ref]:focus {
 }
 
 .docking-heatmap-col-head {
+  position: relative;
   vertical-align: bottom;
+  /* Fixed height reserves room for the diagonal label below, regardless of
+     name length. */
+  height: 7.5rem;
   padding: 0 0 0.4rem;
-  font-size: 0.72rem;
-  font-weight: 600;
-  /* Ten full bile salt names will not fit side by side at column width, so
-     they are set vertically, as in the original figure's angled labels. */
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
+  transition: height 0.35s ease;
+}
+
+.docking-heatmap-col-head span {
+  /* Angled labels (as in the original figure) read far more easily than
+     fully vertical text, while still fitting ten full bile salt names side
+     by side at column width. */
+  position: absolute;
+  left: 0.3rem;
+  bottom: 0.5rem;
+  transform: rotate(-45deg);
+  transform-origin: left bottom;
   white-space: nowrap;
+  font-size: 0.74rem;
+  font-weight: 600;
+  transition: font-size 0.35s ease;
 }
 
 .docking-heatmap-corner {
@@ -1051,6 +1226,7 @@ a[data-footnote-ref]:focus {
   text-align: left;
   vertical-align: bottom;
   padding-bottom: 0.4rem;
+  transition: font-size 0.35s ease;
 }
 
 .docking-heatmap-row-head,
@@ -1067,6 +1243,9 @@ a[data-footnote-ref]:focus {
   font-weight: 600;
   text-align: right;
   white-space: nowrap;
+  transition:
+    font-size 0.35s ease,
+    padding-right 0.35s ease;
 }
 
 .docking-heatmap-cell-wrap {
@@ -1084,9 +1263,42 @@ a[data-footnote-ref]:focus {
   font-variant-numeric: tabular-nums;
   line-height: 1.1;
   cursor: pointer;
-  transition: outline-color 0.12s ease;
+  transition:
+    outline-color 0.12s ease,
+    min-width 0.35s ease,
+    padding 0.35s ease,
+    font-size 0.35s ease;
   outline: 2px solid transparent;
   outline-offset: -2px;
+}
+
+/* Smaller type + padding so a split-view grid fits its half of the row
+   without needing much of its sideways scroll (min-width:0 on
+   .docking-heatmap-top above is what lets it shrink past the table's
+   natural width at all; the scroll stays as a fallback for tall tables). */
+@media (min-width: 769px) {
+  .docking-heatmap.is-split .docking-heatmap-cell {
+    min-width: 34px;
+    padding: 0.4rem 0.2rem;
+    font-size: 0.64rem;
+  }
+
+  .docking-heatmap.is-split .docking-heatmap-row-head {
+    font-size: 0.68rem;
+    padding-right: 0.4rem;
+  }
+
+  .docking-heatmap.is-split .docking-heatmap-col-head {
+    height: 5.5rem;
+  }
+
+  .docking-heatmap.is-split .docking-heatmap-col-head span {
+    font-size: 0.62rem;
+  }
+
+  .docking-heatmap.is-split .docking-heatmap-corner {
+    font-size: 0.62rem;
+  }
 }
 
 .docking-heatmap-cell:hover {
@@ -1101,6 +1313,8 @@ a[data-footnote-ref]:focus {
 .docking-heatmap-legend {
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 0.85rem;
   font-size: 0.75rem;
@@ -1118,11 +1332,21 @@ a[data-footnote-ref]:focus {
 }
 
 .docking-heatmap-detail {
+  flex: 1 1 100%;
+  min-width: 0;
   margin-top: 1rem;
   border: 1px solid rgba(51, 40, 63, 0.25);
   border-radius: 0.75rem;
   padding: 1rem;
   text-align: center;
+  transition: flex-basis 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 769px) {
+  .docking-heatmap.is-split .docking-heatmap-detail {
+    flex-basis: calc(50% - 0.75rem);
+    margin-top: 0;
+  }
 }
 
 [data-theme="dark"] .docking-heatmap-detail {
@@ -1141,6 +1365,46 @@ a[data-footnote-ref]:focus {
 .docking-heatmap-detail-placeholder {
   opacity: 0.7;
   font-style: italic;
+}
+
+@keyframes docking-heatmap-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.docking-heatmap-detail.has-selection {
+  animation: docking-heatmap-pop-in 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.docking-heatmap-detail-image {
+  /* Given room to be the thing you're now looking at, rather than a thumbnail
+     tucked under a still-full-size table. */
+  max-width: min(100%, 640px);
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(20, 14, 28, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .docking-heatmap-detail.has-selection {
+    transition: none;
+    animation: none;
+  }
+
+  .docking-heatmap-top,
+  .docking-heatmap-detail,
+  .docking-heatmap-cell,
+  .docking-heatmap-col-head,
+  .docking-heatmap-col-head span,
+  .docking-heatmap-corner,
+  .docking-heatmap-row-head {
+    transition: none;
+  }
 }
 
 /* MARKDOWN TABLES INSIDE A DROPDOWN (notebook / protocol accordions)
@@ -2303,6 +2567,29 @@ a[data-footnote-ref]:focus {
   opacity: 1;
 }
 
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: "CRISPR construct design" sat as a plain row at the bottom of a
+   long Therapeutics list, directly under two indented sub-sub rows — easy to
+   miss (team feedback). Targeted by its known slug rather than by changing
+   the heading text, so its anchor and the link to it from
+   experimental-overview.mdx are untouched. Bolder, a touch bigger, and set
+   off with a divider so it reads as its own result instead of blending into
+   the hydrolase section above it. */
+.section-progress a[href="#crispr-construct-design"] .section-progress-label {
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.section-progress li:has(> a[href="#crispr-construct-design"]) {
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid rgba(51, 40, 63, 0.18);
+}
+
+[data-theme="dark"] .section-progress li:has(> a[href="#crispr-construct-design"]) {
+  border-top-color: rgba(255, 255, 255, 0.14);
+}
+
 /* Collapsible index (pages that render [data-toc-collapsible]): a chevron
    at the right of each main section with subsections toggles them open. */
 .section-progress li.expandable a {
@@ -2613,6 +2900,65 @@ a[data-footnote-ref]:focus {
 
 .segmented-selector-content {
   margin-top: 1.5rem;
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: <SegmentedSelector tone="pipeline"> (results page's Toolkit /
+   Therapeutics switch). Team feedback: it was not clear enough which
+   pipeline you were in. Each segment keeps its own colour — Toolkit teal,
+   Therapeutics purple — as a soft tint when idle and a solid fill with a
+   check mark when active, and the section below gets a matching top rule so
+   the colour carries down the page. */
+.segmented-selector--pipeline {
+  --pipeline-0: #2fa4a9;
+  --pipeline-1: #8a6bbf;
+}
+
+.segmented-selector--pipeline > .segmented-selector-bar {
+  border-width: 0;
+  gap: 0.75rem;
+  overflow: visible;
+}
+
+.segmented-selector--pipeline .segmented-selector-segment {
+  border: 2px solid var(--seg);
+  border-radius: 0.6rem;
+  background-color: color-mix(in srgb, var(--seg) 14%, transparent);
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+.segmented-selector--pipeline .segmented-selector-segment--0 {
+  --seg: var(--pipeline-0);
+}
+
+.segmented-selector--pipeline .segmented-selector-segment--1 {
+  --seg: var(--pipeline-1);
+}
+
+.segmented-selector--pipeline .segmented-selector-segment:hover {
+  background-color: color-mix(in srgb, var(--seg) 28%, transparent);
+  opacity: 1;
+}
+
+.segmented-selector--pipeline .segmented-selector-segment.active {
+  background-color: var(--seg);
+  color: #fff;
+  opacity: 1;
+  font-weight: 700;
+}
+
+.segmented-selector--pipeline .segmented-selector-segment.active::before {
+  content: "✓ ";
+}
+
+.segmented-selector--pipeline > .segmented-selector-content {
+  padding-top: 1.5rem;
+  border-top: 4px solid var(--pipeline-0);
+}
+
+.segmented-selector--pipeline[data-active-index="1"] > .segmented-selector-content {
+  border-top-color: var(--pipeline-1);
 }
 
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-09-08
@@ -3599,6 +3945,31 @@ div.sponsor-grid-card:hover {
   border-radius: 0.5rem;
 }
 
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: <ZoomableImage onLightBackground /> — for a figure drawn with a
+   transparent background (the pBSH-Cas9 plasmid map), which disappeared into
+   the dialog's dark backdrop above. Plain white rather than a theme token:
+   the figure was drawn assuming a light background specifically, not
+   whatever the current theme happens to be. box-sizing keeps the padding
+   from pushing the image past the dialog's own padding. */
+.zoomable-image-dialog img.on-light-bg {
+  box-sizing: border-box;
+  padding: 2rem;
+  background-color: #ffffff;
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: the same light card for the inline thumbnail, not just the
+   fullscreen dialog — in dark mode .construct-map-image sits on the page's
+   own dark background (var(--color-page-bg)), so the plasmid map's dark
+   labels and thin grey arcs were nearly invisible before the figure was ever
+   clicked open. */
+.zoomable-image-trigger img.on-light-bg {
+  box-sizing: border-box;
+  padding: 1.25rem;
+  background-color: #ffffff;
+}
+
 .zoomable-image-close {
   position: absolute;
   top: 0.75rem;
@@ -3652,18 +4023,32 @@ body.home-fullscreen {
   width: 100%;
   height: 100dvh;
   overflow: hidden;
-  background-color: var(--color-header-bg);
+  background-color: var(--color-accent);
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback): the
+   video's bacterium -> logo morph is the final transition, so the still sits
+   at exactly the embed's geometry and is swapped in instantly (no dissolve,
+   no resize afterwards) — it just holds the video's last frame on screen.
+   Both are sized to fit entirely inside the hero ("contain", so the logo is
+   never cropped on any window shape, per the earlier team call) and then
+   shrunk slightly by --home-hero-video-scale. The video's edges are the same
+   lavender as .home-hero's background, so the margin this leaves blends in. */
+.home-hero {
+  container-type: size;
+  --home-hero-video-scale: 0.85;
 }
 
 .home-hero-video {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  top: 50%;
+  left: 50%;
+  width: min(100cqw, calc(100cqh * 16 / 9));
+  height: min(100cqh, calc(100cqw * 9 / 16));
+  transform: translate(-50%, -50%) scale(var(--home-hero-video-scale));
   object-fit: cover;
   display: block;
   opacity: 0;
-  transition: opacity 0.5s ease;
 }
 
 .home-hero-video--shown {
@@ -3672,25 +4057,18 @@ body.home-fullscreen {
 
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
    Purpose: object-fit doesn't apply to an <iframe>, so the 16:9 video embed
-   is sized to always cover the hero and centred, letting .home-hero's
-   overflow crop the excess — the same result as object-fit: cover.
-   Edited with Claude Sonnet 5 (Anthropic), 2026-10-17 (team feedback: the
-   opening and closing frames were being cropped top/bottom on wide, short
-   windows, cutting off the figure and the logo): height no longer grows
-   past 100% — the old `max(100%, 100vw * 9/16)` could push it well past the
-   hero's own height on a wide-but-short viewport, trimming equally off the
-   top and bottom. Width still over-grows the same way for a narrow, tall
-   viewport, which only crops background either side of the centred subject.
-   A wider-than-16:9 window now pillarboxes within the embed instead of
-   cropping vertically. It's a decorative background, so it takes no pointer
-   input. */
+   is sized and centred by hand.
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback): no
+   longer full-bleed/cropped — it now uses the exact same "contain" box as
+   .home-hero-video above, so its last frame and the still line up
+   pixel-for-pixel and the logo is never cropped or oversized. */
 .home-hero-embed {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: max(100%, calc(100dvh * 16 / 9));
-  height: 100%;
-  transform: translate(-50%, -50%);
+  width: min(100cqw, calc(100cqh * 16 / 9));
+  height: min(100cqh, calc(100cqw * 9 / 16));
+  transform: translate(-50%, -50%) scale(var(--home-hero-video-scale));
   border: 0;
   pointer-events: none;
 }
@@ -3762,6 +4140,17 @@ body.home-fullscreen {
 
 .home-section--page {
   background-color: var(--color-page-bg);
+}
+
+/* In light mode --color-page-bg is a light teal, distinct from the light
+   purple --color-body-bg band next to it — unlike dark mode, where both
+   tokens are shades of dark purple and the whole page reads as one
+   consistent identity. Matching this band to --color-body-bg in light mode
+   only gives light mode that same connected purple feel (2026-10-18 team
+   feedback), without touching --color-page-bg itself (still teal on every
+   other page). */
+[data-theme="light"] .home-section--page {
+  background-color: var(--color-body-bg);
 }
 
 .home-section--body {
@@ -4418,6 +4807,57 @@ body:not(.home-fullscreen) .home-hero {
   text-underline-offset: 0.2em;
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
+   panels wait until the globe has landed on the first circle (.is-landed,
+   set by PmosEffectsSection.tsx), then come in by themselves one after
+   another, left to right — each --i steps later (0.25s apart) — with no
+   more scrolling. The first circle is where the globe lands, so it appears
+   at once (the globe has just turned into it) and only its drawing and
+   label fade in. Going back up hides them straight away, ready to play
+   again. */
+.pmos-effect,
+.pmos-effects-more {
+  transition:
+    opacity 0.5s ease,
+    translate 0.5s ease;
+}
+
+.pmos-effects.is-landed .pmos-effect,
+.pmos-effects.is-landed .pmos-effects-more {
+  transition-delay: calc(var(--i) * 0.25s);
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback: going
+   back up wasn't smooth): leaving, they now go one after another too, in
+   reverse — the link first, the circle next to the globe last — quicker
+   than they came in so the globe has its room back as it rises. */
+.pmos-effects:not(.is-landed) .pmos-effect,
+.pmos-effects:not(.is-landed) .pmos-effects-more {
+  opacity: 0;
+  translate: -1.5rem 0;
+  transition-duration: 0.35s;
+  transition-delay: calc((4 - var(--i)) * 0.08s);
+}
+
+.pmos-effects:not(.is-landed) .pmos-effect.symptom-group--hormonal {
+  opacity: 1;
+  translate: none;
+}
+
+.pmos-effects:not(.is-landed) .symptom-group--hormonal .pmos-effect-art {
+  visibility: hidden;
+}
+
+.pmos-effect.symptom-group--hormonal .pmos-effect-art svg,
+.pmos-effect.symptom-group--hormonal .pmos-effect-label {
+  transition: opacity 0.5s ease;
+}
+
+.pmos-effects:not(.is-landed) .symptom-group--hormonal .pmos-effect-art svg,
+.pmos-effects:not(.is-landed) .symptom-group--hormonal .pmos-effect-label {
+  opacity: 0;
+}
+
 /* Tablets and phones: two by two. */
 @media (max-width: 799.98px) {
   .pmos-effects-grid {
@@ -4440,6 +4880,207 @@ body:not(.home-fullscreen) .home-hero {
 
   .pmos-effect:hover .pmos-effect-art {
     translate: none;
+  }
+}
+
+/* ELLE'S TOUR
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-18
+   Purpose: the screen after the circles (see ElleTour.tsx), where Elle tours
+   the lady from the home-page video and ends up beside her next to "So many
+   symptoms… but no known etiology". The screen stays pinned for a little
+   scrolling while the tour plays. --fig-h is the lady's height; Elle is 0.3
+   of it wide (ELLE_SIZE). Opacity and placement of the parts that move are
+   set from the script every frame. */
+.elle-tour {
+  position: relative;
+  height: calc(100vh + 50vh);
+  height: calc(100svh + 50vh);
+}
+
+.elle-tour-stage {
+  --fig-h: min(
+    calc(100svh - var(--home-nav-h) - var(--home-wave-h) - 4rem),
+    46rem
+  );
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: grid;
+  grid-template-columns: auto auto minmax(0, max-content);
+  justify-content: center;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  padding: calc(var(--home-nav-h) + 1.5rem) clamp(0.5rem, 3vw, 2.5rem)
+    calc(var(--home-wave-h) + 1.5rem);
+}
+
+/* Her picture is the video frame, on the video's own near-black; "lighten"
+   against the band's (lighter) colour hides that, so only she shows. The
+   band's colour is repeated on her own box because blending only reaches
+   as far as the nearest stacking context (the sticky stage, and her own
+   faded box), not the band itself. Same colour the band resolves to in each
+   theme (see .home-section--contrast). A transparent PNG works the same. */
+.elle-tour-lady {
+  height: var(--fig-h);
+  aspect-ratio: 976 / 1644;
+  background-color: var(--color-header-bg);
+  opacity: 0;
+}
+
+[data-theme="dark"] .elle-tour-lady {
+  background-color: var(--color-body-bg);
+}
+
+.elle-tour-lady img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: lighten;
+}
+
+.elle-tour-slot {
+  width: calc(var(--fig-h) * 0.3);
+  aspect-ratio: 1668 / 1211;
+}
+
+.elle-tour-words {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(0.5rem, 3vh, 1.5rem);
+}
+
+.elle-tour-line {
+  display: block;
+  opacity: 0;
+}
+
+.elle-tour-line + .elle-tour-line {
+  margin-top: 0.35em;
+}
+
+.elle-tour-questions-wrap {
+  opacity: 0;
+  transform-origin: left center;
+}
+
+/* The old etiology screen's question marks, at half their size. */
+.elle-tour-questions {
+  zoom: 0.5;
+  margin: 0;
+}
+
+/* The fixed layer Elle and the close-ups are drawn on. */
+.elle-tour-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.elle-tour-elle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  container-type: size;
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+.elle-tour-elle > img,
+.elle-tour-uterus {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  overflow: visible;
+}
+
+/* Placed in shares of Elle's width (cqw), matching GLASS_* in ElleTour.tsx
+   so the lens centre lands exactly where the script expects it. */
+.elle-tour-glass-wrap {
+  position: absolute;
+  left: calc(var(--glass-left) * 100cqw);
+  top: calc(var(--glass-top) * 100cqw);
+  width: calc(var(--glass-size) * 100cqw);
+  aspect-ratio: 1;
+}
+
+.elle-tour-glass {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.elle-tour-glass-handle {
+  stroke: #5a2d4a;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.elle-tour-glass-lens {
+  fill: rgba(234, 244, 245, 0.25);
+  stroke: #2fa4a9;
+  stroke-width: 3.5;
+}
+
+.elle-tour-glass-shine {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.8;
+}
+
+/* A close-up: the same disc as its circle (.pmos-effect-art), growing out
+   of Elle's lens. */
+.elle-tour-close-up {
+  position: absolute;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 4px solid var(--symptom-color);
+  background-color: color-mix(in srgb, var(--symptom-color) 22%, #fff);
+  box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.35);
+  transform-origin: center;
+  will-change: transform;
+}
+
+.elle-tour-close-up.symptom-group--reproductive {
+  --symptom-color: #b9a3f0;
+}
+
+/* The drawing inside, with the same 18% margin as in its circle. */
+.elle-tour-close-up svg {
+  position: absolute;
+  left: 18%;
+  top: 18%;
+  width: 64%;
+  height: 64%;
+  overflow: visible;
+}
+
+/* Phones: the lady on top, Elle and the sentence side by side under her. */
+@media (max-width: 699.98px) {
+  .elle-tour-stage {
+    --fig-h: min(46svh, 26rem);
+    grid-template-columns: auto minmax(0, 1fr);
+    align-content: center;
+    row-gap: 1rem;
+  }
+
+  .elle-tour-lady {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+
+  .elle-tour-words .story-text {
+    font-size: 1.3rem;
   }
 }
 
@@ -6202,6 +6843,18 @@ body:not(.home-fullscreen) .home-hero {
   color: #33283f;
 }
 
+/* In dark mode the section behind the cards is the same lavender as the
+   light cards, so with no border they vanish into it. The dark cards already
+   carry an outline; give the light ones the dark plum one. */
+[data-theme="dark"] .find-more-card--light {
+  border-color: rgba(51, 40, 63, 0.55);
+}
+
+[data-theme="dark"] .find-more-card--light:hover,
+[data-theme="dark"] .find-more-card--light:focus-visible {
+  border-color: #2fa4a9;
+}
+
 .find-more-card:hover,
 .find-more-card:focus-visible {
   border-color: #2fa4a9;
@@ -6468,14 +7121,137 @@ body:not(.home-fullscreen) .home-hero {
   line-height: 1.05;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
-  padding: 0 0.1em;
-  /* --color-header-bg (not --color-accent) — accent is identical to the
-     body background in light mode, which would make this invisible too. */
-  border-bottom: 0.07em solid var(--color-header-bg);
+  padding: 0 0.1em 0.07em;
+  position: relative;
+}
+
+/* The underline: --color-header-bg (not --color-accent) — accent is
+   identical to the body background in light mode, which would make this
+   invisible too. Drawn as a bar (not a border) so it can sweep in. */
+.pmos-counter-number::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0.07em;
+  background: var(--color-header-bg);
+  transform: scaleX(0);
+  transition: transform 0.7s cubic-bezier(0.3, 0, 0.2, 1);
 }
 
 [data-theme="dark"] .pmos-counter-number {
   color: #5fd3d7;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
+   counter screen starts blank. The M of "Million" falls in from the PMOS
+   acrostic and climbs a bar-chart staircase (useFallingM.ts); once it is in
+   place "illion" appears around it (--landed), and once the stairs are gone
+   the figure, the underline and the sentence follow (--revealed). Every
+   part keeps its space throughout, so nothing moves as it appears.
+   inline-block gives the M's slot a box exactly one line high, which the
+   flying M copies. */
+.pmos-counter-figure {
+  display: inline-block;
+  text-align: right;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.pmos-counter-m {
+  display: inline-block;
+  visibility: hidden;
+}
+
+.pmos-counter-illion {
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.pmos-counter-rest {
+  opacity: 0;
+  transition: opacity 0.6s ease 0.35s;
+}
+
+.pmos-counter--landed .pmos-counter-m {
+  visibility: visible;
+}
+
+.pmos-counter--landed .pmos-counter-illion,
+.pmos-counter--revealed .pmos-counter-figure,
+.pmos-counter--revealed .pmos-counter-rest {
+  opacity: 1;
+}
+
+.pmos-counter--revealed .pmos-counter-number::after {
+  transform: scaleX(1);
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): while
+   the underline is curling up into the globe (useLineToGlobe.ts) the
+   overlay draws it, so the real one steps aside. */
+.pmos-counter--revealed .pmos-counter-number.is-detached::after {
+  transition: none;
+  opacity: 0;
+}
+
+.line-to-globe {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* --tint (0 → 1, set per frame) shifts the line from its own colour to the
+   globe's atmosphere colour (--color-accent, see atmosphereColor in
+   PmosGlobe.tsx) and gives it that glow as the ring closes. */
+.line-to-globe path {
+  --tint: 0;
+  fill: none;
+  stroke: color-mix(
+    in srgb,
+    var(--color-accent) calc(var(--tint) * 100%),
+    var(--color-header-bg)
+  );
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(
+    0 0 calc(var(--tint) * 14px)
+      color-mix(in srgb, var(--color-accent) calc(var(--tint) * 90%), transparent)
+  );
+}
+
+.falling-m,
+.falling-m-stairs {
+  left: 0;
+  top: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Fixed while it falls with the scroll, absolute (page coordinates) once
+   it is climbing — set from useFallingM.ts. */
+.falling-m {
+  display: block;
+  transform-origin: 0 0;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.falling-m-stairs {
+  position: absolute;
+  overflow: visible;
+}
+
+.falling-m-stairs rect {
+  fill: var(--color-header-bg);
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transform: scaleY(0);
 }
 
 .pmos-overview-source {
@@ -6519,6 +7295,89 @@ body:not(.home-fullscreen) .home-hero {
 
 .pmos-globe-stage.is-hovering canvas {
   cursor: pointer !important;
+}
+
+/* GLOBE DROP
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-18
+   Purpose: the globe falling onto the next screen's first circle (see
+   useGlobeDrop in PmosGlobe.tsx, which sets the transform, --fly-scale and
+   --morph). While it falls it must paint over the band below, which comes
+   later in the page and would otherwise cover it. */
+.pmos-globe-fly {
+  position: relative;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.pmos-globe-wrap.is-dropping {
+  z-index: 5;
+}
+
+.pmos-globe-wrap.is-dropping .pmos-globe-fly {
+  pointer-events: none;
+}
+
+.pmos-globe-wrap.is-dropping .pmos-globe-fly > :not(.pmos-globe-morph) {
+  opacity: calc(1 - var(--morph, 0));
+}
+
+/* Matches .pmos-effect-art (border and disc colour), sized to the sphere
+   (SPHERE_FRACTION in PmosGlobe.tsx); the border is divided by the scale so
+   it lands at the circle's own 4px. */
+.pmos-globe-morph {
+  position: absolute;
+  /* Above the globe's own element (see .pmos-globe-halo). */
+  z-index: 2;
+  left: 50%;
+  top: 50%;
+  width: 70.5%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  border: calc(4px / var(--fly-scale, 1)) solid var(--symptom-color);
+  background-color: color-mix(in srgb, var(--symptom-color) 22%, #fff);
+  opacity: var(--morph, 0);
+  pointer-events: none;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
+   halo round the sphere. Sized to the sphere (SPHERE_FRACTION in
+   PmosGlobe.tsx) plus twice its ring width, so the ring sits just outside
+   the sphere's edge — exactly where useLineToGlobe.ts closes the line;
+   --halo (set there) keeps it hidden until that line arrives.
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback:
+   raised continents vanished behind it): it is painted behind the globe
+   (z-index 0, the globe's own element 1), so hovered/clicked continents
+   rise in front of it. */
+.pmos-globe-fly > :first-child {
+  position: relative;
+  z-index: 1;
+}
+
+.pmos-globe-halo {
+  --halo-w: 4px;
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 50%;
+  width: calc(100% * 0.7051 + 2 * var(--halo-w));
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  border: var(--halo-w) solid var(--color-accent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--color-accent) 90%, transparent);
+  opacity: var(--halo, 1);
+  pointer-events: none;
+}
+
+/* The drop's fade (above) must not bring a faded-out halo back. */
+.pmos-globe-wrap.is-dropping .pmos-globe-fly > .pmos-globe-halo {
+  opacity: calc(var(--halo, 1) * (1 - var(--morph, 0)));
+}
+
+/* Landed: the real circle has taken over. */
+.pmos-globe-wrap.is-landed .pmos-globe-fly {
+  visibility: hidden;
 }
 
 .pmos-globe-info {
@@ -6601,6 +7460,39 @@ body:not(.home-fullscreen) .home-hero {
   font-size: 0.85rem;
   text-align: center;
   line-height: 1.4;
+}
+
+/* PREVALENCE ELLE (Elle + "how we got these numbers", in PmosOverview.tsx)
+   Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
+   Purpose: Elle (ElleSays.tsx) stands in the corner of the globe section with
+   her line already in a speech bubble, rather than behind a click-to-open
+   info button — pinned to the section itself (not the globe/text pair) so
+   she stays in the same spot whether .pmos-globe-wrap is a row (desktop) or
+   a stacked column (mobile, see the media query below). The ">" selector
+   beats the specificity of the ".pmos-overview > :not(.microbe-backdrop)"
+   rule above that would otherwise force this back to position: relative. */
+.pmos-overview > .pmos-prevalence-elle {
+  position: absolute;
+  top: clamp(0.5rem, 3vh, 1.5rem);
+  right: clamp(0.5rem, 3vw, 1.5rem);
+  z-index: 3;
+  max-width: min(34rem, calc(100vw - 2rem));
+}
+
+.pmos-prevalence-elle .elle {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .pmos-overview > .pmos-prevalence-elle {
+    position: static;
+    margin: 0 auto 1rem;
+  }
+
+  .pmos-prevalence-elle .elle {
+    --elle-size: clamp(6rem, 24vw, 8rem);
+    justify-content: center;
+  }
 }
 
 @media (max-width: 768px) {
@@ -10246,7 +11138,6 @@ a.protocol-download:hover {
 .rm-chip:focus-visible,
 .rm-bar:focus-visible,
 .rm-ms:focus-visible,
-.rm-nav button:focus-visible,
 .rm-li-head:focus-visible {
   outline: 3px solid var(--rm-ring);
   outline-offset: 2px;
@@ -10364,7 +11255,7 @@ a.protocol-download:hover {
   font-weight: 700;
   line-height: 1.05;
   text-align: center;
-  cursor: pointer;
+  cursor: default;
   transition:
     opacity 0.15s,
     transform 0.15s,
@@ -10390,7 +11281,7 @@ a.protocol-download:hover {
   border: 0;
   background: none;
   font: inherit;
-  cursor: pointer;
+  cursor: default;
 }
 
 .rm-dia {
@@ -10437,18 +11328,6 @@ a.protocol-download:hover {
 
 .rm-ms.rm-end .rm-t {
   transform: translateX(-85%);
-}
-
-.rm-sel {
-  box-shadow: 0 0 0 3px var(--rm-ring);
-}
-
-.rm-ms.rm-sel {
-  box-shadow: none;
-}
-
-.rm-ms.rm-sel .rm-dia {
-  box-shadow: 0 0 0 3px var(--rm-ring);
 }
 
 .rm-dim {
@@ -10521,32 +11400,6 @@ a.protocol-download:hover {
   background: var(--rm-funding);
 }
 
-/* Detail card */
-.rm-detail {
-  margin-top: 10px;
-  padding: 12px 16px 14px;
-  border: 1px solid var(--rm-line);
-  border-top: 4px solid var(--bc);
-  border-radius: 12px;
-  background: var(--rm-surface);
-}
-
-.rm-dhead {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 10px;
-  margin-bottom: 8px;
-}
-
-.rm-dhead h4 {
-  font-size: 17px;
-  font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: -0.2px;
-  color: var(--rm-ink);
-}
-
 .rm-tag {
   padding: 2px 9px;
   border-radius: 999px;
@@ -10554,66 +11407,6 @@ a.protocol-download:hover {
   color: var(--rm-on-bar);
   font-size: 11px;
   font-weight: 700;
-}
-
-.rm-when {
-  color: var(--rm-muted);
-  font-weight: 600;
-}
-
-.rm-dgrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 10px 22px;
-}
-
-.roadmap h5 {
-  margin-bottom: 2px;
-  color: var(--rm-muted);
-  font-size: 10.5px;
-  font-weight: 800;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-}
-
-.rm-dgrid p {
-  max-width: 60ch;
-}
-
-.rm-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.rm-nav button {
-  padding: 5px 11px;
-  border: 1.5px solid var(--rm-line);
-  border-radius: 8px;
-  background: var(--rm-bg);
-  color: var(--rm-ink);
-  font: inherit;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.rm-nav button:hover {
-  border-color: var(--rm-ink);
-}
-
-.rm-nav button:disabled {
-  opacity: 0.4;
-  cursor: default;
-}
-
-.rm-pos {
-  align-self: center;
-  margin-left: auto;
-  color: var(--rm-muted);
-  font-size: 11.5px;
-  font-variant-numeric: tabular-nums;
 }
 
 .rm-foot {
@@ -10628,8 +11421,7 @@ a.protocol-download:hover {
 }
 
 @container roadmap (max-width: 860px) {
-  .rm-tl,
-  .rm-detail {
+  .rm-tl {
     display: none;
   }
 
@@ -10647,14 +11439,12 @@ a.protocol-download:hover {
   }
 
   .rm-li-head {
-    all: unset;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: 3px;
     width: 100%;
     padding: 12px 14px;
-    cursor: pointer;
   }
 
   .rm-li-head b {
@@ -10674,15 +11464,6 @@ a.protocol-download:hover {
     color: var(--rm-on-bar);
   }
 
-  .rm-li-body {
-    display: grid;
-    gap: 12px;
-    padding: 0 14px 14px;
-  }
-
-  .rm-li-body p {
-    margin-top: 2px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -10883,49 +11664,89 @@ a.protocol-download:hover {
   margin-bottom: 1.5rem;
 }
 
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: a results intro paragraph with Elle's note in the top right
+   beside it instead of below. Stacks (text first) on narrow screens. */
+.results-intro-row {
+  display: flow-root;
+}
+
+/* Floated so the paragraph wraps around Elle and fills the space under her. */
+.results-intro-aside {
+  float: right;
+  width: 20rem;
+  max-width: 50%;
+  margin: 0 0 0.75rem 1.5rem;
+}
+
+@media (max-width: 767.98px) {
+  .results-intro-aside {
+    float: none;
+    width: auto;
+    max-width: none;
+    margin: 0 0 1rem;
+  }
+}
+
+.results-intro-aside .elle {
+  margin: 0;
+}
+
 /* KEY TAKEAWAYS
    auto-fit means three cards sit in a row on a wide screen and wrap to two
    or one as the column narrows, without a breakpoint per count — sections
    carry anywhere from three to six of them. */
 .key-takeaways {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
-  gap: 1rem;
+  --takeaway-gap: 1rem;
+  --takeaway-cols: 3;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--takeaway-gap);
   margin: 1.5rem 0 2rem;
 }
 
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18 (team feedback:
+   cards were squished and left-aligned). At most 3 per row, so never more
+   than two rows; an incomplete last row is centred, and four cards split
+   2 + 2 rather than 3 + 1. Below 40rem they go two (then one) per row. */
+.key-takeaways:has(> :nth-child(4):last-child) {
+  --takeaway-cols: 2;
+}
+
+.key-takeaways > .key-takeaway {
+  flex: 0 0
+    calc(
+      (100% - (var(--takeaway-cols) - 1) * var(--takeaway-gap)) /
+        var(--takeaway-cols)
+    );
+  min-width: 0;
+}
+
+@media (max-width: 40rem) {
+  .key-takeaways,
+  .key-takeaways:has(> :nth-child(4):last-child) {
+    --takeaway-cols: 1;
+  }
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18 (team feedback: the
+   number/label/sentence split read as busy and inconsistent card to card) —
+   each card is now a single bolded, centered sentence instead. */
 .key-takeaway {
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+  align-items: center;
+  justify-content: center;
   padding: 1.1rem 1.25rem;
   border: 1px solid rgba(51, 40, 63, 0.2);
   border-radius: 1rem;
   background-color: var(--color-page-bg);
-  text-align: left;
+  text-align: center;
+  font-weight: 700;
 }
 
 [data-theme="dark"] .key-takeaway {
   border-color: rgba(255, 255, 255, 0.12);
-}
-
-.key-takeaway-value {
-  font-family: "Poppins", sans-serif;
-  font-size: 1.75rem;
-  font-weight: 700;
-  line-height: 1.1;
-}
-
-.key-takeaway-label {
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  font-size: 0.85rem;
-}
-
-.key-takeaway-body {
-  font-size: 0.92rem;
-  opacity: 0.85;
 }
 
 /* FIGURE SLOTS
@@ -10964,6 +11785,151 @@ a.protocol-download:hover {
   text-align: center;
 }
 
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
+   Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: wrapped in
+   .figure-panel (below) and switched from auto-fit to a fixed 3-column grid,
+   so a set of five figures reliably lays out as a row of 3 then a row of 2
+   instead of auto-fit opportunistically fitting 4 or 5 across on a wide
+   screen. Falls back to 2 columns, then 1, as the viewport narrows.
+   Purpose: lays several figures (each its own placeholder now, each its own
+   clickable-to-enlarge <ZoomableImage> once the real figure lands) side by
+   side in a row, instead of one oversized composite image — e.g. the
+   growth-curve panels on the results page. */
+.figure-grid {
+  --figure-gap: 1.25rem;
+  --figure-cols: 3;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--figure-gap);
+  margin: 1.5rem 0;
+}
+
+.figure-grid > * {
+  flex: 0 0
+    calc(
+      (100% - (var(--figure-cols) - 1) * var(--figure-gap)) / var(--figure-cols)
+    );
+  margin: 0;
+  min-width: 0;
+  text-align: center;
+}
+
+/* captions sit inside <figure>, so the page's justified-text rule never
+   reaches them, but keep them centred explicitly */
+.figure-grid .figure-caption {
+  text-align: center;
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: the source PNGs
+   aren't all the same aspect ratio — panel E (4000×2547, 1.57:1) is
+   noticeably wider/shorter than panels A, B and D (~3672×2563, 1.43:1), so
+   at equal column width it rendered visibly shorter than its neighbours.
+   Pinning every figure to the same box and letterboxing with object-fit
+   keeps the row visually level regardless of the source image's own ratio. */
+.figure-grid img {
+  aspect-ratio: 1.44;
+  width: 100%;
+  object-fit: contain;
+  background-color: #fff;
+}
+
+@media (max-width: 900px) {
+  .figure-grid {
+    --figure-cols: 2;
+  }
+}
+
+@media (max-width: 560px) {
+  .figure-grid {
+    --figure-cols: 1;
+  }
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: team feedback that the growth-curve panels didn't look clickable —
+   a slight zoom plus a "Click to expand" label on hover/focus, scoped to this
+   panel only (other <ZoomableImage> figures on the site keep their plain
+   hover). */
+.figure-grid .zoomable-image-trigger {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.figure-grid .zoomable-image-trigger img {
+  transition: transform 0.2s ease;
+}
+
+.figure-grid .zoomable-image-trigger:hover img,
+.figure-grid .zoomable-image-trigger:focus-visible img {
+  transform: scale(1.04);
+}
+
+.figure-grid .zoomable-image-trigger::after {
+  content: "Click to expand";
+  position: absolute;
+  left: 50%;
+  bottom: 0.6rem;
+  transform: translateX(-50%);
+  padding: 0.3rem 0.75rem;
+  border-radius: 1rem;
+  background-color: rgba(20, 15, 26, 0.75);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.figure-grid .zoomable-image-trigger:hover::after,
+.figure-grid .zoomable-image-trigger:focus-visible::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .figure-grid .zoomable-image-trigger img {
+    transition: none;
+  }
+}
+
+/* FIGURE PANEL
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: groups a whole set of figures (.figure-grid) plus their shared
+   caption onto one card, in the same teal/white tint as .key-takeaway, so
+   the set reads as one unit set apart from the surrounding .content-section
+   tint rather than floating loose on it. */
+.figure-panel {
+  margin: 1.75rem 0;
+  padding: 1.75rem 1.75rem 1.5rem;
+  border: 1px solid rgba(51, 40, 63, 0.2);
+  border-radius: 1.25rem;
+  background-color: var(--color-page-bg);
+}
+
+[data-theme="dark"] .figure-panel {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.figure-panel > .figure-grid {
+  margin-top: 0;
+}
+
+.figure-panel > .figure-caption {
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+@media (max-width: 575.98px) {
+  .figure-panel {
+    padding: 1.25rem 1rem;
+    border-radius: 0.9rem;
+  }
+}
+
 /* The "ALL DATA" divider between a pipeline's introduction and its sections,
    as drawn on the sketch: a big, quiet label rather than a heading, so it
    stays out of the page index. */
@@ -10985,12 +11951,12 @@ a.protocol-download:hover {
    are long only to out-rank that rule. */
 .page-body
   .page-shell-content
-  :is(.success-card, .key-takeaway, .figure-slot, .elle-bubble)
+  :is(.success-card, .figure-slot, .elle-bubble)
   :is(p, li) {
   text-align: left;
 }
 
-.page-body .page-shell-content .figure-slot :is(p, li) {
+.page-body .page-shell-content :is(.figure-slot, .key-takeaway) :is(p, li) {
   text-align: center;
 }
 
@@ -11046,6 +12012,107 @@ a.protocol-download:hover {
   font-size: 0.92rem;
 }
 
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
+   Purpose: the growth-curve fitting parameters table (results page, "Growth
+   curves and medium comparison") carries nine columns across five
+   iterations — tighter padding and smaller text keep it legible, and a
+   minimum width stops columns collapsing before the table-responsive
+   wrapper takes over with a sideways scroll. */
+.growth-params-table {
+  min-width: 54rem;
+}
+
+.growth-params-table td,
+.growth-params-table th {
+  font-size: 0.85rem;
+  padding: 0.5rem 0.6rem;
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: shades each "Media" cell in the growth-params table with the
+   matching line colour from Figure 1 (same idea as .plasmid-legend-table's
+   first column below), so a reader can match a table row to its curve at a
+   glance. .medium-cell--bhi/wc/mm/mgam are the four-medium palette shared by
+   panels A–D; .medium-cell--e-* are the nine-condition palette unique to
+   panel E's full-factorial design (its own colour scale, not the
+   four-medium one). Text colour per variant is picked for contrast against
+   its own background rather than set once for all. Selectors are prefixed
+   with .growth-params-table: Bootstrap's own
+   ".table > :not(caption) > * > *" rule (which paints var(--bs-table-bg)
+   onto every cell) outranks a bare single class on specificity alone, so
+   without the prefix every cell rendered white regardless of this block.
+   Edited 2026-10-18 (Claude Sonnet 5.5): colours softened to pastel tints of
+   the same hues (still matching the figure lines) for a more professional
+   look; all use the same dark text. */
+.growth-params-table .medium-cell {
+  font-weight: 600;
+}
+
+.growth-params-table .medium-cell--bhi {
+  background-color: #f7dbe5;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--wc {
+  background-color: #d9d0ea;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--mm {
+  background-color: #d3c1d1;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--mgam {
+  background-color: #b3e6ee;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--e-mgam {
+  background-color: #b0dcde;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--e-mm-base {
+  background-color: #b4d6dc;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--e-mm-starch {
+  background-color: #b9d0d9;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--e-mm-vitk {
+  background-color: #c3c8d6;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--e-mm-ph {
+  background-color: #d0bfd1;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--e-mm-starch-vitk {
+  background-color: #dbc9d6;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--e-mm-starch-ph {
+  background-color: #e5d3de;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--e-mm-vitk-ph {
+  background-color: #efdce5;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--e-mm-all {
+  background-color: #f8e1ea;
+  color: #33283f;
+}
+
 /* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17
    Purpose: the pBSH-Cas9 component table (results page, "Construct
    components"). First-column cells carry their own fixed background colour
@@ -11061,41 +12128,385 @@ a.protocol-download:hover {
   width: 70%;
 }
 
-/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-17
-   Purpose: the executive summary paragraph beside the plasmid map figure
-   (results page, "CRISPR construct design"), after the team's request to put
-   the construct circle next to the text instead of stacked under its own
-   heading. Stacks below tablet width, image first. */
-.construct-intro {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  margin: 1rem 0;
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: a shared "boxed subsection" treatment for the CRISPR construct
+   design subsections (Construct components, Integration strategy,
+   Validation plan, Data gaps and future iterations) — team feedback that
+   those four needed more visual definition than a plain heading plus
+   flowing text. Matches the .key-takeaway card palette already used on this
+   page rather than inventing a new one. */
+.subsection-panel {
+  padding: 1.5rem 1.75rem;
+  margin: 1rem 0 1.5rem;
+  border: 1px solid rgba(51, 40, 63, 0.2);
+  border-radius: 1.25rem;
+  background-color: var(--color-page-bg);
 }
 
-.construct-intro-text {
-  flex: 1 1 22rem;
-  min-width: 0;
+[data-theme="dark"] .subsection-panel {
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
-.construct-intro-text > :last-child {
+.subsection-panel > :first-child {
+  margin-top: 0;
+}
+
+.subsection-panel > :last-child {
   margin-bottom: 0;
 }
 
-.construct-intro-image {
-  flex: 1 1 16rem;
-  max-width: 22rem;
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: replaces the old .construct-intro pairing (text beside a small
+   map) — team feedback wanted the plasmid map big on the left with its own
+   legend condensed beside it on the right instead. Stacks below tablet
+   width, map first. */
+.construct-map-row {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.construct-map-image {
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+
+.construct-map-legend {
+  flex: 1.5 1 20rem;
+  max-width: 30rem;
+  min-width: 0;
+}
+
+.construct-map-legend .plasmid-legend-table {
+  font-size: 0.82rem;
+}
+
+.construct-map-legend .plasmid-legend-table td {
+  padding: 0.5rem 0.6rem;
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: team feedback on the construct components key — (1) dark mode:
+   Bootstrap's table cells kept a white fill with black text there, so the
+   header and Role column glared against the dark page; they now follow the
+   page theme (the coloured first column keeps its fixed map colours).
+   (2) every cell uses the same centred, same-weight/size formatting, with the
+   component name and role both centred vertically and horizontally. (3) the
+   map is centred vertically in its own box, so it sits level with the key. */
+.construct-map-legend .plasmid-legend-table :is(th, td) {
+  text-align: center;
+  vertical-align: middle;
+  font-size: 0.82rem;
+  line-height: 1.3;
+}
+
+.construct-map-legend .plasmid-legend-table :is(th, td) > p {
+  margin: 0;
+}
+
+.construct-map-legend .plasmid-legend-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.construct-map-legend .plasmid-legend-table :is(th, td):first-child {
+  width: 38%;
+  white-space: normal;
+}
+
+.construct-map-legend .plasmid-legend-table :is(th, td):last-child {
+  width: 62%;
+}
+
+[data-theme="dark"] .plasmid-legend-table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--color-text);
+  --bs-table-border-color: rgba(201, 189, 232, 0.25);
+  border-color: rgba(201, 189, 232, 0.25);
+}
+
+[data-theme="dark"] .plasmid-legend-table th,
+[data-theme="dark"] .plasmid-legend-table td:last-child {
+  background-color: var(--color-page-bg);
+  color: var(--color-text);
+  border-color: rgba(201, 189, 232, 0.25);
+}
+
+[data-theme="dark"] .plasmid-legend-table td:first-child {
+  border-color: rgba(201, 189, 232, 0.25);
+}
+
+.construct-map-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.construct-map-image .zoomable-image-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.construct-map-image .zoomable-image-trigger img {
+  margin: 0 auto;
 }
 
 @media (max-width: 767.98px) {
-  .construct-intro {
+  .construct-map-row {
     flex-direction: column;
   }
 
-  .construct-intro-image {
-    max-width: 20rem;
-    margin: 0 auto;
+  .construct-map-legend {
+    max-width: none;
   }
+}
+
+/* A caveat that does not need a reader's full attention, set small with an
+   asterisk instead of the full bordered "Note" callout it replaced (team
+   feedback). */
+.construct-footnote {
+  font-size: 0.82rem;
+  opacity: 0.7;
+  margin-top: 1rem;
+}
+
+.construct-footnote p {
+  margin: 0;
+}
+
+/* IMAGE FLOW SELECTOR
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: numbered pins over a figure, one per <FlowStep> (the CRISPR
+   integration strategy's five steps) — team feedback wanted the step picked
+   by pointing at the figure itself, with only that step's text showing
+   below it, Previous/Next to move through the rest, and the current step
+   obvious both on the figure and above its text. Replaces the step-flow
+   card row this section used before. Pin positions are percentages of the
+   image's own box (see ImageFlowSelector.tsx's `marker` prop), so they track
+   the figure at any column width. */
+.image-flow-selector {
+  margin: 1.5rem 0;
+}
+
+.image-flow-selector-figure {
+  position: relative;
+  max-width: 56rem;
+  margin: 0 auto;
+  border: 2px solid color-mix(in srgb, var(--color-text) 45%, transparent);
+  border-radius: 0.75rem;
+  padding: 2.6rem 0.5rem;
+}
+
+.image-flow-selector-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.image-flow-selector-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  /* Parked in the figure's top/bottom gutter, level with the centre of it. */
+  width: 1.9rem;
+  height: 1.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background-color: #2fa4a9;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 1px 4px rgba(20, 15, 26, 0.45);
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.image-flow-selector-marker.above {
+  top: 1.3rem;
+}
+
+.image-flow-selector-marker.below {
+  top: auto;
+  bottom: 1.3rem;
+  transform: translate(-50%, 50%);
+}
+
+.image-flow-selector-marker.below.active {
+  transform: translate(-50%, 50%) scale(1.2);
+}
+
+.image-flow-selector-marker:hover {
+  background-color: #1f7f84;
+}
+
+.image-flow-selector-marker:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.image-flow-selector-marker.active {
+  background-color: #1f7f84;
+  transform: translate(-50%, -50%) scale(1.2);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--color-accent) 85%, transparent),
+    0 1px 4px rgba(20, 15, 26, 0.45);
+}
+
+@media (max-width: 575.98px) {
+  .image-flow-selector-marker {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.7rem;
+  }
+}
+
+.image-flow-selector-panel {
+  margin-top: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.image-flow-selector-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.image-flow-selector-arrow {
+  flex: none;
+  width: 3.5rem;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(51, 40, 63, 0.35);
+  border-radius: 50%;
+  background-color: var(--color-page-bg);
+  color: var(--color-text);
+  font-size: 2.4rem;
+  padding-bottom: 0.25rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+[data-theme="dark"] .image-flow-selector-arrow {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.image-flow-selector-arrow:hover:not(:disabled) {
+  background-color: var(--color-accent);
+}
+
+.image-flow-selector-arrow:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.image-flow-selector-title {
+  margin: 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.image-flow-selector-step-count {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #1f7f84;
+}
+
+[data-theme="dark"] .image-flow-selector-step-count {
+  color: #6fd0d4;
+}
+
+.image-flow-selector-body {
+  margin-top: 0.75rem;
+  text-align: center;
+  animation: milestone-arc-fade-in 0.3s ease;
+}
+
+.image-flow-selector-body > :last-child {
+  margin-bottom: 0;
+}
+
+/* The validation-plan dropdowns read as a chronological list (team
+   feedback: the previous "1"-"4" key-takeaway cards had numbers that were
+   too heavy for what they were) — same <ExpandableText> used on the
+   Protocols page, just with a bigger title so each step reads at a glance. */
+.validation-plan-steps .expandable-title {
+  font-size: 1.1rem;
+}
+
+.validation-plan-steps .expandable-container {
+  margin-bottom: 0.75rem;
+}
+
+.validation-plan-steps .expandable-container:last-child {
+  margin-bottom: 0;
+}
+
+/* DATA GAPS LIST
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: each future-iteration item set off as its own row (a numbered
+   badge, like .step-flow-number, plus a left rule) instead of a plain
+   markdown ordered list — team feedback that the section needed more
+   definition. */
+.data-gaps-list ol {
+  list-style: none;
+  counter-reset: data-gaps;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.data-gaps-list li {
+  counter-increment: data-gaps;
+  position: relative;
+  padding: 0.6rem 0 0.6rem 2.75rem;
+  border-top: 1px solid rgba(51, 40, 63, 0.12);
+}
+
+[data-theme="dark"] .data-gaps-list li {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.data-gaps-list li:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.data-gaps-list li:last-child {
+  padding-bottom: 0;
+}
+
+.data-gaps-list li::before {
+  content: counter(data-gaps);
+  position: absolute;
+  left: 0;
+  top: 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  background-color: #2fa4a9;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
 }
 
 /* Generated with Claude Opus 5 (Anthropic), 2026-10-17
@@ -11504,4 +12915,85 @@ a.protocol-download:hover {
   .integration-summary-impact-label.is-hidden {
     display: none;
   }
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: <DBTLCycles> on the Engineering success page. */
+.dbtl-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.dbtl-pill {
+  border: 2px solid var(--color-text);
+  border-radius: 999px;
+  padding: 0.5rem 1.6rem;
+  background: transparent;
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: 1.05rem;
+  cursor: pointer;
+}
+.dbtl-pill-1 { --dbtl-c: #bcd9f5; }
+.dbtl-pill-2 { --dbtl-c: #f5c6bc; }
+.dbtl-pill-3 { --dbtl-c: #ea9bbd; }
+.dbtl-pill-4 { --dbtl-c: #b8e6a0; }
+.dbtl-pill.active { background: var(--dbtl-c); color: #33283f; }
+.dbtl-pill:hover { background: var(--dbtl-c); color: #33283f; }
+.dbtl-pill:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.dbtl-title { margin: 0 0 1rem; min-height: 2.8em; } /* two lines, so a long title does not shift the wheel */
+.dbtl-body {
+  display: grid;
+  grid-template-columns: minmax(220px, 340px) 1fr;
+  gap: 1.5rem;
+  align-items: center;
+}
+.dbtl-wheel { width: 100%; height: auto; color: var(--color-text); }
+.dbtl-wheel-stage { cursor: pointer; outline: none; }
+/* Fading the group, not each path, keeps the shaft/head overlap from showing. */
+.dbtl-wheel-shape { opacity: 0.72; transition: opacity 0.15s; }
+.dbtl-wheel-stage:hover .dbtl-wheel-shape, .dbtl-wheel-stage.active .dbtl-wheel-shape { opacity: 1; }
+/* Site palette: purple, deep teal, pink, lavender. The two light fills take
+   the dark plum for their word, the two dark ones take white. */
+.dbtl-wheel-design { --dbtl-w: #6e5b9e; --dbtl-t: #ffffff; }
+.dbtl-wheel-build { --dbtl-w: #1f7f84; --dbtl-t: #ffffff; }
+.dbtl-wheel-test { --dbtl-w: #f1c3d4; --dbtl-t: #33283f; }
+.dbtl-wheel-learn { --dbtl-w: #c9bde8; --dbtl-t: #33283f; }
+.dbtl-wheel-arrow { fill: var(--dbtl-w); stroke: transparent; stroke-width: 6; stroke-linejoin: round; }
+.dbtl-wheel-stage:focus-visible .dbtl-wheel-arrow { stroke: var(--color-text); }
+.dbtl-wheel-spinner { transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
+@media (prefers-reduced-motion: reduce) { .dbtl-wheel-spinner { transition: none; } }
+.dbtl-wheel-label { fill: var(--dbtl-t); font-size: 36px; font-weight: 700; pointer-events: none; }
+.dbtl-wheel-centre { fill: currentColor; font-size: 28px; font-weight: 600; }
+.dbtl-box {
+  height: clamp(20rem, 62vh, 30rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.5rem 0.75rem 0.5rem 0.25rem;
+}
+.dbtl-box:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+/* Figures keep a legible size instead of being shrunk to the column: panel
+   sets wrap onto several rows, and the wide ones (spreadsheet plate layouts,
+   gel/plate photos with lettering) keep their width and scroll sideways. They
+   also open fullscreen on click. */
+.dbtl-box .figure-panel { margin: 1rem 0; padding: 0.75rem; }
+/* The site-wide figure grid forces a 1.44:1 box; here every figure keeps its own shape. */
+.dbtl-box .figure-grid img { aspect-ratio: auto; height: auto; }
+.dbtl-box .figure-grid { --figure-cols: 2; }
+.dbtl-box .figure-grid:has(.plate-layout, .wide-figure) { --figure-cols: 1; }
+.dbtl-box .figure-grid .zoomable-image-trigger:has(.plate-layout, .wide-figure) {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}
+.dbtl-box .zoomable-image-trigger img.plate-layout { width: max(100%, 700px); max-width: none; }
+.dbtl-box .zoomable-image-trigger img.wide-figure { width: max(100%, 560px); max-width: 780px; }
+.dbtl-box-label { font-weight: 700; font-size: 1.2rem; margin-bottom: 0.5rem; }
+/* Sized by the space the section actually gets (the page can have a side
+   contents list), not by the window. */
+.dbtl { container-type: inline-size; }
+@container (max-width: 640px) {
+  .dbtl-body { grid-template-columns: 1fr; }
+  .dbtl-wheel { max-width: 280px; margin: 0 auto; }
 }

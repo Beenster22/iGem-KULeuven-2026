@@ -36,20 +36,14 @@ export function KeyTakeaways({ children }: { children: ReactNode }) {
 }
 
 interface TakeawayProps {
-  /** The headline number, e.g. "6", "5/15", "1,292×". */
-  value: string;
-  /** The short all-caps line under the number. */
-  label: string;
-  /** Optional sentence of explanation under the label. */
-  children?: ReactNode;
+  /** One bolded, centered sentence stating the takeaway. */
+  children: ReactNode;
 }
 
-export function Takeaway({ value, label, children }: TakeawayProps) {
+export function Takeaway({ children }: TakeawayProps) {
   return (
     <div className="key-takeaway" role="listitem">
-      <span className="key-takeaway-value">{value}</span>
-      <span className="key-takeaway-label">{label}</span>
-      {children && <div className="key-takeaway-body">{children}</div>}
+      {children}
     </div>
   );
 }

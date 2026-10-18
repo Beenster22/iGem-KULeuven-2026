@@ -11,8 +11,12 @@ import {
   type ReactNode,
 } from "react";
 import { useReducedMotion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { PMOS_TOTAL } from "./pmosContinentStats";
 import { MicrobeBackdrop } from "./MicrobeBackdrop";
+import { ElleSays } from "./ElleSays";
+import { useFallingM } from "./useFallingM";
+import { useLineToGlobe } from "./useLineToGlobe";
 
 // three.js + globe.gl add ~700KB (gzipped) to the bundle — lazy-loaded so
 // that weight is only fetched once a visitor actually scrolls this far,
@@ -61,51 +65,94 @@ function useCountUp(target: number, start: boolean) {
 // the headline figure on its own, then the globe.
 export function PmosOverview({ children }: { children?: ReactNode }) {
   const caption = Children.toArray(children).filter(isValidElement);
-  const headingRef = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
 
-  useEffect(() => {
-    const el = headingRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.4 },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): this
+  // screen starts blank. The M of "Million" falls in from the PMOS acrostic
+  // above as it is scrolled to and climbs a bar-chart staircase
+  // (useFallingM.ts); "illion" appears once it has landed ("landed"), and
+  // once the stairs are gone the figure counts up with its underline and
+  // the sentence ("revealed").
+  const sectionRef = useRef<HTMLElement>(null);
+  const mSlotRef = useRef<HTMLSpanElement>(null);
+  const [stage, setStage] = useState<"blank" | "landed" | "revealed">("blank");
+  const prefersReducedMotion = useReducedMotion();
+  useFallingM({
+    sectionRef,
+    slotRef: mSlotRef,
+    onLanded: () => setStage((s) => (s === "blank" ? "landed" : s)),
+    onDone: () => setStage("revealed"),
+    skip: !!prefersReducedMotion,
+  });
 
-  const millions = useCountUp(PMOS_TOTAL / 1_000_000, inView);
+  const totalMillions = PMOS_TOTAL / 1_000_000;
+  const millions = useCountUp(totalMillions, stage === "revealed");
+
+  // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
+  // counter's underline then curls up into the globe on the next screen
+  // (useLineToGlobe.ts).
+  const lineRef = useRef<HTMLSpanElement>(null);
+  const globeSectionRef = useRef<HTMLElement>(null);
+  useLineToGlobe({
+    lineRef,
+    globeSectionRef,
+    active: stage === "revealed",
+    skip: !!prefersReducedMotion,
+  });
 
   return (
     <>
       <section
+        ref={sectionRef}
         className="pmos-overview home-snap-screen home-section--wave-top"
         data-snap=""
       >
         <MicrobeBackdrop count={4} seed={1} />
-        <div className="pmos-counter" ref={headingRef}>
+        <div
+          className={
+            "pmos-counter" +
+            (stage !== "blank" ? " pmos-counter--landed" : "") +
+            (stage === "revealed" ? " pmos-counter--revealed" : "")
+          }
+        >
           {/* Wording as asked for by the team; the figure (PMOS_TOTAL, in
               millions) counts up, on its own line and much larger than the
               words under it. */}
-          <h2 className="pmos-counter-heading">
-            <span className="pmos-counter-number">{millions} million</span>{" "}
-            <span className="pmos-counter-rest">
+          <h2
+            className="pmos-counter-heading"
+            aria-label={`${totalMillions} Million women affected during their reproductive years`}
+          >
+            <span ref={lineRef} className="pmos-counter-number" aria-hidden="true">
+              {/* Fixed width for the final figure, so the line (and the
+                  M's landing spot) doesn't shift while it counts up. */}
+              <span
+                className="pmos-counter-figure"
+                style={{ minWidth: `${String(totalMillions).length}ch` }}
+              >
+                {millions}
+              </span>{" "}
+              <span ref={mSlotRef} className="pmos-counter-m">
+                M
+              </span>
+              <span className="pmos-counter-illion">illion</span>
+            </span>{" "}
+            <span className="pmos-counter-rest" aria-hidden="true">
               women affected during their reproductive years
             </span>
           </h2>
         </div>
       </section>
       <section
+        ref={globeSectionRef}
         className="pmos-overview home-section--body home-snap-screen home-section--wave-top"
         data-snap=""
       >
         <MicrobeBackdrop count={4} seed={6} />
+        <div className="pmos-prevalence-elle">
+          <ElleSays size="lg" side="right">
+            To find out more how we got these numbers click{" "}
+            <Link to="/description#how-many-people-live-with-pmos">HERE</Link>.
+          </ElleSays>
+        </div>
         <Suspense
           fallback={<div className="pmos-globe-loading">Loading globe…</div>}
         >

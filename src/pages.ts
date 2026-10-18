@@ -11,16 +11,15 @@ import {
   ExperimentalOverview,
   Home,
   HumanPractices,
+  Measurement,
   Members,
   Notebook,
-  Parts,
   Protocols,
   Results,
   SafetyAndSecurity,
   Sponsors,
 } from "./contents";
 import {
-  BlocksIcon,
   CalendarIcon,
   ClipboardIcon,
   CodeIcon,
@@ -34,7 +33,7 @@ import {
   ShieldIcon,
   TrophyIcon,
 } from "./components/NavMenuIcons";
-// These four pages already have an illustration on the home page's "Find
+// These five pages already have an illustration on the home page's "Find
 // out more about EMPOWER" cards — reused here instead of drawing a
 // near-duplicate (see NavMenuIcons.tsx).
 import {
@@ -42,6 +41,7 @@ import {
   LightbulbIcon,
   MagnifierIcon,
   RocketIcon,
+  RulerIcon,
 } from "./components/FindOutMoreIcons";
 
 interface Base {
@@ -65,6 +65,17 @@ class Page implements Base {
   // Navbar.tsx, folder pages only) and beside the title on the page's own
   // header (see Header.tsx / App.tsx, every page that sets one).
   icon?: React.FC<SVGProps<SVGSVGElement>>;
+  // Optional: marks a page as the dedicated page for a special prize EMPOWER
+  // is competing for (see the home page's FindOutMore "Special prize" badge,
+  // Tgr5Story.tsx). Shown in the navbar (Navbar.tsx) and on the page's own
+  // header (Header.tsx / App.tsx). Only prizes with a page of their own carry
+  // this.
+  specialPrize?: boolean;
+  // Optional: a thin divider line before this tile in the navbar's mega-menu
+  // (see Navbar.tsx), pushing it onto its own row. Used once today — Dry Lab
+  // in the Lab folder, set apart from the four wet-lab-specific pages above
+  // it (team request, 2026-10-18).
+  menuDivider?: boolean;
 }
 
 const Pages: (Page | Folder)[] = [
@@ -84,6 +95,14 @@ const Pages: (Page | Folder)[] = [
         component: Description,
         lead: "What PMOS is, how it is diagnosed, and why we went looking for its roots in the gut.",
         icon: LightbulbIcon,
+      },
+      {
+        name: "Experimental Overview",
+        title: "Experimental Overview",
+        path: "/experimental-overview",
+        component: ExperimentalOverview,
+        lead: "How our wet lab work fits together, from strain and antibiotic selection through conjugation and promoter screening, across the Toolkit and Therapeutics lines.",
+        icon: FlaskIcon,
       },
       {
         name: "Engineering Success",
@@ -112,39 +131,27 @@ const Pages: (Page | Folder)[] = [
     ],
   },
   {
-    name: "Dry Lab",
-    title: "Dry Lab",
-    path: "/dry-lab",
-    component: DryLab,
-    lead: "A toolkit for engineering Bacteroides species, and the computational screening that narrowed our bile salt hydrolase candidates.",
-    icon: CodeIcon,
-  },
-  {
-    name: "Wet Lab",
+    name: "Lab",
     folder: [
       {
-        name: "Experimental Overview",
-        title: "Experimental Overview",
-        path: "/experimental-overview",
-        component: ExperimentalOverview,
-        lead: "How our wet lab work fits together, from strain and antibiotic selection through conjugation and promoter screening, across the Toolkit and Therapeutics lines.",
-        icon: FlaskIcon,
+        name: "Results",
+        title: "Results",
+        path: "/results",
+        component: Results,
+        lead: "What came out of the Toolkit and Therapeutics pipelines, from the promoter library to bile salt deconjugation by our hydrolase candidates.",
+        icon: MagnifierIcon,
       },
       {
-        name: "Protocols",
-        title: "Protocols",
-        path: "/protocols",
-        component: Protocols,
-        lead: "Detailed, step-by-step protocols used throughout the project so other teams can replicate our work.",
-        icon: ClipboardIcon,
-      },
-      {
-        name: "Parts",
-        title: "Parts",
-        path: "/parts",
-        component: Parts,
-        lead: "The DNA parts built and used in this project, each linked to the notebook entry where it was made or characterised.",
-        icon: BlocksIcon,
+        name: "Measurement",
+        title: "Measurement",
+        path: "/measurement",
+        component: Measurement,
+        // Standard URL for the Best Measurement special prize per
+        // competition.igem.org/judging/awards/special — keep this path
+        // exactly "/measurement".
+        lead: "How we validated and calibrated our measurements, and where to find the methods, equipment, and data behind each one.",
+        icon: RulerIcon,
+        specialPrize: true,
       },
       {
         name: "Notebook",
@@ -155,12 +162,20 @@ const Pages: (Page | Folder)[] = [
         icon: NotebookIcon,
       },
       {
-        name: "Results",
-        title: "Results",
-        path: "/results",
-        component: Results,
-        lead: "What came out of the Toolkit and Therapeutics pipelines, from the promoter library to bile salt deconjugation by our hydrolase candidates.",
-        icon: MagnifierIcon,
+        name: "Protocols",
+        title: "Protocols",
+        path: "/protocols",
+        component: Protocols,
+        lead: "Detailed, step-by-step protocols used throughout the project so other teams can replicate our work.",
+        icon: ClipboardIcon,
+      },
+      {
+        name: "Dry Lab",
+        title: "Dry Lab",
+        path: "/dry-lab",
+        component: DryLab,
+        lead: "A toolkit for engineering Bacteroides species, and the computational screening that narrowed our bile salt hydrolase candidates.",
+        icon: CodeIcon,
       },
     ],
   },
@@ -174,6 +189,7 @@ const Pages: (Page | Folder)[] = [
         component: HumanPractices,
         lead: "The five stakeholder groups we spoke with, how their feedback reached the project, and what it changed.",
         icon: BubblesIcon,
+        specialPrize: true,
       },
       {
         name: "Events",
@@ -192,6 +208,7 @@ const Pages: (Page | Folder)[] = [
     component: Entrepreneurship,
     lead: "The business case for EMPOWER, phase by phase, from mission and problem to market, funding and a sustainable venture.",
     icon: RocketIcon,
+    specialPrize: true,
   },
   {
     name: "Prizes and Medals",
