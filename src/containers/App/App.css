@@ -2508,6 +2508,29 @@ a[data-footnote-ref]:focus {
   opacity: 1;
 }
 
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: "CRISPR construct design" sat as a plain row at the bottom of a
+   long Therapeutics list, directly under two indented sub-sub rows — easy to
+   miss (team feedback). Targeted by its known slug rather than by changing
+   the heading text, so its anchor and the link to it from
+   experimental-overview.mdx are untouched. Bolder, a touch bigger, and set
+   off with a divider so it reads as its own result instead of blending into
+   the hydrolase section above it. */
+.section-progress a[href="#crispr-construct-design"] .section-progress-label {
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.section-progress li:has(> a[href="#crispr-construct-design"]) {
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid rgba(51, 40, 63, 0.18);
+}
+
+[data-theme="dark"] .section-progress li:has(> a[href="#crispr-construct-design"]) {
+  border-top-color: rgba(255, 255, 255, 0.14);
+}
+
 /* Collapsible index (pages that render [data-toc-collapsible]): a chevron
    at the right of each main section with subsections toggles them open. */
 .section-progress li.expandable a {
@@ -3802,6 +3825,19 @@ div.sponsor-grid-card:hover {
   height: 100%;
   object-fit: contain;
   border-radius: 0.5rem;
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: <ZoomableImage onLightBackground /> — for a figure drawn with a
+   transparent background (the pBSH-Cas9 plasmid map), which disappeared into
+   the dialog's dark backdrop above. Plain white rather than a theme token:
+   the figure was drawn assuming a light background specifically, not
+   whatever the current theme happens to be. box-sizing keeps the padding
+   from pushing the image past the dialog's own padding. */
+.zoomable-image-dialog img.on-light-bg {
+  box-sizing: border-box;
+  padding: 2rem;
+  background-color: #ffffff;
 }
 
 .zoomable-image-close {
@@ -11181,21 +11217,18 @@ a.protocol-download:hover {
 }
 
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
+   Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: wrapped in
+   .figure-panel (below) and switched from auto-fit to a fixed 3-column grid,
+   so a set of five figures reliably lays out as a row of 3 then a row of 2
+   instead of auto-fit opportunistically fitting 4 or 5 across on a wide
+   screen. Falls back to 2 columns, then 1, as the viewport narrows.
    Purpose: lays several figures (each its own placeholder now, each its own
    clickable-to-enlarge <ZoomableImage> once the real figure lands) side by
-   side in a wrapping row, instead of one oversized composite image —
-   e.g. the growth-curve panels on the results page. Falls back to one
-   figure per line on narrow screens.
-   Grid rather than flex: with flex-wrap, each row sizes itself
-   independently, so flex-grow stretches whichever figure lands alone on a
-   half-empty last row — five figures at 15rem would give rows of 3 then 2,
-   and if the viewport only fits 2 per row that becomes 2/2/1, with the lone
-   figure on row three stretched to the full row width. A shared
-   auto-fit/minmax column template keeps every figure the same size
-   regardless of how the last row fills. */
+   side in a row, instead of one oversized composite image — e.g. the
+   growth-curve panels on the results page. */
 .figure-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
   margin: 1.5rem 0;
 }
@@ -11203,6 +11236,52 @@ a.protocol-download:hover {
 .figure-grid > * {
   margin: 0;
   min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .figure-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .figure-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* FIGURE PANEL
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: groups a whole set of figures (.figure-grid) plus their shared
+   caption onto one card, in the same teal/white tint as .key-takeaway, so
+   the set reads as one unit set apart from the surrounding .content-section
+   tint rather than floating loose on it. */
+.figure-panel {
+  margin: 1.75rem 0;
+  padding: 1.75rem 1.75rem 1.5rem;
+  border: 1px solid rgba(51, 40, 63, 0.2);
+  border-radius: 1.25rem;
+  background-color: var(--color-page-bg);
+}
+
+[data-theme="dark"] .figure-panel {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.figure-panel > .figure-grid {
+  margin-top: 0;
+}
+
+.figure-panel > .figure-caption {
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+@media (max-width: 575.98px) {
+  .figure-panel {
+    padding: 1.25rem 1rem;
+    border-radius: 0.9rem;
+  }
 }
 
 /* The "ALL DATA" divider between a pipeline's introduction and its sections,
@@ -11318,41 +11397,248 @@ a.protocol-download:hover {
   width: 70%;
 }
 
-/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-17
-   Purpose: the executive summary paragraph beside the plasmid map figure
-   (results page, "CRISPR construct design"), after the team's request to put
-   the construct circle next to the text instead of stacked under its own
-   heading. Stacks below tablet width, image first. */
-.construct-intro {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  margin: 1rem 0;
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: a shared "boxed subsection" treatment for the CRISPR construct
+   design subsections (Construct components, Integration strategy,
+   Validation plan, Data gaps and future iterations) — team feedback that
+   those four needed more visual definition than a plain heading plus
+   flowing text. Matches the .key-takeaway card palette already used on this
+   page rather than inventing a new one. */
+.subsection-panel {
+  padding: 1.5rem 1.75rem;
+  margin: 1rem 0 1.5rem;
+  border: 1px solid rgba(51, 40, 63, 0.2);
+  border-radius: 1.25rem;
+  background-color: var(--color-page-bg);
 }
 
-.construct-intro-text {
-  flex: 1 1 22rem;
-  min-width: 0;
+[data-theme="dark"] .subsection-panel {
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
-.construct-intro-text > :last-child {
+.subsection-panel > :first-child {
+  margin-top: 0;
+}
+
+.subsection-panel > :last-child {
   margin-bottom: 0;
 }
 
-.construct-intro-image {
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: replaces the old .construct-intro pairing (text beside a small
+   map) — team feedback wanted the plasmid map big on the left with its own
+   legend condensed beside it on the right instead. Stacks below tablet
+   width, map first. */
+.construct-map-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.construct-map-image {
+  flex: 1.6 1 24rem;
+  min-width: 0;
+}
+
+.construct-map-legend {
   flex: 1 1 16rem;
-  max-width: 22rem;
+  max-width: 24rem;
+  min-width: 0;
+}
+
+.construct-map-legend .plasmid-legend-table {
+  font-size: 0.82rem;
+}
+
+.construct-map-legend .plasmid-legend-table td {
+  padding: 0.5rem 0.6rem;
 }
 
 @media (max-width: 767.98px) {
-  .construct-intro {
+  .construct-map-row {
     flex-direction: column;
   }
 
-  .construct-intro-image {
-    max-width: 20rem;
-    margin: 0 auto;
+  .construct-map-legend {
+    max-width: none;
   }
+}
+
+/* A caveat that does not need a reader's full attention, set small with an
+   asterisk instead of the full bordered "Note" callout it replaced (team
+   feedback). */
+.construct-footnote {
+  font-size: 0.82rem;
+  opacity: 0.7;
+  margin-top: 1rem;
+}
+
+.construct-footnote p {
+  margin: 0;
+}
+
+/* STEP FLOW
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: a short sequential process as a row of numbered cards joined by
+   arrows (the CRISPR integration strategy's five steps, under its biorender
+   figure) — team feedback wanted the steps shown as a chronological flow
+   rather than a plain bullet list. Wraps to a vertical stack with a downward
+   arrow on narrow screens; the arrow is a rotated copy of the same
+   right-pointing chevron rather than a second glyph, so both read as the
+   same connector. Step numbers come from a CSS counter rather than a prop,
+   so steps can be reordered without renumbering by hand. */
+.step-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  counter-reset: step-flow;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+
+.step-flow-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1 1 11rem;
+  min-width: 11rem;
+}
+
+.step-flow-item:not(:first-child)::before {
+  content: "";
+  flex: none;
+  align-self: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-top: 2px solid rgba(51, 40, 63, 0.35);
+  border-right: 2px solid rgba(51, 40, 63, 0.35);
+  transform: rotate(45deg);
+}
+
+[data-theme="dark"] .step-flow-item:not(:first-child)::before {
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.step-flow-card {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(51, 40, 63, 0.2);
+  border-radius: 1rem;
+  background-color: var(--color-accent);
+}
+
+[data-theme="dark"] .step-flow-card {
+  border-color: transparent;
+}
+
+.step-flow-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background-color: #2fa4a9;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.step-flow-number::before {
+  counter-increment: step-flow;
+  content: counter(step-flow);
+}
+
+.step-flow-title {
+  font-weight: 700;
+  color: #33283f;
+}
+
+.step-flow-body {
+  font-size: 0.88rem;
+  opacity: 0.85;
+  color: #33283f;
+}
+
+@media (max-width: 575.98px) {
+  .step-flow {
+    flex-direction: column;
+  }
+
+  .step-flow-item:not(:first-child)::before {
+    transform: rotate(135deg);
+    align-self: flex-start;
+    margin-left: 0.9rem;
+  }
+}
+
+/* The validation-plan dropdowns read as a chronological list (team
+   feedback: the previous "1"-"4" key-takeaway cards had numbers that were
+   too heavy for what they were) — same <ExpandableText> used on the
+   Protocols page, just with a bigger title so each step reads at a glance. */
+.validation-plan-steps .expandable-title {
+  font-size: 1.1rem;
+}
+
+.validation-plan-steps .expandable-container {
+  margin-bottom: 0.75rem;
+}
+
+.validation-plan-steps .expandable-container:last-child {
+  margin-bottom: 0;
+}
+
+/* DATA GAPS LIST
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: each future-iteration item set off as its own row (a numbered
+   badge, like .step-flow-number, plus a left rule) instead of a plain
+   markdown ordered list — team feedback that the section needed more
+   definition. */
+.data-gaps-list ol {
+  list-style: none;
+  counter-reset: data-gaps;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.data-gaps-list li {
+  counter-increment: data-gaps;
+  position: relative;
+  padding: 0.6rem 0 0.6rem 2.75rem;
+  border-top: 1px solid rgba(51, 40, 63, 0.12);
+}
+
+[data-theme="dark"] .data-gaps-list li {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.data-gaps-list li:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.data-gaps-list li:last-child {
+  padding-bottom: 0;
+}
+
+.data-gaps-list li::before {
+  content: counter(data-gaps);
+  position: absolute;
+  left: 0;
+  top: 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  background-color: #2fa4a9;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
 }
 
 /* Generated with Claude Opus 5 (Anthropic), 2026-10-17

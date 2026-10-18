@@ -11,6 +11,7 @@ import {
   ExperimentalOverview,
   Home,
   HumanPractices,
+  Measurement,
   Members,
   Notebook,
   Parts,
@@ -34,7 +35,7 @@ import {
   ShieldIcon,
   TrophyIcon,
 } from "./components/NavMenuIcons";
-// These four pages already have an illustration on the home page's "Find
+// These five pages already have an illustration on the home page's "Find
 // out more about EMPOWER" cards — reused here instead of drawing a
 // near-duplicate (see NavMenuIcons.tsx).
 import {
@@ -42,6 +43,7 @@ import {
   LightbulbIcon,
   MagnifierIcon,
   RocketIcon,
+  RulerIcon,
 } from "./components/FindOutMoreIcons";
 
 interface Base {
@@ -69,7 +71,7 @@ class Page implements Base {
   // is competing for (see the home page's FindOutMore "Special prize" badge,
   // Tgr5Story.tsx). Shown in the navbar (Navbar.tsx) and on the page's own
   // header (Header.tsx / App.tsx). Only prizes with a page of their own carry
-  // this — "Best Measurement" has none yet, so it isn't flagged anywhere.
+  // this.
   specialPrize?: boolean;
 }
 
@@ -167,6 +169,18 @@ const Pages: (Page | Folder)[] = [
         component: Results,
         lead: "What came out of the Toolkit and Therapeutics pipelines, from the promoter library to bile salt deconjugation by our hydrolase candidates.",
         icon: MagnifierIcon,
+      },
+      {
+        name: "Measurement",
+        title: "Measurement",
+        path: "/measurement",
+        component: Measurement,
+        // Standard URL for the Best Measurement special prize per
+        // competition.igem.org/judging/awards/special — keep this path
+        // exactly "/measurement".
+        lead: "How we validated and calibrated our measurements, and where to find the methods, equipment, and data behind each one.",
+        icon: RulerIcon,
+        specialPrize: true,
       },
     ],
   },

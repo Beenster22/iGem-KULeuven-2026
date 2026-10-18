@@ -83,6 +83,11 @@ export function Navbar() {
           }}
         >
           {item.name}
+          {item.folder.some((subpage) => subpage.specialPrize) && (
+            <span className="nav-link-prize-star" aria-label="Special prize">
+              ★
+            </span>
+          )}
           <svg
             className="nav-link-caret"
             viewBox="0 0 12 8"

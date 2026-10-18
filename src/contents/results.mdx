@@ -285,7 +285,7 @@ package[^growth-dgrowthr][^growth-keitel2025].
 
 <ElleSays mood="smile" size="sm" side="right">
 
-Curious how we measured all this? Have a look at our <Link to="/experimental-overview">measurement page</Link>!
+Curious how we measured all this? Have a look at our <Link to="/measurement">measurement page</Link>!
 
 </ElleSays>
 
@@ -643,6 +643,8 @@ for testing starch, vitamin K₁ and pH one at a time.
 Growth curves across the five iterations are shown in Figure 1 (panels
 A–E); the fitted parameters for every condition are in Table 2.
 
+<div className="figure-panel">
+
 <div className="figure-grid">
 
 <figure>
@@ -704,6 +706,8 @@ A–E); the fitted parameters for every condition are in Table 2.
   Figure 1A–E. Growth of <em>P. vulgatus</em> fitted by Gaussian-process
   regression (DGrowthR); click any panel to enlarge it. Panels correspond to the
   five iterations in Table 2 below.
+</div>
+
 </div>
 
 <ExpandableText title="Why Gaussian process (GP) regression?">
@@ -1111,7 +1115,7 @@ are best read alongside the ΔOD value rather than on their own.
 
 {/* The source cell for iteration 2's mGAM AUC read "0.5 ± 00" in the team's draft, almost certainly a dropped decimal — transcribed here as 0.5 ± 0.0 to match the column's formatting; worth the team double-checking against the raw DGrowthR output. */}
 
-#### Discussion
+<ExpandableText title="Discussion">
 
 **Experiment 1: Pilot.** The first pilot established that medium choice
 mattered more than any other variable we tested. mGAM supported growth in
@@ -1200,6 +1204,8 @@ Benjamini–Hochberg correction across seven comparisons[^growth-bh]. With six
 wells per condition the design is underpowered for this
 question[^growth-tonner], so the result reflects a limitation of the
 experiment rather than evidence that the supplements do not differ.
+
+</ExpandableText>
 
 #### Conclusion
 
@@ -1498,7 +1504,7 @@ section reports.
 
 <ElleSays mood="smile" size="sm" glass side="right">
 
-Curious how we measured all this? Have a look at our <Link to="/experimental-overview">measurement page</Link>!
+Curious how we measured all this? Have a look at our <Link to="/measurement">measurement page</Link>!
 
 </ElleSays>
 
@@ -1767,19 +1773,7 @@ Placeholder — what a next team should do with this.
 
 {/* The team's own "Construct Planning FINAL" document, transferred as written; only typography was adjusted (species names in italics, R6K γ ori, en dashes) and the document's own headings were kept as the structure below. */}
 {/* TODO(team): the document's unresolved comments are not carried onto the page — the open ones are flagged with TODO comments where they apply. */}
-
-<div className="results-standfirst">
-  A CRISPR construct that swaps the native bile salt hydrolase of a patient's
-  own <em>P. vulgatus</em> for a homolog with a different substrate preference.
-</div>
-
-#### Executive summary
-
-{/* The plasmid map sits beside the executive summary rather than under its own heading, with the uploaded figure (pbsh-cas9-transparent.avif) standing in for "The construct" as a heading. */}
-
-<div className="construct-intro">
-
-<div className="construct-intro-text">
+{/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: dropped the standfirst teaser and the "Executive summary" label (team feedback: duplicated the paragraph below without adding anything) and moved the plasmid map down to sit beside its own legend instead of beside this text. */}
 
 Our approach involves isolating _P. vulgatus_ from a patient's fecal sample,
 CRISPR engineering it in vitro, and administering it to the same patient. The
@@ -1791,20 +1785,23 @@ arms flanking our BSH of interest to insert it into the genome after double
 strand break induction. The intended effect is a restored bile salt pool for
 balanced immune and metabolic modulation.
 
-</div>
+#### Construct components
 
-<div className="construct-intro-image">
+{/* Row shading matches the component's colour on the map above. The map sits large on the left with its own legend condensed beside it (team feedback), rather than a full-width table below a small map. */}
+
+<div className="subsection-panel">
+
+<div className="construct-map-row">
+
+<div className="construct-map-image">
   <ZoomableImage
     src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/pbsh-cas9-transparent.avif"
     alt="The pBSH-Cas9 plasmid map: oriT, R6K γ ori, AmpR, pB8-51 and Cat around the backbone, PCas9 driving Cas9, PgRNA driving the gRNA, and the BSH replacement flanked by its left and right homology arms."
+    onLightBackground
   />
 </div>
 
-</div>
-
-#### Construct components
-
-{/* Row shading matches the component's colour on the map above. */}
+<div className="construct-map-legend">
 
 <div className="table-responsive table-responsive-rounded my-3">
 
@@ -1895,27 +1892,20 @@ balanced immune and metabolic modulation.
 
 </div>
 
+</div>
+
+</div>
+
+</div>
+
 #### Integration strategy
+
+{/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: the five bullets became a step flow under the biorender figure (team feedback: wanted the steps shown as a chronological flow, kept together with the figure rather than as a plain list above it), and the "Note" callout was cut down to a small asterisked line since it is a caveat, not a result. */}
+
+<div className="subsection-panel">
 
 The construct must replicate and express in _E. coli_ and _P. vulgatus_ for
 conjugation.
-
-- In _E. coli_ S17 λ _pir_, R6K γ ori is used as an established origin of
-  replication for stable plasmid number upkeep, while an ampicillin resistance
-  cassette is expressed to select for transformed colonies.
-- Upon conjugative transfer to _P. vulgatus_ using oriT, a chloramphenicol
-  resistance cassette (Cat) is used to select for positive transformants.
-  Erythromycin is the usual choice for this step in the conjugation protocol,
-  but our own <Link to="/results#antibiotic-susceptibility-of-p-vulgatus">MIC
-  results</Link> show it only inhibits strain DSM1447, not the faecal isolate
-  RCC1806 — chloramphenicol, tetracycline and metronidazole all inhibit both,
-  and chloramphenicol was chosen as the marker here.
-- pB8-51 ori is used as a _Bacteroides_ origin of replication once inside
-  _P. vulgatus_.
-- The promoter used _P. vulgatus_-specific expression for the gRNA, which
-  combines with Cas9 and targets the native BSH to induce a double strand break.
-- The plasmid backbone does not integrate so it can be cured, leaving a scarless
-  gene replacement.
 
 <ZoomableImage
   src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/crispr-conjugation-horizontal2x.avif"
@@ -1923,43 +1913,99 @@ conjugation.
   className="framed"
 />
 
-<Callout title="Note">
+<StepFlow>
+  <Step title="E. coli replication">
+    In _E. coli_ S17 λ _pir_, R6K γ ori is used as an established origin of
+    replication for stable plasmid number upkeep, while an ampicillin
+    resistance cassette is expressed to select for transformed colonies.
+  </Step>
+  <Step title="Conjugative transfer">
+    Upon conjugative transfer to _P. vulgatus_ using oriT, a chloramphenicol
+    resistance cassette (Cat) is used to select for positive transformants.
+    Erythromycin is the usual choice for this step in the conjugation
+    protocol, but our own <Link to="/results#antibiotic-susceptibility-of-p-vulgatus">MIC
+    results</Link> show it only inhibits strain DSM1447, not the faecal
+    isolate RCC1806 — chloramphenicol, tetracycline and metronidazole all
+    inhibit both, and chloramphenicol was chosen as the marker here.
+  </Step>
+  <Step title="Bacteroides replication">
+    pB8-51 ori is used as a _Bacteroides_ origin of replication once inside
+    _P. vulgatus_.
+  </Step>
+  <Step title="Targeting the native BSH">
+    The promoter used _P. vulgatus_-specific expression for the gRNA, which
+    combines with Cas9 and targets the native BSH to induce a double strand
+    break.
+  </Step>
+  <Step title="Scarless replacement">
+    The plasmid backbone does not integrate so it can be cured, leaving a
+    scarless gene replacement.
+  </Step>
+</StepFlow>
 
-Though integrative plasmids exist, the CRISPR system enables precise engineering
-and site of integration flexibility using the native RecA homology directed
-repair (HDR) system in _P. vulgatus_.
+<div className="construct-footnote">
 
-</Callout>
+<span aria-hidden="true">*</span> Though integrative plasmids exist, the
+CRISPR system enables precise engineering and site of integration flexibility
+using the native RecA homology directed repair (HDR) system in _P. vulgatus_.
+
+</div>
+
+</div>
 
 #### Validation plan
 
 {/* The same four steps as the validation plan on the entrepreneurship page — keep the two in sync. */}
+{/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: the four key-takeaway cards (a bare "1"-"4") became dropdowns, chronological top to bottom with a bigger title, matching the protocol write-ups on the Protocols page (team feedback: the numbers read too large/heavy for what they were). */}
 
 Successful integration could be confirmed by:
 
-<KeyTakeaways>
-  <Takeaway value="1" label="junction PCR">
-    PCR and amplicon sequencing spanning outside the integration junction, using
-    primers flanking HA<sub>L</sub> and HA<sub>R</sub> to amplify the integrated
-    cassette from genomic DNA.
-  </Takeaway>
-  <Takeaway value="2" label="Cas9 expression">
-    Early-stage validation will also include confirming Cas9 expression at the
-    RNA level (qRT-PCR) in the recipient strain.
-  </Takeaway>
-  <Takeaway value="3" label="BSH activity">
-    BSH activity measured via bile salt assays comparing wild-type to
-    integrated-construct strains.
-  </Takeaway>
-  <Takeaway value="4" label="stability">
-    Stability confirmed by serial passage without selection, to ensure the
-    cassette does not excise or degrade.
-  </Takeaway>
-</KeyTakeaways>
+<div className="subsection-panel">
+
+<div className="validation-plan-steps">
+
+<ExpandableText title="1. Junction PCR">
+
+PCR and amplicon sequencing spanning outside the integration junction, using
+primers flanking HA<sub>L</sub> and HA<sub>R</sub> to amplify the integrated
+cassette from genomic DNA.
+
+</ExpandableText>
+
+<ExpandableText title="2. Cas9 expression">
+
+Early-stage validation will also include confirming Cas9 expression at the
+RNA level (qRT-PCR) in the recipient strain.
+
+</ExpandableText>
+
+<ExpandableText title="3. BSH activity">
+
+BSH activity measured via bile salt assays comparing wild-type to
+integrated-construct strains.
+
+</ExpandableText>
+
+<ExpandableText title="4. Stability">
+
+Stability confirmed by serial passage without selection, to ensure the
+cassette does not excise or degrade.
+
+</ExpandableText>
+
+</div>
 
 For additional information about risk and safety see the <Link to="/safety-and-security">safety page</Link>.
 
+</div>
+
 #### Data gaps and future iterations
+
+{/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: boxed in a subsection-panel like the other CRISPR subsections, team feedback. */}
+
+<div className="subsection-panel">
+
+<div className="data-gaps-list">
 
 1. **BSH variant selection** — dependent on the outcome of the BSH assay with a
    wider range of bile salts.
@@ -1973,6 +2019,10 @@ For additional information about risk and safety see the <Link to="/safety-and-s
    implemented.
 5. **Inducible promoter for Cas9 expression** — shown to increase editing
    efficiency if needed[^construct-crispr-gut].
+
+</div>
+
+</div>
 
 <ResourceDownload
   href="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/therapeutic-part-2-section-6-crispr.pdf"
