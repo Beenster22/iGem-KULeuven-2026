@@ -275,6 +275,11 @@ export function PmosGlobe() {
             onPolygonHover={handleHover}
             onPolygonClick={handleClick}
           />
+          {/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team
+              request): a lavender halo ring round the sphere — what the
+              counter's underline curls up into (useLineToGlobe.ts). Inside
+              the moving layer so it stays on the earth during the drop. */}
+          <div className="pmos-globe-halo" aria-hidden="true" />
           {/* What the globe turns into as it lands: the first circle of the
               next screen, in that circle's colours. */}
           <div

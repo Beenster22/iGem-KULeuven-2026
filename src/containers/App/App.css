@@ -6914,14 +6914,137 @@ body:not(.home-fullscreen) .home-hero {
   line-height: 1.05;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
-  padding: 0 0.1em;
-  /* --color-header-bg (not --color-accent) — accent is identical to the
-     body background in light mode, which would make this invisible too. */
-  border-bottom: 0.07em solid var(--color-header-bg);
+  padding: 0 0.1em 0.07em;
+  position: relative;
+}
+
+/* The underline: --color-header-bg (not --color-accent) — accent is
+   identical to the body background in light mode, which would make this
+   invisible too. Drawn as a bar (not a border) so it can sweep in. */
+.pmos-counter-number::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0.07em;
+  background: var(--color-header-bg);
+  transform: scaleX(0);
+  transition: transform 0.7s cubic-bezier(0.3, 0, 0.2, 1);
 }
 
 [data-theme="dark"] .pmos-counter-number {
   color: #5fd3d7;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
+   counter screen starts blank. The M of "Million" falls in from the PMOS
+   acrostic and climbs a bar-chart staircase (useFallingM.ts); once it is in
+   place "illion" appears around it (--landed), and once the stairs are gone
+   the figure, the underline and the sentence follow (--revealed). Every
+   part keeps its space throughout, so nothing moves as it appears.
+   inline-block gives the M's slot a box exactly one line high, which the
+   flying M copies. */
+.pmos-counter-figure {
+  display: inline-block;
+  text-align: right;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.pmos-counter-m {
+  display: inline-block;
+  visibility: hidden;
+}
+
+.pmos-counter-illion {
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.pmos-counter-rest {
+  opacity: 0;
+  transition: opacity 0.6s ease 0.35s;
+}
+
+.pmos-counter--landed .pmos-counter-m {
+  visibility: visible;
+}
+
+.pmos-counter--landed .pmos-counter-illion,
+.pmos-counter--revealed .pmos-counter-figure,
+.pmos-counter--revealed .pmos-counter-rest {
+  opacity: 1;
+}
+
+.pmos-counter--revealed .pmos-counter-number::after {
+  transform: scaleX(1);
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): while
+   the underline is curling up into the globe (useLineToGlobe.ts) the
+   overlay draws it, so the real one steps aside. */
+.pmos-counter--revealed .pmos-counter-number.is-detached::after {
+  transition: none;
+  opacity: 0;
+}
+
+.line-to-globe {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* --tint (0 → 1, set per frame) shifts the line from its own colour to the
+   globe's atmosphere colour (--color-accent, see atmosphereColor in
+   PmosGlobe.tsx) and gives it that glow as the ring closes. */
+.line-to-globe path {
+  --tint: 0;
+  fill: none;
+  stroke: color-mix(
+    in srgb,
+    var(--color-accent) calc(var(--tint) * 100%),
+    var(--color-header-bg)
+  );
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(
+    0 0 calc(var(--tint) * 14px)
+      color-mix(in srgb, var(--color-accent) calc(var(--tint) * 90%), transparent)
+  );
+}
+
+.falling-m,
+.falling-m-stairs {
+  left: 0;
+  top: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Fixed while it falls with the scroll, absolute (page coordinates) once
+   it is climbing — set from useFallingM.ts. */
+.falling-m {
+  display: block;
+  transform-origin: 0 0;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.falling-m-stairs {
+  position: absolute;
+  overflow: visible;
+}
+
+.falling-m-stairs rect {
+  fill: var(--color-header-bg);
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transform: scaleY(0);
 }
 
 .pmos-overview-source {
@@ -7005,6 +7128,26 @@ body:not(.home-fullscreen) .home-hero {
   border: calc(4px / var(--fly-scale, 1)) solid var(--symptom-color);
   background-color: color-mix(in srgb, var(--symptom-color) 22%, #fff);
   opacity: var(--morph, 0);
+  pointer-events: none;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
+   halo round the sphere. Sized to the sphere (SPHERE_FRACTION in
+   PmosGlobe.tsx) plus its own ring width, so the ring is centred on the
+   sphere's edge exactly where useLineToGlobe.ts draws the closing line;
+   --halo (set there) keeps it hidden until that line arrives. */
+.pmos-globe-halo {
+  --halo-w: 4px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(100% * 0.7051 + var(--halo-w));
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  border: var(--halo-w) solid var(--color-accent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--color-accent) 90%, transparent);
+  opacity: var(--halo, 1);
   pointer-events: none;
 }
 
