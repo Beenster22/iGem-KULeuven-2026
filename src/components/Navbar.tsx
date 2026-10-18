@@ -108,6 +108,11 @@ export function Navbar() {
           onClick={closeNow}
         >
           {item.name}
+          {item.specialPrize && (
+            <span className="nav-link-prize-star" aria-label="Special prize">
+              ★
+            </span>
+          )}
         </Nav.Link>
       );
     }
@@ -197,7 +202,14 @@ export function Navbar() {
                         </span>
                       )}
                       <span className="mega-menu-link-text">
-                        <span className="mega-menu-link-name">{subpage.name}</span>
+                        <span className="mega-menu-link-name">
+                          {subpage.name}
+                          {subpage.specialPrize && (
+                            <span className="mega-menu-link-prize">
+                              <span aria-hidden="true">★</span> Special prize
+                            </span>
+                          )}
+                        </span>
                         {subpage.lead && (
                           <span className="mega-menu-link-lead">
                             {renderItalics(subpage.lead)}

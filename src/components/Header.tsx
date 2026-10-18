@@ -15,9 +15,19 @@ interface HeaderProps {
   // she sits in the header itself rather than taking up a row of the page
   // body. Left out, the header is title + lead alone, as on every other page.
   aside?: ReactNode;
+  // Optional: marks this page as a special prize's dedicated page (see
+  // pages.ts `specialPrize`) — shows the same "Special prize" badge as the
+  // home page's FindOutMore cards, next to the title.
+  specialPrize?: boolean;
 }
 
-export function Header({ title, lead, icon: Icon, aside }: HeaderProps) {
+export function Header({
+  title,
+  lead,
+  icon: Icon,
+  aside,
+  specialPrize,
+}: HeaderProps) {
   return (
     <header className="page-header-box">
       <div className={`container${aside ? " page-header-box-row" : ""}`}>
@@ -29,7 +39,15 @@ export function Header({ title, lead, icon: Icon, aside }: HeaderProps) {
               </span>
             )}
             <div>
-              <h1 className="display-4 mb-2">{title}</h1>
+              <div className="page-header-box-title-row">
+                <h1 className="display-4 mb-2">{title}</h1>
+                {specialPrize && (
+                  <span className="page-header-prize-badge">
+                    <span aria-hidden="true">★</span> Special prize{" "}
+                    <span aria-hidden="true">★</span>
+                  </span>
+                )}
+              </div>
               {/* Pages whose lead has not been written yet get the title
                   alone rather than an empty paragraph. */}
               {lead && <p className="lead mb-0">{renderItalics(lead)}</p>}

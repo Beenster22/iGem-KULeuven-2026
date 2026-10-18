@@ -342,6 +342,30 @@ a[data-footnote-ref]:focus {
   color: var(--color-header-text);
 }
 
+/* Purpose: title-row badge marking this as a special prize's dedicated page
+   (see pages.ts `specialPrize`) — same teal pill as the home page's
+   FindOutMore "Special prize" badge (App.css .find-more-card-prize),
+   repeated here and in the navbar (.nav-link-prize-star,
+   .mega-menu-link-prize) so the prize is visible wherever the page is
+   reached, not only from the home page. */
+.page-header-box-title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.page-header-prize-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background-color: #2fa4a9;
+  color: #33283f;
+  font-size: 0.8rem;
+  font-weight: 800;
+  white-space: nowrap;
+  margin-bottom: 0.5rem;
+}
+
 /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
    Purpose: team request — every page's title now carries the same icon as
    its navbar mega-menu tile (see pages.ts `icon`, Header.tsx), sitting to
@@ -434,6 +458,15 @@ a[data-footnote-ref]:focus {
 
 .navbar-empower .nav-link-dropdown.show .nav-link-caret {
   transform: rotate(-180deg);
+}
+
+/* Purpose: small star marking a top-level nav link as a special prize's
+   dedicated page (see pages.ts `specialPrize`, .page-header-prize-badge
+   above). Kept to a bare star rather than the full "Special prize" pill —
+   there isn't room for the pill text beside the nav link label. */
+.nav-link-prize-star {
+  color: #2fa4a9;
+  margin-left: 0.3rem;
 }
 
 .navbar-empower .nav-link::after {
@@ -637,6 +670,22 @@ a[data-footnote-ref]:focus {
   font-weight: 800;
   font-size: 1rem;
   line-height: 1.2;
+}
+
+/* Purpose: "Special prize" pill on a mega-menu tile whose page is a special
+   prize's dedicated page (see pages.ts `specialPrize`). Fixed teal/plum
+   rather than the tile's own dark/light colors so it reads the same as the
+   home page's FindOutMore badge and the page header's. */
+.mega-menu-link-prize {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background-color: #2fa4a9;
+  color: #33283f;
+  font-size: 0.7rem;
+  font-weight: 800;
+  vertical-align: middle;
 }
 
 .mega-menu-link-lead {
@@ -1022,6 +1071,11 @@ a[data-footnote-ref]:focus {
 .docking-heatmap-grid {
   border-collapse: separate;
   border-spacing: 2px;
+  /* Centers the grid when it's narrower than the scroll container; has no
+     effect (auto margins resolve to 0) once it's wide enough to need the
+     sideways scroll, so nothing is ever clipped off the left edge. */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .docking-heatmap-caption {
@@ -1034,15 +1088,26 @@ a[data-footnote-ref]:focus {
 }
 
 .docking-heatmap-col-head {
+  position: relative;
   vertical-align: bottom;
+  /* Fixed height reserves room for the diagonal label below, regardless of
+     name length. */
+  height: 7.5rem;
   padding: 0 0 0.4rem;
-  font-size: 0.72rem;
-  font-weight: 600;
-  /* Ten full bile salt names will not fit side by side at column width, so
-     they are set vertically, as in the original figure's angled labels. */
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
+}
+
+.docking-heatmap-col-head span {
+  /* Angled labels (as in the original figure) read far more easily than
+     fully vertical text, while still fitting ten full bile salt names side
+     by side at column width. */
+  position: absolute;
+  left: 0.3rem;
+  bottom: 0.5rem;
+  transform: rotate(-45deg);
+  transform-origin: left bottom;
   white-space: nowrap;
+  font-size: 0.74rem;
+  font-weight: 600;
 }
 
 .docking-heatmap-corner {

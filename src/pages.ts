@@ -65,6 +65,12 @@ class Page implements Base {
   // Navbar.tsx, folder pages only) and beside the title on the page's own
   // header (see Header.tsx / App.tsx, every page that sets one).
   icon?: React.FC<SVGProps<SVGSVGElement>>;
+  // Optional: marks a page as the dedicated page for a special prize EMPOWER
+  // is competing for (see the home page's FindOutMore "Special prize" badge,
+  // Tgr5Story.tsx). Shown in the navbar (Navbar.tsx) and on the page's own
+  // header (Header.tsx / App.tsx). Only prizes with a page of their own carry
+  // this — "Best Measurement" has none yet, so it isn't flagged anywhere.
+  specialPrize?: boolean;
 }
 
 const Pages: (Page | Folder)[] = [
@@ -174,6 +180,7 @@ const Pages: (Page | Folder)[] = [
         component: HumanPractices,
         lead: "The five stakeholder groups we spoke with, how their feedback reached the project, and what it changed.",
         icon: BubblesIcon,
+        specialPrize: true,
       },
       {
         name: "Events",
@@ -192,6 +199,7 @@ const Pages: (Page | Folder)[] = [
     component: Entrepreneurship,
     lead: "The business case for EMPOWER, phase by phase, from mission and problem to market, funding and a sustainable venture.",
     icon: RocketIcon,
+    specialPrize: true,
   },
   {
     name: "Prizes and Medals",
