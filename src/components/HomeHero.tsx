@@ -233,9 +233,10 @@ export function HomeHero() {
           allow="autoplay; fullscreen"
           sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
         />
-        {/* Faded in over the embed rather than swapped for it, so the
-            handoff has no frame where neither is on screen (see App.css
-            .home-hero-video, 2026-10-17 team feedback). */}
+        {/* Laid over the embed (same box, see App.css .home-hero-video)
+            and shown instantly when the video ends, so it simply holds the
+            last frame — no dissolve or resize after the logo appears
+            (2026-10-18 team feedback). */}
         <img
           className={`home-hero-video${videoEnded ? " home-hero-video--shown" : ""}`}
           src={FINAL_FRAME_SRC}

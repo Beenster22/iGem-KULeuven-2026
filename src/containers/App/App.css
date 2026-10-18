@@ -4026,26 +4026,29 @@ body.home-fullscreen {
   background-color: var(--color-accent);
 }
 
-/* Deliberately NOT sharing .home-hero-embed's cover formula below
-   (2026-10-18, team call): a 16:9 asset can't both fill a wider-than-16:9
-   window edge-to-edge AND show its full height uncropped — one has to give.
-   Cropping the logo was ruled unacceptable, so this stays full "contain"
-   (never grows past 100% either dimension, so never crops vertically); on a
-   wide/short window the resting logo leaves a themed-colour margin on the
-   sides instead, and there's a brief zoom at the handoff on those windows
-   until FINAL_FRAME_SRC's video is re-exported on a wider canvas — see the
-   .home-hero-embed comment. */
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback): the
+   video's bacterium -> logo morph is the final transition, so the still sits
+   at exactly the embed's geometry and is swapped in instantly (no dissolve,
+   no resize afterwards) — it just holds the video's last frame on screen.
+   Both are sized to fit entirely inside the hero ("contain", so the logo is
+   never cropped on any window shape, per the earlier team call) and then
+   shrunk slightly by --home-hero-video-scale. The video's edges are the same
+   lavender as .home-hero's background, so the margin this leaves blends in. */
+.home-hero {
+  container-type: size;
+  --home-hero-video-scale: 0.85;
+}
+
 .home-hero-video {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: calc(100dvh * 16 / 9);
-  height: 100%;
-  transform: translate(-50%, -50%);
+  width: min(100cqw, calc(100cqh * 16 / 9));
+  height: min(100cqh, calc(100cqw * 9 / 16));
+  transform: translate(-50%, -50%) scale(var(--home-hero-video-scale));
   object-fit: cover;
   display: block;
   opacity: 0;
-  transition: opacity 0.5s ease;
 }
 
 .home-hero-video--shown {
@@ -4054,25 +4057,18 @@ body.home-fullscreen {
 
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
    Purpose: object-fit doesn't apply to an <iframe>, so the 16:9 video embed
-   is sized to always cover the hero and centred, letting .home-hero's
-   overflow crop the excess — the same result as object-fit: cover.
-   Edited with Claude Sonnet 5 (Anthropic), 2026-10-18 (team call: the live
-   video stays full-bleed/cropped — it only plays once, briefly — but the
-   resting logo it hands off to must never be cropped; see .home-hero-video,
-   which intentionally does NOT share this formula anymore). Width and
-   height both over-grow symmetrically, so the box always covers the hero
-   fully in both dimensions. A narrow/tall window crops the sides; a
-   wide/short window crops top/bottom. This is an interim CSS-only trade-off
-   — the real fix is re-exporting the source video (and FINAL_FRAME_SRC) on
-   a wider canvas with margin around the subject, so nothing needs cropping
-   or margins on any window shape; ask when that's ready. */
+   is sized and centred by hand.
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback): no
+   longer full-bleed/cropped — it now uses the exact same "contain" box as
+   .home-hero-video above, so its last frame and the still line up
+   pixel-for-pixel and the logo is never cropped or oversized. */
 .home-hero-embed {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: max(100%, calc(100dvh * 16 / 9));
-  height: max(100%, calc(100vw * 9 / 16));
-  transform: translate(-50%, -50%);
+  width: min(100cqw, calc(100cqh * 16 / 9));
+  height: min(100cqh, calc(100cqw * 9 / 16));
+  transform: translate(-50%, -50%) scale(var(--home-hero-video-scale));
   border: 0;
   pointer-events: none;
 }
