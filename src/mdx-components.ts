@@ -59,7 +59,12 @@ import { HomeSnapScroll } from "./components/HomeSnapScroll";
 import { ZoomableImage } from "./components/ZoomableImage";
 import { ElleSays } from "./components/ElleSays";
 import { SuccessCards, SuccessCard } from "./components/SuccessCards";
-import { ResultSection, KeyTakeaways, Takeaway, FigureSlot } from "./components/ResultsKit";
+import {
+  ResultSection,
+  KeyTakeaways,
+  Takeaway,
+  FigureSlot,
+} from "./components/ResultsKit";
 import {
   StakeholderGroups,
   StakeholderGroup,

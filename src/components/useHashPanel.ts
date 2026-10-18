@@ -21,7 +21,7 @@ import { stringToSlug } from "../utils/stringToSlug";
 const HEADING_TAGS = new Set(["h1", "h2", "h3", "h4", "h5", "h6"]);
 
 /** Plain text of a React subtree, ignoring anything that is not a string. */
-function textOf(node: ReactNode): string {
+export function textOf(node: ReactNode): string {
   if (typeof node === "string" || typeof node === "number") return String(node);
   if (Array.isArray(node)) return node.map(textOf).join("");
   if (isValidElement(node)) {
@@ -35,7 +35,7 @@ function textOf(node: ReactNode): string {
  * components (an <ExpandableText>, say) count too: their content is still
  * part of this panel, and MDX leaves them in the element tree as children.
  */
-function headingSlugs(node: ReactNode, found: string[] = []): string[] {
+export function headingSlugs(node: ReactNode, found: string[] = []): string[] {
   if (Array.isArray(node)) {
     node.forEach((child) => headingSlugs(child, found));
     return found;
@@ -44,6 +44,13 @@ function headingSlugs(node: ReactNode, found: string[] = []): string[] {
 
   if (typeof node.type === "string" && HEADING_TAGS.has(node.type)) {
     const text = textOf((node.props as { children?: ReactNode }).children);
+    if (text) found.push(stringToSlug(text));
+  }
+  // A dropdown's title is rendered as a heading too (see ExpandableText), but
+  // it is a prop, not a child, so it has to be read from there.
+  const title = (node.props as { title?: ReactNode }).title;
+  if (typeof node.type !== "string" && title) {
+    const text = textOf(title);
     if (text) found.push(stringToSlug(text));
   }
   headingSlugs((node.props as { children?: ReactNode }).children, found);

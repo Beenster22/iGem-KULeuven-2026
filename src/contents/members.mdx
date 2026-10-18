@@ -4,7 +4,7 @@
 
 ---
 
-Click a card to read more about each team member.
+*Click a card to read more about each team member.*
 
 <TeamMembers rows={[2, 3, 3, 4]}>
 
@@ -13,14 +13,14 @@ Click a card to read more about each team member.
     favourite and funFact: from the team's "TEAM PAGE" document (2026-10-15).
     linkedin: a member's LinkedIn profile URL, shown under the photo in the
     popup (2026-10-17). Tracking parameters (utm_*, isSelfProfile) stripped.
-    TODO(team): Milica's and Tim's are still to come.
+    Tim is an ex-member, so he has no link.
     rows: how many cards go on each row, in the order below.
     TODO(team): Daniel's nationality is still to come.
     crop (Claude Opus 5.5, 2026-10-15): measured from each cut-out photo so
     every head is the same width (about a third of the frame) with the same
     space above it. A re-uploaded photo needs its crop measured again. */}
 
-<TeamMemberCard name="Milica Glušac" role="Team Captain" nationality="Montenegrin" age={23} study="Masters in Biophysics, Biochemistry and Biotechnology" favourite="Mamma Mia!" funFact="My friends claim I used to eat mud in kindergarten, and we still debate it to this day" photo="https://static.igem.wiki/teams/6299/wiki/team/members/milica.avif" crop={{ x: 0.061, y: 0.357, size: 0.827 }} />
+<TeamMemberCard name="Milica Glušac" role="Team Captain" linkedin="https://www.linkedin.com/in/milica-glusac-71a836283/" nationality="Montenegrin" age={23} study="Masters in Biophysics, Biochemistry and Biotechnology" favourite="Mamma Mia!" funFact="My friends claim I used to eat mud in kindergarten, and we still debate it to this day" photo="https://static.igem.wiki/teams/6299/wiki/team/members/milica.avif" crop={{ x: 0.061, y: 0.357, size: 0.827 }} />
 <TeamMemberCard name="Sarah Vanderhoydonck" role="Team Vice Captain" nationality="Belgian" age={22} study="Masters in basic and translational research, Biomedical Sciences" favourite="Harry Potter" funFact="I can touch my nose with my tongue!" linkedin="https://www.linkedin.com/in/sarah-vanderhoydonck-621a75373/" photo="https://static.igem.wiki/teams/6299/wiki/team/members/sarah.avif" crop={{ x: 0.008, y: 0.429, size: 0.856 }} />
 <TeamMemberCard name="Martha Philipiak" role="Engagement Captain" nationality="German" age={23} study="Masters in Biophysics, Biochemistry and Biotechnology" favourite="Dune trilogy" funFact="I once drank 5 L of beer at Oktoberfest." linkedin="https://www.linkedin.com/in/mphilipiak/" photo="https://static.igem.wiki/teams/6299/wiki/team/members/martha.avif" crop={{ x: 0.027, y: 0.311, size: 0.92 }} />
 <TeamMemberCard name="Daniel Steukers" role="Dry Lab Captain" age={24} study="Biochemistry, Biotechnology and Biophysics" favourite="The Vital Question by Nick Lane" funFact="I once fell asleep on a train to Münster and ended up in Berlin. That’s how I realized how massive Germany actually is." linkedin="https://www.linkedin.com/in/daniel-steukers/" photo="https://static.igem.wiki/teams/6299/wiki/team/members/daniel.avif" crop={{ x: 0.023, y: 0.396, size: 0.897 }} />
@@ -31,7 +31,7 @@ Click a card to read more about each team member.
 <TeamMemberCard name="Marie Van de Mosselaer" role="Member" nationality="Belgian" age={21} study="Master of Bioscience Engineering: Cellular and Genetic Engineering" favourite="The Priory of the Orange Tree by Samantha Shannon" funFact="I once owned fish named Flap, Flep, Flip, Flop, and Flup" linkedin="https://www.linkedin.com/in/marie-van-de-mosselaer-37215442b/" photo="https://static.igem.wiki/teams/6299/wiki/team/members/marie.avif" crop={{ x: 0.106, y: 0.336, size: 0.833 }} />
 <TeamMemberCard name="Onkar Satish Jadhav" role="Member" nationality="Indian" age={23} study="Master of Chemistry" favourite="Sherlock Holmes" funFact="Made it to synbio teams without bio background twice" linkedin="https://www.linkedin.com/in/onkar-jadhav-57b9932a0/" photo="https://static.igem.wiki/teams/6299/wiki/team/members/onkar.avif" crop={{ x: 0.0, y: 0.27, size: 1.026 }} />
 <TeamMemberCard name="Azra Yagmur Tufanoglu" role="Member" nationality="Turkish" age={20} study="Bachelor in Chemical Engineering Technology" favourite="Two for the Road" funFact="I almost studied literature instead of engineering" linkedin="https://www.linkedin.com/in/azra-yagmur-tufanoglu-1a37592a1/" photo="https://static.igem.wiki/teams/6299/wiki/team/members/azra.avif" crop={{ x: 0.077, y: 0.264, size: 0.938 }} />
-<TeamMemberCard name="Tim Lybeer" role="Member" nationality="Belgian" age={23} study="Master of Bioscience Engineering: Cellular and Genetic Engineering" favourite="Norwegian Wood by Haruki Murakami" funFact="I am physically incapable of tanning, no matter how hard the sun tries" photo="https://static.igem.wiki/teams/6299/wiki/team/members/tim.avif" crop={{ x: 0.007, y: 0.232, size: 0.974 }} />
+<TeamMemberCard name="Tim Lybeer" role="Ex-member" nationality="Belgian" age={23} study="Master of Bioscience Engineering: Cellular and Genetic Engineering" favourite="Norwegian Wood by Haruki Murakami" funFact="I am physically incapable of tanning, no matter how hard the sun tries" photo="https://static.igem.wiki/teams/6299/wiki/team/members/tim.avif" crop={{ x: 0.007, y: 0.232, size: 0.974 }} />
 
 </TeamMembers>
 
@@ -41,8 +41,16 @@ Click a card to read more about each team member.
 
 <TeamMembers>
 
-<TeamMemberCard name="Vitor Pinheiro" role="PI" position="Professor, Medicinal Chemistry (Rega Institute), Faculty of Pharmaceutical Sciences, KU Leuven" photo="https://static.igem.wiki/teams/6299/wiki/team/members/vitor.avif" />
-<TeamMemberCard name="Ruben Vazquez-Uribe" role="PI" position="Researcher and scientific project manager, VIB Center for Microbiology; Laboratory of Molecular Bacteriology (Rega Institute), KU Leuven" photo="https://static.igem.wiki/teams/6299/wiki/team/members/ruben.avif" />
+<TeamMemberCard name="Vitor Bernardes Pinheiro" role="PI" linkedin="https://www.linkedin.com/in/vitorpinheiro/" position="Professor, Medicinal Chemistry (Rega Institute), Faculty of Pharmaceutical Sciences, KU Leuven" photo="https://static.igem.wiki/teams/6299/wiki/team/members/vitor.avif">
+
+Prof. Dr. Vitor Bernardes Pinheiro is a synthetic biology professor at KU Leuven and a pioneer in xenobiology, directed evolution, and synthetic genetic systems.
+
+</TeamMemberCard>
+<TeamMemberCard name="Ruben Vazquez-Uribe" role="PI" linkedin="https://www.linkedin.com/in/ruben-vazquez-uribe-79054148/" position="Researcher and scientific project manager, VIB Center for Microbiology; Laboratory of Molecular Bacteriology (Rega Institute), KU Leuven" photo="https://static.igem.wiki/teams/6299/wiki/team/members/ruben.avif">
+
+Dr. Ruben Vazquez Uribe is a microbiologist whose research focuses on engineering microorganisms for applications in health, sustainability, and food technology.
+
+</TeamMemberCard>
 
 </TeamMembers>
 
@@ -52,11 +60,31 @@ Click a card to read more about each team member.
 
 <TeamMembers>
 
-<TeamMemberCard name="Matthew Herdman" role="Instructor" position="Postdoctoral researcher, Molecular Biotechnology of Plants and Micro-organisms, KU Leuven" photo="https://static.igem.wiki/teams/6299/wiki/team/members/matthew.avif" />
-<TeamMemberCard name="Jef Rozenski" role="Instructor" position="Professor, Medicinal Chemistry (Rega Institute), Faculty of Pharmaceutical Sciences, KU Leuven" photo="https://static.igem.wiki/teams/6299/wiki/team/members/jef.avif" />
-<TeamMemberCard name="Sam Biermans" role="Advisor" position="Educational Development and Study Career Guidance, Group T Leuven Campus, KU Leuven" photo="https://static.igem.wiki/teams/6299/wiki/team/members/sam.avif" />
-<TeamMemberCard name="Joris Kenis" role="Advisor" position="Special visiting lecturer, Faculty of Engineering Technology, KU Leuven" photo="https://static.igem.wiki/teams/6299/wiki/team/members/joris.avif" />
-<TeamMemberCard name="Niels Visser" role="Advisor" study="Master of Bioscience Engineering: Cellular and Genetic Engineering" photo="https://static.igem.wiki/teams/6299/wiki/team/members/niels.webp" />
+<TeamMemberCard name="Matthew Herdman" role="Instructor" linkedin="https://www.linkedin.com/in/matthew-herdman-19b79b20a/" position="Postdoctoral researcher, Molecular Biotechnology of Plants and Micro-organisms, KU Leuven" photo="https://static.igem.wiki/teams/6299/wiki/team/members/matthew.avif">
+
+Dr. Matthew Herdman is a Marie Skłodowska-Curie Postdoctoral Fellow at KU Leuven whose research focuses on bacterial cell physiology, growth, and organization, with a particular interest in gut bacteria of the genus *Bacteroides*.
+
+</TeamMemberCard>
+<TeamMemberCard name="Jef Rozenski" role="Instructor" linkedin="https://www.linkedin.com/in/jefrozenski/" position="Professor, Medicinal Chemistry (Rega Institute), Faculty of Pharmaceutical Sciences, KU Leuven" photo="https://static.igem.wiki/teams/6299/wiki/team/members/jef.avif">
+
+Prof. Dr. Jef Rozenski is a professor at the Rega Institute of KU Leuven, where his research focuses on medicinal chemistry, nucleic acid technologies, and the application of advanced mass spectrometry to study nucleic acids and drug-related compounds.
+
+</TeamMemberCard>
+<TeamMemberCard name="Sam Biermans" role="Advisor" linkedin="https://www.linkedin.com/in/sam-biermans/" position="Educational Development and Study Career Guidance, Group T Leuven Campus, KU Leuven" photo="https://static.igem.wiki/teams/6299/wiki/team/members/sam.avif">
+
+Sam Biermans is a coordinator and startup mentor at Technovation Hub, supporting innovation and entrepreneurship among student-led technology ventures.
+
+</TeamMemberCard>
+<TeamMemberCard name="Joris Kenis" role="Advisor" linkedin="https://www.linkedin.com/in/joris-kenis/" position="Special visiting lecturer, Faculty of Engineering Technology, KU Leuven" photo="https://static.igem.wiki/teams/6299/wiki/team/members/joris.avif">
+
+Joris Kenis is an R&D engineer at Aurubis and mentor at Technovation Hub.
+
+</TeamMemberCard>
+<TeamMemberCard name="Niels Visser" role="Advisor" linkedin="https://www.linkedin.com/in/nielsvisser99/" study="Master of Bioscience Engineering: Cellular and Genetic Engineering" photo="https://static.igem.wiki/teams/6299/wiki/team/members/niels.webp">
+
+Niels Visser, team captain of the iGEM KU Leuven 2025 team, advises our team on leadership, team dynamics, and navigating the challenges of an iGEM project.
+
+</TeamMemberCard>
 
 </TeamMembers>
 </PageLayout>

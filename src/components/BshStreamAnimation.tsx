@@ -667,7 +667,7 @@ export function BshStreamAnimation() {
               className="bsh-stream-caption bsh-stream-caption--species"
               style={{ left: "50%", top: pctY(40) }}
             >
-              Phocaeicola vulgatus
+              <em>Phocaeicola vulgatus</em>
             </span>
             <span
               className="bsh-stream-enzyme-label"

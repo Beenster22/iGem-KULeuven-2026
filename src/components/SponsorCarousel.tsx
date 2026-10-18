@@ -21,6 +21,11 @@ export function SponsorLogo(_props: SponsorLogoProps) {
   return null;
 }
 
+// The tiles are about this much bigger than the ones the footerZoom values in
+// sponsors.ts were tuned for, so each logo's enlargement is divided by it
+// (never below 1) to keep the zoomed logos from spilling out of their tile.
+const TILE_GROWTH = 1.25;
+
 interface Sponsor {
   name: string;
   src?: string;
@@ -50,7 +55,11 @@ function SponsorTile({ sponsor, hidden }: { sponsor: Sponsor; hidden?: boolean }
     <img
       src={sponsor.src}
       alt={sponsor.name}
-      style={sponsor.zoom ? { transform: `scale(${sponsor.zoom})` } : undefined}
+      style={
+        sponsor.zoom
+          ? { transform: `scale(${Math.max(1, sponsor.zoom / TILE_GROWTH)})` }
+          : undefined
+      }
     />
   ) : (
     <span className="sponsor-carousel-placeholder">{sponsor.name}</span>

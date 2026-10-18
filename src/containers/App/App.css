@@ -3201,7 +3201,7 @@ footer hr {
 .sponsor-carousel-track {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
   width: max-content;
   animation: sponsor-carousel-scroll var(--sponsor-carousel-duration, 25s)
     linear infinite;
@@ -3216,15 +3216,16 @@ footer hr {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 150px;
-  height: 76px;
+  width: 210px;
+  height: 108px;
   border-radius: 0.75rem;
   background-color: rgba(255, 255, 255, 0.95);
-  /* 1rem top/bottom keeps every logo's clear space at >= half the height of
-     the KU Leuven Group SET logomark within it (its brand guideline's
-     minimum), since that's the tallest padding requirement of any sponsor
-     sharing this tile size — bumped from 0.75rem for that reason. */
-  padding: 1rem 1.25rem;
+  /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18 (team request: use
+     the tile's space, logos must stay readable): the tile grew from 150x76 to
+     210x108 and its padding shrank from 1rem 1.25rem to 0.55rem 0.8rem, so the
+     logo area went from about 110x44 to about 184x76 pixels. The per-logo
+     enlargement (SponsorCarousel.tsx) is eased off to match. */
+  padding: 0.55rem 0.8rem;
   /* Logos enlarged with `zoom` (SponsorCarousel.tsx) may reach into the
      padding; this keeps them inside the tile's rounded corners. */
   overflow: hidden;
@@ -3243,7 +3244,7 @@ footer hr {
 
 .sponsor-carousel-placeholder {
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 1rem;
   text-align: center;
   color: var(--color-text);
   opacity: 0.6;
@@ -3532,23 +3533,40 @@ body.home-fullscreen {
 }
 
 .home-hero-video {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.home-hero-video--shown {
+  opacity: 1;
 }
 
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
    Purpose: object-fit doesn't apply to an <iframe>, so the 16:9 video embed
    is sized to always cover the hero and centred, letting .home-hero's
-   overflow crop the excess — the same result as object-fit: cover. It's a
-   decorative background, so it takes no pointer input. */
+   overflow crop the excess — the same result as object-fit: cover.
+   Edited with Claude Sonnet 5 (Anthropic), 2026-10-17 (team feedback: the
+   opening and closing frames were being cropped top/bottom on wide, short
+   windows, cutting off the figure and the logo): height no longer grows
+   past 100% — the old `max(100%, 100vw * 9/16)` could push it well past the
+   hero's own height on a wide-but-short viewport, trimming equally off the
+   top and bottom. Width still over-grows the same way for a narrow, tall
+   viewport, which only crops background either side of the centred subject.
+   A wider-than-16:9 window now pillarboxes within the embed instead of
+   cropping vertically. It's a decorative background, so it takes no pointer
+   input. */
 .home-hero-embed {
   position: absolute;
   top: 50%;
   left: 50%;
   width: max(100%, calc(100dvh * 16 / 9));
-  height: max(100%, calc(100vw * 9 / 16));
+  height: 100%;
   transform: translate(-50%, -50%);
   border: 0;
   pointer-events: none;
@@ -4120,10 +4138,16 @@ body:not(.home-fullscreen) .home-hero {
   list-style: none;
   font-size: clamp(0.85rem, 1.3vw, 1rem);
   line-height: 1.3;
-  /* Content pages justify their text, which stretches a wrapped chip. */
-  text-align: left;
 }
 
+/* Edited with Claude Sonnet 5 (Anthropic), 2026-10-17 (team feedback: a
+   wrapped chip like "Dyslipidaemia and raised cardiovascular risk" had its
+   first line stretched edge to edge): content pages justify every `li`
+   directly (see .page-shell-content :is(p, li) above, (0,3,1) to this
+   rule's (0,1,1) — the li only inherits the list's own `text-align: left`,
+   it doesn't match it, so that rule alone couldn't win). !important for the
+   same reason .text-center is above: it's the one override with no higher
+   selector to chase. */
 .symptom-card-list li {
   display: flex;
   align-items: center;
@@ -4131,6 +4155,7 @@ body:not(.home-fullscreen) .home-hero {
   padding: 0.3rem 0.75rem;
   border-radius: 999px;
   border: 1.5px solid color-mix(in srgb, currentColor 25%, transparent);
+  text-align: left !important;
 }
 
 .symptom-card-list li::before {
@@ -5306,7 +5331,9 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): the
-   cell's fimbriae/pili. (Its loop of DNA was removed on 2026-10-15.) */
+   cell's fimbriae/pili. (Its loop of DNA was tried twice on 2026-10-17 —
+   dotted, then a criss-crossing line — and removed again both times: the
+   team decided against it.) */
 .bsh-pili {
   fill: none;
   stroke: #6e5b9e;
@@ -5993,90 +6020,130 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
-/* Find out more: links rolling sideways like the sponsor logos (the track
-   holds the set four times over and shifts by half its width per loop). */
+/* Find out more: boxes linking to the main pages.
+   Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-17 (team request: boxes
+   instead of rolling links, in the EMPOWER style): alternating dark purple and
+   lavender cards with a flat illustration, a title, a short line, and — for
+   the special prizes — a teal "Special prize" badge. The illustrations take
+   their colours from the card (--ic-*). */
 .find-more {
   text-align: center;
 }
 
 .find-more-heading {
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.75rem;
 }
 
-.find-more-band {
-  overflow: hidden;
-  margin: 0 calc(-50vw + 50%);
-  padding: 0.5rem 0;
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 8%,
-    black 92%,
-    transparent
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 8%,
-    black 92%,
-    transparent
-  );
+.find-more-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+  gap: 1rem;
+  max-width: 72rem;
+  margin: 0 auto;
 }
 
-.find-more-track {
+.find-more-card {
   display: flex;
-  gap: 1.5rem;
-  width: max-content;
-  padding-right: 1.5rem;
-  animation: find-more-roll 36s linear infinite;
-}
-
-.find-more-band:hover .find-more-track,
-.find-more-band:focus-within .find-more-track {
-  animation-play-state: paused;
-}
-
-@keyframes find-more-roll {
-  to {
-    translate: -50% 0;
-  }
-}
-
-.find-more-link {
-  flex: none;
-  padding: 0.7rem 1.75rem;
-  border: 3px solid currentColor;
-  border-radius: 999px;
-  color: inherit;
-  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
-  font-weight: 700;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  padding: 1.25rem 1.1rem 1.1rem;
+  border: 2px solid transparent;
+  border-radius: 1.25rem;
+  text-align: left;
   text-decoration: none;
   transition:
-    background-color 0.2s ease,
-    color 0.2s ease,
-    scale 0.2s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
-.find-more-link:hover,
-.find-more-link:focus-visible {
-  background-color: #2fa4a9;
+.find-more-card--dark {
+  --ic-1: #c9bde8;
+  --ic-2: #2fa4a9;
+  --ic-3: #f1c3d4;
+  --ic-line: #33283f;
+  --card-tagline: #7fd6da;
+  background-color: #33283f;
+  border-color: rgba(201, 189, 232, 0.3);
+  color: #eaf4f5;
+}
+
+.find-more-card--light {
+  --ic-1: #33283f;
+  --ic-2: #2fa4a9;
+  --ic-3: #f1c3d4;
+  --ic-line: #eaf4f5;
+  --card-tagline: #1f6a6e;
+  background-color: #c9bde8;
+  color: #33283f;
+}
+
+.find-more-card:hover,
+.find-more-card:focus-visible {
   border-color: #2fa4a9;
-  color: #fff;
-  scale: 1.05;
+  box-shadow: 0 0.9rem 1.8rem rgba(47, 164, 169, 0.35);
+  color: inherit;
+  transform: translateY(-6px);
 }
 
-.find-more-band--static {
-  margin: 0;
-  -webkit-mask-image: none;
-  mask-image: none;
+.find-more-card-art {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.6rem;
 }
 
-.find-more-band--static .find-more-track {
-  flex-wrap: wrap;
-  justify-content: center;
-  width: auto;
-  padding-right: 0;
-  animation: none;
+.find-more-card-art svg {
+  display: block;
+  width: min(100%, 7.5rem);
+  height: auto;
+  margin: 0 auto;
+  transition: transform 0.25s ease;
+}
+
+.find-more-card:hover .find-more-card-art svg,
+.find-more-card:focus-visible .find-more-card-art svg {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.find-more-card-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.find-more-card-tagline {
+  color: var(--card-tagline);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.find-more-card-prize {
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background-color: #2fa4a9;
+  color: #33283f;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.find-more-card-tagline + .find-more-card-prize {
+  margin-top: 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .find-more-card,
+  .find-more-card-art svg {
+    transition: none;
+  }
+
+  .find-more-card:hover,
+  .find-more-card:focus-visible {
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -10856,6 +10923,58 @@ a.protocol-download:hover {
   font-size: 0.92rem;
 }
 
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17
+   Purpose: the pBSH-Cas9 component table (results page, "Construct
+   components"). First-column cells carry their own fixed background colour
+   (inline, matching the component's colour on the uploaded plasmid map), so
+   only the shared layout — bold component names, same width in both
+   columns — lives here. */
+.plasmid-legend-table td:first-child {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.plasmid-legend-table td:last-child {
+  width: 70%;
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-17
+   Purpose: the executive summary paragraph beside the plasmid map figure
+   (results page, "CRISPR construct design"), after the team's request to put
+   the construct circle next to the text instead of stacked under its own
+   heading. Stacks below tablet width, image first. */
+.construct-intro {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin: 1rem 0;
+}
+
+.construct-intro-text {
+  flex: 1 1 22rem;
+  min-width: 0;
+}
+
+.construct-intro-text > :last-child {
+  margin-bottom: 0;
+}
+
+.construct-intro-image {
+  flex: 1 1 16rem;
+  max-width: 22rem;
+}
+
+@media (max-width: 767.98px) {
+  .construct-intro {
+    flex-direction: column;
+  }
+
+  .construct-intro-image {
+    max-width: 20rem;
+    margin: 0 auto;
+  }
+}
+
 /* Generated with Claude Opus 5 (Anthropic), 2026-10-17
    Purpose: the header box's optional right-hand decoration (Header's
    `aside` prop) — the results page's only user today, for Elle's greeting.
@@ -10914,4 +11033,163 @@ a.protocol-download:hover {
   .page-header-box-row .page-header-box-text {
     max-width: none;
   }
+}
+
+/* PLASMID MAP */
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17
+   Purpose: the pBSH-Cas9 ring (PlasmidMap.tsx, results page). Feature
+   colours are inline (sampled per feature in data/plasmidMap.ts), so nothing
+   here sets them. The ring and the name/role panel sit side by side above
+   tablet width and stack below it. */
+.plasmid-map {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin: 1.5rem 0;
+}
+
+.plasmid-map-svg {
+  flex: 0 0 auto;
+  width: clamp(220px, 32vw, 300px);
+  height: auto;
+  overflow: visible;
+}
+
+.plasmid-map-feature {
+  cursor: pointer;
+  stroke: var(--color-page-bg);
+  stroke-width: 2;
+  outline: none;
+  transition:
+    filter 0.15s ease,
+    stroke-width 0.15s ease;
+}
+
+.plasmid-map-feature:hover,
+.plasmid-map-feature:focus-visible,
+.plasmid-map-feature.active {
+  filter: brightness(1.08) saturate(1.15);
+}
+
+.plasmid-map-feature.active {
+  stroke: var(--color-text);
+  stroke-width: 2.5;
+}
+
+.plasmid-map-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  fill: var(--color-text);
+  pointer-events: none;
+}
+
+.plasmid-map-panel {
+  flex: 1 1 16rem;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border: 1px solid rgba(51, 40, 63, 0.25);
+  border-radius: 0.75rem;
+  padding: 1rem 1.15rem;
+}
+
+[data-theme="dark"] .plasmid-map-panel {
+  border-color: rgba(201, 189, 232, 0.3);
+}
+
+.plasmid-map-panel-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.plasmid-map-panel-role {
+  color: var(--color-text);
+  opacity: 0.85;
+}
+
+.plasmid-map-panel-progress {
+  display: block;
+  margin-top: 0.5rem;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(51, 40, 63, 0.12);
+  overflow: hidden;
+}
+
+[data-theme="dark"] .plasmid-map-panel-progress {
+  background: rgba(201, 189, 232, 0.18);
+}
+
+.plasmid-map-panel-progress-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--color-text);
+  opacity: 0.55;
+  animation: plasmid-map-progress var(--plasmid-map-interval, 3200ms) linear
+    forwards;
+}
+
+.plasmid-map-panel-progress-fill.paused {
+  animation: none;
+  width: 100%;
+  opacity: 0;
+}
+
+@keyframes plasmid-map-progress {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plasmid-map-panel-progress-fill {
+    animation: none;
+    width: 100%;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .plasmid-map {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .plasmid-map-svg {
+    width: min(70vw, 280px);
+    margin: 0 auto;
+  }
+}
+
+/* COMPACT TABLE
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17 (team request: the
+   team table on the Entrepreneurship page was far too big): small type and
+   tight cells, fixed columns so it always fits the width, left-aligned
+   because the cells hold sentences. */
+.table-compact.table-responsive-rounded .table-bordered {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table-compact.table-responsive-rounded .table-bordered th,
+.table-compact.table-responsive-rounded .table-bordered td {
+  min-width: 0;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.74rem;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.table-compact.table-responsive-rounded .table-bordered th:first-child,
+.table-compact.table-responsive-rounded .table-bordered td:first-child {
+  width: 17%;
+}
+
+.table-compact.table-responsive-rounded .table-bordered th:nth-child(2),
+.table-compact.table-responsive-rounded .table-bordered td:nth-child(2) {
+  width: 30%;
 }

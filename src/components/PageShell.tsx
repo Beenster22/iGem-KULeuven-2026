@@ -3,7 +3,7 @@
 // section index (left) with the actual content (right, filling the rest of
 // the row) so the index reserves its own column instead of floating.
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigationType } from "react-router-dom";
 import { SectionProgress } from "./SectionProgress";
 
 // Generated with Claude Sonnet 5 (Anthropic), 2026-09-03
@@ -30,12 +30,28 @@ export function PageShell({
   // across a navigation: without the route in the effect's dependencies, a
   // link to another page's section would never run the jump below.
   const { pathname, hash } = useLocation();
+  const navigationType = useNavigationType();
   // Generated with Claude Sonnet 5 (Anthropic), 2026-09-03
   // Purpose: id of the in-text [n] citation the reader last followed into
   // the References panel — shown as a single floating "return" button
   // (rather than a back-link on every reference) so it only ever appears
   // once a reader has actually jumped away from their place in the text.
   const [returnToId, setReturnToId] = useState<string | null>(null);
+
+  // Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17 (team feedback:
+  // a box on the home page opened the next page at the bottom): React Router
+  // keeps the scroll position across a navigation, so a link followed from far
+  // down a page landed equally far down the next one. A new page now starts at
+  // the top, unless the link points at a section (handled below) or the reader
+  // came back with the browser's back/forward buttons, which restore their
+  // place themselves. "instant" because the site scrolls smoothly otherwise.
+  useEffect(() => {
+    if (!hash && navigationType !== "POP") {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }
+    // Only on a change of page: following a #link within one must not jump.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   useEffect(() => {
     const container = contentRef.current;

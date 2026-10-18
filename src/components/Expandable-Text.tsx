@@ -1,4 +1,7 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { stringToSlug } from "../utils/stringToSlug";
+import { headingSlugs, textOf } from "./useHashPanel";
 
 interface ExpandableTextProps {
   title: ReactNode;
@@ -31,6 +34,30 @@ export function ExpandableText({
 }: ExpandableTextProps) {
   const [ownOpen, setOwnOpen] = useState(false);
   const isOpen = open ?? ownOpen;
+
+  // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-17: a dropdown's
+  // content is only rendered while it is open, so a link such as
+  // /results#antibiotic-susceptibility-of-p-vulgatus would find nothing to
+  // jump to. A dropdown on its own state therefore opens when the URL hash
+  // names its own title or a heading inside it (nested dropdowns included —
+  // each level opens in turn as the one above renders it).
+  const { hash } = useLocation();
+  useEffect(() => {
+    if (open !== undefined) return;
+    const check = () => {
+      const slug = decodeURIComponent(window.location.hash.slice(1));
+      if (!slug) return;
+      if (stringToSlug(textOf(title)) === slug || headingSlugs(children).includes(slug)) {
+        setOwnOpen(true);
+      }
+    };
+    check();
+    // A plain #link changes the hash without going through the router.
+    window.addEventListener("hashchange", check);
+    return () => window.removeEventListener("hashchange", check);
+    // Only a change of hash should (re)open it, not every render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hash]);
   const setIsOpen = (next: boolean) => {
     setOwnOpen(next);
     onOpenChange?.(next);
