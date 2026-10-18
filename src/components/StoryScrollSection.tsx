@@ -76,7 +76,7 @@ const STEPS: StoryStep[] = [
     position: "presentation",
     lines: [
       <>
-        There is currently no actual therapeutic solution that tackles{" "}
+        There currently is no actual therapeutic solution that tackles{" "}
         <strong>all of the symptoms at once!</strong>
       </>,
     ],
