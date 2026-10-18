@@ -593,9 +593,15 @@ a[data-footnote-ref]:focus {
    of the navbar inventing its own look. Cards are wide (minmax 15rem) and
    short, sized for a horizontal dropdown strip rather than the home page's
    tall vertical cards. */
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: team request — a fixed 3 columns instead of auto-fit, so a wide
+   folder (4+ tiles) never crowds 4 onto one row; it wraps to 3 then
+   2-or-3 instead. See layoutMegaMenu in Navbar.tsx, which works out how
+   many tiles land in that trailing row and pads it out with Elle
+   (.mega-menu-filler) when it is short of 3. */
 .mega-menu-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.85rem;
   padding: 1.25rem 1rem;
 }
@@ -610,6 +616,22 @@ a[data-footnote-ref]:focus {
   height: 1px;
   margin: 0.25rem 0;
   background-color: rgba(201, 189, 232, 0.35);
+}
+
+/* Elle, filling out a trailing row that falls short of 3 tiles (see
+   layoutMegaMenu). Same silent-mascot sizing idea as .mega-menu-link-icon,
+   just bigger and alone in its cell since she isn't sitting next to a
+   label here. */
+.mega-menu-filler {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mega-menu-filler img {
+  width: 4.5rem;
+  height: auto;
+  opacity: 0.85;
 }
 
 .mega-menu-link {
@@ -742,6 +764,12 @@ a[data-footnote-ref]:focus {
   .mega-menu-content {
     grid-template-columns: 1fr;
     padding: 0.5rem 0.5rem 1rem;
+  }
+
+  /* A single column has no "empty cell" to fill — Elle would just be an
+     unexplained image stacked into the middle of the link list. */
+  .mega-menu-filler {
+    display: none;
   }
 }
 
@@ -4026,6 +4054,17 @@ body.home-fullscreen {
 
 .home-section--page {
   background-color: var(--color-page-bg);
+}
+
+/* In light mode --color-page-bg is a light teal, distinct from the light
+   purple --color-body-bg band next to it — unlike dark mode, where both
+   tokens are shades of dark purple and the whole page reads as one
+   consistent identity. Matching this band to --color-body-bg in light mode
+   only gives light mode that same connected purple feel (2026-10-18 team
+   feedback), without touching --color-page-bg itself (still teal on every
+   other page). */
+[data-theme="light"] .home-section--page {
+  background-color: var(--color-body-bg);
 }
 
 .home-section--body {
