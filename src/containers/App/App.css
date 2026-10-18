@@ -671,8 +671,21 @@ a[data-footnote-ref]:focus {
 .mega-menu-link:focus {
   border-color: #2fa4a9;
   box-shadow: 0 0.6rem 1.4rem rgba(47, 164, 169, 0.3);
-  color: inherit;
   transform: translateY(-3px);
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: hover used `color: inherit`, which resolved to the mega-menu's
+   dark text rather than the tile's own color, so the text vanished on the
+   dark tiles. Each variant now keeps its own text color on hover/focus. */
+.mega-menu-link--dark:hover,
+.mega-menu-link--dark:focus {
+  color: #eaf4f5;
+}
+
+.mega-menu-link--light:hover,
+.mega-menu-link--light:focus {
+  color: #33283f;
 }
 
 .mega-menu-link-icon {
@@ -11381,6 +11394,34 @@ a.protocol-download:hover {
   margin-bottom: 1.5rem;
 }
 
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: a results intro paragraph with Elle's note in the top right
+   beside it instead of below. Stacks (text first) on narrow screens. */
+.results-intro-row {
+  display: flow-root;
+}
+
+/* Floated so the paragraph wraps around Elle and fills the space under her. */
+.results-intro-aside {
+  float: right;
+  width: 20rem;
+  max-width: 50%;
+  margin: 0 0 0.75rem 1.5rem;
+}
+
+@media (max-width: 767.98px) {
+  .results-intro-aside {
+    float: none;
+    width: auto;
+    max-width: none;
+    margin: 0 0 1rem;
+  }
+}
+
+.results-intro-aside .elle {
+  margin: 0;
+}
+
 /* KEY TAKEAWAYS
    auto-fit means three cards sit in a row on a wide screen and wrap to two
    or one as the column narrows, without a breakpoint per count — sections
@@ -12415,4 +12456,63 @@ a.protocol-download:hover {
 .table-compact.table-responsive-rounded .table-bordered th:nth-child(2),
 .table-compact.table-responsive-rounded .table-bordered td:nth-child(2) {
   width: 30%;
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: <DBTLCycles> on the Engineering success page. */
+.dbtl-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.dbtl-pill {
+  border: 2px solid var(--color-text);
+  border-radius: 999px;
+  padding: 0.5rem 1.6rem;
+  background: transparent;
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: 1.05rem;
+  cursor: pointer;
+}
+.dbtl-pill-1 { --dbtl-c: #bcd9f5; }
+.dbtl-pill-2 { --dbtl-c: #f5c6bc; }
+.dbtl-pill-3 { --dbtl-c: #ea9bbd; }
+.dbtl-pill-4 { --dbtl-c: #b8e6a0; }
+.dbtl-pill.active { background: var(--dbtl-c); color: #33283f; }
+.dbtl-pill:hover { background: var(--dbtl-c); color: #33283f; }
+.dbtl-pill:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.dbtl-title { margin: 0 0 1rem; }
+.dbtl-body {
+  display: grid;
+  grid-template-columns: minmax(220px, 340px) 1fr;
+  gap: 1.5rem;
+  align-items: center;
+}
+.dbtl-wheel { width: 100%; height: auto; color: var(--color-text); }
+.dbtl-wheel-stage { cursor: pointer; outline: none; }
+/* Fading the group, not each path, keeps the shaft/head overlap from showing. */
+.dbtl-wheel-shape { opacity: 0.72; transition: opacity 0.15s; }
+.dbtl-wheel-stage:hover .dbtl-wheel-shape, .dbtl-wheel-stage.active .dbtl-wheel-shape { opacity: 1; }
+/* Site palette: purple, deep teal, pink, lavender. The two light fills take
+   the dark plum for their word, the two dark ones take white. */
+.dbtl-wheel-design { --dbtl-w: #6e5b9e; --dbtl-t: #ffffff; }
+.dbtl-wheel-build { --dbtl-w: #1f7f84; --dbtl-t: #ffffff; }
+.dbtl-wheel-test { --dbtl-w: #f1c3d4; --dbtl-t: #33283f; }
+.dbtl-wheel-learn { --dbtl-w: #c9bde8; --dbtl-t: #33283f; }
+.dbtl-wheel-arrow { fill: var(--dbtl-w); stroke: transparent; stroke-width: 6; stroke-linejoin: round; }
+.dbtl-wheel-stage:focus-visible .dbtl-wheel-arrow { stroke: var(--color-text); }
+.dbtl-wheel-spinner { transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
+@media (prefers-reduced-motion: reduce) { .dbtl-wheel-spinner { transition: none; } }
+.dbtl-wheel-label { fill: var(--dbtl-t); font-size: 36px; font-weight: 700; pointer-events: none; }
+.dbtl-wheel-centre { fill: currentColor; font-size: 28px; font-weight: 600; }
+.dbtl-box {
+  padding: 0.5rem 0.25rem;
+  min-height: 14rem;
+}
+.dbtl-box-label { font-weight: 700; font-size: 1.2rem; margin-bottom: 0.5rem; }
+@media (max-width: 720px) {
+  .dbtl-body { grid-template-columns: 1fr; }
+  .dbtl-wheel { max-width: 260px; margin: 0 auto; }
 }

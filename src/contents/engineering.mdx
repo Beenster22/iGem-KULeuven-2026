@@ -2,6 +2,280 @@
 
 <span data-toc-collapsible hidden />
 
-*Content to follow.*
+## Fluorescence microscopy – conjugation
+
+<DBTLCycles>
+
+<DBTLCycle label="Cycle 1" title="Is KOFP-7 visible in conjugated cells?">
+
+<DBTLStage stage="design">
+
+To visualize the presence of the pNBU2 plasmid (containing KOFP-7 downstream of a rhamnose-inducible promoter), we conducted fluorescence microscopy experiments. Conjugated *P. vulgatus* DSM1447 cells were studied, and we expected to see blue fluorescence when rhamnose was added.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+Wildtype *P. vulgatus*, conjugated *P. vulgatus*, and conjugated rhamnose-induced *P. vulgatus* were studied using epi-fluorescence microscopy. Wildtype *P. vulgatus* would allow us to identify possible autofluorescence, while conjugated *P. vulgatus* without supplementing rhamnose would allow us to identify the strength of the promoter (qualitatively) and possible leaky expression.
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+Autofluorescence of *P. vulgatus* is clearly visible, because the wildtype (which does not contain pNBU2) emits blue fluorescent light (Figure 1A). This makes it impossible to see the effect of inducing KOFP-7 expression with rhamnose. Interestingly, this autofluorescence is not visible in cells that contained pNBU2, but which were not incubated with rhamnose (Figure 1B).
+
+<div className="figure-panel">
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/project/dbtl/cycle1-a.avif"
+    alt="Figure panel A"
+  />
+</figure>
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/project/dbtl/cycle1-b.avif"
+    alt="Figure panel B"
+  />
+</figure>
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/project/dbtl/cycle1-c.avif"
+    alt="Figure panel C"
+  />
+</figure>
+
+</div>
+
+<div className="figure-caption">**Figure 1.** DBTL cycle 1 of the fluorescence microscopy to confirm the presence of pNBU2 containing KOFP-7. A) Wildtype *P. vulgatus* DSM1447. B) *P. vulgatus* DSM1447 conjugated with pNBU2. C) *P. vulgatus* DSM1447 conjugated with pNBU2, where the expression of KOFP-7 was induced with rhamnose (10 mM). Imaging was done using Fiji. All figures are composite images of phase contrast and fluorescence microscopy.</div>
+
+</div>
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+Autofluorescence of *P. vulgatus* seems to overlap with KOFP-7 fluorescence. To be able to distinguish between them, we repeated the experiment using a different fluorescent filter (Figure 2).
+
+</DBTLStage>
+
+</DBTLCycle>
+
+<DBTLCycle label="Cycle 2" title="Reducing the effect of autofluorescence">
+
+<DBTLStage stage="design">
+
+A green filter filters out green fluorescence instead of cyan. This way, we hoped to avoid autofluorescence. Another concern was that the signal produced by rhamnose was simply too weak to be visible. To tackle this, minimal medium (MM) containing only rhamnose as a carbon source was also used as a growth medium (Table 1). This way, rhamnose was sure to be taken up by the cells and would thus produce a stronger signal.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+Different combinations of MM, glucose, and rhamnose were created to see if glucose in the medium would affect fluorescence:
+
+| | Wildtype, − rhamnose | Conjugated, − rhamnose | Conjugated, + rhamnose |
+| --- | --- | --- | --- |
+| mGAM | not visualized | not visualized | visualized |
+| MM containing glucose | not visualized | not visualized | not visualized |
+| MM containing rhamnose | not visualized | not visualized | visualized |
+
+**Table 1.** Combinations of MM, glucose and rhamnose that were prepared to ensure the signal produced by KOFP-7 would be strong enough. Ideally, all combinations should have been visualized. Combinations marked "visualized" were imaged; the others should have been imaged to serve as negative controls to make the distinction between autofluorescence and fluorescence by KOFP-7.
+
+The visualized combinations were imaged by our advisor Matthew Herdman, who is responsible for fluorescence microscopy, but not the others. Ideally, all combinations would have been visualized.
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+Green fluorescence was visible. This could be either due to autofluorescence or inducing KOFP-7 expression with rhamnose. Negative controls were prepared, but were not visualized by staff responsible for the fluorescence microscopy. Thus, it could not be determined whether the fluorescence was due to autofluorescence or KOFP-7 expression.
+
+*P. vulgatus* is rod-shaped, so Figure 2A–C clearly shows contamination by coccoid-shaped cells. Green fluorescence was visible, but as the negative controls were not visualized, we could not determine if this was due to autofluorescence or KOFP-7 expression.
+
+<div className="figure-panel">
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/project/dbtl/cycle2-a.avif"
+    alt="Figure panel A"
+  />
+</figure>
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/project/dbtl/cycle2-b.avif"
+    alt="Figure panel B"
+  />
+</figure>
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/project/dbtl/cycle2-c.avif"
+    alt="Figure panel C"
+  />
+</figure>
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/project/dbtl/cycle2-d.avif"
+    alt="Figure panel D"
+  />
+</figure>
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/project/dbtl/cycle2-e.avif"
+    alt="Figure panel E"
+  />
+</figure>
+
+</div>
+
+<div className="figure-caption">**Figure 2.** DBTL cycle 2 of the fluorescence microscopy to reduce the effect of autofluorescence. A) Phase contrast image of conjugated *P. vulgatus* DSM1447 (green arrows) and contamination (red arrows) in mGAM + 10 mM rhamnose. B) Fluorescence image of conjugated *P. vulgatus* DSM1447 (green arrows) and contamination by an unknown species (red arrows) in mGAM + 10 mM rhamnose. C) Composite image of A and B. D) Phase contrast image of conjugated *P. vulgatus* DSM1447 in minimal medium + 10 mM rhamnose. E) Fluorescence image of conjugated *P. vulgatus* DSM1447 in minimal medium + 10 mM rhamnose.</div>
+
+</div>
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+The cycle ended inconclusive. *P. vulgatus* emits in both cyan and green ranges, so the filter cannot separate a dim reporter from the background in this case. A control that was planned but never received is the same as no control at all. We couldn't explain that the autofluorescence observed in the wildtype was absent in uninduced cells carrying pNBU2, and the mGAM + rhamnose culture was contaminated with another type of cells, so culture purity should be confirmed next time before imaging. Plasmid presence is better confirmed by colony PCR and sequencing, and expression by a luminescent reporter.
+
+</DBTLStage>
+
+</DBTLCycle>
+
+</DBTLCycles>
+
+
+## MIC assay
+
+<DBTLCycles>
+
+<DBTLCycle label="Cycle 1" title="The literature ranges were wrong">
+
+<DBTLStage stage="design">
+
+The goal for this experiment was to understand the susceptibility of P.vulgatus strains to range of antibiotics for downstream selection markers and biocontainment. Since no MIC data for our strains was available, we took starting concentrations for seven antibiotics from the literature on related Bacteroides species and tested DSM1447. We predicted two failures in advance: ampicillin not having an effect, because β-lactamases are reported in P. vulgatus, and kanamycin, because aminoglycoside uptake depends on the proton motive force and thus on oxygen, which an obligate anaerobe does not respire.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+Seven antibiotics were used across three 96-well plates: kanamycin, metronidazole and spectinomycin on plate 1, ampicillin, chloramphenicol and erythromycin on plate 2, and tetracycline on plate 3. Each antibiotic occupied three adjacent columns, giving triplicate series, with the highest concentration in row A and a two-fold dilution at every step down to row G, each well containing 180 µL of mGAM. Row H was filled with inoculated mGAM as a positive growth control. The fourth column of each block carried the matching solvent (ddH₂O, DMSO, or ethanol at 50, 95 or 100%) diluted in the same two-fold steps, so that solvent toxicity could be told apart from antibiotic effect. The inoculum was prepared from an overnight culture of DSM1447 in mGAM, diluted into a single master plate, and transferred into each dilution plate with a 96-pin replicator so that every well started from the same cell density. Plates were incubated anaerobically at 37 °C and read at OD630 after 24 h and 48 h.
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+After 48h of incubation time, none of our strains grew. For most compounds the entire series inhibited, so the ranges sat above the useful window, and no IC90 could be calculated. Kanamycin and spectinomycin did the opposite: growth continued at every concentration tested, up to 1024 µg/mL for kanamycin.
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+This experiment gave us no MIC values but we learned that the literature ranges are several two-fold steps too high for our strains. Our predictions held for kanamycin, which is what gave us the approval for continuation with our plate layout. Ampicillin, in contrast, inhibited at every concentration tested, so the β-lactamase not dropped. Kanamycin and spectinomycin were dropped routine testing as those showed no inhibition at the highest concentrations.
+
+</DBTLStage>
+
+</DBTLCycle>
+
+<DBTLCycle label="Cycle 2" title="Lower ranges, and advice, giving a second strain and two new compounds">
+
+<DBTLStage stage="design">
+
+For our next iteration, we lowered every starting concentration by up to three two-fold steps. Two additions came out of conversations rather than the data: our instructor Matt supplied gentamicin, the aminoglycoside used clinically to clear gut microbes. Additionally, during a meeting with our PI Ruben on ,a PhD student showed us her graph on statins used to clear the gut microbiome. This led us to include simvastatin, reported to inhibit DSM1447 (Escalante et al., 2024). We also included the fecal strain RCC1806, since a toolkit for P. vulgatus should not rest on the type strain alone.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+We used the same plate layout, replication and incubation time as for Cycle 1, so the ranges were the only change for DSM1447. RCC1806 was run at the original literature ranges, as its own window was still unknown.
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+Across the two strains:
+
+- **Tetracycline, chloramphenicol and metronidazole** inhibited at the low end
+- **Ampicillin and erythromycin** inhibited at concentrations that differed between the two strains
+- **Gentamicin and kanamycin** had no effect on DSM1447, but gentamicin inhibited RCC1806 at the top of its series
+- **Tetracycline** inhibited across its whole series, range was still too high
+
+The plate photographs for each strain are on the [Results](/results) page.
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+Including the second strain paid off immediately: ampicillin, erythromycin and gentamicin cannot be treated as having one species-level value. Three loose ends remained: tetracycline still had no endpoint, the ampicillin replicates disagreed, and RCC1806’s panel was incomplete.
+
+</DBTLStage>
+
+</DBTLCycle>
+
+<DBTLCycle label="Cycle 3" title="Closing the gap in the fecal strain">
+
+<DBTLStage stage="design">
+
+In MIC-02, RCC1806 had been run at the original literature ranges rather than the lowered ones used for DSM1447. For erythromycin, spectinomycin and simvastatin the strain grew at every concentration tested, so no inhibitory endpoint was reached. These three were therefore repeated at higher ranges, since the faecal strain had already proved the less susceptible of the two.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+Our building strategy was identical to Cycle 2, but we included RCC1806 strain only. Initially, our first overnight cultures failed because the plates we used had sat in the anaerobic chamber over two weeks and had dried and cracked, so fresh plates were struck from cryostock and the run restarted.
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+When we ran the experiment, we noticed that erythromycin inhibited RCC1806, but not at the same concentration that was used for DSM1447. This confirmed difference between the was visible here and not an artefact of the ranges used.
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+The main takeaway is the fecal isolate does not behave like the type strain. Erythromycin inhibited RCC1806 at a different concentration that DSM1447. This pattern is consistent: RCC1806 is less susceptible of the two across several compounds. Susceptibility values from DSM1447 thus cannot be assumed to transfer to fecal or clinical isolates, and any concentration used for selection or containment has to be checked per strain. The cycle also gave us a practical in-lab rule: plates older than about a week in the chamber are not a reliable inoculum source, so working from recent plates became standard practice for the rest of the project.
+
+</DBTLStage>
+
+</DBTLCycle>
+
+<DBTLCycle label="Cycle 4" title="Settling the values, and discovering the cutoff mattered">
+
+<DBTLStage stage="design">
+
+By this point each antibiotics’ dilution series showed its inhibition point for both strains, so the aim shifted from locating endpoints to settling working values across the full panel, with enough replication to compare compounds statistically.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+We did three replicate series per antibiotic with matched solvent controls, plates for DSM1447 alone and for both strains together, read at OD630 after 48 h of incubation. Endpoints were scored at 90% inhibition and compared within each strain by Kruskal–Wallis with Dunn’s post hoc test.
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+All antibiotics gave results within an acceptable range, which could be used for statistical calculations. The 90% cutoff on the other hand turned out to be suboptimal: wells at lower concentrations sometimes passed 90% while the highest concentration of the same series read 88–89%, which threw away most of the tetracycline data. Re-scoring at 85% kept those replicates and supported the same three compounds.
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+What we learned from these iterations is that Tetracycline, chloramphenicol and metronidazole are the most effective of the panel. We chose metronidazole as the containment compound rather than simply the most potent one, because it is the only compound here with usable clinical guidance. Ampicillin was ruled out: it varies more than ten-fold between strains. The aminoglycoside result fed straight back into the conjugation work, where selection plates use 200 µg/mL gentamicin to counter-select E. coli. As P. vulgatus DSM1447 was insensitive to gentamicin, this allowed P. vulgatus to grow on the plates and kill E. coli at the same time, leaving us with only DSM1447 on our plates during conjugation.
+
+</DBTLStage>
+
+</DBTLCycle>
+
+</DBTLCycles>
 
 </PageLayout>

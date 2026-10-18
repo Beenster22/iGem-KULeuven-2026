@@ -253,11 +253,20 @@ further down this page!
 
 ### Growth curves and medium comparison
 
-<div className="results-standfirst">
-  Which of four anaerobic media makes <em>P. vulgatus</em> grow fastest and most
-  reproducibly, and which of mGAM's own ingredients can explain the gap.
-</div>
+<div className="results-intro-row">
+<div className="results-intro-aside">
 
+<ElleSays mood="smile" size="sm" side="right">
+
+Curious how we measured all this? Have a look at our <Link to="/measurement">measurement page</Link>!
+
+</ElleSays>
+
+</div>
+<div className="results-intro-text">
+
+We asked which of four anaerobic media makes _P. vulgatus_ grow fastest and
+most reproducibly, and which of mGAM's own ingredients can explain the gap.
 Growth of each condition was characterized by fitting its optical density
 (OD) data over time, which yields parameters describing how quickly cells
 grow, how long they take to begin dividing, and how much biomass they
@@ -269,11 +278,8 @@ plates, reading optical density every 30 minutes for 24 to 48 h and fitting
 by Gaussian-process regression with the DGrowthR
 package[^growth-dgrowthr][^growth-keitel2025].
 
-<ElleSays mood="smile" size="sm" side="right">
-
-Curious how we measured all this? Have a look at our <Link to="/measurement">measurement page</Link>!
-
-</ElleSays>
+</div>
+</div>
 
 #### Major takeaways
 
@@ -1254,33 +1260,43 @@ literature suggests is a credible alternative[^growth-gibbons].
 ### Antibiotic susceptibility of _P. vulgatus_
 
 <div className="results-standfirst">
-  Which antibiotics inhibit <em>P. vulgatus</em>, and which one to reach for
-  when a culture has to be stopped.
+  Minimum inhibitory concentrations (MIC) for nine antibiotics across two{" "}
+  <em>P. vulgatus</em> strains, to find reliable selection markers we could use
+  downstream in our project.
 </div>
 
 The MIC assay is part of the toolkit development, which has the aim of facilitating research with
-_Phocaeicola vulgatus_. As _P. vulgatus_ is not a model organism, not as much is known about media optimal
-for growth, most effective antibiotics, compatible fluorescent reporters etc. on a strain level. The goal of
-the MIC assay is to determine which antibiotics are most effective at inhibiting growth of _P. vulgatus_
-DSM1447/ATCC8482 and fecal strain _P. vulgatus_ RCC1806. An application in the therapeutics pipeline is to use
-the most effective antibiotic to inhibit _P. vulgatus_, transformed with the CRISPR construct, growth in the
-case of uncontrolled growth.
+_Phocaeicola vulgatus_. The goal of the MIC assay is to determine which antibiotics are most effective at
+inhibiting growth of _P. vulgatus_ DSM1447/ATCC8482 and fecal strain _P. vulgatus_ RCC1806. In the
+therapeutics pipeline, the most effective antibiotic would serve to inhibit _P. vulgatus_ carrying the CRISPR
+construct in the case of uncontrolled growth.
+
+<ExpandableText title="Do you know what EUCAST is?" tocIgnore>
+
+EUCAST stands for the European Committee on Antimicrobial Susceptibility Testing. It is a scientific committee
+jointly organized by the European Society for Clinical Microbiology and Infectious Diseases (ESCMID), the
+European Centre for Disease Prevention and Control (ECDC), and European national breakpoint committees.
+
+What do they do? They set rules for testing antibiotics. They decide the exact dose needed to kill different
+bacteria and fungi, helping doctors choose the right medicine to treat infections successfully.
+
+</ExpandableText>
 
 #### Major takeaways
 
 <KeyTakeaways>
   <Takeaway>
-    Tetracycline, chloramphenicol and metronidazole gave the lowest
-    IC<sub>90%</sub> values, making them the most effective antibiotics
-    tested.
+    Tetracycline, chloramphenicol, and metronidazole were found to be the most
+    effective antibiotics against <em>P. vulgatus</em> DSM1447 and RCC1806.
   </Takeaway>
   <Takeaway>
-    Ampicillin and erythromycin were too variable between the two strains to
-    be carried forward.
+    4 mg/L: both strains sit at the EUCAST breakpoint of 4 mg/L for
+    metronidazole, where a therapeutic is likely to succeed. It is the only
+    compound here with usable clinical guidance.
   </Takeaway>
   <Takeaway>
-    Metronidazole is the recommended antibiotic, with an IC<sub>90%</sub> of
-    4 mg/L at the EUCAST breakpoint for both strains.
+    Ampicillin and erythromycin: both vary widely between strains, and EUCAST
+    advises against ampicillin for anaerobes above 0.5 mg/L.
   </Takeaway>
 </KeyTakeaways>
 
@@ -1306,21 +1322,19 @@ Full plate layouts, dilution ranges and run-by-run records are in the <Link to="
 #### Results
 
 The antibiotic with the lowest IC<sub>90%</sub> is the most effective against _P. vulgatus_ and can be used in
-the therapeutics pipeline to inhibit growth if needed. Tetracycline was found to be the most effective
-antibiotic, followed by chloramphenicol and metronidazole (Figure 1). Ampicillin and erythromycin showed more
-variable results between the two strains. Gentamicin and kanamycin did not inhibit _P. vulgatus_ within the
-tested range, except for RCC1806, which had a IC<sub>90%</sub> of 256 mg/L for gentamicin.
+the pipeline to inhibit growth if needed. Tetracycline was most effective, followed by chloramphenicol and
+metronidazole (Figure 1). Ampicillin and erythromycin showed more variable results between the two strains.
+Gentamicin and kanamycin did not inhibit _P. vulgatus_ within the tested range, except for RCC1806, which had
+a IC<sub>90%</sub> of 256 mg/L for gentamicin.
 
-While tetracycline had the lowest IC<sub>90%</sub>, the range was several orders of two high for
-_P. vulgatus_ DSM1447, and there was only one replicate for _P. vulgatus_ RCC1806. To justify tetracycline as
-the most effective antibiotic (although insignificant compared to ampicillin, chloramphenicol, erythromycin,
-and metronidazole) for _P. vulgatus_, the same results, but now with an inhibition cutoff of 85%, are included
-(Figure 2). In some dilutions, wells with a lower antibiotic concentration had inhibition values of above 90%,
-while wells with the highest antibiotic concentration in a dilution sometimes had values of 88% or 89%. As a
-result, these replicates, including the replicates of tetracycline, were discarded when using a cutoff of 90%.
-Thus, when lowering the cutoff to 85%, a more nuanced figure appears, which justifies the choice of
-tetracycline, metronidazole, and chloramphenicol as the most effective antibiotics for both DSM1447 and
-RCC1806.
+While tetracycline had the lowest IC<sub>90%</sub>, the range spanned several orders of two for _P. vulgatus_
+DSM1447, and there was only one replicate for RCC1806. In some dilutions, wells with a lower antibiotic
+concentration reached above 90% inhibition, while wells with the highest concentration in a dilution sometimes
+had values of 88% or 89%. These replicates, including the replicates of tetracycline, were discarded at a
+cutoff of 90%.
+
+Repeating the analysis at an 85% cutoff gives a more nuanced figure (Figure 2), which justifies the choice of
+tetracycline, metronidazole, and chloramphenicol as the most effective antibiotics for both strains.
 
 <MicChart />
 
@@ -1481,8 +1495,8 @@ isolates. EUCAST advises not to use ampicillin for anaerobic bacteria when the M
 RCC1806, means that ampicillin will no longer be considered as an effective antibiotic against _P. vulgatus_
 DSM1447 and RCC1806.
 
-For both strains the IC<sub>90%</sub> of metronidazole is at the breakpoint of 4 mg/L, indicating that
-metronidazole is most likely an effective therapeutical antibiotic[^mic-eucast-bp]. A recent meta-analysis
+**For both strains the IC<sub>90%</sub> of metronidazole is at the breakpoint of 4 mg/L, indicating that
+metronidazole is most likely an effective therapeutical antibiotic**[^mic-eucast-bp]. A recent meta-analysis
 confirms resistance against metronidazole remains low[^mic-markowska]. No breakpoints or other advice
 concerning tetracycline, chloramphenicol, or erythromycin are available for _P. vulgatus_.
 

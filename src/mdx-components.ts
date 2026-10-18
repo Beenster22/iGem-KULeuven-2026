@@ -56,6 +56,7 @@ import {
 } from "./components/Tgr5Story";
 import { SponsorGrid } from "./components/SponsorGrid";
 import { HomeSnapScroll } from "./components/HomeSnapScroll";
+import { DBTLCycles, DBTLCycle, DBTLStage } from "./components/DBTLCycles";
 import { ZoomableImage } from "./components/ZoomableImage";
 import { ElleSays } from "./components/ElleSays";
 import { SuccessCards, SuccessCard } from "./components/SuccessCards";
@@ -192,4 +193,9 @@ export const mdxComponents = {
   // Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
   // Purpose: the interactive phenotype Venn diagram on the description page.
   PhenotypeVenn,
+  // Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+  // Purpose: DBTL cycle browser on the Engineering success page.
+  DBTLCycles,
+  DBTLCycle,
+  DBTLStage,
 };
