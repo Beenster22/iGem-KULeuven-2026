@@ -22,14 +22,16 @@ const HALO_WIDTH = 4;
 // 2026-10-18: "a little bit lower than the top").
 const START_BELOW_TOP = 0.15;
 
-// How far the drop has got: 0 until a point just below the top of the
-// globe (START_BELOW_TOP) has scrolled up to the navigation bar, 1 once the effects screen's top has
-// reached the top of the window (and from then on). Null when the screen
-// isn't on the page.
+// The scroll positions the drop runs between: `start`, where a point just
+// below the top of the globe (START_BELOW_TOP) has scrolled up to the
+// navigation bar, and `end`, where the effects screen's top reaches the top
+// of the window. Null when the screen isn't on the page.
 // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback): it
 // used to start as soon as the effects screen's top entered the window;
-// now it waits for the top of the globe to reach the navigation bar.
-export function globeDropProgress(): number | null {
+// now it waits for the top of the globe to reach the navigation bar. Split
+// out of globeDropProgress so the auto-scroll (PmosEffectsSection.tsx) can
+// glide to exactly these two points.
+export function globeDropRange(): { start: number; end: number } | null {
   const wrapper = document.getElementById(PMOS_EFFECTS_ID);
   if (!wrapper) return null;
   const end = wrapper.getBoundingClientRect().top + window.scrollY;
@@ -44,6 +46,14 @@ export function globeDropProgress(): number | null {
     // Leave the drop at least a third of a screen to play out in.
     start = Math.min(globeStart, end - window.innerHeight / 3);
   }
+  return { start, end };
+}
+
+// How far the drop has got: 0 up to `start`, 1 from `end` on.
+export function globeDropProgress(): number | null {
+  const range = globeDropRange();
+  if (!range) return null;
+  const { start, end } = range;
   return Math.min(1, Math.max(0, (window.scrollY - start) / (end - start)));
 }
 

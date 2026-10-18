@@ -4827,10 +4827,16 @@ body:not(.home-fullscreen) .home-hero {
   transition-delay: calc(var(--i) * 0.25s);
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback: going
+   back up wasn't smooth): leaving, they now go one after another too, in
+   reverse — the link first, the circle next to the globe last — quicker
+   than they came in so the globe has its room back as it rises. */
 .pmos-effects:not(.is-landed) .pmos-effect,
 .pmos-effects:not(.is-landed) .pmos-effects-more {
   opacity: 0;
   translate: -1.5rem 0;
+  transition-duration: 0.35s;
+  transition-delay: calc((4 - var(--i)) * 0.08s);
 }
 
 .pmos-effects:not(.is-landed) .pmos-effect.symptom-group--hormonal {
@@ -4874,6 +4880,207 @@ body:not(.home-fullscreen) .home-hero {
 
   .pmos-effect:hover .pmos-effect-art {
     translate: none;
+  }
+}
+
+/* ELLE'S TOUR
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-18
+   Purpose: the screen after the circles (see ElleTour.tsx), where Elle tours
+   the lady from the home-page video and ends up beside her next to "So many
+   symptoms… but no known etiology". The screen stays pinned for a little
+   scrolling while the tour plays. --fig-h is the lady's height; Elle is 0.3
+   of it wide (ELLE_SIZE). Opacity and placement of the parts that move are
+   set from the script every frame. */
+.elle-tour {
+  position: relative;
+  height: calc(100vh + 50vh);
+  height: calc(100svh + 50vh);
+}
+
+.elle-tour-stage {
+  --fig-h: min(
+    calc(100svh - var(--home-nav-h) - var(--home-wave-h) - 4rem),
+    46rem
+  );
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: grid;
+  grid-template-columns: auto auto minmax(0, max-content);
+  justify-content: center;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  padding: calc(var(--home-nav-h) + 1.5rem) clamp(0.5rem, 3vw, 2.5rem)
+    calc(var(--home-wave-h) + 1.5rem);
+}
+
+/* Her picture is the video frame, on the video's own near-black; "lighten"
+   against the band's (lighter) colour hides that, so only she shows. The
+   band's colour is repeated on her own box because blending only reaches
+   as far as the nearest stacking context (the sticky stage, and her own
+   faded box), not the band itself. Same colour the band resolves to in each
+   theme (see .home-section--contrast). A transparent PNG works the same. */
+.elle-tour-lady {
+  height: var(--fig-h);
+  aspect-ratio: 976 / 1644;
+  background-color: var(--color-header-bg);
+  opacity: 0;
+}
+
+[data-theme="dark"] .elle-tour-lady {
+  background-color: var(--color-body-bg);
+}
+
+.elle-tour-lady img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: lighten;
+}
+
+.elle-tour-slot {
+  width: calc(var(--fig-h) * 0.3);
+  aspect-ratio: 1668 / 1211;
+}
+
+.elle-tour-words {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(0.5rem, 3vh, 1.5rem);
+}
+
+.elle-tour-line {
+  display: block;
+  opacity: 0;
+}
+
+.elle-tour-line + .elle-tour-line {
+  margin-top: 0.35em;
+}
+
+.elle-tour-questions-wrap {
+  opacity: 0;
+  transform-origin: left center;
+}
+
+/* The old etiology screen's question marks, at half their size. */
+.elle-tour-questions {
+  zoom: 0.5;
+  margin: 0;
+}
+
+/* The fixed layer Elle and the close-ups are drawn on. */
+.elle-tour-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.elle-tour-elle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  container-type: size;
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+.elle-tour-elle > img,
+.elle-tour-uterus {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  overflow: visible;
+}
+
+/* Placed in shares of Elle's width (cqw), matching GLASS_* in ElleTour.tsx
+   so the lens centre lands exactly where the script expects it. */
+.elle-tour-glass-wrap {
+  position: absolute;
+  left: calc(var(--glass-left) * 100cqw);
+  top: calc(var(--glass-top) * 100cqw);
+  width: calc(var(--glass-size) * 100cqw);
+  aspect-ratio: 1;
+}
+
+.elle-tour-glass {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.elle-tour-glass-handle {
+  stroke: #5a2d4a;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.elle-tour-glass-lens {
+  fill: rgba(234, 244, 245, 0.25);
+  stroke: #2fa4a9;
+  stroke-width: 3.5;
+}
+
+.elle-tour-glass-shine {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.8;
+}
+
+/* A close-up: the same disc as its circle (.pmos-effect-art), growing out
+   of Elle's lens. */
+.elle-tour-close-up {
+  position: absolute;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 4px solid var(--symptom-color);
+  background-color: color-mix(in srgb, var(--symptom-color) 22%, #fff);
+  box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.35);
+  transform-origin: center;
+  will-change: transform;
+}
+
+.elle-tour-close-up.symptom-group--reproductive {
+  --symptom-color: #b9a3f0;
+}
+
+/* The drawing inside, with the same 18% margin as in its circle. */
+.elle-tour-close-up svg {
+  position: absolute;
+  left: 18%;
+  top: 18%;
+  width: 64%;
+  height: 64%;
+  overflow: visible;
+}
+
+/* Phones: the lady on top, Elle and the sentence side by side under her. */
+@media (max-width: 699.98px) {
+  .elle-tour-stage {
+    --fig-h: min(46svh, 26rem);
+    grid-template-columns: auto minmax(0, 1fr);
+    align-content: center;
+    row-gap: 1rem;
+  }
+
+  .elle-tour-lady {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+
+  .elle-tour-words .story-text {
+    font-size: 1.3rem;
   }
 }
 
@@ -12519,6 +12726,195 @@ a.protocol-download:hover {
 .table-compact.table-responsive-rounded .table-bordered th:nth-child(2),
 .table-compact.table-responsive-rounded .table-bordered td:nth-child(2) {
   width: 30%;
+}
+
+/* INTEGRATION SUMMARY (Human Practices)
+   Generated with Claude Opus 5 (Anthropic), 2026-10-19
+   Purpose: closes a stakeholder group with "what we learned" beside "how we
+   integrated it" — two columns of prose split by a hairline rather than a
+   real table — plus a marker column whose bar says whether the point was
+   actively or passively implemented. Consecutive rows sharing a marker draw
+   one unbroken bar, so a run reads as a single bracket. See
+   IntegrationSummary.tsx. */
+.integration-summary {
+  margin: 2rem 0 0.5rem;
+}
+
+.integration-summary-title {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+}
+
+.integration-summary-headrow,
+.integration-summary-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 11rem;
+  gap: 0 1.5rem;
+}
+
+.integration-summary-head {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #2fa4a9;
+  padding-bottom: 0.5rem;
+}
+
+.integration-summary-row {
+  padding: 1rem 0;
+  border-top: 1px solid rgba(51, 40, 63, 0.18);
+}
+
+[data-theme="dark"] .integration-summary-row {
+  border-top-color: rgba(255, 255, 255, 0.16);
+}
+
+/* A row that carries on from the one above shares its point, so the divider
+   between them is dropped and the left column stays empty. */
+.integration-summary-row.is-continuation {
+  border-top: none;
+  padding-top: 0;
+}
+
+/* The hairline between the two prose columns */
+.integration-summary-integrated {
+  border-left: 1px solid rgba(51, 40, 63, 0.18);
+  padding-left: 1.5rem;
+}
+
+[data-theme="dark"] .integration-summary-integrated {
+  border-left-color: rgba(255, 255, 255, 0.16);
+}
+
+.page-body .page-shell-content .integration-summary-row p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  text-align: left;
+}
+
+.integration-summary-learned {
+  font-weight: 600;
+}
+
+.integration-summary-impact {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+/* The bar. Rows in the same run stretch to meet each other through the
+   padding, so the run draws as one continuous bracket. */
+.integration-summary-bar {
+  flex: none;
+  width: 4px;
+  align-self: stretch;
+  border-radius: 2px;
+  background-color: #2fa4a9;
+}
+
+.integration-summary-bar--passive {
+  background-color: rgba(47, 164, 169, 0.45);
+}
+
+.integration-summary-bar--none {
+  background-color: rgba(51, 40, 63, 0.3);
+}
+
+[data-theme="dark"] .integration-summary-bar--none {
+  background-color: rgba(255, 255, 255, 0.28);
+}
+
+.integration-summary-bar.is-continued {
+  margin-top: -1rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.integration-summary-bar.is-continuing {
+  margin-bottom: -1rem;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.integration-summary-impact-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #2fa4a9;
+}
+
+.integration-summary-bar--none ~ .integration-summary-impact-label {
+  color: inherit;
+  opacity: 0.7;
+}
+
+.integration-summary-impact-label.is-hidden {
+  visibility: hidden;
+}
+
+@media (max-width: 820px) {
+  /* Too narrow for three columns: the two prose blocks stack, the marker
+     moves under them and its bar turns horizontal. */
+  .integration-summary-headrow {
+    display: none;
+  }
+
+  .integration-summary-row {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .integration-summary-learned::before {
+    content: "What we learned";
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #2fa4a9;
+  }
+
+  .integration-summary-integrated {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .integration-summary-integrated::before {
+    content: "How we integrated it";
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #2fa4a9;
+  }
+
+  .integration-summary-impact {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.35rem;
+  }
+
+  .integration-summary-bar {
+    width: auto;
+    height: 4px;
+    align-self: auto;
+  }
+
+  .integration-summary-bar.is-continued,
+  .integration-summary-bar.is-continuing {
+    margin-top: 0;
+    margin-bottom: 0;
+    border-radius: 2px;
+  }
+
+  .integration-summary-impact-label.is-hidden {
+    display: none;
+  }
 }
 
 /* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18

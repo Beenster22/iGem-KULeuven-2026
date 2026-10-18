@@ -19,8 +19,14 @@ import {
 } from "react";
 import { Link } from "react-router-dom";
 import { useReducedMotion } from "framer-motion";
-import { GLOBE_LANDED, globeDropProgress, PMOS_EFFECTS_ID } from "./globeDrop";
+import {
+  GLOBE_LANDED,
+  globeDropProgress,
+  globeDropRange,
+  PMOS_EFFECTS_ID,
+} from "./globeDrop";
 import { BrainOrgan, UterusOrgan } from "./BodyOrgans";
+import { GLIDE, glideStartRate } from "./scrollGlide";
 import {
   LIVER_DRAWING_HEIGHT,
   LIVER_DRAWING_WIDTH,
@@ -81,6 +87,13 @@ const EFFECTS: Effect[] = [
   },
 ];
 
+// Each circle's drawing by id, for Elle's tour of the body below
+// (ElleTour.tsx), which shows the same drawings close up.
+export const EFFECT_ART: Record<string, Pick<Effect, "viewBox" | "art">> =
+  Object.fromEntries(
+    EFFECTS.map(({ id, viewBox, art }) => [id, { viewBox, art }]),
+  );
+
 // Whether the globe has landed on the first circle (see globeDrop.ts).
 // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback: a
 // glitch just before the circle appears): the section's "is-landed" class
@@ -123,16 +136,11 @@ const DROP_DURATION_MS = 1100;
 // Wheel and touch input arriving just after the drop (a trackpad's momentum)
 // is still swallowed for this long, so it doesn't carry the page on.
 const DROP_SETTLE_MS = 400;
-// 0 → 1 over t = 0 … 1, leaving 0 at slope `startRate` and arriving at 1
-// at rest (a cubic Hermite curve). Edited with Claude Opus 5.5 (Anthropic),
-// 2026-10-18 (team feedback: a glitch as the drop began): the glide used to
-// start from a standstill (ease-in-out), so a page already being scrolled
-// stopped dead for a moment and then sped up again; it now carries on at
-// the speed the page was already moving and eases to a stop.
-const GLIDE = (t: number, startRate: number) =>
-  startRate * (t ** 3 - 2 * t ** 2 + t) + (3 * t ** 2 - 2 * t ** 3);
-// Above 3 the curve would overshoot the target before settling back.
-const MAX_START_RATE = 3;
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback: a
+// glitch as the drop began): the glide used to start from a standstill
+// (ease-in-out), so a page already being scrolled stopped dead for a moment
+// and then sped up again; it now carries on at the speed the page was
+// already moving and eases to a stop (see scrollGlide.ts).
 
 // Generated with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request: the
 // whole drop in one scroll): as soon as the page is scrolled into the
@@ -166,12 +174,7 @@ function useGlobeDropAutoScroll(enabled: boolean) {
       const distance = to - from;
       const start = performance.now();
       busyUntil = start + DROP_DURATION_MS + DROP_SETTLE_MS;
-      // The page's current speed, as a slope of the 0 → 1 curve (only if
-      // it is already heading the right way).
-      const startRate =
-        distance !== 0 && Math.sign(velocity) === Math.sign(distance)
-          ? Math.min(MAX_START_RATE, (velocity * DROP_DURATION_MS) / distance)
-          : 0;
+      const startRate = glideStartRate(velocity, distance, DROP_DURATION_MS);
       const tick = (now: number) => {
         const t = Math.min(1, (now - start) / DROP_DURATION_MS);
         window.scrollTo({
@@ -196,12 +199,15 @@ function useGlobeDropAutoScroll(enabled: boolean) {
       lastY = y;
       lastTime = now;
       if (performance.now() < busyUntil) return;
-      const section = document.getElementById(PMOS_EFFECTS_ID);
       const progress = globeDropProgress();
-      if (!section || progress === null || progress <= 0 || progress >= 1)
+      const range = globeDropRange();
+      if (!range || progress === null || progress <= 0 || progress >= 1)
         return;
-      const sectionTop = y + section.getBoundingClientRect().top;
-      glide(down ? sectionTop : sectionTop - window.innerHeight);
+      // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback:
+      // going back up wasn't smooth): back up, the glide now ends exactly
+      // where the drop starts (it used to aim a screen above this one, which
+      // could leave the globe half-dropped and set off a second glide).
+      glide(down ? range.end : range.start);
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });

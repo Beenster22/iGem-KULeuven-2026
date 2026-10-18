@@ -32,6 +32,7 @@ import {
   PmosDefinition,
 } from "./components/BodySymptomsSection";
 import { PmosEffectsSection } from "./components/PmosEffectsSection";
+import { ElleTour } from "./components/ElleTour";
 import { InflammationSliderSection } from "./components/InflammationSliderSection";
 import { BshStreamAnimation } from "./components/BshStreamAnimation";
 import { MicChart } from "./components/MicChart";
@@ -41,6 +42,7 @@ import { MarketRings, MarketRing } from "./components/MarketRings";
 import { BusinessModelCanvas } from "./components/BusinessModelCanvas";
 import { Roadmap } from "./components/Roadmap";
 import { PhasePager } from "./components/PhasePager";
+import { IntegrationSummary, IntegrationPoint } from "./components/IntegrationSummary";
 import { MicrobeBackdrop } from "./components/MicrobeBackdrop";
 import { TwoGutsSection } from "./components/TwoGutsSection";
 import {
@@ -112,6 +114,7 @@ export const mdxComponents = {
   PmosOverview,
   SymptomGroups,
   PmosEffectsSection,
+  ElleTour,
   PmosDefinition,
   BshStreamAnimation,
   InflammationSliderSection,
@@ -125,6 +128,8 @@ export const mdxComponents = {
   BusinessModelCanvas,
   Roadmap,
   PhasePager,
+  IntegrationSummary,
+  IntegrationPoint,
   MicrobeBackdrop,
   TwoGutsSection,
   StoryScrollSection,
