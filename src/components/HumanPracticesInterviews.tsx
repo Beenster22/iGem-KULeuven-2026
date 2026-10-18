@@ -13,6 +13,7 @@
 // <Interviewee> entries is treated as that section's context/overview blurb,
 // in its original relative order.
 import { Children, ReactElement, ReactNode, isValidElement, useEffect, useMemo, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 interface IntervieweeProps {
   name: string;
@@ -32,6 +33,9 @@ interface IntervieweeProps {
   /** One- or two-sentence blurb shown next to the person while they're
    * featured. Falls back to a clipped excerpt of the full write-up. */
   summary?: string;
+  /** Short name for linking straight to this interview: a link to
+   * /human-practices#<slug> opens the interview's popup. */
+  slug?: string;
   /** The interview write-up, shown in the modal under "Interview Summary". */
   children: ReactNode;
 }
@@ -82,6 +86,7 @@ interface FlatInterviewee {
   date?: string;
   basedIn?: string;
   summary?: string;
+  slug?: string;
   content: ReactNode;
 }
 
@@ -120,6 +125,7 @@ function extractSections(children: ReactNode): Section[] {
             date: child.props.date,
             basedIn: child.props.basedIn,
             summary: child.props.summary,
+            slug: child.props.slug,
             content: child.props.children,
           });
         } else {
@@ -464,6 +470,17 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
   }
 
   const openPerson = openIndex !== null ? flat[openIndex] : null;
+
+  // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: a link such as
+  // /human-practices#merck opens that interview's popup (see `slug`), so other
+  // pages can point at one specific interview.
+  const { hash } = useLocation();
+  useEffect(() => {
+    const slug = decodeURIComponent(hash.slice(1));
+    if (!slug) return;
+    const index = flat.findIndex((person) => person.slug === slug);
+    if (index !== -1) setOpenIndex(index);
+  }, [hash, flat]);
 
   useEffect(() => {
     if (openIndex === null) return;
