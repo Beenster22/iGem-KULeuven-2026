@@ -4722,10 +4722,12 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
-   panels come in one per scroll step, left to right (.is-shown, set by
-   PmosEffectsSection.tsx). The first circle is where the globe lands, so it
-   appears at once — the globe has just turned into it — and only its
-   drawing and label fade in. */
+   panels wait until the globe has landed on the first circle (.is-landed,
+   set by PmosEffectsSection.tsx), then come in by themselves one after
+   another, left to right — each --i steps later — with no more scrolling.
+   The first circle is where the globe lands, so it appears at once (the
+   globe has just turned into it) and only its drawing and label fade in.
+   Going back up hides them straight away, ready to play again. */
 .pmos-effect,
 .pmos-effects-more {
   transition:
@@ -4733,18 +4735,23 @@ body:not(.home-fullscreen) .home-hero {
     translate 0.5s ease;
 }
 
-.pmos-effect:not(.is-shown),
-.pmos-effects-more:not(.is-shown) {
+.pmos-effects.is-landed .pmos-effect,
+.pmos-effects.is-landed .pmos-effects-more {
+  transition-delay: calc(var(--i) * 0.4s);
+}
+
+.pmos-effects:not(.is-landed) .pmos-effect,
+.pmos-effects:not(.is-landed) .pmos-effects-more {
   opacity: 0;
   translate: -1.5rem 0;
 }
 
-.pmos-effect.symptom-group--hormonal:not(.is-shown) {
+.pmos-effects:not(.is-landed) .pmos-effect.symptom-group--hormonal {
   opacity: 1;
   translate: none;
 }
 
-.pmos-effect:not(.is-shown) .pmos-effect-art {
+.pmos-effects:not(.is-landed) .symptom-group--hormonal .pmos-effect-art {
   visibility: hidden;
 }
 
@@ -4753,8 +4760,8 @@ body:not(.home-fullscreen) .home-hero {
   transition: opacity 0.5s ease;
 }
 
-.pmos-effect.symptom-group--hormonal:not(.is-shown) .pmos-effect-art svg,
-.pmos-effect.symptom-group--hormonal:not(.is-shown) .pmos-effect-label {
+.pmos-effects:not(.is-landed) .symptom-group--hormonal .pmos-effect-art svg,
+.pmos-effects:not(.is-landed) .symptom-group--hormonal .pmos-effect-label {
   opacity: 0;
 }
 
