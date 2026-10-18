@@ -14,14 +14,12 @@ import {
   Measurement,
   Members,
   Notebook,
-  Parts,
   Protocols,
   Results,
   SafetyAndSecurity,
   Sponsors,
 } from "./contents";
 import {
-  BlocksIcon,
   CalendarIcon,
   ClipboardIcon,
   CodeIcon,
@@ -73,6 +71,11 @@ class Page implements Base {
   // header (Header.tsx / App.tsx). Only prizes with a page of their own carry
   // this.
   specialPrize?: boolean;
+  // Optional: a thin divider line before this tile in the navbar's mega-menu
+  // (see Navbar.tsx), pushing it onto its own row. Used once today — Dry Lab
+  // in the Lab folder, set apart from the four wet-lab-specific pages above
+  // it (team request, 2026-10-18).
+  menuDivider?: boolean;
 }
 
 const Pages: (Page | Folder)[] = [
@@ -92,6 +95,14 @@ const Pages: (Page | Folder)[] = [
         component: Description,
         lead: "What PMOS is, how it is diagnosed, and why we went looking for its roots in the gut.",
         icon: LightbulbIcon,
+      },
+      {
+        name: "Experimental Overview",
+        title: "Experimental Overview",
+        path: "/experimental-overview",
+        component: ExperimentalOverview,
+        lead: "How our wet lab work fits together, from strain and antibiotic selection through conjugation and promoter screening, across the Toolkit and Therapeutics lines.",
+        icon: FlaskIcon,
       },
       {
         name: "Engineering Success",
@@ -120,48 +131,8 @@ const Pages: (Page | Folder)[] = [
     ],
   },
   {
-    name: "Dry Lab",
-    title: "Dry Lab",
-    path: "/dry-lab",
-    component: DryLab,
-    lead: "A toolkit for engineering Bacteroides species, and the computational screening that narrowed our bile salt hydrolase candidates.",
-    icon: CodeIcon,
-  },
-  {
-    name: "Wet Lab",
+    name: "Lab",
     folder: [
-      {
-        name: "Experimental Overview",
-        title: "Experimental Overview",
-        path: "/experimental-overview",
-        component: ExperimentalOverview,
-        lead: "How our wet lab work fits together, from strain and antibiotic selection through conjugation and promoter screening, across the Toolkit and Therapeutics lines.",
-        icon: FlaskIcon,
-      },
-      {
-        name: "Protocols",
-        title: "Protocols",
-        path: "/protocols",
-        component: Protocols,
-        lead: "Detailed, step-by-step protocols used throughout the project so other teams can replicate our work.",
-        icon: ClipboardIcon,
-      },
-      {
-        name: "Parts",
-        title: "Parts",
-        path: "/parts",
-        component: Parts,
-        lead: "The DNA parts built and used in this project, each linked to the notebook entry where it was made or characterised.",
-        icon: BlocksIcon,
-      },
-      {
-        name: "Notebook",
-        title: "Notebook",
-        path: "/notebook",
-        component: Notebook,
-        lead: "A chronological record of our wet lab work, one notebook per research line, each entry also downloadable as a PDF.",
-        icon: NotebookIcon,
-      },
       {
         name: "Results",
         title: "Results",
@@ -181,6 +152,31 @@ const Pages: (Page | Folder)[] = [
         lead: "How we validated and calibrated our measurements, and where to find the methods, equipment, and data behind each one.",
         icon: RulerIcon,
         specialPrize: true,
+      },
+      {
+        name: "Notebook",
+        title: "Notebook",
+        path: "/notebook",
+        component: Notebook,
+        lead: "A chronological record of our wet lab work, one notebook per research line, each entry also downloadable as a PDF.",
+        icon: NotebookIcon,
+      },
+      {
+        name: "Protocols",
+        title: "Protocols",
+        path: "/protocols",
+        component: Protocols,
+        lead: "Detailed, step-by-step protocols used throughout the project so other teams can replicate our work.",
+        icon: ClipboardIcon,
+      },
+      {
+        name: "Dry Lab",
+        title: "Dry Lab",
+        path: "/dry-lab",
+        component: DryLab,
+        lead: "A toolkit for engineering Bacteroides species, and the computational screening that narrowed our bile salt hydrolase candidates.",
+        icon: CodeIcon,
+        menuDivider: true,
       },
     ],
   },

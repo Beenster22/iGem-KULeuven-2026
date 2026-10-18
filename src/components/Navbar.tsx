@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type SVGProps } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import BootstrapNavbar from "react-bootstrap/Navbar";
@@ -17,6 +17,64 @@ const NAVBAR_BRAND_MARK_BY_MODE = {
     "https://static.igem.wiki/teams/6299/wiki/icons/empower-stylized-name-light-mode.avif",
   dark: "https://static.igem.wiki/teams/6299/wiki/icons/empower-stylized-name-dark-mode.avif",
 } as const;
+
+// Same artwork as the page index and Elle's other appearances (ElleSays,
+// SectionProgress) — a plain, silent mascot image here, not the speech
+// bubble those use.
+const MASCOT_FILLER_SRC =
+  "https://static.igem.wiki/teams/6299/wiki/mascot/uterus-happy.avif";
+
+// The handful of fields a mega-menu tile actually needs — a local shape
+// rather than importing pages.ts's own Page class, which isn't exported.
+interface MegaMenuEntry {
+  name: string | undefined;
+  path: string | undefined;
+  icon?: React.FC<SVGProps<SVGSVGElement>>;
+  lead?: string;
+  specialPrize?: boolean;
+  menuDivider?: boolean;
+}
+
+type MegaMenuRow =
+  | { kind: "tile"; subpage: MegaMenuEntry; tileIndex: number }
+  | { kind: "divider"; key: string }
+  | { kind: "filler"; key: string };
+
+// Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+// Purpose: team request — the mega-menu grid is a fixed 3 columns (see
+// .mega-menu-content), so a folder whose tile count isn't a multiple of 3
+// leaves empty cells in its last row. Rather than a row of 1 or 2 tiles
+// trailing off, those empty cells get Elle. Only the first run of tiles
+// (before any menuDivider) is padded this way — a divider already sets its
+// own tiles apart deliberately (see Dry Lab in the Lab folder), so padding
+// that run too would undo the separation.
+function layoutMegaMenu(folder: MegaMenuEntry[]): MegaMenuRow[] {
+  const rows: MegaMenuRow[] = [];
+  let firstRunLength = 0;
+  let firstRunClosed = false;
+
+  const padFirstRun = () => {
+    const remainder = firstRunLength % 3;
+    const fillerCount = remainder === 0 ? 0 : 3 - remainder;
+    for (let i = 0; i < fillerCount; i++) {
+      rows.push({ kind: "filler", key: `filler-${i}` });
+    }
+    firstRunClosed = true;
+  };
+
+  folder.forEach((subpage, tileIndex) => {
+    if (subpage.menuDivider) {
+      if (!firstRunClosed) padFirstRun();
+      rows.push({ kind: "divider", key: `divider-${tileIndex}` });
+    } else if (!firstRunClosed) {
+      firstRunLength++;
+    }
+    rows.push({ kind: "tile", subpage, tileIndex });
+  });
+  if (!firstRunClosed) padFirstRun();
+
+  return rows;
+}
 
 export function Navbar() {
   const { mode, toggleMode } = useThemeMode();
@@ -191,39 +249,60 @@ export function Navbar() {
             <div className="mega-menu-bridge" />
             <div className="mega-menu">
               <Container className="mega-menu-content">
-                {activeFolder.map((subpage, subpageIndex) => {
-                  if (!subpage.path) return null;
-                  const Icon = subpage.icon;
-                  return (
-                    <Link
-                      key={`mega-${openMenu}-${subpageIndex}`}
-                      to={subpage.path}
-                      className={`mega-menu-link mega-menu-link--${subpageIndex % 2 === 0 ? "dark" : "light"}`}
-                      onClick={closeNow}
-                    >
-                      {Icon && (
-                        <span className="mega-menu-link-icon" aria-hidden="true">
-                          <Icon />
-                        </span>
-                      )}
-                      <span className="mega-menu-link-text">
-                        <span className="mega-menu-link-name">
-                          {subpage.name}
-                          {subpage.specialPrize && (
-                            <span className="mega-menu-link-prize">
-                              <span aria-hidden="true">★</span> Special prize
+                {layoutMegaMenu(activeFolder.filter((subpage) => subpage.path)).map(
+                  (row) => {
+                    if (row.kind === "divider") {
+                      return (
+                        <div
+                          key={`mega-${openMenu}-${row.key}`}
+                          className="mega-menu-divider"
+                        />
+                      );
+                    }
+                    if (row.kind === "filler") {
+                      return (
+                        <div
+                          key={`mega-${openMenu}-${row.key}`}
+                          className="mega-menu-filler"
+                          aria-hidden="true"
+                        >
+                          <img src={MASCOT_FILLER_SRC} alt="" />
+                        </div>
+                      );
+                    }
+                    const { subpage, tileIndex } = row;
+                    const Icon = subpage.icon;
+                    return (
+                      <Link
+                        key={`mega-${openMenu}-${tileIndex}`}
+                        to={subpage.path!}
+                        className={`mega-menu-link mega-menu-link--${tileIndex % 2 === 0 ? "dark" : "light"}`}
+                        onClick={closeNow}
+                      >
+                        {Icon && (
+                          <span className="mega-menu-link-icon" aria-hidden="true">
+                            <Icon />
+                          </span>
+                        )}
+                        <span className="mega-menu-link-text">
+                          <span className="mega-menu-link-name">
+                            {subpage.name}
+                            {subpage.specialPrize && (
+                              <span className="mega-menu-link-prize">
+                                <span aria-hidden="true">★</span> Special prize
+                              </span>
+                            )}
+                          </span>
+                          {subpage.lead && (
+                            <span className="mega-menu-link-lead">
+                              {renderItalics(subpage.lead)}
                             </span>
                           )}
                         </span>
-                        {subpage.lead && (
-                          <span className="mega-menu-link-lead">
-                            {renderItalics(subpage.lead)}
-                          </span>
-                        )}
-                      </span>
-                    </Link>
-                  );
-                })}
+                      </Link>
+                    );
+                  },
+                )}
               </Container>
             </div>
           </>
