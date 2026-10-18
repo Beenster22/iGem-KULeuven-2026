@@ -41,6 +41,7 @@ import { MarketRings, MarketRing } from "./components/MarketRings";
 import { BusinessModelCanvas } from "./components/BusinessModelCanvas";
 import { Roadmap } from "./components/Roadmap";
 import { PhasePager } from "./components/PhasePager";
+import { IntegrationSummary, IntegrationPoint } from "./components/IntegrationSummary";
 import { MicrobeBackdrop } from "./components/MicrobeBackdrop";
 import { TwoGutsSection } from "./components/TwoGutsSection";
 import {
@@ -122,6 +123,8 @@ export const mdxComponents = {
   BusinessModelCanvas,
   Roadmap,
   PhasePager,
+  IntegrationSummary,
+  IntegrationPoint,
   MicrobeBackdrop,
   TwoGutsSection,
   StoryScrollSection,
