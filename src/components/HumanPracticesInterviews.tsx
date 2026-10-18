@@ -476,11 +476,26 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
   // pages can point at one specific interview.
   const { hash } = useLocation();
   useEffect(() => {
-    const slug = decodeURIComponent(hash.slice(1));
-    if (!slug) return;
-    const index = flat.findIndex((person) => person.slug === slug);
-    if (index !== -1) setOpenIndex(index);
-  }, [hash, flat]);
+    const open = () => {
+      const slug = decodeURIComponent(window.location.hash.slice(1));
+      if (!slug) return;
+      const index = flat.findIndex((person) => person.slug === slug);
+      if (index === -1) return;
+      setOpenIndex(index);
+      // Park the page on the interviews behind the popup, so closing it does
+      // not leave the reader at the top of the page.
+      window.setTimeout(
+        () => document.getElementById("interviews")?.scrollIntoView({ block: "start", behavior: "instant" }),
+        0,
+      );
+    };
+    open();
+    // A plain #link changes the hash without going through the router.
+    window.addEventListener("hashchange", open);
+    return () => window.removeEventListener("hashchange", open);
+    // `flat` is rebuilt whenever the page re-renders; only a new hash matters.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hash]);
 
   useEffect(() => {
     if (openIndex === null) return;
