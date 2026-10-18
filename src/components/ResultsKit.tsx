@@ -36,20 +36,14 @@ export function KeyTakeaways({ children }: { children: ReactNode }) {
 }
 
 interface TakeawayProps {
-  /** The headline number, e.g. "6", "5/15", "1,292×". */
-  value: string;
-  /** The short all-caps line under the number. */
-  label: string;
-  /** Optional sentence of explanation under the label. */
-  children?: ReactNode;
+  /** One bolded, centered sentence stating the takeaway. */
+  children: ReactNode;
 }
 
-export function Takeaway({ value, label, children }: TakeawayProps) {
+export function Takeaway({ children }: TakeawayProps) {
   return (
     <div className="key-takeaway" role="listitem">
-      <span className="key-takeaway-value">{value}</span>
-      <span className="key-takeaway-label">{label}</span>
-      {children && <div className="key-takeaway-body">{children}</div>}
+      {children}
     </div>
   );
 }
@@ -66,38 +60,6 @@ export function FigureSlot({ label, children }: FigureSlotProps) {
     <div className="figure-slot">
       <span className="figure-slot-label">{label}</span>
       {children && <span className="figure-slot-hint">{children}</span>}
-    </div>
-  );
-}
-
-// Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
-// Purpose: a short sequential process (e.g. the CRISPR construct's
-// integration strategy) as a row of numbered cards joined by arrows, instead
-// of a plain bullet list — <StepFlow><Step title="...">...</Step>...
-// </StepFlow>. Numbers come from CSS (counter on .step-flow-item), so steps
-// can be reordered without renumbering by hand.
-export function StepFlow({ children }: { children: ReactNode }) {
-  return (
-    <div className="step-flow" role="list">
-      {children}
-    </div>
-  );
-}
-
-interface StepProps {
-  /** The step's short name, e.g. "Conjugative transfer". */
-  title: string;
-  children?: ReactNode;
-}
-
-export function Step({ title, children }: StepProps) {
-  return (
-    <div className="step-flow-item" role="listitem">
-      <div className="step-flow-card">
-        <span className="step-flow-number" aria-hidden="true" />
-        <span className="step-flow-title">{title}</span>
-        {children && <div className="step-flow-body">{children}</div>}
-      </div>
     </div>
   );
 }

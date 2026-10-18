@@ -1,4 +1,5 @@
-// Generated with Claude Sonnet 5 (Anthropic), 2026-07-14 (extended 2026-09-08)
+// Generated with Claude Sonnet 5 (Anthropic), 2026-07-14 (extended 2026-09-08;
+// `tone="pipeline"` added with Claude Sonnet 5.5, 2026-10-18)
 // Purpose: segmented bar selector for switching between labeled content panes.
 import { ReactNode, useMemo, useState } from "react";
 import { extractLabeledChildren } from "../utils/extractLabeledChildren";
@@ -9,11 +10,14 @@ interface SegmentedSelectorProps {
   /** "row" (default) is the classic horizontal bar; "column" stacks segments
    * vertically, e.g. for a step list read top-to-bottom next to its content. */
   orientation?: "row" | "column";
+  /** "pipeline" colours each segment differently (and the content below to
+   * match), so the reader always knows which pipeline they are in. */
+  tone?: "pipeline";
 }
 
 // A rectangular bar split evenly into labeled, clickable segments. Selecting
 // a segment highlights it and shows its content below the bar.
-export function SegmentedSelector({ children, orientation = "row" }: SegmentedSelectorProps) {
+export function SegmentedSelector({ children, orientation = "row", tone }: SegmentedSelectorProps) {
   const items = useMemo(() => extractLabeledChildren(children), [children]);
   const [activeIndex, setActiveIndex] = useState(0);
   // A link from elsewhere may name a heading inside a segment that is not open.
@@ -21,7 +25,10 @@ export function SegmentedSelector({ children, orientation = "row" }: SegmentedSe
   const active = items[activeIndex];
 
   return (
-    <div className={`segmented-selector segmented-selector--${orientation}`}>
+    <div
+      className={`segmented-selector segmented-selector--${orientation}${tone ? ` segmented-selector--${tone}` : ""}`}
+      data-active-index={activeIndex}
+    >
       <div className="segmented-selector-bar" role="tablist">
         {items.map((item, index) => (
           <button
@@ -29,7 +36,7 @@ export function SegmentedSelector({ children, orientation = "row" }: SegmentedSe
             type="button"
             role="tab"
             aria-selected={index === activeIndex}
-            className={`segmented-selector-segment${index === activeIndex ? " active" : ""}`}
+            className={`segmented-selector-segment segmented-selector-segment--${index}${index === activeIndex ? " active" : ""}`}
             onClick={() => setActiveIndex(index)}
           >
             {item.label}

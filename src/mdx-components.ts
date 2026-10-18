@@ -64,9 +64,8 @@ import {
   KeyTakeaways,
   Takeaway,
   FigureSlot,
-  StepFlow,
-  Step,
 } from "./components/ResultsKit";
+import { ImageFlowSelector, FlowStep } from "./components/ImageFlowSelector";
 import {
   StakeholderGroups,
   StakeholderGroup,
@@ -149,8 +148,8 @@ export const mdxComponents = {
   KeyTakeaways,
   Takeaway,
   FigureSlot,
-  StepFlow,
-  Step,
+  ImageFlowSelector,
+  FlowStep,
   DockingHeatmap,
   // Generated with Claude Opus 5 (Anthropic), 2026-10-17
   // Purpose: BSA-07's Table 1 in the notebook, with the workbook's red/yellow

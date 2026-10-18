@@ -2843,6 +2843,65 @@ a[data-footnote-ref]:focus {
   margin-top: 1.5rem;
 }
 
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: <SegmentedSelector tone="pipeline"> (results page's Toolkit /
+   Therapeutics switch). Team feedback: it was not clear enough which
+   pipeline you were in. Each segment keeps its own colour — Toolkit teal,
+   Therapeutics purple — as a soft tint when idle and a solid fill with a
+   check mark when active, and the section below gets a matching top rule so
+   the colour carries down the page. */
+.segmented-selector--pipeline {
+  --pipeline-0: #2fa4a9;
+  --pipeline-1: #8a6bbf;
+}
+
+.segmented-selector--pipeline > .segmented-selector-bar {
+  border-width: 0;
+  gap: 0.75rem;
+  overflow: visible;
+}
+
+.segmented-selector--pipeline .segmented-selector-segment {
+  border: 2px solid var(--seg);
+  border-radius: 0.6rem;
+  background-color: color-mix(in srgb, var(--seg) 14%, transparent);
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+.segmented-selector--pipeline .segmented-selector-segment--0 {
+  --seg: var(--pipeline-0);
+}
+
+.segmented-selector--pipeline .segmented-selector-segment--1 {
+  --seg: var(--pipeline-1);
+}
+
+.segmented-selector--pipeline .segmented-selector-segment:hover {
+  background-color: color-mix(in srgb, var(--seg) 28%, transparent);
+  opacity: 1;
+}
+
+.segmented-selector--pipeline .segmented-selector-segment.active {
+  background-color: var(--seg);
+  color: #fff;
+  opacity: 1;
+  font-weight: 700;
+}
+
+.segmented-selector--pipeline .segmented-selector-segment.active::before {
+  content: "✓ ";
+}
+
+.segmented-selector--pipeline > .segmented-selector-content {
+  padding-top: 1.5rem;
+  border-top: 4px solid var(--pipeline-0);
+}
+
+.segmented-selector--pipeline[data-active-index="1"] > .segmented-selector-content {
+  border-top-color: var(--pipeline-1);
+}
+
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-09-08
    Purpose: opt-in vertical layout (SegmentedSelector orientation="column")
    — the bar becomes a stacked step list beside its content instead of a
@@ -3837,6 +3896,18 @@ div.sponsor-grid-card:hover {
 .zoomable-image-dialog img.on-light-bg {
   box-sizing: border-box;
   padding: 2rem;
+  background-color: #ffffff;
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: the same light card for the inline thumbnail, not just the
+   fullscreen dialog — in dark mode .construct-map-image sits on the page's
+   own dark background (var(--color-page-bg)), so the plasmid map's dark
+   labels and thin grey arcs were nearly invisible before the figure was ever
+   clicked open. */
+.zoomable-image-trigger img.on-light-bg {
+  box-sizing: border-box;
+  padding: 1.25rem;
   background-color: #ffffff;
 }
 
@@ -11140,44 +11211,56 @@ a.protocol-download:hover {
    or one as the column narrows, without a breakpoint per count — sections
    carry anywhere from three to six of them. */
 .key-takeaways {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
-  gap: 1rem;
+  --takeaway-gap: 1rem;
+  --takeaway-cols: 3;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--takeaway-gap);
   margin: 1.5rem 0 2rem;
 }
 
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18 (team feedback:
+   cards were squished and left-aligned). At most 3 per row, so never more
+   than two rows; an incomplete last row is centred, and four cards split
+   2 + 2 rather than 3 + 1. Below 40rem they go two (then one) per row. */
+.key-takeaways:has(> :nth-child(4):last-child) {
+  --takeaway-cols: 2;
+}
+
+.key-takeaways > .key-takeaway {
+  flex: 0 0
+    calc(
+      (100% - (var(--takeaway-cols) - 1) * var(--takeaway-gap)) /
+        var(--takeaway-cols)
+    );
+  min-width: 0;
+}
+
+@media (max-width: 40rem) {
+  .key-takeaways,
+  .key-takeaways:has(> :nth-child(4):last-child) {
+    --takeaway-cols: 1;
+  }
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18 (team feedback: the
+   number/label/sentence split read as busy and inconsistent card to card) —
+   each card is now a single bolded, centered sentence instead. */
 .key-takeaway {
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+  align-items: center;
+  justify-content: center;
   padding: 1.1rem 1.25rem;
   border: 1px solid rgba(51, 40, 63, 0.2);
   border-radius: 1rem;
   background-color: var(--color-page-bg);
-  text-align: left;
+  text-align: center;
+  font-weight: 700;
 }
 
 [data-theme="dark"] .key-takeaway {
   border-color: rgba(255, 255, 255, 0.12);
-}
-
-.key-takeaway-value {
-  font-family: "Poppins", sans-serif;
-  font-size: 1.75rem;
-  font-weight: 700;
-  line-height: 1.1;
-}
-
-.key-takeaway-label {
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  font-size: 0.85rem;
-}
-
-.key-takeaway-body {
-  font-size: 0.92rem;
-  opacity: 0.85;
 }
 
 /* FIGURE SLOTS
@@ -11227,26 +11310,102 @@ a.protocol-download:hover {
    side in a row, instead of one oversized composite image — e.g. the
    growth-curve panels on the results page. */
 .figure-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
+  --figure-gap: 1.25rem;
+  --figure-cols: 3;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--figure-gap);
   margin: 1.5rem 0;
 }
 
 .figure-grid > * {
+  flex: 0 0
+    calc(
+      (100% - (var(--figure-cols) - 1) * var(--figure-gap)) / var(--figure-cols)
+    );
   margin: 0;
   min-width: 0;
+  text-align: center;
+}
+
+/* captions sit inside <figure>, so the page's justified-text rule never
+   reaches them, but keep them centred explicitly */
+.figure-grid .figure-caption {
+  text-align: center;
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: the source PNGs
+   aren't all the same aspect ratio — panel E (4000×2547, 1.57:1) is
+   noticeably wider/shorter than panels A, B and D (~3672×2563, 1.43:1), so
+   at equal column width it rendered visibly shorter than its neighbours.
+   Pinning every figure to the same box and letterboxing with object-fit
+   keeps the row visually level regardless of the source image's own ratio. */
+.figure-grid img {
+  aspect-ratio: 1.44;
+  width: 100%;
+  object-fit: contain;
+  background-color: #fff;
 }
 
 @media (max-width: 900px) {
   .figure-grid {
-    grid-template-columns: repeat(2, 1fr);
+    --figure-cols: 2;
   }
 }
 
 @media (max-width: 560px) {
   .figure-grid {
-    grid-template-columns: 1fr;
+    --figure-cols: 1;
+  }
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: team feedback that the growth-curve panels didn't look clickable —
+   a slight zoom plus a "Click to expand" label on hover/focus, scoped to this
+   panel only (other <ZoomableImage> figures on the site keep their plain
+   hover). */
+.figure-grid .zoomable-image-trigger {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.figure-grid .zoomable-image-trigger img {
+  transition: transform 0.2s ease;
+}
+
+.figure-grid .zoomable-image-trigger:hover img,
+.figure-grid .zoomable-image-trigger:focus-visible img {
+  transform: scale(1.04);
+}
+
+.figure-grid .zoomable-image-trigger::after {
+  content: "Click to expand";
+  position: absolute;
+  left: 50%;
+  bottom: 0.6rem;
+  transform: translateX(-50%);
+  padding: 0.3rem 0.75rem;
+  border-radius: 1rem;
+  background-color: rgba(20, 15, 26, 0.75);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.figure-grid .zoomable-image-trigger:hover::after,
+.figure-grid .zoomable-image-trigger:focus-visible::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .figure-grid .zoomable-image-trigger img {
+    transition: none;
   }
 }
 
@@ -11273,6 +11432,7 @@ a.protocol-download:hover {
 }
 
 .figure-panel > .figure-caption {
+  text-align: center;
   margin-top: 1rem;
   margin-bottom: 0;
 }
@@ -11305,12 +11465,12 @@ a.protocol-download:hover {
    are long only to out-rank that rule. */
 .page-body
   .page-shell-content
-  :is(.success-card, .key-takeaway, .figure-slot, .elle-bubble)
+  :is(.success-card, .figure-slot, .elle-bubble)
   :is(p, li) {
   text-align: left;
 }
 
-.page-body .page-shell-content .figure-slot :is(p, li) {
+.page-body .page-shell-content :is(.figure-slot, .key-takeaway) :is(p, li) {
   text-align: center;
 }
 
@@ -11382,6 +11542,91 @@ a.protocol-download:hover {
   padding: 0.5rem 0.6rem;
 }
 
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: shades each "Media" cell in the growth-params table with the
+   matching line colour from Figure 1 (same idea as .plasmid-legend-table's
+   first column below), so a reader can match a table row to its curve at a
+   glance. .medium-cell--bhi/wc/mm/mgam are the four-medium palette shared by
+   panels A–D; .medium-cell--e-* are the nine-condition palette unique to
+   panel E's full-factorial design (its own colour scale, not the
+   four-medium one). Text colour per variant is picked for contrast against
+   its own background rather than set once for all. Selectors are prefixed
+   with .growth-params-table: Bootstrap's own
+   ".table > :not(caption) > * > *" rule (which paints var(--bs-table-bg)
+   onto every cell) outranks a bare single class on specificity alone, so
+   without the prefix every cell rendered white regardless of this block.
+   Edited 2026-10-18 (Claude Sonnet 5.5): colours softened to pastel tints of
+   the same hues (still matching the figure lines) for a more professional
+   look; all use the same dark text. */
+.growth-params-table .medium-cell {
+  font-weight: 600;
+}
+
+.growth-params-table .medium-cell--bhi {
+  background-color: #f7dbe5;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--wc {
+  background-color: #d9d0ea;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--mm {
+  background-color: #d3c1d1;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--mgam {
+  background-color: #b3e6ee;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--e-mgam {
+  background-color: #b0dcde;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--e-mm-base {
+  background-color: #b4d6dc;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--e-mm-starch {
+  background-color: #b9d0d9;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--e-mm-vitk {
+  background-color: #c3c8d6;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--e-mm-ph {
+  background-color: #d0bfd1;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--e-mm-starch-vitk {
+  background-color: #dbc9d6;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--e-mm-starch-ph {
+  background-color: #e5d3de;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--e-mm-vitk-ph {
+  background-color: #efdce5;
+  color: #33283f;
+}
+
+.growth-params-table .medium-cell--e-mm-all {
+  background-color: #f8e1ea;
+  color: #33283f;
+}
+
 /* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17
    Purpose: the pBSH-Cas9 component table (results page, "Construct
    components"). First-column cells carry their own fixed background colour
@@ -11431,18 +11676,18 @@ a.protocol-download:hover {
    width, map first. */
 .construct-map-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 2rem;
 }
 
 .construct-map-image {
-  flex: 1.6 1 24rem;
+  flex: 1 1 14rem;
   min-width: 0;
 }
 
 .construct-map-legend {
-  flex: 1 1 16rem;
-  max-width: 24rem;
+  flex: 1.5 1 20rem;
+  max-width: 30rem;
   min-width: 0;
 }
 
@@ -11452,6 +11697,74 @@ a.protocol-download:hover {
 
 .construct-map-legend .plasmid-legend-table td {
   padding: 0.5rem 0.6rem;
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: team feedback on the construct components key — (1) dark mode:
+   Bootstrap's table cells kept a white fill with black text there, so the
+   header and Role column glared against the dark page; they now follow the
+   page theme (the coloured first column keeps its fixed map colours).
+   (2) every cell uses the same centred, same-weight/size formatting, with the
+   component name and role both centred vertically and horizontally. (3) the
+   map is centred vertically in its own box, so it sits level with the key. */
+.construct-map-legend .plasmid-legend-table :is(th, td) {
+  text-align: center;
+  vertical-align: middle;
+  font-size: 0.82rem;
+  line-height: 1.3;
+}
+
+.construct-map-legend .plasmid-legend-table :is(th, td) > p {
+  margin: 0;
+}
+
+.construct-map-legend .plasmid-legend-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.construct-map-legend .plasmid-legend-table :is(th, td):first-child {
+  width: 38%;
+  white-space: normal;
+}
+
+.construct-map-legend .plasmid-legend-table :is(th, td):last-child {
+  width: 62%;
+}
+
+[data-theme="dark"] .plasmid-legend-table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--color-text);
+  --bs-table-border-color: rgba(201, 189, 232, 0.25);
+  border-color: rgba(201, 189, 232, 0.25);
+}
+
+[data-theme="dark"] .plasmid-legend-table th,
+[data-theme="dark"] .plasmid-legend-table td:last-child {
+  background-color: var(--color-page-bg);
+  color: var(--color-text);
+  border-color: rgba(201, 189, 232, 0.25);
+}
+
+[data-theme="dark"] .plasmid-legend-table td:first-child {
+  border-color: rgba(201, 189, 232, 0.25);
+}
+
+.construct-map-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.construct-map-image .zoomable-image-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.construct-map-image .zoomable-image-trigger img {
+  margin: 0 auto;
 }
 
 @media (max-width: 767.98px) {
@@ -11477,102 +11790,171 @@ a.protocol-download:hover {
   margin: 0;
 }
 
-/* STEP FLOW
+/* IMAGE FLOW SELECTOR
    Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
-   Purpose: a short sequential process as a row of numbered cards joined by
-   arrows (the CRISPR integration strategy's five steps, under its biorender
-   figure) — team feedback wanted the steps shown as a chronological flow
-   rather than a plain bullet list. Wraps to a vertical stack with a downward
-   arrow on narrow screens; the arrow is a rotated copy of the same
-   right-pointing chevron rather than a second glyph, so both read as the
-   same connector. Step numbers come from a CSS counter rather than a prop,
-   so steps can be reordered without renumbering by hand. */
-.step-flow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  counter-reset: step-flow;
-  gap: 0.75rem;
+   Purpose: numbered pins over a figure, one per <FlowStep> (the CRISPR
+   integration strategy's five steps) — team feedback wanted the step picked
+   by pointing at the figure itself, with only that step's text showing
+   below it, Previous/Next to move through the rest, and the current step
+   obvious both on the figure and above its text. Replaces the step-flow
+   card row this section used before. Pin positions are percentages of the
+   image's own box (see ImageFlowSelector.tsx's `marker` prop), so they track
+   the figure at any column width. */
+.image-flow-selector {
   margin: 1.5rem 0;
 }
 
-.step-flow-item {
+.image-flow-selector-figure {
+  position: relative;
+  max-width: 56rem;
+  margin: 0 auto;
+  border: 2px solid color-mix(in srgb, var(--color-text) 45%, transparent);
+  border-radius: 0.75rem;
+  padding: 2.6rem 0.5rem;
+}
+
+.image-flow-selector-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.image-flow-selector-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  /* Parked in the figure's top/bottom gutter, level with the centre of it. */
+  width: 1.9rem;
+  height: 1.9rem;
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex: 1 1 11rem;
-  min-width: 11rem;
-}
-
-.step-flow-item:not(:first-child)::before {
-  content: "";
-  flex: none;
-  align-self: center;
-  width: 1.1rem;
-  height: 1.1rem;
-  border-top: 2px solid rgba(51, 40, 63, 0.35);
-  border-right: 2px solid rgba(51, 40, 63, 0.35);
-  transform: rotate(45deg);
-}
-
-[data-theme="dark"] .step-flow-item:not(:first-child)::before {
-  border-color: rgba(255, 255, 255, 0.35);
-}
-
-.step-flow-card {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  padding: 1rem 1.1rem;
-  border: 1px solid rgba(51, 40, 63, 0.2);
-  border-radius: 1rem;
-  background-color: var(--color-accent);
-}
-
-[data-theme="dark"] .step-flow-card {
-  border-color: transparent;
-}
-
-.step-flow-number {
-  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.6rem;
-  height: 1.6rem;
+  border: 2px solid #ffffff;
   border-radius: 50%;
   background-color: #2fa4a9;
   color: #ffffff;
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 1px 4px rgba(20, 15, 26, 0.45);
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
-.step-flow-number::before {
-  counter-increment: step-flow;
-  content: counter(step-flow);
+.image-flow-selector-marker.above {
+  top: 1.3rem;
 }
 
-.step-flow-title {
-  font-weight: 700;
-  color: #33283f;
+.image-flow-selector-marker.below {
+  top: auto;
+  bottom: 1.3rem;
+  transform: translate(-50%, 50%);
 }
 
-.step-flow-body {
-  font-size: 0.88rem;
-  opacity: 0.85;
-  color: #33283f;
+.image-flow-selector-marker.below.active {
+  transform: translate(-50%, 50%) scale(1.2);
+}
+
+.image-flow-selector-marker:hover {
+  background-color: #1f7f84;
+}
+
+.image-flow-selector-marker:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.image-flow-selector-marker.active {
+  background-color: #1f7f84;
+  transform: translate(-50%, -50%) scale(1.2);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--color-accent) 85%, transparent),
+    0 1px 4px rgba(20, 15, 26, 0.45);
 }
 
 @media (max-width: 575.98px) {
-  .step-flow {
-    flex-direction: column;
+  .image-flow-selector-marker {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.7rem;
   }
+}
 
-  .step-flow-item:not(:first-child)::before {
-    transform: rotate(135deg);
-    align-self: flex-start;
-    margin-left: 0.9rem;
-  }
+.image-flow-selector-panel {
+  margin-top: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.image-flow-selector-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.image-flow-selector-arrow {
+  flex: none;
+  width: 3.5rem;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(51, 40, 63, 0.35);
+  border-radius: 50%;
+  background-color: var(--color-page-bg);
+  color: var(--color-text);
+  font-size: 2.4rem;
+  padding-bottom: 0.25rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+[data-theme="dark"] .image-flow-selector-arrow {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.image-flow-selector-arrow:hover:not(:disabled) {
+  background-color: var(--color-accent);
+}
+
+.image-flow-selector-arrow:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.image-flow-selector-title {
+  margin: 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.image-flow-selector-step-count {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #1f7f84;
+}
+
+[data-theme="dark"] .image-flow-selector-step-count {
+  color: #6fd0d4;
+}
+
+.image-flow-selector-body {
+  margin-top: 0.75rem;
+  text-align: center;
+  animation: milestone-arc-fade-in 0.3s ease;
+}
+
+.image-flow-selector-body > :last-child {
+  margin-bottom: 0;
 }
 
 /* The validation-plan dropdowns read as a chronological list (team
