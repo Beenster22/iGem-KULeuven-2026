@@ -1,154 +1,175 @@
 // Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
-// Purpose: one small line icon per mega-menu entry (see Navbar.tsx), so each
-// dropdown reads as a grid of icon tiles rather than a plain link list.
-// Flat, minimal, single-stroke style (24x24, currentColor) so the icon
-// recolors with the tile exactly like the rest of the site's line art.
+// Purpose: one flat illustration per mega-menu entry (see Navbar.tsx), drawn
+// in the same style and palette as the home page's "Find out more about
+// EMPOWER" cards (FindOutMoreIcons.tsx / Tgr5Story.tsx): flat shapes using
+// --ic-1 / --ic-2 / --ic-3 / --ic-line, set per tile (see .mega-menu-link in
+// App.css) so the same drawing works on a dark or a light tile. Pages that
+// already have an icon on the home page (Description, Results, Integrated
+// Human Practices) reuse that exact icon instead of a near-duplicate.
 import type { SVGProps } from "react";
 
-const BASE = {
-  viewBox: "0 0 24 24",
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: 1.6,
-  strokeLinecap: "round" as const,
-  strokeLinejoin: "round" as const,
-};
-
-export function DescriptionIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg {...BASE} {...props}>
-      <path d="M6 3h8l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" />
-      <path d="M14 3v4h4" />
-      <path d="M8 12h8M8 15.5h8M8 8.5h3" />
-    </svg>
-  );
-}
+const common = {
+  viewBox: "0 0 120 120",
+  "aria-hidden": true,
+  focusable: false,
+} as const;
 
 export function GearIcon(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg {...BASE} {...props}>
-      <circle cx="12" cy="12" r="3.2" />
-      <path d="M12 3v2.4M12 18.6V21M21 12h-2.4M5.4 12H3M18.1 5.9l-1.7 1.7M7.6 16.4l-1.7 1.7M18.1 18.1l-1.7-1.7M7.6 7.6 5.9 5.9" />
+    <svg {...common} {...props}>
+      <g stroke="var(--ic-line)" strokeWidth="10" strokeLinecap="round">
+        <path d="M60 10v14M60 96v14M110 60H96M24 60H10M93 27l-10 10M37 83l-10 10M93 93l-10-10M37 37 27 27" />
+      </g>
+      <circle cx="60" cy="60" r="30" fill="var(--ic-1)" />
+      <circle cx="60" cy="60" r="13" fill="var(--ic-line)" />
+      <circle cx="60" cy="60" r="7" fill="var(--ic-3)" />
     </svg>
   );
 }
 
 export function PuzzleIcon(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg {...BASE} {...props}>
-      <path d="M9 4h4a1 1 0 0 1 1 1v2.2a1.6 1.6 0 0 0 2.8 1A1.6 1.6 0 0 1 20 9.6V13a1 1 0 0 1-1 1h-2.2a1.6 1.6 0 0 0-1 2.8A1.6 1.6 0 0 1 14.4 20H11a1 1 0 0 1-1-1v-2.2a1.6 1.6 0 0 0-2.8-1A1.6 1.6 0 0 1 4 14.4V11a1 1 0 0 1 1-1h2.2a1.6 1.6 0 0 0 1-2.8A1.6 1.6 0 0 1 9 4Z" />
+    <svg {...common} {...props}>
+      <path
+        d="M38 14h30a6 6 0 0 1 6 6v13a10 10 0 0 1 17 6 10 10 0 0 1-17 6v13a6 6 0 0 1-6 6H58a10 10 0 0 0 0-17 10 10 0 0 0 0 17H38a6 6 0 0 1-6-6V68a10 10 0 0 1-17-6 10 10 0 0 1 17-6V26a6 6 0 0 1 6-6Z"
+        fill="var(--ic-1)"
+      />
+      <circle cx="60" cy="52" r="7" fill="var(--ic-3)" />
     </svg>
   );
 }
 
 export function ShieldIcon(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg {...BASE} {...props}>
-      <path d="M12 3.5 19 6v6c0 4.2-3 7.3-7 8.5-4-1.2-7-4.3-7-8.5V6l7-2.5Z" />
-      <path d="m9 12 2 2 4-4.2" />
+    <svg {...common} {...props}>
+      <path d="M60 10 98 24v30c0 26-17 42-38 46C39 96 22 80 22 54V24Z" fill="var(--ic-1)" />
+      <path d="M60 10 98 24v30c0 26-17 42-38 46Z" fill="var(--ic-2)" fillOpacity="0.5" />
+      <path
+        d="M42 58l13 13 24-26"
+        fill="none"
+        stroke="var(--ic-line)"
+        strokeWidth="9"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
 
 export function FlaskIcon(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg {...BASE} {...props}>
-      <path d="M10 3h4" />
-      <path d="M10.5 3v6.2L5.8 18a1.5 1.5 0 0 0 1.3 2.3h9.8a1.5 1.5 0 0 0 1.3-2.3L13.5 9.2V3" />
-      <path d="M7.8 15h8.4" />
+    <svg {...common} {...props}>
+      <path d="M48 12h24" stroke="var(--ic-line)" strokeWidth="8" strokeLinecap="round" />
+      <path
+        d="M51 14v26L26 86a10 10 0 0 0 9 15h50a10 10 0 0 0 9-15L69 40V14Z"
+        fill="var(--ic-1)"
+      />
+      <path d="M33 72h54l7 14a10 10 0 0 1-9 15H35a10 10 0 0 1-9-15Z" fill="var(--ic-2)" />
+      <circle cx="56" cy="62" r="4.5" fill="var(--ic-3)" />
+      <circle cx="68" cy="70" r="3.5" fill="var(--ic-3)" />
     </svg>
   );
 }
 
 export function ClipboardIcon(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg {...BASE} {...props}>
-      <rect x="5.5" y="4.5" width="13" height="16" rx="1.5" />
-      <path d="M9 4.5V3.8A1.3 1.3 0 0 1 10.3 2.5h3.4A1.3 1.3 0 0 1 15 3.8v.7" />
-      <path d="m8.5 12.5 2 2 4.5-4.6" />
+    <svg {...common} {...props}>
+      <rect x="26" y="16" width="68" height="92" rx="10" fill="var(--ic-1)" />
+      <rect x="44" y="8" width="32" height="16" rx="6" fill="var(--ic-2)" />
+      <g stroke="var(--ic-line)" strokeWidth="6" strokeLinecap="round">
+        <path d="M39 50h26M39 64h26M39 78h18" />
+      </g>
+      <path
+        d="M66 60l9 9 16-18"
+        fill="none"
+        stroke="var(--ic-3)"
+        strokeWidth="8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
 
 export function BlocksIcon(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg {...BASE} {...props}>
-      <rect x="3.5" y="4" width="7" height="7" rx="1" />
-      <rect x="13.5" y="4" width="7" height="7" rx="1" />
-      <rect x="8.5" y="13" width="7" height="7" rx="1" />
+    <svg {...common} {...props}>
+      <rect x="14" y="40" width="34" height="34" rx="7" fill="var(--ic-1)" />
+      <rect x="72" y="40" width="34" height="34" rx="7" fill="var(--ic-2)" />
+      <rect x="43" y="68" width="34" height="34" rx="7" fill="var(--ic-3)" />
+      <rect x="43" y="12" width="34" height="34" rx="7" fill="none" stroke="var(--ic-line)" strokeWidth="5" />
     </svg>
   );
 }
 
 export function NotebookIcon(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg {...BASE} {...props}>
-      <rect x="5" y="3.5" width="14" height="17" rx="1.5" />
-      <path d="M8.5 3.5v17" />
-      <path d="M12 8h4M12 11.5h4M12 15h2.5" />
-    </svg>
-  );
-}
-
-export function ChartIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg {...BASE} {...props}>
-      <path d="M4 20V4" />
-      <path d="M4 20h16" />
-      <rect x="7" y="13" width="2.6" height="7" />
-      <rect x="11.7" y="9" width="2.6" height="11" />
-      <rect x="16.4" y="6" width="2.6" height="14" />
-    </svg>
-  );
-}
-
-export function SpeechHeartIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg {...BASE} {...props}>
-      <path d="M4 5.5h16v10H9l-4 3.5v-3.5H4Z" />
-      <path d="M12 7.8c-.9-1-2.4-1-3.1 0-.7 1-.5 2 .4 2.9L12 13l2.7-2.3c.9-.9 1.1-1.9.4-2.9-.7-1-2.2-1-3.1 0Z" />
+    <svg {...common} {...props}>
+      <path d="M22 18a8 8 0 0 1 8-8h22v92H30a8 8 0 0 1-8-8Z" fill="var(--ic-1)" />
+      <path d="M52 10h38a8 8 0 0 1 8 8v74a8 8 0 0 1-8 8H52Z" fill="var(--ic-2)" />
+      <g stroke="var(--ic-line)" strokeWidth="6" strokeLinecap="round">
+        <path d="M64 34h24M64 48h24M64 62h16" />
+      </g>
+      <circle cx="30" cy="34" r="3.5" fill="var(--ic-3)" />
+      <circle cx="30" cy="48" r="3.5" fill="var(--ic-3)" />
     </svg>
   );
 }
 
 export function CalendarIcon(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg {...BASE} {...props}>
-      <rect x="4" y="5" width="16" height="15" rx="1.5" />
-      <path d="M4 9.5h16" />
-      <path d="M8 3v4M16 3v4" />
-      <path d="M8 13h2M11 13h2M14 13h2M8 16.3h2M11 16.3h2" />
+    <svg {...common} {...props}>
+      <rect x="14" y="26" width="92" height="80" rx="12" fill="var(--ic-1)" />
+      <rect x="14" y="26" width="92" height="24" rx="12" fill="var(--ic-2)" />
+      <g stroke="var(--ic-line)" strokeWidth="8" strokeLinecap="round">
+        <path d="M38 14v20M82 14v20" />
+      </g>
+      <g fill="var(--ic-3)">
+        <circle cx="38" cy="74" r="5" />
+        <circle cx="60" cy="74" r="5" />
+        <circle cx="82" cy="74" r="5" />
+        <circle cx="38" cy="90" r="5" />
+        <circle cx="60" cy="90" r="5" />
+      </g>
     </svg>
   );
 }
 
 export function PeopleIcon(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg {...BASE} {...props}>
-      <circle cx="8.5" cy="8.5" r="2.6" />
-      <circle cx="16" cy="9.5" r="2.1" />
-      <path d="M3.5 19.5c.4-3 2.4-4.8 5-4.8s4.6 1.8 5 4.8" />
-      <path d="M14.3 14.9c2.1.2 3.6 1.8 3.9 4.1" />
+    <svg {...common} {...props}>
+      <circle cx="40" cy="38" r="17" fill="var(--ic-1)" />
+      <circle cx="80" cy="42" r="14" fill="var(--ic-2)" />
+      <path d="M12 102c2-22 13-34 28-34s26 12 28 34Z" fill="var(--ic-1)" />
+      <path d="M68 102c2-18 10-28 24-28s22 10 24 28Z" fill="var(--ic-2)" fillOpacity="0.85" />
+      <circle cx="40" cy="38" r="6" fill="var(--ic-3)" />
     </svg>
   );
 }
 
 export function RibbonIcon(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg {...BASE} {...props}>
-      <circle cx="12" cy="8" r="4.5" />
-      <path d="m9 11.8-1.8 7.7L12 16l4.8 3.5-1.8-7.7" />
+    <svg {...common} {...props}>
+      <path d="M38 64 24 108l22-10 14 14 14-14 22 10-14-44" fill="var(--ic-2)" />
+      <circle cx="60" cy="48" r="30" fill="var(--ic-1)" />
+      <circle cx="60" cy="48" r="16" fill="none" stroke="var(--ic-line)" strokeWidth="6" />
+      <circle cx="60" cy="48" r="5" fill="var(--ic-3)" />
     </svg>
   );
 }
 
 export function HandshakeIcon(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg {...BASE} {...props}>
-      <path d="m3 10 3.5-3.5a2 2 0 0 1 2.8 0L11 8.2" />
-      <path d="M21 10l-3.5-3.5a2 2 0 0 0-2.8 0L13 8.2l-2 2a1.4 1.4 0 0 0 2 2l1.8-1.8" />
-      <path d="m11 10.2 2.3 2.3a1.4 1.4 0 0 1-2 2L9.5 12.7" />
-      <path d="M3 10v5.5l3 3M21 10v5.5l-3 3" />
+    <svg {...common} {...props}>
+      <path
+        d="M60 100c22-10 36-10 46-30 6-12-4-24-16-18-6 3-12 9-18 15"
+        fill="var(--ic-1)"
+      />
+      <path
+        d="M60 100c-22-10-36-10-46-30-6-12 4-24 16-18 6 3 12 9 18 15"
+        fill="var(--ic-2)"
+      />
+      <circle cx="60" cy="58" r="9" fill="var(--ic-3)" />
     </svg>
   );
 }

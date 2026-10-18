@@ -5,6 +5,7 @@ import BootstrapNavbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
 import Pages from "../pages.ts";
 import { useThemeMode } from "../ThemeModeContext";
+import { renderItalics } from "../utils/renderItalics";
 import { SearchButton } from "./Search";
 
 // Generated with Claude Sonnet 5 (Anthropic), 2026-09-08
@@ -187,7 +188,7 @@ export function Navbar() {
                     <Link
                       key={`mega-${openMenu}-${subpageIndex}`}
                       to={subpage.path}
-                      className="mega-menu-link"
+                      className={`mega-menu-link mega-menu-link--${subpageIndex % 2 === 0 ? "dark" : "light"}`}
                       onClick={closeNow}
                     >
                       {Icon && (
@@ -195,7 +196,14 @@ export function Navbar() {
                           <Icon />
                         </span>
                       )}
-                      <span className="mega-menu-link-name">{subpage.name}</span>
+                      <span className="mega-menu-link-text">
+                        <span className="mega-menu-link-name">{subpage.name}</span>
+                        {subpage.lead && (
+                          <span className="mega-menu-link-lead">
+                            {renderItalics(subpage.lead)}
+                          </span>
+                        )}
+                      </span>
                     </Link>
                   );
                 })}

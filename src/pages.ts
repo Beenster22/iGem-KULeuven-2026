@@ -22,9 +22,7 @@ import {
 import {
   BlocksIcon,
   CalendarIcon,
-  ChartIcon,
   ClipboardIcon,
-  DescriptionIcon,
   FlaskIcon,
   GearIcon,
   HandshakeIcon,
@@ -33,8 +31,15 @@ import {
   PuzzleIcon,
   RibbonIcon,
   ShieldIcon,
-  SpeechHeartIcon,
 } from "./components/NavMenuIcons";
+// These three pages already have an illustration on the home page's "Find
+// out more about EMPOWER" cards — reused here instead of drawing a
+// near-duplicate (see NavMenuIcons.tsx).
+import {
+  BubblesIcon,
+  LightbulbIcon,
+  MagnifierIcon,
+} from "./components/FindOutMoreIcons";
 
 interface Base {
   name: string | undefined;
@@ -75,7 +80,7 @@ const Pages: (Page | Folder)[] = [
         path: "/description",
         component: Description,
         lead: "What PMOS is, how it is diagnosed, and why we went looking for its roots in the gut.",
-        icon: DescriptionIcon,
+        icon: LightbulbIcon,
       },
       {
         name: "Engineering Success",
@@ -151,7 +156,7 @@ const Pages: (Page | Folder)[] = [
         path: "/results",
         component: Results,
         lead: "What came out of the Toolkit and Therapeutics pipelines, from the promoter library to bile salt deconjugation by our hydrolase candidates.",
-        icon: ChartIcon,
+        icon: MagnifierIcon,
       },
     ],
   },
@@ -164,7 +169,7 @@ const Pages: (Page | Folder)[] = [
         path: "/human-practices",
         component: HumanPractices,
         lead: "The five stakeholder groups we spoke with, how their feedback reached the project, and what it changed.",
-        icon: SpeechHeartIcon,
+        icon: BubblesIcon,
       },
       {
         name: "Events",

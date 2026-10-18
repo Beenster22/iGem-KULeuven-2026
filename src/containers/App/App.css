@@ -506,68 +506,118 @@ a[data-footnote-ref]:focus {
   }
 }
 
-/* Edited with Claude Sonnet 5 (Anthropic), 2026-10-18
-   Purpose: team request to match another team's wiki, whose mega-menu shows
-   each page as an icon tile in a grid rather than a left-aligned list with a
-   description line. Tiles use the site's own palette (lavender tint,
-   teal icon) instead of copying their colours. */
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: team request to match another team's wiki — wide landscape tiles
+   (icon beside the text, not stacked above it) rather than a left-aligned
+   list with a description line. Reuses the exact card system the home
+   page's "Find out more about EMPOWER" cards already use (find-more-card /
+   FindOutMoreIcons.tsx — alternating dark-plum and lavender, flat
+   illustrations coloured through --ic-1/2/3/line), so the two match instead
+   of the navbar inventing its own look. Cards are wide (minmax 15rem) and
+   short, sized for a horizontal dropdown strip rather than the home page's
+   tall vertical cards. */
 .mega-menu-content {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 1rem;
-  padding: 1.5rem 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 0.85rem;
+  padding: 1.25rem 1rem;
 }
 
 .mega-menu-link {
-  text-decoration: none;
-  color: var(--color-text);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1.5rem 1rem;
+  gap: 0.85rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid transparent;
   border-radius: 1rem;
-  background-color: color-mix(in srgb, var(--brand-lavender) 22%, transparent);
-  text-align: center;
+  text-decoration: none;
   transition:
-    background-color 0.15s ease,
-    transform 0.15s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.mega-menu-link--dark {
+  --ic-1: #c9bde8;
+  --ic-2: #2fa4a9;
+  --ic-3: #f1c3d4;
+  --ic-line: #33283f;
+  --card-tagline: #7fd6da;
+  background-color: #33283f;
+  border-color: rgba(201, 189, 232, 0.3);
+  color: #eaf4f5;
+}
+
+.mega-menu-link--light {
+  --ic-1: #33283f;
+  --ic-2: #2fa4a9;
+  --ic-3: #f1c3d4;
+  --ic-line: #eaf4f5;
+  --card-tagline: #1f6a6e;
+  background-color: #c9bde8;
+  color: #33283f;
 }
 
 .mega-menu-link:hover,
 .mega-menu-link:focus {
-  background-color: color-mix(in srgb, var(--brand-lavender) 45%, transparent);
-  transform: translateY(-2px);
-}
-
-[data-theme="dark"] .mega-menu-link {
-  background-color: color-mix(in srgb, var(--brand-lavender) 12%, transparent);
-}
-
-[data-theme="dark"] .mega-menu-link:hover,
-[data-theme="dark"] .mega-menu-link:focus {
-  background-color: color-mix(in srgb, var(--brand-lavender) 22%, transparent);
+  border-color: #2fa4a9;
+  box-shadow: 0 0.6rem 1.4rem rgba(47, 164, 169, 0.3);
+  color: inherit;
+  transform: translateY(-3px);
 }
 
 .mega-menu-link-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex: none;
+  display: block;
   width: 2.75rem;
-  height: 2.75rem;
-  color: var(--brand-teal);
 }
 
 .mega-menu-link-icon svg {
+  display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
+  transition: transform 0.25s ease;
+}
+
+.mega-menu-link:hover .mega-menu-link-icon svg,
+.mega-menu-link:focus .mega-menu-link-icon svg {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.mega-menu-link-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
 }
 
 .mega-menu-link-name {
+  font-weight: 800;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.mega-menu-link-lead {
+  color: var(--card-tagline);
+  font-size: 0.8rem;
   font-weight: 600;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mega-menu-link,
+  .mega-menu-link-icon svg {
+    transition: none;
+  }
+
+  .mega-menu-link:hover,
+  .mega-menu-link:focus {
+    transform: none;
+  }
 }
 
 @media (max-width: 991.98px) {
@@ -582,7 +632,7 @@ a[data-footnote-ref]:focus {
   }
 
   .mega-menu-content {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    grid-template-columns: 1fr;
     padding: 0.5rem 0.5rem 1rem;
   }
 }
