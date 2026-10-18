@@ -2,14 +2,28 @@
 // Purpose: an image that opens fullscreen when clicked, for detailed figures
 // that are hard to read at column width. Use in .mdx as
 // <ZoomableImage src="…" alt="…" />; click anywhere or press Esc to close.
+// Edited with Claude Sonnet 5 (Anthropic), 2026-10-18: added optional
+// `className`, passed through to the thumbnail <img> so individual figures
+// can opt into extra styling (e.g. a "framed" border + larger size) via CSS.
+// Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: added optional
+// `onLightBackground`, for a figure drawn with a transparent background (the
+// pBSH-Cas9 plasmid map) — against the dialog's dark backdrop it was
+// unreadable, so this gives the fullscreen image its own white card instead.
 import { useRef } from "react";
 
 interface ZoomableImageProps {
   src: string;
   alt: string;
+  className?: string;
+  onLightBackground?: boolean;
 }
 
-export function ZoomableImage({ src, alt }: ZoomableImageProps) {
+export function ZoomableImage({
+  src,
+  alt,
+  className,
+  onLightBackground,
+}: ZoomableImageProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   return (
@@ -20,7 +34,11 @@ export function ZoomableImage({ src, alt }: ZoomableImageProps) {
         aria-label={`View fullscreen: ${alt}`}
         onClick={() => dialogRef.current?.showModal()}
       >
-        <img src={src} alt={alt} className="img-fluid rounded" />
+        <img
+          src={src}
+          alt={alt}
+          className={`img-fluid rounded${className ? ` ${className}` : ""}`}
+        />
       </button>
       <dialog
         ref={dialogRef}
@@ -28,7 +46,11 @@ export function ZoomableImage({ src, alt }: ZoomableImageProps) {
         aria-label={alt}
         onClick={() => dialogRef.current?.close()}
       >
-        <img src={src} alt={alt} />
+        <img
+          src={src}
+          alt={alt}
+          className={onLightBackground ? "on-light-bg" : undefined}
+        />
         <button
           type="button"
           className="zoomable-image-close"

@@ -19,6 +19,33 @@ interface Heading {
   text: string;
   level: 2 | 3 | 4;
   parentId?: string;
+  // The heading's content as plain-vs-italic runs (e.g. "Selecting a "
+  // + italic "P. vulgatus" + " strain panel"), so a species name italicised
+  // on the page (see App.css / description.mdx etc.) stays italicised in
+  // this index instead of flattening to plain text.
+  segments: HeadingSegment[];
+}
+
+interface HeadingSegment {
+  text: string;
+  italic: boolean;
+}
+
+function headingSegments(element: Element): HeadingSegment[] {
+  const segments: HeadingSegment[] = [];
+  const walk = (node: ChildNode, italic: boolean) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent ?? "";
+      if (text) segments.push({ text, italic });
+      return;
+    }
+    if (node.nodeType !== Node.ELEMENT_NODE) return;
+    const el = node as Element;
+    const nowItalic = italic || el.tagName === "EM" || el.tagName === "I";
+    el.childNodes.forEach((child) => walk(child, nowItalic));
+  };
+  element.childNodes.forEach((child) => walk(child, false));
+  return segments;
 }
 
 // h4s are only listed when they opt in with data-toc-sub (the sections inside
@@ -59,7 +86,13 @@ function collectHeadings(container: HTMLElement): Heading[] {
     const level: 2 | 3 | 4 =
       element.tagName === "H4" || (isDropdownTitle && underWrittenH3) ? 4 : element.tagName === "H3" ? 3 : 2;
     if (level === 2) currentParentId = slug;
-    return { id: slug, text, level, parentId: level === 2 ? undefined : currentParentId };
+    return {
+      id: slug,
+      text,
+      level,
+      parentId: level === 2 ? undefined : currentParentId,
+      segments: headingSegments(element),
+    };
   });
 }
 
@@ -71,15 +104,40 @@ const READING_LINE_PX = 92;
 // if the browser never reports the end of the scroll.
 const CLICK_LOCK_MS = 1500;
 
+// Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-17 (team feedback: on the
+// Team page the mascot never followed the reader down to "Principal
+// Investigators" and "Advisors"): the last sections of a page are often
+// shorter than the screen, so their headings can never scroll up to the
+// reading line. Over the final screenful of the page the line therefore moves
+// down to the bottom of the screen, so each of those headings counts as read
+// in turn as the page runs out.
+// Edited 2026-10-17 (the mascot still stayed behind on the Team page): the line
+// itself now sits halfway down the screen instead of just under the navbar, so a
+// section counts as the current one once it fills the middle of the screen,
+// not only after its heading has scrolled all the way to the top. Short
+// sections near the end of a page then get their turn well before the page
+// runs out.
+function readingLine(): number {
+  const viewport = window.innerHeight;
+  const base = Math.max(READING_LINE_PX, viewport * 0.5);
+  const remaining = Math.max(
+    0,
+    document.documentElement.scrollHeight - viewport - window.scrollY,
+  );
+  if (remaining >= viewport) return base;
+  return base + (viewport - base) * (1 - remaining / viewport);
+}
+
 // The section being read: the last heading at or above the reading line.
 function currentHeadingId(headings: Heading[]): string {
   let current = "";
+  const line = readingLine();
   for (const heading of headings) {
     const element = document.getElementById(heading.id);
     // Headings inside a hidden section (see PhasePager) have no layout box.
     if (!element || element.getClientRects().length === 0) continue;
     if (!current) current = heading.id;
-    if (element.getBoundingClientRect().top > READING_LINE_PX) break;
+    if (element.getBoundingClientRect().top > line) break;
     current = heading.id;
   }
   return current || (headings[0]?.id ?? "");
@@ -141,9 +199,22 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
     const container = containerRef.current;
     if (!container) return;
 
+    // Edited with Claude Opus 5 (Anthropic), 2026-10-17
+    // Purpose: the rescan used to be latched behind a single rAF handle, so
+    // a frame that never arrives — a backgrounded tab, a window that is not
+    // painting — left the latch set and the observer deaf from then on. A
+    // timeout runs alongside the frame and whichever arrives first wins, so
+    // the index still catches up on a page nobody is looking at yet.
     let frame = 0;
-    const rescan = () => {
+    let timer = 0;
+    const cancelScheduled = () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      if (timer) window.clearTimeout(timer);
       frame = 0;
+      timer = 0;
+    };
+    const rescan = () => {
+      cancelScheduled();
       const found = collectHeadings(container);
       setHeadings((current) => (sameHeadings(current, found) ? current : found));
       // If the current section was inside a dropdown that just closed, fall
@@ -155,12 +226,22 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
     };
 
     const observer = new MutationObserver(() => {
-      if (!frame) frame = window.requestAnimationFrame(rescan);
+      if (frame || timer) return;
+      frame = window.requestAnimationFrame(rescan);
+      timer = window.setTimeout(rescan, 100);
     });
-    observer.observe(container, { childList: true, subtree: true });
+    // Edited with Claude Opus 5 (Anthropic), 2026-10-17
+    // Purpose: characterData matters as much as childList here. Switching a
+    // tab or segment (TabbedSections, SegmentedSelector) swaps one panel's
+    // content for another's, and React reuses the heading elements it
+    // already has, rewriting their text in place. Without characterData
+    // that is invisible to this observer, so every heading kept the id
+    // slugified from the *previous* panel's text — and a link to
+    // /results#crispr-construct-design found no such id on the page.
+    observer.observe(container, { childList: true, subtree: true, characterData: true });
     return () => {
       observer.disconnect();
-      if (frame) window.cancelAnimationFrame(frame);
+      cancelScheduled();
     };
   }, [containerRef, location.pathname]);
 
@@ -331,7 +412,11 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
                   .join(" ") || undefined}
               >
                 <a href={`#${heading.id}`} onClick={(event) => handleClick(event, heading.id)}>
-                  <span className="section-progress-label">{heading.text}</span>
+                  <span className="section-progress-label">
+                    {heading.segments.map((segment, i) =>
+                      segment.italic ? <em key={i}>{segment.text}</em> : segment.text,
+                    )}
+                  </span>
                 </a>
                 {expandable && (
                   <button

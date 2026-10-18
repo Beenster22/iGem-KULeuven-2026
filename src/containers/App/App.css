@@ -342,6 +342,74 @@ a[data-footnote-ref]:focus {
   color: var(--color-header-text);
 }
 
+/* Purpose: title-row badge marking this as a special prize's dedicated page
+   (see pages.ts `specialPrize`) — same teal pill as the home page's
+   FindOutMore "Special prize" badge (App.css .find-more-card-prize),
+   repeated here and in the navbar (.nav-link-prize-star,
+   .mega-menu-link-prize) so the prize is visible wherever the page is
+   reached, not only from the home page. */
+.page-header-box-title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.page-header-prize-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background-color: #2fa4a9;
+  color: #33283f;
+  font-size: 0.8rem;
+  font-weight: 800;
+  white-space: nowrap;
+  margin-bottom: 0.5rem;
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: team request — every page's title now carries the same icon as
+   its navbar mega-menu tile (see pages.ts `icon`, Header.tsx), sitting to
+   its left and spanning the full height of the title + lead stack (not just
+   the title line). The header box is always the same dark plum
+   (--color-header-bg), so the --ic-* illustration variables are fixed to
+   that card's palette rather than switching with the site's light/dark
+   theme toggle. */
+.page-header-box-icon-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.page-header-icon {
+  --ic-1: #c9bde8;
+  --ic-2: #2fa4a9;
+  --ic-3: #f1c3d4;
+  --ic-line: #33283f;
+  /* DbtlCycleIcon's centre text fills with currentColor rather than an
+     --ic-* var (it sits over the open middle, not over a filled shape) —
+     needs its own color since nothing above it in the header sets one. */
+  color: var(--color-header-text);
+  flex: none;
+  display: block;
+  width: 6rem;
+}
+
+.page-header-icon svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 575.98px) {
+  .page-header-box-icon-row {
+    gap: 1rem;
+  }
+
+  .page-header-icon {
+    width: 3.75rem;
+  }
+}
+
 /* NAVBAR */
 .navbar-empower {
   background-color: var(--color-page-bg);
@@ -390,6 +458,15 @@ a[data-footnote-ref]:focus {
 
 .navbar-empower .nav-link-dropdown.show .nav-link-caret {
   transform: rotate(-180deg);
+}
+
+/* Purpose: small star marking a top-level nav link as a special prize's
+   dedicated page (see pages.ts `specialPrize`, .page-header-prize-badge
+   above). Kept to a bare star rather than the full "Special prize" pill —
+   there isn't room for the pill text beside the nav link label. */
+.nav-link-prize-star {
+  color: #2fa4a9;
+  margin-left: 0.3rem;
 }
 
 .navbar-empower .nav-link::after {
@@ -495,11 +572,6 @@ a[data-footnote-ref]:focus {
   border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
-[data-theme="dark"] .mega-menu-link:hover,
-[data-theme="dark"] .mega-menu-link:focus {
-  background-color: rgba(201, 189, 232, 0.15);
-}
-
 @keyframes mega-menu-fade-in {
   from {
     opacity: 0;
@@ -511,44 +583,171 @@ a[data-footnote-ref]:focus {
   }
 }
 
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: team request to match another team's wiki — wide landscape tiles
+   (icon beside the text, not stacked above it) rather than a left-aligned
+   list with a description line. Reuses the exact card system the home
+   page's "Find out more about EMPOWER" cards already use (find-more-card /
+   FindOutMoreIcons.tsx — alternating dark-plum and lavender, flat
+   illustrations coloured through --ic-1/2/3/line), so the two match instead
+   of the navbar inventing its own look. Cards are wide (minmax 15rem) and
+   short, sized for a horizontal dropdown strip rather than the home page's
+   tall vertical cards. */
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: team request — a fixed 3 columns instead of auto-fit, so a wide
+   folder (4+ tiles) never crowds 4 onto one row; it wraps to 3 then
+   2-or-3 instead. See layoutMegaMenu in Navbar.tsx, which works out how
+   many tiles land in that trailing row and pads it out with Elle
+   (.mega-menu-filler) when it is short of 3. */
 .mega-menu-content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+  padding: 1.25rem 1rem;
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: team request — a thin rule setting Dry Lab apart from the other
+   Lab-folder tiles above it (Results, Measurement, Notebook, Protocols).
+   Spans every column so it reads as a full-width row break rather than a
+   divider between two tiles. */
+.mega-menu-divider {
+  grid-column: 1 / -1;
+  height: 1px;
+  margin: 0.25rem 0;
+  background-color: rgba(201, 189, 232, 0.35);
+}
+
+/* Elle, filling out a trailing row that falls short of 3 tiles (see
+   layoutMegaMenu). Same silent-mascot sizing idea as .mega-menu-link-icon,
+   just bigger and alone in its cell since she isn't sitting next to a
+   label here. */
+.mega-menu-filler {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 1.5rem 2rem;
-  padding: 1.5rem 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.mega-menu-filler img {
+  width: 4.5rem;
+  height: auto;
+  opacity: 0.85;
 }
 
 .mega-menu-link {
-  flex: 1 1 180px;
-  max-width: 260px;
-  text-decoration: none;
-  color: var(--color-text);
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  transition: background-color 0.15s ease;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.4rem;
+  border: 2px solid transparent;
+  border-radius: 1rem;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.mega-menu-link--dark {
+  --ic-1: #c9bde8;
+  --ic-2: #2fa4a9;
+  --ic-3: #f1c3d4;
+  --ic-line: #33283f;
+  background-color: #33283f;
+  border-color: rgba(201, 189, 232, 0.3);
+  color: #eaf4f5;
+}
+
+.mega-menu-link--light {
+  --ic-1: #33283f;
+  --ic-2: #2fa4a9;
+  --ic-3: #f1c3d4;
+  --ic-line: #eaf4f5;
+  background-color: #c9bde8;
+  color: #33283f;
 }
 
 .mega-menu-link:hover,
 .mega-menu-link:focus {
-  background-color: rgba(201, 189, 232, 0.5);
+  border-color: #2fa4a9;
+  box-shadow: 0 0.6rem 1.4rem rgba(47, 164, 169, 0.3);
+  color: inherit;
+  transform: translateY(-3px);
+}
+
+.mega-menu-link-icon {
+  flex: none;
+  display: block;
+  width: 2.75rem;
+}
+
+.mega-menu-link-icon svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.25s ease;
+}
+
+.mega-menu-link:hover .mega-menu-link-icon svg,
+.mega-menu-link:focus .mega-menu-link-icon svg {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.mega-menu-link-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
 }
 
 .mega-menu-link-name {
-  font-weight: 600;
-  font-size: 1.05rem;
+  font-weight: 800;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+/* Purpose: "Special prize" pill on a mega-menu tile whose page is a special
+   prize's dedicated page (see pages.ts `specialPrize`). Fixed teal/plum
+   rather than the tile's own dark/light colors so it reads the same as the
+   home page's FindOutMore badge and the page header's. */
+.mega-menu-link-prize {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background-color: #2fa4a9;
+  color: #33283f;
+  font-size: 0.7rem;
+  font-weight: 800;
+  vertical-align: middle;
 }
 
 .mega-menu-link-lead {
-  font-size: 0.85rem;
-  opacity: 0.75;
+  /* Same colour as the title (white on the dark tiles, plum on the light
+     ones) rather than the teal/blue tagline colour the home page cards use
+     — team feedback: the tinted tagline read as "blue" and they wanted
+     plain white here instead. */
+  color: inherit;
+  opacity: 0.85;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mega-menu-link,
+  .mega-menu-link-icon svg {
+    transition: none;
+  }
+
+  .mega-menu-link:hover,
+  .mega-menu-link:focus {
+    transform: none;
+  }
 }
 
 @media (max-width: 991.98px) {
@@ -563,12 +762,14 @@ a[data-footnote-ref]:focus {
   }
 
   .mega-menu-content {
-    flex-direction: column;
-    padding: 0.5rem 0 0.5rem 1rem;
+    grid-template-columns: 1fr;
+    padding: 0.5rem 0.5rem 1rem;
   }
 
-  .mega-menu-link {
-    max-width: none;
+  /* A single column has no "empty cell" to fill — Elle would just be an
+     unexplained image stacked into the middle of the link list. */
+  .mega-menu-filler {
+    display: none;
   }
 }
 
@@ -769,6 +970,30 @@ a[data-footnote-ref]:focus {
   }
 }
 
+/* STICKY TABLE HEADER
+   Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
+   Purpose: a long results table (e.g. the growth-curve fitting parameters,
+   results page) scrolls vertically inside a capped-height wrapper instead
+   of stretching the page, with its header row pinned to the top of that
+   scroll area so the column labels stay readable throughout. Stacks with
+   .table-responsive-rounded, whose own overflow-y: hidden (kept for the
+   rounded corners) is overridden back to auto here. The sticky cells'
+   background is the enclosing .content-section's own tint rather than the
+   page background, so the header stays opaque over scrolled rows without
+   mismatching the card around it; short tables that never reach the capped
+   height simply never scroll, so this is safe to apply everywhere. */
+.table-responsive-sticky-head {
+  max-height: 28rem;
+  overflow-y: auto;
+}
+
+.table-responsive-sticky-head thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--content-section-bg, var(--color-page-bg));
+}
+
 /* CALLOUT */
 .bd-callout {
   padding: 1.25rem;
@@ -897,9 +1122,34 @@ a[data-footnote-ref]:focus {
    The grid is wider than the content column, so it scrolls sideways with
    the homolog column pinned to the left edge. Cell colours are inline
    styles (computed per value in DockingHeatmap.tsx), so nothing here sets
-   them. */
+   them.
+   Edited with Claude Sonnet 5 (Anthropic), 2026-10-18
+   Purpose: .docking-heatmap is always a flex row of its two children (the
+   grid and the detail panel), both at 100% basis so they stack normally.
+   Adding .is-split (on selection, wide viewports only — see the media query
+   below) narrows both to ~50% so the shrinking grid and the appearing image
+   are visibly two halves of the same row, with a transition on flex-basis so
+   the move is animated rather than an instant snap. The grid itself also
+   gets smaller type/padding under .is-split so the full width stays mostly
+   visible instead of relying only on its sideways scroll. */
 .docking-heatmap {
   margin: 1.5rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.docking-heatmap-top {
+  flex: 1 1 100%;
+  min-width: 0;
+  transition: flex-basis 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 769px) {
+  .docking-heatmap.is-split .docking-heatmap-top {
+    flex-basis: calc(50% - 0.75rem);
+  }
 }
 
 .docking-heatmap-scroll {
@@ -910,6 +1160,11 @@ a[data-footnote-ref]:focus {
 .docking-heatmap-grid {
   border-collapse: separate;
   border-spacing: 2px;
+  /* Centers the grid when it's narrower than the scroll container; has no
+     effect (auto margins resolve to 0) once it's wide enough to need the
+     sideways scroll, so nothing is ever clipped off the left edge. */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .docking-heatmap-caption {
@@ -922,15 +1177,28 @@ a[data-footnote-ref]:focus {
 }
 
 .docking-heatmap-col-head {
+  position: relative;
   vertical-align: bottom;
+  /* Fixed height reserves room for the diagonal label below, regardless of
+     name length. */
+  height: 7.5rem;
   padding: 0 0 0.4rem;
-  font-size: 0.72rem;
-  font-weight: 600;
-  /* Ten full bile salt names will not fit side by side at column width, so
-     they are set vertically, as in the original figure's angled labels. */
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
+  transition: height 0.35s ease;
+}
+
+.docking-heatmap-col-head span {
+  /* Angled labels (as in the original figure) read far more easily than
+     fully vertical text, while still fitting ten full bile salt names side
+     by side at column width. */
+  position: absolute;
+  left: 0.3rem;
+  bottom: 0.5rem;
+  transform: rotate(-45deg);
+  transform-origin: left bottom;
   white-space: nowrap;
+  font-size: 0.74rem;
+  font-weight: 600;
+  transition: font-size 0.35s ease;
 }
 
 .docking-heatmap-corner {
@@ -939,6 +1207,7 @@ a[data-footnote-ref]:focus {
   text-align: left;
   vertical-align: bottom;
   padding-bottom: 0.4rem;
+  transition: font-size 0.35s ease;
 }
 
 .docking-heatmap-row-head,
@@ -955,6 +1224,9 @@ a[data-footnote-ref]:focus {
   font-weight: 600;
   text-align: right;
   white-space: nowrap;
+  transition:
+    font-size 0.35s ease,
+    padding-right 0.35s ease;
 }
 
 .docking-heatmap-cell-wrap {
@@ -972,9 +1244,42 @@ a[data-footnote-ref]:focus {
   font-variant-numeric: tabular-nums;
   line-height: 1.1;
   cursor: pointer;
-  transition: outline-color 0.12s ease;
+  transition:
+    outline-color 0.12s ease,
+    min-width 0.35s ease,
+    padding 0.35s ease,
+    font-size 0.35s ease;
   outline: 2px solid transparent;
   outline-offset: -2px;
+}
+
+/* Smaller type + padding so a split-view grid fits its half of the row
+   without needing much of its sideways scroll (min-width:0 on
+   .docking-heatmap-top above is what lets it shrink past the table's
+   natural width at all; the scroll stays as a fallback for tall tables). */
+@media (min-width: 769px) {
+  .docking-heatmap.is-split .docking-heatmap-cell {
+    min-width: 34px;
+    padding: 0.4rem 0.2rem;
+    font-size: 0.64rem;
+  }
+
+  .docking-heatmap.is-split .docking-heatmap-row-head {
+    font-size: 0.68rem;
+    padding-right: 0.4rem;
+  }
+
+  .docking-heatmap.is-split .docking-heatmap-col-head {
+    height: 5.5rem;
+  }
+
+  .docking-heatmap.is-split .docking-heatmap-col-head span {
+    font-size: 0.62rem;
+  }
+
+  .docking-heatmap.is-split .docking-heatmap-corner {
+    font-size: 0.62rem;
+  }
 }
 
 .docking-heatmap-cell:hover {
@@ -989,6 +1294,8 @@ a[data-footnote-ref]:focus {
 .docking-heatmap-legend {
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 0.85rem;
   font-size: 0.75rem;
@@ -1006,11 +1313,21 @@ a[data-footnote-ref]:focus {
 }
 
 .docking-heatmap-detail {
+  flex: 1 1 100%;
+  min-width: 0;
   margin-top: 1rem;
   border: 1px solid rgba(51, 40, 63, 0.25);
   border-radius: 0.75rem;
   padding: 1rem;
   text-align: center;
+  transition: flex-basis 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 769px) {
+  .docking-heatmap.is-split .docking-heatmap-detail {
+    flex-basis: calc(50% - 0.75rem);
+    margin-top: 0;
+  }
 }
 
 [data-theme="dark"] .docking-heatmap-detail {
@@ -1029,6 +1346,46 @@ a[data-footnote-ref]:focus {
 .docking-heatmap-detail-placeholder {
   opacity: 0.7;
   font-style: italic;
+}
+
+@keyframes docking-heatmap-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.docking-heatmap-detail.has-selection {
+  animation: docking-heatmap-pop-in 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.docking-heatmap-detail-image {
+  /* Given room to be the thing you're now looking at, rather than a thumbnail
+     tucked under a still-full-size table. */
+  max-width: min(100%, 640px);
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(20, 14, 28, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .docking-heatmap-detail.has-selection {
+    transition: none;
+    animation: none;
+  }
+
+  .docking-heatmap-top,
+  .docking-heatmap-detail,
+  .docking-heatmap-cell,
+  .docking-heatmap-col-head,
+  .docking-heatmap-col-head span,
+  .docking-heatmap-corner,
+  .docking-heatmap-row-head {
+    transition: none;
+  }
 }
 
 /* MARKDOWN TABLES INSIDE A DROPDOWN (notebook / protocol accordions)
@@ -1127,6 +1484,70 @@ a[data-footnote-ref]:focus {
     max-width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
+  }
+}
+
+/* APPENDIX TABLES (project description — PMOS prevalence)
+   Generated with Claude Sonnet 5 (Anthropic), 2026-10-17
+   Purpose: the plain markdown tables in the Appendix section render as bare
+   <table>s outside any dropdown, so they need the same accent-header,
+   soft-border treatment as .expandable-content table above (same palette:
+   --color-accent header fill, the site's plum-tinted border colour in both
+   themes). The two short summary tables (search settings; prevalence by
+   continent) hold single words and numbers, so --compact centers them at
+   their natural width instead of stretching edge-to-edge; the locations
+   table holds full sentences and stays left-aligned and full width, same
+   reasoning as the dropdown tables. */
+.appendix-table table {
+  width: 100%;
+  margin: 0 auto 1.25rem;
+  border-collapse: collapse;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.appendix-table table :is(th, td) {
+  border: 1px solid rgba(51, 40, 63, 0.18);
+  padding: 0.6rem 0.85rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+[data-theme="dark"] .appendix-table table :is(th, td) {
+  border-color: rgba(201, 189, 232, 0.25);
+}
+
+.appendix-table table th {
+  background-color: var(--color-accent);
+  /* The accent fill is light in both themes, so the header text is fixed
+     dark rather than the theme-varying --color-text. */
+  color: #33283f;
+  font-weight: 600;
+}
+
+.appendix-table--compact table {
+  width: auto;
+  min-width: 320px;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.appendix-table--compact table :is(th, td) {
+  text-align: center;
+}
+
+@media (max-width: 767.98px) {
+  .appendix-table table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .appendix-table--compact table {
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 
@@ -2125,6 +2546,29 @@ a[data-footnote-ref]:focus {
 .section-progress li.sub-sub.active .section-progress-label {
   font-weight: 700;
   opacity: 1;
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: "CRISPR construct design" sat as a plain row at the bottom of a
+   long Therapeutics list, directly under two indented sub-sub rows — easy to
+   miss (team feedback). Targeted by its known slug rather than by changing
+   the heading text, so its anchor and the link to it from
+   experimental-overview.mdx are untouched. Bolder, a touch bigger, and set
+   off with a divider so it reads as its own result instead of blending into
+   the hydrolase section above it. */
+.section-progress a[href="#crispr-construct-design"] .section-progress-label {
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.section-progress li:has(> a[href="#crispr-construct-design"]) {
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid rgba(51, 40, 63, 0.18);
+}
+
+[data-theme="dark"] .section-progress li:has(> a[href="#crispr-construct-design"]) {
+  border-top-color: rgba(255, 255, 255, 0.14);
 }
 
 /* Collapsible index (pages that render [data-toc-collapsible]): a chevron
@@ -3137,7 +3581,7 @@ footer hr {
 .sponsor-carousel-track {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
   width: max-content;
   animation: sponsor-carousel-scroll var(--sponsor-carousel-duration, 25s)
     linear infinite;
@@ -3152,15 +3596,16 @@ footer hr {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 150px;
-  height: 76px;
+  width: 210px;
+  height: 108px;
   border-radius: 0.75rem;
   background-color: rgba(255, 255, 255, 0.95);
-  /* 1rem top/bottom keeps every logo's clear space at >= half the height of
-     the KU Leuven Group SET logomark within it (its brand guideline's
-     minimum), since that's the tallest padding requirement of any sponsor
-     sharing this tile size — bumped from 0.75rem for that reason. */
-  padding: 1rem 1.25rem;
+  /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18 (team request: use
+     the tile's space, logos must stay readable): the tile grew from 150x76 to
+     210x108 and its padding shrank from 1rem 1.25rem to 0.55rem 0.8rem, so the
+     logo area went from about 110x44 to about 184x76 pixels. The per-logo
+     enlargement (SponsorCarousel.tsx) is eased off to match. */
+  padding: 0.55rem 0.8rem;
   /* Logos enlarged with `zoom` (SponsorCarousel.tsx) may reach into the
      padding; this keeps them inside the tile's rounded corners. */
   overflow: hidden;
@@ -3179,7 +3624,7 @@ footer hr {
 
 .sponsor-carousel-placeholder {
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 1rem;
   text-align: center;
   color: var(--color-text);
   opacity: 0.6;
@@ -3380,6 +3825,17 @@ div.sponsor-grid-card:hover {
   margin-inline: auto;
 }
 
+/* Added with Claude Sonnet 5 (Anthropic), 2026-10-18
+   Purpose: opt-in style for a single figure, via
+   <ZoomableImage className="framed" ... /> — a visible border around the
+   image plus a larger column cap, for a diagram the reader should linger on. */
+.zoomable-image-trigger img.framed {
+  max-width: min(100%, 56rem);
+  border: 2px solid color-mix(in srgb, var(--color-text) 45%, transparent);
+  border-radius: 0.75rem;
+  padding: 0.5rem;
+}
+
 .zoomable-image-dialog {
   width: 100vw;
   height: 100vh;
@@ -3409,6 +3865,19 @@ div.sponsor-grid-card:hover {
   height: 100%;
   object-fit: contain;
   border-radius: 0.5rem;
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: <ZoomableImage onLightBackground /> — for a figure drawn with a
+   transparent background (the pBSH-Cas9 plasmid map), which disappeared into
+   the dialog's dark backdrop above. Plain white rather than a theme token:
+   the figure was drawn assuming a light background specifically, not
+   whatever the current theme happens to be. box-sizing keeps the padding
+   from pushing the image past the dialog's own padding. */
+.zoomable-image-dialog img.on-light-bg {
+  box-sizing: border-box;
+  padding: 2rem;
+  background-color: #ffffff;
 }
 
 .zoomable-image-close {
@@ -3464,21 +3933,49 @@ body.home-fullscreen {
   width: 100%;
   height: 100dvh;
   overflow: hidden;
-  background-color: var(--color-header-bg);
+  background-color: var(--color-accent);
 }
 
+/* Deliberately NOT sharing .home-hero-embed's cover formula below
+   (2026-10-18, team call): a 16:9 asset can't both fill a wider-than-16:9
+   window edge-to-edge AND show its full height uncropped — one has to give.
+   Cropping the logo was ruled unacceptable, so this stays full "contain"
+   (never grows past 100% either dimension, so never crops vertically); on a
+   wide/short window the resting logo leaves a themed-colour margin on the
+   sides instead, and there's a brief zoom at the handoff on those windows
+   until FINAL_FRAME_SRC's video is re-exported on a wider canvas — see the
+   .home-hero-embed comment. */
 .home-hero-video {
-  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(100dvh * 16 / 9);
   height: 100%;
+  transform: translate(-50%, -50%);
   object-fit: cover;
   display: block;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.home-hero-video--shown {
+  opacity: 1;
 }
 
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
    Purpose: object-fit doesn't apply to an <iframe>, so the 16:9 video embed
    is sized to always cover the hero and centred, letting .home-hero's
-   overflow crop the excess — the same result as object-fit: cover. It's a
-   decorative background, so it takes no pointer input. */
+   overflow crop the excess — the same result as object-fit: cover.
+   Edited with Claude Sonnet 5 (Anthropic), 2026-10-18 (team call: the live
+   video stays full-bleed/cropped — it only plays once, briefly — but the
+   resting logo it hands off to must never be cropped; see .home-hero-video,
+   which intentionally does NOT share this formula anymore). Width and
+   height both over-grow symmetrically, so the box always covers the hero
+   fully in both dimensions. A narrow/tall window crops the sides; a
+   wide/short window crops top/bottom. This is an interim CSS-only trade-off
+   — the real fix is re-exporting the source video (and FINAL_FRAME_SRC) on
+   a wider canvas with margin around the subject, so nothing needs cropping
+   or margins on any window shape; ask when that's ready. */
 .home-hero-embed {
   position: absolute;
   top: 50%;
@@ -3557,6 +4054,17 @@ body.home-fullscreen {
 
 .home-section--page {
   background-color: var(--color-page-bg);
+}
+
+/* In light mode --color-page-bg is a light teal, distinct from the light
+   purple --color-body-bg band next to it — unlike dark mode, where both
+   tokens are shades of dark purple and the whole page reads as one
+   consistent identity. Matching this band to --color-body-bg in light mode
+   only gives light mode that same connected purple feel (2026-10-18 team
+   feedback), without touching --color-page-bg itself (still teal on every
+   other page). */
+[data-theme="light"] .home-section--page {
+  background-color: var(--color-body-bg);
 }
 
 .home-section--body {
@@ -4056,10 +4564,16 @@ body:not(.home-fullscreen) .home-hero {
   list-style: none;
   font-size: clamp(0.85rem, 1.3vw, 1rem);
   line-height: 1.3;
-  /* Content pages justify their text, which stretches a wrapped chip. */
-  text-align: left;
 }
 
+/* Edited with Claude Sonnet 5 (Anthropic), 2026-10-17 (team feedback: a
+   wrapped chip like "Dyslipidaemia and raised cardiovascular risk" had its
+   first line stretched edge to edge): content pages justify every `li`
+   directly (see .page-shell-content :is(p, li) above, (0,3,1) to this
+   rule's (0,1,1) — the li only inherits the list's own `text-align: left`,
+   it doesn't match it, so that rule alone couldn't win). !important for the
+   same reason .text-center is above: it's the one override with no higher
+   selector to chase. */
 .symptom-card-list li {
   display: flex;
   align-items: center;
@@ -4067,6 +4581,7 @@ body:not(.home-fullscreen) .home-hero {
   padding: 0.3rem 0.75rem;
   border-radius: 999px;
   border: 1.5px solid color-mix(in srgb, currentColor 25%, transparent);
+  text-align: left !important;
 }
 
 .symptom-card-list li::before {
@@ -5279,7 +5794,9 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team review): the
-   cell's fimbriae/pili. (Its loop of DNA was removed on 2026-10-15.) */
+   cell's fimbriae/pili. (Its loop of DNA was tried twice on 2026-10-17 —
+   dotted, then a criss-crossing line — and removed again both times: the
+   team decided against it.) */
 .bsh-pili {
   fill: none;
   stroke: #6e5b9e;
@@ -5966,90 +6483,130 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
-/* Find out more: links rolling sideways like the sponsor logos (the track
-   holds the set four times over and shifts by half its width per loop). */
+/* Find out more: boxes linking to the main pages.
+   Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-17 (team request: boxes
+   instead of rolling links, in the EMPOWER style): alternating dark purple and
+   lavender cards with a flat illustration, a title, a short line, and — for
+   the special prizes — a teal "Special prize" badge. The illustrations take
+   their colours from the card (--ic-*). */
 .find-more {
   text-align: center;
 }
 
 .find-more-heading {
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.75rem;
 }
 
-.find-more-band {
-  overflow: hidden;
-  margin: 0 calc(-50vw + 50%);
-  padding: 0.5rem 0;
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 8%,
-    black 92%,
-    transparent
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 8%,
-    black 92%,
-    transparent
-  );
+.find-more-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+  gap: 1rem;
+  max-width: 72rem;
+  margin: 0 auto;
 }
 
-.find-more-track {
+.find-more-card {
   display: flex;
-  gap: 1.5rem;
-  width: max-content;
-  padding-right: 1.5rem;
-  animation: find-more-roll 36s linear infinite;
-}
-
-.find-more-band:hover .find-more-track,
-.find-more-band:focus-within .find-more-track {
-  animation-play-state: paused;
-}
-
-@keyframes find-more-roll {
-  to {
-    translate: -50% 0;
-  }
-}
-
-.find-more-link {
-  flex: none;
-  padding: 0.7rem 1.75rem;
-  border: 3px solid currentColor;
-  border-radius: 999px;
-  color: inherit;
-  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
-  font-weight: 700;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  padding: 1.25rem 1.1rem 1.1rem;
+  border: 2px solid transparent;
+  border-radius: 1.25rem;
+  text-align: left;
   text-decoration: none;
   transition:
-    background-color 0.2s ease,
-    color 0.2s ease,
-    scale 0.2s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
-.find-more-link:hover,
-.find-more-link:focus-visible {
-  background-color: #2fa4a9;
+.find-more-card--dark {
+  --ic-1: #c9bde8;
+  --ic-2: #2fa4a9;
+  --ic-3: #f1c3d4;
+  --ic-line: #33283f;
+  --card-tagline: #7fd6da;
+  background-color: #33283f;
+  border-color: rgba(201, 189, 232, 0.3);
+  color: #eaf4f5;
+}
+
+.find-more-card--light {
+  --ic-1: #33283f;
+  --ic-2: #2fa4a9;
+  --ic-3: #f1c3d4;
+  --ic-line: #eaf4f5;
+  --card-tagline: #1f6a6e;
+  background-color: #c9bde8;
+  color: #33283f;
+}
+
+.find-more-card:hover,
+.find-more-card:focus-visible {
   border-color: #2fa4a9;
-  color: #fff;
-  scale: 1.05;
+  box-shadow: 0 0.9rem 1.8rem rgba(47, 164, 169, 0.35);
+  color: inherit;
+  transform: translateY(-6px);
 }
 
-.find-more-band--static {
-  margin: 0;
-  -webkit-mask-image: none;
-  mask-image: none;
+.find-more-card-art {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.6rem;
 }
 
-.find-more-band--static .find-more-track {
-  flex-wrap: wrap;
-  justify-content: center;
-  width: auto;
-  padding-right: 0;
-  animation: none;
+.find-more-card-art svg {
+  display: block;
+  width: min(100%, 7.5rem);
+  height: auto;
+  margin: 0 auto;
+  transition: transform 0.25s ease;
+}
+
+.find-more-card:hover .find-more-card-art svg,
+.find-more-card:focus-visible .find-more-card-art svg {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.find-more-card-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.find-more-card-tagline {
+  color: var(--card-tagline);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.find-more-card-prize {
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background-color: #2fa4a9;
+  color: #33283f;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.find-more-card-tagline + .find-more-card-prize {
+  margin-top: 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .find-more-card,
+  .find-more-card-art svg {
+    transition: none;
+  }
+
+  .find-more-card:hover,
+  .find-more-card:focus-visible {
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -6430,6 +6987,39 @@ body:not(.home-fullscreen) .home-hero {
   font-size: 0.85rem;
   text-align: center;
   line-height: 1.4;
+}
+
+/* PREVALENCE ELLE (Elle + "how we got these numbers", in PmosOverview.tsx)
+   Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
+   Purpose: Elle (ElleSays.tsx) stands in the corner of the globe section with
+   her line already in a speech bubble, rather than behind a click-to-open
+   info button — pinned to the section itself (not the globe/text pair) so
+   she stays in the same spot whether .pmos-globe-wrap is a row (desktop) or
+   a stacked column (mobile, see the media query below). The ">" selector
+   beats the specificity of the ".pmos-overview > :not(.microbe-backdrop)"
+   rule above that would otherwise force this back to position: relative. */
+.pmos-overview > .pmos-prevalence-elle {
+  position: absolute;
+  top: clamp(0.5rem, 3vh, 1.5rem);
+  right: clamp(0.5rem, 3vw, 1.5rem);
+  z-index: 3;
+  max-width: min(34rem, calc(100vw - 2rem));
+}
+
+.pmos-prevalence-elle .elle {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .pmos-overview > .pmos-prevalence-elle {
+    position: static;
+    margin: 0 auto 1rem;
+  }
+
+  .pmos-prevalence-elle .elle {
+    --elle-size: clamp(6rem, 24vw, 8rem);
+    justify-content: center;
+  }
 }
 
 @media (max-width: 768px) {
@@ -10793,6 +11383,74 @@ a.protocol-download:hover {
   text-align: center;
 }
 
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
+   Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: wrapped in
+   .figure-panel (below) and switched from auto-fit to a fixed 3-column grid,
+   so a set of five figures reliably lays out as a row of 3 then a row of 2
+   instead of auto-fit opportunistically fitting 4 or 5 across on a wide
+   screen. Falls back to 2 columns, then 1, as the viewport narrows.
+   Purpose: lays several figures (each its own placeholder now, each its own
+   clickable-to-enlarge <ZoomableImage> once the real figure lands) side by
+   side in a row, instead of one oversized composite image — e.g. the
+   growth-curve panels on the results page. */
+.figure-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.figure-grid > * {
+  margin: 0;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .figure-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .figure-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* FIGURE PANEL
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: groups a whole set of figures (.figure-grid) plus their shared
+   caption onto one card, in the same teal/white tint as .key-takeaway, so
+   the set reads as one unit set apart from the surrounding .content-section
+   tint rather than floating loose on it. */
+.figure-panel {
+  margin: 1.75rem 0;
+  padding: 1.75rem 1.75rem 1.5rem;
+  border: 1px solid rgba(51, 40, 63, 0.2);
+  border-radius: 1.25rem;
+  background-color: var(--color-page-bg);
+}
+
+[data-theme="dark"] .figure-panel {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.figure-panel > .figure-grid {
+  margin-top: 0;
+}
+
+.figure-panel > .figure-caption {
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+@media (max-width: 575.98px) {
+  .figure-panel {
+    padding: 1.25rem 1rem;
+    border-radius: 0.9rem;
+  }
+}
+
 /* The "ALL DATA" divider between a pipeline's introduction and its sections,
    as drawn on the sketch: a big, quiet label rather than a heading, so it
    stays out of the page index. */
@@ -10829,18 +11487,37 @@ a.protocol-download:hover {
    compared against. A tinted background and a heavier first cell, so it is
    found at a glance without the table turning into a colour chart. */
 .table-row-highlight > td {
-  /* Bootstrap paints every cell with --bs-table-bg and an inset shadow, so
-     the tint has to go on the cells, not on the row. */
-  background-color: rgba(201, 189, 232, 0.45);
+  /* Team dark purple (#33283f) with crisp light text (#eaf4f5 / #fff) in light mode —
+     contrasts sharply with the surrounding lavender card and white table rows. */
+  background-color: #33283f;
+  color: #eaf4f5;
+  border-color: rgba(234, 244, 245, 0.2);
   box-shadow: none;
 }
 
+.table-row-highlight > td a {
+  color: #eaf4f5;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 [data-theme="dark"] .table-row-highlight > td {
-  background-color: rgba(201, 189, 232, 0.18);
+  /* Team lavender (#c9bde8) with dark text (#33283f) in dark mode —
+     stands out brightly against the dark theme background. */
+  background-color: #c9bde8;
+  color: #33283f;
+  border-color: rgba(51, 40, 63, 0.25);
+}
+
+[data-theme="dark"] .table-row-highlight > td a {
+  color: #33283f;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .table-row-highlight td:first-child {
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /* The strain panel carries seven columns, two of them full sentences. Left
@@ -10854,4 +11531,498 @@ a.protocol-download:hover {
 .strain-panel-table td,
 .strain-panel-table th {
   font-size: 0.92rem;
+}
+
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
+   Purpose: the growth-curve fitting parameters table (results page, "Growth
+   curves and medium comparison") carries nine columns across five
+   iterations — tighter padding and smaller text keep it legible, and a
+   minimum width stops columns collapsing before the table-responsive
+   wrapper takes over with a sideways scroll. */
+.growth-params-table {
+  min-width: 54rem;
+}
+
+.growth-params-table td,
+.growth-params-table th {
+  font-size: 0.85rem;
+  padding: 0.5rem 0.6rem;
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17
+   Purpose: the pBSH-Cas9 component table (results page, "Construct
+   components"). First-column cells carry their own fixed background colour
+   (inline, matching the component's colour on the uploaded plasmid map), so
+   only the shared layout — bold component names, same width in both
+   columns — lives here. */
+.plasmid-legend-table td:first-child {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.plasmid-legend-table td:last-child {
+  width: 70%;
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: a shared "boxed subsection" treatment for the CRISPR construct
+   design subsections (Construct components, Integration strategy,
+   Validation plan, Data gaps and future iterations) — team feedback that
+   those four needed more visual definition than a plain heading plus
+   flowing text. Matches the .key-takeaway card palette already used on this
+   page rather than inventing a new one. */
+.subsection-panel {
+  padding: 1.5rem 1.75rem;
+  margin: 1rem 0 1.5rem;
+  border: 1px solid rgba(51, 40, 63, 0.2);
+  border-radius: 1.25rem;
+  background-color: var(--color-page-bg);
+}
+
+[data-theme="dark"] .subsection-panel {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.subsection-panel > :first-child {
+  margin-top: 0;
+}
+
+.subsection-panel > :last-child {
+  margin-bottom: 0;
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: replaces the old .construct-intro pairing (text beside a small
+   map) — team feedback wanted the plasmid map big on the left with its own
+   legend condensed beside it on the right instead. Stacks below tablet
+   width, map first. */
+.construct-map-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.construct-map-image {
+  flex: 1.6 1 24rem;
+  min-width: 0;
+}
+
+.construct-map-legend {
+  flex: 1 1 16rem;
+  max-width: 24rem;
+  min-width: 0;
+}
+
+.construct-map-legend .plasmid-legend-table {
+  font-size: 0.82rem;
+}
+
+.construct-map-legend .plasmid-legend-table td {
+  padding: 0.5rem 0.6rem;
+}
+
+@media (max-width: 767.98px) {
+  .construct-map-row {
+    flex-direction: column;
+  }
+
+  .construct-map-legend {
+    max-width: none;
+  }
+}
+
+/* A caveat that does not need a reader's full attention, set small with an
+   asterisk instead of the full bordered "Note" callout it replaced (team
+   feedback). */
+.construct-footnote {
+  font-size: 0.82rem;
+  opacity: 0.7;
+  margin-top: 1rem;
+}
+
+.construct-footnote p {
+  margin: 0;
+}
+
+/* STEP FLOW
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: a short sequential process as a row of numbered cards joined by
+   arrows (the CRISPR integration strategy's five steps, under its biorender
+   figure) — team feedback wanted the steps shown as a chronological flow
+   rather than a plain bullet list. Wraps to a vertical stack with a downward
+   arrow on narrow screens; the arrow is a rotated copy of the same
+   right-pointing chevron rather than a second glyph, so both read as the
+   same connector. Step numbers come from a CSS counter rather than a prop,
+   so steps can be reordered without renumbering by hand. */
+.step-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  counter-reset: step-flow;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+
+.step-flow-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1 1 11rem;
+  min-width: 11rem;
+}
+
+.step-flow-item:not(:first-child)::before {
+  content: "";
+  flex: none;
+  align-self: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-top: 2px solid rgba(51, 40, 63, 0.35);
+  border-right: 2px solid rgba(51, 40, 63, 0.35);
+  transform: rotate(45deg);
+}
+
+[data-theme="dark"] .step-flow-item:not(:first-child)::before {
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.step-flow-card {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(51, 40, 63, 0.2);
+  border-radius: 1rem;
+  background-color: var(--color-accent);
+}
+
+[data-theme="dark"] .step-flow-card {
+  border-color: transparent;
+}
+
+.step-flow-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background-color: #2fa4a9;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.step-flow-number::before {
+  counter-increment: step-flow;
+  content: counter(step-flow);
+}
+
+.step-flow-title {
+  font-weight: 700;
+  color: #33283f;
+}
+
+.step-flow-body {
+  font-size: 0.88rem;
+  opacity: 0.85;
+  color: #33283f;
+}
+
+@media (max-width: 575.98px) {
+  .step-flow {
+    flex-direction: column;
+  }
+
+  .step-flow-item:not(:first-child)::before {
+    transform: rotate(135deg);
+    align-self: flex-start;
+    margin-left: 0.9rem;
+  }
+}
+
+/* The validation-plan dropdowns read as a chronological list (team
+   feedback: the previous "1"-"4" key-takeaway cards had numbers that were
+   too heavy for what they were) — same <ExpandableText> used on the
+   Protocols page, just with a bigger title so each step reads at a glance. */
+.validation-plan-steps .expandable-title {
+  font-size: 1.1rem;
+}
+
+.validation-plan-steps .expandable-container {
+  margin-bottom: 0.75rem;
+}
+
+.validation-plan-steps .expandable-container:last-child {
+  margin-bottom: 0;
+}
+
+/* DATA GAPS LIST
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: each future-iteration item set off as its own row (a numbered
+   badge, like .step-flow-number, plus a left rule) instead of a plain
+   markdown ordered list — team feedback that the section needed more
+   definition. */
+.data-gaps-list ol {
+  list-style: none;
+  counter-reset: data-gaps;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.data-gaps-list li {
+  counter-increment: data-gaps;
+  position: relative;
+  padding: 0.6rem 0 0.6rem 2.75rem;
+  border-top: 1px solid rgba(51, 40, 63, 0.12);
+}
+
+[data-theme="dark"] .data-gaps-list li {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.data-gaps-list li:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.data-gaps-list li:last-child {
+  padding-bottom: 0;
+}
+
+.data-gaps-list li::before {
+  content: counter(data-gaps);
+  position: absolute;
+  left: 0;
+  top: 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  background-color: #2fa4a9;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-17
+   Purpose: the header box's optional right-hand decoration (Header's
+   `aside` prop) — the results page's only user today, for Elle's greeting.
+   The title/lead column is capped to a fixed width rather than left to grow
+   into whatever room the flex row leaves: a lead that is free to fill the
+   full container only ever wraps to one line, which left Elle's row (taller
+   than one line, with her figure and bubble) setting the box's height on its
+   own. Capping the text column keeps the lead at roughly the two lines it
+   would wrap to anyway once a mascot sits beside it, so the two columns
+   settle at close to the same height and the box does not grow past that.
+   Below 768px the two stack, title first, so Elle never crowds the title on
+   a narrow screen. */
+.page-header-box-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* Scoped to .page-header-box-row (present only when `aside` is given, see
+   Header.tsx) rather than to .page-header-box-text alone, which every page's
+   header wears and would otherwise have its width capped too. The cap keeps
+   the lead from stretching into the single very wide line it would get if
+   left to fill all the room the row leaves once Elle's column is taken out,
+   so it instead wraps the way it would on any other page. */
+.page-header-box-row .page-header-box-text {
+  flex: 1 1 28rem;
+  max-width: 42rem;
+}
+
+.page-header-box-aside {
+  flex: 0 0 auto;
+}
+
+/* Elle's own spacing (.elle's 2rem vertical margin, meant for a line of body
+   copy) is more than a header box needs, and left at her speech bubble's
+   default 24em max-width and "md" size she would set the row's height on
+   her own — size="sm" on the ElleSays call handles the mascot, and the
+   bubble is narrowed to match so her line settles into about as many lines
+   as the lead does, rather than spreading wide and short beside it. */
+.page-header-box-aside .elle {
+  margin: 0;
+}
+
+.page-header-box-aside .elle-bubble {
+  max-width: 13em;
+}
+
+@media (max-width: 767.98px) {
+  .page-header-box-row {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .page-header-box-row .page-header-box-text {
+    max-width: none;
+  }
+}
+
+/* PLASMID MAP */
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17
+   Purpose: the pBSH-Cas9 ring (PlasmidMap.tsx, results page). Feature
+   colours are inline (sampled per feature in data/plasmidMap.ts), so nothing
+   here sets them. The ring and the name/role panel sit side by side above
+   tablet width and stack below it. */
+.plasmid-map {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin: 1.5rem 0;
+}
+
+.plasmid-map-svg {
+  flex: 0 0 auto;
+  width: clamp(220px, 32vw, 300px);
+  height: auto;
+  overflow: visible;
+}
+
+.plasmid-map-feature {
+  cursor: pointer;
+  stroke: var(--color-page-bg);
+  stroke-width: 2;
+  outline: none;
+  transition:
+    filter 0.15s ease,
+    stroke-width 0.15s ease;
+}
+
+.plasmid-map-feature:hover,
+.plasmid-map-feature:focus-visible,
+.plasmid-map-feature.active {
+  filter: brightness(1.08) saturate(1.15);
+}
+
+.plasmid-map-feature.active {
+  stroke: var(--color-text);
+  stroke-width: 2.5;
+}
+
+.plasmid-map-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  fill: var(--color-text);
+  pointer-events: none;
+}
+
+.plasmid-map-panel {
+  flex: 1 1 16rem;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border: 1px solid rgba(51, 40, 63, 0.25);
+  border-radius: 0.75rem;
+  padding: 1rem 1.15rem;
+}
+
+[data-theme="dark"] .plasmid-map-panel {
+  border-color: rgba(201, 189, 232, 0.3);
+}
+
+.plasmid-map-panel-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.plasmid-map-panel-role {
+  color: var(--color-text);
+  opacity: 0.85;
+}
+
+.plasmid-map-panel-progress {
+  display: block;
+  margin-top: 0.5rem;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(51, 40, 63, 0.12);
+  overflow: hidden;
+}
+
+[data-theme="dark"] .plasmid-map-panel-progress {
+  background: rgba(201, 189, 232, 0.18);
+}
+
+.plasmid-map-panel-progress-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--color-text);
+  opacity: 0.55;
+  animation: plasmid-map-progress var(--plasmid-map-interval, 3200ms) linear
+    forwards;
+}
+
+.plasmid-map-panel-progress-fill.paused {
+  animation: none;
+  width: 100%;
+  opacity: 0;
+}
+
+@keyframes plasmid-map-progress {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plasmid-map-panel-progress-fill {
+    animation: none;
+    width: 100%;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .plasmid-map {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .plasmid-map-svg {
+    width: min(70vw, 280px);
+    margin: 0 auto;
+  }
+}
+
+/* COMPACT TABLE
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-17 (team request: the
+   team table on the Entrepreneurship page was far too big): small type and
+   tight cells, fixed columns so it always fits the width, left-aligned
+   because the cells hold sentences. */
+.table-compact.table-responsive-rounded .table-bordered {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table-compact.table-responsive-rounded .table-bordered th,
+.table-compact.table-responsive-rounded .table-bordered td {
+  min-width: 0;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.74rem;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.table-compact.table-responsive-rounded .table-bordered th:first-child,
+.table-compact.table-responsive-rounded .table-bordered td:first-child {
+  width: 17%;
+}
+
+.table-compact.table-responsive-rounded .table-bordered th:nth-child(2),
+.table-compact.table-responsive-rounded .table-bordered td:nth-child(2) {
+  width: 30%;
 }

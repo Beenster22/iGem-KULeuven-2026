@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import { getPathMapping, stringToSlug } from "../../utils";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Navbar } from "../../components/Navbar";
 import { Header } from "../../components/Header";
 import { HomeHero } from "../../components/HomeHero";
@@ -11,8 +11,23 @@ import { Footer } from "../../components/Footer";
 import { PageShell } from "../../components/PageShell";
 import { BackToTop } from "../../components/BackToTop";
 import { ThemeModeProvider } from "../../ThemeModeContext";
+import { ElleSays } from "../../components/ElleSays";
 
 const HOME_PATH = "/";
+
+// Generated with Claude Opus 5 (Anthropic), 2026-10-17
+// Purpose: per-page decorations for the header box's right side (Header's
+// `aside` prop). Keyed by path rather than threaded through pages.ts, which
+// is plain data (.ts, not .tsx) and cannot hold JSX. Only the results page
+// uses this today — Elle's greeting, moved here from the top of the page
+// body so she sits beside the title instead of above the content.
+const HEADER_ASIDE: Record<string, ReactNode> = {
+  "/results": (
+    <ElleSays mood="excited" size="sm" side="right">
+      Here you can find all our results! Isn&rsquo;t it exciting?!
+    </ElleSays>
+  ),
+};
 
 const App = () => {
   const pathMapping = getPathMapping();
@@ -64,7 +79,10 @@ const App = () => {
       {/* Header and PageContent */}
       <Routes>
         {Object.entries(pathMapping).map(
-          ([path, { title, lead, component: Component }]) =>
+          ([
+            path,
+            { title, lead, icon, specialPrize, component: Component },
+          ]) =>
             path === HOME_PATH ? (
               <Route
                 key={path}
@@ -86,7 +104,13 @@ const App = () => {
                 path={path}
                 element={
                   <>
-                    <Header title={title || ""} lead={lead || ""} />
+                    <Header
+                      title={title || ""}
+                      lead={lead || ""}
+                      icon={icon}
+                      aside={HEADER_ASIDE[path]}
+                      specialPrize={specialPrize}
+                    />
                     <main className="page-body">
                       <PageShell>
                         <Component />

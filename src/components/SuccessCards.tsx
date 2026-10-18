@@ -19,11 +19,22 @@ interface SuccessCardProps {
 export function SuccessCard({ to, children }: SuccessCardProps) {
   function handleClick(event: MouseEvent<HTMLAnchorElement>) {
     const target = document.getElementById(to);
-    // No target yet (the section may live in a tab that is not open, or may
-    // still be a placeholder) — leave the default jump in place rather than
-    // swallowing the click.
-    if (!target) return;
     event.preventDefault();
+    // No target yet: the result sits inside a dropdown that is not open (see
+    // ExpandableText), which opens itself when it hears the hash change. The
+    // heading appears once it has rendered, so the jump is retried briefly.
+    if (!target) {
+      history.replaceState(null, "", `#${to}`);
+      window.dispatchEvent(new HashChangeEvent("hashchange"));
+      let tries = 0;
+      const jump = () => {
+        const el = document.getElementById(to);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        else if (tries++ < 20) window.setTimeout(jump, 100);
+      };
+      jump();
+      return;
+    }
     target.scrollIntoView({ behavior: "smooth", block: "start" });
     history.replaceState(null, "", `#${to}`);
   }
