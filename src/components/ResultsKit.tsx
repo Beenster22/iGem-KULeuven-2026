@@ -69,3 +69,35 @@ export function FigureSlot({ label, children }: FigureSlotProps) {
     </div>
   );
 }
+
+// Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+// Purpose: a short sequential process (e.g. the CRISPR construct's
+// integration strategy) as a row of numbered cards joined by arrows, instead
+// of a plain bullet list — <StepFlow><Step title="...">...</Step>...
+// </StepFlow>. Numbers come from CSS (counter on .step-flow-item), so steps
+// can be reordered without renumbering by hand.
+export function StepFlow({ children }: { children: ReactNode }) {
+  return (
+    <div className="step-flow" role="list">
+      {children}
+    </div>
+  );
+}
+
+interface StepProps {
+  /** The step's short name, e.g. "Conjugative transfer". */
+  title: string;
+  children?: ReactNode;
+}
+
+export function Step({ title, children }: StepProps) {
+  return (
+    <div className="step-flow-item" role="listitem">
+      <div className="step-flow-card">
+        <span className="step-flow-number" aria-hidden="true" />
+        <span className="step-flow-title">{title}</span>
+        {children && <div className="step-flow-body">{children}</div>}
+      </div>
+    </div>
+  );
+}

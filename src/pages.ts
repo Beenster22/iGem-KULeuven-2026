@@ -35,7 +35,7 @@ import {
   ShieldIcon,
   TrophyIcon,
 } from "./components/NavMenuIcons";
-// These four pages already have an illustration on the home page's "Find
+// These five pages already have an illustration on the home page's "Find
 // out more about EMPOWER" cards — reused here instead of drawing a
 // near-duplicate (see NavMenuIcons.tsx).
 import {
@@ -148,9 +148,13 @@ const Pages: (Page | Folder)[] = [
       },
       {
         name: "Measurement",
-        title: "Best Measurement",
-        path: "/best-measurement",
+        title: "Measurement",
+        path: "/measurement",
         component: Measurement,
+        // Standard URL for the Best Measurement special prize per
+        // competition.igem.org/judging/awards/special — keep this path
+        // exactly "/measurement".
+        lead: "How we validated and calibrated our measurements, and where to find the methods, equipment, and data behind each one.",
         icon: RulerIcon,
         specialPrize: true,
       },

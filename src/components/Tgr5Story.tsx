@@ -1027,7 +1027,7 @@ export function EngineerSection() {
 /* ------------------------------------------------------------------ */
 
 // The pages the team lists, as boxes (the team's note of 2026-10-17). Each
-// special prize links to its own dedicated page.
+// special prize card links to its own dedicated page.
 interface MoreCard {
   title: string;
   tagline: string;
@@ -1052,7 +1052,7 @@ const MORE_CARDS: MoreCard[] = [
   {
     title: "Best Measurement",
     tagline: "Our measurement work",
-    to: "/best-measurement",
+    to: "/measurement",
     icon: <RulerIcon />,
     specialPrize: true,
   },
