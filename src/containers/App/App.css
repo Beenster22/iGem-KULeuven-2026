@@ -6636,6 +6636,18 @@ body:not(.home-fullscreen) .home-hero {
   color: #33283f;
 }
 
+/* In dark mode the section behind the cards is the same lavender as the
+   light cards, so with no border they vanish into it. The dark cards already
+   carry an outline; give the light ones the dark plum one. */
+[data-theme="dark"] .find-more-card--light {
+  border-color: rgba(51, 40, 63, 0.55);
+}
+
+[data-theme="dark"] .find-more-card--light:hover,
+[data-theme="dark"] .find-more-card--light:focus-visible {
+  border-color: #2fa4a9;
+}
+
 .find-more-card:hover,
 .find-more-card:focus-visible {
   border-color: #2fa4a9;
@@ -12405,11 +12417,27 @@ a.protocol-download:hover {
   padding: 0.5rem 0.75rem 0.5rem 0.25rem;
 }
 .dbtl-box:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
-/* Keep figures compact; they open fullscreen on click anyway. */
-.dbtl-box .figure-panel { margin: 1rem 0; }
-.dbtl-box .zoomable-image-trigger img { max-height: 180px; width: 100%; object-fit: contain; }
+/* Figures keep a legible size instead of being shrunk to the column: panel
+   sets wrap onto several rows, and the wide ones (spreadsheet plate layouts,
+   gel/plate photos with lettering) keep their width and scroll sideways. They
+   also open fullscreen on click. */
+.dbtl-box .figure-panel { margin: 1rem 0; padding: 0.75rem; }
+/* The site-wide figure grid forces a 1.44:1 box; here every figure keeps its own shape. */
+.dbtl-box .figure-grid img { aspect-ratio: auto; height: auto; }
+.dbtl-box .figure-grid { --figure-cols: 2; }
+.dbtl-box .figure-grid:has(.plate-layout, .wide-figure) { --figure-cols: 1; }
+.dbtl-box .figure-grid .zoomable-image-trigger:has(.plate-layout, .wide-figure) {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}
+.dbtl-box .zoomable-image-trigger img.plate-layout { width: max(100%, 700px); max-width: none; }
+.dbtl-box .zoomable-image-trigger img.wide-figure { width: max(100%, 560px); max-width: 780px; }
 .dbtl-box-label { font-weight: 700; font-size: 1.2rem; margin-bottom: 0.5rem; }
-@media (max-width: 720px) {
+/* Sized by the space the section actually gets (the page can have a side
+   contents list), not by the window. */
+.dbtl { container-type: inline-size; }
+@container (max-width: 640px) {
   .dbtl-body { grid-template-columns: 1fr; }
-  .dbtl-wheel { max-width: 260px; margin: 0 auto; }
+  .dbtl-wheel { max-width: 280px; margin: 0 auto; }
 }
