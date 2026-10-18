@@ -185,3 +185,49 @@ export function HandshakeIcon(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+// A screen with a code bracket and a blinking cursor — Dry Lab's
+// computational work.
+export function CodeIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...common} {...props}>
+      <rect x="10" y="20" width="100" height="70" rx="10" fill="var(--ic-1)" />
+      <rect x="10" y="20" width="100" height="16" rx="8" fill="var(--ic-2)" />
+      <g fill="var(--ic-3)">
+        <circle cx="22" cy="28" r="3" />
+        <circle cx="32" cy="28" r="3" />
+      </g>
+      <path
+        d="M42 54l-10 10 10 10M78 54l10 10-10 10M65 50l-10 28"
+        fill="none"
+        stroke="var(--ic-line)"
+        strokeWidth="6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <rect x="46" y="100" width="28" height="8" rx="4" fill="var(--ic-2)" />
+    </svg>
+  );
+}
+
+export function TrophyIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...common} {...props}>
+      <path
+        d="M34 18h52v26c0 16-12 28-26 28s-26-12-26-28Z"
+        fill="var(--ic-1)"
+      />
+      <path
+        d="M34 24H18v6c0 12 8 20 18 22v-9c-5-3-8-9-8-16Z"
+        fill="var(--ic-2)"
+      />
+      <path
+        d="M86 24h16v6c0 12-8 20-18 22v-9c5-3 8-9 8-16Z"
+        fill="var(--ic-2)"
+      />
+      <rect x="54" y="68" width="12" height="16" fill="var(--ic-1)" />
+      <path d="M40 100c2-10 10-16 20-16s18 6 20 16Z" fill="var(--ic-1)" />
+      <circle cx="60" cy="32" r="8" fill="var(--ic-3)" />
+    </svg>
+  );
+}

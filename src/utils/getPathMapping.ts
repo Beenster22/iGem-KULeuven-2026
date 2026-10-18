@@ -1,3 +1,4 @@
+import type { SVGProps } from "react";
 import pages from "../pages.ts";
 
 export const getPathMapping = () => {
@@ -7,6 +8,7 @@ export const getPathMapping = () => {
       title: string | undefined;
       component: React.FC;
       lead: string | undefined;
+      icon: React.FC<SVGProps<SVGSVGElement>> | undefined;
     };
   }>((map, item) => {
     if ("path" in item && item.path && item.component) {
@@ -15,6 +17,7 @@ export const getPathMapping = () => {
         title: item.title,
         component: item.component,
         lead: item.lead,
+        icon: item.icon,
       };
     } else if ("folder" in item && item.folder) {
       item.folder.forEach((page) => {
@@ -24,6 +27,7 @@ export const getPathMapping = () => {
             title: page.title,
             component: page.component,
             lead: page.lead,
+            icon: page.icon,
           };
         }
       });

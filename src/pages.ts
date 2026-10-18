@@ -23,6 +23,7 @@ import {
   BlocksIcon,
   CalendarIcon,
   ClipboardIcon,
+  CodeIcon,
   DbtlCycleIcon,
   FlaskIcon,
   HandshakeIcon,
@@ -31,14 +32,16 @@ import {
   PuzzleIcon,
   RibbonIcon,
   ShieldIcon,
+  TrophyIcon,
 } from "./components/NavMenuIcons";
-// These three pages already have an illustration on the home page's "Find
+// These four pages already have an illustration on the home page's "Find
 // out more about EMPOWER" cards — reused here instead of drawing a
 // near-duplicate (see NavMenuIcons.tsx).
 import {
   BubblesIcon,
   LightbulbIcon,
   MagnifierIcon,
+  RocketIcon,
 } from "./components/FindOutMoreIcons";
 
 interface Base {
@@ -58,9 +61,9 @@ class Page implements Base {
   // Optional: pages whose lead has not been written yet show the title alone
   // (see Header.tsx) instead of iGEM's own judging prompt.
   lead?: string;
-  // Optional: shown above the name in the navbar's mega-menu (see
-  // Navbar.tsx) for pages inside a folder. Top-level (non-folder) pages
-  // don't use this — they render as plain links, no tile.
+  // Optional: shown beside the name in the navbar's mega-menu (see
+  // Navbar.tsx, folder pages only) and beside the title on the page's own
+  // header (see Header.tsx / App.tsx, every page that sets one).
   icon?: React.FC<SVGProps<SVGSVGElement>>;
 }
 
@@ -114,6 +117,7 @@ const Pages: (Page | Folder)[] = [
     path: "/dry-lab",
     component: DryLab,
     lead: "A toolkit for engineering Bacteroides species, and the computational screening that narrowed our bile salt hydrolase candidates.",
+    icon: CodeIcon,
   },
   {
     name: "Wet Lab",
@@ -187,6 +191,7 @@ const Pages: (Page | Folder)[] = [
     path: "/entrepreneurship",
     component: Entrepreneurship,
     lead: "The business case for EMPOWER, phase by phase, from mission and problem to market, funding and a sustainable venture.",
+    icon: RocketIcon,
   },
   {
     name: "Prizes and Medals",
@@ -194,6 +199,7 @@ const Pages: (Page | Folder)[] = [
     path: "/awards",
     component: Awards,
     lead: "The medal and special prizes we are competing for, why we believe we deserve each one, and where on the wiki to find the work behind it.",
+    icon: TrophyIcon,
   },
   {
     name: "Team",

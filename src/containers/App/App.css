@@ -342,6 +342,45 @@ a[data-footnote-ref]:focus {
   color: var(--color-header-text);
 }
 
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: team request — every page's title now carries the same icon as
+   its navbar mega-menu tile (see pages.ts `icon`, Header.tsx), sitting to
+   its left. The header box is always the same dark plum (--color-header-bg),
+   so the --ic-* illustration variables are fixed to that card's palette
+   rather than switching with the site's light/dark theme toggle. */
+.page-header-box-title-row {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.page-header-box-title-row h1 {
+  margin-bottom: 0;
+}
+
+.page-header-icon {
+  --ic-1: #c9bde8;
+  --ic-2: #2fa4a9;
+  --ic-3: #f1c3d4;
+  --ic-line: #33283f;
+  flex: none;
+  display: block;
+  width: 3.75rem;
+}
+
+.page-header-icon svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 575.98px) {
+  .page-header-icon {
+    width: 2.75rem;
+  }
+}
+
 /* NAVBAR */
 .navbar-empower {
   background-color: var(--color-page-bg);
