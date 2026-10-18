@@ -12748,17 +12748,17 @@ a.protocol-download:hover {
 .integration-summary-headrow,
 .integration-summary-row {
   display: grid;
-  grid-template-columns: 1fr 1fr 11rem;
+  grid-template-columns: 1fr 1fr 13rem;
   gap: 0 1.5rem;
 }
 
 .integration-summary-head {
-  font-size: 0.72rem;
+  font-size: 0.95rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   color: #2fa4a9;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.6rem;
 }
 
 .integration-summary-row {
@@ -12777,14 +12777,22 @@ a.protocol-download:hover {
   padding-top: 0;
 }
 
-/* The hairline between the two prose columns */
-.integration-summary-integrated {
-  border-left: 1px solid rgba(51, 40, 63, 0.18);
+/* Thick rules between the columns — deliberately heavier than the hairlines
+   that separate the rows, so the three columns read as the main split. */
+.integration-summary-integrated,
+.integration-summary-impact {
+  border-left: 3px solid rgba(51, 40, 63, 0.22);
   padding-left: 1.5rem;
 }
 
-[data-theme="dark"] .integration-summary-integrated {
-  border-left-color: rgba(255, 255, 255, 0.16);
+[data-theme="dark"] .integration-summary-integrated,
+[data-theme="dark"] .integration-summary-impact {
+  border-left-color: rgba(255, 255, 255, 0.2);
+}
+
+/* The marker sits further right than the rule, so it clears the column line */
+.integration-summary-impact {
+  padding-left: 1.9rem;
 }
 
 .page-body .page-shell-content .integration-summary-row p {
@@ -12839,7 +12847,7 @@ a.protocol-download:hover {
 }
 
 .integration-summary-impact-label {
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 700;
   line-height: 1.3;
   color: #2fa4a9;
@@ -12870,14 +12878,15 @@ a.protocol-download:hover {
     content: "What we learned";
     display: block;
     margin-bottom: 0.3rem;
-    font-size: 0.68rem;
+    font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: #2fa4a9;
   }
 
-  .integration-summary-integrated {
+  .integration-summary-integrated,
+  .integration-summary-impact {
     border-left: none;
     padding-left: 0;
   }
@@ -12886,7 +12895,7 @@ a.protocol-download:hover {
     content: "How we integrated it";
     display: block;
     margin-bottom: 0.3rem;
-    font-size: 0.68rem;
+    font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
