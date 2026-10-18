@@ -7107,6 +7107,8 @@ body:not(.home-fullscreen) .home-hero {
    it lands at the circle's own 4px. */
 .pmos-globe-morph {
   position: absolute;
+  /* Above the globe's own element (see .pmos-globe-halo). */
+  z-index: 2;
   left: 50%;
   top: 50%;
   width: 70.5%;
@@ -7121,15 +7123,25 @@ body:not(.home-fullscreen) .home-hero {
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
    halo round the sphere. Sized to the sphere (SPHERE_FRACTION in
-   PmosGlobe.tsx) plus its own ring width, so the ring is centred on the
-   sphere's edge exactly where useLineToGlobe.ts draws the closing line;
-   --halo (set there) keeps it hidden until that line arrives. */
+   PmosGlobe.tsx) plus twice its ring width, so the ring sits just outside
+   the sphere's edge — exactly where useLineToGlobe.ts closes the line;
+   --halo (set there) keeps it hidden until that line arrives.
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback:
+   raised continents vanished behind it): it is painted behind the globe
+   (z-index 0, the globe's own element 1), so hovered/clicked continents
+   rise in front of it. */
+.pmos-globe-fly > :first-child {
+  position: relative;
+  z-index: 1;
+}
+
 .pmos-globe-halo {
   --halo-w: 4px;
   position: absolute;
+  z-index: 0;
   left: 50%;
   top: 50%;
-  width: calc(100% * 0.7051 + var(--halo-w));
+  width: calc(100% * 0.7051 + 2 * var(--halo-w));
   aspect-ratio: 1;
   translate: -50% -50%;
   border-radius: 50%;
