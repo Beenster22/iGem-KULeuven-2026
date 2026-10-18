@@ -150,15 +150,7 @@ export function PmosOverview({ children }: { children?: ReactNode }) {
         <div className="pmos-prevalence-elle">
           <ElleSays size="lg" side="right">
             To find out more how we got these numbers click{" "}
-            {/* The globe's drop onto the next screen waits until this link
-                reaches the navigation bar (globeDrop.ts). */}
-            <Link
-              to="/description#how-many-people-live-with-pmos"
-              className="pmos-prevalence-here"
-            >
-              HERE
-            </Link>
-            .
+            <Link to="/description#how-many-people-live-with-pmos">HERE</Link>.
           </ElleSays>
         </div>
         <Suspense
