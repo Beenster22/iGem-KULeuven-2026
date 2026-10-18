@@ -39,7 +39,7 @@
   />
 </div>
 
-<SegmentedSelector>
+<SegmentedSelector tone="pipeline">
 
 <SectionItem label="Toolkit">
 
@@ -64,18 +64,21 @@ for how these experiments fit together.
   clinical isolate and a direct faecal isolate.
 </div>
 
+#### Major takeaways
+
 <KeyTakeaways>
-  <Takeaway value="6" label="strains, three origins">
-    Four of human faecal origin, one clinical isolate from a retroperitoneal
-    abscess, and one direct faecal isolate.
+  <Takeaway>
+    Six <em>P. vulgatus</em> strains were chosen spanning three origins: four
+    of human faecal origin, one clinical isolate, and one direct faecal
+    isolate.
   </Takeaway>
-  <Takeaway value="3" label="BSH loci in the type strain">
-    DSM 1447 carries three choloylglycine hydrolase loci, with activity
-    confirmed in vitro and in vivo.
+  <Takeaway>
+    The type strain DSM 1447 carries three choloylglycine hydrolase (BSH)
+    loci, with activity confirmed in vitro and in vivo.
   </Takeaway>
-  <Takeaway value="4" label="strains with no BSH data">
-    The Sanger gut isolates and the clinical strain have no reported BSH
-    activity — one of the gaps this panel is built to close.
+  <Takeaway>
+    Four of the six strains have no reported BSH activity — one of the gaps
+    this panel is built to close.
   </Takeaway>
 </KeyTakeaways>
 
@@ -224,7 +227,7 @@ Together this panel covers healthy human gut, clinical and inflamed murine origi
 
 Only the type strain has characterised BSH loci. Its genome carries three choloylglycine hydrolase (_cgh_/_bsh_) genes, with activity confirmed both in vitro and in vivo. These serve as the query set for annotating the remaining strains.
 
-<ExpandableText title="BSH loci in DSM 1447 and how the other strains were annotated">
+<ExpandableText title="BSH loci in DSM 1447 and how the other strains were annotated" tocIgnore>
 
 | Locus tag   | Role                                             |
 | ----------- | ------------------------------------------------ |
@@ -255,23 +258,6 @@ further down this page!
   reproducibly, and which of mGAM's own ingredients can explain the gap.
 </div>
 
-<KeyTakeaways>
-  <Takeaway value="mGAM" label="fastest, most reproducible growth">
-    Followed by Wilkins–Chalgren (WC), which gives a more sigmoidal curve.
-  </Takeaway>
-  <Takeaway value="0" label="growth in unsupplemented BHI">
-    Agrees with the literature: hemin and vitamin K are required by many
-    _Bacteroides_ and relatives[^growth-gibbons].
-  </Takeaway>
-  <Takeaway value="2³" label="factorial supplementation design">
-    The in-house minimal medium (MM) was written off within a 24 h window but
-    grew once the read was extended, prompting a full-factorial supplementation
-    study.
-  </Takeaway>
-</KeyTakeaways>
-
-#### Introduction
-
 Growth of each condition was characterized by fitting its optical density
 (OD) data over time, which yields parameters describing how quickly cells
 grow, how long they take to begin dividing, and how much biomass they
@@ -289,7 +275,34 @@ Curious how we measured all this? Have a look at our <Link to="/measurement">mea
 
 </ElleSays>
 
-#### Materials and methods
+#### Major takeaways
+
+<KeyTakeaways>
+  <Takeaway>
+    mGAM gave the fastest, most reproducible growth, followed by
+    Wilkins–Chalgren (WC) with a more sigmoidal curve.
+  </Takeaway>
+  <Takeaway>
+    Unsupplemented BHI supported no growth at all, agreeing with the
+    literature: hemin and vitamin K are required by many _Bacteroides_ and
+    relatives[^growth-gibbons].
+  </Takeaway>
+  <Takeaway>
+    BHI growth was strain dependent: the isolate grew in unsupplemented BHI
+    while the type strain did not.
+  </Takeaway>
+  <Takeaway>
+    Our minimal medium requires pH adjustment, and the enrichment with
+    vitamin K and starch only contributed noticeably once the pH had been
+    corrected.
+  </Takeaway>
+  <Takeaway>
+    A standardized cell preparation protocol is required to obtain the
+    exponential-phase cells needed for growth comparisons.
+  </Takeaway>
+</KeyTakeaways>
+
+<ExpandableText title="Medium Component analysis" tocIgnore>
 
 BHI, WC and mGAM were used at the manufacturer's formulation, while MM was a
 laboratory recipe. The media were chosen based on reported anaerobic growth
@@ -306,7 +319,7 @@ A summary of medium compositions is given below — crucial for the next steps
 of the project, since it gives a fair starting point from which to attribute
 a growth advantage to specific components.
 
-<ExpandableText title="Table 1a–d. Medium compositions (BHI, WC, mGAM, MM)">
+<ExpandableText title="Table 1a–d. Medium compositions (BHI, WC, mGAM, MM)" tocIgnore>
 
 **Table 1a. Composition of Brain Heart Infusion (BHI).** BD Difco, Franklin
 Lakes, NJ, USA. Used at the manufacturer's formulation.
@@ -541,18 +554,17 @@ Prepared in-house. LB powder from Sigma-Aldrich, St. Louis, MO, USA.
 
 Full protocol, plate layouts and run-by-run records are in the{" "}
 
-<Link to="/protocols">Protocols</Link> (Chassis Characterization → Medium
-Comparison Growth Assay) and the <Link to="/notebook">Notebook</Link> (entries
-STR-01 to STR-03).
-
-#### Component analysis
+<Link to="/protocols#medium-comparison-growth-assay">Protocols</Link> (Chassis
+Characterization → Medium Comparison Growth Assay) and the{" "}
+<Link to="/notebook#notebook-str-strain-and-medium-selection">Notebook</Link>{" "}
+(entries STR-01 to STR-03).
 
 The main differences in medium components create differences in growth
 performance. The following components are the most prominent differences
 between the media, discussed here to work out which are responsible for the
 higher-performing media.
 
-<ExpandableText title="Hemin">
+<ExpandableText title="Hemin" tocIgnore>
 
 WC contains 5 mg L⁻¹ hemin, whereas mGAM and MM contain 10 mg L⁻¹; BHI
 contains no added hemin. Hemin supplies haem for haem-containing proteins
@@ -564,7 +576,7 @@ increased growth rate and biomass yield[^growth-macy].
 
 </ExpandableText>
 
-<ExpandableText title="Vitamin K compounds">
+<ExpandableText title="Vitamin K compounds" tocIgnore>
 
 mGAM contains vitamin K₁ (5 mg L⁻¹), whereas WC contains menadione
 (0.5 mg L⁻¹); neither BHI nor MM contains an explicit vitamin K supplement.
@@ -577,7 +589,7 @@ experimentally.
 
 </ExpandableText>
 
-<ExpandableText title="Starch">
+<ExpandableText title="Starch" tocIgnore>
 
 Only mGAM contains soluble starch, at 5 g L⁻¹. Starch has been shown to
 support rapid growth and high bacterial yields in tested _B. vulgatus_
@@ -587,7 +599,7 @@ in mGAM by providing an additional source of carbon and energy.
 
 </ExpandableText>
 
-<ExpandableText title="Glucose and complex nutrients">
+<ExpandableText title="Glucose and complex nutrients" tocIgnore>
 
 Glucose concentrations are 2.0 g L⁻¹ in BHI, 1.0 in WC, 0.5 in mGAM and 0.2 in
 MM. Glucose provides carbon and energy for _B. vulgatus_, which has been
@@ -599,7 +611,7 @@ additional carbon source[^growth-mccarthy].
 
 </ExpandableText>
 
-<ExpandableText title="Bicarbonate">
+<ExpandableText title="Bicarbonate" tocIgnore>
 
 Only MM contains added sodium bicarbonate, at 1.25 g L⁻¹. Bicarbonate
 provides a source of dissolved CO₂ and helps resist changes in pH, which is
@@ -611,7 +623,7 @@ considered.
 
 </ExpandableText>
 
-<ExpandableText title="Reducing agents">
+<ExpandableText title="Reducing agents" tocIgnore>
 
 mGAM contains cysteine hydrochloride and sodium thioglycollate, WC was
 supplemented with cysteine hydrochloride, and MM contains cysteine. These
@@ -629,14 +641,16 @@ experiments therefore varied starch, vitamin K₁ and pH individually to assess
 their contributions.
 
 mGAM was the clear winner: it grew fastest and reached a final OD of about
-0.41, against only 0.13 in WC. It is hard to attribute this to only one
-component. Starch (both amylose and amylopectin) is a likely factor, since it
-is known to give rapid growth and high yields in
-_B. vulgatus_[^growth-mccarthy]. Hemin may also have helped[^growth-lee], and
-the reducing agents would have kept conditions properly anaerobic — though
-this experiment cannot separate out what each ingredient contributed. Even
-so, mGAM's advantage was large enough to make it the natural starting medium
-for testing starch, vitamin K₁ and pH one at a time.
+0.41, against only 0.13 in WC. It is hard to attribute this to a single
+component. However, starch (both amylose and amylopectin) is a likely factor,
+since it is known to give rapid growth and high yields in _B. vulgatus_[^growth-mccarthy].
+Hemin may also have helped[^growth-lee], and the reducing agents would have
+kept conditions properly anaerobic, though this experiment cannot separate out
+what each ingredient contributed. Even so, mGAM's advantage was big enough to
+make it the natural starting medium for testing starch, vitamin K₁ and pH one
+at a time.
+
+</ExpandableText>
 
 #### Results
 
@@ -710,7 +724,7 @@ A–E); the fitted parameters for every condition are in Table 2.
 
 </div>
 
-<ExpandableText title="Why Gaussian process (GP) regression?">
+<ExpandableText title="Why Gaussian process (GP) regression?" tocIgnore>
 
 Bacterial growth curves have a lag phase, an exponential phase, and a
 plateau. Parametric models such as the logistic impose a fixed shape on all
@@ -724,7 +738,7 @@ choosing a window by eye, and it propagates measurement uncertainty into μ.
 
 </ExpandableText>
 
-<ExpandableText title="What does each variable describe?">
+<ExpandableText title="What does each variable describe?" tocIgnore>
 
 - **ΔOD** is the total increase in optical density, which reflects the final
   biomass the culture reaches.
@@ -744,7 +758,7 @@ choosing a window by eye, and it propagates measurement uncertainty into μ.
 
 </ExpandableText>
 
-<ExpandableText title="How are the calculations performed?">
+<ExpandableText title="How are the calculations performed?" tocIgnore>
 
 ΔOD is the difference between the maximum and initial OD over the
 measurement: ΔOD = OD<sub>max</sub> − OD<sub>initial</sub>.
@@ -763,7 +777,7 @@ the integral of the fitted ln(OD) curve over the whole measurement.
 
 </ExpandableText>
 
-<ExpandableText title="What do the † and ‡ quality flags mean in Table 2?">
+<ExpandableText title="What do the † and ‡ quality flags mean in Table 2?" tocIgnore>
 
 **† (marginal):** conditions with a ΔOD of 0.03 or less. At this level the
 growth signal is close to the noise of the measurement, so the estimated
@@ -804,300 +818,312 @@ are best read alongside the ΔOD value rather than on their own.
   <tbody>
     <tr>
       <td rowSpan={4}>1 — Pilot</td>
-      <td>mGAM</td>
+      <td className="medium-cell medium-cell--mgam">mGAM</td>
       <td rowSpan={4}>DSM 1447</td>
       <td rowSpan={4}>24</td>
-      <td>+0.398</td>
-      <td>46 ± 1 min</td>
-      <td>0.902 ± 0.007</td>
-      <td>1.0 ± 0.3</td>
-      <td>75.4 ± 0.0</td>
+      <td className="medium-cell medium-cell--mgam">+0.398</td>
+      <td className="medium-cell medium-cell--mgam">46 ± 1 min</td>
+      <td className="medium-cell medium-cell--mgam">0.902 ± 0.007</td>
+      <td className="medium-cell medium-cell--mgam">1.0 ± 0.3</td>
+      <td className="medium-cell medium-cell--mgam">75.4 ± 0.0</td>
     </tr>
     <tr>
-      <td>WC</td>
-      <td>+0.132</td>
-      <td>1.60 ± 0.07</td>
-      <td>0.434 ± 0.018</td>
-      <td>9.2 ± 1.0</td>
-      <td>28.0 ± 0.2</td>
+      <td className="medium-cell medium-cell--wc">WC</td>
+      <td className="medium-cell medium-cell--wc">+0.132</td>
+      <td className="medium-cell medium-cell--wc">1.60 ± 0.07</td>
+      <td className="medium-cell medium-cell--wc">0.434 ± 0.018</td>
+      <td className="medium-cell medium-cell--wc">9.2 ± 1.0</td>
+      <td className="medium-cell medium-cell--wc">28.0 ± 0.2</td>
     </tr>
     <tr>
-      <td>MM †</td>
-      <td>+0.01</td>
-      <td>11.97 ± 3.41</td>
-      <td>0.062 ± 0.015</td>
-      <td>16.2 ± 4.9</td>
-      <td>0.7 ± 0.3</td>
+      <td className="medium-cell medium-cell--mm">MM †</td>
+      <td className="medium-cell medium-cell--mm">+0.01</td>
+      <td className="medium-cell medium-cell--mm">11.97 ± 3.41</td>
+      <td className="medium-cell medium-cell--mm">0.062 ± 0.015</td>
+      <td className="medium-cell medium-cell--mm">16.2 ± 4.9</td>
+      <td className="medium-cell medium-cell--mm">0.7 ± 0.3</td>
     </tr>
     <tr>
-      <td>BHI ‡</td>
-      <td>+0.002</td>
-      <td>—</td>
-      <td>—</td>
-      <td>—</td>
-      <td>—</td>
+      <td className="medium-cell medium-cell--bhi">BHI ‡</td>
+      <td className="medium-cell medium-cell--bhi">+0.002</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
     </tr>
     <tr>
       <td rowSpan={4}>2 — Pilot continuation</td>
-      <td>mGAM †</td>
+      <td className="medium-cell medium-cell--mgam">mGAM †</td>
       <td rowSpan={4}>DSM 1447</td>
       <td rowSpan={4}>24</td>
-      <td>0.028</td>
-      <td>107.52 ± 3.91</td>
-      <td>0.01 ± 0.00</td>
-      <td>11.1 ± 4.5</td>
-      <td>0.5 ± 0.0</td>
+      <td className="medium-cell medium-cell--mgam">0.028</td>
+      <td className="medium-cell medium-cell--mgam">107.52 ± 3.91</td>
+      <td className="medium-cell medium-cell--mgam">0.01 ± 0.00</td>
+      <td className="medium-cell medium-cell--mgam">11.1 ± 4.5</td>
+      <td className="medium-cell medium-cell--mgam">0.5 ± 0.0</td>
     </tr>
     <tr>
-      <td>WC †</td>
-      <td>0.012</td>
-      <td>39.99 ± 11.16</td>
-      <td>0.02 ± 0.00</td>
-      <td>16.1 ± 5.2</td>
-      <td>1.0 ± 0.1</td>
+      <td className="medium-cell medium-cell--wc">WC †</td>
+      <td className="medium-cell medium-cell--wc">0.012</td>
+      <td className="medium-cell medium-cell--wc">39.99 ± 11.16</td>
+      <td className="medium-cell medium-cell--wc">0.02 ± 0.00</td>
+      <td className="medium-cell medium-cell--wc">16.1 ± 5.2</td>
+      <td className="medium-cell medium-cell--wc">1.0 ± 0.1</td>
     </tr>
     <tr>
-      <td>MM</td>
-      <td>0.048</td>
-      <td>3.48 ± 0.41</td>
-      <td>0.20 ± 0.02</td>
-      <td>7.2 ± 1.3</td>
-      <td>17.8 ± 0.9</td>
+      <td className="medium-cell medium-cell--mm">MM</td>
+      <td className="medium-cell medium-cell--mm">0.048</td>
+      <td className="medium-cell medium-cell--mm">3.48 ± 0.41</td>
+      <td className="medium-cell medium-cell--mm">0.20 ± 0.02</td>
+      <td className="medium-cell medium-cell--mm">7.2 ± 1.3</td>
+      <td className="medium-cell medium-cell--mm">17.8 ± 0.9</td>
     </tr>
     <tr>
-      <td>BHI ‡</td>
-      <td>-0.001</td>
-      <td>—</td>
-      <td>—</td>
-      <td>—</td>
-      <td>—</td>
+      <td className="medium-cell medium-cell--bhi">BHI ‡</td>
+      <td className="medium-cell medium-cell--bhi">-0.001</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
     </tr>
     <tr>
       <td rowSpan={8}>3 — Strain effect</td>
-      <td>mGAM</td>
+      <td className="medium-cell medium-cell--mgam">mGAM</td>
       <td rowSpan={4}>RCC 1806</td>
       <td rowSpan={8}>48</td>
-      <td>+0.490</td>
-      <td>1.02 ± 0.04</td>
-      <td>0.680 ± 0.023</td>
-      <td>24.2 ± 0.3</td>
-      <td>77.3 ± 0.3</td>
+      <td className="medium-cell medium-cell--mgam">+0.490</td>
+      <td className="medium-cell medium-cell--mgam">1.02 ± 0.04</td>
+      <td className="medium-cell medium-cell--mgam">0.680 ± 0.023</td>
+      <td className="medium-cell medium-cell--mgam">24.2 ± 0.3</td>
+      <td className="medium-cell medium-cell--mgam">77.3 ± 0.3</td>
     </tr>
     <tr>
-      <td>WC</td>
-      <td>+0.110</td>
-      <td>3.50 ± 0.17</td>
-      <td>0.199 ± 0.010</td>
-      <td>8.9 ± 1.2</td>
-      <td>76.5 ± 0.5</td>
+      <td className="medium-cell medium-cell--wc">WC</td>
+      <td className="medium-cell medium-cell--wc">+0.110</td>
+      <td className="medium-cell medium-cell--wc">3.50 ± 0.17</td>
+      <td className="medium-cell medium-cell--wc">0.199 ± 0.010</td>
+      <td className="medium-cell medium-cell--wc">8.9 ± 1.2</td>
+      <td className="medium-cell medium-cell--wc">76.5 ± 0.5</td>
     </tr>
     <tr>
-      <td>MM</td>
-      <td>+0.085</td>
-      <td>1.93 ± 0.06</td>
-      <td>0.359 ± 0.011</td>
-      <td>14.8 ± 0.3</td>
-      <td>63.3 ± 0.2</td>
+      <td className="medium-cell medium-cell--mm">MM</td>
+      <td className="medium-cell medium-cell--mm">+0.085</td>
+      <td className="medium-cell medium-cell--mm">1.93 ± 0.06</td>
+      <td className="medium-cell medium-cell--mm">0.359 ± 0.011</td>
+      <td className="medium-cell medium-cell--mm">14.8 ± 0.3</td>
+      <td className="medium-cell medium-cell--mm">63.3 ± 0.2</td>
     </tr>
     <tr>
-      <td>BHI</td>
-      <td>+0.073</td>
-      <td>4.41 ± 0.10</td>
-      <td>0.157 ± 0.004</td>
-      <td>18.1 ± 0.7</td>
-      <td>45.7 ± 0.1</td>
+      <td className="medium-cell medium-cell--bhi">BHI</td>
+      <td className="medium-cell medium-cell--bhi">+0.073</td>
+      <td className="medium-cell medium-cell--bhi">4.41 ± 0.10</td>
+      <td className="medium-cell medium-cell--bhi">0.157 ± 0.004</td>
+      <td className="medium-cell medium-cell--bhi">18.1 ± 0.7</td>
+      <td className="medium-cell medium-cell--bhi">45.7 ± 0.1</td>
     </tr>
     <tr>
-      <td>mGAM</td>
+      <td className="medium-cell medium-cell--mgam">mGAM</td>
       <td rowSpan={4}>DSM 1447</td>
-      <td>+0.462</td>
-      <td>48 ± 1 min</td>
-      <td>0.863 ± 0.008</td>
-      <td>0.6 ± 1.1</td>
-      <td>164.6 ± 0.0</td>
+      <td className="medium-cell medium-cell--mgam">+0.462</td>
+      <td className="medium-cell medium-cell--mgam">48 ± 1 min</td>
+      <td className="medium-cell medium-cell--mgam">0.863 ± 0.008</td>
+      <td className="medium-cell medium-cell--mgam">0.6 ± 1.1</td>
+      <td className="medium-cell medium-cell--mgam">164.6 ± 0.0</td>
     </tr>
     <tr>
-      <td>WC †</td>
-      <td>+0.035</td>
-      <td>6.49 ± 0.52</td>
-      <td>0.107 ± 0.008</td>
-      <td>17.7 ± 2.7</td>
-      <td>25.9 ± 0.3</td>
+      <td className="medium-cell medium-cell--wc">WC †</td>
+      <td className="medium-cell medium-cell--wc">+0.035</td>
+      <td className="medium-cell medium-cell--wc">6.49 ± 0.52</td>
+      <td className="medium-cell medium-cell--wc">0.107 ± 0.008</td>
+      <td className="medium-cell medium-cell--wc">17.7 ± 2.7</td>
+      <td className="medium-cell medium-cell--wc">25.9 ± 0.3</td>
     </tr>
     <tr>
-      <td>MM †</td>
-      <td>+0.024</td>
-      <td>2.78 ± 0.50</td>
-      <td>0.256 ± 0.043</td>
-      <td>41.9 ± 1.1</td>
-      <td>3.4 ± 0.7</td>
+      <td className="medium-cell medium-cell--mm">MM †</td>
+      <td className="medium-cell medium-cell--mm">+0.024</td>
+      <td className="medium-cell medium-cell--mm">2.78 ± 0.50</td>
+      <td className="medium-cell medium-cell--mm">0.256 ± 0.043</td>
+      <td className="medium-cell medium-cell--mm">41.9 ± 1.1</td>
+      <td className="medium-cell medium-cell--mm">3.4 ± 0.7</td>
     </tr>
     <tr>
-      <td>BHI ‡</td>
-      <td>+0.000</td>
-      <td>—</td>
-      <td>—</td>
-      <td>—</td>
-      <td>—</td>
+      <td className="medium-cell medium-cell--bhi">BHI ‡</td>
+      <td className="medium-cell medium-cell--bhi">+0.000</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
     </tr>
     <tr>
       <td rowSpan={10}>4 — Lag reduction</td>
-      <td>mGAM</td>
+      <td className="medium-cell medium-cell--mgam">mGAM</td>
       <td rowSpan={5}>DSM 1447</td>
       <td rowSpan={10}>42</td>
-      <td>+0.328</td>
-      <td>41 ± 1 min</td>
-      <td>1.004 ± 0.017</td>
-      <td>2.5 ± 1.9</td>
-      <td>119.7 ± 0.1</td>
+      <td className="medium-cell medium-cell--mgam">+0.328</td>
+      <td className="medium-cell medium-cell--mgam">41 ± 1 min</td>
+      <td className="medium-cell medium-cell--mgam">1.004 ± 0.017</td>
+      <td className="medium-cell medium-cell--mgam">2.5 ± 1.9</td>
+      <td className="medium-cell medium-cell--mgam">119.7 ± 0.1</td>
     </tr>
     <tr>
-      <td>WC</td>
-      <td>+0.131</td>
-      <td>4.61 ± 0.38</td>
-      <td>0.151 ± 0.012</td>
-      <td>6.4 ± 2.7</td>
-      <td>63.5 ± 1.8</td>
+      <td className="medium-cell medium-cell--wc">WC</td>
+      <td className="medium-cell medium-cell--wc">+0.131</td>
+      <td className="medium-cell medium-cell--wc">4.61 ± 0.38</td>
+      <td className="medium-cell medium-cell--wc">0.151 ± 0.012</td>
+      <td className="medium-cell medium-cell--wc">6.4 ± 2.7</td>
+      <td className="medium-cell medium-cell--wc">63.5 ± 1.8</td>
     </tr>
     <tr>
-      <td>MM</td>
-      <td>+0.063</td>
-      <td>6.32 ± 1.24</td>
-      <td>0.113 ± 0.019</td>
-      <td>26.5 ± 5.4</td>
-      <td>9.6 ± 1.9</td>
+      <td className="medium-cell medium-cell--mm">MM</td>
+      <td className="medium-cell medium-cell--mm">+0.063</td>
+      <td className="medium-cell medium-cell--mm">6.32 ± 1.24</td>
+      <td className="medium-cell medium-cell--mm">0.113 ± 0.019</td>
+      <td className="medium-cell medium-cell--mm">26.5 ± 5.4</td>
+      <td className="medium-cell medium-cell--mm">9.6 ± 1.9</td>
     </tr>
     <tr>
-      <td>BHI †</td>
-      <td>+0.010</td>
-      <td>38.44 ± 8.89</td>
-      <td>0.019 ± 0.004</td>
-      <td>7.9 ± 8.0</td>
-      <td>11.4 ± 1.8</td>
+      <td className="medium-cell medium-cell--bhi">BHI †</td>
+      <td className="medium-cell medium-cell--bhi">+0.010</td>
+      <td className="medium-cell medium-cell--bhi">38.44 ± 8.89</td>
+      <td className="medium-cell medium-cell--bhi">0.019 ± 0.004</td>
+      <td className="medium-cell medium-cell--bhi">7.9 ± 8.0</td>
+      <td className="medium-cell medium-cell--bhi">11.4 ± 1.8</td>
     </tr>
     <tr>
-      <td>BHI (10×) ‡</td>
-      <td>−0.005</td>
-      <td>—</td>
-      <td>—</td>
-      <td>—</td>
-      <td>—</td>
+      <td className="medium-cell medium-cell--bhi">BHI (10×) ‡</td>
+      <td className="medium-cell medium-cell--bhi">−0.005</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
     </tr>
     <tr>
-      <td>mGAM</td>
+      <td className="medium-cell medium-cell--mgam">mGAM</td>
       <td rowSpan={5}>RCC 1806</td>
-      <td>+0.484</td>
-      <td>50 ± 1 min</td>
-      <td>0.833 ± 0.012</td>
-      <td>6.0 ± 0.0</td>
-      <td>121.6 ± 0.1</td>
+      <td className="medium-cell medium-cell--mgam">+0.484</td>
+      <td className="medium-cell medium-cell--mgam">50 ± 1 min</td>
+      <td className="medium-cell medium-cell--mgam">0.833 ± 0.012</td>
+      <td className="medium-cell medium-cell--mgam">6.0 ± 0.0</td>
+      <td className="medium-cell medium-cell--mgam">121.6 ± 0.1</td>
     </tr>
     <tr>
-      <td>WC †</td>
-      <td>+0.011</td>
-      <td>11.48 ± 2.33</td>
-      <td>0.063 ± 0.012</td>
-      <td>36.6 ± 6.3</td>
-      <td>0.4 ± 0.2</td>
+      <td className="medium-cell medium-cell--wc">WC †</td>
+      <td className="medium-cell medium-cell--wc">+0.011</td>
+      <td className="medium-cell medium-cell--wc">11.48 ± 2.33</td>
+      <td className="medium-cell medium-cell--wc">0.063 ± 0.012</td>
+      <td className="medium-cell medium-cell--wc">36.6 ± 6.3</td>
+      <td className="medium-cell medium-cell--wc">0.4 ± 0.2</td>
     </tr>
     <tr>
-      <td>MM ‡</td>
-      <td>+0.002</td>
-      <td>—</td>
-      <td>—</td>
-      <td>—</td>
-      <td>—</td>
+      <td className="medium-cell medium-cell--mm">MM ‡</td>
+      <td className="medium-cell medium-cell--mm">+0.002</td>
+      <td className="medium-cell medium-cell--mm">—</td>
+      <td className="medium-cell medium-cell--mm">—</td>
+      <td className="medium-cell medium-cell--mm">—</td>
+      <td className="medium-cell medium-cell--mm">—</td>
     </tr>
     <tr>
-      <td>BHI †</td>
-      <td>+0.008</td>
-      <td>21.94 ± 4.17</td>
-      <td>0.033 ± 0.006</td>
-      <td>16.9 ± 6.4</td>
-      <td>7.8 ± 1.2</td>
+      <td className="medium-cell medium-cell--bhi">BHI †</td>
+      <td className="medium-cell medium-cell--bhi">+0.008</td>
+      <td className="medium-cell medium-cell--bhi">21.94 ± 4.17</td>
+      <td className="medium-cell medium-cell--bhi">0.033 ± 0.006</td>
+      <td className="medium-cell medium-cell--bhi">16.9 ± 6.4</td>
+      <td className="medium-cell medium-cell--bhi">7.8 ± 1.2</td>
     </tr>
     <tr>
-      <td>BHI (10×) ‡</td>
-      <td>−0.016</td>
-      <td>—</td>
-      <td>—</td>
-      <td>—</td>
-      <td>—</td>
+      <td className="medium-cell medium-cell--bhi">BHI (10×) ‡</td>
+      <td className="medium-cell medium-cell--bhi">−0.016</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
+      <td className="medium-cell medium-cell--bhi">—</td>
     </tr>
     <tr>
       <td rowSpan={9}>5 — Full-factorial design</td>
-      <td>mGAM (ref) *</td>
+      <td className="medium-cell medium-cell--e-mgam">mGAM (ref) *</td>
       <td rowSpan={9}>DSM 1447</td>
       <td rowSpan={9}>48</td>
-      <td>+0.180</td>
-      <td>3.49 ± 0.06</td>
-      <td>0.199 ± 0.003</td>
-      <td>&lt;0.1 ± 0.0</td>
-      <td>24.1 ± 0.0</td>
+      <td className="medium-cell medium-cell--e-mgam">+0.180</td>
+      <td className="medium-cell medium-cell--e-mgam">3.49 ± 0.06</td>
+      <td className="medium-cell medium-cell--e-mgam">0.199 ± 0.003</td>
+      <td className="medium-cell medium-cell--e-mgam">&lt;0.1 ± 0.0</td>
+      <td className="medium-cell medium-cell--e-mgam">24.1 ± 0.0</td>
     </tr>
     <tr>
-      <td>MM + starch + vitK + pH</td>
-      <td>+0.047</td>
-      <td>12.30 ± 2.02</td>
-      <td>0.058 ± 0.009</td>
-      <td>10.3 ± 6.1</td>
-      <td>22.8 ± 0.8</td>
+      <td className="medium-cell medium-cell--e-mm-all">
+        MM + starch + vitK + pH
+      </td>
+      <td className="medium-cell medium-cell--e-mm-all">+0.047</td>
+      <td className="medium-cell medium-cell--e-mm-all">12.30 ± 2.02</td>
+      <td className="medium-cell medium-cell--e-mm-all">0.058 ± 0.009</td>
+      <td className="medium-cell medium-cell--e-mm-all">10.3 ± 6.1</td>
+      <td className="medium-cell medium-cell--e-mm-all">22.8 ± 0.8</td>
     </tr>
     <tr>
-      <td>MM + vitK + pH</td>
-      <td>+0.044</td>
-      <td>9.54 ± 1.08</td>
-      <td>0.074 ± 0.008</td>
-      <td>12.4 ± 3.4</td>
-      <td>28.8 ± 0.9</td>
+      <td className="medium-cell medium-cell--e-mm-vitk-ph">
+        MM + vitK + pH
+      </td>
+      <td className="medium-cell medium-cell--e-mm-vitk-ph">+0.044</td>
+      <td className="medium-cell medium-cell--e-mm-vitk-ph">9.54 ± 1.08</td>
+      <td className="medium-cell medium-cell--e-mm-vitk-ph">0.074 ± 0.008</td>
+      <td className="medium-cell medium-cell--e-mm-vitk-ph">12.4 ± 3.4</td>
+      <td className="medium-cell medium-cell--e-mm-vitk-ph">28.8 ± 0.9</td>
     </tr>
     <tr>
-      <td>MM + starch + pH</td>
-      <td>+0.032</td>
-      <td>18.39 ± 3.72</td>
-      <td>0.039 ± 0.008</td>
-      <td>10.4 ± 10.3</td>
-      <td>16.4 ± 0.8</td>
+      <td className="medium-cell medium-cell--e-mm-starch-ph">
+        MM + starch + pH
+      </td>
+      <td className="medium-cell medium-cell--e-mm-starch-ph">+0.032</td>
+      <td className="medium-cell medium-cell--e-mm-starch-ph">18.39 ± 3.72</td>
+      <td className="medium-cell medium-cell--e-mm-starch-ph">0.039 ± 0.008</td>
+      <td className="medium-cell medium-cell--e-mm-starch-ph">10.4 ± 10.3</td>
+      <td className="medium-cell medium-cell--e-mm-starch-ph">16.4 ± 0.8</td>
     </tr>
     <tr>
-      <td>MM + vitK †</td>
-      <td>+0.014</td>
-      <td>16.98 ± 2.46</td>
-      <td>0.042 ± 0.006</td>
-      <td>23.4 ± 4.8</td>
-      <td>8.5 ± 0.5</td>
+      <td className="medium-cell medium-cell--e-mm-vitk">MM + vitK †</td>
+      <td className="medium-cell medium-cell--e-mm-vitk">+0.014</td>
+      <td className="medium-cell medium-cell--e-mm-vitk">16.98 ± 2.46</td>
+      <td className="medium-cell medium-cell--e-mm-vitk">0.042 ± 0.006</td>
+      <td className="medium-cell medium-cell--e-mm-vitk">23.4 ± 4.8</td>
+      <td className="medium-cell medium-cell--e-mm-vitk">8.5 ± 0.5</td>
     </tr>
     <tr>
-      <td>MM + pH †</td>
-      <td>−0.001</td>
-      <td>25.41 ± 5.26</td>
-      <td>0.028 ± 0.006</td>
-      <td>10.8 ± 5.2</td>
-      <td>11.8 ± 0.8</td>
+      <td className="medium-cell medium-cell--e-mm-ph">MM + pH †</td>
+      <td className="medium-cell medium-cell--e-mm-ph">−0.001</td>
+      <td className="medium-cell medium-cell--e-mm-ph">25.41 ± 5.26</td>
+      <td className="medium-cell medium-cell--e-mm-ph">0.028 ± 0.006</td>
+      <td className="medium-cell medium-cell--e-mm-ph">10.8 ± 5.2</td>
+      <td className="medium-cell medium-cell--e-mm-ph">11.8 ± 0.8</td>
     </tr>
     <tr>
-      <td>MM + starch + vitK †</td>
-      <td>−0.003</td>
-      <td>71.15 ± 19.69</td>
-      <td>0.010 ± 0.003</td>
-      <td>10.6 ± 10.5</td>
-      <td>6.2 ± 0.6</td>
+      <td className="medium-cell medium-cell--e-mm-starch-vitk">
+        MM + starch + vitK †
+      </td>
+      <td className="medium-cell medium-cell--e-mm-starch-vitk">−0.003</td>
+      <td className="medium-cell medium-cell--e-mm-starch-vitk">71.15 ± 19.69</td>
+      <td className="medium-cell medium-cell--e-mm-starch-vitk">0.010 ± 0.003</td>
+      <td className="medium-cell medium-cell--e-mm-starch-vitk">10.6 ± 10.5</td>
+      <td className="medium-cell medium-cell--e-mm-starch-vitk">6.2 ± 0.6</td>
     </tr>
     <tr>
-      <td>MM + starch †</td>
-      <td>−0.002</td>
-      <td>79.80 ± 34.90</td>
-      <td>0.010 ± 0.003</td>
-      <td>5.3 ± 6.5</td>
-      <td>6.4 ± 0.7</td>
+      <td className="medium-cell medium-cell--e-mm-starch">
+        MM + starch †
+      </td>
+      <td className="medium-cell medium-cell--e-mm-starch">−0.002</td>
+      <td className="medium-cell medium-cell--e-mm-starch">79.80 ± 34.90</td>
+      <td className="medium-cell medium-cell--e-mm-starch">0.010 ± 0.003</td>
+      <td className="medium-cell medium-cell--e-mm-starch">5.3 ± 6.5</td>
+      <td className="medium-cell medium-cell--e-mm-starch">6.4 ± 0.7</td>
     </tr>
     <tr>
-      <td>MM (unsuppl.) †</td>
-      <td>−0.016</td>
-      <td>13.75 ± 1.60</td>
-      <td>0.051 ± 0.006</td>
-      <td>&lt;0.1 ± 0.0</td>
-      <td>2.6 ± 0.0</td>
+      <td className="medium-cell medium-cell--e-mm-base">
+        MM (unsuppl.) †
+      </td>
+      <td className="medium-cell medium-cell--e-mm-base">−0.016</td>
+      <td className="medium-cell medium-cell--e-mm-base">13.75 ± 1.60</td>
+      <td className="medium-cell medium-cell--e-mm-base">0.051 ± 0.006</td>
+      <td className="medium-cell medium-cell--e-mm-base">&lt;0.1 ± 0.0</td>
+      <td className="medium-cell medium-cell--e-mm-base">2.6 ± 0.0</td>
     </tr>
   </tbody>
 </table>
@@ -1115,7 +1141,7 @@ are best read alongside the ΔOD value rather than on their own.
 
 {/* The source cell for iteration 2's mGAM AUC read "0.5 ± 00" in the team's draft, almost certainly a dropped decimal — transcribed here as 0.5 ± 0.0 to match the column's formatting; worth the team double-checking against the raw DGrowthR output. */}
 
-<ExpandableText title="Discussion">
+<ExpandableText title="Discussion" tocIgnore>
 
 **Experiment 1: Pilot.** The first pilot established that medium choice
 mattered more than any other variable we tested. mGAM supported growth in
@@ -1150,15 +1176,15 @@ BHI, where the type strain did not, on the same plate read at the same time.
 Since RCC 1806 is recorded as a faecal isolate, the explanation for this can
 only be an assumption without further experiments. The LB-based minimal
 medium gave a divided result: two of its three DSM 1447 wells grew and one
-did not, so the pooled +0.024 OD describes neither. It sits just under the
-0.03 OD marking line, and summarising by mean instead of median puts it just
-over — that is the whole distance between reading the condition as dead and
-reading it as alive, so we treat it as unreliable. Its 41.9 ± 1.1 h lag is
+did not, so the pooled +0.024 OD describes neither. Its median OD falls just
+below the 0.03 OD marking line, while its mean falls just above. That is the
+whole distance between reading the condition as dead and reading it as alive,
+so we treat it as unreliable. Its 41.9 ± 1.1 h lag is
 the latest in the study and fits the slow, inconsistent behaviour this
 medium showed throughout.
 
 **Experiment 4: Reducing lag times.** On Laurie Comstock's advice that most
-of an overnight culture is dead by the time it is subcultured, we inoculated
+of an overnight culture was dead by the time it is subcultured, we inoculated
 both strains in the morning from colonies on a fresh plate. This cut the
 isolate's mGAM lag from 24.2 h to 6.0 h, a four-fold reduction, while the
 type strain went from essentially no lag to 2.5 ± 1.9 h, an interval wide
@@ -1207,7 +1233,7 @@ experiment rather than evidence that the supplements do not differ.
 
 </ExpandableText>
 
-#### Conclusion
+#### Conclusions and future directions
 
 These four cycles were as much a learning curve for EMPOWER as for
 _P. vulgatus_. They showed that the assay must match the organism, since a
@@ -1232,21 +1258,6 @@ literature suggests is a credible alternative[^growth-gibbons].
   when a culture has to be stopped.
 </div>
 
-<KeyTakeaways>
-  <Takeaway value="Tet · Cm · Met" label="most effective">
-    Tetracycline, chloramphenicol and metronidazole gave the lowest IC
-    <sub>90%</sub> values.
-  </Takeaway>
-  <Takeaway value="Amp · Ery" label="not carried forward">
-    Too variable between the two strains to rely on.
-  </Takeaway>
-  <Takeaway value="4 mg/L" label="metronidazole is the recommendation">
-    At the EUCAST breakpoint for both strains.
-  </Takeaway>
-</KeyTakeaways>
-
-#### Introduction
-
 The MIC assay is part of the toolkit development, which has the aim of facilitating research with
 _Phocaeicola vulgatus_. As _P. vulgatus_ is not a model organism, not as much is known about media optimal
 for growth, most effective antibiotics, compatible fluorescent reporters etc. on a strain level. The goal of
@@ -1254,6 +1265,24 @@ the MIC assay is to determine which antibiotics are most effective at inhibiting
 DSM1447/ATCC8482 and fecal strain _P. vulgatus_ RCC1806. An application in the therapeutics pipeline is to use
 the most effective antibiotic to inhibit _P. vulgatus_, transformed with the CRISPR construct, growth in the
 case of uncontrolled growth.
+
+#### Major takeaways
+
+<KeyTakeaways>
+  <Takeaway>
+    Tetracycline, chloramphenicol and metronidazole gave the lowest
+    IC<sub>90%</sub> values, making them the most effective antibiotics
+    tested.
+  </Takeaway>
+  <Takeaway>
+    Ampicillin and erythromycin were too variable between the two strains to
+    be carried forward.
+  </Takeaway>
+  <Takeaway>
+    Metronidazole is the recommended antibiotic, with an IC<sub>90%</sub> of
+    4 mg/L at the EUCAST breakpoint for both strains.
+  </Takeaway>
+</KeyTakeaways>
 
 #### Materials and methods
 
@@ -1479,26 +1508,6 @@ ampicillin by EUCAST.
   Placeholder — one line on what the library is and what it is for.
 </div>
 
-<KeyTakeaways>
-  <Takeaway value="1,292×" label="CFX is the strongest promoter">
-    Placeholder — one line.
-  </Takeaway>
-  <Takeaway value="80×" label="BFP as usable second">
-    Placeholder — one line.
-  </Takeaway>
-  <Takeaway value="20/20" label="full library assembled">
-    Placeholder — one line.
-  </Takeaway>
-  <Takeaway value="1.1 & 1.1" label="BT & PBT no different from blank">
-    Placeholder — one line.
-  </Takeaway>
-  <Takeaway value="1/13" label="fluorescent constructs report">
-    Placeholder — one line.
-  </Takeaway>
-</KeyTakeaways>
-
-#### Introduction
-
 Placeholder — why a promoter library was needed for _P. vulgatus_ and what this
 section reports.
 
@@ -1507,6 +1516,26 @@ section reports.
 Curious how we measured all this? Have a look at our <Link to="/measurement">measurement page</Link>!
 
 </ElleSays>
+
+#### Major takeaways
+
+<KeyTakeaways>
+  <Takeaway>
+    Placeholder — CFX is the strongest promoter, at 1,292× over background.
+  </Takeaway>
+  <Takeaway>
+    Placeholder — BFP is a usable second choice, at 80× over background.
+  </Takeaway>
+  <Takeaway>
+    Placeholder — the full 20/20 promoter library was assembled.
+  </Takeaway>
+  <Takeaway>
+    Placeholder — BT and PBT both read 1.1×, no different from the blank.
+  </Takeaway>
+  <Takeaway>
+    Placeholder — only 1 of 13 fluorescent constructs gave a usable reading.
+  </Takeaway>
+</KeyTakeaways>
 
 #### The library
 
@@ -1570,7 +1599,7 @@ Placeholder — the fluorescent reporters sat at background, with one exception.
 
 </SegmentedSelector>
 
-<ExpandableText title="Why the fluorescent reporters stayed at background">
+<ExpandableText title="Why the fluorescent reporters stayed at background" tocIgnore>
 
 Placeholder — the longer explanation behind the figures above.
 
@@ -1620,31 +1649,31 @@ for how these experiments fit together.
   Placeholder — one line on what the plate assay tests and why it comes first.
 </div>
 
-<KeyTakeaways>
-  <Takeaway value="salt → LB" label="(name this takeaway)">
-    Placeholder — one line.
-  </Takeaway>
-  <Takeaway value="H₂O" label="(name this takeaway)">
-    Placeholder — one line.
-  </Takeaway>
-  <Takeaway value="100 mg/mL" label="(name this takeaway)">
-    Placeholder — one line.
-  </Takeaway>
-  <Takeaway value="14/14" label="(name this takeaway)">
-    Placeholder — one line.
-  </Takeaway>
-  <Takeaway value="✗" label="(name this takeaway)">
-    Placeholder — one line.
-  </Takeaway>
-  <Takeaway value="LC–MS" label="(name this takeaway)">
-    Placeholder — one line.
-  </Takeaway>
-</KeyTakeaways>
-
-#### Introduction
-
 Placeholder — the reaction the assay reads out, and what a positive plate looks
 like.
+
+#### Major takeaways
+
+<KeyTakeaways>
+  <Takeaway>
+    Placeholder — what "salt → LB" shows (name this takeaway).
+  </Takeaway>
+  <Takeaway>
+    Placeholder — what "H₂O" shows (name this takeaway).
+  </Takeaway>
+  <Takeaway>
+    Placeholder — what "100 mg/mL" shows (name this takeaway).
+  </Takeaway>
+  <Takeaway>
+    Placeholder — what "14/14" shows (name this takeaway).
+  </Takeaway>
+  <Takeaway>
+    Placeholder — what "✗" shows (name this takeaway).
+  </Takeaway>
+  <Takeaway>
+    Placeholder — what "LC–MS" shows (name this takeaway).
+  </Takeaway>
+</KeyTakeaways>
 
 ##### In the agar
 
@@ -1677,33 +1706,34 @@ Word document).
   Placeholder — one line on which hydrolases were tested and on what substrates.
 </div>
 
-<KeyTakeaways>
-  <Takeaway value="5/15" label="active hydrolases">
-    Placeholder — one line.
-  </Takeaway>
-  <Takeaway value="> 96%" label="GUDCA is the easier substrate">
-    Placeholder — one line.
-  </Takeaway>
-  <Takeaway value="< 6%" label="two are GUDCA-specific">
-    Placeholder — one line.
-  </Takeaway>
-  <Takeaway value="3" label="dual-substrate genes">
-    Placeholder — one line.
-  </Takeaway>
-  <Takeaway value="✗" label="docking did not predict activity">
-    Placeholder — one line.
-  </Takeaway>
-  <Takeaway value="Cys" label="catalytic residue">
-    Placeholder — one line.
-  </Takeaway>
-</KeyTakeaways>
-
-#### Introduction
-
 Placeholder — the 15 candidates, where they came from, and how activity was
 measured.
 
-<ExpandableText title="Deconjugation per condition">
+#### Major takeaways
+
+<KeyTakeaways>
+  <Takeaway>
+    Placeholder — 5 of the 15 hydrolases tested were active.
+  </Takeaway>
+  <Takeaway>
+    Placeholder — GUDCA was the easier substrate, with &gt;96% deconjugation.
+  </Takeaway>
+  <Takeaway>
+    Placeholder — two hydrolases are GUDCA-specific, with &lt;6% activity on
+    the other substrate.
+  </Takeaway>
+  <Takeaway>
+    Placeholder — three genes acted on both substrates.
+  </Takeaway>
+  <Takeaway>
+    Placeholder — docking scores did not predict the observed activity.
+  </Takeaway>
+  <Takeaway>
+    Placeholder — the catalytic residue is a cysteine.
+  </Takeaway>
+</KeyTakeaways>
+
+<ExpandableText title="Deconjugation per condition" tocIgnore>
 
 Placeholder — short lead-in to the figures below.
 
@@ -1750,7 +1780,7 @@ map itself lives on the <Link to="/dry-lab">dry lab</Link> page.
   Predicted affinity next to measured activity, per hydrolase.
 </FigureSlot>
 
-<ExpandableText title="Sequence and structure of the active hydrolases">
+<ExpandableText title="Sequence and structure of the active hydrolases" tocIgnore>
 
 Placeholder — the catalytic residue and whatever else the active hydrolases
 have in common.
@@ -1805,7 +1835,7 @@ balanced immune and metabolic modulation.
 
 <div className="table-responsive table-responsive-rounded my-3">
 
-<table className="table table-bordered align-middle plasmid-legend-table">
+<table className="table table-bordered align-middle text-center plasmid-legend-table">
   <thead>
     <tr>
       <th>Component</th>
@@ -1900,26 +1930,24 @@ balanced immune and metabolic modulation.
 
 #### Integration strategy
 
-{/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: the five bullets became a step flow under the biorender figure (team feedback: wanted the steps shown as a chronological flow, kept together with the figure rather than as a plain list above it), and the "Note" callout was cut down to a small asterisked line since it is a caveat, not a result. */}
+{/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: the five steps became numbered pins on the biorender figure itself instead of a card row below it (team feedback: wanted the figure and its step-by-step explanation to work as one interactive piece, defaulting to step 1 with Previous/Next to move through the rest), and the "Note" callout was cut down to a small asterisked line since it is a caveat, not a result. */}
 
 <div className="subsection-panel">
 
 The construct must replicate and express in _E. coli_ and _P. vulgatus_ for
-conjugation.
+conjugation. Select a numbered step on the figure, or use the arrows below it,
+to read what happens at that stage.
 
-<ZoomableImage
-  src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/crispr-conjugation-horizontal2x.avif"
+<ImageFlowSelector
+  image="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/crispr-conjugation-horizontal2x.avif"
   alt="In vivo engineering with the CRISPR plasmid: the construct conjugates from E. coli into P. vulgatus, then performs CRISPR-based gene replacement at the native BSH locus."
-  className="framed"
-/>
-
-<StepFlow>
-  <Step title="E. coli replication">
+>
+  <FlowStep title="E. coli replication" marker={{ x: 10, side: "above" }}>
     In _E. coli_ S17 λ _pir_, R6K γ ori is used as an established origin of
     replication for stable plasmid number upkeep, while an ampicillin
     resistance cassette is expressed to select for transformed colonies.
-  </Step>
-  <Step title="Conjugative transfer">
+  </FlowStep>
+  <FlowStep title="Conjugative transfer" marker={{ x: 58, side: "above" }}>
     Upon conjugative transfer to _P. vulgatus_ using oriT, a chloramphenicol
     resistance cassette (Cat) is used to select for positive transformants.
     Erythromycin is the usual choice for this step in the conjugation
@@ -1927,21 +1955,21 @@ conjugation.
     results</Link> show it only inhibits strain DSM1447, not the faecal
     isolate RCC1806 — chloramphenicol, tetracycline and metronidazole all
     inhibit both, and chloramphenicol was chosen as the marker here.
-  </Step>
-  <Step title="Bacteroides replication">
+  </FlowStep>
+  <FlowStep title="Bacteroides replication" marker={{ x: 80, side: "below" }}>
     pB8-51 ori is used as a _Bacteroides_ origin of replication once inside
     _P. vulgatus_.
-  </Step>
-  <Step title="Targeting the native BSH">
+  </FlowStep>
+  <FlowStep title="Targeting the native BSH" marker={{ x: 84, side: "above" }}>
     The promoter used _P. vulgatus_-specific expression for the gRNA, which
     combines with Cas9 and targets the native BSH to induce a double strand
     break.
-  </Step>
-  <Step title="Scarless replacement">
+  </FlowStep>
+  <FlowStep title="Scarless replacement" marker={{ x: 92, side: "below" }}>
     The plasmid backbone does not integrate so it can be cured, leaving a
     scarless gene replacement.
-  </Step>
-</StepFlow>
+  </FlowStep>
+</ImageFlowSelector>
 
 <div className="construct-footnote">
 
@@ -1964,7 +1992,7 @@ Successful integration could be confirmed by:
 
 <div className="validation-plan-steps">
 
-<ExpandableText title="1. Junction PCR">
+<ExpandableText title="1. Junction PCR" tocIgnore>
 
 PCR and amplicon sequencing spanning outside the integration junction, using
 primers flanking HA<sub>L</sub> and HA<sub>R</sub> to amplify the integrated
@@ -1972,21 +2000,21 @@ cassette from genomic DNA.
 
 </ExpandableText>
 
-<ExpandableText title="2. Cas9 expression">
+<ExpandableText title="2. Cas9 expression" tocIgnore>
 
 Early-stage validation will also include confirming Cas9 expression at the
 RNA level (qRT-PCR) in the recipient strain.
 
 </ExpandableText>
 
-<ExpandableText title="3. BSH activity">
+<ExpandableText title="3. BSH activity" tocIgnore>
 
 BSH activity measured via bile salt assays comparing wild-type to
 integrated-construct strains.
 
 </ExpandableText>
 
-<ExpandableText title="4. Stability">
+<ExpandableText title="4. Stability" tocIgnore>
 
 Stability confirmed by serial passage without selection, to ensure the
 cassette does not excise or degrade.
@@ -2025,7 +2053,7 @@ For additional information about risk and safety see the <Link to="/safety-and-s
 </div>
 
 <ResourceDownload
-  href="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/therapeutic-part-2-section-6-crispr.pdf"
+  href="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/therapeutic-part-2-section-6-crispr-branded.pdf"
   title="Construct planning"
   type="PDF"
 >

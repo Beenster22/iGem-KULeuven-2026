@@ -9,6 +9,10 @@
 // `onLightBackground`, for a figure drawn with a transparent background (the
 // pBSH-Cas9 plasmid map) — against the dialog's dark backdrop it was
 // unreadable, so this gives the fullscreen image its own white card instead.
+// Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: `onLightBackground`
+// now also cards the inline thumbnail, not just the fullscreen dialog — in
+// dark mode the same transparent-background figure was disappearing into the
+// page's own dark background before it was ever clicked.
 import { useRef } from "react";
 
 interface ZoomableImageProps {
@@ -37,7 +41,9 @@ export function ZoomableImage({
         <img
           src={src}
           alt={alt}
-          className={`img-fluid rounded${className ? ` ${className}` : ""}`}
+          className={`img-fluid rounded${className ? ` ${className}` : ""}${
+            onLightBackground ? " on-light-bg" : ""
+          }`}
         />
       </button>
       <dialog

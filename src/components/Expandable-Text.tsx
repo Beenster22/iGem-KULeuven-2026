@@ -16,6 +16,11 @@ interface ExpandableTextProps {
   // notebook to open (see EntryLink).
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  // Keeps this dropdown's title out of the page-wide left index
+  // (SectionProgress), for a detail dropdown that isn't worth its own entry
+  // there — results.mdx uses this heavily, since every supplementary
+  // explanation would otherwise show up as its own "section".
+  tocIgnore?: boolean;
   children: ReactNode;
 }
 // Component translated from Astro to React, taken from 2025 Munich team's repo. Original Astro component can be found here: https://gitlab.igem.org/2025/munich/-/blob/1665a99ba477fe5f9ca6e8c41f79ca5d31a1a71e/src/components/ExpandableText.astro
@@ -30,6 +35,7 @@ export function ExpandableText({
   meta,
   open,
   onOpenChange,
+  tocIgnore,
   children,
 }: ExpandableTextProps) {
   const [ownOpen, setOwnOpen] = useState(false);
@@ -76,7 +82,9 @@ export function ExpandableText({
             subsection — the only consumers are protocols.mdx and
             NotebookDropdown (notebook.mdx), so promoting the title to a
             real heading is safe here. */}
-        <h3 className="expandable-title">{title}</h3>
+        <h3 className="expandable-title" data-toc-ignore={tocIgnore ? "true" : undefined}>
+          {title}
+        </h3>
         {meta}
         <svg
           className="expandable-arrow"
