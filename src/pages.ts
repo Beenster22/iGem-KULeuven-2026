@@ -23,8 +23,8 @@ import {
   BlocksIcon,
   CalendarIcon,
   ClipboardIcon,
+  DbtlCycleIcon,
   FlaskIcon,
-  GearIcon,
   HandshakeIcon,
   NotebookIcon,
   PeopleIcon,
@@ -88,7 +88,7 @@ const Pages: (Page | Folder)[] = [
         path: "/engineering",
         component: Engineering,
         lead: "The design-build-test-learn cycles behind EMPOWER, and what each round changed about our design.",
-        icon: GearIcon,
+        icon: DbtlCycleIcon,
       },
       {
         name: "Contribution",

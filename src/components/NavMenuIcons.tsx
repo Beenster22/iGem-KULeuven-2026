@@ -14,15 +14,27 @@ const common = {
   focusable: false,
 } as const;
 
-export function GearIcon(props: SVGProps<SVGSVGElement>) {
+// A Design-Build-Test-Learn cycle: four arced arrows chasing each other
+// clockwise around a circle, one colour per stage.
+export function DbtlCycleIcon(props: SVGProps<SVGSVGElement>) {
+  const arcs = [
+    { d: "M60 22A38 38 0 0 1 95.7 47", color: "var(--ic-1)", tip: [95.7, 47], rotate: 70 },
+    { d: "M98 60A38 38 0 0 1 73 95.7", color: "var(--ic-2)", tip: [73, 95.7], rotate: 160 },
+    { d: "M60 98A38 38 0 0 1 24.3 73", color: "var(--ic-3)", tip: [24.3, 73], rotate: 250 },
+    { d: "M22 60A38 38 0 0 1 47 24.3", color: "var(--ic-line)", tip: [47, 24.3], rotate: 340 },
+  ];
   return (
     <svg {...common} {...props}>
-      <g stroke="var(--ic-line)" strokeWidth="10" strokeLinecap="round">
-        <path d="M60 10v14M60 96v14M110 60H96M24 60H10M93 27l-10 10M37 83l-10 10M93 93l-10-10M37 37 27 27" />
-      </g>
-      <circle cx="60" cy="60" r="30" fill="var(--ic-1)" />
-      <circle cx="60" cy="60" r="13" fill="var(--ic-line)" />
-      <circle cx="60" cy="60" r="7" fill="var(--ic-3)" />
+      {arcs.map((arc, i) => (
+        <g key={i}>
+          <path d={arc.d} fill="none" stroke={arc.color} strokeWidth="10" strokeLinecap="round" />
+          <polygon
+            points="0,-8 8,6 -8,6"
+            fill={arc.color}
+            transform={`translate(${arc.tip[0]} ${arc.tip[1]}) rotate(${arc.rotate})`}
+          />
+        </g>
+      ))}
     </svg>
   );
 }

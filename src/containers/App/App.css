@@ -518,7 +518,7 @@ a[data-footnote-ref]:focus {
    tall vertical cards. */
 .mega-menu-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
   gap: 0.85rem;
   padding: 1.25rem 1rem;
 }
@@ -526,8 +526,8 @@ a[data-footnote-ref]:focus {
 .mega-menu-link {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
-  padding: 0.75rem 1rem;
+  gap: 1rem;
+  padding: 0.9rem 1.4rem;
   border: 2px solid transparent;
   border-radius: 1rem;
   text-decoration: none;
@@ -542,7 +542,6 @@ a[data-footnote-ref]:focus {
   --ic-2: #2fa4a9;
   --ic-3: #f1c3d4;
   --ic-line: #33283f;
-  --card-tagline: #7fd6da;
   background-color: #33283f;
   border-color: rgba(201, 189, 232, 0.3);
   color: #eaf4f5;
@@ -553,7 +552,6 @@ a[data-footnote-ref]:focus {
   --ic-2: #2fa4a9;
   --ic-3: #f1c3d4;
   --ic-line: #eaf4f5;
-  --card-tagline: #1f6a6e;
   background-color: #c9bde8;
   color: #33283f;
 }
@@ -598,7 +596,12 @@ a[data-footnote-ref]:focus {
 }
 
 .mega-menu-link-lead {
-  color: var(--card-tagline);
+  /* Same colour as the title (white on the dark tiles, plum on the light
+     ones) rather than the teal/blue tagline colour the home page cards use
+     — team feedback: the tinted tagline read as "blue" and they wanted
+     plain white here instead. */
+  color: inherit;
+  opacity: 0.85;
   font-size: 0.8rem;
   font-weight: 600;
   line-height: 1.3;
