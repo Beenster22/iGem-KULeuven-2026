@@ -28,7 +28,10 @@ function haloWidth(stage: HTMLElement) {
 
 const clamp01 =(v: number) => Math.min(1, Math.max(0, v));
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
+// 0 → 1 over t = 0 … 1, leaving 0 at slope `startRate` and arriving at 1
+// flat (a cubic Hermite curve); always rising for startRate ≥ 0.
+const settle = (t: number, startRate: number) =>
+  startRate * (t ** 3 - 2 * t ** 2 + t) + (3 * t ** 2 - 2 * t ** 3);
 
 // An arc of the given length bent through `angle` radians, its middle at
 // (mx, my) and bulging downwards — a straight line at angle 0, a closed
@@ -144,9 +147,21 @@ export function useLineToGlobe({
       const radius = (to.width * SPHERE_FRACTION) / 2;
       const toThickness = haloWidth(stage);
 
-      const e = easeInOut(q);
-      const mx = lerp(fromX, to.left + to.width / 2, e);
-      const my = lerp(fromY, to.top + to.height / 2 + radius, e);
+      // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback:
+      // it dipped, then jumped to line up): the ring's position is now
+      // measured from the globe (which keeps scrolling up meanwhile), not
+      // aimed at it. Its offset from the globe shrinks along a curve that
+      // starts at just the speed that holds the ring still where it let go
+      // and ends at zero, so it settles onto the globe moving with it —
+      // no sudden turn or snap at either end.
+      const gx = to.left + to.width / 2;
+      const gy = to.top + to.height / 2 + radius;
+      const gy0 = gy + shift; // where the globe was when the line let go
+      const gap0 = gy0 - fromY;
+      const startRate = gap0 > 0 ? Math.min(1.5, (closedAt - releaseAt) / gap0) : 0;
+      const e = settle(q, startRate);
+      const mx = gx + (fromX - gx) * (1 - e);
+      const my = gy + (fromY - gy0) * (1 - e);
       const length = lerp(lineBox.width, 2 * Math.PI * radius, e);
       path.setAttribute("d", arcPath(mx, my, length, 2 * Math.PI * e));
       path.setAttribute("stroke-width", String(lerp(fromThickness, toThickness, e)));
