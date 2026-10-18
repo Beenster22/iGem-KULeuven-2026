@@ -1026,9 +1026,8 @@ export function EngineerSection() {
 /* Find out more                                                       */
 /* ------------------------------------------------------------------ */
 
-// The pages the team lists, as boxes (the team's note of 2026-10-17). The two
-// prizes' pages are the pages themselves; "Best Measurement" has no page of
-// its own yet, so it goes to its section on the Prizes and Medals page.
+// The pages the team lists, as boxes (the team's note of 2026-10-17). Each
+// special prize links to its own dedicated page.
 interface MoreCard {
   title: string;
   tagline: string;
@@ -1053,7 +1052,7 @@ const MORE_CARDS: MoreCard[] = [
   {
     title: "Best Measurement",
     tagline: "Our measurement work",
-    to: "/awards#best-measurement",
+    to: "/best-measurement",
     icon: <RulerIcon />,
     specialPrize: true,
   },
