@@ -507,4 +507,178 @@ The cycle ended inconclusive. *P. vulgatus* emits in both cyan and green ranges,
 
 </DBTLCycles>
 
+## CRISPR design
+
+<DBTLCycles>
+
+<DBTLCycle label="Cycle 1" title="Riboswitch (stopped on feasibility)">
+
+<DBTLStage stage="design">
+
+The design goal was dynamic, self-tuning control of the bile-salt pathway. A riboswitch is an RNA element that changes gene expression when it binds a small molecule. An aptamer selective for a bile salt would therefore switch expression in response to the bile salt. We planned to select the aptamer by SELEX (Systematic Evolution of Ligands by EXponential enrichment). SELEX selects RNA ligands by iterative binding and amplification.[^tuerk]
+
+Our hypothesis was: an aptamer selective for TUDCA, GDCA, or other bile salts can feasibly be selected by SELEX within the project timeline.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+No construct was built. The feasibility check was a literature search for existing bile-salt-sensing riboswitches and an estimate of the SELEX timeline.
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+The question was whether a bile-salt-sensing riboswitch could be found or made within the iGEM timeline. A literature search of riboswitch reviews and databases found no riboswitch that senses bile salts such as TUDCA, GUDCA, or TCDCA.[^serganov][^sun] The team estimated that determining an aptamer for a bile salt by SELEX would take years. This estimate was given by our PI, who described it as "a PhD thesis".
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+A bile-salt riboswitch cannot be developed within the iGEM timeline, so the riboswitch was dropped. The goal of dynamic control was kept and carried into Cycle 2. This was a feasibility decision that changed our design direction.
+
+</DBTLStage>
+
+</DBTLCycle>
+
+<DBTLCycle label="Cycle 2" title="CRISPRi controlled by BreR (stopped on access)">
+
+<DBTLStage stage="design">
+
+The CRISPR interference (CRISPRi) cycle ended because the BreR system could not be obtained. The design was a catalytically dead Cas9 (dCas9) system whose expression would follow the bile-salt signal.
+
+The goal of designing a tunable biosensor continued. We discovered BreR, a bile-responsive TetR-family repressor. In *Vibrio cholerae*, bile salts relieve BreR repression of the *breAB* efflux operon.[^cerda] We thought the design could use BreR to release a repressor when deconjugated bile acids are high. Only then would a CRISPRi construct be expressed.
+
+CRISPRi uses dCas9, which binds DNA without cutting it, to block transcription at a target site.[^qi] The guide RNA (gRNA) would be designed to target the native BSH gene, so the cell's own enzyme would be repressed when the signal is high. The design also considered expressing a second BSH, so that the enzyme's deconjugating activity could be changed.
+
+Hypothesis: a BreR-controlled CRISPRi construct that represses native BSH only when deconjugated bile acids are high could be a feasible and successful iGEM therapeutic design.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+No DNA was assembled. However, these were the prospective parts:
+
+- BreR cassette for environmental sensing
+- gRNA and scaffold targeting the native BSH locus
+- Antibiotic selection marker, chosen from the MIC assay
+- dCas9
+- Promoter, from the promoter library (not yet decided, because the library had not yet been tested)
+- Origin of replication
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+No test was run. The BreR sequence was not publicly available when the plasmid compilation began, causing a large roadblock in this design.
+
+The open questions below are design gaps that an additional iteration intended to address:
+
+- Does dCas9 bind permanently, or does the binding strength (time) need to be tested?
+- Is one promoter enough to drive both the BreR cassette and the gRNA, or are two needed?
+- Does the repressor interfere with dCas9 activity?
+- Is a reporter gene needed for testing?
+- Is the integration mechanism suicidal?
+- What is the efficiency of BreR in *P. vulgatus*?
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+The BreR system is patented and hard to obtain, so the design was changed. The use of BreR in *Bacteroides* is documented only in patent literature.[^lu] Two ideas were noted:
+
+- Codon harmonization of the BreR sequence to the host. This changes the DNA but may not remove any patent coverage, because a patent can cover the protein itself. An intellectual property check is needed before this is revisited. The team's dry-lab codon optimization and harmonization tool could be used for this.
+- Using a second BSH to change deconjugating activity. This idea was carried into Cycle 3.
+
+With BreR removed, the dynamic requirement was also dropped, and the design became constitutive. PI Ruben's advice to keep the change narrow strengthened the idea of alternative BSH expression. Because of this discussion, we decided against simply knocking out the native BSH. The team's rationale is that replacing the enzyme, rather than deleting it, keeps the change smaller. This is a new hypothesis to test.
+
+</DBTLStage>
+
+</DBTLCycle>
+
+<DBTLCycle label="Cycle 3" title="Cas9 gene replacement (current design, 2 October 2026)">
+
+<DBTLStage stage="design">
+
+The current design uses Cas9 to make a double-strand break at the native BSH gene. The cell's repair machinery then copies a donor carrying a replacement BSH. The design rests on three choices.
+
+- **Replace rather than knock out.** BSH is not an essential gene, and a BSH-deletion strain of *Bacteroides thetaiotaomicron* is viable.[^yao] The aim is a minimal change: a replacement BSH with a different substrate preference should keep deconjugation in the gut while leaving the bile salts the team considers most important for TGR5 signalling conjugated. TGR5 is a membrane receptor for bile acids.[^maruyama][^kawamata] TUDCA and GUDCA are weak TGR5 agonists,[^ibrahim] so the wiki should not describe them as potent TGR5 agonists.
+- **Use CRISPR.** CRISPR offers target specificity and uses homology-directed repair to insert a gene. CRISPR/Cas tools, including inducible FnCas12a, have been built for *Bacteroides* species, including *B. vulgatus*.[^zheng] An integrative pNBU2 backbone, validated in the team's conjugation protocol, was ruled out because pNBU2 integrates only at a serine tRNA site,[^wang] not at the native BSH locus.
+- **Use a constitutive system.** The dynamic control from Cycle 1 was dropped with BreR in Cycle 2. The Cas9 and gRNA are expressed from fixed promoters.
+
+Hypothesis: Cas9-induced repair at the native BSH site replaces the enzyme with one of different substrate preference. Expected readout: a changed percentage of deconjugated TUDCA and GUDCA, measured by LC-MS at 0.1% bile salt.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+The build is a plasmid map only. Sequences are missing for the gRNAs, the homology arms, and the replacement BSH, so the plasmid cannot yet be verified base by base.
+
+In the wet lab, the construct would be assembled by Gibson assembly[^gibson] and conjugated from *E. coli* S17-1 λpir into *P. vulgatus*.[^simon]
+
+<div className="figure-panel">
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/pbsh-cas9-transparent.avif"
+    alt="The pBSH-Cas9 plasmid map: oriT, R6K γ ori, AmpR, pB8-51 and Cat around the backbone, PCas9 driving Cas9, PgRNA driving the gRNA, and the BSH replacement flanked by its left and right homology arms."
+    onLightBackground
+  />
+</figure>
+
+</div>
+
+<div className="figure-caption">**Plasmid map of the planned pBSH-Cas9 construct.** A map only: the gRNA, homology-arm and replacement BSH sequences are still missing.</div>
+
+</div>
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+No test has been run. The planned tests below are future perspectives that guide the direction of the work. In silico, before any construct is built:
+
+- gRNA on-target and off-target scoring against the DSM1447 genome, using CRISPOR and Cas-OFFinder. The group sets the thresholds and approves the gRNA choice.
+- Homology arm design, including length and identity to the target.
+- Full plasmid sequence check, including confirmation that the Cfx and BfP1E6 promoters are assigned to different parts.
+- Origin compatibility between pB8-51 and R6K γ.
+- Literature review of inducible promoters for Cas9 expression in *Bacteroides*. Inducible CRISPR/Cas expression has been used in *Bacteroides*,[^zheng] and inducible dCas9 control has been established in bacteria.[^qi]
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+The Learn step is open. Four decisions are pending, and each has a trigger.
+
+- Editing efficiency too low: add Lambda Red recombineering to improve homology-directed repair. Lambda Red recombineering plasmids have been validated in Gram-negative bacteria.[^datta] It has not been shown in *Bacteroides*, so this option needs its own test.
+- Cas9 expression needs tuning: add an inducible Cas9 promoter, which would also restore a form of dynamic control.
+- Plasmid loss not reliable: choose a loss mechanism before the construct is described as cured. Passage without selection depends on the replicon's stability in *P. vulgatus*, which is untested.
+- The replacement BSH is not named, as its choice depends on LC-MS data for the remaining bile salts of interest. Only 2 of 10 have been tested so far.
+
+</DBTLStage>
+
+</DBTLCycle>
+
+</DBTLCycles>
+
+{/* The "References" panel is generated from these footnote definitions. */}
+
+[^tuerk]: Tuerk, C., & Gold, L. (1990). Systematic evolution of ligands by exponential enrichment: RNA ligands to bacteriophage T4 DNA polymerase. Science, 249(4968), 505–510. https://doi.org/10.1126/science.2200121
+[^serganov]: Serganov, A., & Nudler, E. (2013). A decade of riboswitches. Cell, 152(1–2), 17–24. https://doi.org/10.1016/j.cell.2012.12.024
+[^sun]: Sun, S., Wang, K., Sun, L., Cheng, B., Qiao, S., Dai, H., Shi, W., Ma, J., & Liu, H. (2024). Ribocentre-switch: A database of riboswitches. Nucleic Acids Research, 52(D1), D265–D272. https://doi.org/10.1093/nar/gkad891
+[^cerda]: Cerda-Maira, F. A., Ringelberg, C. S., & Taylor, R. K. (2008). The bile response repressor BreR regulates expression of the Vibrio cholerae breAB efflux system operon. Journal of Bacteriology, 190(22), 7441–7452. https://doi.org/10.1128/JB.00584-08
+[^qi]: Qi, L. S., Larson, M. H., Gilbert, L. A., Doudna, J. A., Weissman, J. S., Arkin, A. P., & Lim, W. A. (2013). Repurposing CRISPR as an RNA-guided platform for sequence-specific control of gene expression. Cell, 152(5), 1173–1183. https://doi.org/10.1016/j.cell.2013.02.022
+[^lu]: Lu, T. K., Mimee, M., & Citorik, R. J. (2018). Transcriptional sensor for bile acids in Bacteroides thetaiotaomicron (U.S. Patent Application Publication No. US 2018/0073031 A1). U.S. Patent and Trademark Office. https://patents.google.com/patent/US20180073031A1/en
+[^yao]: Yao, L., Seaton, S. C., Ndousse-Fetter, S., Adhikari, A. A., DiBenedetto, N., Mina, A. I., Banks, A. S., Bry, L., & Devlin, A. S. (2018). A selective gut bacterial bile salt hydrolase alters host metabolism. eLife, 7, Article e37182. https://doi.org/10.7554/eLife.37182
+[^maruyama]: Maruyama, T., Miyamoto, Y., Nakamura, T., Tamai, Y., Okada, H., Sugiyama, E., Nakamura, T., Itadani, H., & Tanaka, K. (2002). Identification of membrane-type receptor for bile acids (M-BAR). Biochemical and Biophysical Research Communications, 298(5), 714–719. https://doi.org/10.1016/S0006-291X(02)02550-0
+[^kawamata]: Kawamata, Y., Fujii, R., Hosoya, M., Harada, M., Yoshida, H., Miwa, M., Fukusumi, S., Habata, Y., Itoh, T., Shintani, Y., Hinuma, S., Fujisawa, Y., & Fujino, M. (2003). A G protein-coupled receptor responsive to bile acids. Journal of Biological Chemistry, 278(11), 9435–9440. https://doi.org/10.1074/jbc.M209706200
+[^ibrahim]: Ibrahim, E., Diakonov, I., Arunthavarajah, D., Swift, T., Goodwin, M., McIlvride, S., Nikolova, V., Williamson, C., & Gorelik, J. (2018). Bile acids and their respective conjugates elicit different responses in neonatal cardiomyocytes: Role of Gi protein, muscarinic receptors and TGR5. Scientific Reports, 8, Article 7110. https://doi.org/10.1038/s41598-018-25569-4
+[^zheng]: Zheng, L., Tan, Y., Hu, Y., Shen, J., Qu, Z., Chen, X., Ho, C. L., Leung, E. L.-H., Zhao, W., & Dai, L. (2022). CRISPR/Cas-based genome editing for human gut commensal Bacteroides species. ACS Synthetic Biology, 11(1), 464–472. https://doi.org/10.1021/acssynbio.1c00543
+[^wang]: Wang, J., Shoemaker, N. B., Wang, G.-R., & Salyers, A. A. (2000). Characterization of a Bacteroides mobilizable transposon, NBU2, which carries a functional lincomycin resistance gene. Journal of Bacteriology, 182(12), 3559–3571. https://doi.org/10.1128/JB.182.12.3559-3571.2000
+[^gibson]: Gibson, D. G., Young, L., Chuang, R.-Y., Venter, J. C., Hutchison, C. A., III, & Smith, H. O. (2009). Enzymatic assembly of DNA molecules up to several hundred kilobases. Nature Methods, 6(5), 343–345. https://doi.org/10.1038/nmeth.1318
+[^simon]: Simon, R., Priefer, U., & Pühler, A. (1983). A broad host range mobilization system for in vivo genetic engineering: Transposon mutagenesis in gram negative bacteria. Bio/Technology, 1(9), 784–791. https://doi.org/10.1038/nbt1183-784
+[^datta]: Datta, S., Costantino, N., & Court, D. L. (2006). A set of recombineering plasmids for gram-negative bacteria. Gene, 379, 109–115. https://doi.org/10.1016/j.gene.2006.04.018
+
 </PageLayout>

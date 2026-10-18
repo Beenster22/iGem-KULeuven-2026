@@ -3,43 +3,35 @@
 <span data-toc-collapsible hidden />
 
 {/* Page structure laid out with Claude Opus 5 (Anthropic), 2026-10-17, from the team's sketch of the results page (Notes_261017). */}
-{/* The title sits top left, Elle greets from the right — both in the page header box itself, see App.tsx's HEADER_ASIDE — and the four headline success cards start the content, jumping to their section before the page splits into the Toolkit and Therapeutics pipelines. */}
+{/* The title sits top left, Elle greets from the right — both in the page header box itself, see App.tsx's HEADER_ASIDE — the Toolkit / Therapeutics switch and an index of the chosen pipeline's sections come first, then the four headline success cards, then the pipeline's sections one at a time (ResultsPipelines). */}
 {/* The MIC write-up is the team's own text, carried over unchanged from the previous version of this page. */}
 {/* TO FILL IN: every "Placeholder" paragraph; every <FigureSlot>, which names the figure or table that belongs there and is meant to be deleted once the real one is in; the explanation line on each <Takeaway>, plus a real label for the cryptic ones ("salt -> LB", "H2O", "X"); and the four <SuccessCard> labels at the top. */}
 {/* A <SuccessCard>'s `to` is the slug of its target heading, so "### Bile salt deconjugation by 15 bile salt hydrolases" is reached with to="bile-salt-deconjugation-by-15-bile-salt-hydrolases". */}
 {/* Keep every comment on this page to a single line: prettier reflows a multi-line MDX comment into markdown and breaks the page. */}
 
-<SuccessCards>
-  <SuccessCard to="antibiotic-susceptibility-of-p-vulgatus">
-    Three antibiotics inhibit <em>P. vulgatus</em>
-  </SuccessCard>
-  <SuccessCard to="a-characterized-promoter-library-for-p-vulgatus">
-    A 20/20 promoter library
-  </SuccessCard>
-  <SuccessCard to="screening-bsh-activity-on-bile-salt-plates">
-    BSH activity on bile salt plates
-  </SuccessCard>
-  <SuccessCard to="bile-salt-deconjugation-by-15-bile-salt-hydrolases">
-    5 of 15 hydrolases are active
-  </SuccessCard>
-</SuccessCards>
+{/* The pipeline switch and the index of the chosen pipeline's sections open the page, see ResultsPipelines. The success cards follow, passed in as `highlights`. */}
 
-{/* Two logo files, one per theme, swapped in CSS — the same pair the navbar uses. */}
+<ResultsPipelines
+  highlights={
+    <>
+      <SuccessCards>
+        <SuccessCard to="antibiotic-susceptibility-of-p-vulgatus">
+          Three antibiotics inhibit <em>P. vulgatus</em>
+        </SuccessCard>
+        <SuccessCard to="a-characterized-promoter-library-for-p-vulgatus">
+          A 20/20 promoter library
+        </SuccessCard>
+        <SuccessCard to="screening-bsh-activity-on-bile-salt-plates">
+          BSH activity on bile salt plates
+        </SuccessCard>
+        <SuccessCard to="bile-salt-deconjugation-by-15-bile-salt-hydrolases">
+          5 of 15 hydrolases are active
+        </SuccessCard>
+      </SuccessCards>
+    </>
+  }
+>
 
-<div className="pipeline-divider">
-  <img
-    className="pipeline-divider-logo pipeline-divider-logo--light"
-    src="https://static.igem.wiki/teams/6299/wiki/icons/logo-dark-purple-no-text.avif"
-    alt=""
-  />
-  <img
-    className="pipeline-divider-logo pipeline-divider-logo--dark"
-    src="https://static.igem.wiki/teams/6299/wiki/icons/logo-light-purple-no-text.avif"
-    alt=""
-  />
-</div>
-
-<SegmentedSelector tone="pipeline">
 
 <SectionItem label="Toolkit">
 
@@ -2078,7 +2070,7 @@ For additional information about risk and safety see the <Link to="/safety-and-s
 
 </SectionItem>
 
-</SegmentedSelector>
+</ResultsPipelines>
 
 [^construct-crispr-gut]: CRISPR-Cas-based genome editing for human gut commensals. ACS Synthetic Biology, 11(1), 464. https://pubs.acs.org/asbcd6/article-abstract/11/1/464/1497030/CRISPR-Cas-Based-Genome-Editing-for-Human-Gut
 

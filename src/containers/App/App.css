@@ -12570,6 +12570,21 @@ a.protocol-download:hover {
 @media (prefers-reduced-motion: reduce) { .dbtl-wheel-spinner { transition: none; } }
 .dbtl-wheel-label { fill: var(--dbtl-t); font-size: 36px; font-weight: 700; pointer-events: none; }
 .dbtl-wheel-centre { fill: currentColor; font-size: 28px; font-weight: 600; }
+.dbtl-main { min-width: 0; }
+.dbtl-next {
+  display: block;
+  margin: 0.6rem 0 0 auto;
+  padding: 0.3rem 0.95rem;
+  border: 2px solid var(--color-text);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.dbtl-next:hover { background: var(--color-text); color: var(--color-page-bg); }
+.dbtl-next:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 .dbtl-box {
   height: clamp(20rem, 62vh, 30rem);
   overflow-y: auto;
@@ -12600,4 +12615,185 @@ a.protocol-download:hover {
 @container (max-width: 640px) {
   .dbtl-body { grid-template-columns: 1fr; }
   .dbtl-wheel { max-width: 280px; margin: 0 auto; }
+}
+
+/* RESULTS PAGE: PIPELINE INDEX
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-19
+   Purpose: the numbered list of the chosen pipeline's sections that sits
+   under the Toolkit / Therapeutics switch (ResultsPipelines.tsx). It takes
+   the colour of the open pipeline, like the rule under the sections. */
+.results-pipelines {
+  --pipeline-now: var(--pipeline-0);
+}
+
+.results-pipelines[data-active-index="1"] {
+  --pipeline-now: var(--pipeline-1);
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-19: the index is a row
+   of chevrons, one per section, each pointing on to the next (the team's
+   sketch). The open section is filled solid with the pipeline's colour. */
+.results-index {
+  --chevron: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.results-index-title {
+  margin: 0 0 0.75rem;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.results-index-list {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.results-index-list li {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.results-index-list li + li {
+  margin-left: calc(var(--chevron) * -1 + 0.3rem);
+}
+
+.results-index-list a {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: 100%;
+  min-height: 5.5rem;
+  padding: 0.75rem calc(var(--chevron) + 0.25rem) 0.75rem 1rem;
+  background-color: color-mix(in srgb, var(--pipeline-now) 28%, transparent);
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--chevron)) 0,
+    100% 50%,
+    calc(100% - var(--chevron)) 100%,
+    0 100%
+  );
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.results-index-list li + li a {
+  padding-left: calc(var(--chevron) + 0.75rem);
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--chevron)) 0,
+    100% 50%,
+    calc(100% - var(--chevron)) 100%,
+    0 100%,
+    var(--chevron) 50%
+  );
+}
+
+.results-index-list a:hover,
+.results-index-list a:focus-visible {
+  background-color: color-mix(in srgb, var(--pipeline-now) 50%, transparent);
+}
+
+.results-index-list a.active {
+  background-color: var(--pipeline-now);
+  color: #fff;
+}
+
+.results-index-number {
+  flex: 0 0 auto;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Too narrow for a row of arrows: stack them as plain bars. */
+@media (max-width: 767.98px) {
+  .results-index-list {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .results-index-list li + li {
+    margin-left: 0;
+  }
+
+  .results-index-list a,
+  .results-index-list li + li a {
+    min-height: 0;
+    padding: 0.7rem 1rem;
+    border-radius: 0.6rem;
+    clip-path: none;
+  }
+}
+
+.results-pipelines > .success-cards {
+  margin-top: 1.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .results-index-list a {
+    transition: none;
+  }
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-19
+   Purpose: on the results page the page index starts level with the first
+   section, below the pipeline switch, index and success cards
+   (--results-toc-offset is set by ResultsPipelines.tsx). */
+@media (min-width: 992px) {
+  .section-progress {
+    padding-top: var(--results-toc-offset, 0);
+  }
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-19
+   Purpose: the top block of the results page (switch, index, success cards)
+   spans the whole screen; ResultsPipelines.tsx sets its negative left margin
+   and width. The page index rail is see-through beside it and only gets its
+   background from the first section down. */
+.results-top {
+  box-sizing: border-box;
+  padding: 0 2.5rem;
+}
+
+@media (min-width: 992px) {
+  .section-progress {
+    background: linear-gradient(
+      to bottom,
+      transparent var(--results-toc-offset, 0px),
+      var(--color-page-bg) var(--results-toc-offset, 0px)
+    );
+  }
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-19
+   Purpose: the Toolkit / Therapeutics switch stays pinned under the navbar
+   while the sections scroll past (the navbar is fixed and 5rem tall). It is
+   opaque so the sections do not show through it. */
+.results-bar {
+  position: sticky;
+  top: 5rem;
+  z-index: 20;
+  box-sizing: border-box;
+  padding: 0.75rem 2.5rem;
+  background-color: var(--color-body-bg);
+}
+
+@media (min-width: 992px) {
+  .section-progress-box {
+    top: calc(5rem + var(--results-bar-h, 0px));
+    max-height: calc(100vh - 7rem - var(--results-bar-h, 0px));
+  }
 }
