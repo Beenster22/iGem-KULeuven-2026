@@ -60,6 +60,15 @@ function baselineOffset(el: HTMLElement, boxHeight: number) {
   return (boxHeight - (ascent + descent)) / 2 + ascent;
 }
 
+// Bottom edge of the navigation bar in the window. On the home page the bar
+// is hidden until opened (see App.tsx), so fall back to its usual height.
+const NAV_HEIGHT_FALLBACK = 64;
+function navBottom() {
+  const nav = document.querySelector(".navbar-empower");
+  const bottom = nav ? nav.getBoundingClientRect().bottom : 0;
+  return bottom > 0 ? bottom : NAV_HEIGHT_FALLBACK;
+}
+
 const place = ({ x, y, s }: Pose) => `translate(${x}px, ${y}px) scale(${s})`;
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 
@@ -211,8 +220,10 @@ export function useFallingM({
     };
 
     // While falling the M is position: fixed, so it is placed in window
-    // coordinates: from the source letter (as seen when p = 0) to the lowest
-    // bar (as seen when p = 1), accelerating like a fall.
+    // coordinates. Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team
+    // feedback): it stays in "Metabolic" until that line has scrolled up to
+    // the navigation bar, lets go right there and then falls (accelerating)
+    // to the lowest bar, reaching it as the counter screen settles.
     const renderFall = () => {
       if (phase !== "falling") return;
       const p = progress();
@@ -221,7 +232,11 @@ export function useFallingM({
         return;
       }
       setBars(p);
-      if (p <= 0) {
+      const navY = navBottom();
+      const releaseAt = startPose.y - navY; // scroll where the M meets the nav
+      const landAt = sectionTop - window.innerHeight * (1 - CLIMB_AT);
+      const q = (window.scrollY - releaseAt) / (landAt - releaseAt);
+      if (!(q > 0) || landAt <= releaseAt) {
         flyer.style.visibility = "hidden";
         if (source) source.style.visibility = "";
         return;
@@ -230,15 +245,14 @@ export function useFallingM({
       flyer.style.visibility = "";
       flyer.style.position = "fixed";
       flyer.style.color = startColor;
-      const t = (p / CLIMB_AT) ** 2;
-      const from = startPose;
-      const to = poses[STEP_COUNT - 1];
-      const fromTop = sectionTop - window.innerHeight; // scroll at p = 0
-      const toTop = sectionTop - window.innerHeight * (1 - CLIMB_AT); // at CLIMB_AT
+      const t = q ** 2;
+      const from = { x: startPose.x - window.scrollX, y: navY };
+      const low = poses[STEP_COUNT - 1];
+      const to = { x: low.x - window.scrollX, y: low.y - landAt };
       flyer.style.transform = place({
-        x: from.x - window.scrollX + (to.x - from.x) * t,
-        y: from.y - fromTop + (to.y - toTop - (from.y - fromTop)) * t,
-        s: from.s,
+        x: from.x + (to.x - from.x) * t,
+        y: from.y + (to.y - from.y) * t,
+        s: startPose.s,
       });
     };
 
