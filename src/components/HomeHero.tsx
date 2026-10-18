@@ -180,6 +180,12 @@ const HERO_VIDEO_EMBED_SRC =
 const FINAL_FRAME_SRC =
   "https://static.igem.wiki/teams/6299/wiki/home-page/empower-logo-still.avif";
 
+// How close to the video's end the crossfade to FINAL_FRAME_SRC begins.
+const EARLY_FADE_S = 0.6;
+// Matches .home-hero-video's opacity transition: once the still is fully
+// opaque it eases from the embed's cropped size to its uncropped one.
+const SETTLE_DELAY_MS = 600;
+
 // The PeerTube embed talks to its parent page over jschannel: JSON strings
 // with a "peertube::<method>" name. It queues its notifications until the
 // parent answers its "__ready" ping, so that handshake has to be completed
@@ -191,7 +197,10 @@ function useEmbedEnded(iframeRef: React.RefObject<HTMLIFrameElement | null>, onE
       if (!player || event.source !== player || event.origin !== HERO_VIDEO_ORIGIN) return;
       if (typeof event.data !== "string") return;
 
-      let message: { method?: string; params?: { type?: string } | string };
+      let message: {
+        method?: string;
+        params?: { type?: string; position?: number; duration?: number } | string;
+      };
       try {
         message = JSON.parse(event.data);
       } catch {
@@ -209,6 +218,17 @@ function useEmbedEnded(iframeRef: React.RefObject<HTMLIFrameElement | null>, onE
         );
       } else if (message.method === "peertube::playbackStatusChange" && message.params === "ended") {
         onEnded();
+      } else if (
+        // Sent every ~500ms while playing; starting the crossfade just
+        // before the true end hides any end-of-playback flash in the player.
+        message.method === "peertube::playbackStatusUpdate" &&
+        typeof message.params === "object" &&
+        typeof message.params.position === "number" &&
+        typeof message.params.duration === "number" &&
+        message.params.duration > 0 &&
+        message.params.duration - message.params.position <= EARLY_FADE_S
+      ) {
+        onEnded();
       }
     };
     window.addEventListener("message", handleMessage);
@@ -221,6 +241,13 @@ export function HomeHero() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const handleEnded = useCallback(() => setVideoEnded(true), []);
   useEmbedEnded(iframeRef, handleEnded);
+
+  const [settled, setSettled] = useState(false);
+  useEffect(() => {
+    if (!videoEnded) return;
+    const timer = setTimeout(() => setSettled(true), SETTLE_DELAY_MS);
+    return () => clearTimeout(timer);
+  }, [videoEnded]);
 
   if (HERO_VIDEO_EMBED_SRC) {
     return (
@@ -237,7 +264,11 @@ export function HomeHero() {
             handoff has no frame where neither is on screen (see App.css
             .home-hero-video, 2026-10-17 team feedback). */}
         <img
-          className={`home-hero-video${videoEnded ? " home-hero-video--shown" : ""}`}
+          className={
+            "home-hero-video" +
+            (videoEnded ? " home-hero-video--shown" : "") +
+            (settled ? " home-hero-video--settled" : "")
+          }
           src={FINAL_FRAME_SRC}
           alt={`${import.meta.env.VITE_TEAM_NAME} logo`}
         />
