@@ -14,32 +14,40 @@ const common = {
   focusable: false,
 } as const;
 
-// A Design-Build-Test-Learn cycle: four arced arrows chasing each other
-// clockwise around a circle, one colour per stage. Deliberately cycles only
-// --ic-1/2/3 (never --ic-line) — ic-line is meant to match whichever
-// background the icon sits on (used elsewhere as a "cutout" detail inside a
-// filled shape), so a freestanding arrow drawn in it would vanish on that
-// same background, which is exactly what happened on the (always dark)
-// page header before this fix.
+// The iGEM Design-Build-Test-Learn cycle: four chunky arrow-shaped wedges
+// chasing each other clockwise around a ring, "DBTL" lettered in the open
+// centre (no per-arrow labels — too small to read at icon size). Each wedge
+// is one closed path: an outer arc, a pointed tip poking past the ring, an
+// inner arc back. Deliberately cycles only --ic-1/2/3 (never --ic-line) —
+// ic-line is meant to match whichever background the icon sits on (used
+// elsewhere as a "cutout" detail inside a filled shape), so a freestanding
+// shape drawn in it would vanish on that same background, which is exactly
+// what happened on the (always dark) page header before this fix. The
+// centre text uses currentColor so it inherits whatever text colour the
+// surrounding tile already sets (white on a dark tile/header, plum on a
+// light one) rather than needing its own.
 export function DbtlCycleIcon(props: SVGProps<SVGSVGElement>) {
-  const arcs = [
-    { d: "M60 22A38 38 0 0 1 95.7 47", color: "var(--ic-1)", tip: [95.7, 47], rotate: 70 },
-    { d: "M98 60A38 38 0 0 1 73 95.7", color: "var(--ic-2)", tip: [73, 95.7], rotate: 160 },
-    { d: "M60 98A38 38 0 0 1 24.3 73", color: "var(--ic-3)", tip: [24.3, 73], rotate: 250 },
-    { d: "M22 60A38 38 0 0 1 47 24.3", color: "var(--ic-1)", tip: [47, 24.3], rotate: 340 },
+  const wedges = [
+    { d: "M63.8 16.2A44 44 0 0 1 103.8 56.2L113.5 67.5L83.9 57.9A24 24 0 0 0 62.1 36.1Z", color: "var(--ic-1)" },
+    { d: "M103.8 63.8A44 44 0 0 1 63.8 103.8L52.5 113.5L62.1 83.9A24 24 0 0 0 83.9 62.1Z", color: "var(--ic-2)" },
+    { d: "M56.2 103.8A44 44 0 0 1 16.2 63.8L6.5 52.5L36.1 62.1A24 24 0 0 0 57.9 83.9Z", color: "var(--ic-3)" },
+    { d: "M16.2 56.2A44 44 0 0 1 56.2 16.2L67.5 6.5L57.9 36.1A24 24 0 0 0 36.1 57.9Z", color: "var(--ic-1)" },
   ];
   return (
     <svg {...common} {...props}>
-      {arcs.map((arc, i) => (
-        <g key={i}>
-          <path d={arc.d} fill="none" stroke={arc.color} strokeWidth="10" strokeLinecap="round" />
-          <polygon
-            points="0,-8 8,6 -8,6"
-            fill={arc.color}
-            transform={`translate(${arc.tip[0]} ${arc.tip[1]}) rotate(${arc.rotate})`}
-          />
-        </g>
+      {wedges.map((wedge, i) => (
+        <path key={i} d={wedge.d} fill={wedge.color} />
       ))}
+      <text
+        x="60"
+        y="65"
+        textAnchor="middle"
+        fontSize="20"
+        fontWeight="800"
+        fill="currentColor"
+      >
+        DBTL
+      </text>
     </svg>
   );
 }

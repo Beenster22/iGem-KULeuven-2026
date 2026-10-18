@@ -361,6 +361,10 @@ a[data-footnote-ref]:focus {
   --ic-2: #2fa4a9;
   --ic-3: #f1c3d4;
   --ic-line: #33283f;
+  /* DbtlCycleIcon's centre text fills with currentColor rather than an
+     --ic-* var (it sits over the open middle, not over a filled shape) —
+     needs its own color since nothing above it in the header sets one. */
+  color: var(--color-header-text);
   flex: none;
   display: block;
   width: 6rem;
