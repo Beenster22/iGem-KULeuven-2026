@@ -81,7 +81,7 @@ export function PageShell({
       const scrollToHash = () => {
         const target = document.getElementById(id);
         target?.scrollIntoView({ block: "start", behavior: "instant" });
-        const landed = target && Math.abs(target.getBoundingClientRect().top) < 120;
+        const landed = target && target.getClientRects().length > 0 && Math.abs(target.getBoundingClientRect().top) < 120;
         if (!landed && tries++ < 20) jump = window.setTimeout(scrollToHash, 100);
       };
       scrollToHash();
