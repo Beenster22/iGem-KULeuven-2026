@@ -6902,24 +6902,42 @@ body:not(.home-fullscreen) .home-hero {
   line-height: 1.05;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
-  padding: 0 0.1em;
-  /* --color-header-bg (not --color-accent) — accent is identical to the
-     body background in light mode, which would make this invisible too. */
-  border-bottom: 0.07em solid var(--color-header-bg);
+  padding: 0 0.1em 0.07em;
+  position: relative;
+}
+
+/* The underline: --color-header-bg (not --color-accent) — accent is
+   identical to the body background in light mode, which would make this
+   invisible too. Drawn as a bar (not a border) so it can sweep in. */
+.pmos-counter-number::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0.07em;
+  background: var(--color-header-bg);
+  transform: scaleX(0);
+  transition: transform 0.7s cubic-bezier(0.3, 0, 0.2, 1);
 }
 
 [data-theme="dark"] .pmos-counter-number {
   color: #5fd3d7;
 }
 
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18: the M of "Million"
-   flies in from the PMOS acrostic (useFallingM.ts) — its slot keeps its
-   space but stays hidden until the flying M lands on it, and the sentence
-   underneath fades in after. inline-block gives the slot a box exactly one
-   line high, which the flying M copies. */
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
+   counter screen starts blank. The M of "Million" falls in from the PMOS
+   acrostic and climbs a bar-chart staircase (useFallingM.ts); once it is in
+   place "illion" appears around it (--landed), and once the stairs are gone
+   the figure, the underline and the sentence follow (--revealed). Every
+   part keeps its space throughout, so nothing moves as it appears.
+   inline-block gives the M's slot a box exactly one line high, which the
+   flying M copies. */
 .pmos-counter-figure {
   display: inline-block;
   text-align: right;
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
 
 .pmos-counter-m {
@@ -6927,28 +6945,40 @@ body:not(.home-fullscreen) .home-hero {
   visibility: hidden;
 }
 
-.pmos-counter-m--landed {
-  visibility: visible;
+.pmos-counter-illion {
+  opacity: 0;
+  transition: opacity 0.45s ease;
 }
 
 .pmos-counter-rest {
   opacity: 0;
-  transition: opacity 0.6s ease;
+  transition: opacity 0.6s ease 0.35s;
 }
 
-.pmos-counter-rest--shown {
+.pmos-counter--landed .pmos-counter-m {
+  visibility: visible;
+}
+
+.pmos-counter--landed .pmos-counter-illion,
+.pmos-counter--revealed .pmos-counter-figure,
+.pmos-counter--revealed .pmos-counter-rest {
   opacity: 1;
+}
+
+.pmos-counter--revealed .pmos-counter-number::after {
+  transform: scaleX(1);
 }
 
 .falling-m,
 .falling-m-stairs {
-  position: absolute;
   left: 0;
   top: 0;
   z-index: 5;
   pointer-events: none;
 }
 
+/* Fixed while it falls with the scroll, absolute (page coordinates) once
+   it is climbing — set from useFallingM.ts. */
 .falling-m {
   display: block;
   transform-origin: 0 0;
@@ -6957,7 +6987,15 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .falling-m-stairs {
+  position: absolute;
   overflow: visible;
+}
+
+.falling-m-stairs rect {
+  fill: var(--color-header-bg);
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transform: scaleY(0);
 }
 
 .pmos-overview-source {

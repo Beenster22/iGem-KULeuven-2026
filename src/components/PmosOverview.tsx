@@ -64,45 +64,43 @@ function useCountUp(target: number, start: boolean) {
 // the headline figure on its own, then the globe.
 export function PmosOverview({ children }: { children?: ReactNode }) {
   const caption = Children.toArray(children).filter(isValidElement);
-  const headingRef = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
 
-  useEffect(() => {
-    const el = headingRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.4 },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): this
+  // screen starts blank. The M of "Million" falls in from the PMOS acrostic
+  // above as it is scrolled to and climbs a bar-chart staircase
+  // (useFallingM.ts); "illion" appears once it has landed ("landed"), and
+  // once the stairs are gone the figure counts up with its underline and
+  // the sentence ("revealed").
+  const sectionRef = useRef<HTMLElement>(null);
+  const mSlotRef = useRef<HTMLSpanElement>(null);
+  const [stage, setStage] = useState<"blank" | "landed" | "revealed">("blank");
+  const prefersReducedMotion = useReducedMotion();
+  useFallingM({
+    sectionRef,
+    slotRef: mSlotRef,
+    onLanded: () => setStage((s) => (s === "blank" ? "landed" : s)),
+    onDone: () => setStage("revealed"),
+    skip: !!prefersReducedMotion,
+  });
 
   const totalMillions = PMOS_TOTAL / 1_000_000;
-  const millions = useCountUp(totalMillions, inView);
-
-  // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
-  // M of "Million" arrives from the PMOS acrostic above, climbing a little
-  // staircase while the figure counts up; the rest of the sentence appears
-  // once it has landed (useFallingM.ts).
-  const prefersReducedMotion = useReducedMotion();
-  const mSlotRef = useRef<HTMLSpanElement>(null);
-  const [mLanded, setMLanded] = useState(false);
-  useFallingM(inView, mSlotRef, () => setMLanded(true), !!prefersReducedMotion);
+  const millions = useCountUp(totalMillions, stage === "revealed");
 
   return (
     <>
       <section
+        ref={sectionRef}
         className="pmos-overview home-snap-screen home-section--wave-top"
         data-snap=""
       >
         <MicrobeBackdrop count={4} seed={1} />
-        <div className="pmos-counter" ref={headingRef}>
+        <div
+          className={
+            "pmos-counter" +
+            (stage !== "blank" ? " pmos-counter--landed" : "") +
+            (stage === "revealed" ? " pmos-counter--revealed" : "")
+          }
+        >
           {/* Wording as asked for by the team; the figure (PMOS_TOTAL, in
               millions) counts up, on its own line and much larger than the
               words under it. */}
@@ -119,18 +117,12 @@ export function PmosOverview({ children }: { children?: ReactNode }) {
               >
                 {millions}
               </span>{" "}
-              <span
-                ref={mSlotRef}
-                className={`pmos-counter-m${mLanded ? " pmos-counter-m--landed" : ""}`}
-              >
+              <span ref={mSlotRef} className="pmos-counter-m">
                 M
               </span>
-              illion
+              <span className="pmos-counter-illion">illion</span>
             </span>{" "}
-            <span
-              className={`pmos-counter-rest${mLanded ? " pmos-counter-rest--shown" : ""}`}
-              aria-hidden="true"
-            >
+            <span className="pmos-counter-rest" aria-hidden="true">
               women affected during their reproductive years
             </span>
           </h2>
