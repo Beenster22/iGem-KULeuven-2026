@@ -39,14 +39,29 @@ export function DbtlCycleIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+// A single jigsaw piece: a tab sticking out on the top and right edges,
+// a matching notch cut into the bottom and left — the classic puzzle-piece
+// silhouette, rather than the previous free-form blob.
 export function PuzzleIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...common} {...props}>
       <path
-        d="M38 14h30a6 6 0 0 1 6 6v13a10 10 0 0 1 17 6 10 10 0 0 1-17 6v13a6 6 0 0 1-6 6H58a10 10 0 0 0 0-17 10 10 0 0 0 0 17H38a6 6 0 0 1-6-6V68a10 10 0 0 1-17-6 10 10 0 0 1 17-6V26a6 6 0 0 1 6-6Z"
+        d="M24 24
+           L46 24
+           A14 14 0 0 1 74 24
+           L96 24
+           L96 46
+           A14 14 0 0 1 96 74
+           L96 96
+           L74 96
+           A14 14 0 0 0 46 96
+           L24 96
+           L24 74
+           A14 14 0 0 0 24 46
+           Z"
         fill="var(--ic-1)"
       />
-      <circle cx="60" cy="52" r="7" fill="var(--ic-3)" />
+      <circle cx="60" cy="60" r="7" fill="var(--ic-3)" />
     </svg>
   );
 }
