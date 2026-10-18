@@ -16,6 +16,10 @@ const SPHERE_FRACTION = Math.tan(Math.asin(1 / 3.2)) / Math.tan((25 * Math.PI) /
 // Scroll progress (0 = the globe screen's top at the bottom of the window,
 // 1 = it fills the window) by which the ring has closed around the globe.
 const CLOSED_AT = 0.85;
+// Share of the scroll between the line letting go and Elle's bubble
+// reaching the nav bar that the line spends travelling and closing; the
+// rest is the halo's fade.
+const FADE_SHARE_START = 0.5;
 const POINTS = 96;
 
 // The halo's ring width in px (--halo-w on .pmos-globe-halo), which the line
@@ -110,12 +114,26 @@ export function useLineToGlobe({
       }
 
       // Scroll positions where the line lets go (its "170 Million" reaches
-      // the nav bar) and where the ring has closed round the globe.
+      // the nav bar), where the ring has closed round the globe, and where
+      // the halo has faded (the top of Elle's speech bubble reaches the nav
+      // bar). Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team
+      // feedback: the fade was too quick): the ring now closes halfway
+      // between letting go and the bubble reaching the nav bar (or when the
+      // globe screen has settled, if that is sooner), leaving the other half
+      // for a slow fade.
       const lineBox = line.getBoundingClientRect();
       const releaseAt = lineBox.top + window.scrollY - navBottom();
-      const closedAt =
+      const bubble = section.querySelector(".elle-bubble");
+      const bubbleAt = bubble
+        ? bubble.getBoundingClientRect().top + window.scrollY - navBottom()
+        : -Infinity;
+      const settledAt =
         section.getBoundingClientRect().top + window.scrollY -
         window.innerHeight * (1 - CLOSED_AT);
+      const closedAt =
+        bubbleAt > releaseAt
+          ? Math.min(settledAt, releaseAt + (bubbleAt - releaseAt) * FADE_SHARE_START)
+          : settledAt;
       const q =
         closedAt > releaseAt
           ? (window.scrollY - releaseAt) / (closedAt - releaseAt)
@@ -129,10 +147,15 @@ export function useLineToGlobe({
         return;
       }
       if (q >= 1) {
-        // Closed: the globe's own halo takes over.
+        // Closed: the globe's own halo takes over. Edited with Claude Opus
+        // 5.5 (Anthropic), 2026-10-18 (team feedback): it then fades very
+        // slowly away, gone just as the top of Elle's speech bubble reaches
+        // the navigation bar (never over less than 80px of scrolling).
         overlay.style.visibility = "hidden";
         line.classList.add("is-detached");
-        show(1, 1);
+        const fadedAt = Math.max(bubbleAt, closedAt + 80);
+        const f = clamp01((window.scrollY - closedAt) / (fadedAt - closedAt));
+        show(1, 1 - f * f * (3 - 2 * f));
         return;
       }
 
