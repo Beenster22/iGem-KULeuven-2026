@@ -593,9 +593,15 @@ a[data-footnote-ref]:focus {
    of the navbar inventing its own look. Cards are wide (minmax 15rem) and
    short, sized for a horizontal dropdown strip rather than the home page's
    tall vertical cards. */
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: team request — a fixed 3 columns instead of auto-fit, so a wide
+   folder (4+ tiles) never crowds 4 onto one row; it wraps to 3 then
+   2-or-3 instead. See layoutMegaMenu in Navbar.tsx, which works out how
+   many tiles land in that trailing row and pads it out with Elle
+   (.mega-menu-filler) when it is short of 3. */
 .mega-menu-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.85rem;
   padding: 1.25rem 1rem;
 }
@@ -610,6 +616,22 @@ a[data-footnote-ref]:focus {
   height: 1px;
   margin: 0.25rem 0;
   background-color: rgba(201, 189, 232, 0.35);
+}
+
+/* Elle, filling out a trailing row that falls short of 3 tiles (see
+   layoutMegaMenu). Same silent-mascot sizing idea as .mega-menu-link-icon,
+   just bigger and alone in its cell since she isn't sitting next to a
+   label here. */
+.mega-menu-filler {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mega-menu-filler img {
+  width: 4.5rem;
+  height: auto;
+  opacity: 0.85;
 }
 
 .mega-menu-link {
@@ -742,6 +764,12 @@ a[data-footnote-ref]:focus {
   .mega-menu-content {
     grid-template-columns: 1fr;
     padding: 0.5rem 0.5rem 1rem;
+  }
+
+  /* A single column has no "empty cell" to fill — Elle would just be an
+     unexplained image stacked into the middle of the link list. */
+  .mega-menu-filler {
+    display: none;
   }
 }
 
@@ -4028,6 +4056,17 @@ body.home-fullscreen {
   background-color: var(--color-page-bg);
 }
 
+/* In light mode --color-page-bg is a light teal, distinct from the light
+   purple --color-body-bg band next to it — unlike dark mode, where both
+   tokens are shades of dark purple and the whole page reads as one
+   consistent identity. Matching this band to --color-body-bg in light mode
+   only gives light mode that same connected purple feel (2026-10-18 team
+   feedback), without touching --color-page-bg itself (still teal on every
+   other page). */
+[data-theme="light"] .home-section--page {
+  background-color: var(--color-body-bg);
+}
+
 .home-section--body {
   background-color: var(--color-body-bg);
 }
@@ -4680,6 +4719,43 @@ body:not(.home-fullscreen) .home-hero {
   color: inherit;
   font-weight: 600;
   text-underline-offset: 0.2em;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
+   panels come in one per scroll step, left to right (.is-shown, set by
+   PmosEffectsSection.tsx). The first circle is where the globe lands, so it
+   appears at once — the globe has just turned into it — and only its
+   drawing and label fade in. */
+.pmos-effect,
+.pmos-effects-more {
+  transition:
+    opacity 0.5s ease,
+    translate 0.5s ease;
+}
+
+.pmos-effect:not(.is-shown),
+.pmos-effects-more:not(.is-shown) {
+  opacity: 0;
+  translate: -1.5rem 0;
+}
+
+.pmos-effect.symptom-group--hormonal:not(.is-shown) {
+  opacity: 1;
+  translate: none;
+}
+
+.pmos-effect:not(.is-shown) .pmos-effect-art {
+  visibility: hidden;
+}
+
+.pmos-effect.symptom-group--hormonal .pmos-effect-art svg,
+.pmos-effect.symptom-group--hormonal .pmos-effect-label {
+  transition: opacity 0.5s ease;
+}
+
+.pmos-effect.symptom-group--hormonal:not(.is-shown) .pmos-effect-art svg,
+.pmos-effect.symptom-group--hormonal:not(.is-shown) .pmos-effect-label {
+  opacity: 0;
 }
 
 /* Tablets and phones: two by two. */
@@ -6785,6 +6861,52 @@ body:not(.home-fullscreen) .home-hero {
   cursor: pointer !important;
 }
 
+/* GLOBE DROP
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-18
+   Purpose: the globe falling onto the next screen's first circle (see
+   useGlobeDrop in PmosGlobe.tsx, which sets the transform, --fly-scale and
+   --morph). While it falls it must paint over the band below, which comes
+   later in the page and would otherwise cover it. */
+.pmos-globe-fly {
+  position: relative;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.pmos-globe-wrap.is-dropping {
+  z-index: 5;
+}
+
+.pmos-globe-wrap.is-dropping .pmos-globe-fly {
+  pointer-events: none;
+}
+
+.pmos-globe-wrap.is-dropping .pmos-globe-fly > :not(.pmos-globe-morph) {
+  opacity: calc(1 - var(--morph, 0));
+}
+
+/* Matches .pmos-effect-art (border and disc colour), sized to the sphere
+   (SPHERE_FRACTION in PmosGlobe.tsx); the border is divided by the scale so
+   it lands at the circle's own 4px. */
+.pmos-globe-morph {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 70.5%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  border: calc(4px / var(--fly-scale, 1)) solid var(--symptom-color);
+  background-color: color-mix(in srgb, var(--symptom-color) 22%, #fff);
+  opacity: var(--morph, 0);
+  pointer-events: none;
+}
+
+/* Landed: the real circle has taken over. */
+.pmos-globe-wrap.is-landed .pmos-globe-fly {
+  visibility: hidden;
+}
+
 .pmos-globe-info {
   flex: 1;
   min-width: 0;
@@ -6865,6 +6987,39 @@ body:not(.home-fullscreen) .home-hero {
   font-size: 0.85rem;
   text-align: center;
   line-height: 1.4;
+}
+
+/* PREVALENCE ELLE (Elle + "how we got these numbers", in PmosOverview.tsx)
+   Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
+   Purpose: Elle (ElleSays.tsx) stands in the corner of the globe section with
+   her line already in a speech bubble, rather than behind a click-to-open
+   info button — pinned to the section itself (not the globe/text pair) so
+   she stays in the same spot whether .pmos-globe-wrap is a row (desktop) or
+   a stacked column (mobile, see the media query below). The ">" selector
+   beats the specificity of the ".pmos-overview > :not(.microbe-backdrop)"
+   rule above that would otherwise force this back to position: relative. */
+.pmos-overview > .pmos-prevalence-elle {
+  position: absolute;
+  top: clamp(0.5rem, 3vh, 1.5rem);
+  right: clamp(0.5rem, 3vw, 1.5rem);
+  z-index: 3;
+  max-width: min(34rem, calc(100vw - 2rem));
+}
+
+.pmos-prevalence-elle .elle {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .pmos-overview > .pmos-prevalence-elle {
+    position: static;
+    margin: 0 auto 1rem;
+  }
+
+  .pmos-prevalence-elle .elle {
+    --elle-size: clamp(6rem, 24vw, 8rem);
+    justify-content: center;
+  }
 }
 
 @media (max-width: 768px) {

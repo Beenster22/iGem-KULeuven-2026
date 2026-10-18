@@ -9,8 +9,18 @@
 // drawing for this one), then the team's own uterus and ovaries and brain
 // (BodyOrgans.tsx) and liver (LiverDrawing.tsx). Colours match the symptom
 // groups' (.symptom-group--*).
-import type { ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import { Link } from "react-router-dom";
+import { useReducedMotion } from "framer-motion";
+import { GLOBE_LANDED, globeDropProgress, PMOS_EFFECTS_ID } from "./globeDrop";
+import { SnapSteps } from "./HomeSnapScroll";
+import { usePinnedStep } from "./usePinnedStep";
 import { BrainOrgan, UterusOrgan } from "./BodyOrgans";
 import {
   LIVER_DRAWING_HEIGHT,
@@ -72,32 +82,85 @@ const EFFECTS: Effect[] = [
   },
 ];
 
+// Whether the globe has landed on the first circle (see globeDrop.ts).
+function useGlobeLanded(enabled: boolean) {
+  const [landed, setLanded] = useState(!enabled);
+
+  useEffect(() => {
+    if (!enabled) return;
+    let frame: number | null = null;
+    const update = () => {
+      frame = null;
+      setLanded((globeDropProgress() ?? 0) >= GLOBE_LANDED);
+    };
+    const onScroll = () => {
+      if (frame === null) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame !== null) cancelAnimationFrame(frame);
+    };
+  }, [enabled]);
+
+  return landed;
+}
+
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
+// globe from the screen above now falls onto the first circle and becomes it
+// (PmosGlobe.tsx), and the screen stays pinned while the circles come in one
+// per scroll step, left to right, from hormonal imbalance to psychological
+// burden.
 export function PmosEffectsSection() {
+  const prefersReducedMotion = useReducedMotion();
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const step = usePinnedStep(wrapperRef, EFFECTS.length);
+  const landed = useGlobeLanded(!prefersReducedMotion);
+  const shown = (i: number) => prefersReducedMotion || (landed && i <= step);
+
   return (
-    <section className="pmos-effects" data-snap="">
-      <h2 className="pmos-effects-title">PMOS manifests differently in patients</h2>
-      <ul className="pmos-effects-grid">
-        {EFFECTS.map((effect) => (
-          <li
-            key={effect.id}
-            className={`pmos-effect symptom-group--${effect.id}`}
-          >
-            <div className="pmos-effect-art">
-              <svg
-                viewBox={effect.viewBox}
-                preserveAspectRatio="xMidYMid meet"
-                aria-hidden="true"
-              >
-                {effect.art}
-              </svg>
-            </div>
-            <h3 className="pmos-effect-label">{effect.label}</h3>
-          </li>
-        ))}
-      </ul>
-      <Link className="pmos-effects-more" to="/description">
-        See all symptoms on the project description page →
-      </Link>
-    </section>
+    <div
+      id={PMOS_EFFECTS_ID}
+      className={prefersReducedMotion ? undefined : "home-snap-pin"}
+      ref={wrapperRef}
+      style={{ "--snap-steps": EFFECTS.length } as CSSProperties}
+    >
+      {!prefersReducedMotion && <SnapSteps steps={EFFECTS.length} />}
+      <section
+        className={`pmos-effects${prefersReducedMotion ? "" : " home-snap-stage"}`}
+      >
+        <h2 className="pmos-effects-title">
+          PMOS manifests differently in patients
+        </h2>
+        <ul className="pmos-effects-grid">
+          {EFFECTS.map((effect, i) => (
+            <li
+              key={effect.id}
+              className={`pmos-effect symptom-group--${effect.id}${shown(i) ? " is-shown" : ""}`}
+            >
+              <div className="pmos-effect-art">
+                <svg
+                  viewBox={effect.viewBox}
+                  preserveAspectRatio="xMidYMid meet"
+                  aria-hidden="true"
+                >
+                  {effect.art}
+                </svg>
+              </div>
+              <h3 className="pmos-effect-label">{effect.label}</h3>
+            </li>
+          ))}
+        </ul>
+        <Link
+          className={`pmos-effects-more${shown(EFFECTS.length - 1) ? " is-shown" : ""}`}
+          to="/description"
+        >
+          See all symptoms on the project description page →
+        </Link>
+      </section>
+    </div>
   );
 }

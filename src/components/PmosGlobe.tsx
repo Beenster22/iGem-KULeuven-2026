@@ -5,14 +5,16 @@
 // served from iGEM infrastructure" asset rule in README.md. The globe itself
 // uses a flat brand-colored material instead of a photographic Earth
 // texture, so no texture image needs hosting either.
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
 import { feature } from "topojson-client";
 import type { GeometryCollection, Topology } from "topojson-specification";
 import Globe, { GlobeMethods } from "react-globe.gl";
 import { MeshPhongMaterial } from "three";
 import worldTopo from "world-atlas/countries-110m.json";
+import { useReducedMotion } from "framer-motion";
 import { useThemeMode } from "../ThemeModeContext";
+import { GLOBE_LANDED, globeDropProgress, PMOS_EFFECTS_ID } from "./globeDrop";
 import { Continent, COUNTRY_ID_TO_CONTINENT } from "./pmosContinents";
 import {
   PMOS_CONTINENT_NOTES,
@@ -63,12 +65,90 @@ function lighten(hex: string, amount: number): string {
   return `rgb(${channel(16)}, ${channel(8)}, ${channel(0)})`;
 }
 
+// The sphere's share of the canvas width, at the altitude-2.2 view set
+// below: globe.gl's camera has a 50° field of view and sits 3.2 globe radii
+// from the centre, so the sphere spans tan(asin(1 / 3.2)) / tan(25°) of it.
+const SPHERE_FRACTION =
+  Math.tan(Math.asin(1 / 3.2)) / Math.tan((25 * Math.PI) / 180);
+
+const EASE_IN_OUT = (t: number) =>
+  t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+
+// Generated with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): as
+// the next screen ("PMOS manifests differently in patients") scrolls in, the
+// globe falls onto its first circle, shrinking to that circle's size, and
+// fades into a plain disc in its colours — the circle itself then takes over
+// (see globeDrop.ts). Written straight to the element's style each frame
+// rather than through React state, so scrolling doesn't re-render the globe.
+function useGlobeDrop(
+  stageRef: RefObject<HTMLDivElement | null>,
+  flyRef: RefObject<HTMLDivElement | null>,
+) {
+  const prefersReducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    const fly = flyRef.current;
+    if (!stage || !fly || prefersReducedMotion) return;
+    const wrap = stage.closest<HTMLElement>(".pmos-globe-wrap");
+    let frame: number | null = null;
+
+    const update = () => {
+      frame = null;
+      const progress = globeDropProgress();
+      const target = document
+        .getElementById(PMOS_EFFECTS_ID)
+        ?.querySelector<HTMLElement>(".pmos-effect-art");
+      if (!progress || !target) {
+        fly.style.transform = "";
+        fly.style.removeProperty("--morph");
+        wrap?.classList.remove("is-dropping", "is-landed");
+        return;
+      }
+      // The stage itself never moves, so it still marks where the globe
+      // would be without the drop.
+      const from = stage.getBoundingClientRect();
+      const to = target.getBoundingClientRect();
+      const eased = EASE_IN_OUT(progress);
+      const dx =
+        (to.left + to.width / 2 - (from.left + from.width / 2)) * eased;
+      const dy =
+        (to.top + to.height / 2 - (from.top + from.height / 2)) * eased;
+      const endScale = to.width / (from.width * SPHERE_FRACTION);
+      const scale = 1 + (endScale - 1) * eased;
+      fly.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+      fly.style.setProperty("--fly-scale", String(scale));
+      // The globe turns into the disc over the last stretch of the fall.
+      fly.style.setProperty(
+        "--morph",
+        String(Math.min(1, Math.max(0, (progress - 0.55) / 0.4))),
+      );
+      wrap?.classList.add("is-dropping");
+      wrap?.classList.toggle("is-landed", progress >= GLOBE_LANDED);
+    };
+    const onScroll = () => {
+      if (frame === null) frame = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame !== null) cancelAnimationFrame(frame);
+    };
+  }, [stageRef, flyRef, prefersReducedMotion]);
+}
+
 export function PmosGlobe() {
   const { mode } = useThemeMode();
   // Sizes the globe itself — its own stage element, not the outer wrap,
   // which also holds the text beside it.
   const stageRef = useRef<HTMLDivElement>(null);
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
+  // What actually moves during the drop (see useGlobeDrop).
+  const flyRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState(320);
   const [selected, setSelected] = useState<{
     continent: Continent;
@@ -88,6 +168,8 @@ export function PmosGlobe() {
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
+
+  useGlobeDrop(stageRef, flyRef);
 
   useEffect(() => {
     globeRef.current?.pointOfView({ altitude: 2.2 }, 0);
@@ -155,43 +237,51 @@ export function PmosGlobe() {
         className={`pmos-globe-stage${hoveredContinent ? " is-hovering" : ""}`}
         ref={stageRef}
       >
-        <Globe
-          ref={globeRef}
-          width={size}
-          height={size}
-          backgroundColor="rgba(0,0,0,0)"
-          globeImageUrl={null}
-          globeMaterial={globeMaterial}
-          showAtmosphere
-          atmosphereColor={atmosphereColor}
-          polygonsData={countries}
-          polygonCapColor={(d) => {
-            const country = d as Feature<Geometry, CountryProps>;
-            const base = colorOf(country);
-            return continentOf(country) === hoveredContinent
-              ? lighten(base, 0.35)
-              : base;
-          }}
-          polygonSideColor={() => "rgba(0,0,0,0.15)"}
-          polygonStrokeColor={() => "#221B2B"}
-          polygonAltitude={(d) => {
-            const country = d as Feature<Geometry, CountryProps>;
-            return continentOf(country) === hoveredContinent ? 0.06 : 0.01;
-          }}
-          // Continent-level only, deliberately not the country name — hovering
-          // over an individual country implies it's independently clickable,
-          // which would be misleading since every country in a continent maps
-          // to the same continent-wide stat.
-          polygonLabel={(d) => {
-            const country = d as Feature<Geometry, CountryProps>;
-            const continent = continentOf(country);
-            if (!continent) return "";
-            const count = PMOS_STATS_BY_CONTINENT[continent];
-            return `<div class="pmos-globe-tooltip"><strong>${continent}</strong><br />${count.toLocaleString()} women affected</div>`;
-          }}
-          onPolygonHover={handleHover}
-          onPolygonClick={handleClick}
-        />
+        <div className="pmos-globe-fly" ref={flyRef}>
+          <Globe
+            ref={globeRef}
+            width={size}
+            height={size}
+            backgroundColor="rgba(0,0,0,0)"
+            globeImageUrl={null}
+            globeMaterial={globeMaterial}
+            showAtmosphere
+            atmosphereColor={atmosphereColor}
+            polygonsData={countries}
+            polygonCapColor={(d) => {
+              const country = d as Feature<Geometry, CountryProps>;
+              const base = colorOf(country);
+              return continentOf(country) === hoveredContinent
+                ? lighten(base, 0.35)
+                : base;
+            }}
+            polygonSideColor={() => "rgba(0,0,0,0.15)"}
+            polygonStrokeColor={() => "#221B2B"}
+            polygonAltitude={(d) => {
+              const country = d as Feature<Geometry, CountryProps>;
+              return continentOf(country) === hoveredContinent ? 0.06 : 0.01;
+            }}
+            // Continent-level only, deliberately not the country name — hovering
+            // over an individual country implies it's independently clickable,
+            // which would be misleading since every country in a continent maps
+            // to the same continent-wide stat.
+            polygonLabel={(d) => {
+              const country = d as Feature<Geometry, CountryProps>;
+              const continent = continentOf(country);
+              if (!continent) return "";
+              const count = PMOS_STATS_BY_CONTINENT[continent];
+              return `<div class="pmos-globe-tooltip"><strong>${continent}</strong><br />${count.toLocaleString()} women affected</div>`;
+            }}
+            onPolygonHover={handleHover}
+            onPolygonClick={handleClick}
+          />
+          {/* What the globe turns into as it lands: the first circle of the
+              next screen, in that circle's colours. */}
+          <div
+            className="pmos-globe-morph symptom-group--hormonal"
+            aria-hidden="true"
+          />
+        </div>
       </div>
       <div className="pmos-globe-info" aria-live="polite">
         {selected ? (
