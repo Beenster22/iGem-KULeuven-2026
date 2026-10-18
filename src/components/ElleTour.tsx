@@ -22,6 +22,13 @@ import { useReducedMotion } from "framer-motion";
 import { EFFECT_ART } from "./PmosEffectsSection";
 import { PMOS_EFFECTS_ID } from "./globeDrop";
 import { GLIDE, glideStartRate } from "./scrollGlide";
+import { navBottom } from "./useFallingM";
+
+// Elle's place on the next screen, presenting (StoryScrollSection.tsx).
+const PROFESSOR_SELECTOR = "[data-elle-professor]";
+// The lady's waist, as a share of her picture's height: when it scrolls up
+// to the navigation bar, Elle sets off for that next screen.
+const WAIST = 0.4;
 
 // The uterus drawing in the "Reproductive issues" circle, which Elle grows
 // out of.
@@ -124,17 +131,15 @@ const GLASS_SIZE = 0.5;
 const LENS_X = GLASS_LEFT + (GLASS_SIZE * 20) / 48;
 const LENS_Y = GLASS_TOP + (GLASS_SIZE * 20) / 48;
 
-// The question marks of the old "etiology" screen (see .story-art--question
-// in App.css), smaller.
-function QuestionMarks({ style }: { style?: CSSProperties }) {
+// The teal question mark of the old "etiology" screen (see
+// .story-art--question in App.css), on its own under the sentence (team
+// request, 2026-10-18).
+function QuestionMark() {
   return (
     <div
       className="story-art story-art--question elle-tour-questions"
       aria-hidden="true"
-      style={style}
     >
-      <span>?</span>
-      <span>?</span>
       <span>?</span>
     </div>
   );
@@ -183,8 +188,17 @@ export function ElleTour() {
         w,
         h,
       });
+      // Her place beside the lady, held where it sits while the screen is
+      // pinned: once the screen scrolls on, she stays put on the screen
+      // (team request, 2026-10-18) rather than scrolling away with it.
+      const stage = slot.parentElement!.getBoundingClientRect();
       const side = slot.getBoundingClientRect();
-      const sideBox: Box = { x: side.left, y: side.top, w: side.width, h: side.height };
+      const sideBox: Box = {
+        x: side.left,
+        y: side.top - Math.min(0, stage.top),
+        w: side.width,
+        h: side.height,
+      };
       const circle = source();
       const circleRect = circle?.getBoundingClientRect();
       const startBox: Box = circleRect
@@ -211,13 +225,48 @@ export function ElleTour() {
         }
       }
 
-      const shown = t > 0;
+      // Once the tour is over and the lady's waist has scrolled up to the
+      // navigation bar, she follows the scroll down to her place on the
+      // next screen (the professor, see StoryScrollSection.tsx), arriving
+      // just as that screen pins, and hands over to the Elle drawn there.
+      // Her offset from that place shrinks along a curve that starts at
+      // just the speed holding her still, so she leaves without a jolt.
+      // She stays sad: the professor is the same sad Elle, with glasses on.
+      let handedOver = false;
+      const professor = document.querySelector<HTMLElement>(PROFESSOR_SELECTOR);
+      const story = professor?.closest<HTMLElement>(".story-scroll");
+      if (t >= END && professor && story && !prefersReducedMotion) {
+        const unpinnedTop =
+          wrapper.getBoundingClientRect().top + window.scrollY +
+          wrapper.offsetHeight - slot.parentElement!.offsetHeight;
+        const waistAt =
+          unpinnedTop + (fig.top - stage.top) + WAIST * fig.height - navBottom();
+        const landAt = story.getBoundingClientRect().top + window.scrollY;
+        const span = landAt - waistAt;
+        const q = span > 0 ? clamp01((window.scrollY - waistAt) / span) : 1;
+        if (q > 0) {
+          const p = professor.getBoundingClientRect();
+          const shift = Math.min(window.scrollY, landAt) - waistAt;
+          const gap0 = p.top + shift - sideBox.y; // how far below her it started
+          const e = GLIDE(q, gap0 > 0 ? Math.min(1.5, span / gap0) : 0);
+          box = {
+            x: p.left + (sideBox.x - p.left) * (1 - e),
+            y: p.top + (sideBox.y - (p.top + shift)) * (1 - e),
+            w: lerp(sideBox.w, p.width, e),
+            h: lerp(sideBox.h, p.height, e),
+          };
+          handedOver = q >= 1;
+        }
+      }
+      professor?.classList.toggle("is-here", handedOver || prefersReducedMotion);
+
+      const shown = t > 0 && !handedOver;
       elle.style.visibility = shown ? "" : "hidden";
       elle.style.width = `${box.w}px`;
       elle.style.height = `${box.h}px`;
       elle.style.transform = `translate(${box.x}px, ${box.y - hop * box.h * 0.18}px) rotate(${hop * 7}deg)`;
       // The circle's uterus is handed over to the fixed layer while it is out.
-      if (circle && !prefersReducedMotion) circle.style.visibility = shown ? "hidden" : "";
+      if (circle && !prefersReducedMotion) circle.style.visibility = t > 0 ? "hidden" : "";
 
       const sad = smooth((t - SAD_AT) / SAD_FOR);
       setOpacity(uterusRef.current, 1 - smooth((t - 0.1) / 0.5));
@@ -323,6 +372,12 @@ export function ElleTour() {
       if (!prefersReducedMotion) {
         const top = wrapper.getBoundingClientRect().top;
         const vh = window.innerHeight;
+        // Scrolled on past the screen before the tour finished: skip to its
+        // end, so Elle is ready to move on to the next screen.
+        if (direction > 0 && slot.parentElement!.getBoundingClientRect().top < -0.25 * vh) {
+          t = END;
+          direction = 0;
+        }
         if (direction <= 0 && t < END && down && top < START_AT * vh && top > -vh) {
           play(1);
           if (top > 2 && now >= busyUntil) glideTo(y + top);
@@ -378,7 +433,7 @@ export function ElleTour() {
             </span>
           </p>
           <div ref={questionsRef} className="elle-tour-questions-wrap">
-            <QuestionMarks />
+            <QuestionMark />
           </div>
         </div>
       </div>

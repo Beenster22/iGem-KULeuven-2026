@@ -4947,8 +4947,12 @@ body:not(.home-fullscreen) .home-hero {
 .elle-tour-words {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: clamp(0.5rem, 3vh, 1.5rem);
+  align-items: center;
+  gap: clamp(0.75rem, 3vh, 1.75rem);
+}
+
+.elle-tour-words .story-text {
+  align-self: stretch;
 }
 
 .elle-tour-line {
@@ -4962,13 +4966,23 @@ body:not(.home-fullscreen) .home-hero {
 
 .elle-tour-questions-wrap {
   opacity: 0;
-  transform-origin: left center;
+  transform-origin: center;
 }
 
-/* The old etiology screen's question marks, at half their size. */
-.elle-tour-questions {
-  zoom: 0.5;
+/* Just the teal question mark (team request, 2026-10-18), centred under
+   the sentence: out of the three-mark arrangement's absolute layout and
+   into the flow, still bobbing. */
+.story-art--question.elle-tour-questions {
+  width: auto;
+  height: auto;
   margin: 0;
+}
+
+.story-art--question.elle-tour-questions span:nth-child(1) {
+  position: static;
+  width: clamp(5rem, 10vw, 7.5rem);
+  height: clamp(5rem, 10vw, 7.5rem);
+  font-size: clamp(3rem, 6vw, 4.6rem);
 }
 
 /* The fixed layer Elle and the close-ups are drawn on. */
@@ -5200,6 +5214,144 @@ body:not(.home-fullscreen) .home-hero {
 
 .story-step--center .story-text {
   max-width: 14em;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
+   "presentation" step — Elle as a professor beside a presentation screen,
+   pointing at the sentence on it with a stick (see Professor in
+   StoryScrollSection.tsx). --prof-w is her width; the gap between her and
+   the screen is what the stick spans. */
+.story-step--presentation {
+  --prof-w: clamp(7rem, 17vw, 14rem);
+  gap: calc(var(--prof-w) * 0.35);
+}
+
+/* Hidden until Elle has arrived here from her tour (ElleTour.tsx hands
+   over to it by adding .is-here); then the glasses and stick appear. */
+.story-professor {
+  position: relative;
+  flex: none;
+  width: var(--prof-w);
+  aspect-ratio: 1668 / 1211;
+  visibility: hidden;
+}
+
+.story-professor.is-here {
+  visibility: visible;
+}
+
+.story-professor-elle {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.story-professor-glasses,
+.story-professor-stick {
+  position: absolute;
+  overflow: visible;
+  opacity: 0;
+  transition:
+    opacity 0.35s ease 0.1s,
+    scale 0.35s ease 0.1s,
+    rotate 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s;
+}
+
+.story-professor.is-here .story-professor-glasses,
+.story-professor.is-here .story-professor-stick {
+  opacity: 1;
+}
+
+/* Over her eyes on the "sad" artwork (36.3% / 60.6% across, about 47%
+   down — the lenses are tilted slightly to follow them). */
+.story-professor-glasses {
+  left: 27%;
+  top: 35.1%;
+  width: 43%;
+  height: auto;
+  aspect-ratio: 100 / 40;
+  scale: 1.25;
+  fill: rgba(234, 244, 245, 0.28);
+  stroke: #33283f;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+}
+
+.story-professor.is-here .story-professor-glasses {
+  scale: 1;
+}
+
+/* From her right-hand ovary (72% across, 69% down) up to the screen, just
+   reaching over the gap into its edge. Swings up into place. */
+.story-professor-stick {
+  left: 70%;
+  bottom: 31%;
+  width: 67%;
+  height: 45%;
+  transform-origin: 0 100%;
+  rotate: 35deg;
+  stroke: #8a5a3b;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.story-professor-stick line {
+  vector-effect: non-scaling-stroke;
+}
+
+.story-professor-stick-tip {
+  stroke: #33283f;
+}
+
+.story-professor.is-here .story-professor-stick {
+  rotate: 0deg;
+}
+
+/* The presentation screen: a light board on a stand, in the brand teal so
+   it shows on this band in both themes. */
+.story-screen {
+  position: relative;
+  flex: 0 1 auto;
+  max-width: 26em;
+  padding: clamp(1rem, 3vw, 2rem) clamp(1.25rem, 3.5vw, 2.5rem);
+  border: 0.4rem solid #2fa4a9;
+  border-radius: 1rem;
+  background: #eaf4f5;
+  color: #33283f;
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
+}
+
+.story-screen::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 0.4rem;
+  height: clamp(1.5rem, 6vh, 3rem);
+  background: #2fa4a9;
+  translate: -50% 0;
+}
+
+.story-screen .story-text {
+  max-width: 14em;
+  font-size: clamp(1.15rem, 2.4vw, 2rem);
+}
+
+@media (max-width: 699.98px) {
+  .story-step--presentation {
+    --prof-w: 5.5rem;
+  }
+
+  .story-screen .story-text {
+    font-size: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-professor-glasses,
+  .story-professor-stick {
+    transition: none;
+  }
 }
 
 /* StoryStatement: one sentence in an ordinary full-screen band, so it is
@@ -12637,17 +12789,17 @@ a.protocol-download:hover {
 .integration-summary-headrow,
 .integration-summary-row {
   display: grid;
-  grid-template-columns: 1fr 1fr 11rem;
+  grid-template-columns: 1fr 1fr 13rem;
   gap: 0 1.5rem;
 }
 
 .integration-summary-head {
-  font-size: 0.72rem;
+  font-size: 0.95rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   color: #2fa4a9;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.6rem;
 }
 
 .integration-summary-row {
@@ -12666,14 +12818,17 @@ a.protocol-download:hover {
   padding-top: 0;
 }
 
-/* The hairline between the two prose columns */
-.integration-summary-integrated {
-  border-left: 1px solid rgba(51, 40, 63, 0.18);
+/* Thick rules between the columns — deliberately heavier than the hairlines
+   that separate the rows, so the three columns read as the main split. */
+.integration-summary-integrated,
+.integration-summary-impact {
+  border-left: 3px solid rgba(47, 164, 169, 0.6);
   padding-left: 1.5rem;
 }
 
-[data-theme="dark"] .integration-summary-integrated {
-  border-left-color: rgba(255, 255, 255, 0.16);
+/* The marker sits further right than the rule, so it clears the column line */
+.integration-summary-impact {
+  padding-left: 1.9rem;
 }
 
 .page-body .page-shell-content .integration-summary-row p {
@@ -12728,7 +12883,7 @@ a.protocol-download:hover {
 }
 
 .integration-summary-impact-label {
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 700;
   line-height: 1.3;
   color: #2fa4a9;
@@ -12759,14 +12914,15 @@ a.protocol-download:hover {
     content: "What we learned";
     display: block;
     margin-bottom: 0.3rem;
-    font-size: 0.68rem;
+    font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: #2fa4a9;
   }
 
-  .integration-summary-integrated {
+  .integration-summary-integrated,
+  .integration-summary-impact {
     border-left: none;
     padding-left: 0;
   }
@@ -12775,7 +12931,7 @@ a.protocol-download:hover {
     content: "How we integrated it";
     display: block;
     margin-bottom: 0.3rem;
-    font-size: 0.68rem;
+    font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
