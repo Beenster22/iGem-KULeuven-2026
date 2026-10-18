@@ -12422,3 +12422,229 @@ a.protocol-download:hover {
 .table-compact.table-responsive-rounded .table-bordered td:nth-child(2) {
   width: 30%;
 }
+
+/* VALUE CHAIN FIGURE
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
+   Purpose: the value chain figure on the Entrepreneurship page (see
+   ValueChainFigure.tsx), redrawn as live content. Fixed light card with dark
+   text like the roadmap and the canvas, so it reads the same in both themes. */
+.vcf-scroll {
+  margin: 1rem 0 0.5rem;
+  padding: 1rem 1rem 0.75rem;
+  border-radius: 1rem;
+  background: #fbfafe;
+  color: #33283f;
+  overflow-x: auto;
+  text-align: left;
+}
+
+.vcf {
+  display: grid;
+  grid-template-columns: 8.5rem repeat(6, minmax(8rem, 1fr));
+  gap: 0.5rem;
+  min-width: 62rem;
+}
+
+.vcf-side {
+  grid-column: 1;
+  align-self: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.25;
+}
+
+.vcf-side span {
+  display: block;
+  font-weight: 400;
+  font-size: 0.78rem;
+}
+
+.vcf-side--dark {
+  align-self: stretch;
+  padding: 0.75rem;
+  border-radius: 0.6rem;
+  background: #33283f;
+  color: #fff;
+}
+
+.vcf-side--dark strong {
+  font-size: 1.05rem;
+}
+
+.vcf-phase {
+  grid-row: 1;
+  padding: 0.3rem 0.75rem;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.vcf-phase--rd {
+  grid-column: 2 / 5;
+  background: #d3ebef;
+}
+
+.vcf-phase--cm {
+  grid-column: 5 / 8;
+  background: #e3ddf3;
+}
+
+.vcf-cycle-wrap {
+  grid-row: 2;
+  grid-column: 2 / 8;
+}
+
+.vcf-cycle {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: inherit;
+}
+
+.vcf-cycle-bg {
+  fill: #e8f4f4;
+}
+
+.vcf-cycle-axis line {
+  stroke: #33283f;
+  stroke-opacity: 0.55;
+  stroke-width: 1.5;
+}
+
+.vcf-cycle-era text {
+  fill: #33283f;
+  font-size: 24px;
+  font-weight: 600;
+  text-anchor: middle;
+}
+
+.vcf-cycle-base {
+  stroke: #33283f;
+  stroke-width: 2;
+  stroke-dasharray: 2 5;
+}
+
+.vcf-cycle-handover {
+  stroke: #f08fae;
+  stroke-width: 3;
+  stroke-dasharray: 9 7;
+}
+
+.vcf-cycle-pill {
+  fill: #f8c9d6;
+}
+
+.vcf-cycle-pill-text {
+  fill: #33283f;
+  font-size: 21px;
+  font-weight: 600;
+  text-anchor: middle;
+}
+
+.vcf-cycle-loss {
+  stroke: #33283f;
+  stroke-width: 2;
+  stroke-dasharray: 3 5;
+}
+
+.vcf-cycle-curve {
+  fill: none;
+  stroke: #33283f;
+  stroke-width: 4;
+}
+
+.vcf-cycle-pointer {
+  stroke: #2fa4a9;
+  stroke-width: 3;
+}
+
+.vcf-cycle-today {
+  fill: #2fa4a9;
+}
+
+.vcf-cycle-dot {
+  fill: #33283f;
+}
+
+.vcf-cycle-labels text {
+  fill: #33283f;
+  font-size: 21px;
+}
+
+.vcf-cycle-today-label {
+  fill: #2fa4a9;
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.vcf-chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.7rem 1rem;
+  background: #33283f;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  clip-path: polygon(0 0, calc(100% - 1.1rem) 0, 100% 50%, calc(100% - 1.1rem) 100%, 0 100%, 1.1rem 50%);
+}
+
+.vcf-card {
+  margin: 0;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid rgba(51, 40, 63, 0.1);
+  border-radius: 0.6rem;
+  background: #e8f4f4;
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.vcf-card--list {
+  list-style: none;
+}
+
+.vcf-card--list li {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.vcf-card--list li:last-child {
+  margin-bottom: 0;
+}
+
+.vcf-dot {
+  flex: none;
+  display: inline-block;
+  width: 0.65rem;
+  height: 0.65rem;
+  margin-top: 0.25rem;
+  border-radius: 50%;
+}
+
+.vcf-dot--empower {
+  background: #2fa4a9;
+}
+
+.vcf-dot--partners {
+  background: #9c88d8;
+}
+
+.vcf-dot--licensee {
+  background: #33283f;
+}
+
+.vcf-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.75rem;
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+}
+
+.vcf-legend .vcf-dot {
+  margin: 0 0.3rem 0 0;
+  vertical-align: middle;
+}
