@@ -5,10 +5,14 @@
 // read one section at a time (Previous / Next at the foot of each), the way
 // entrepreneurship.mdx and human-practices.mdx are read with <PhasePager>.
 //
-//   <ResultsPipelines highlights={<SuccessCards>…</SuccessCards>}>
+//   <ResultsPipelines>
 //     <SectionItem label="Toolkit"> ## Toolkit, <ResultSection>… </SectionItem>
 //     <SectionItem label="Therapeutics"> … </SectionItem>
 //   </ResultsPipelines>
+//
+// Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-19: dropped the
+// `highlights` slot (the headline success-card row that used to sit under
+// the index) — team feedback that it duplicated the index below it.
 //
 // Each pipeline's <ResultSection>s are the "main sections": the index lists
 // the "### " heading of every one, and only the open one is shown. The rest
@@ -96,14 +100,7 @@ function readPipeline(item: { label: string; content: ReactNode }): Pipeline {
   };
 }
 
-export function ResultsPipelines({
-  children,
-  highlights,
-}: {
-  children: ReactNode;
-  /** Shown between the index and the sections, e.g. the success cards. */
-  highlights?: ReactNode;
-}) {
+export function ResultsPipelines({ children }: { children: ReactNode }) {
   const pipelines = useMemo(
     () => extractLabeledChildren(children).map(readPipeline),
     [children],
@@ -170,9 +167,9 @@ export function ResultsPipelines({
     };
   }, [reveal]);
 
-  // The page index on the left starts below the switch, the index and the
-  // success cards (--results-toc-offset, read by .section-progress in App.css),
-  // so it sits next to the sections it lists instead of next to this block.
+  // The page index on the left starts below the switch and the pipeline
+  // index (--results-toc-offset, read by .section-progress in App.css), so
+  // it sits next to the sections it lists instead of next to this block.
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
@@ -192,12 +189,11 @@ export function ResultsPipelines({
         "--results-bar-h",
         `${barRef.current?.offsetHeight ?? 0}px`,
       );
-      const cards = root.querySelector(".success-cards");
       const rail = document.querySelector(".section-progress");
-      if (!cards || !rail) return;
-      // 32px of air between the success cards and the rail.
+      if (!topRef.current || !rail) return;
+      // 32px of air between the pipeline index and the rail.
       const offset =
-        cards.getBoundingClientRect().bottom -
+        topRef.current.getBoundingClientRect().bottom -
         rail.getBoundingClientRect().top +
         32;
       document.documentElement.style.setProperty(
@@ -280,23 +276,48 @@ export function ResultsPipelines({
           <p className="results-index-title">
             In the {pipeline.label} pipeline
           </p>
-          <ol className="results-index-list">
-            {sections.map((section, index) => (
-              <li key={section.slug}>
-                <a
-                  href={`#${section.slug}`}
-                  className={index === sectionIndex ? "active" : undefined}
-                  onClick={(event) => jumpTo(event, index)}
+          <ol className="results-timeline">
+            {sections.map((section, index) => {
+              const up = index % 2 === 0;
+              const label = (
+                <span className="results-timeline-label">
+                  <span className="results-timeline-number">{index + 1}</span>
+                  <span className="results-timeline-text">{section.title}</span>
+                </span>
+              );
+              return (
+                <li
+                  key={section.slug}
+                  className={`results-timeline-item${up ? " results-timeline-item--up" : " results-timeline-item--down"}`}
                 >
-                  <span className="results-index-number">{index + 1}</span>
-                  <span className="results-index-text">{section.title}</span>
-                </a>
-              </li>
-            ))}
+                  <a
+                    href={`#${section.slug}`}
+                    className={`results-timeline-link${index === sectionIndex ? " active" : ""}`}
+                    onClick={(event) => jumpTo(event, index)}
+                  >
+                    <span className="results-timeline-region results-timeline-region--above">
+                      {up && (
+                        <>
+                          {label}
+                          <span className="results-timeline-stem" aria-hidden="true" />
+                        </>
+                      )}
+                    </span>
+                    <span className="results-timeline-dot" aria-hidden="true" />
+                    <span className="results-timeline-region results-timeline-region--below">
+                      {!up && (
+                        <>
+                          <span className="results-timeline-stem" aria-hidden="true" />
+                          {label}
+                        </>
+                      )}
+                    </span>
+                  </a>
+                </li>
+              );
+            })}
           </ol>
         </nav>
-
-        {highlights}
       </div>
 
       <div className="segmented-selector-content">

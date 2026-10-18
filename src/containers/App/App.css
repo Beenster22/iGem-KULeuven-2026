@@ -11536,117 +11536,6 @@ a.protocol-download:hover {
   }
 }
 
-/* RESULTS PAGE: SUCCESS CARDS AND PIPELINE DIVIDER */
-/* Generated with Claude Opus 5 (Anthropic), 2026-10-16
-   Purpose: the row of headline result cards at the top of the results page
-   (SuccessCards.tsx) and the logo divider that separates them from the
-   Toolkit / Therapeutics selector. The cards are navigation, not decoration,
-   so they are sized to be comfortable tap targets and keep their focus ring.
-   On narrow screens the row becomes a two-column grid rather than shrinking
-   the cards to illegibility. */
-.success-cards {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1rem;
-  margin: 2rem 0;
-}
-
-.success-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  min-height: 6rem;
-  padding: 1.1rem 1.25rem;
-  border: 1px solid rgba(51, 40, 63, 0.15);
-  border-radius: 1rem;
-  background-color: var(--color-page-bg);
-  color: var(--color-text);
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  text-decoration: none;
-  box-shadow: 0 0.25rem 0.75rem rgba(51, 40, 63, 0.12);
-  transition:
-    transform 0.15s ease-out,
-    box-shadow 0.15s ease-out;
-}
-
-[data-theme="dark"] .success-card {
-  border-color: rgba(255, 255, 255, 0.12);
-}
-
-.success-card:hover,
-.success-card:focus-visible {
-  color: var(--color-text);
-  transform: translateY(-0.2rem);
-  box-shadow: 0 0.5rem 1.25rem rgba(51, 40, 63, 0.2);
-}
-
-.success-card-arrow {
-  flex: 0 0 auto;
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
-.pipeline-divider {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin: 2.5rem 0 1.5rem;
-}
-
-/* The two rules are the line either side of the logo. */
-.pipeline-divider::before,
-.pipeline-divider::after {
-  content: "";
-  flex: 1 1 auto;
-  height: 1px;
-  background-color: rgba(51, 40, 63, 0.25);
-}
-
-[data-theme="dark"] .pipeline-divider::before,
-[data-theme="dark"] .pipeline-divider::after {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-/* One logo per theme; the other is taken out of the layout entirely so the
-   divider keeps a single circle in its middle. */
-.pipeline-divider-logo--dark,
-[data-theme="dark"] .pipeline-divider-logo--light {
-  display: none;
-}
-
-[data-theme="dark"] .pipeline-divider-logo--dark {
-  display: block;
-}
-
-.pipeline-divider-logo {
-  flex: 0 0 auto;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  background-color: var(--color-logo-circle-bg);
-  padding: 0.4rem;
-  object-fit: contain;
-}
-
-@media (max-width: 767.98px) {
-  .success-cards {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .success-card {
-    transition: none;
-  }
-
-  .success-card:hover,
-  .success-card:focus-visible {
-    transform: none;
-  }
-}
-
 /* RESULTS PAGE: KEY TAKEAWAYS, FIGURE SLOTS */
 /* Generated with Claude Opus 5 (Anthropic), 2026-10-17
    Purpose: the two blocks each result section on the results page is built
@@ -11951,7 +11840,7 @@ a.protocol-download:hover {
    are long only to out-rank that rule. */
 .page-body
   .page-shell-content
-  :is(.success-card, .figure-slot, .elle-bubble)
+  :is(.figure-slot, .elle-bubble)
   :is(p, li) {
   text-align: left;
 }
@@ -13026,11 +12915,12 @@ a.protocol-download:hover {
   --pipeline-now: var(--pipeline-1);
 }
 
-/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-19: the index is a row
-   of chevrons, one per section, each pointing on to the next (the team's
-   sketch). The open section is filled solid with the pipeline's colour. */
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-19: the index is a
+   horizontal timeline — one line through evenly spaced dots, one per
+   section, with each section's number and title on a stem running
+   alternately up and down from its dot (the team's sketch). The open
+   section's dot is filled solid with the pipeline's colour. */
 .results-index {
-  --chevron: 1.5rem;
   margin-top: 1.5rem;
 }
 
@@ -13044,109 +12934,184 @@ a.protocol-download:hover {
   opacity: 0.75;
 }
 
-.results-index-list {
+.results-timeline {
+  position: relative;
   display: flex;
+  height: 12rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.results-index-list li {
+/* The line every dot sits on, drawn once behind the whole row rather than
+   per item, so it reads as one continuous timeline. */
+.results-timeline::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: var(--pipeline-now);
+  transform: translateY(-1.5px);
+}
+
+.results-timeline-item {
+  position: relative;
+  z-index: 1;
   flex: 1 1 0;
   min-width: 0;
 }
 
-.results-index-list li + li {
-  margin-left: calc(var(--chevron) * -1 + 0.3rem);
-}
-
-.results-index-list a {
-  box-sizing: border-box;
+.results-timeline-item a {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
   height: 100%;
-  min-height: 5.5rem;
-  padding: 0.75rem calc(var(--chevron) + 0.25rem) 0.75rem 1rem;
-  background-color: color-mix(in srgb, var(--pipeline-now) 28%, transparent);
-  clip-path: polygon(
-    0 0,
-    calc(100% - var(--chevron)) 0,
-    100% 50%,
-    calc(100% - var(--chevron)) 100%,
-    0 100%
-  );
   color: var(--color-text);
-  font-size: 0.95rem;
-  font-weight: 600;
-  line-height: 1.3;
   text-decoration: none;
-  transition: background-color 0.15s ease;
 }
 
-.results-index-list li + li a {
-  padding-left: calc(var(--chevron) + 0.75rem);
-  clip-path: polygon(
-    0 0,
-    calc(100% - var(--chevron)) 0,
-    100% 50%,
-    calc(100% - var(--chevron)) 100%,
-    0 100%,
-    var(--chevron) 50%
-  );
+/* The two halves above and below the dot are equal flex boxes regardless of
+   which one actually holds this item's label, so the dot always lands
+   exactly on the line — see ResultsPipelines.tsx's `up` / `down` split. */
+.results-timeline-region {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 0;
 }
 
-.results-index-list a:hover,
-.results-index-list a:focus-visible {
-  background-color: color-mix(in srgb, var(--pipeline-now) 50%, transparent);
+.results-timeline-region--above {
+  justify-content: flex-end;
 }
 
-.results-index-list a.active {
-  background-color: var(--pipeline-now);
-  color: #fff;
+.results-timeline-region--below {
+  justify-content: flex-start;
 }
 
-.results-index-number {
-  flex: 0 0 auto;
+.results-timeline-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0 0.4rem;
+  text-align: center;
+}
+
+.results-timeline-number {
   font-family: "Poppins", sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 700;
   line-height: 1;
+  color: var(--pipeline-now);
 }
 
-/* Too narrow for a row of arrows: stack them as plain bars. */
+.results-timeline-text {
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-decoration: none;
+}
+
+.results-timeline-stem {
+  flex: none;
+  width: 3px;
+  height: 1rem;
+  background-color: var(--pipeline-now);
+}
+
+.results-timeline-dot {
+  flex: none;
+  box-sizing: border-box;
+  width: 0.9rem;
+  height: 0.9rem;
+  margin: 0.25rem 0;
+  border: 3px solid var(--pipeline-now);
+  border-radius: 50%;
+  background-color: var(--color-body-bg);
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.results-timeline-item a:hover .results-timeline-dot,
+.results-timeline-item a:focus-visible .results-timeline-dot {
+  transform: scale(1.2);
+}
+
+.results-timeline-item a.active .results-timeline-dot {
+  background-color: var(--pipeline-now);
+  transform: scale(1.3);
+}
+
+.results-timeline-item a.active .results-timeline-text {
+  color: var(--pipeline-now);
+}
+
+/* Too narrow for the up/down spread: a plain vertical timeline instead, the
+   line running down the left edge with every label to its right. */
 @media (max-width: 767.98px) {
-  .results-index-list {
+  .results-timeline {
     flex-direction: column;
-    gap: 0.4rem;
+    height: auto;
   }
 
-  .results-index-list li + li {
-    margin-left: 0;
+  .results-timeline::before {
+    top: 0;
+    bottom: 0;
+    left: 0.65rem;
+    right: auto;
+    width: 3px;
+    height: auto;
+    transform: none;
   }
 
-  .results-index-list a,
-  .results-index-list li + li a {
-    min-height: 0;
-    padding: 0.7rem 1rem;
-    border-radius: 0.6rem;
-    clip-path: none;
+  .results-timeline-item {
+    flex: none;
   }
-}
 
-.results-pipelines > .success-cards {
-  margin-top: 1.5rem;
+  .results-timeline-item a {
+    flex-direction: row;
+    align-items: center;
+    height: auto;
+    padding: 0.6rem 0;
+  }
+
+  .results-timeline-region {
+    flex: 0 0 auto;
+    width: auto;
+    flex-direction: row;
+    order: 2;
+  }
+
+  .results-timeline-dot {
+    order: 1;
+    margin: 0;
+  }
+
+  .results-timeline-stem {
+    display: none;
+  }
+
+  .results-timeline-label {
+    align-items: flex-start;
+    padding: 0 0 0 0.75rem;
+    text-align: left;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .results-index-list a {
+  .results-timeline-dot {
     transition: none;
   }
 }
 
 /* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-19
    Purpose: on the results page the page index starts level with the first
-   section, below the pipeline switch, index and success cards
+   section, below the pipeline switch and index
    (--results-toc-offset is set by ResultsPipelines.tsx). */
 @media (min-width: 992px) {
   .section-progress {
@@ -13155,8 +13120,8 @@ a.protocol-download:hover {
 }
 
 /* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-19
-   Purpose: the top block of the results page (switch, index, success cards)
-   spans the whole screen; ResultsPipelines.tsx sets its negative left margin
+   Purpose: the top block of the results page (switch, index) spans the
+   whole screen; ResultsPipelines.tsx sets its negative left margin
    and width. The page index rail is see-through beside it and only gets its
    background from the first section down. */
 .results-top {

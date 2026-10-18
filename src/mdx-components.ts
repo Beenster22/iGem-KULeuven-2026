@@ -61,7 +61,6 @@ import { HomeSnapScroll } from "./components/HomeSnapScroll";
 import { DBTLCycles, DBTLCycle, DBTLStage } from "./components/DBTLCycles";
 import { ZoomableImage } from "./components/ZoomableImage";
 import { ElleSays } from "./components/ElleSays";
-import { SuccessCards, SuccessCard } from "./components/SuccessCards";
 import {
   ResultSection,
   KeyTakeaways,
@@ -144,10 +143,6 @@ export const mdxComponents = {
   HomeSnapScroll,
   ZoomableImage,
   ElleSays,
-  // Generated with Claude Opus 5 (Anthropic), 2026-10-16
-  // Purpose: the headline result cards at the top of the results page.
-  SuccessCards,
-  SuccessCard,
   // Generated with Claude Opus 5 (Anthropic), 2026-10-17
   // Purpose: the results page's layout kit — the key-takeaway cards and the
   // placeholder boxes for figures that have not been added yet.
