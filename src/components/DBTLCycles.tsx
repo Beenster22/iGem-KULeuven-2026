@@ -157,7 +157,9 @@ export function DBTLCycles({ children }: { children: ReactNode }) {
       {cycle.props.title && <h4 className="dbtl-title">{cycle.props.title}</h4>}
       <div className="dbtl-body">
         <Wheel active={stage} onPick={setStage} />
-        <div className="dbtl-box">
+        {/* A fixed-height box that scrolls inside itself (keyed so it starts at the top for each stage), so a stage with many
+            figures never pushes the page around or moves the wheel. */}
+        <div key={`${index}-${stage}`} className="dbtl-box" tabIndex={0} role="region" aria-label={`${label} stage`}>
           <div className="dbtl-box-label">{label}:</div>
           <div className="dbtl-box-text">{current?.props.children}</div>
         </div>
