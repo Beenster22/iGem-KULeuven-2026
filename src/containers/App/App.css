@@ -3460,6 +3460,17 @@ div.sponsor-grid-card:hover {
   margin-inline: auto;
 }
 
+/* Added with Claude Sonnet 5 (Anthropic), 2026-10-18
+   Purpose: opt-in style for a single figure, via
+   <ZoomableImage className="framed" ... /> — a visible border around the
+   image plus a larger column cap, for a diagram the reader should linger on. */
+.zoomable-image-trigger img.framed {
+  max-width: min(100%, 56rem);
+  border: 2px solid color-mix(in srgb, var(--color-text) 45%, transparent);
+  border-radius: 0.75rem;
+  padding: 0.5rem;
+}
+
 .zoomable-image-dialog {
   width: 100vw;
   height: 100vh;
