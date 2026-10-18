@@ -5,12 +5,12 @@
 // PmosEffectsSection.tsx). Both components read the same scroll position
 // from here, so the globe hands over to the circle on exactly the same frame.
 
-// The id of PmosEffectsSection's tall pinned wrapper.
+// The id of PmosEffectsSection's section.
 export const PMOS_EFFECTS_ID = "pmos-effects";
 
 // How far the effects screen has scrolled in: 0 while its top is still at
-// the bottom of the screen (or below), 1 once it has reached the top and is
-// pinned there. Null when the screen isn't on the page.
+// the bottom of the screen (or below), 1 once it has reached the top (and
+// from then on). Null when the screen isn't on the page.
 export function globeDropProgress(): number | null {
   const wrapper = document.getElementById(PMOS_EFFECTS_ID);
   if (!wrapper) return null;
