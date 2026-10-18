@@ -8,6 +8,8 @@
 // selection; on narrow containers it turns into a stacked list.
 import { CSSProperties, useMemo, useState } from "react";
 
+const section = (id: string, text: string) => <a href={`#${id}`}>{text}</a>;
+
 type Kind = "inhouse" | "partner" | "licensed" | "funding";
 type Filter = "all" | Kind;
 
