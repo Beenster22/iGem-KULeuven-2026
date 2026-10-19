@@ -5219,20 +5219,29 @@ body:not(.home-fullscreen) .home-hero {
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
    "presentation" step — Elle as a professor beside a presentation screen,
    pointing at the sentence on it with a stick (see Professor in
-   StoryScrollSection.tsx). --prof-w is her width; the gap between her and
-   the screen is what the stick spans. */
+   StoryScrollSection.tsx). --prof-w is her width; --prof-gap the gap
+   between her and the screen, which the stick spans.
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team feedback: the
+   justified sentence left big gaps on a narrow screen): the screen is wider
+   and Elle stands under it at every size, pointing up at it. */
 .story-step--presentation {
-  --prof-w: clamp(7rem, 17vw, 14rem);
-  gap: calc(var(--prof-w) * 0.35);
+  --prof-w: clamp(6rem, 13vw, 11rem);
+  --prof-gap: clamp(2rem, 6vh, 3.5rem);
+  /* Elle comes first in the markup, so reversed to put her underneath. */
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: var(--prof-gap);
 }
 
 /* Hidden until Elle has arrived here from her tour (ElleTour.tsx hands
-   over to it by adding .is-here); then the glasses and stick appear. */
+   over to it by adding .is-here); then the glasses and stick appear. Set a
+   little left of centre, so her stick reaches up to the screen's middle. */
 .story-professor {
   position: relative;
   flex: none;
   width: var(--prof-w);
   aspect-ratio: 1668 / 1211;
+  margin-inline-end: calc(var(--prof-w) * 1.2);
   visibility: hidden;
 }
 
@@ -5281,13 +5290,13 @@ body:not(.home-fullscreen) .home-hero {
   scale: 1;
 }
 
-/* From her right-hand ovary (72% across, 69% down) up to the screen, just
-   reaching over the gap into its edge. Swings up into place. */
+/* From her right-hand ovary (72% across, 69% down) up over the gap and
+   just into the screen's bottom edge. Swings up into place. */
 .story-professor-stick {
   left: 70%;
   bottom: 31%;
-  width: 67%;
-  height: 45%;
+  width: 45%;
+  height: calc(69% + var(--prof-gap) + 0.5rem);
   transform-origin: 0 100%;
   rotate: 35deg;
   stroke: #8a5a3b;
@@ -5307,12 +5316,13 @@ body:not(.home-fullscreen) .home-hero {
   rotate: 0deg;
 }
 
-/* The presentation screen: a light board on a stand, in the brand teal so
-   it shows on this band in both themes. */
+/* The presentation screen: a light board in the brand teal, so it shows
+   on this band in both themes, as wide as its sentence needs. */
 .story-screen {
   position: relative;
   flex: 0 1 auto;
-  max-width: 26em;
+  width: fit-content;
+  max-width: 100%;
   padding: clamp(1rem, 3vw, 2rem) clamp(1.25rem, 3.5vw, 2.5rem);
   border: 0.4rem solid #2fa4a9;
   border-radius: 1rem;
@@ -5321,60 +5331,44 @@ body:not(.home-fullscreen) .home-hero {
   box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
 }
 
-.story-screen::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 100%;
-  width: 0.4rem;
-  height: clamp(1.5rem, 6vh, 3rem);
-  background: #2fa4a9;
-  translate: -50% 0;
-}
-
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team feedback: hard
-   to read): centred like a slide, with more room between the lines. */
+   to read): justified — straight edges on the left and the right — with
+   more room between the lines. 21.2em wide (in its own font size, so it
+   breaks the same way at every screen size) puts it on three lines whose
+   word gaps stay close to a normal space; narrower screens get filled
+   lines (not the "balanced", shorter ones the other sentences use) and
+   hyphenation for the same reason. */
 .story-screen .story-text {
-  max-width: 15em;
+  width: 21.2em;
+  max-width: 100%;
   margin-inline: auto;
   font-size: clamp(1.15rem, 2.4vw, 2rem);
   line-height: 1.3;
-  text-align: center;
+  text-align: justify;
+  text-wrap: pretty;
+  hyphens: auto;
 }
 
-/* Phones: side by side the screen was a narrow column of one or two words
-   a line, so it spans the width instead, with Elle under it pointing her
-   stick up at it (from her ovary into the screen's bottom edge). */
+/* Phones: the screen spans the width, Elle under its left half. */
 @media (max-width: 699.98px) {
   .story-step--presentation {
     --prof-w: 6rem;
-    /* Elle comes first in the markup, so reversed to put her underneath. */
-    flex-direction: column-reverse;
     align-items: stretch;
-    gap: 2.75rem;
   }
 
   .story-screen {
-    max-width: none;
+    width: auto;
   }
 
-  /* The stand would run into Elle's stick; she stands in for it. */
-  .story-screen::after {
-    display: none;
-  }
-
+  /* Of the sizes that fit, the one whose justified lines have the most
+     even word gaps here. */
   .story-screen .story-text {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
   }
 
   .story-professor {
     align-self: flex-start;
-    margin-inline-start: 8%;
-  }
-
-  .story-professor-stick {
-    width: 45%;
-    height: calc(69% + 2.75rem + 0.5rem);
+    margin-inline: 8% 0;
   }
 }
 
