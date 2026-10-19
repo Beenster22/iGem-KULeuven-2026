@@ -615,13 +615,16 @@ a[data-footnote-ref]:focus {
   flex: 1 1 calc((100% - 1.7rem) / 3);
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request): a
+   short trailing row now starts at the left, its tiles lining up under the
+   first ones of the row above (e.g. Safety under Description), instead of
+   being centred. (The class name is kept from when it centred them.) */
 .mega-menu-row--centered {
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 /* A short row's tiles stay the same width as a full row's (not stretched
-   to fill the leftover space) — that's what makes "centered" read as a
-   smaller row, not just left-aligned tiles with room to spare. */
+   to fill the leftover space), so they line up with the columns above. */
 .mega-menu-row--centered .mega-menu-link {
   flex: 0 0 calc((100% - 1.7rem) / 3);
 }
@@ -2571,8 +2574,7 @@ a[data-footnote-ref]:focus {
    Purpose: "CRISPR construct design" sat as a plain row at the bottom of a
    long Therapeutics list, directly under two indented sub-sub rows — easy to
    miss (team feedback). Targeted by its known slug rather than by changing
-   the heading text, so its anchor and the link to it from
-   experimental-overview.mdx are untouched. Bolder, a touch bigger, and set
+   the heading text, so its anchor and any links to it are untouched. Bolder, a touch bigger, and set
    off with a divider so it reads as its own result instead of blending into
    the hydrolase section above it. */
 .section-progress a[href="#crispr-construct-design"] .section-progress-label {
@@ -2786,6 +2788,24 @@ a[data-footnote-ref]:focus {
   pointer-events: none;
 }
 
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-10-19
+   Purpose: the hub's text alternative to the bacterium (WheelSelector's
+   hubLabel prop), used by the PMOS hypothesis figure. */
+.wheel-selector-hub-label {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  fill: #33283f;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* The small icon shown above a wedge's label when its SectionItem has an
+   `icon` prop (PMOS hypothesis figure). */
+.wheel-selector-wedge-icon {
+  pointer-events: none;
+}
+
 .wheel-selector-selected {
   fill: none;
   stroke: #33283f;
@@ -2838,16 +2858,152 @@ a[data-footnote-ref]:focus {
   margin-bottom: 0;
 }
 
-/* Too narrow to read a paragraph beside the wheel: it goes back under it,
-   still pointing right — the pointer is part of the drawing. */
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-19
+   Purpose: shared bits of the two "nothing selected until clicked" wheels —
+   "dropdown" (results page), whose panel grows down from underneath, and
+   "side-dropdown" (added 2026-10-19, PMOS hypothesis figure), whose panel
+   grows out sideways instead, so the figure doesn't push the rest of the
+   page down while closed. The outline and pointer wait for a click too. */
+.wheel-selector--toggle {
+  gap: 1rem;
+}
+
+.wheel-selector--toggle .wheel-selector-svg {
+  width: min(100%, 320px);
+}
+
+.wheel-selector--toggle .wheel-selector-selected,
+.wheel-selector--toggle .wheel-selector-pointer {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.wheel-selector--toggle.is-open .wheel-selector-selected,
+.wheel-selector--toggle.is-open .wheel-selector-pointer {
+  opacity: 1;
+  transition-delay: 0.35s;
+}
+
+.wheel-selector-dropdown-inner {
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.wheel-selector--toggle .wheel-selector-content {
+  padding: 1.25rem 1.5rem;
+  border: 2px solid rgba(51, 40, 63, 0.18);
+  border-radius: 1rem;
+  background: #fdf0f7;
+  color: #33283f;
+  animation: wheel-selector-dropdown-in 0.35s ease;
+}
+
+.wheel-selector--toggle .wheel-selector-content > :first-child {
+  margin-top: 0;
+}
+
+.wheel-selector--toggle .wheel-selector-content > :last-child {
+  margin-bottom: 0;
+}
+
+@keyframes wheel-selector-dropdown-in {
+  from {
+    opacity: 0;
+    translate: 0 -0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wheel-selector-dropdown,
+  .wheel-selector--toggle .wheel-selector-selected,
+  .wheel-selector--toggle .wheel-selector-pointer {
+    transition: none;
+  }
+
+  .wheel-selector--toggle .wheel-selector-content {
+    animation: none;
+  }
+}
+
+/* "dropdown" (results page): opens by growing its one grid row from 0 to
+   its content's height, underneath the wheel. */
+.wheel-selector-dropdown {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: min(100%, 40rem);
+  transition: grid-template-rows 0.45s cubic-bezier(0.45, 0, 0.2, 1);
+}
+
+.wheel-selector--dropdown.is-open .wheel-selector-dropdown {
+  grid-template-rows: 1fr;
+}
+
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-10-19
+   Purpose: "side-dropdown" (PMOS hypothesis figure, project description
+   page) — the "side" wheel's row layout, but nothing is selected at first
+   and the panel grows out of the wheel's right-hand side on click instead
+   of always sitting there, so the collapsed figure takes up less room. */
+.wheel-selector--side-dropdown {
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.wheel-selector--side-dropdown .wheel-selector-svg {
+  flex: none;
+  width: clamp(200px, 38%, 320px);
+}
+
+/* Opens by growing its one grid column from 0 to its content's width —
+   overrides the base .wheel-selector-dropdown rule's row-based collapse,
+   which would otherwise clip this to 0 height regardless of its width. */
+.wheel-selector-dropdown--side {
+  display: grid;
+  grid-template-rows: none;
+  grid-template-columns: 0fr;
+  width: auto;
+  flex: 1 1 20rem;
+  min-width: 0;
+  transition: grid-template-columns 0.45s cubic-bezier(0.45, 0, 0.2, 1);
+}
+
+.wheel-selector--side-dropdown.is-open .wheel-selector-dropdown--side {
+  grid-template-columns: 1fr;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wheel-selector-dropdown--side {
+    transition: none;
+  }
+}
+
+/* Too narrow for the wheel and an open panel side by side: the panel goes
+   back underneath, growing down instead of sideways. */
 @media (max-width: 767.98px) {
-  .wheel-selector--side {
+  .wheel-selector--side,
+  .wheel-selector--side-dropdown {
     flex-direction: column;
     gap: 1.5rem;
   }
 
-  .wheel-selector--side .wheel-selector-svg {
+  .wheel-selector--side .wheel-selector-svg,
+  .wheel-selector--side-dropdown .wheel-selector-svg {
     width: min(100%, 320px);
+  }
+
+  .wheel-selector-dropdown--side {
+    grid-template-columns: none;
+    grid-template-rows: 0fr;
+    width: 100%;
+    flex: none;
+    transition: grid-template-rows 0.45s cubic-bezier(0.45, 0, 0.2, 1);
+  }
+
+  .wheel-selector--side-dropdown.is-open .wheel-selector-dropdown--side {
+    grid-template-columns: none;
+    grid-template-rows: 1fr;
   }
 }
 
@@ -5221,20 +5377,29 @@ body:not(.home-fullscreen) .home-hero {
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
    "presentation" step — Elle as a professor beside a presentation screen,
    pointing at the sentence on it with a stick (see Professor in
-   StoryScrollSection.tsx). --prof-w is her width; the gap between her and
-   the screen is what the stick spans. */
+   StoryScrollSection.tsx). --prof-w is her width; --prof-gap the gap
+   between her and the screen, which the stick spans.
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team feedback: the
+   justified sentence left big gaps on a narrow screen): the screen is wider
+   and Elle stands under it at every size, pointing up at it. */
 .story-step--presentation {
-  --prof-w: clamp(7rem, 17vw, 14rem);
-  gap: calc(var(--prof-w) * 0.35);
+  --prof-w: clamp(6rem, 13vw, 11rem);
+  --prof-gap: clamp(2rem, 6vh, 3.5rem);
+  /* Elle comes first in the markup, so reversed to put her underneath. */
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: var(--prof-gap);
 }
 
 /* Hidden until Elle has arrived here from her tour (ElleTour.tsx hands
-   over to it by adding .is-here); then the glasses and stick appear. */
+   over to it by adding .is-here); then the glasses and stick appear. Set a
+   little left of centre, so her stick reaches up to the screen's middle. */
 .story-professor {
   position: relative;
   flex: none;
   width: var(--prof-w);
   aspect-ratio: 1668 / 1211;
+  margin-inline-end: calc(var(--prof-w) * 1.2);
   visibility: hidden;
 }
 
@@ -5283,13 +5448,13 @@ body:not(.home-fullscreen) .home-hero {
   scale: 1;
 }
 
-/* From her right-hand ovary (72% across, 69% down) up to the screen, just
-   reaching over the gap into its edge. Swings up into place. */
+/* From her right-hand ovary (72% across, 69% down) up over the gap and
+   just into the screen's bottom edge. Swings up into place. */
 .story-professor-stick {
   left: 70%;
   bottom: 31%;
-  width: 67%;
-  height: 45%;
+  width: 45%;
+  height: calc(69% + var(--prof-gap) + 0.5rem);
   transform-origin: 0 100%;
   rotate: 35deg;
   stroke: #8a5a3b;
@@ -5309,12 +5474,13 @@ body:not(.home-fullscreen) .home-hero {
   rotate: 0deg;
 }
 
-/* The presentation screen: a light board on a stand, in the brand teal so
-   it shows on this band in both themes. */
+/* The presentation screen: a light board in the brand teal, so it shows
+   on this band in both themes, as wide as its sentence needs. */
 .story-screen {
   position: relative;
   flex: 0 1 auto;
-  max-width: 26em;
+  width: fit-content;
+  max-width: 100%;
   padding: clamp(1rem, 3vw, 2rem) clamp(1.25rem, 3.5vw, 2.5rem);
   border: 0.4rem solid #2fa4a9;
   border-radius: 1rem;
@@ -5323,29 +5489,44 @@ body:not(.home-fullscreen) .home-hero {
   box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
 }
 
-.story-screen::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 100%;
-  width: 0.4rem;
-  height: clamp(1.5rem, 6vh, 3rem);
-  background: #2fa4a9;
-  translate: -50% 0;
-}
-
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team feedback: hard
+   to read): justified — straight edges on the left and the right — with
+   more room between the lines. 21.2em wide (in its own font size, so it
+   breaks the same way at every screen size) puts it on three lines whose
+   word gaps stay close to a normal space; narrower screens get filled
+   lines (not the "balanced", shorter ones the other sentences use) and
+   hyphenation for the same reason. */
 .story-screen .story-text {
-  max-width: 14em;
+  width: 21.2em;
+  max-width: 100%;
+  margin-inline: auto;
   font-size: clamp(1.15rem, 2.4vw, 2rem);
+  line-height: 1.3;
+  text-align: justify;
+  text-wrap: pretty;
+  hyphens: auto;
 }
 
+/* Phones: the screen spans the width, Elle under its left half. */
 @media (max-width: 699.98px) {
   .story-step--presentation {
-    --prof-w: 5.5rem;
+    --prof-w: 6rem;
+    align-items: stretch;
   }
 
+  .story-screen {
+    width: auto;
+  }
+
+  /* Of the sizes that fit, the one whose justified lines have the most
+     even word gaps here. */
   .story-screen .story-text {
-    font-size: 1rem;
+    font-size: 1.15rem;
+  }
+
+  .story-professor {
+    align-self: flex-start;
+    margin-inline: 8% 0;
   }
 }
 
@@ -5353,6 +5534,251 @@ body:not(.home-fullscreen) .home-hero {
   .story-professor-glasses,
   .story-professor-stick {
     transition: none;
+  }
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-19
+   Purpose: the "office" step — a GP's office on the left (its sign, which
+   the presentation screen's box turns into, over the doctor-and-patient
+   picture with the clock on the wall) and the sentences on the right (see
+   OfficeArt in StoryScrollSection.tsx). The picture keeps its own dark
+   background as the office wall, framed, so it shows on this band in both
+   themes. */
+.story-step--office {
+  gap: clamp(1.5rem, 5vw, 4rem);
+}
+
+.story-office {
+  flex: 0 1 auto;
+  width: min(54%, 38rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.75rem, 2.5vh, 1.25rem);
+}
+
+/* Styled like the presentation screen it grows out of. */
+.story-office-sign {
+  margin: 0;
+  padding: 0.4em 1.2em;
+  border: 0.4rem solid #2fa4a9;
+  border-radius: 1rem;
+  background: #eaf4f5;
+  color: #33283f;
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
+}
+
+/* Always exactly the picture's shape (content-box, width capped by the
+   height instead of a max-height), so the moving parts cut from it line up
+   with it. */
+.story-office-room {
+  --room-max-h: 60vh;
+  position: relative;
+  box-sizing: content-box;
+  width: min(calc(100% - 0.8rem), calc(var(--room-max-h) * 2000 / 1878));
+  aspect-ratio: 2000 / 1878;
+  overflow: hidden;
+  border: 0.4rem solid #2fa4a9;
+  border-radius: 1.25rem;
+  background: #1b1823;
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
+}
+
+.story-office-room img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* The two women talking (team request, 2026-10-19): each part is a copy of
+   the picture cut down to it — the polygon includes a margin of plain wall
+   (and ends across flat parts of the neck, coat or thigh), so as it turns
+   the still picture underneath stays covered and no edge shows — turned a
+   few degrees about where it joins the body. The doctor talks (head and
+   clipboard), the patient listens and nods; gentle, and each on its own
+   beat so it never looks mechanical. */
+.story-office-part {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: 3.4s ease-in-out infinite;
+}
+
+.story-office-part--doctor-head {
+  clip-path: polygon(65.5% 5.5%, 83.5% 5.5%, 83.5% 21.5%, 75% 23.2%,
+    74.5% 23.6%, 69.5% 23.6%, 65.5% 21%);
+  transform-origin: 72% 23.5%;
+  animation-name: story-office-doctor-head;
+}
+
+.story-office-part--doctor-hands {
+  clip-path: polygon(54.5% 36%, 66% 36%, 70.5% 42%, 71.5% 50%, 70% 54.5%,
+    55% 56%);
+  transform-origin: 70.5% 47%;
+  animation-name: story-office-doctor-hands;
+  animation-duration: 2.6s;
+  animation-delay: -0.8s;
+}
+
+.story-office-part--patient-head {
+  clip-path: polygon(16.5% 6%, 31.5% 6%, 31.5% 22%, 28.5% 24.5%, 17% 25%);
+  transform-origin: 24% 24%;
+  animation-name: story-office-patient-head;
+  animation-duration: 5.2s;
+  animation-delay: -1.5s;
+}
+
+/* Talking: small tilts and nods towards the patient. */
+@keyframes story-office-doctor-head {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  18% {
+    rotate: -3deg;
+  }
+  36% {
+    rotate: 1deg;
+  }
+  55% {
+    rotate: -2deg;
+  }
+  75% {
+    rotate: 1.5deg;
+  }
+}
+
+/* Gesturing a little with the clipboard. */
+@keyframes story-office-doctor-hands {
+  0%,
+  100% {
+    rotate: 0deg;
+    translate: 0 0;
+  }
+  30% {
+    rotate: -2.5deg;
+    translate: 0 -0.4%;
+  }
+  60% {
+    rotate: 0.8deg;
+    translate: 0 0.2%;
+  }
+}
+
+/* Listening: an occasional nod. */
+@keyframes story-office-patient-head {
+  0%,
+  45%,
+  100% {
+    rotate: 0deg;
+  }
+  55% {
+    rotate: 2.5deg;
+  }
+  65% {
+    rotate: 0deg;
+  }
+  75% {
+    rotate: 2deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-office-part {
+    animation: none;
+  }
+}
+
+/* Small, in the wall's top-right corner (team request, 2026-10-19). */
+.story-office-room .story-art--clock {
+  position: absolute;
+  top: 4%;
+  right: 4%;
+  width: 11%;
+  filter: drop-shadow(0 0.3rem 0.5rem rgba(0, 0, 0, 0.3));
+}
+
+.story-office-words {
+  flex: 0 1 26rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.5rem, 6vh, 3rem);
+  /* Centred in its column (team request, 2026-10-19). */
+  text-align: center;
+}
+
+/* A little smaller than the other screens' sentences: two of them share
+   this column, and Elle stands in the corner below it. */
+.story-office-words .story-text {
+  font-size: clamp(1.2rem, 2.3vw, 2rem);
+}
+
+/* The stand-in box for the screen → sign morph (useScreenToSign in
+   StoryScrollSection.tsx): the same look as both, its two texts stacked in
+   the middle. */
+.story-morph {
+  position: fixed;
+  z-index: 6;
+  overflow: hidden;
+  border: 0.4rem solid #2fa4a9;
+  border-radius: 1rem;
+  background: #eaf4f5;
+  color: #33283f;
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.story-morph-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+}
+
+/* The clock → magnifying glass stand-in: round, the clock fading into the
+   lens's close-up of the microbes. */
+.story-morph--lens {
+  border: 0.35rem solid #2fa4a9;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.story-morph .story-morph-clock,
+.story-morph .story-morph-lens {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.story-morph .story-morph-lens {
+  object-fit: cover;
+  scale: 2.2;
+}
+
+/* Phones: the office on top, the sentences under it. */
+@media (max-width: 699.98px) {
+  .story-step--office {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .story-office {
+    width: min(92%, 24rem);
+  }
+
+  .story-office-room {
+    --room-max-h: 40vh;
+  }
+
+  .story-office-words {
+    flex: none;
+    gap: 1rem;
   }
 }
 
@@ -5393,12 +5819,6 @@ body:not(.home-fullscreen) .home-hero {
   right: 0;
 }
 
-/* The "quest" step keeps both halves of its sentence in the bottom-left
-   corner, so the right-hand side Elle stands in is narrower there than on the
-   pair layouts — without this she reaches back over the second half. */
-.story-step--split .story-elle {
-  max-width: min(26rem, 40%);
-}
 
 .story-elle .elle {
   margin: 0;
@@ -5557,153 +5977,231 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06
-   Purpose: the "quest" step — first half of the sentence top left, second
-   half bottom right, and between them a magnifying glass wandering over
-   some gut microbes (MicrobiomeArt in StoryScrollSection.tsx). */
-/* Edited with Claude Opus 5 (Anthropic), 2026-10-09: the glass now fills the
-   top right and the two halves of the sentence sit together in the
-   bottom-left corner, still staggered but much closer than before. */
-.story-step--split {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-  grid-template-rows: minmax(0, 1fr) auto;
-  gap: 1rem;
-  padding-top: 4vh;
-  padding-bottom: 4vh;
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request)
+   Purpose: the "quest" step — "On a quest to find a new solution…" above
+   the team's gut illustration, "…we looked into the gut microbiome…" below
+   it, and a magnifying glass (which the office clock turns into, see
+   useStepMorphs in StoryScrollSection.tsx) touring the gut. Its lens shows
+   the team's microbes picture close up: a different part of it, turned a
+   different way, at each of five spots, the bacteria drifting about. Replaces
+   the earlier drawn microbes and the "split" layout. */
+.story-step--gut {
+  flex-direction: column;
+  gap: clamp(0.75rem, 2.5vh, 1.5rem);
+  text-align: center;
 }
 
-.story-step--split .story-text {
-  grid-column: 1 / -1;
-  grid-row: 2;
-  align-self: end;
-  justify-self: start;
-  max-width: 15em;
+.story-step--gut .story-text {
+  max-width: 18em;
+  font-size: clamp(1.25rem, 2.6vw, 2.2rem);
 }
 
-.story-step--split .story-line {
-  margin-top: 0;
-  text-align: left;
+/* The illustration on its own light background, framed like the office. */
+.quest-gut {
+  position: relative;
+  flex: none;
+  height: min(54vh, 40rem);
+  aspect-ratio: 976 / 1192;
 }
 
-.story-step--split .story-line:last-child {
-  margin-top: 0.45em;
-  margin-inline-start: clamp(1rem, 7vw, 6rem);
-  text-align: right;
+.quest-gut-picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0.4rem solid #2fa4a9;
+  border-radius: 1.25rem;
+  background: #e7f5f6;
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
 }
 
-.story-step--split .story-art {
-  grid-column: 2;
-  grid-row: 1;
-  place-self: center end;
+/* The magnifying glass: 34% of the gut's width, its top-left corner moved
+   between five spots (the lens centred on the small intestine, the
+   ascending colon, the transverse colon, the descending colon and the
+   lower small intestine), pausing at each. */
+.quest-lens {
+  position: absolute;
+  left: 33%;
+  top: 33.1%;
+  width: 34%;
+  aspect-ratio: 1;
 }
 
-.story-art--microbiome {
-  width: clamp(12rem, 38vw, 30rem);
-  height: auto;
-  max-height: 100%;
-  overflow: visible;
+.story-step--active .quest-lens {
+  animation: quest-lens-tour 12.5s ease-in-out 1s infinite;
 }
 
-.story-microbe {
-  fill: currentColor;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: story-microbe-wriggle 2.6s ease-in-out infinite;
+@keyframes quest-lens-tour {
+  0%,
+  11.2% {
+    left: 33%;
+    top: 33.1%;
+  }
+  20%,
+  31.2% {
+    left: -1%;
+    top: 31.1%;
+  }
+  40%,
+  51.2% {
+    left: 35%;
+    top: -1.9%;
+  }
+  60%,
+  71.2% {
+    left: 69%;
+    top: 28.1%;
+  }
+  80%,
+  91.2% {
+    left: 25%;
+    top: 52.1%;
+  }
+  100% {
+    left: 33%;
+    top: 33.1%;
+  }
 }
 
-.story-microbe--teal {
-  fill: #2fa4a9;
+.quest-lens-glass {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 0.35rem solid #2fa4a9;
+  border-radius: 50%;
+  background: #221b2b;
+  box-shadow:
+    0 0.6rem 1.4rem rgba(0, 0, 0, 0.35),
+    inset 0 0 1.2rem rgba(0, 0, 0, 0.45);
 }
 
-.story-microbe--curved {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 6;
-  stroke-linecap: round;
+/* The bacteria moving about: a slow wander and wobble... */
+.quest-lens-drift {
+  position: absolute;
+  inset: 0;
+  animation: quest-lens-drift 4.6s ease-in-out infinite;
 }
 
-.story-microbe--curved.story-microbe--teal {
-  stroke: #2fa4a9;
-}
-
-.story-microbes-far {
-  opacity: 0.3;
-}
-
-@keyframes story-microbe-wriggle {
+@keyframes quest-lens-drift {
   0%,
   100% {
     translate: 0 0;
-    rotate: -6deg;
+    rotate: 0deg;
   }
-  50% {
-    translate: 0 -2px;
-    rotate: 7deg;
+  33% {
+    translate: 4% -3%;
+    rotate: 6deg;
+  }
+  66% {
+    translate: -3% 3%;
+    rotate: -5deg;
   }
 }
 
-/* The glass and the hole it leaves in the faint microbes share one path;
-   the close-up inside it runs the same path times -1.8 (the enlargement),
-   which keeps it centred on whatever the lens is over. */
-.story-lens {
-  animation: story-lens-wander 9s ease-in-out infinite;
+/* ...and a different view at each spot: turned (here) and moved (on the
+   picture, below), in step with the tour. */
+.quest-lens-spin {
+  position: absolute;
+  inset: 0;
 }
 
-.story-lens-view {
-  animation: story-lens-view 9s ease-in-out infinite;
+.story-step--active .quest-lens-spin {
+  animation: quest-lens-spin 12.5s ease-in-out 1s infinite;
 }
 
-.story-lens-rim {
-  fill: currentColor;
-  fill-opacity: 0.05;
-  stroke: currentColor;
-  stroke-width: 4;
+@keyframes quest-lens-spin {
+  0%,
+  11.2%,
+  100% {
+    rotate: 0deg;
+  }
+  20%,
+  31.2% {
+    rotate: 70deg;
+  }
+  40%,
+  51.2% {
+    rotate: 150deg;
+  }
+  60%,
+  71.2% {
+    rotate: 290deg;
+  }
+  80%,
+  91.2% {
+    rotate: 200deg;
+  }
 }
 
-.story-lens-handle {
+/* The microbes picture at 2.2× the lens, so the lens shows under half of
+   it; translate moves a chosen point of it (as a share of the picture) to
+   the lens's centre: (0.227 − x, 0.227 − y) of its own size. */
+.quest-lens-view {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 220%;
+  height: 220%;
+  max-width: none;
+  translate: -27.3% -27.3%;
+}
+
+.story-step--active .quest-lens-view {
+  animation: quest-lens-view 12.5s ease-in-out 1s infinite;
+}
+
+@keyframes quest-lens-view {
+  0%,
+  11.2%,
+  100% {
+    translate: -27.3% -27.3%;
+  }
+  20%,
+  31.2% {
+    translate: -12.3% -37.3%;
+  }
+  40%,
+  51.2% {
+    translate: -39.3% -15.3%;
+  }
+  60%,
+  71.2% {
+    translate: -17.3% -15.3%;
+  }
+  80%,
+  91.2% {
+    translate: -37.3% -39.3%;
+  }
+}
+
+/* The handle, out from the lens's bottom right; grows in once the glass
+   has arrived from the clock. */
+.quest-lens-handle {
+  position: absolute;
+  left: 88%;
+  top: 88%;
+  width: 34%;
+  height: 34%;
+  overflow: visible;
   stroke: #2fa4a9;
-  stroke-width: 7;
+  stroke-width: 1.6;
   stroke-linecap: round;
+  transform-origin: 0 0;
+  scale: 0;
+  transition: scale 0.35s ease;
 }
 
-.story-lens-shine {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  opacity: 0.45;
+.story-step--active .quest-lens-handle {
+  scale: 1;
+  transition-delay: 0.75s;
 }
 
-@keyframes story-lens-wander {
-  0%,
-  100% {
-    transform: translate(0, 0);
+@media (max-width: 699.98px) {
+  .quest-gut {
+    height: min(42vh, 22rem);
   }
-  30% {
-    transform: translate(55px, -12px);
-  }
-  55% {
-    transform: translate(75px, 18px);
-  }
-  80% {
-    transform: translate(25px, 25px);
-  }
-}
 
-@keyframes story-lens-view {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-  30% {
-    transform: translate(-99px, 21.6px);
-  }
-  55% {
-    transform: translate(-135px, -32.4px);
-  }
-  80% {
-    transform: translate(-45px, -45px);
+  .story-step--gut .story-text {
+    font-size: 1.15rem;
   }
 }
 
@@ -5739,27 +6237,6 @@ body:not(.home-fullscreen) .home-hero {
     display: none;
   }
 
-  /* One column: the glass above, then the sentence under it. */
-  .story-step--split {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr) auto;
-  }
-
-  .story-step--split .story-text {
-    grid-column: 1;
-    justify-self: center;
-    text-align: center;
-  }
-
-  .story-step--split .story-art {
-    grid-column: 1;
-    place-self: center;
-  }
-
-  .story-step--split .story-line:last-child {
-    margin-inline-start: 0;
-    text-align: center;
-  }
 }
 
 /* No pinning: the sentences are listed one under the other, all shown. */
@@ -5785,9 +6262,10 @@ body:not(.home-fullscreen) .home-hero {
 
   .story-art--question span,
   .story-clock-hand,
-  .story-microbe,
-  .story-lens,
-  .story-lens-view {
+  .quest-lens,
+  .quest-lens-drift,
+  .quest-lens-spin,
+  .quest-lens-view {
     animation: none;
   }
 }
@@ -12806,11 +13284,7 @@ a.protocol-download:hover {
 
 .integration-summary-row {
   padding: 1rem 0;
-  border-top: 1px solid rgba(51, 40, 63, 0.18);
-}
-
-[data-theme="dark"] .integration-summary-row {
-  border-top-color: rgba(255, 255, 255, 0.16);
+  border-top: 3px solid rgba(47, 164, 169, 0.6);
 }
 
 /* A row that carries on from the one above shares its point, so the divider
@@ -12820,10 +13294,9 @@ a.protocol-download:hover {
   padding-top: 0;
 }
 
-/* Thick rules between the columns — deliberately heavier than the hairlines
-   that separate the rows, so the three columns read as the main split. */
-.integration-summary-integrated,
-.integration-summary-impact {
+/* One rule between the two prose columns. The marker column needs none —
+   its bar already sits there, and a rule beside it read as a double line. */
+.integration-summary-integrated {
   border-left: 3px solid rgba(47, 164, 169, 0.6);
   padding-left: 1.5rem;
 }
@@ -12923,8 +13396,7 @@ a.protocol-download:hover {
     color: #2fa4a9;
   }
 
-  .integration-summary-integrated,
-  .integration-summary-impact {
+  .integration-summary-integrated {
     border-left: none;
     padding-left: 0;
   }

@@ -90,6 +90,13 @@ import {
   InfoCard,
 } from "./components/QuestionSelector";
 import { PhenotypeVenn } from "./components/PhenotypeVenn";
+import {
+  EvolutionIcon,
+  DnaIcon,
+  InsulinIcon,
+  GlobeLeafIcon,
+  BrainIcon,
+} from "./components/HypothesisIcons";
 import { Link } from "react-router-dom";
 
 export const mdxComponents = {
@@ -202,4 +209,12 @@ export const mdxComponents = {
   DBTLCycles,
   DBTLCycle,
   DBTLStage,
+  // Generated with Claude Sonnet 5 (Anthropic), 2026-10-19
+  // Purpose: the PMOS hypothesis figure's wedge icons (project description
+  // page), one per hypothesis in Nisa et al.'s grouping of five.
+  EvolutionIcon,
+  DnaIcon,
+  InsulinIcon,
+  GlobeLeafIcon,
+  BrainIcon,
 };

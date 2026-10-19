@@ -36,9 +36,10 @@ type MegaMenuGroup =
 
 // Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
 // Purpose: team request — 3 tiles per row, never 4; a folder whose tile
-// count isn't a multiple of 3 gets a shorter trailing row of 1 or 2,
-// centered rather than left-aligned (see .mega-menu-row--centered) or
-// padded with filler content. A menuDivider tile still starts a fresh row
+// count isn't a multiple of 3 gets a shorter trailing row of 1 or 2, its
+// tiles lined up under the first column(s) above (see
+// .mega-menu-row--centered — edited 2026-10-19: it used to centre them),
+// not padded with filler content. A menuDivider tile still starts a fresh row
 // of its own (see Dry Lab... though nothing uses it right now).
 function layoutMegaMenu(folder: MegaMenuEntry[]): MegaMenuGroup[] {
   const groups: MegaMenuGroup[] = [];

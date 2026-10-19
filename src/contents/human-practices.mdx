@@ -237,7 +237,7 @@ She sees little difference in how women with PMOS are treated across countries. 
 
 <IntegrationPoint
   learned="Most clinicians were doubtful about causal link between bile acids and inflammation."
-  integrated="We integrated their feedback by reviewing IL-22 transcriptomic data and conducting a bioinformatic analysis of which other bacterial species interact with the bile salt metabolism."
+  integrated="We integrated their feedback by reviewing IL-22 transcriptomic data and conducting a bioinformatic analysis of which other bacterial species interact with the bile acid metabolism."
   impact="active"
 />
 
@@ -247,7 +247,7 @@ She sees little difference in how women with PMOS are treated across countries. 
 />
 
 <IntegrationPoint
-  learned="PMOS is severely under-researched and lacks novel treatment methods."
+  learned="PMOS is severely underresearched and lacks novel treatment methods."
   integrated="To address this, we reached out to analysts who have investigated the funding gap or are trying to improve it."
   impact="active"
 />
@@ -287,7 +287,7 @@ To judge the feasibility and design of our engineering approach, we spoke with t
 
 <Interviewee name="Dr. Ruben Vazquez-Uribe " role="Staff Scientist & Research Manager in Gut Microbiome, VIB-KU Leuven Center for Microbiology " date="02 April 2026" basedIn="Leuven, Belgium" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/ruben.avif">
 
-**Why did we reach out to them?** — At the start of the project, we just concluded that we want to work on regulating the bile-salt metabolism through the gut bacterium *P. vulgatus* but lacked the experimental expertise to judge whether this was feasible. Therefore, we contacted Dr. Ruben Vazquez-Uribe, who is a research scientist and Head of Fermentations at the VIB-KU Leuven Center for Microbiology, for advice on engineering gut bacteria and microbiome research.
+**Why did we reach out to them?** — At the start of the project, we just concluded that we want to work on regulating the bile-acid metabolism through the gut bacterium *P. vulgatus* but lacked the experimental expertise to judge whether this was feasible. Therefore, we contacted Dr. Ruben Vazquez-Uribe, who is a research scientist and Head of Fermentations at the VIB-KU Leuven Center for Microbiology, for advice on engineering gut bacteria and microbiome research.
 
 **What did we learn?** — Initially, Dr. Uribe advised us not to build our project on *P. vulgatus*, since it is not a model organism and its limited genetic tools could make the project too ambitious for the iGEM timeline. He pointed out that different BSH enzymes differ in substrate activity and should not be treated as equals and suggested investigating more efficient alternatives. Bile acids are chemically very similar and hard to measure, so he recommended LC-MS, chromatography or bile-acid-sensitive biosensors. He also raised CRISPR as a method to selectively kill *P. vulgatus*, with bacterial conjugation as a more realistic delivery method than phages. However, he emphasized that the main challenge would be delivering the CRISPR system into the bacterium. While phage-based delivery would likely be difficult to establish, bacterial conjugation could provide a more realistic alternative. He encouraged us looking into modifying disease-relevant molecules that are already present in the gut, rather than making the entire project dependent *P. vulgatus*. 
 
@@ -300,23 +300,29 @@ Besides incredibly valuable scientific advice provided by Ruben, another way he 
 
 **Why did we reach out to them?** — One of our members met Dr. Matthew Herdman per chance. After introducing EMPOWER, it turned out he actually works with *P. vulgatus* as part of postdoctoral research project in the Govers Lab in the Department of Biology at KU Leuven. 
 
-**How did we integrate their feedback?** — Dr. Herdman supplied the starting point for the whole project: P. vulgatus DSM 1447 and E. coli DH5α the E. coli S17-1 λpir donor strain carrying pRham_KOFP7 that we used in every conjugation, hemin and gentamicin. He also gave us access to the fluorescence microscope at the Bioscience Center, and he ran and returned the imaging himself. Our conjugation work is built on his Bacteroides protocol (day 0 to day 3), and we followed his sample preparation for fluorescence microscopy. Furthermore, he advised us on results, interpretation, and following experiment planning, thereby playing a key part in our Wet Lab’s success. Finally, he also referred us to Prof. Laurie Comstock. 
+**What did we learn?** — Dr. Herdman supplied the starting point for the whole project: P. vulgatus DSM 1447 and E. coli DH5α the E. coli S17-1 λpir donor strain carrying pRham_KOFP7 that we used in every conjugation, hemin and gentamicin. He also gave us access to the fluorescence microscope at the Bioscience Center, and he ran and returned the imaging himself. Our conjugation work is built on his Bacteroides protocol (day 0 to day 3), and we followed his sample preparation for fluorescence microscopy. Furthermore, he advised us on results, interpretation, and following experiment planning, thereby playing a key part in our Wet Lab’s success. He also pointed us to literature. Among the papers he showed us was work from Laurie Comstock’s lab, which is how we came to know her research.
+
+**How did we implement their feedback** - His conjugation protocol was used in our pipeline and ran for every strain in the CNJ line. The medium work was built on his hemin and vitamin K1 reasoning, which fed directly into the factorial supplementation study. Based on his advice and our own results on promotor screening, we could decide that KOFP-7 wasn’t a good reporter gene to be used in P. vulgatus. The primer explanation sent us back to redesign for a gene shared across the strain panel. He also provided hemin and gentamicin and did fluorescence microscopy with us in the Bioscience Center.
 
 </Interviewee>
 
 <Interviewee name="Prof. Laurie Comstock" role="Professor for Microbiology, University of Chicago" date="27 May 2026" basedIn="Chicago, USA">
 
-**Why did we reach out to them?** — One of our members met Dr. Matthew Herdman per chance. After introducing EMPOWER, it turned out he actually works with *P. vulgatus* as part of postdoctoral research project in the Govers Lab in the Department of Biology at KU Leuven. 
+**Why did we reach out to them?** — We were recommended to reach out to Prof. Dr. Laurie Comstock from multiple sources due to her pioneering work on the Bacteroidales species. She is a Professor of Microbiology at the University of Chicago and is researching the gut microbiome, its compositions and pathways. We reached out to ask whether she could share her suicide vector pLGB13 (Addgene #126618), described in her mBio paper, for genetic manipulation of P. vulgatus.
 
-**How did we integrate their feedback?** — Dr. Herdman supplied the starting point for the whole project: *P. vulgatus* DSM 1447 and *E. coli* DH5α the *E. coli* S17-1 λpir donor strain carrying pRham_KOFP7 that we used in every conjugation, hemin and gentamicin. He also gave us access to the fluorescence microscope at the Bioscience Center, and he ran and returned the imaging himself. Our conjugation work is built on his Bacteroides protocol (day 0 to day 3), and we followed his sample preparation for fluorescence microscopy. Furthermore, he advised us on results, interpretation and following experiment planning, thereby playing a key part in our Wet Lab’s success.
+**What did we learn?** - She kindly agreed to send us the vector, mentioning that her laboratory had previously made P. vulgatus mutants utilizing this vector. Additionally, she advised us to use colonies from a fresh plate instead of working from an overnight broth, as the growth curves result in having an extended lag phase. In addition, she said to revive the strain from a frozen stock every week instead of passaging repeatedly, as they easily accumulate mutations.
+
+**How did we integrate their feedback?** — Prof. Comstock kindly agreed to send us the vector and provided us with information about how reduce the lag-time. The last information was used in STR-02r3 of our wetlab work, where we started both strains in the morning from colonies on a plate which were streaked from the day before. The fecal isolate grown in mGAM showed us a fourfold reduction in lag-time but for DSM1447 the issue could not be solved, same as the other media which did not shorten in lag-time.
 
 </Interviewee>
 
 <Interviewee name="Prof. Jef Rozenski" role="Professor, Faculty for Pharmaceutical Sciences, Ku Leuven" date="10 July 2026" basedIn="Chicago, USA" image = "https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/jef-rozenski.avif">
 
-**Why did we reach out to them?** — One of our members met Dr. Matthew Herdman per chance. After introducing EMPOWER, it turned out he actually works with *P. vulgatus* as part of postdoctoral research project in the Govers Lab in the Department of Biology at KU Leuven. 
+**Why did we reach out to them?** — Dr. Jef Rozenski is a professor at KU Leuven University and has specializations in biomedical analysis, LC/MS, and Mass Spectrometry of biomolecules. As our plate-based HALO assay could only report bile salt tolerance, we also wanted to be able to measure conjugation directly. Dr. Rozenski, who runs mass spectrometry at the Rega Institute, and we approached him to ask whether LC-MS could be used for quantifying conjugated bile salts.
 
-**How did we integrate their feedback?** — Dr. Herdman supplied the starting point for the whole project: *P. vulgatus* DSM 1447 and *E. coli* DH5α the *E. coli* S17-1 λpir donor strain carrying pRham_KOFP7 that we used in every conjugation, hemin and gentamicin. He also gave us access to the fluorescence microscope at the Bioscience Center, and he ran and returned the imaging himself. Our conjugation work is built on his Bacteroides protocol (day 0 to day 3), and we followed his sample preparation for fluorescence microscopy. Furthermore, he advised us on results, interpretation and following experiment planning, thereby playing a key part in our Wet Lab’s success.
+**What did we learn?** — He confirmed that the measurements we were planning to do were feasible, and he told us what to send him, and in what state. In the week of 27 July, he ran pure a bile salt mixture to set the instrument up and find the gradient that resolves all three targeted standards (GUDCA, TUDCA, and UDCA). We also learned some limits of the output data, such as that it establishes identity rather than a calibration series, meaning that the output is peak areas and ratios, not concentrations.
+
+**How did we integrate their feedback?** — We built the liquid-culture assay with his aid and ran a second round at 0.1% (instead of 0.5%) with the two bile salts (GUDCA and TUDCA) dissolved separately, so each substrate could be tracked on its own. His measurements became the quantitative backbone of the BSH work. The method set-up can be found as it is documented in BSA-06 or in our protocols list.
 
 </Interviewee>
 
@@ -445,13 +451,13 @@ On the business side, she advised us to research potential buyers or licensees b
 />
 
 <IntegrationPoint
-  learned="For biocontainment strategies, we discussed various options for CRISPR kill-switches as well as the bile-salt sensitive BreR sensor."
+  learned="For biocontainment strategies, we discussed various options for CRISPR kill-switches as well as the bile-acid sensitive BreR sensor."
   integrated="In our previous therapeutic design, we considered these methods but did not need them further as the final design no longer requires them. Still, they might be utilizable in the future."
   impact="passive"
 />
 
 <IntegrationPoint
-  learned="Several experts recommended a broad multi-omics approach to characterize bile salt-dependent cell response in epithelial cells and ILC5 cells. In addition, we were advised to consider delivery methods of the therapeutic (acid-resistant carrier) and pharmacokinetics."
+  learned="Several experts recommended a broad multi-omics approach to characterize bile acid-dependent cell response in epithelial cells and ILC5 cells. In addition, we were advised to consider delivery methods of the therapeutic (acid-resistant carrier) and pharmacokinetics."
   integrated="This was beyond what we could achieve this season due to time and budget constraints. These propositions will be very central when it comes to the manufacturing design of the project and translational studies."
   impact="passive"
 />
@@ -480,7 +486,7 @@ Some advice was beyond what we could do this season: multi-omics, acid-resistant
 
 <HPIntro>
 
-Before we approached industry, EMPOWER had a scientific concept: an engineered P. vulgatus that tunes bile-salt metabolism to support ovarian recovery in PMOS. What we lacked was a view on whether it could become a product. We did not know how to pitch it, finance it, or get it past regulators and manufacturers. This is why we approached 8 people with experience in biotech start-ups, pharma and IP (Intellectual Property) to learn five things:
+Before we approached the industry, EMPOWER had a scientific concept: an engineered P. vulgatus that tunes bile-acid metabolism to support ovarian recovery in PMOS. What we lacked was a view on whether it could become a product. We did not know how to pitch it, finance it, or get it past regulators and manufacturers. This is why we approached 8 people with experience in biotech start-ups, pharma and IP (Intellectual Property) to learn five things:
 •	How to present the problem and solution to non-specialists.
 •	Which regulatory and production barriers our engineering strategy would meet.
 •	How a project like ours is funded and what a realistic budget and timeline look like.
@@ -586,7 +592,7 @@ She also advised us on timing. We can file a first application now, before we di
 
 <IntegrationPoint
   learned="A supplement could mean faster market entry and simpler marketing, but cost of goods, out-of-pocket payment, and strain stability are challenges."
-  integrated="We considered a supplement route, then dropped it after Correa de Sampaio’s input. We explain our reasoning in more detail in this entrepreneurship section."
+  integrated="We considered a supplement route, then dropped it after Dr. Correa de Sampaio’s input. We explain our reasoning in more detail in this entrepreneurship section."
   impact="active"
 />
 
@@ -611,21 +617,62 @@ Route to market. Aoife Brennan’s input led us to consider selling EMPOWER as a
 
 </HPSection>
 
-<HPSection title="General Public">
-
-<HPIntro>
-
-Replace this with an introduction to this stakeholder group: what we wanted to learn from them,
-and what we already knew (or didn't know) before talking to them.
-
-</HPIntro>
-
-Replace this with the general public section. No interview popups here — just write the text directly
-inside this section.
-
-</HPSection>
-
 </HumanPracticesInterviews>
+
+## Public
+
+Over the months, the aim of EMPOWER has manifested into developing a genetically engineered live biotherapeutic product (LBP) to alleviate severely affected women with PMOS of their symptoms. However, we know that not everyone has the same opinion on synthetic biology as us.
+
+Since genetically engineered organisms (GMOs) remain a controversial topic of conversation, we wanted to understand what shapes public attitudes toward genetically engineered microbial therapeutics, and whether these attitudes shift for diseases (such as PMOS) that currently have limited or no effective treatment options. We included topics on perceived risk and willingness to use such a treatment. The survey also collected demographic information and level of education to explore whether attitudes and trust vary across educational backgrounds. In addition, it measured general trust in science and asked respondents directly what information or reassurances would increase their trust or willingness to consider such a treatment.
+
+### Results
+
+*Genetically engineered organisms to the rescue: how the general public views genetic engineering for diseases with limited treatment options.*
+
+{/* TODO: replace this whole section with the real survey data. Still to fill in:
+      - how long the survey ran and how many people responded (the [x] below)
+      - the demographic and education breakdown of the respondents
+      - attitudes to GMOs, route of administration and perceived risk
+      - willingness to use the treatment, and whether that shifted for
+        conditions with limited treatment options
+      - what respondents said would increase their trust
+    Charts can be added here once the numbers exist — ask Claude to wire them
+    up. Do not publish any figure that is not in the real data. */}
+
+The survey ran over [x] time and reached [x] respondents.
+
+*Results to follow.*
+
+### Limitations
+
+We observed that the demographic as well as the professional background were likely influenced by the team distributing the survey. We distributed the message in large student groupchats and among peers, making the result more homogeneous than initially intended. This was also due to the limited time we had to promote the survey, as we received the approval quite close to the wiki deadline. Ideally, we would have wanted to include a more variable demographic.
+
+<ExpandableText title="Ethical approval">
+
+We submitted the survey to the Privacy and Ethical Review Committee (PRET) on the 31st of July 2026. After minor revisions we received formal approval on the 13th of October under the reference number G-2026-11849-R2(MIN) to publish the questionnaire online on the platform Limesurvey.org.
+
+{/* TODO: both PDFs below still have to go through the iGEM uploads tool
+    (https://teams.igem.org/go/deliverables/wiki/uploads) — Claude cannot
+    upload them for you. Upload them under exactly these two filenames, or
+    paste the real links into each card's `href`. Until then both 404. */}
+
+<ResourceDownload
+  href="https://static.igem.wiki/teams/6299/wiki/human-practices/public-survey-questionnaire.pdf"
+  title="Public survey"
+  type="PDF"
+>
+  The full questionnaire as published on Limesurvey.org.
+</ResourceDownload>
+
+<ResourceDownload
+  href="https://static.igem.wiki/teams/6299/wiki/human-practices/public-survey-informed-consent.pdf"
+  title="Informed consent form"
+  type="PDF"
+>
+  The consent form every respondent agreed to before taking the survey.
+</ResourceDownload>
+
+</ExpandableText>
 
 ## Patients
 
@@ -681,7 +728,7 @@ For funding, she explained that society splits into idealists and finance-minded
 
 </Interviewee>
 
-<Interviewee name="Dr. Danko Relic" role="Executive Director, APHEA; Member, European Economic and Social Committee" date="21 September 2026" basedIn="Brussels, Belgium & Zagreb, Croatia" image=" ">
+<Interviewee name="Dr. Danko Relic" role="Executive Director, APHEA; Member, European Economic and Social Committee" date="21 September 2026" basedIn="Brussels, Belgium & Zagreb, Croatia" image="https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/danko-relic.avif">
 
 **Why did we reach out to them?** — Dr. Danko Relic, who is a physician, Executive Director of APHEA (Agency for Public Health Education and Accreditation) and member of the EESC, was referred to us by Juliane Marie Neiiendam. We reached out to get a public health perspective on PMOS.
 
