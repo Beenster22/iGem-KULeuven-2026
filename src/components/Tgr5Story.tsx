@@ -952,7 +952,7 @@ export function EngineerSection() {
     <div className="engineer">
       <p className="story-text engineer-text">
         This is why we want to <strong>engineer</strong> <em>P. vulgatus</em>{" "}
-        and silence <strong>BSH expression</strong>
+        to restore bile acid and achieve a therapeutic effect in <strong>PMOS</strong>
       </p>
       {/* The cell of BshStreamAnimation.tsx, now with a genetic circuit in
           it that silences BSH (drawn with the usual blunt "inhibits" line). */}

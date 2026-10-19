@@ -49,6 +49,35 @@ const App = () => {
     return () => document.body.classList.remove("home-fullscreen");
   }, [isHome, navRevealed]);
 
+  // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-19: links to other
+  // sites open in a new tab instead of replacing the wiki. Done once here, on
+  // click, so it covers markdown links, JSX links and component links alike.
+  useEffect(() => {
+    const onClick = (event: MouseEvent) => {
+      if (event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
+      }
+      const link = (event.target as Element).closest?.("a[href]");
+      if (!link || link.hasAttribute("download") || link.hasAttribute("target")) {
+        return;
+      }
+      let url: URL;
+      try {
+        url = new URL((link as HTMLAnchorElement).href, window.location.href);
+      } catch {
+        return;
+      }
+      if (!/^https?:$/.test(url.protocol) || url.origin === window.location.origin) {
+        return;
+      }
+      event.preventDefault();
+      window.open(url.href, "_blank", "noopener,noreferrer");
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
+
   // Set Page Title
   const title =
     currentPath in pathMapping ? pathMapping[currentPath].title : "Not Found";
