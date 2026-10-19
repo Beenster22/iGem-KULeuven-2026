@@ -726,14 +726,18 @@ function Tgr5BindingDiagram({ animate }: { animate: boolean }) {
         </g>
       ))}
 
-      {/* Hidden until they pour in (see useBindingLoop). */}
-      <g>
+      {/* Hidden until they pour in (see useBindingLoop).
+          Edited with Claude Opus 5 (Anthropic), 2026-10-19 (team request):
+          named so the acids flying down from the BSH screen can land on
+          them and hand over (see useBileAcidFlight.ts); --acids-in keeps
+          the pool waiting until that moment. */}
+      <g className="tgr5-pool">
         {acids.map((acid, i) => {
           const at = staticAt(acid);
           return (
             <g
               key={acid.id}
-              className={`bsh-molecule--${acid.kind}`}
+              className={`tgr5-pool-acid bsh-molecule--${acid.kind}`}
               transform={`translate(${at[0]} ${at[1]})`}
               opacity={animate ? 0 : undefined}
               ref={(el) => {
