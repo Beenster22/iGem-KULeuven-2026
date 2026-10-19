@@ -13214,10 +13214,9 @@ a.protocol-download:hover {
   padding-top: 0;
 }
 
-/* Thick rules between the columns — deliberately heavier than the hairlines
-   that separate the rows, so the three columns read as the main split. */
-.integration-summary-integrated,
-.integration-summary-impact {
+/* One rule between the two prose columns. The marker column needs none —
+   its bar already sits there, and a rule beside it read as a double line. */
+.integration-summary-integrated {
   border-left: 3px solid rgba(47, 164, 169, 0.6);
   padding-left: 1.5rem;
 }
@@ -13317,8 +13316,7 @@ a.protocol-download:hover {
     color: #2fa4a9;
   }
 
-  .integration-summary-integrated,
-  .integration-summary-impact {
+  .integration-summary-integrated {
     border-left: none;
     padding-left: 0;
   }
