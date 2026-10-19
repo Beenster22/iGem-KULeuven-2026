@@ -25,7 +25,6 @@
 // corner.
 import {
   useEffect,
-  useId,
   useRef,
   useState,
   type CSSProperties,
@@ -43,9 +42,15 @@ interface StoryStep {
   // puts the first sentence top left and the second bottom right;
   // "pair-right" is its mirror image; "presentation" is Elle as a professor
   // pointing at the sentence on a presentation screen; "office" is the GP's
-  // office scene on the left with the sentences on the right.
-  position: "pair-left" | "pair-right" | "split" | "presentation" | "office";
-  art?: "clock" | "microbiome";
+  // office scene on the left with the sentences on the right; "gut" is the
+  // first line above the gut, the second below it.
+  position:
+    | "pair-left"
+    | "pair-right"
+    | "presentation"
+    | "office"
+    | "gut";
+  art?: "clock";
   lines: ReactNode[];
   // The screen's second sentence (the pair layouts).
   second?: ReactNode[];
@@ -85,7 +90,7 @@ const STEPS: StoryStep[] = [
   },
   // Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request): a
   // GP's office on the left — the presentation screen's box turns into its
-  // sign (see useScreenToSign), over the team's doctor-and-patient picture
+  // sign (see useStepMorphs), over the team's doctor-and-patient picture
   // with the clock on the wall — and the sentences on the right.
   {
     id: "diagnosis",
@@ -93,22 +98,19 @@ const STEPS: StoryStep[] = [
     lines: [
       <>
         <strong>Diagnosis takes quite a while</strong> because PMOS manifests
-        differently between each patient…
+        differently in each patient…
       </>,
     ],
     // "With so much passion about women's health, we knew we needed to do
-    // something about this!" removed here (team request, 2026-10-19).
-    elle: {
-      says: <>Let’s find out together!</>,
-      corner: "right",
-      mood: "smile",
-      delay: 2600,
-    },
+    // something about this!" and Elle's "Let's find out together!" removed
+    // here (team request, 2026-10-19).
   },
+  // Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request): the
+  // first half of the sentence above the gut, the second below it, and the
+  // office clock turns into the magnifying glass going over the gut.
   {
     id: "quest",
-    position: "split",
-    art: "microbiome",
+    position: "gut",
     lines: [
       <>On a quest to find a new solution…</>,
       <>
@@ -167,7 +169,7 @@ const OFFICE_SRC =
 
 // Generated with Claude Opus 5.5 (Anthropic), 2026-10-19
 // Purpose: the "diagnosis" step's GP's office — its sign (which the
-// presentation screen's box turns into, see useScreenToSign) above the room,
+// presentation screen's box turns into, see useStepMorphs) above the room,
 // with the ticking clock in the wall's top-right corner.
 // Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request): the
 // two women talk — the doctor's head and her hands with the clipboard move
@@ -266,123 +268,39 @@ function ClockArt() {
   );
 }
 
-// The gut microbes of MicrobiomeArt, drawn once faintly on the page and once
-// more, enlarged, inside the lens. Each one wriggles on its own beat.
-function Microbes() {
-  const beat = (delay: number): CSSProperties => ({
-    animationDelay: `${delay}s`,
-  });
-  return (
-    <>
-      <g transform="rotate(-20 41 49.5)">
-        <rect
-          className="story-microbe"
-          style={beat(0)}
-          x={28}
-          y={44}
-          width={26}
-          height={11}
-          rx={5.5}
-        />
-      </g>
-      <circle
-        className="story-microbe story-microbe--teal"
-        style={beat(-0.6)}
-        cx={78}
-        cy={62}
-        r={7}
-      />
-      <g className="story-microbe" style={beat(-1.3)}>
-        <circle cx={112} cy={38} r={5.5} />
-        <circle cx={122} cy={41} r={5.5} />
-      </g>
-      <path
-        className="story-microbe story-microbe--curved story-microbe--teal"
-        style={beat(-0.3)}
-        d="M132 78 q10 -12 22 -2"
-      />
-      <g transform="rotate(15 54 97)">
-        <rect
-          className="story-microbe story-microbe--teal"
-          style={beat(-1.8)}
-          x={42}
-          y={92}
-          width={24}
-          height={10}
-          rx={5}
-        />
-      </g>
-      <circle
-        className="story-microbe"
-        style={beat(-1)}
-        cx={100}
-        cy={98}
-        r={6}
-      />
-      <g transform="rotate(-10 162 109)">
-        <rect
-          className="story-microbe"
-          style={beat(-2.2)}
-          x={150}
-          y={104}
-          width={24}
-          height={10}
-          rx={5}
-        />
-      </g>
-      <path
-        className="story-microbe story-microbe--curved"
-        style={beat(-1.5)}
-        d="M150 40 q12 8 22 -3"
-      />
-    </>
-  );
-}
+// Generated with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request)
+// Purpose: the "quest" step's gut — the team's intestines illustration,
+// framed, with a magnifying glass (which the office clock turns into, see
+// useStepMorphs) touring five spots on it. Its lens shows the inside: the
+// team's microbes picture, close up — a different part of it, turned a
+// different way, at each spot — with the bacteria drifting and wobbling
+// about. All CSS animation (see .quest-* in App.css).
+const GUT_SRC = "https://static.igem.wiki/teams/6299/wiki/home-page/intestines-hq.avif";
+const MICROBES_SRC = "https://static.igem.wiki/teams/6299/wiki/home-page/microbes-hq.avif";
 
-// A magnifying glass wandering over the gut microbes: under the lens they
-// show enlarged and in full colour. The enlarged copy moves against the lens
-// (see story-lens-view in App.css) so that it stays a true close-up of
-// whatever the lens is over.
-function MicrobiomeArt() {
-  const id = useId();
+function GutArt() {
   return (
-    <svg
-      className="story-art story-art--microbiome"
-      viewBox="0 0 200 150"
-      aria-hidden="true"
-    >
-      <defs>
-        <clipPath id={`${id}-lens`}>
-          <circle cx={70} cy={65} r={30} />
-        </clipPath>
-        <mask
-          id={`${id}-outside`}
-          maskUnits="userSpaceOnUse"
-          x={0}
-          y={0}
-          width={200}
-          height={150}
-        >
-          <rect width={200} height={150} fill="#fff" />
-          <circle className="story-lens" cx={70} cy={65} r={31} fill="#000" />
-        </mask>
-      </defs>
-      <g className="story-microbes-far" mask={`url(#${id}-outside)`}>
-        <Microbes />
-      </g>
-      <g className="story-lens">
-        <g clipPath={`url(#${id}-lens)`}>
-          <g className="story-lens-view">
-            <g transform="translate(-56 -52) scale(1.8)">
-              <Microbes />
-            </g>
-          </g>
-        </g>
-        <line className="story-lens-handle" x1={94} y1={89} x2={113} y2={108} />
-        <circle className="story-lens-rim" cx={70} cy={65} r={32} />
-        <path className="story-lens-shine" d="M50 55 a22 22 0 0 1 12 -11" />
-      </g>
-    </svg>
+    <div className="quest-gut">
+      <img
+        className="quest-gut-picture"
+        src={GUT_SRC}
+        alt="The human intestines"
+        width={976}
+        height={1192}
+      />
+      <div className="quest-lens" aria-hidden="true">
+        <div className="quest-lens-glass">
+          <div className="quest-lens-drift">
+            <div className="quest-lens-spin">
+              <img className="quest-lens-view" src={MICROBES_SRC} alt="" />
+            </div>
+          </div>
+        </div>
+        <svg className="quest-lens-handle" viewBox="0 0 10 10">
+          <line x1={0} y1={0} x2={10} y2={10} />
+        </svg>
+      </div>
+    </div>
   );
 }
 
@@ -419,14 +337,44 @@ export function StoryStatement({ children }: { children: ReactNode }) {
 }
 
 // Generated with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request)
-// Purpose: between the "presentation" step and the "office" step after it,
-// the presentation screen's box turns into the GP's office sign (and back,
-// scrolling up): a stand-in box goes from the one to where the other comes
-// to rest, its sentence fading into "GP's office" on the way, while the
-// real two are hidden. The steps themselves keep their usual fade.
+// Purpose: one thing on a step turning into another on the next step (and
+// back, scrolling up): a stand-in goes from the one to where the other comes
+// to rest, its look fading from the first into the second on the way, while
+// the real two are hidden. The steps themselves keep their usual fade.
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request): was
+// only the presentation screen → GP's office sign; now also the office's
+// clock → the magnifying glass over the gut.
 const MORPH_MS = 750;
 
-function useScreenToSign(
+interface StepMorph {
+  from: StoryStep["position"];
+  to: StoryStep["position"];
+  // The element on the `from` step, and the one on the `to` step.
+  a: string;
+  b: string;
+  // "label": a box whose text changes; "lens": a round one whose picture
+  // changes.
+  kind: "label" | "lens";
+}
+
+const STEP_MORPHS: StepMorph[] = [
+  {
+    from: "presentation",
+    to: "office",
+    a: ".story-screen",
+    b: ".story-office-sign",
+    kind: "label",
+  },
+  {
+    from: "office",
+    to: "gut",
+    a: ".story-office-room .story-art--clock",
+    b: ".quest-lens-glass",
+    kind: "lens",
+  },
+];
+
+function useStepMorphs(
   stageRef: RefObject<HTMLElement | null>,
   step: number,
   enabled: boolean,
@@ -437,17 +385,20 @@ function useScreenToSign(
     const from = previous.current;
     previous.current = step;
     const stage = stageRef.current;
-    const screenIndex = STEPS.findIndex((s) => s.position === "presentation");
-    const officeIndex = STEPS.findIndex((s) => s.position === "office");
-    const forwards = from === screenIndex && step === officeIndex;
-    const backwards = from === officeIndex && step === screenIndex;
-    if (!enabled || !stage || !(forwards || backwards)) return;
-    const screen = stage.querySelector<HTMLElement>(".story-screen");
-    const sign = stage.querySelector<HTMLElement>(".story-office-sign");
-    const screenText = screen?.querySelector<HTMLElement>(".story-text");
-    if (!screen || !sign || !screenText) return;
-    const [box, target] = forwards ? [screen, sign] : [sign, screen];
-    const [oldText, newText] = forwards ? [screenText, sign] : [sign, screenText];
+    if (!enabled || !stage || from === step) return;
+    const fromPos = STEPS[from]?.position;
+    const toPos = STEPS[step]?.position;
+    const morph = STEP_MORPHS.find(
+      (m) =>
+        (m.from === fromPos && m.to === toPos) ||
+        (m.to === fromPos && m.from === toPos),
+    );
+    if (!morph) return;
+    const forwards = morph.from === fromPos;
+    const steps = stage.querySelectorAll<HTMLElement>(":scope > .story-step");
+    const inFrom = steps[from]?.querySelector<HTMLElement>(forwards ? morph.a : morph.b);
+    const inTo = steps[step]?.querySelector<HTMLElement>(forwards ? morph.b : morph.a);
+    if (!inFrom || !inTo) return;
 
     // Where an element is now, and where it comes to rest once its step has
     // slid into place (the steps arrive with a translate, see .story-step).
@@ -458,31 +409,44 @@ function useScreenToSign(
       const dy = parts.length > 1 ? parseFloat(parts[1]) || 0 : 0;
       return { left: r.left, top: r.top - dy, width: r.width, height: r.height };
     };
-    const start = rest(box);
-    const end = rest(target);
+    const start = rest(inFrom);
+    const end = rest(inTo);
 
     const ghost = document.createElement("div");
-    ghost.className = "story-morph";
+    ghost.className = `story-morph story-morph--${morph.kind}`;
     ghost.setAttribute("aria-hidden", "true");
-    const label = (source: HTMLElement) => {
-      const el = document.createElement("div");
-      const style = getComputedStyle(source);
-      el.className = "story-morph-text";
-      el.textContent = source.textContent;
-      Object.assign(el.style, {
-        width: `${source.getBoundingClientRect().width}px`,
-        fontFamily: style.fontFamily,
-        fontSize: style.fontSize,
-        fontWeight: style.fontWeight,
-        lineHeight: style.lineHeight,
-        letterSpacing: style.letterSpacing,
-        textAlign: style.textAlign,
-      });
-      ghost.appendChild(el);
-      return el;
+    // What each end looks like inside the stand-in.
+    const look = (el: HTMLElement) => {
+      let part: HTMLElement;
+      if (morph.kind === "label") {
+        const source = el.querySelector<HTMLElement>(".story-text") ?? el;
+        const style = getComputedStyle(source);
+        part = document.createElement("div");
+        part.className = "story-morph-text";
+        part.textContent = source.textContent;
+        Object.assign(part.style, {
+          width: `${source.getBoundingClientRect().width}px`,
+          fontFamily: style.fontFamily,
+          fontSize: style.fontSize,
+          fontWeight: style.fontWeight,
+          lineHeight: style.lineHeight,
+          letterSpacing: style.letterSpacing,
+          textAlign: style.textAlign,
+        });
+      } else if (el.matches(".quest-lens-glass")) {
+        part = document.createElement("img");
+        part.className = "story-morph-lens";
+        (part as HTMLImageElement).src = MICROBES_SRC;
+      } else {
+        part = el.cloneNode(true) as HTMLElement;
+        part.removeAttribute("style");
+        part.classList.add("story-morph-clock");
+      }
+      ghost.appendChild(part);
+      return part;
     };
-    const fading = label(oldText);
-    const arriving = label(newText);
+    const fading = look(inFrom);
+    const arriving = look(inTo);
     const px = (r: typeof start) => ({
       left: `${r.left}px`,
       top: `${r.top}px`,
@@ -491,8 +455,11 @@ function useScreenToSign(
     });
     Object.assign(ghost.style, px(start));
     document.body.appendChild(ghost);
-    box.style.visibility = "hidden";
-    target.style.visibility = "hidden";
+    // The magnifying glass is hidden whole, handle and all.
+    const hidden = [inFrom, inTo].map(
+      (el) => el.closest<HTMLElement>(".quest-lens") ?? el,
+    );
+    hidden.forEach((el) => (el.style.visibility = "hidden"));
 
     const easing = "cubic-bezier(0.65, 0, 0.35, 1)";
     const moving = ghost.animate([px(start), px(end)], {
@@ -511,8 +478,7 @@ function useScreenToSign(
     });
 
     const finish = () => {
-      box.style.visibility = "";
-      target.style.visibility = "";
+      hidden.forEach((el) => (el.style.visibility = ""));
       ghost.remove();
     };
     moving.finished.then(finish, finish);
@@ -528,7 +494,7 @@ export function StoryScrollSection() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const step = usePinnedStep(wrapperRef, STEPS.length);
-  useScreenToSign(stageRef, step, !prefersReducedMotion);
+  useStepMorphs(stageRef, step, !prefersReducedMotion);
 
   return (
     <div
@@ -567,7 +533,6 @@ export function StoryScrollSection() {
           const art = (
             <>
               {entry.art === "clock" && <ClockArt />}
-              {entry.art === "microbiome" && <MicrobiomeArt />}
             </>
           );
           const elle = entry.elle && (
@@ -599,6 +564,12 @@ export function StoryScrollSection() {
                 <>
                   <Professor here={!!prefersReducedMotion} />
                   <div className="story-screen">{text(entry.lines, 0)}</div>
+                </>
+              ) : entry.position === "gut" ? (
+                <>
+                  {text(entry.lines.slice(0, 1), 0)}
+                  <GutArt />
+                  {text(entry.lines.slice(1), 1)}
                 </>
               ) : entry.position === "office" ? (
                 <>

@@ -5582,6 +5582,27 @@ body:not(.home-fullscreen) .home-hero {
   translate: -50% -50%;
 }
 
+/* The clock → magnifying glass stand-in: round, the clock fading into the
+   lens's close-up of the microbes. */
+.story-morph--lens {
+  border: 0.35rem solid #2fa4a9;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.story-morph .story-morph-clock,
+.story-morph .story-morph-lens {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.story-morph .story-morph-lens {
+  object-fit: cover;
+  scale: 2.2;
+}
+
 /* Phones: the office on top, the sentences under it. */
 @media (max-width: 699.98px) {
   .story-step--office {
@@ -5640,12 +5661,6 @@ body:not(.home-fullscreen) .home-hero {
   right: 0;
 }
 
-/* The "quest" step keeps both halves of its sentence in the bottom-left
-   corner, so the right-hand side Elle stands in is narrower there than on the
-   pair layouts — without this she reaches back over the second half. */
-.story-step--split .story-elle {
-  max-width: min(26rem, 40%);
-}
 
 .story-elle .elle {
   margin: 0;
@@ -5804,153 +5819,231 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06
-   Purpose: the "quest" step — first half of the sentence top left, second
-   half bottom right, and between them a magnifying glass wandering over
-   some gut microbes (MicrobiomeArt in StoryScrollSection.tsx). */
-/* Edited with Claude Opus 5 (Anthropic), 2026-10-09: the glass now fills the
-   top right and the two halves of the sentence sit together in the
-   bottom-left corner, still staggered but much closer than before. */
-.story-step--split {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-  grid-template-rows: minmax(0, 1fr) auto;
-  gap: 1rem;
-  padding-top: 4vh;
-  padding-bottom: 4vh;
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request)
+   Purpose: the "quest" step — "On a quest to find a new solution…" above
+   the team's gut illustration, "…we looked into the gut microbiome…" below
+   it, and a magnifying glass (which the office clock turns into, see
+   useStepMorphs in StoryScrollSection.tsx) touring the gut. Its lens shows
+   the team's microbes picture close up: a different part of it, turned a
+   different way, at each of five spots, the bacteria drifting about. Replaces
+   the earlier drawn microbes and the "split" layout. */
+.story-step--gut {
+  flex-direction: column;
+  gap: clamp(0.75rem, 2.5vh, 1.5rem);
+  text-align: center;
 }
 
-.story-step--split .story-text {
-  grid-column: 1 / -1;
-  grid-row: 2;
-  align-self: end;
-  justify-self: start;
-  max-width: 15em;
+.story-step--gut .story-text {
+  max-width: 18em;
+  font-size: clamp(1.25rem, 2.6vw, 2.2rem);
 }
 
-.story-step--split .story-line {
-  margin-top: 0;
-  text-align: left;
+/* The illustration on its own light background, framed like the office. */
+.quest-gut {
+  position: relative;
+  flex: none;
+  height: min(54vh, 40rem);
+  aspect-ratio: 976 / 1192;
 }
 
-.story-step--split .story-line:last-child {
-  margin-top: 0.45em;
-  margin-inline-start: clamp(1rem, 7vw, 6rem);
-  text-align: right;
+.quest-gut-picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0.4rem solid #2fa4a9;
+  border-radius: 1.25rem;
+  background: #e7f5f6;
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
 }
 
-.story-step--split .story-art {
-  grid-column: 2;
-  grid-row: 1;
-  place-self: center end;
+/* The magnifying glass: 34% of the gut's width, its top-left corner moved
+   between five spots (the lens centred on the small intestine, the
+   ascending colon, the transverse colon, the descending colon and the
+   lower small intestine), pausing at each. */
+.quest-lens {
+  position: absolute;
+  left: 33%;
+  top: 33.1%;
+  width: 34%;
+  aspect-ratio: 1;
 }
 
-.story-art--microbiome {
-  width: clamp(12rem, 38vw, 30rem);
-  height: auto;
-  max-height: 100%;
-  overflow: visible;
+.story-step--active .quest-lens {
+  animation: quest-lens-tour 12.5s ease-in-out 1s infinite;
 }
 
-.story-microbe {
-  fill: currentColor;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: story-microbe-wriggle 2.6s ease-in-out infinite;
+@keyframes quest-lens-tour {
+  0%,
+  11.2% {
+    left: 33%;
+    top: 33.1%;
+  }
+  20%,
+  31.2% {
+    left: -1%;
+    top: 31.1%;
+  }
+  40%,
+  51.2% {
+    left: 35%;
+    top: -1.9%;
+  }
+  60%,
+  71.2% {
+    left: 69%;
+    top: 28.1%;
+  }
+  80%,
+  91.2% {
+    left: 25%;
+    top: 52.1%;
+  }
+  100% {
+    left: 33%;
+    top: 33.1%;
+  }
 }
 
-.story-microbe--teal {
-  fill: #2fa4a9;
+.quest-lens-glass {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 0.35rem solid #2fa4a9;
+  border-radius: 50%;
+  background: #221b2b;
+  box-shadow:
+    0 0.6rem 1.4rem rgba(0, 0, 0, 0.35),
+    inset 0 0 1.2rem rgba(0, 0, 0, 0.45);
 }
 
-.story-microbe--curved {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 6;
-  stroke-linecap: round;
+/* The bacteria moving about: a slow wander and wobble... */
+.quest-lens-drift {
+  position: absolute;
+  inset: 0;
+  animation: quest-lens-drift 4.6s ease-in-out infinite;
 }
 
-.story-microbe--curved.story-microbe--teal {
-  stroke: #2fa4a9;
-}
-
-.story-microbes-far {
-  opacity: 0.3;
-}
-
-@keyframes story-microbe-wriggle {
+@keyframes quest-lens-drift {
   0%,
   100% {
     translate: 0 0;
-    rotate: -6deg;
+    rotate: 0deg;
   }
-  50% {
-    translate: 0 -2px;
-    rotate: 7deg;
+  33% {
+    translate: 4% -3%;
+    rotate: 6deg;
+  }
+  66% {
+    translate: -3% 3%;
+    rotate: -5deg;
   }
 }
 
-/* The glass and the hole it leaves in the faint microbes share one path;
-   the close-up inside it runs the same path times -1.8 (the enlargement),
-   which keeps it centred on whatever the lens is over. */
-.story-lens {
-  animation: story-lens-wander 9s ease-in-out infinite;
+/* ...and a different view at each spot: turned (here) and moved (on the
+   picture, below), in step with the tour. */
+.quest-lens-spin {
+  position: absolute;
+  inset: 0;
 }
 
-.story-lens-view {
-  animation: story-lens-view 9s ease-in-out infinite;
+.story-step--active .quest-lens-spin {
+  animation: quest-lens-spin 12.5s ease-in-out 1s infinite;
 }
 
-.story-lens-rim {
-  fill: currentColor;
-  fill-opacity: 0.05;
-  stroke: currentColor;
-  stroke-width: 4;
+@keyframes quest-lens-spin {
+  0%,
+  11.2%,
+  100% {
+    rotate: 0deg;
+  }
+  20%,
+  31.2% {
+    rotate: 70deg;
+  }
+  40%,
+  51.2% {
+    rotate: 150deg;
+  }
+  60%,
+  71.2% {
+    rotate: 290deg;
+  }
+  80%,
+  91.2% {
+    rotate: 200deg;
+  }
 }
 
-.story-lens-handle {
+/* The microbes picture at 2.2× the lens, so the lens shows under half of
+   it; translate moves a chosen point of it (as a share of the picture) to
+   the lens's centre: (0.227 − x, 0.227 − y) of its own size. */
+.quest-lens-view {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 220%;
+  height: 220%;
+  max-width: none;
+  translate: -27.3% -27.3%;
+}
+
+.story-step--active .quest-lens-view {
+  animation: quest-lens-view 12.5s ease-in-out 1s infinite;
+}
+
+@keyframes quest-lens-view {
+  0%,
+  11.2%,
+  100% {
+    translate: -27.3% -27.3%;
+  }
+  20%,
+  31.2% {
+    translate: -12.3% -37.3%;
+  }
+  40%,
+  51.2% {
+    translate: -39.3% -15.3%;
+  }
+  60%,
+  71.2% {
+    translate: -17.3% -15.3%;
+  }
+  80%,
+  91.2% {
+    translate: -37.3% -39.3%;
+  }
+}
+
+/* The handle, out from the lens's bottom right; grows in once the glass
+   has arrived from the clock. */
+.quest-lens-handle {
+  position: absolute;
+  left: 88%;
+  top: 88%;
+  width: 34%;
+  height: 34%;
+  overflow: visible;
   stroke: #2fa4a9;
-  stroke-width: 7;
+  stroke-width: 1.6;
   stroke-linecap: round;
+  transform-origin: 0 0;
+  scale: 0;
+  transition: scale 0.35s ease;
 }
 
-.story-lens-shine {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  opacity: 0.45;
+.story-step--active .quest-lens-handle {
+  scale: 1;
+  transition-delay: 0.75s;
 }
 
-@keyframes story-lens-wander {
-  0%,
-  100% {
-    transform: translate(0, 0);
+@media (max-width: 699.98px) {
+  .quest-gut {
+    height: min(42vh, 22rem);
   }
-  30% {
-    transform: translate(55px, -12px);
-  }
-  55% {
-    transform: translate(75px, 18px);
-  }
-  80% {
-    transform: translate(25px, 25px);
-  }
-}
 
-@keyframes story-lens-view {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-  30% {
-    transform: translate(-99px, 21.6px);
-  }
-  55% {
-    transform: translate(-135px, -32.4px);
-  }
-  80% {
-    transform: translate(-45px, -45px);
+  .story-step--gut .story-text {
+    font-size: 1.15rem;
   }
 }
 
@@ -5986,27 +6079,6 @@ body:not(.home-fullscreen) .home-hero {
     display: none;
   }
 
-  /* One column: the glass above, then the sentence under it. */
-  .story-step--split {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr) auto;
-  }
-
-  .story-step--split .story-text {
-    grid-column: 1;
-    justify-self: center;
-    text-align: center;
-  }
-
-  .story-step--split .story-art {
-    grid-column: 1;
-    place-self: center;
-  }
-
-  .story-step--split .story-line:last-child {
-    margin-inline-start: 0;
-    text-align: center;
-  }
 }
 
 /* No pinning: the sentences are listed one under the other, all shown. */
@@ -6032,9 +6104,10 @@ body:not(.home-fullscreen) .home-hero {
 
   .story-art--question span,
   .story-clock-hand,
-  .story-microbe,
-  .story-lens,
-  .story-lens-view {
+  .quest-lens,
+  .quest-lens-drift,
+  .quest-lens-spin,
+  .quest-lens-view {
     animation: none;
   }
 }
