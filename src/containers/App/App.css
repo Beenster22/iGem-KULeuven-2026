@@ -2571,8 +2571,7 @@ a[data-footnote-ref]:focus {
    Purpose: "CRISPR construct design" sat as a plain row at the bottom of a
    long Therapeutics list, directly under two indented sub-sub rows — easy to
    miss (team feedback). Targeted by its known slug rather than by changing
-   the heading text, so its anchor and the link to it from
-   experimental-overview.mdx are untouched. Bolder, a touch bigger, and set
+   the heading text, so its anchor and any links to it are untouched. Bolder, a touch bigger, and set
    off with a divider so it reads as its own result instead of blending into
    the hydrolase section above it. */
 .section-progress a[href="#crispr-construct-design"] .section-progress-label {
@@ -2849,25 +2848,6 @@ a[data-footnote-ref]:focus {
 
 .wheel-selector--dropdown .wheel-selector-svg {
   width: min(100%, 460px);
-}
-
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request): the
-   wedge labels in the site's heading face, like the section titles in the
-   panel below (Luckiest Guy has one weight, so the selected one is picked
-   out by size instead of bold). */
-.wheel-selector--dropdown .wheel-selector-label {
-  font-family: "Luckiest Guy", "Poppins", sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-}
-
-.wheel-selector--dropdown .wheel-selector-wedge.active .wheel-selector-label {
-  font-weight: 400;
-  font-size: 18.5px;
-}
-
-.wheel-selector--dropdown .wheel-selector-wedge.active .wheel-selector-label--small {
-  font-size: 15px;
 }
 
 .wheel-selector--dropdown .wheel-selector-selected,
