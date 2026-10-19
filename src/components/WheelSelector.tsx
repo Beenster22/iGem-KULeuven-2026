@@ -5,7 +5,7 @@
 // just above its content: selecting another one turns the wheel (the shorter
 // way round) until that wedge is at the bottom, while the labels and the
 // bacterium stay upright. Design after the team's own drawing of the wheel.
-import { ReactNode, useMemo, useState } from "react";
+import { ReactNode, useId, useMemo, useState } from "react";
 import { extractLabeledChildren } from "../utils/extractLabeledChildren";
 
 interface WheelSelectorProps {
@@ -14,8 +14,11 @@ interface WheelSelectorProps {
    * "below" (the wet lab wheel): the selected wedge turns to the bottom and
    * its content sits underneath. "side" (added 2026-10-11): a smaller wheel
    * whose selected wedge turns to the right, with its content beside it.
+   * "dropdown" (added 2026-10-19, results page): the "side" wheel's size,
+   * nothing selected at first; clicking a wedge turns it to the bottom and
+   * drops its content down underneath, clicking it again folds it away.
    */
-  layout?: "below" | "side";
+  layout?: "below" | "side" | "dropdown";
   /** Accessible name for the ring of wedges. */
   label?: string;
 }
@@ -90,7 +93,7 @@ const midAngle = (index: number, count: number) =>
 
 // Where the selected wedge comes to rest, in degrees clockwise from "east":
 // at the bottom of the wheel, or at its right-hand side.
-const REST_DEGREES = { below: 90, side: 0 } as const;
+const REST_DEGREES = { below: 90, side: 0, dropdown: 90 } as const;
 
 // How far the wheel is turned to bring wedge `index` to its resting place.
 const restAngle = (index: number, count: number, rest: number) =>
@@ -135,10 +138,20 @@ export function WheelSelector({
   // Kept as a running total (not reduced to 0–360) so each turn takes the
   // shorter way round instead of unwinding.
   const [rotation, setRotation] = useState(() => restAngle(0, count, rest));
+  // Edited with Claude Opus 5.5 (Anthropic), 2026-10-19: the "dropdown"
+  // layout starts with nothing open; the others always show their content.
+  const isDropdown = layout === "dropdown";
+  const [open, setOpen] = useState(!isDropdown);
+  const panelId = useId();
   const active = items[activeIndex];
   const step = 360 / count;
 
   const select = (index: number) => {
+    if (isDropdown && index === activeIndex && open) {
+      setOpen(false);
+      return;
+    }
+    setOpen(true);
     setActiveIndex(index);
     setRotation((current) => {
       const delta =
@@ -148,7 +161,9 @@ export function WheelSelector({
   };
 
   return (
-    <div className={`wheel-selector wheel-selector--${layout}`}>
+    <div
+      className={`wheel-selector wheel-selector--${layout}${open ? " is-open" : ""}`}
+    >
       <svg
         className="wheel-selector-svg"
         viewBox={`0 0 ${SIZE} ${SIZE}`}
@@ -168,7 +183,7 @@ export function WheelSelector({
               LABEL_RADIUS,
               midAngle(index, count),
             );
-            const isActive = index === activeIndex;
+            const isActive = index === activeIndex && open;
             const colours = PALETTE[index % PALETTE.length];
             const lines = wrapLabel(item.label);
             const scale =
@@ -180,6 +195,8 @@ export function WheelSelector({
                 role="tab"
                 tabIndex={0}
                 aria-selected={isActive}
+                aria-expanded={isDropdown ? isActive : undefined}
+                aria-controls={isDropdown ? panelId : undefined}
                 className={`wheel-selector-wedge${isActive ? " active" : ""}`}
                 onClick={() => select(index)}
                 onKeyDown={(event) => {
@@ -240,7 +257,27 @@ export function WheelSelector({
           }
         />
       </svg>
-      {active && <div className="wheel-selector-content">{active.content}</div>}
+      {isDropdown ? (
+        // Opens and folds away (see .wheel-selector-dropdown in App.css);
+        // keyed on the section so switching sections fades the new one in.
+        <div
+          id={panelId}
+          className="wheel-selector-dropdown"
+          role="region"
+          aria-label={active?.label}
+          inert={!open}
+        >
+          <div className="wheel-selector-dropdown-inner">
+            {active && (
+              <div className="wheel-selector-content" key={activeIndex}>
+                {active.content}
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        active && <div className="wheel-selector-content">{active.content}</div>
+      )}
     </div>
   );
 }
