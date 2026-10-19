@@ -41,6 +41,7 @@ import {
   type RefObject,
 } from "react";
 import { createPortal } from "react-dom";
+import { useBileAcidFlight } from "./useBileAcidFlight";
 import {
   motion,
   useMotionValue,
@@ -575,6 +576,8 @@ export function BshStreamAnimation() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const diagramRef = useRef<HTMLDivElement>(null);
   const zoom = usePvZoom(diagramRef, !prefersReducedMotion);
+  // The bile acids carry on down to the TGR5 screen (useBileAcidFlight.ts).
+  useBileAcidFlight({ diagramRef, skip: !!prefersReducedMotion });
   // Two scroll steps: the cell on its own with its introduction beside it,
   // then the reaction around it. Without the pin both are simply shown.
   const step = usePinnedStep(wrapperRef, 2);

@@ -12,6 +12,7 @@
 // deeper ("sub-sub").
 import { MouseEvent, RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { getPathMapping } from "../utils";
 import { stringToSlug } from "../utils/stringToSlug";
 
 interface Heading {
@@ -161,6 +162,10 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
   const [collapsible, setCollapsible] = useState(false);
   const [openGroup, setOpenGroup] = useState("");
   const location = useLocation();
+  // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-19
+  // Purpose: the top of the index names the page the reader is on, so anyone
+  // following a link from another page knows where they landed.
+  const pageTitle = getPathMapping()[location.pathname.replace(/(.)\/+$/, "$1") || "/"]?.title;
   const listRef = useRef<HTMLUListElement>(null);
   // Vertical center of the active row within the list, in px; null until
   // measured so the mascot first appears in place instead of sliding in.
@@ -176,7 +181,11 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
     const container = containerRef.current;
     if (!container) return;
 
-    const found = collectHeadings(container);
+    // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-19
+    // Purpose: Safety page wants only its Risk 1–3 in the index, not the
+    // dropdown titles beneath them. Pages opt in with data-toc-no-dropdowns.
+    const hideDropdowns = container.querySelector("[data-toc-no-dropdowns]") !== null;
+    const found = collectHeadings(container).filter((heading) => !(hideDropdowns && heading.level === 4));
     setHeadings(found);
     setCollapsible(container.querySelector("[data-toc-collapsible]") !== null);
     setOpenGroup("");
@@ -374,7 +383,11 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
   return (
     <nav className="section-progress" aria-label="Page sections">
       <div className="section-progress-box">
-        <p className="section-progress-heading">On this page</p>
+        {pageTitle ? (
+          <p className="section-progress-heading">{pageTitle}</p>
+        ) : (
+          <p className="section-progress-heading">On this page</p>
+        )}
         <ul ref={listRef}>
           {mascotY !== null && (
             <li

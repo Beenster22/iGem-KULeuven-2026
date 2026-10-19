@@ -11,9 +11,9 @@ export { default as SafetyAndSecurity } from "./safety-and-security.mdx";
 // Dry Lab
 export { default as DryLab } from "./dry-lab.mdx";
 // Lab
-export { default as ExperimentalOverview } from "./experimental-overview.mdx";
 export { default as Protocols } from "./protocols.mdx";
 export { default as Notebook } from "./notebook.mdx";
+export { default as Parts } from "./parts.mdx";
 export { default as Results } from "./results.mdx";
 export { default as Measurement } from "./measurement.mdx";
 // iHP

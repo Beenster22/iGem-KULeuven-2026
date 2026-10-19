@@ -7,9 +7,7 @@
     Quantification of Bile Acid Deconjugation" under B. Bile Salt Hydrolase
     Characterization > Activity Assay, transcribed from the team's protocol
     document of the same name. Its three calculator tables (methanol
-    precipitation, net dilution, percentage of deconjugation) were checked
-    against the real Protocol_Calculators.xlsx workbook, tab "LC-MS
-    deconjugation" — formulas and worked-example values match. */}
+    precipitation, net dilution, percentage of deconjugation) were added. */}
 
 <PageLayout>
 
@@ -24,9 +22,7 @@ the numbers in the tables.
 
 The tables that were left blank in our written protocols are **live on this
 page** — change a value in a box and the shaded cells recalculate, so a run can
-be planned without opening anything else. Each of those tables also names the
-tab of our `Protocol_Calculators.xlsx` workbook it came from, for anyone
-working from our own copy.
+be planned without opening anything else.
 
 ## A. Core Methods
 
@@ -425,7 +421,7 @@ they change; they are kept in the team handbook.
 
 <ExpandableText title="Cryostock Generation">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/cryostock-generation-1.pdf" workbookTab="Cryostock" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/cryostock-generation-1.pdf" />
 
 #### Introduction
 
@@ -540,7 +536,7 @@ after the glycerol is added.
 <ProtocolCalculator
   number={2}
   title="Glycerol and culture volumes."
-  workbookTab="Cryostock"
+ 
   rows={[
     { key: "vTotal", label: "Final volume per cryovial", value: 1000, unit: "µL", input: true },
     { key: "cFinal", label: "Final glycerol concentration", value: 25, unit: "%", input: true },
@@ -612,7 +608,7 @@ cryovials, 6000 µL of each is required.
 
 <ExpandableText title="Preparing LB Broth and Agar Plates">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/preparing-lb-broth-and-agar-plates-3.pdf" workbookTab="LB media" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/preparing-lb-broth-and-agar-plates-3.pdf" />
 
 #### Introduction
 
@@ -708,7 +704,7 @@ A volume of 300–350 mL is recommended for 20 plates.
 <ProtocolCalculator
   number={2}
   title="Medium powder and plate yield."
-  workbookTab="LB media"
+ 
   rows={[
     { key: "vAgar", label: "LB agar volume", value: 300, unit: "mL", input: true },
     { key: "cAgar", label: "LB-agar powder per litre (manufacturer: 40 g/L for Sigma L3147)", value: 40, unit: "g/L", input: true },
@@ -815,7 +811,7 @@ concentration, C2 the final concentration and V2 the volume of medium. Example:
 <ProtocolCalculator
   number={3}
   title="Antibiotic stock volume (C1 × V1 = C2 × V2)."
-  workbookTab="LB media"
+ 
   rows={[
     { key: "c1", label: "Antibiotic stock concentration (C1)", value: 50, unit: "mg/mL", input: true },
     { key: "c2", label: "Final concentration in medium (C2)", value: 50, unit: "µg/mL", input: true },
@@ -929,7 +925,7 @@ C1 and C2 must be expressed in the same unit before the values are entered;
 
 <ExpandableText title="Preparation of mGAM Broth and Agar Plates">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/preparation-of-mgam-broth-and-agar-plates-1.pdf" workbookTab="Media preparation" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/preparation-of-mgam-broth-and-agar-plates-1.pdf" />
 
 #### Introduction
 
@@ -1027,7 +1023,7 @@ and differs between suppliers and formulations.
 <ProtocolCalculator
   number={2}
   title="mGAM broth and agar."
-  workbookTab="Media preparation"
+ 
   rows={[
     { key: "vMedium", label: "Volume of medium", value: 1000, unit: "mL", input: true },
     { key: "cPowder", label: "mGAM powder per litre (manufacturer)", value: 41.7, unit: "g/L", input: true },
@@ -1144,7 +1140,7 @@ converts millilitres to litres.
 
 <ExpandableText title="Preparation of Wilkins-Chalgren Broth and Agar Plates">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/preparation-of-wilkins-chalgren-broth-and-agar-plates-1.pdf" workbookTab="Media preparation" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/preparation-of-wilkins-chalgren-broth-and-agar-plates-1.pdf" />
 
 #### Introduction
 
@@ -1243,7 +1239,7 @@ therefore needed.
 <ProtocolCalculator
   number={2}
   title="Wilkins-Chalgren broth and agar."
-  workbookTab="Media preparation"
+ 
   rows={[
     { key: "vMedium", label: "Volume of medium", value: 1000, unit: "mL", input: true },
     { key: "cPowder", label: "WC powder per litre (manufacturer)", value: 33, unit: "g/L", input: true },
@@ -1363,7 +1359,7 @@ powder, 0.300 g of L-cysteine HCl and, for plates, 15.00 g of agar.
 
 <ExpandableText title={<>Preparation of Minimal Medium for <em>P. vulgatus</em> (anaerobic, with hemin)</>}>
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/preparation-of-minimal-medium-for-p-vulgatus-2.pdf" workbookTab="Media preparation" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/preparation-of-minimal-medium-for-p-vulgatus-2.pdf" />
 
 #### Introduction
 
@@ -1485,7 +1481,7 @@ keeps the medium minimal.
 <ProtocolCalculator
   number={2}
   title={<>Minimal medium for <em>P. vulgatus</em>.</>}
-  workbookTab="Media preparation"
+ 
   rows={[
     { key: "vMedium", label: "Volume of medium", value: 1000, unit: "mL", input: true },
     { key: "cLB", label: "LB powder (half the recommended 20 g/L)", value: 10, unit: "g/L", input: true },
@@ -1541,7 +1537,7 @@ hydroxide first. The stock is light sensitive and is kept dark.
 <ProtocolCalculator
   number={3}
   title="Hemin stock solution."
-  workbookTab="Media preparation"
+ 
   rows={[
     { key: "cStock", label: "Stock concentration", value: 1, unit: "mg/mL", input: true },
     { key: "vStock", label: "Stock volume", value: 10, unit: "mL", input: true },
@@ -2039,7 +2035,7 @@ This step is essential to avoid residual ethanol in the plasmid preparation.
 
 <ExpandableText title="DNA Quantification with the LVis Plate">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/dna-quantification-with-the-lvis-plate-1.pdf" workbookTab="Nanodrop" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/dna-quantification-with-the-lvis-plate-1.pdf" />
 
 #### Introduction
 
@@ -2160,7 +2156,7 @@ can be loaded in one movement.
 <ProtocolCalculator
   number={2}
   title="Concentration and purity."
-  workbookTab="Nanodrop"
+ 
   rows={[
     { key: "a260", label: "A₂₆₀ (pathlength corrected to 10 mm)", value: 0.25, unit: "–", input: true },
     { key: "factor", label: "Factor for double-stranded DNA", value: 50, unit: "ng/µL per A₂₆₀", input: true },
@@ -2198,7 +2194,7 @@ with a low A₂₆₀/A₂₃₀ ratio can fail in sequencing and in enzymatic r
 <ProtocolCalculator
   number={3}
   title="Volume required for a given mass of DNA."
-  workbookTab="Nanodrop"
+ 
   rows={[
     { key: "mass", label: "Mass of DNA required", value: 200, unit: "ng", input: true },
     { key: "conc", label: "Measured concentration", value: 120, unit: "ng/µL", input: true },
@@ -2286,7 +2282,7 @@ in which:
 
 <ExpandableText title="Gibson Assembly">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/gibson-assembly-2.pdf" workbookTab="Gibson assembly" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/gibson-assembly-2.pdf" />
 
 #### Introduction
 
@@ -2391,7 +2387,7 @@ concentration in nM, because 1 nM is 1 fmol/µL.
 <ProtocolCalculator
   number={2}
   title="Resuspension of lyophilised gBlocks."
-  workbookTab="Gibson assembly"
+ 
   rows={[
     { key: "fmol", label: "Amount stated on the tube", value: 1000, unit: "fmol", input: true },
     { key: "cTarget", label: "Target concentration", value: 10, unit: "nM", input: true },
@@ -2434,7 +2430,7 @@ up and down very slowly the first time with a sterile tip.
 <ProtocolCalculator
   number={3}
   title="Assembly reaction."
-  workbookTab="Gibson assembly"
+ 
   rows={[
     { key: "vTotal", label: "Total reaction volume", value: 10, unit: "µL", input: true },
     { key: "vMasterMix", label: "NEBuilder HiFi Master Mix (2×)", unit: "µL", decimals: 1, compute: (v) => v.vTotal / 2 },
@@ -2569,7 +2565,7 @@ of a 20 nM vector and a 2:1 ratio, the insert is 0.100 pmol; the volumes are
 
 <ExpandableText title="Chemical Transformation">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/chemical-transformation-protocol.pdf" workbookTab="Transformation" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/chemical-transformation-protocol.pdf" />
 
 #### Introduction
 
@@ -2674,7 +2670,7 @@ required for a given DNA mass can be calculated with Table 2.
 <ProtocolCalculator
   number={2}
   title="DNA volume to add."
-  workbookTab="Transformation"
+ 
   rows={[
     { key: "conc", label: "DNA concentration", value: 0.1, unit: "ng/µL", input: true },
     { key: "mass", label: "DNA mass to transform", value: 0.1, unit: "ng", input: true },
@@ -2730,7 +2726,7 @@ Depending on the strain, construct and antibiotic, colonies can take up to
 <ProtocolCalculator
   number={3}
   title="Transformation efficiency."
-  workbookTab="Transformation"
+ 
   rows={[
     { key: "colonies", label: "Colonies counted on plate", value: 150, unit: "CFU", input: true },
     { key: "mass", label: "DNA mass transformed", value: 0.1, unit: "ng", input: true },
@@ -2800,7 +2796,7 @@ suspension plated: *f* = 50 / 50 = 1, and *E* = 150 / (0.0001 × 1) =
 
 <ExpandableText title="Making Chemically Competent Cells">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/making-chemically-competent-cells.pdf" workbookTab="Competent cells" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/making-chemically-competent-cells.pdf" />
 
 #### Introduction
 
@@ -2912,7 +2908,7 @@ anhydrous forms require different masses.
 <ProtocolCalcGrid
   number={2}
   title="Salt solutions: mass to weigh."
-  workbookTab="Competent cells"
+ 
   columns={[
     { key: "salt", label: "Salt", type: "text" },
     { key: "M", label: "Molar mass (g/mol)", type: "input" },
@@ -2935,7 +2931,7 @@ anhydrous forms require different masses.
 <ProtocolCalculator
   number={3}
   title="CaCl₂-glycerol storage solution."
-  workbookTab="Competent cells"
+ 
   rows={[
     { key: "vTotal", label: "Total volume", value: 20, unit: "mL", input: true },
     { key: "pGlycerol", label: "Glycerol (final, v/v)", value: 15, unit: "%", input: true },
@@ -2962,7 +2958,7 @@ anhydrous forms require different masses.
 <ProtocolCalculator
   number={4}
   title="Culture scaling."
-  workbookTab="Competent cells"
+ 
   rows={[
     { key: "vCulture", label: "Culture volume", value: 200, unit: "mL", input: true },
     { key: "dilution", label: "Dilution of overnight culture (1 in …)", value: 100, unit: "fold", input: true },
@@ -3108,7 +3104,7 @@ solution is 0.01 × 200 = 2.00 mL, which gives 2000 / 50 = 40 aliquots of 50 µL
 
 <ExpandableText title="Agarose Gel Electrophoresis (Lithium Acetate)">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/agarose-gel-electrophoresis-lithium-acetate.pdf" workbookTab="Agarose gel" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/agarose-gel-electrophoresis-lithium-acetate.pdf" />
 
 #### Introduction
 
@@ -3191,7 +3187,7 @@ off before the lid of the tank is removed.
 <ProtocolCalculator
   number={2}
   title="10 mM lithium acetate running buffer."
-  workbookTab="Agarose gel"
+ 
   rows={[
     { key: "conc", label: "Buffer concentration", value: 10, unit: "mM", input: true },
     { key: "volume", label: "Buffer volume", value: 1000, unit: "mL", input: true },
@@ -3208,7 +3204,7 @@ off before the lid of the tank is removed.
 <ProtocolCalculator
   number={3}
   title="Planning the gel."
-  workbookTab="Agarose gel"
+ 
   rows={[
     { key: "vGel", label: "Gel volume", value: 50, unit: "mL", input: true },
     { key: "pGel", label: "Gel percentage (w/v)", value: 1, unit: "%", input: true },
@@ -3275,7 +3271,7 @@ The method of removal depends on the equipment used.
 <ProtocolCalculator
   number={4}
   title="Preparing the samples."
-  workbookTab="Agarose gel"
+ 
   rows={[
     { key: "vSample", label: "Sample volume", value: 25, unit: "µL", input: true },
     { key: "xBuffer", label: "Loading buffer concentration", value: 6, unit: "×-fold", input: true },
@@ -3422,7 +3418,7 @@ rearranges to the equation above.
 
 <ExpandableText title="Colony PCR">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/colony-pcr-2.pdf" workbookTab="Colony PCR" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/colony-pcr-2.pdf" />
 
 #### Introduction
 
@@ -3569,7 +3565,7 @@ volume is unchanged.
 <ProtocolCalculator
   number={3}
   title="PCR master mix for multiple reactions."
-  workbookTab="Colony PCR"
+ 
   rows={[
     { key: "n", label: "Number of reactions", value: 8, unit: "reactions", input: true },
     { key: "excess", label: "Excess for pipetting loss", value: 10, unit: "%", input: true },
@@ -3616,7 +3612,7 @@ Biolabs, n.d.-b).
 <ProtocolCalculator
   number={5}
   title="Extension time."
-  workbookTab="Colony PCR"
+ 
   rows={[
     { key: "length", label: "Expected amplicon length", value: 1.5, unit: "kb", input: true },
     { key: "rate", label: "Extension rate", value: 1, unit: "min/kb", input: true },
@@ -3708,7 +3704,7 @@ in which:
 
 <ExpandableText title="PCR Clean-Up">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/pcr-clean-up.pdf" workbookTab="PCR clean-up" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/pcr-clean-up.pdf" />
 
 #### Introduction
 
@@ -3811,7 +3807,7 @@ to that range with TE buffer or nuclease-free water.
 <ProtocolCalculator
   number={2}
   title="Binding buffer and expected yield."
-  workbookTab="PCR clean-up"
+ 
   rows={[
     { key: "vSample", label: "Sample volume", value: 50, unit: "µL", input: true },
     { key: "ratio", label: "Volumes of Monarch Buffer BZ per volume of sample", value: 5, unit: "–", input: true },
@@ -3937,7 +3933,7 @@ a slightly lower total yield.
 
 <ExpandableText title="Sanger Sequencing Sample Preparation">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/sanger-sequencing-sample-preparation-3.pdf" workbookTab="Sequencing prep" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/sanger-sequencing-sample-preparation-3.pdf" />
 
 #### Introduction
 
@@ -4075,7 +4071,7 @@ Genomics, n.d.-a).
 <ProtocolCalculator
   number={3}
   title="Primer working solution at 10 pmol/µL."
-  workbookTab="Sequencing prep"
+ 
   rows={[
     { key: "nmol", label: "Amount of primer stated on the tube", value: 24.8, unit: "nmol", input: true },
     { key: "cStock", label: "Stock concentration after resuspension", value: 100, unit: "µM", input: true },
@@ -4112,7 +4108,7 @@ provider before mixing.
 <ProtocolCalculator
   number={4}
   title="Premixed sample for TubeSeq (17 µL total)."
-  workbookTab="Sequencing prep"
+ 
   rows={[
     { key: "vTotal", label: "Total premixed volume required", value: 17, unit: "µL", input: true },
     { key: "vPrimer", label: "Primer volume", value: 2, unit: "µL", input: true },
@@ -4235,7 +4231,7 @@ at 120 ng/µL this is 6.25 µL of sample and 8.75 µL of MQ water.
 
 <ExpandableText title="Backbone Amplification PCR">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/backbone-amplification-pcr-1.pdf" workbookTab="Backbone PCR" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/backbone-amplification-pcr-1.pdf" />
 
 #### Introduction
 
@@ -4372,7 +4368,7 @@ briefly, aliquoted into the tubes, and the template added last.
 <ProtocolCalculator
   number={2}
   title="Master mix for a temperature gradient."
-  workbookTab="Backbone PCR"
+ 
   rows={[
     { key: "n", label: "Number of reactions (gradient positions plus one spare)", value: 11, unit: "reactions", input: true },
     { key: "vRxn", label: "Reaction volume", value: 25, unit: "µL", input: true },
@@ -4392,7 +4388,7 @@ briefly, aliquoted into the tubes, and the template added last.
 <ProtocolCalculator
   number={3}
   title="Template volume and extension time."
-  workbookTab="Backbone PCR"
+ 
   rows={[
     { key: "conc", label: "Plasmid concentration", value: 73.37, unit: "ng/µL", input: true },
     { key: "mass", label: "Template mass per reaction", value: 10, unit: "ng", input: true },
@@ -4461,7 +4457,7 @@ to a minimum, because it damages the DNA.
 <ProtocolCalculator
   number={5}
   title="Gel extraction: dissolving buffer."
-  workbookTab="Backbone PCR"
+ 
   rows={[
     { key: "mass", label: "Mass of the excised gel slice", value: 307, unit: "mg", input: true },
     { key: "ratio", label: "Volumes of Monarch Buffer BY per volume of gel", value: 4, unit: "–", input: true },
@@ -4808,7 +4804,7 @@ number.
 
 <ExpandableText title="Liquid Bile Salt Assay (LC-MS readout)">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/liquid-bile-salt-assay-5.pdf" workbookTab="Bile salt assay" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/liquid-bile-salt-assay-5.pdf" />
 
 #### Introduction
 
@@ -4917,7 +4913,7 @@ differ between suppliers and product grades.
 <ProtocolCalculator
   number={2}
   title="Number of samples and medium required."
-  workbookTab="Bile salt assay"
+ 
   rows={[
     { key: "strains", label: "Number of strains (including the sfGFP control strain)", value: 16, unit: "strains", input: true },
     { key: "concs", label: "Number of bile salt concentrations", value: 2, unit: "–", input: true },
@@ -4951,7 +4947,7 @@ hemin at 0.01 g/L. The two must not be substituted for each other.
 <ProtocolCalculator
   number={3}
   title="Minimal medium components."
-  workbookTab="Bile salt assay"
+ 
   rows={[
     { key: "vMedium", label: "Medium volume", value: 400, unit: "mL", input: true },
     { key: "cLB", label: "LB", value: 10, unit: "g/L", input: true },
@@ -5037,7 +5033,7 @@ the bile salts are then not at saturation.
 <ProtocolCalculator
   number={4}
   title="Composition of one sample tube."
-  workbookTab="Bile salt assay"
+ 
   rows={[
     { key: "vTotal", label: "Total culture volume", value: 2000, unit: "µL", input: true },
     { key: "pBile", label: "Target bile salt concentration", value: 0.1, unit: "% (w/v)", input: true },
@@ -5138,7 +5134,7 @@ In the first run, 50 µL of 50% methanol was added to all samples.
 <ProtocolCalculator
   number={5}
   title="Reconstitution volume after evaporation."
-  workbookTab="Bile salt assay"
+ 
   rows={[
     { key: "pBile", label: "Bile salt concentration of the sample", value: 0.1, unit: "% (w/v)", input: true },
     { key: "factor", label: "Reconstitution volume per 1% bile salt", value: 1000, unit: "µL", input: true },
@@ -5178,9 +5174,6 @@ The tubes should not be shaken or mixed after this centrifugation.
 | F2 | 53 | 54 | 55 | 56 |
 | G2 | 57 | 58 | 59 | 60 |
 | H2 | 61 | 62 | 63 | 64 |
-
-For the full sample list in Excel, go to Protocol_Calculators.xlsx, tab "Bile
-salt assay" (Table 6).
 
 <ProtocolCalculations>
 
@@ -5280,7 +5273,7 @@ in the injected sample stays within the range of the LC-MS method.
 
 <ExpandableText title="LC-MS Quantification of Bile Acid Deconjugation">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/lc-ms-quantification-of-bile-acid-deconjugation.pdf" workbookTab="LC-MS deconjugation" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/lc-ms-quantification-of-bile-acid-deconjugation.pdf" />
 
 #### Introduction
 
@@ -5423,7 +5416,7 @@ bench.
 <ProtocolCalculator
   number={2}
   title="Methanol precipitation of protein."
-  workbookTab="LC-MS deconjugation"
+ 
   rows={[
     { key: "vSample", label: "Culture supernatant taken", value: 100, unit: "µL", input: true },
     { key: "vMeOH", label: "Ice-cold methanol added", value: 400, unit: "µL", input: true },
@@ -5482,7 +5475,7 @@ split peak.
 <ProtocolCalculator
   number={3}
   title="Net dilution of the sample."
-  workbookTab="LC-MS deconjugation"
+ 
   rows={[
     { key: "vSample", label: "Culture supernatant taken", value: 100, unit: "µL", input: true },
     { key: "vTotal", label: "Extract after mixing", value: 500, unit: "µL", input: true },
@@ -5583,7 +5576,7 @@ unexpected product would not be seen.
 <ProtocolCalculator
   number={6}
   title="Percentage of deconjugation."
-  workbookTab="LC-MS deconjugation"
+ 
   rows={[
     { key: "areaUDCA", label: "Peak area of UDCA (m/z 391.1)", value: 142000, unit: "counts", input: true },
     { key: "areaGUDCA", label: "Peak area of GUDCA (m/z 448.1)", value: 331000, unit: "counts", input: true },
@@ -5748,7 +5741,7 @@ concentrations.
 
 <ExpandableText title="HALO Assay (failed protocol)" meta={<em>discontinued</em>}>
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/halo-assay-discontinued.pdf" workbookTab="HALO assay" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/halo-assay-discontinued.pdf" />
 
 <Callout title="This protocol failed">
 
@@ -5895,7 +5888,7 @@ concentration requires 90 mg per bile salt.
 <ProtocolCalculator
   number={2}
   title="Bile salt stock volume (C1 × V1 = C2 × V2)."
-  workbookTab="HALO assay"
+ 
   rows={[
     { key: "c1", label: "Bile salt stock concentration (C1)", value: 100, unit: "mg/mL", input: true },
     { key: "pFinal", label: "Final bile salt concentration", value: 0.5, unit: "% (w/v)", input: true },
@@ -5923,7 +5916,7 @@ GUDCA is not soluble in distilled water, and TUDCA is not heat resistant.
 <ProtocolCalculator
   number={3}
   title="CaCl₂ stock volume for the agar."
-  workbookTab="HALO assay"
+ 
   rows={[
     { key: "gTarget", label: "Target CaCl₂ concentration", value: 0.37, unit: "g/L", input: true },
     { key: "molarMass", label: "Molar mass of CaCl₂ (anhydrous)", value: 110.98, unit: "g/mol", input: true },
@@ -5967,7 +5960,7 @@ The cultures will probably all have a different OD₆₀₀.
 <ProtocolCalculator
   number={4}
   title="Normalization of the OD₆₀₀ (OD1 × V1 = OD2 × V2)."
-  workbookTab="HALO assay"
+ 
   rows={[
     { key: "od1", label: "Measured OD₆₀₀ of the culture (OD1)", value: 0.8, unit: "–", input: true },
     { key: "od2", label: "Target OD₆₀₀ (OD2)", value: 0.5, unit: "–", input: true },
@@ -6066,7 +6059,7 @@ cryostock — are listed under Section B and are used unchanged here.
 
 <ExpandableText title="Medium Comparison Growth Assay">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/medium-comparison-growth-assay-2.pdf" workbookTab="Medium comparison" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/medium-comparison-growth-assay-2.pdf" />
 
 #### Introduction
 
@@ -6220,7 +6213,7 @@ medium.
 <ProtocolCalculator
   number={2}
   title="Supplement stock volumes per mL of medium."
-  workbookTab="Medium comparison"
+ 
   rows={[
     { key: "cStarchStock", label: "Starch stock concentration", value: 5, unit: "%", input: true },
     { key: "cStarchFinal", label: "Starch final concentration", value: 5, unit: "g/L", input: true },
@@ -6259,7 +6252,7 @@ concentrated.
 <ProtocolCalculator
   number={3}
   title="Normalization of the overnight cultures."
-  workbookTab="Medium comparison"
+ 
   rows={[
     { key: "od1", label: "Measured OD₆₀₀", value: 0.9, unit: "–", input: true },
     { key: "od2", label: "Target OD₆₀₀ (the lowest obtained)", value: 0.4, unit: "–", input: true },
@@ -6619,7 +6612,7 @@ in the file. It needs to be added, or the reference to it removed.
 
 <ExpandableText title="Minimum Inhibitory Concentration Testing">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/minimum-inhibitory-concentration-testing-2.pdf" workbookTab="MIC assay" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/minimum-inhibitory-concentration-testing-2.pdf" />
 
 #### Introduction
 
@@ -6781,7 +6774,7 @@ first, so that the volume to pipette stays accurate.
 <ProtocolCalculator
   number={3}
   title="Antibiotic working solution (C1 × V1 = C2 × V2)."
-  workbookTab="MIC assay"
+ 
   rows={[
     { key: "c1", label: "Antibiotic stock concentration (C1)", value: 10000, unit: "µg/mL", input: true },
     { key: "c2", label: "Highest concentration in the series (C2)", value: 32, unit: "µg/mL", input: true },
@@ -6805,7 +6798,7 @@ first, so that the volume to pipette stays accurate.
 <ProtocolCalculator
   number={4}
   title="Two-fold dilution series."
-  workbookTab="MIC assay"
+ 
   rows={[
     { key: "cTop", label: "Highest concentration", value: 32, unit: "µg/mL", input: true },
     { key: "steps", label: "Number of dilution steps", value: 7, unit: "steps", input: true },
@@ -6919,7 +6912,7 @@ temperature affects both the growth rate and the apparent susceptibility.
 <ProtocolCalculator
   number={5}
   title="Percentage of inhibition and IC₉₀."
-  workbookTab="MIC assay"
+ 
   rows={[
     { key: "odWell", label: "OD₆₃₀ of the well", value: 0.182, unit: "–", input: true },
     { key: "odBlank", label: "OD₆₃₀ of the blank (inoculated antibiotic solvent)", value: 0.062, unit: "–", input: true },
@@ -7387,7 +7380,7 @@ of the electroporator, still need to be added.
 
 <ExpandableText title="Dilution Series Protocol">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/dilution-series-protocol.pdf" workbookTab="Dilution series" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/dilution-series-protocol.pdf" />
 
 <Callout title="Not to be uploaded on its own yet">
 
@@ -7487,7 +7480,7 @@ Pre-warming prevents condensation from pooling on the surface of the agar.
 <ProtocolCalculator
   number={2}
   title="Kanamycin stock volume (C1 × V1 = C2 × V2)."
-  workbookTab="Dilution series"
+ 
   rows={[
     { key: "c1", label: "Kanamycin stock concentration (C1)", value: 50, unit: "mg/mL", input: true },
     { key: "c2", label: "Working concentration (C2)", value: 50, unit: "µg/mL", input: true },
@@ -7530,7 +7523,7 @@ The most important point is that both cultures have the same OD₆₀₀.
 <ProtocolCalculator
   number={3}
   title="Normalization of the OD₆₀₀ (OD1 × V1 = OD2 × V2)."
-  workbookTab="Dilution series"
+ 
   rows={[
     { key: "od1", label: "Measured OD₆₀₀ of the culture (OD1)", value: 0.8, unit: "–", input: true },
     { key: "od2", label: "Target OD₆₀₀ (OD2)", value: 0.6, unit: "–", input: true },
@@ -7625,7 +7618,7 @@ OD₆₀₀ 0.8: V1 = (0.6 × 1000) / 0.8 = 750.0 µL of culture and 1000 − 75
 
 <ExpandableText title="ParB Colony PCR">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/parb-colony-pcr-2.pdf" workbookTab="ParB PCR" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/parb-colony-pcr-2.pdf" />
 
 #### Introduction
 
@@ -7729,7 +7722,7 @@ set 2 (24.8 nmol) and 208 µL for ParB reverse set 2 (20.8 nmol).
 <ProtocolCalculator
   number={2}
   title="Primer resuspension and working dilution."
-  workbookTab="ParB PCR"
+ 
   rows={[
     { key: "nmol", label: "Amount of primer stated on the tube", value: 24.8, unit: "nmol", input: true },
     { key: "cStock", label: "Target stock concentration", value: 100, unit: "µM", input: true },
@@ -7768,7 +7761,7 @@ Biolabs, n.d.-a).
 <ProtocolCalculator
   number={4}
   title="Q5 master mix for several reactions."
-  workbookTab="ParB PCR"
+ 
   rows={[
     { key: "n", label: "Number of reactions", value: 20, unit: "reactions", input: true },
     { key: "excess", label: "Excess for pipetting loss", value: 10, unit: "%", input: true },
@@ -7811,7 +7804,7 @@ Biolabs, n.d.-a).
 <ProtocolCalculator
   number={6}
   title="Extension time."
-  workbookTab="ParB PCR"
+ 
   rows={[
     { key: "length", label: "Expected amplicon length", value: 0.6, unit: "kb", input: true },
     { key: "rate", label: "Extension rate (Q5: 0.33–0.5 min/kb; DreamTaq: 1 min/kb)", value: 0.5, unit: "min/kb", input: true },
@@ -7985,7 +7978,7 @@ extends at 1 min/kb.
 
 <ExpandableText title={<>Conjugation of pNBU2 Plasmids into <em>P. vulgatus</em></>}>
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/conjugation-of-pnbu2-plasmids-into-p-vulgatus-2.pdf" workbookTab="Conjugation" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/conjugation-of-pnbu2-plasmids-into-p-vulgatus-2.pdf" />
 
 #### Introduction
 
@@ -8156,7 +8149,7 @@ counterselection.
 <ProtocolCalcGrid
   number={2}
   title="Antibiotic volumes per culture or plate (C1 × V1 = C2 × V2)."
-  workbookTab="Conjugation"
+ 
   columns={[
     { key: "name", label: "Antibiotic", type: "text" },
     { key: "stock", label: "Stock (µg/mL)", type: "input" },
@@ -8221,7 +8214,7 @@ onwards.
 <ProtocolCalculator
   number={3}
   title="Subculture volumes."
-  workbookTab="Conjugation"
+ 
   rows={[
     { key: "vDonor", label: "Donor subculture volume (LB)", value: 25, unit: "mL", input: true },
     { key: "dDonor", label: "Donor dilution of the overnight culture (1 in …)", value: 100, unit: "fold", input: true },
@@ -8268,7 +8261,7 @@ stock (Table 4).
 <ProtocolCalculator
   number={4}
   title="Diluting 10× PBS to 1×."
-  workbookTab="Conjugation"
+ 
   rows={[
     { key: "vTotal", label: "Total volume of 1× PBS required", value: 570, unit: "mL", input: true },
     { key: "factor", label: "Concentration factor of the stock", value: 10, unit: "×", input: true },
@@ -8372,7 +8365,7 @@ Protocol" and then used as the standard.
 <ProtocolCalculator
   number={5}
   title="Colony counting and conjugation efficiency."
-  workbookTab="Conjugation"
+ 
   rows={[
     { key: "colonies", label: "Colonies counted on the plate", value: 48, unit: "CFU", input: true },
     { key: "dilution", label: "Dilution of the plated suspension (10⁻ˣ; enter x)", value: 4, unit: "–", input: true },
@@ -8419,7 +8412,7 @@ in the genome (Wang et al., 2000).
 <ProtocolCalculator
   number={6}
   title="Primer resuspension and working dilution."
-  workbookTab="Conjugation"
+ 
   rows={[
     { key: "nmol", label: "Amount of primer stated on the tube", value: 38.2, unit: "nmol", input: true },
     { key: "cStock", label: "Target stock concentration", value: 100, unit: "µM", input: true },
@@ -8696,7 +8689,7 @@ dilution: 100 × (10 / 100) = 10.0 µL of stock and 90.0 µL of MQ water.
 
 <ExpandableText title="Rhamnose Induction and Medium Optimization">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/rhamnose-induction-and-medium-optimization-3.pdf" workbookTab="Rhamnose induction" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/rhamnose-induction-and-medium-optimization-3.pdf" />
 
 #### Introduction
 
@@ -8788,7 +8781,7 @@ is that of the monohydrate and should be checked against the bottle.
 <ProtocolCalculator
   number={2}
   title="Mass of L-rhamnose for a stock solution."
-  workbookTab="Rhamnose induction"
+ 
   rows={[
     { key: "conc", label: "Stock concentration", value: 1, unit: "M", input: true },
     { key: "volume", label: "Stock volume", value: 1, unit: "mL", input: true },
@@ -8826,7 +8819,7 @@ medium. For 10 mM in 10 mL, 100 µL is added to 9.9 mL.
 <ProtocolCalculator
   number={3}
   title="Volume of rhamnose stock per culture (C1 × V1 = C2 × V2)."
-  workbookTab="Rhamnose induction"
+ 
   rows={[
     { key: "c1", label: "Stock concentration (C1)", value: 1000, unit: "mM", input: true },
     { key: "c2", label: "Required final concentration (C2)", value: 15, unit: "mM", input: true },
@@ -8855,7 +8848,7 @@ corresponds to 1.11 mM.
 <ProtocolCalculator
   number={4}
   title="Matching the rhamnose concentration to the glucose concentration."
-  workbookTab="Rhamnose induction"
+ 
   rows={[
     { key: "gGlucose", label: "Glucose concentration in the medium", value: 0.2, unit: "g/L", input: true },
     { key: "mGlucose", label: "Molar mass of glucose", value: 180.16, unit: "g/mol", input: true },
@@ -8989,7 +8982,7 @@ concentration, so that rhamnose can replace glucose on a mole-for-mole basis.
 
 <ExpandableText title="Plate Reader Sample Preparation">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/plate-reader-sample-preparation-2.pdf" workbookTab="Plate reader prep" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/plate-reader-sample-preparation-2.pdf" />
 
 #### Introduction
 
@@ -9119,7 +9112,7 @@ dilution factor.
 <ProtocolCalculator
   number={2}
   title="Dilution of the culture to the target OD₆₀₀."
-  workbookTab="Plate reader prep"
+ 
   rows={[
     { key: "od1", label: "Measured OD₆₀₀ of the overnight culture", value: 1.2, unit: "–", input: true },
     { key: "od2", label: "Target OD₆₀₀ in the measurement plate", value: 0.3, unit: "–", input: true },
@@ -9131,10 +9124,9 @@ dilution factor.
   ]}
 />
 
-When a whole plate is seeded at once, the volumes for every well are calculated
-in the 96-well seeding grid: `Protocol_Calculators.xlsx`, tab "Plate seeding".
-The measured OD₆₀₀ of each well is entered in the first grid, and the volume of
-culture and of medium for that well is read from the second and third grids.
+When a whole plate is seeded at once, the volume of culture and of medium for
+each well follows from the same two formulas, applied to that well's measured
+OD₆₀₀.
 
 <ProtocolNote>
 
@@ -9248,7 +9240,7 @@ wells per construct, 150.0 µL of culture is needed.
 
 <ExpandableText title="Promoter-Reporter Screen">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/promoter-reporter-screen-2.pdf" workbookTab="Promoter screen" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/promoter-reporter-screen-2.pdf" />
 
 #### Introduction
 
@@ -9360,7 +9352,7 @@ it.
 <ProtocolCalculator
   number={2}
   title="Plate layout: number of wells required."
-  workbookTab="Promoter screen"
+ 
   rows={[
     { key: "n", label: "Number of constructs and controls", value: 21, unit: "samples", input: true },
     { key: "bio", label: "Biological replicates per construct", value: 3, unit: "–", input: true },
@@ -9514,7 +9506,7 @@ usable range of the gain is roughly 70 to 90; readings below 1000 or above
 <ProtocolCalculator
   number={4}
   title="Normalized fluorescence."
-  workbookTab="Promoter screen"
+ 
   rows={[
     { key: "fSample", label: "Fluorescence of the sample well", value: 45000, unit: "RFU", input: true },
     { key: "fBlank", label: "Fluorescence of the medium-only blank", value: 1200, unit: "RFU", input: true },
@@ -9641,7 +9633,7 @@ corrected OD is 0.45 − 0.05 = 0.400. Blank-corrected: (45,000 − 1200) / 0.40
 
 <ExpandableText title="Fluorescence Microscopy">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/fluorescence-microscopy-2.pdf" workbookTab="Microscopy" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/fluorescence-microscopy-2.pdf" />
 
 #### Introduction
 
@@ -9727,7 +9719,7 @@ PBS.
 <ProtocolCalculator
   number={2}
   title="Resuspension of the cells to a defined OD₆₀₀."
-  workbookTab="Microscopy"
+ 
   rows={[
     { key: "od1", label: "Measured OD₆₀₀ of the culture", value: 1, unit: "–", input: true },
     { key: "od2", label: "Target OD₆₀₀ after resuspension", value: 0.5, unit: "–", input: true },
@@ -9750,7 +9742,7 @@ PBS.
 <ProtocolCalculator
   number={3}
   title="Agarose pad."
-  workbookTab="Microscopy"
+ 
   rows={[
     { key: "percent", label: "Agarose percentage (w/v)", value: 1.5, unit: "%", input: true },
     { key: "vSolution", label: "Volume of agarose solution to prepare", value: 5, unit: "mL", input: true },
@@ -9871,7 +9863,7 @@ At 350 µL per slide this gives 5000 / 350 = 14 slides.
 
 <ExpandableText title="Fitness Cost-Based Ranking of BSH Constructs">
 
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/fitness-cost-based-ranking-of-bsh-constructs.pdf" workbookTab="Fitness ranking" />
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/fitness-cost-based-ranking-of-bsh-constructs.pdf" />
 
 #### Introduction
 
@@ -10060,7 +10052,7 @@ that lag is indistinguishable from a fitness cost in the images.
 <ProtocolCalculator
   number={2}
   title="Normalization to OD₆₀₀ = 0.5 (OD1 × V1 = OD2 × V2)."
-  workbookTab="Fitness ranking"
+ 
   rows={[
     { key: "od1", label: "Measured OD₆₀₀ of the subculture (OD1)", value: 0.84, unit: "–", input: true },
     { key: "od2", label: "Target OD₆₀₀ (OD2)", value: 0.5, unit: "–", input: true },
@@ -10092,7 +10084,7 @@ or the size of the colonies reflects the construct and not the inoculum.
 <ProtocolCalculator
   number={3}
   title="Ten-fold dilution series."
-  workbookTab="Fitness ranking"
+ 
   rows={[
     { key: "vTransfer", label: "Volume transferred per step", value: 10, unit: "µL", input: true },
     { key: "vDiluent", label: "Medium already in each well", value: 90, unit: "µL", input: true },
@@ -10213,7 +10205,7 @@ numerous to count and are not used. The next dilution along is used instead.
 <ProtocolCalculator
   number={5}
   title="Colony-forming units per millilitre from a spot."
-  workbookTab="Fitness ranking"
+ 
   rows={[
     { key: "colonies", label: "Colonies counted in the spot", value: 24, unit: "CFU", input: true },
     { key: "vSpotUl", label: "Volume spotted", value: 5, unit: "µL", input: true },
@@ -10232,7 +10224,7 @@ numerous to count and are not used. The next dilution along is used instead.
 <ProtocolCalculator
   number={6}
   title="Relative yield, fitness cost and delay."
-  workbookTab="Fitness ranking"
+ 
   rows={[
     { key: "cConstruct", label: "CFU/mL of the strain carrying the construct", value: 4.8, unit: "× 10⁹ CFU/mL", input: true },
     { key: "cReference", label: "CFU/mL of the construct-free reference strain", value: 7.2, unit: "× 10⁹ CFU/mL", input: true },

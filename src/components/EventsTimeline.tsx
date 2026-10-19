@@ -4,6 +4,7 @@
 // to view it in a full-screen lightbox.
 import {
   Children,
+  CSSProperties,
   ReactElement,
   ReactNode,
   isValidElement,
@@ -44,20 +45,31 @@ function extractEvents(children: ReactNode) {
 interface ImageRotatorProps {
   images: string[];
   alt: string;
+  seed?: number;
 }
 
 // Cross-fades through an event's photos on a timer — the "revolving" preview
 // shown on the collapsed timeline card.
-function ImageRotator({ images, alt }: ImageRotatorProps) {
+function ImageRotator({ images, alt, seed = 0 }: ImageRotatorProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // Each card gets its own period and start offset so photos don't all swap in unison.
   useEffect(() => {
     if (images.length < 2) return;
-    const id = setInterval(() => {
+    const period = 6000 + ((seed * 613) % 3000);
+    const offset = (seed * 977) % period;
+    let id: ReturnType<typeof setInterval>;
+    const start = setTimeout(() => {
       setActiveIndex((index) => (index + 1) % images.length);
-    }, 3500);
-    return () => clearInterval(id);
-  }, [images.length]);
+      id = setInterval(() => {
+        setActiveIndex((index) => (index + 1) % images.length);
+      }, period);
+    }, offset + 500);
+    return () => {
+      clearTimeout(start);
+      clearInterval(id);
+    };
+  }, [images.length, seed]);
 
   if (images.length === 0) {
     return <span className="events-timeline-media events-timeline-media-empty" aria-hidden="true" />;
@@ -150,6 +162,96 @@ function EventGallery({ images, onOpen }: EventGalleryProps) {
   );
 }
 
+// The row's line: a gentle wave that drops into a small loop at each card, the
+// loop's lowest point being the card's punch hole (columns are equal width, so
+// the holes sit at 1/6, 1/2 and 5/6 of the width). Drawn in real pixels
+// (measured) so the loops stay round.
+const LINE_HALF_HEIGHT = 40;
+const LINE_HEIGHT = 110;
+const LOOP_A = 6;
+const LOOP_B = 22; // loop depth is 2 * LOOP_B; the card hole sits at that depth
+
+function buildRowPath(width: number) {
+  const S = width / 3;
+  const markers = [S / 2, S * 1.5, S * 2.5];
+  const loopHalf = LOOP_A * Math.PI;
+  const pts: string[] = [];
+  const add = (x: number, y: number) =>
+    pts.push(`${x.toFixed(1)},${(LINE_HALF_HEIGHT + y).toFixed(1)}`);
+
+  function wave(x0: number, x1: number, sign: number) {
+    const n = Math.max(8, Math.round((x1 - x0) / 8));
+    for (let i = 0; i <= n; i++) {
+      const u = i / n;
+      add(x0 + (x1 - x0) * u, sign * 5 * Math.sin(Math.PI * u));
+    }
+  }
+  // The loop's right-hand half (bottom → back up to the line) is also returned
+  // separately: drawn above the card, it's the strand that has come through the hole.
+  const front: string[] = [];
+  function loop(xm: number) {
+    const half: string[] = [];
+    for (let i = 0; i <= 64; i++) {
+      const th = -Math.PI + (2 * Math.PI * i) / 64;
+      const x = xm + LOOP_A * th - LOOP_B * Math.sin(th);
+      const y = LOOP_B * (1 + Math.cos(th));
+      add(x, y);
+      if (th >= 0) half.push(`${x.toFixed(1)},${(LINE_HALF_HEIGHT + y).toFixed(1)}`);
+    }
+    front.push("M" + half.join(" L"));
+  }
+
+  wave(0, markers[0] - loopHalf, 1);
+  loop(markers[0]);
+  wave(markers[0] + loopHalf, markers[1] - loopHalf, -1);
+  loop(markers[1]);
+  wave(markers[1] + loopHalf, markers[2] - loopHalf, 1);
+  loop(markers[2]);
+  wave(markers[2] + loopHalf, width, -1);
+  return { full: "M" + pts.join(" L"), front: front.join(" ") };
+}
+
+function RowLine() {
+  const ref = useRef<SVGSVGElement | null>(null);
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const update = () => setWidth(el.clientWidth || el.getBoundingClientRect().width);
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const paths = useMemo(() => (width > 0 ? buildRowPath(width) : null), [width]);
+  const viewBox = `0 0 ${width || 1} ${LINE_HEIGHT}`;
+
+  return (
+    <>
+      <svg ref={ref} className="events-row-line" viewBox={viewBox} aria-hidden="true">
+        {paths && <path d={paths.full} />}
+      </svg>
+      <svg
+        className="events-row-line events-row-line-front"
+        viewBox={viewBox}
+        aria-hidden="true"
+      >
+        {paths && <path d={paths.front} />}
+      </svg>
+    </>
+  );
+}
+
+const EVENTS_PER_ROW = 3;
+// Per-card accents from the site palette: marker, tag, card back and offset shadow share a colour,
+// and each card sits at a slightly different tilt until hovered.
+// Every colour must stand out on the lavender page background (so no lavender); --ev-ink is the text colour on top.
+const CARD_COLORS = ["#2fa4a9", "#f1c3d4", "#6e5b9e", "#2f4f86"];
+const CARD_INKS = ["#33283f", "#33283f", "#ffffff", "#ffffff"];
+const CARD_TILTS = [-2.5, 2, -1.5, 3];
+
 interface LightboxState {
   images: string[];
   index: number;
@@ -164,6 +266,27 @@ export function EventsTimeline({ children }: EventsTimelineProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [lightbox, setLightbox] = useState<LightboxState | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
+  // Touch devices have no hover, so the first tap flips a card and the second opens it.
+  const [flipped, setFlipped] = useState<number | null>(null);
+
+  // Snake layout: events are chunked into rows; odd rows run right-to-left (via CSS).
+  const rows = useMemo(() => {
+    const out: { event: (typeof events)[number]; index: number }[][] = [];
+    events.forEach((event, index) => {
+      const r = Math.floor(index / EVENTS_PER_ROW);
+      (out[r] ??= []).push({ event, index });
+    });
+    return out;
+  }, [events]);
+
+  function handleCardClick(index: number) {
+    const noHover = window.matchMedia("(hover: none)").matches;
+    if (noHover && flipped !== index) {
+      setFlipped(index);
+      return;
+    }
+    setOpenIndex(index);
+  }
 
   const openEvent = openIndex !== null ? events[openIndex] : null;
 
@@ -207,33 +330,73 @@ export function EventsTimeline({ children }: EventsTimelineProps) {
 
   return (
     <>
-      <ol className="events-timeline">
-        {events.map((event, index) => (
-          <li key={event.title} className="events-timeline-item">
-            <span className="events-timeline-marker" />
-            <button
-              type="button"
-              className="events-timeline-card"
-              onClick={() => setOpenIndex(index)}
-            >
-              <span className="events-timeline-card-media">
-                <ImageRotator images={event.images} alt={event.title} />
-              </span>
-              <span className="events-timeline-card-body">
-                <span className="events-timeline-date">
-                  {event.date}
-                  {event.location ? ` · ${event.location}` : ""}
+      <div className="events-timeline">
+        {rows.map((row, rowIndex) => (
+          <ol
+            key={rowIndex}
+            className={`events-row${rowIndex % 2 === 1 ? " events-row-rtl" : ""}${
+              rowIndex < rows.length - 1 ? " events-row-connected" : ""
+            }${rowIndex > 0 ? " events-row-continued" : ""}`}
+          >
+            <RowLine />
+            {rowIndex < rows.length - 1 && (
+              <svg
+                className="events-row-turn"
+                viewBox="0 0 40 420"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M0,0 C26,0 38,8 38,30 L38,390 C38,412 26,420 0,420"
+                  vectorEffect="non-scaling-stroke"
+                />
+              </svg>
+            )}
+            {row.map(({ event, index }) => (
+              <li
+                key={event.title}
+                className="events-timeline-item"
+                style={
+                  {
+                    "--ev-c": CARD_COLORS[index % CARD_COLORS.length],
+                    "--ev-ink": CARD_INKS[index % CARD_INKS.length],
+                    "--ev-tilt": `${CARD_TILTS[index % CARD_TILTS.length]}deg`,
+                  } as CSSProperties
+                }
+              >
+                <span className="events-timeline-number">
+                  {String(index + 1).padStart(2, "0")}
+                  <span className="events-timeline-number-date">{event.date}</span>
                 </span>
-                <span className="events-timeline-title">{event.title}</span>
-                {event.summary && (
-                  <span className="events-timeline-summary-text">{event.summary}</span>
-                )}
-                <span className="events-timeline-readmore">Read more →</span>
-              </span>
-            </button>
-          </li>
+                <button
+                  type="button"
+                  className={`events-timeline-card${flipped === index ? " is-flipped" : ""}`}
+                  onClick={() => handleCardClick(index)}
+                >
+                  <span className="events-timeline-card-inner">
+                    <span className="events-timeline-face events-timeline-front">
+                      <span className="events-timeline-card-media">
+                        <ImageRotator images={event.images} alt={event.title} seed={index} />
+                      </span>
+                      <span className="events-timeline-card-body">
+                        {event.location && (
+                          <span className="events-timeline-tag">{event.location}</span>
+                        )}
+                        <span className="events-timeline-title">{event.title}</span>
+                      </span>
+                    </span>
+                    <span className="events-timeline-face events-timeline-back">
+                      <span className="events-timeline-title">{event.title}</span>
+                      <span className="events-timeline-summary-text">{event.summary ?? "Click to read more."}</span>
+                      <span className="events-timeline-readmore">Read more →</span>
+                    </span>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ol>
         ))}
-      </ol>
+      </div>
 
       {openEvent && (
         <div className="events-modal-backdrop" onClick={() => setOpenIndex(null)}>

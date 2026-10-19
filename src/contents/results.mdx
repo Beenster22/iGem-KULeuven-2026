@@ -3,14 +3,33 @@
 <span data-toc-collapsible hidden />
 
 {/* Page structure laid out with Claude Opus 5 (Anthropic), 2026-10-17, from the team's sketch of the results page (Notes_261017). */}
-{/* The title sits top left, Elle greets from the right — both in the page header box itself, see App.tsx's HEADER_ASIDE — the Toolkit / Therapeutics switch and an index of the chosen pipeline's sections come first (the headline success-card row that used to sit here was dropped, team feedback), then the pipeline's sections one at a time (ResultsPipelines). */}
+{/* The title sits top left, Elle greets from the right — both in the page header box itself, see App.tsx's HEADER_ASIDE — the Toolkit / Therapeutics switch comes first, then the four headline success cards (passed in as `highlights`, team feedback that the per-pipeline section timeline that used to sit there duplicated the page index on the left), then the pipeline's sections one at a time (ResultsPipelines). */}
 {/* The MIC write-up is the team's own text, carried over unchanged from the previous version of this page. */}
-{/* TO FILL IN: every "Placeholder" paragraph; every <FigureSlot>, which names the figure or table that belongs there and is meant to be deleted once the real one is in; the explanation line on each <Takeaway>. */}
+{/* TO FILL IN: every "Placeholder" paragraph; every <FigureSlot>, which names the figure or table that belongs there and is meant to be deleted once the real one is in; the explanation line on each <Takeaway>; and the four <SuccessCard> labels at the top. */}
+{/* A <SuccessCard>'s `to` is the slug of its target heading, so "### Bile salt deconjugation by 15 bile salt hydrolases" is reached with to="bile-salt-deconjugation-by-15-bile-salt-hydrolases". */}
 {/* Keep every comment on this page to a single line: prettier reflows a multi-line MDX comment into markdown and breaks the page. */}
+{/* TODO: video embeds to place in this page later (team hasn't said where yet) — iGEM Video Universe embed URLs: https://video.igem.org/videos/embed/dWJa7LBctfPAGB8QPDXhvg, https://video.igem.org/videos/embed/gBeDyXZZKVxvwyZTo38Tq6, https://video.igem.org/videos/embed/9i3W6jnN4irP35H7rLDVsf, https://video.igem.org/videos/embed/11kRHBxTQvefLXuvDze9R4, https://video.igem.org/videos/embed/f6maVp5MxpSDAg6mdFnvJR, https://video.igem.org/videos/embed/fbGD954QxGQdFpntHHXvcM, https://video.igem.org/videos/embed/qCmsSjUFt6WG2g8ph5Yx8z, https://video.igem.org/videos/embed/abexQymKsjoXPfZysApdaK, https://video.igem.org/videos/embed/iHfKxTpmi6pDmgAvWdvxgW, https://video.igem.org/videos/embed/joreGxz8Htd8skRhSP78vX, https://video.igem.org/videos/embed/bEUBpCpjEv2giowrYT5vv3, https://video.igem.org/videos/embed/7Xzy1fHKnkrCJQEjRW5at4, https://video.igem.org/videos/embed/aBoqrR1L116wfX2eyAr7qx, https://video.igem.org/videos/embed/sKrmhyy4S6uCrCBBRZFUpY, https://video.igem.org/videos/embed/69kRExLGtzLyWpBuzciHfm */}
 
-{/* The pipeline switch and the index of the chosen pipeline's sections open the page, see ResultsPipelines. */}
+{/* The pipeline switch opens the page, then the success cards, passed in as `highlights`, see ResultsPipelines. */}
 
-<ResultsPipelines>
+<ResultsPipelines
+  highlights={
+    <SuccessCards>
+      <SuccessCard to="antibiotic-susceptibility-of-p-vulgatus">
+        Three antibiotics inhibit <em>P. vulgatus</em>
+      </SuccessCard>
+      <SuccessCard to="a-characterized-promoter-library-for-p-vulgatus">
+        A 20/20 promoter library
+      </SuccessCard>
+      <SuccessCard to="screening-bsh-activity-on-bile-salt-plates">
+        BSH activity on bile salt plates
+      </SuccessCard>
+      <SuccessCard to="bile-salt-deconjugation-by-15-bile-salt-hydrolases">
+        5 of 15 hydrolases are active
+      </SuccessCard>
+    </SuccessCards>
+  }
+>
 
 <SectionItem label="Toolkit">
 
@@ -20,13 +39,9 @@
 
 ### Introduction
 
-Placeholder — replace with the introduction to the toolkit pipeline, ending in
-a pointer to the <Link to="/experimental-overview">experimental overview</Link>
-for how these experiments fit together.
+{/* The wet lab wheel, as on the Project description page (same seven sections, keep them in step); layout="side" (team feedback, 2026-10-19 — the "dropdown" layout left nothing showing until a wedge was clicked) always shows the selected section's text beside the wheel, starting with the first one. */}
 
-{/* The wet lab wheel, as on the Project description page (same seven sections, keep them in step), added with Claude Opus 5.5 (Anthropic), 2026-10-19: clicking a wedge drops down a short description of that section underneath. */}
-
-<WheelSelector layout="dropdown" label="Toolkit sections">
+<WheelSelector layout="side" label="Toolkit sections" id="toolkit-sections">
 
 <SectionItem label="Strain selection">
 
@@ -1222,7 +1237,7 @@ so we treat it as unreliable. Its 41.9 ± 1.1 h lag is
 the latest in the study and fits the slow, inconsistent behaviour this
 medium showed throughout.
 
-**Experiment 4: Reducing lag times.** On Laurie Comstock's advice that most
+**Experiment 4: Reducing lag times.** On <Link to="/human-practices#laurie-comstock">Laurie Comstock's</Link> advice that most
 of an overnight culture was dead by the time it is subcultured, we inoculated
 both strains in the morning from colonies on a fresh plate. This cut the
 isolate's mGAM lag from 24.2 h to 6.0 h, a four-fold reduction, while the
@@ -1336,8 +1351,8 @@ bacteria and fungi, helping doctors choose the right medicine to treat infection
 #### Materials and methods
 
 _P. vulgatus_ DSM1447 was obtained from the research group Molecular Biotechnology of Plants and
-Micro-organisms from KU Leuven by Matt Herdman. The clinical isolate _P. vulgatus_ RCC1806 was obtained from
-the Raes lab of Bioinformatics and (Eco-)Systems Biology by Ruben Vazquez-Uribe. Ampicillin, chloramphenicol,
+Micro-organisms from KU Leuven by <Link to="/human-practices#matthew-herdman">Matt Herdman</Link>. The clinical isolate _P. vulgatus_ RCC1806 was obtained from
+the Raes lab of Bioinformatics and (Eco-)Systems Biology by <Link to="/human-practices#ruben-vazquez-uribe">Ruben Vazquez-Uribe</Link>. Ampicillin, chloramphenicol,
 erythromycin, metronidazole, kanamycin, spectinomycin, tetracycline and gentamicin were tested, together with
 simvastatin — not an antibiotic, but reported to inhibit the growth of _P. vulgatus_
 DSM1447[^mic-escalante]. Starting concentrations for the two-fold dilution series in mGAM were taken from
@@ -1680,9 +1695,9 @@ Placeholder — what the library gives a future team.
 
 ### Introduction
 
-Placeholder — replace with the introduction to the therapeutics pipeline,
-ending in a pointer to the <Link to="/experimental-overview">experimental overview</Link>
-for how these experiments fit together.
+{/* The team's figure of the therapeutics pipeline, added with Claude Opus 5 (Anthropic), 2026-10-19: its five numbered steps are clickable — 1-4 open that step's write-up underneath, 5 sends the reader to the conjugation section of the Toolkit wheel above. Text from the team's "Experimental overview of therapeutics" document. */}
+
+<TherapeuticsOverview />
 
 <div className="all-data-label">All data</div>
 

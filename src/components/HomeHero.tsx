@@ -164,9 +164,14 @@ function layerTarget(index: number, stageIndex: number) {
 // Plays once, muted and without player chrome, as a full-bleed background.
 // api=1 turns on the PeerTube embed's postMessage API, which is how the end
 // of playback is detected below.
+// Edited with Claude Sonnet 5 (Anthropic), 2026-10-19: re-exported on a wide
+// 2560x1080 (~2.37:1) canvas instead of 16:9, so a wide/short browser window
+// no longer has to crop into the subject to fill edge-to-edge — see
+// App.css's .home-hero-embed (HOME_HERO_ASPECT there must match this
+// video's and FINAL_FRAME_SRC's actual pixel dimensions).
 const HERO_VIDEO_ORIGIN = "https://video.igem.org";
 const HERO_VIDEO_EMBED_SRC =
-  `${HERO_VIDEO_ORIGIN}/videos/embed/gPW5SeamwAPrw1aD6Z6NK7` +
+  `${HERO_VIDEO_ORIGIN}/videos/embed/6YDMnnzDgLhNPGTqnq4dag` +
   "?autoplay=1&muted=1&loop=0&controls=0&controlBar=0&title=0&warningTitle=0&peertubeLink=0&p2p=0&api=1";
 
 // The frame the intro video ends on (logo + banner) — once the video
@@ -174,11 +179,11 @@ const HERO_VIDEO_EMBED_SRC =
 // or sitting idle as a paused player, since a plain <img> is cheaper to
 // leave on screen indefinitely and guarantees a crisp result regardless of
 // how the video's own last frame compresses. Must be an actual frame-grab
-// of the video's real ending (same framing/zoom as its last frame) — an
-// unrelated banner graphic here causes a visible jump at the handoff
-// (2026-10-18 team feedback).
+// of the video's real ending (same framing/zoom as its last frame, and same
+// 2560x1080 canvas) — an unrelated banner graphic here, or a mismatched
+// canvas, causes a visible jump at the handoff (2026-10-18 team feedback).
 const FINAL_FRAME_SRC =
-  "https://static.igem.wiki/teams/6299/wiki/home-page/empower-logo-still.avif";
+  "https://static.igem.wiki/teams/6299/wiki/home-page/empower-logo-still-wide.avif";
 
 // The PeerTube embed talks to its parent page over jschannel: JSON strings
 // with a "peertube::<method>" name. It queues its notifications until the

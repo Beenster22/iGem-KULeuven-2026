@@ -36,9 +36,10 @@ type MegaMenuGroup =
 
 // Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-18
 // Purpose: team request — 3 tiles per row, never 4; a folder whose tile
-// count isn't a multiple of 3 gets a shorter trailing row of 1 or 2,
-// centered rather than left-aligned (see .mega-menu-row--centered) or
-// padded with filler content. A menuDivider tile still starts a fresh row
+// count isn't a multiple of 3 gets a shorter trailing row of 1 or 2, its
+// tiles lined up under the first column(s) above (see
+// .mega-menu-row--centered — edited 2026-10-19: it used to centre them),
+// not padded with filler content. A menuDivider tile still starts a fresh row
 // of its own (see Dry Lab... though nothing uses it right now).
 function layoutMegaMenu(folder: MegaMenuEntry[]): MegaMenuGroup[] {
   const groups: MegaMenuGroup[] = [];
@@ -75,6 +76,36 @@ export function Navbar() {
   // CSS :hover) to signal it's interactive, it no longer opens the menu.
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
+
+  // Generated with Claude Opus 5 (Anthropic), 2026-10-19 (team feedback: a
+  // home-page sentence sat right under the navigation bar): --home-nav-h is
+  // what every home section leaves clear at the top, and it was a flat 64px
+  // (see HOME SNAP SECTIONS in App.css), which is short whenever the bar
+  // wraps to two rows on a narrow window. Measured here instead, so those
+  // sections always start below the bar as it really is. Taken off the body
+  // when the bar goes, leaving the stylesheet's own value.
+  useEffect(() => {
+    const bar = navRef.current?.querySelector(".navbar-empower");
+    if (!bar) return;
+    const measure = () =>
+      document.body.style.setProperty(
+        "--home-nav-h",
+        `${Math.round(bar.getBoundingClientRect().height)}px`,
+      );
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(bar);
+    window.addEventListener("resize", measure);
+    // The bar grows a row taller once the logo and the fonts land, which
+    // does not always reach the observer — measure again as it settles.
+    const timers = [50, 300, 1000].map((ms) => window.setTimeout(measure, ms));
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", measure);
+      timers.forEach(window.clearTimeout);
+      document.body.style.removeProperty("--home-nav-h");
+    };
+  }, []);
 
   // Closing must also drop keyboard focus from whatever's focused inside the
   // navbar — otherwise the clicked dropdown toggle keeps its CSS :focus

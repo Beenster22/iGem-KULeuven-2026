@@ -27,6 +27,12 @@ easier engineering of *Bacteroides* species.
 *Checking P. vulgatus before engineering it, assembling genetic parts with a realistic chance of
 working in Bacteroides, and building the codon tool we wished already existed.*
 
+<SoftwareDownload
+  name="Bacteroides codon optimization tool"
+  path="software/codon-optimization-tool"
+  description="Our free, open-source codon tool for Bacteroides. Details in section 1.3."
+/>
+
 ### 1.1 Virulence analysis
 
 *Phocaeicola vulgatus* is a non-model organism that is sparsely represented in curated databases.
@@ -111,7 +117,7 @@ Unlike the model organism *E. coli*, Bacteroidaceae initiate transcription from 
 approach was then to borrow from the closest well-characterized relatives: *B. thetaiotaomicron* and
 *B. fragilis*. A short literature survey yielded twenty-four promoters validated within *Bacteroides*
 spp. (Table 2), from which we selected 5, keeping time constraints in mind. Each was combined with 4
-reporters to rigorously test expression strength, resulting in a library of twenty constructs (see the
+reporters to rigorously test expression strength, resulting in a library of twenty constructs (<Link to="/results#a-characterized-promoter-library-for-p-vulgatus">results</Link>; see the
 [Promoter-Reporter Screen](/protocols#promoter-reporter-screen) protocol for the assay itself).
 
 Characterized inducible promoters do exist for *Bacteroides*, but validating an inducible system means
@@ -233,6 +239,12 @@ While planning our constructs in the wet lab we ran into a gap. There existed no
 perform codon optimization or harmonization for *Bacteroides* species. Existing tools target
 *E. coli*, yeast or mammalian hosts, and their defaults are a poor fit for an AT-rich anaerobe.
 Since we needed one ourselves, we built it and made it freely available.
+
+<SoftwareDownload
+  name="Bacteroides codon optimization tool"
+  path="software/codon-optimization-tool"
+  description="Python command-line tool for codon optimization and harmonization in Bacteroides. Runs on your own machine."
+/>
 
 #### Optimization versus harmonization
 
@@ -453,7 +465,7 @@ extended the panel well beyond these, to agents that would realistically be used
 Gram-negative anaerobe. This was done so that the resulting profile could support a genuine clinical
 fallback rather than only resolving the in silico conflict.
 
-Together these analyses gave us a foundation to rely on before starting experiments: a safety profile
+Together these analyses gave us a foundation to rely on before starting experiments: a <Link to="/dry-lab#1-1-virulence-analysis">safety profile</Link>
 for a strain with little published characterization, a set of genetic parts with a realistic prospect
 of functioning in *P. vulgatus*, and an empirically grounded susceptibility profile.
 

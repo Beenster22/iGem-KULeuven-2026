@@ -227,6 +227,29 @@ a[data-footnote-ref]:focus {
   overflow-wrap: break-word;
 }
 
+/* The reference a reader just followed from a citation (or landed on through a
+   shared #user-content-fn-n link) is :target, so it gets a highlight that
+   fades from strong to a soft tint and then stays. */
+.page-references li:target {
+  background: rgba(47, 164, 169, 0.18);
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0 0.4rem rgba(47, 164, 169, 0.18);
+  animation: reference-flash 1.6s ease-out;
+}
+
+@keyframes reference-flash {
+  from {
+    background: rgba(47, 164, 169, 0.6);
+    box-shadow: 0 0 0 0.4rem rgba(47, 164, 169, 0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-references li:target {
+    animation: none;
+  }
+}
+
 .page-references li::marker {
   color: var(--color-text);
   font-weight: 700;
@@ -615,13 +638,16 @@ a[data-footnote-ref]:focus {
   flex: 1 1 calc((100% - 1.7rem) / 3);
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request): a
+   short trailing row now starts at the left, its tiles lining up under the
+   first ones of the row above (e.g. Safety under Description), instead of
+   being centred. (The class name is kept from when it centred them.) */
 .mega-menu-row--centered {
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 /* A short row's tiles stay the same width as a full row's (not stretched
-   to fill the leftover space) — that's what makes "centered" read as a
-   smaller row, not just left-aligned tiles with room to spare. */
+   to fill the leftover space), so they line up with the columns above. */
 .mega-menu-row--centered .mega-menu-link {
   flex: 0 0 calc((100% - 1.7rem) / 3);
 }
@@ -2417,15 +2443,17 @@ a[data-footnote-ref]:focus {
 }
 
 .section-progress-heading {
+  /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-19: now the name of the
+     current page, big and bold so a reader arriving from a link sees at once
+     where they are. */
   margin: 0 0 0.9rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
   color: var(--color-text);
-  opacity: 0.55;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(51, 40, 63, 0.15);
+  border-bottom: 2px solid rgba(51, 40, 63, 0.25);
 }
 
 .section-progress ul {
@@ -2571,8 +2599,7 @@ a[data-footnote-ref]:focus {
    Purpose: "CRISPR construct design" sat as a plain row at the bottom of a
    long Therapeutics list, directly under two indented sub-sub rows — easy to
    miss (team feedback). Targeted by its known slug rather than by changing
-   the heading text, so its anchor and the link to it from
-   experimental-overview.mdx are untouched. Bolder, a touch bigger, and set
+   the heading text, so its anchor and any links to it are untouched. Bolder, a touch bigger, and set
    off with a divider so it reads as its own result instead of blending into
    the hydrolase section above it. */
 .section-progress a[href="#crispr-construct-design"] .section-progress-label {
@@ -2786,6 +2813,24 @@ a[data-footnote-ref]:focus {
   pointer-events: none;
 }
 
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-10-19
+   Purpose: the hub's text alternative to the bacterium (WheelSelector's
+   hubLabel prop), used by the PMOS hypothesis figure. */
+.wheel-selector-hub-label {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  fill: #33283f;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* The small icon shown above a wedge's label when its SectionItem has an
+   `icon` prop (PMOS hypothesis figure). */
+.wheel-selector-wedge-icon {
+  pointer-events: none;
+}
+
 .wheel-selector-selected {
   fill: none;
   stroke: #33283f;
@@ -2839,48 +2884,38 @@ a[data-footnote-ref]:focus {
 }
 
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-10-19
-   Purpose: the "dropdown" wheel (WheelSelector layout="dropdown", results
-   page): the "side" wheel's size, its selected wedge turning to the bottom
-   to point down at a panel that drops open under it. Nothing is selected
-   until a wedge is clicked, so the outline and pointer wait until then. */
-.wheel-selector--dropdown {
+   Purpose: shared bits of the two "nothing selected until clicked" wheels —
+   "dropdown" (results page), whose panel grows down from underneath, and
+   "side-dropdown" (added 2026-10-19, PMOS hypothesis figure), whose panel
+   grows out sideways instead, so the figure doesn't push the rest of the
+   page down while closed. The outline and pointer wait for a click too. */
+.wheel-selector--toggle {
   gap: 1rem;
 }
 
-.wheel-selector--dropdown .wheel-selector-svg {
+.wheel-selector--toggle .wheel-selector-svg {
   width: min(100%, 320px);
 }
 
-.wheel-selector--dropdown .wheel-selector-selected,
-.wheel-selector--dropdown .wheel-selector-pointer {
+.wheel-selector--toggle .wheel-selector-selected,
+.wheel-selector--toggle .wheel-selector-pointer {
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
-.wheel-selector--dropdown.is-open .wheel-selector-selected,
-.wheel-selector--dropdown.is-open .wheel-selector-pointer {
+.wheel-selector--toggle.is-open .wheel-selector-selected,
+.wheel-selector--toggle.is-open .wheel-selector-pointer {
   opacity: 1;
   transition-delay: 0.35s;
 }
 
-/* Opens by growing its one grid row from 0 to its content's height. */
-.wheel-selector-dropdown {
-  display: grid;
-  grid-template-rows: 0fr;
-  width: min(100%, 40rem);
-  transition: grid-template-rows 0.45s cubic-bezier(0.45, 0, 0.2, 1);
-}
-
-.wheel-selector--dropdown.is-open .wheel-selector-dropdown {
-  grid-template-rows: 1fr;
-}
-
 .wheel-selector-dropdown-inner {
   min-height: 0;
+  min-width: 0;
   overflow: hidden;
 }
 
-.wheel-selector--dropdown .wheel-selector-content {
+.wheel-selector--toggle .wheel-selector-content {
   padding: 1.25rem 1.5rem;
   border: 2px solid rgba(51, 40, 63, 0.18);
   border-radius: 1rem;
@@ -2889,11 +2924,11 @@ a[data-footnote-ref]:focus {
   animation: wheel-selector-dropdown-in 0.35s ease;
 }
 
-.wheel-selector--dropdown .wheel-selector-content > :first-child {
+.wheel-selector--toggle .wheel-selector-content > :first-child {
   margin-top: 0;
 }
 
-.wheel-selector--dropdown .wheel-selector-content > :last-child {
+.wheel-selector--toggle .wheel-selector-content > :last-child {
   margin-bottom: 0;
 }
 
@@ -2906,26 +2941,94 @@ a[data-footnote-ref]:focus {
 
 @media (prefers-reduced-motion: reduce) {
   .wheel-selector-dropdown,
-  .wheel-selector--dropdown .wheel-selector-selected,
-  .wheel-selector--dropdown .wheel-selector-pointer {
+  .wheel-selector--toggle .wheel-selector-selected,
+  .wheel-selector--toggle .wheel-selector-pointer {
     transition: none;
   }
 
-  .wheel-selector--dropdown .wheel-selector-content {
+  .wheel-selector--toggle .wheel-selector-content {
     animation: none;
   }
 }
 
-/* Too narrow to read a paragraph beside the wheel: it goes back under it,
-   still pointing right — the pointer is part of the drawing. */
+/* "dropdown" (results page): opens by growing its one grid row from 0 to
+   its content's height, underneath the wheel. */
+.wheel-selector-dropdown {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: min(100%, 40rem);
+  transition: grid-template-rows 0.45s cubic-bezier(0.45, 0, 0.2, 1);
+}
+
+.wheel-selector--dropdown.is-open .wheel-selector-dropdown {
+  grid-template-rows: 1fr;
+}
+
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-10-19
+   Purpose: "side-dropdown" (PMOS hypothesis figure, project description
+   page) — the "side" wheel's row layout, but nothing is selected at first
+   and the panel grows out of the wheel's right-hand side on click instead
+   of always sitting there, so the collapsed figure takes up less room. */
+.wheel-selector--side-dropdown {
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.wheel-selector--side-dropdown .wheel-selector-svg {
+  flex: none;
+  width: clamp(200px, 38%, 320px);
+}
+
+/* Opens by growing its one grid column from 0 to its content's width —
+   overrides the base .wheel-selector-dropdown rule's row-based collapse,
+   which would otherwise clip this to 0 height regardless of its width. */
+.wheel-selector-dropdown--side {
+  display: grid;
+  grid-template-rows: none;
+  grid-template-columns: 0fr;
+  width: auto;
+  flex: 1 1 20rem;
+  min-width: 0;
+  transition: grid-template-columns 0.45s cubic-bezier(0.45, 0, 0.2, 1);
+}
+
+.wheel-selector--side-dropdown.is-open .wheel-selector-dropdown--side {
+  grid-template-columns: 1fr;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wheel-selector-dropdown--side {
+    transition: none;
+  }
+}
+
+/* Too narrow for the wheel and an open panel side by side: the panel goes
+   back underneath, growing down instead of sideways. */
 @media (max-width: 767.98px) {
-  .wheel-selector--side {
+  .wheel-selector--side,
+  .wheel-selector--side-dropdown {
     flex-direction: column;
     gap: 1.5rem;
   }
 
-  .wheel-selector--side .wheel-selector-svg {
+  .wheel-selector--side .wheel-selector-svg,
+  .wheel-selector--side-dropdown .wheel-selector-svg {
     width: min(100%, 320px);
+  }
+
+  .wheel-selector-dropdown--side {
+    grid-template-columns: none;
+    grid-template-rows: 0fr;
+    width: 100%;
+    flex: none;
+    transition: grid-template-rows 0.45s cubic-bezier(0.45, 0, 0.2, 1);
+  }
+
+  .wheel-selector--side-dropdown.is-open .wheel-selector-dropdown--side {
+    grid-template-columns: none;
+    grid-template-rows: 1fr;
   }
 }
 
@@ -3161,93 +3264,238 @@ a[data-footnote-ref]:focus {
   opacity: 0.7;
 }
 
-/* EVENTS TIMELINE */
+/* EVENTS TIMELINE
+   Snaking timeline: rows of three cards, row 1 runs left→right, row 2
+   right→left, row 3 left→right. A line through each row's markers joins to
+   the next row with a rounded U-turn. Cards flip on hover to show a short
+   blurb; clicking opens the detail view. */
 .events-timeline {
-  position: relative;
-  list-style: none;
+  --ev-line: #6b5d85;
+  --ev-line-y: calc(3rem + 8px);
+  --ev-border: #33283f;
+  --ev-line-back: #a496c4;
+  --ev-row-gap: 3.5rem;
+  --ev-turn: 2.5rem;
   margin: 2rem 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
 }
 
-.events-timeline::before {
+[data-theme="dark"] .events-timeline {
+  --ev-border: #eaf4f5;
+  --ev-line-back: #7d6ca8;
+  --ev-line: #c9bde8;
+}
+
+.events-row {
+  position: relative;
+  list-style: none;
+  margin: 0 0 var(--ev-row-gap);
+  padding: 0 var(--ev-turn);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+
+.events-row:last-child {
+  margin-bottom: 0;
+}
+
+.events-row-rtl {
+  direction: rtl;
+}
+
+/* line through the markers */
+.events-row-line,
+.events-row-turn {
+  position: absolute;
+  fill: none;
+  stroke: var(--ev-line);
+  stroke-width: 4px;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+/* The wave covers the grid's content box so its zero-crossings land exactly
+   on the three marker centres (columns are equal width). Short straight
+   stubs fill the gap to the row edge where no U-turn is attached. */
+.events-row-line {
+  top: calc(var(--ev-line-y) - 40px);
+  left: var(--ev-turn);
+  width: calc(100% - 2 * var(--ev-turn));
+  height: 110px;
+  overflow: visible;
+  stroke-linejoin: round;
+}
+
+.events-row::before,
+.events-row::after {
   content: "";
   position: absolute;
-  top: 4px;
-  bottom: 4px;
-  left: 27px;
-  width: 2px;
-  background-color: rgba(51, 40, 63, 0.15);
+  top: calc(var(--ev-line-y) - 2px);
+  width: var(--ev-turn);
+  height: 4px;
+  border-radius: 2px;
+  background-color: var(--ev-line);
+  display: none;
+}
+
+.events-row:not(.events-row-continued)::before {
+  display: block;
+  left: 0;
+}
+
+.events-row:not(.events-row-connected)::after {
+  display: block;
+  right: 0;
+}
+
+.events-row-rtl:not(.events-row-connected)::after {
+  right: auto;
+  left: 0;
+}
+
+/* U-turn down to the next row's line */
+.events-row-line-front {
+  z-index: 5;
+}
+
+.events-row-turn {
+  top: var(--ev-line-y);
+  right: 0;
+  width: var(--ev-turn);
+  height: calc(100% + var(--ev-row-gap));
+  overflow: visible;
+}
+
+.events-row-rtl .events-row-turn {
+  right: auto;
+  left: 0;
+  transform: scaleX(-1);
 }
 
 .events-timeline-item {
   position: relative;
-  padding-left: 4rem;
-}
-
-.events-timeline-marker {
-  position: absolute;
-  left: 20px;
-  top: 20px;
-  z-index: 1;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background-color: var(--color-page-bg);
-  border: 2px solid rgba(51, 40, 63, 0.35);
-}
-
-/* The collapsed card is itself a <button> so the whole thing, not just the
-   "Read more" label, is a single click/keyboard target. */
-.events-timeline-card {
+  direction: ltr;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1.25rem;
+  padding: 0 1rem;
+}
+
+.events-timeline-number {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 3rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+.events-timeline-number-date {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.65;
+}
+
+.events-timeline-number {
+  color: var(--ev-border);
+}
+
+/* The card is a <button> so the whole thing is one click/keyboard target. */
+.events-timeline-card {
+  display: block;
   width: 100%;
+  height: 300px;
+  padding: 0;
   border: none;
-  background-color: var(--color-page-bg);
-  border-radius: 1rem;
-  padding: 0.75rem 1.5rem 0.75rem 0.75rem;
+  background: none;
   text-align: left;
   cursor: pointer;
   color: var(--color-text);
-  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.12);
-  transform-origin: left center;
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+  perspective: 1000px;
+  margin-top: 30px;
+  transform-origin: 50% 22px;
+  transform: rotate(var(--ev-tilt, 0deg));
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .events-timeline-card:hover,
 .events-timeline-card:focus-visible {
-  transform: scale(1.03);
-  box-shadow: 0 1rem 2.5rem rgba(51, 40, 63, 0.22);
-  z-index: 2;
+  transform: rotate(0deg) scale(1.04);
+  z-index: 3;
+}
+
+.events-timeline-card-inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.34, 1.4, 0.5, 1);
+}
+
+.events-timeline-card.is-flipped .events-timeline-card-inner {
+  transform: rotateY(180deg);
+}
+
+@media (hover: hover) {
+  .events-timeline-card:hover .events-timeline-card-inner,
+  .events-timeline-card:focus-visible .events-timeline-card-inner {
+    transform: rotateY(180deg);
+  }
+}
+
+.events-timeline-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 3px solid var(--ev-border);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow: 6px 6px 0 var(--ev-c);
+  /* punch hole near the top edge: the line behind shows through it */
+  -webkit-mask: radial-gradient(circle 8px at 50% 22px, transparent 7.5px, #000 8px);
+  mask: radial-gradient(circle 8px at 50% 22px, transparent 7.5px, #000 8px);
+}
+
+.events-timeline-face::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 11px;
+  box-sizing: border-box;
+  width: 22px;
+  height: 22px;
+  margin-left: -11px;
+  border: 3px solid var(--ev-border);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.events-timeline-front {
+  background-color: var(--color-page-bg);
+}
+
+.events-timeline-back {
+  transform: rotateY(180deg);
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem 1.25rem;
+  background-color: var(--ev-c);
+  color: var(--ev-ink, #33283f);
 }
 
 .events-timeline-card-media {
   position: relative;
   flex: none;
-  width: 88px;
-  height: 88px;
-  border-radius: 0.75rem;
+  height: 62%;
   overflow: hidden;
   background-color: var(--color-body-bg);
-  transition:
-    width 0.25s ease,
-    height 0.25s ease;
-}
-
-/* Photos grow on hover — desktop/pointer devices only, since there is no
-   hover state to reveal them on touch. */
-@media (hover: hover) {
-  .events-timeline-card:hover .events-timeline-card-media,
-  .events-timeline-card:focus-visible .events-timeline-card-media {
-    width: 150px;
-    height: 150px;
-  }
 }
 
 .events-timeline-media,
@@ -3257,6 +3505,12 @@ a[data-footnote-ref]:focus {
   inset: 0;
 }
 
+.events-timeline-media-empty {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' fill='%2333283f' fill-opacity='.35'%3E%3Cpath d='M8 50 26 22l12 18 8-10 10 20z'/%3E%3Ccircle cx='46' cy='16' r='5'/%3E%3C/svg%3E")
+    center / 3.5rem no-repeat;
+}
+
 .events-timeline-media-img {
   position: absolute;
   inset: 0;
@@ -3264,7 +3518,7 @@ a[data-footnote-ref]:focus {
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transition: opacity 0.8s ease;
+  transition: opacity 1.2s ease;
 }
 
 .events-timeline-media-img.visible {
@@ -3273,60 +3527,45 @@ a[data-footnote-ref]:focus {
 
 .events-timeline-card-body {
   display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  min-width: 0;
   flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 0;
+  padding: 0.75rem 1rem;
 }
 
-.events-timeline-date {
-  font-size: 0.8rem;
-  font-weight: 600;
+.events-timeline-tag {
+  align-self: flex-start;
+  max-width: 100%;
+  padding: 0.15rem 0.7rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 999px;
+  border: 2px solid var(--ev-ink, #33283f);
+  background-color: var(--ev-c);
+  color: var(--ev-ink, #33283f);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
-  opacity: 0.7;
 }
 
 .events-timeline-title {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 700;
+  line-height: 1.25;
 }
 
-/* The one-sentence blurb stays hidden until hover/focus on pointer devices,
-   and is simply always visible where there's no hover to reveal it. */
 .events-timeline-summary-text {
-  font-size: 0.9rem;
-  opacity: 0;
-  max-height: 0;
-  margin-top: 0;
-  overflow: hidden;
-  transition:
-    max-height 0.25s ease,
-    opacity 0.2s ease,
-    margin-top 0.25s ease;
-}
-
-@media (hover: hover) {
-  .events-timeline-card:hover .events-timeline-summary-text,
-  .events-timeline-card:focus-visible .events-timeline-summary-text {
-    opacity: 0.85;
-    max-height: 3rem;
-    margin-top: 0.15rem;
-  }
-}
-
-@media (hover: none) {
-  .events-timeline-summary-text {
-    opacity: 0.85;
-    max-height: none;
-    margin-top: 0.15rem;
-  }
+  font-size: 0.92rem;
+  line-height: 1.4;
 }
 
 .events-timeline-readmore {
   align-self: flex-start;
-  margin-top: 0.4rem;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.85rem;
   text-decoration: underline;
 }
@@ -3536,29 +3775,56 @@ a[data-footnote-ref]:focus {
   right: 1.5rem;
 }
 
-@media (max-width: 576px) {
-  .events-timeline-item {
-    padding-left: 3rem;
+@media (max-width: 820px) {
+  .events-timeline {
+    position: relative;
+    padding-left: 2.25rem;
   }
 
   .events-timeline::before {
-    left: 15px;
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0.6rem;
+    width: 2px;
+    background-color: var(--ev-line);
   }
 
-  .events-timeline-marker {
-    left: 8px;
+  .events-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding: 0;
   }
 
-  .events-timeline-card {
-    flex-wrap: wrap;
-    padding: 0.65rem;
+  .events-row-rtl {
+    direction: ltr;
   }
 
-  .events-timeline-card-media {
-    width: 64px;
-    height: 64px;
+  .events-row::before,
+  .events-row::after,
+  .events-row-line,
+  .events-row-turn {
+    display: none !important;
   }
 
+  .events-timeline-item {
+    align-items: stretch;
+  }
+
+  .events-timeline-number {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.5rem;
+    height: auto;
+    margin-bottom: 0.6rem;
+  }
+
+}
+
+@media (max-width: 576px) {
   .events-modal {
     padding: 1.5rem;
     max-height: 96vh;
@@ -4104,26 +4370,31 @@ body.home-fullscreen {
   background-color: var(--color-accent);
 }
 
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback): the
-   video's bacterium -> logo morph is the final transition, so the still sits
-   at exactly the embed's geometry and is swapped in instantly (no dissolve,
-   no resize afterwards) — it just holds the video's last frame on screen.
-   Both are sized to fit entirely inside the hero ("contain", so the logo is
-   never cropped on any window shape, per the earlier team call) and then
-   shrunk slightly by --home-hero-video-scale. The video's edges are the same
-   lavender as .home-hero's background, so the margin this leaves blends in. */
+/* Edited with Claude Sonnet 5 (Anthropic), 2026-10-19 (team call: full
+   edge-to-edge coverage, no margin on any side, ever — supersedes the Oct 18
+   "contain" compromise below). Both elements now use "cover" (max(), not
+   min()): the box always grows to at least fill the hero in both
+   dimensions, so .home-hero's overflow:hidden crops whichever axis
+   overflows rather than ever leaving a gap. The video was re-exported on a
+   wide 2560x1080 (~2.37:1) canvas specifically so this crops much less than
+   it would have on the original 16:9 source — the aspect ratio below must
+   stay in sync with HomeHero.tsx's actual source dimensions. */
 .home-hero {
   container-type: size;
-  --home-hero-video-scale: 0.85;
+  /* A bare "2560 / 1080" isn't a valid number once substituted into another
+     calc() (it splits into two numbers and a stray slash) — calc() here
+     pre-computes it to a single <number> so the formulas below can divide
+     by var(--home-hero-aspect) directly. */
+  --home-hero-aspect: calc(2560 / 1080);
 }
 
 .home-hero-video {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(100cqw, calc(100cqh * 16 / 9));
-  height: min(100cqh, calc(100cqw * 9 / 16));
-  transform: translate(-50%, -50%) scale(var(--home-hero-video-scale));
+  width: max(100cqw, calc(100cqh * var(--home-hero-aspect)));
+  height: max(100cqh, calc(100cqw / var(--home-hero-aspect)));
+  transform: translate(-50%, -50%);
   object-fit: cover;
   display: block;
   opacity: 0;
@@ -4135,20 +4406,31 @@ body.home-fullscreen {
 
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
    Purpose: object-fit doesn't apply to an <iframe>, so the 16:9 video embed
-   is sized and centred by hand.
-   Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback): no
-   longer full-bleed/cropped — it now uses the exact same "contain" box as
-   .home-hero-video above, so its last frame and the still line up
-   pixel-for-pixel and the logo is never cropped or oversized. */
+   is sized and centred by hand, matching .home-hero-video's exact box so
+   its last frame and the still line up pixel-for-pixel at the handoff. */
 .home-hero-embed {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(100cqw, calc(100cqh * 16 / 9));
-  height: min(100cqh, calc(100cqw * 9 / 16));
-  transform: translate(-50%, -50%) scale(var(--home-hero-video-scale));
+  width: max(100cqw, calc(100cqh * var(--home-hero-aspect)));
+  height: max(100cqh, calc(100cqw / var(--home-hero-aspect)));
+  transform: translate(-50%, -50%);
   border: 0;
   pointer-events: none;
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-19
+   Purpose: on a portrait screen (phones) the hero is far taller than the
+   2.37:1 video, so "cover" scaled it up to the screen height and cropped to
+   a ~390px sliver — a super-zoomed fragment of the logo. In portrait the
+   video/still are fitted to the width instead (letterboxed on the hero's
+   accent background), so the whole frame stays visible. */
+@media (orientation: portrait) {
+  .home-hero-video,
+  .home-hero-embed {
+    width: 100cqw;
+    height: calc(100cqw / var(--home-hero-aspect));
+  }
 }
 
 .home-hero-layer {
@@ -4313,6 +4595,22 @@ body:not(.home-fullscreen) .home-hero {
 @media (hover: hover), (pointer: fine) {
   .home-snap-pin {
     --snap-step: 85vh;
+  }
+}
+
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-19 (team request: the
+   acids should float on "But why is this reaction important?" for one turn
+   of the wheel and fall on the next): that sentence is pinned for a step of
+   its own, which gives the two beats somewhere to happen. */
+.home-statement-pin {
+  --snap-steps: 1;
+}
+
+/* Nothing flies across it when motion is reduced (see useBileAcidFlight.ts),
+   so the sentence does not need the extra step of scrolling either. */
+@media (prefers-reduced-motion: reduce) {
+  .home-statement-pin {
+    --snap-steps: 0;
   }
 }
 
@@ -4757,6 +5055,38 @@ body:not(.home-fullscreen) .home-hero {
   background-color: var(--symptom-color);
 }
 
+/* Symptom explanation tooltip (shown on hover / keyboard focus). */
+.symptom-card-list li.has-tip {
+  position: relative;
+  cursor: help;
+}
+
+.symptom-tip {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  bottom: calc(100% + 0.5rem);
+  width: max-content;
+  max-width: min(18rem, 80vw);
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.75rem;
+  background-color: #221b2b;
+  color: #fff;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.symptom-card-list li.has-tip:hover .symptom-tip,
+.symptom-card-list li.has-tip:focus .symptom-tip {
+  opacity: 1;
+  visibility: visible;
+}
+
 /* Phones: one card per row, a little tighter. */
 @media (max-width: 699.98px) {
   .symptoms-overview-grid {
@@ -5017,20 +5347,29 @@ body:not(.home-fullscreen) .home-hero {
   mix-blend-mode: lighten;
 }
 
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-20 (team request): Elle
+   ends up level with the top of the lady rather than half way down her,
+   and stands off a little rather than right against her. The slot is only
+   a placeholder — she is drawn on the fixed layer over it — so moving it
+   moves her. */
 .elle-tour-slot {
   width: calc(var(--fig-h) * 0.3);
   aspect-ratio: 1668 / 1211;
+  align-self: start;
+  margin-top: calc(var(--fig-h) * 0.02);
+  margin-inline-start: clamp(0.5rem, 2.5vw, 2.5rem);
 }
 
 .elle-tour-words {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: clamp(0.75rem, 3vh, 1.75rem);
+  gap: clamp(0.5rem, 2vw, 1.5rem);
 }
 
 .elle-tour-words .story-text {
-  align-self: stretch;
+  align-self: center;
+  text-align: center;
 }
 
 .elle-tour-line {
@@ -5047,9 +5386,13 @@ body:not(.home-fullscreen) .home-hero {
   transform-origin: center;
 }
 
-/* Just the teal question mark (team request, 2026-10-18), centred under
-   the sentence: out of the three-mark arrangement's absolute layout and
-   into the flow, still bobbing. */
+/* Just the teal question mark (team request, 2026-10-18), out of the
+   three-mark arrangement's absolute layout and into the flow. Edited
+   2026-10-20 (team request): it sits beside the sentence on its right
+   rather than under it, and is a plain mark standing still — no bubble,
+   no bobbing. It is deliberately far larger than the words and set apart
+   from them, because the sentence is not a question and the mark must not
+   be read as its punctuation. */
 .story-art--question.elle-tour-questions {
   width: auto;
   height: auto;
@@ -5058,9 +5401,14 @@ body:not(.home-fullscreen) .home-hero {
 
 .story-art--question.elle-tour-questions span:nth-child(1) {
   position: static;
-  width: clamp(5rem, 10vw, 7.5rem);
-  height: clamp(5rem, 10vw, 7.5rem);
-  font-size: clamp(3rem, 6vw, 4.6rem);
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  font-size: clamp(4rem, 9vw, 7rem);
+  color: #2fa4a9;
+  background: none;
+  box-shadow: none;
+  animation: none;
 }
 
 /* The fixed layer Elle and the close-ups are drawn on. */
@@ -5905,10 +6253,15 @@ body:not(.home-fullscreen) .home-hero {
    the team's microbes picture close up: a different part of it, turned a
    different way, at each of five spots, the bacteria drifting about. Replaces
    the earlier drawn microbes and the "split" layout. */
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-19 (team feedback: "On a
+   quest…" sat too close to the navigation bar): extra room at the top, and
+   the gut below gives way rather than pushing the sentence up into the bar
+   (see .quest-gut's flex-shrink). */
 .story-step--gut {
   flex-direction: column;
   gap: clamp(0.75rem, 2.5vh, 1.5rem);
   text-align: center;
+  padding-top: clamp(3rem, 9vh, 7rem);
 }
 
 .story-step--gut .story-text {
@@ -5917,10 +6270,16 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 /* The illustration on its own light background, framed like the office. */
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-19 (team request): bigger,
+   and with the framing gone — no teal border, no backing colour and no
+   shadow, so the drawing sits straight on the band. */
 .quest-gut {
   position: relative;
-  flex: none;
-  height: min(54vh, 40rem);
+  /* Shrinks when the screen is too short for the whole column, so the
+     sentences keep their place instead of being pushed off the screen. */
+  flex: 0 1 auto;
+  min-height: 0;
+  height: min(62vh, 46rem);
   aspect-ratio: 976 / 1192;
 }
 
@@ -5928,20 +6287,21 @@ body:not(.home-fullscreen) .home-hero {
   display: block;
   width: 100%;
   height: 100%;
-  border: 0.4rem solid #2fa4a9;
-  border-radius: 1.25rem;
-  background: #e7f5f6;
-  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
 }
 
 /* The magnifying glass: 34% of the gut's width, its top-left corner moved
-   between five spots (the lens centred on the small intestine, the
-   ascending colon, the transverse colon, the descending colon and the
-   lower small intestine), pausing at each. */
+   between five spots, pausing at each.
+   Edited with Claude Opus 5 (Anthropic), 2026-10-19 (team request: it must
+   not cross the gut's outline): the five spots were worked out from the
+   drawing itself — each lens centre is at least 19% of the width clear of
+   the silhouette's edge, against a lens radius of 17%, so the glass always
+   sits wholly on the gut with ~2% to spare. Re-work them if the drawing is
+   re-exported. The tour runs upper left, upper right, lower right, lower
+   left, then the middle. */
 .quest-lens {
   position: absolute;
-  left: 33%;
-  top: 33.1%;
+  left: 9.6%;
+  top: 18%;
   width: 34%;
   aspect-ratio: 1;
 }
@@ -5953,32 +6313,32 @@ body:not(.home-fullscreen) .home-hero {
 @keyframes quest-lens-tour {
   0%,
   11.2% {
-    left: 33%;
-    top: 33.1%;
+    left: 9.6%;
+    top: 18%;
   }
   20%,
   31.2% {
-    left: -1%;
-    top: 31.1%;
+    left: 53.5%;
+    top: 15.6%;
   }
   40%,
   51.2% {
-    left: 35%;
-    top: -1.9%;
+    left: 57.2%;
+    top: 50.5%;
   }
   60%,
   71.2% {
-    left: 69%;
-    top: 28.1%;
+    left: 6.4%;
+    top: 41.8%;
   }
   80%,
   91.2% {
-    left: 25%;
-    top: 52.1%;
+    left: 40.4%;
+    top: 34.1%;
   }
   100% {
-    left: 33%;
-    top: 33.1%;
+    left: 9.6%;
+    top: 18%;
   }
 }
 
@@ -6727,9 +7087,12 @@ body:not(.home-fullscreen) .home-hero {
   pointer-events: none;
 }
 
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-19 (team request): the
+   "Conjugated" / "Deconjugated bile acids" captions read larger. */
 .bsh-stream-caption {
-  font-size: clamp(0.65rem, 1.3vw, 0.95rem);
-  opacity: 0.85;
+  font-size: clamp(0.9rem, 1.9vw, 1.4rem);
+  font-weight: 600;
+  opacity: 0.95;
 }
 
 .bsh-stream-caption--species {
@@ -7392,27 +7755,32 @@ body:not(.home-fullscreen) .home-hero {
   --ic-line: #eaf4f5;
   --card-tagline: #1f6a6e;
   background-color: #c9bde8;
+  /* A frame in the dark purple, so the lavender card still stands out when
+     the band behind it is lavender too. */
+  border-color: #33283f;
   color: #33283f;
-}
-
-/* In dark mode the section behind the cards is the same lavender as the
-   light cards, so with no border they vanish into it. The dark cards already
-   carry an outline; give the light ones the dark plum one. */
-[data-theme="dark"] .find-more-card--light {
-  border-color: rgba(51, 40, 63, 0.55);
-}
-
-[data-theme="dark"] .find-more-card--light:hover,
-[data-theme="dark"] .find-more-card--light:focus-visible {
-  border-color: #2fa4a9;
 }
 
 .find-more-card:hover,
 .find-more-card:focus-visible {
   border-color: #2fa4a9;
   box-shadow: 0 0.9rem 1.8rem rgba(47, 164, 169, 0.35);
-  color: inherit;
   transform: translateY(-6px);
+}
+
+/* Each card keeps its own text colour on hover and focus. Letting it inherit
+   (as before) turned the dark cards' titles dark purple on dark purple, and
+   the link styles of the page would otherwise recolour them too. */
+.find-more-card--dark,
+.find-more-card--dark:hover,
+.find-more-card--dark:focus-visible {
+  color: #eaf4f5;
+}
+
+.find-more-card--light,
+.find-more-card--light:hover,
+.find-more-card--light:focus-visible {
+  color: #33283f;
 }
 
 .find-more-card-art {
@@ -10705,7 +11073,7 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 [data-theme="dark"] .protocol-calc-input {
-  border-color: rgba(201, 189, 232, 0.45);
+  border-color: rgba(201, 189, 232, 0.7);
 }
 
 .protocol-calc-input:focus-visible {
@@ -10745,15 +11113,11 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 [data-theme="dark"] .protocol-calc-reset {
-  border-color: rgba(201, 189, 232, 0.45);
+  border-color: rgba(201, 189, 232, 0.7);
 }
 
 .protocol-calc-reset:hover {
   background-color: rgba(201, 189, 232, 0.25);
-}
-
-.protocol-calc-workbook {
-  opacity: 0.8;
 }
 
 /* NOTE AND CRITICAL BOXES */
@@ -10855,7 +11219,7 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 [data-theme="dark"] .protocol-download {
-  border-color: rgba(201, 189, 232, 0.45);
+  border-color: rgba(201, 189, 232, 0.7);
 }
 
 a.protocol-download:hover {
@@ -11332,7 +11696,7 @@ a.protocol-download:hover {
 }
 
 .search-result.selected {
-  background-color: rgba(201, 189, 232, 0.45);
+  background-color: rgba(201, 189, 232, 0.7);
 }
 
 [data-theme="dark"] .search-result.selected {
@@ -13387,6 +13751,7 @@ a.protocol-download:hover {
   grid-template-columns: minmax(220px, 340px) 1fr;
   gap: 1.5rem;
   align-items: center;
+  margin-bottom: 3rem; /* room for the Next button hanging below the box */
 }
 .dbtl-wheel { width: 100%; height: auto; color: var(--color-text); }
 .dbtl-wheel-stage { cursor: pointer; outline: none; }
@@ -13405,10 +13770,15 @@ a.protocol-download:hover {
 @media (prefers-reduced-motion: reduce) { .dbtl-wheel-spinner { transition: none; } }
 .dbtl-wheel-label { fill: var(--dbtl-t); font-size: 36px; font-weight: 700; pointer-events: none; }
 .dbtl-wheel-centre { fill: currentColor; font-size: 28px; font-weight: 600; }
-.dbtl-main { min-width: 0; }
+/* The Next button hangs below the box instead of sitting in the column, so the
+   column is just the box and its text stays level with the wheel. */
+.dbtl-main { min-width: 0; position: relative; }
 .dbtl-next {
+  position: absolute;
+  top: 100%;
+  right: 0;
   display: block;
-  margin: 0.6rem 0 0 auto;
+  margin: 0.6rem 0 0;
   padding: 0.3rem 0.95rem;
   border: 2px solid var(--color-text);
   border-radius: 999px;
@@ -13421,11 +13791,20 @@ a.protocol-download:hover {
 .dbtl-next:hover { background: var(--color-text); color: var(--color-page-bg); }
 .dbtl-next:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 .dbtl-box {
-  height: clamp(20rem, 62vh, 30rem);
+  max-height: clamp(20rem, 62vh, 30rem); /* hugs its text; only a long stage scrolls */
   overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 0.5rem 0.75rem 0.5rem 0.25rem;
+  /* Same card as the PMOS hypothesis wheel's panel. */
+  padding: 1.25rem 1.5rem;
+  border: 2px solid rgba(51, 40, 63, 0.18);
+  border-radius: 1rem;
+  background: #fdf0f7;
+  color: #33283f;
 }
+/* Short stages sit in the vertical middle of the box (level with the wheel);
+   auto margins, unlike justify-content: center, never clip the top of a long
+   stage that has to scroll. */
+.dbtl-box { display: flex; flex-direction: column; }
+.dbtl-box-inner { margin: auto 0; }
 .dbtl-box:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 /* Figures keep a legible size instead of being shrunk to the column: panel
    sets wrap onto several rows, and the wide ones (spreadsheet plate layouts,
@@ -13702,9 +14081,626 @@ a.protocol-download:hover {
   background-color: var(--color-body-bg);
 }
 
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-19: a jump to a heading
+   on the results page (a #hash link from another page, the page index) must
+   clear the pinned Toolkit / Therapeutics bar as well as the navbar, or the
+   bar covers the heading it landed on. */
+.results-pipelines :is(h2, h3, h4)[id] {
+  scroll-margin-top: calc(5rem + var(--results-bar-h, 0px) + 0.5rem);
+}
+
 @media (min-width: 992px) {
   .section-progress-box {
     top: calc(5rem + var(--results-bar-h, 0px));
     max-height: calc(100vh - 7rem - var(--results-bar-h, 0px));
   }
+}
+
+/* THERAPEUTICS OVERVIEW FIGURE
+   Generated with Claude Opus 5 (Anthropic), 2026-10-19
+   Purpose: the team's therapeutics pipeline figure on the results page
+   (TherapeuticsOverview.tsx), whose five numbered steps are buttons. The
+   badges sit on the circles drawn into the artwork — teal, so they read as
+   clickable against the figure's blues and pinks — and are placed as
+   percentages of the figure, so they hold their spots at every size. */
+.therapeutics-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.therapeutics-overview-figure {
+  position: relative;
+  width: 100%;
+  max-width: 1057px;
+  margin-inline: auto;
+  aspect-ratio: 1057 / 510;
+}
+
+.therapeutics-overview-figure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+}
+
+/* Sized from the figure's width so a badge keeps covering its circle; the
+   artwork's own circles are about 3% of it across. */
+.therapeutics-overview-badge {
+  position: absolute;
+  translate: -50% -50%;
+  width: 3.4%;
+  aspect-ratio: 1;
+  min-width: 22px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 2px solid #eaf4f5;
+  border-radius: 50%;
+  background: #2fa4a9;
+  color: #fff;
+  font-family: inherit;
+  font-size: clamp(0.7rem, 1.35vw, 1.05rem);
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    scale 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.therapeutics-overview-badge:hover,
+.therapeutics-overview-badge:focus-visible {
+  scale: 1.15;
+  background: #1f7479;
+  box-shadow: 0 0 0 0.3rem rgba(47, 164, 169, 0.3);
+}
+
+.therapeutics-overview-badge.is-open {
+  background: #1f7479;
+  box-shadow: 0 0 0 0.3rem rgba(47, 164, 169, 0.45);
+}
+
+/* Step 5 leaves this figure for the Toolkit wheel, so it is marked out with
+   a ring rather than reading as another panel to open. */
+.therapeutics-overview-badge--link {
+  border-style: dashed;
+}
+
+.therapeutics-overview-badge .visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The step's write-up, in the same box as the section it sits in
+   (.content-section), a shade lighter as it is inside one. */
+.therapeutics-overview-panel {
+  padding: 2rem 2.25rem;
+  border-radius: 1.25rem;
+  background-color: color-mix(in srgb, var(--color-body-bg) 35%, #fff);
+  animation: therapeutics-overview-in 0.3s ease;
+}
+
+[data-theme="dark"] .therapeutics-overview-panel {
+  background-color: color-mix(in srgb, var(--color-body-bg) 74%, #fff);
+}
+
+.therapeutics-overview-panel > :first-child {
+  margin-top: 0;
+}
+
+.therapeutics-overview-panel > :last-child {
+  margin-bottom: 0;
+}
+
+.therapeutics-overview-panel h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* The step's number, repeated so the panel says which badge opened it. */
+.therapeutics-overview-panel-number {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.8em;
+  height: 1.8em;
+  border-radius: 50%;
+  background: #2fa4a9;
+  color: #fff;
+  font-size: 0.7em;
+  font-weight: 800;
+}
+
+.therapeutics-overview-panel h5 {
+  margin-bottom: 0.3rem;
+  font-size: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+}
+
+@keyframes therapeutics-overview-in {
+  from {
+    opacity: 0;
+    translate: 0 -0.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .therapeutics-overview-panel {
+    padding: 1.25rem 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .therapeutics-overview-badge {
+    transition: none;
+  }
+
+  .therapeutics-overview-panel {
+    animation: none;
+  }
+}
+
+/* Restored with Claude Sonnet 5.5 (Anthropic), 2026-10-19: the success cards'
+   styles were dropped from this file while SuccessCards.tsx stayed in use,
+   which left the cards and their arrow icons unstyled. */
+.success-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.success-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 6rem;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid rgba(51, 40, 63, 0.15);
+  border-radius: 1rem;
+  background-color: var(--color-page-bg);
+  color: var(--color-text);
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 0.25rem 0.75rem rgba(51, 40, 63, 0.12);
+  transition:
+    transform 0.15s ease-out,
+    box-shadow 0.15s ease-out;
+}
+
+[data-theme="dark"] .success-card {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.success-card:hover,
+.success-card:focus-visible {
+  color: var(--color-text);
+  transform: translateY(-0.2rem);
+  box-shadow: 0 0.5rem 1.25rem rgba(51, 40, 63, 0.2);
+}
+
+.success-card-arrow {
+  flex: 0 0 auto;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+@media (max-width: 767.98px) {
+  .success-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Compact table with only the header row in the brand's dark purple (the
+   budget table on the Entrepreneurship page); every other cell stays plain. */
+.table-head-purple.table-responsive-rounded .table-bordered thead th {
+  background-color: #33283f;
+  color: #ffffff;
+}
+
+/* LENS → GUT WINDOW
+   Generated with Claude Opus 5 (Anthropic), 2026-10-19 (team request)
+   Purpose: the stand-in that carries what the magnifying glass is showing
+   over to the circle of bacteria on the screen below (see
+   useLensToGutWindow.ts, which places and sizes it every frame). It wears
+   the glass's own face, so the hand-over starts as exactly what was under
+   the lens. */
+.lens-to-window {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 5;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* The circle it is arriving at waits, so the two are never both solid:
+   --window-in runs 0 → 1 as the stand-in fades out. */
+.two-guts .two-guts-lens {
+  opacity: var(--window-in, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .two-guts .two-guts-lens {
+    opacity: 1;
+  }
+}
+
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-19 (team request: a
+   quicker hand-over to the screen below): the glass tours the gut showing
+   the microbes close-up, then at its last stop swaps to the circle of
+   bacteria it is about to become. Both layers fill the glass; the swap runs
+   once, in step with the tour (same 12.5s and 1s delay, see
+   .quest-lens-tour), and stays swapped. */
+.quest-lens-photo,
+.quest-lens-circle {
+  position: absolute;
+  inset: 0;
+}
+
+.quest-lens-circle {
+  display: grid;
+  place-items: center;
+  opacity: 0;
+}
+
+.quest-lens-circle svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* The circle brings its own rim, so the glass's own ring would double up. */
+.quest-lens-circle .two-guts-lens-rim {
+  display: none;
+}
+
+.story-step--active .quest-lens-photo {
+  animation: quest-lens-hand-off-out 12.5s linear 1s 1 forwards;
+}
+
+.story-step--active .quest-lens-circle {
+  animation: quest-lens-hand-off-in 12.5s linear 1s 1 forwards;
+}
+
+@keyframes quest-lens-hand-off-out {
+  0%,
+  76% {
+    opacity: 1;
+  }
+  82%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes quest-lens-hand-off-in {
+  0%,
+  76% {
+    opacity: 0;
+  }
+  82%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .success-card {
+    transition: none;
+  }
+
+  .success-card:hover,
+  .success-card:focus-visible {
+    transform: none;
+  }
+}
+
+.results-pipelines > .success-cards {
+  margin-top: 1.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-step--active .quest-lens-photo,
+  .story-step--active .quest-lens-circle {
+    animation: none;
+  }
+}
+
+/* BILE ACIDS IN FLIGHT
+   Generated with Claude Opus 5 (Anthropic), 2026-10-19 (team request)
+   Purpose: the layer the bile acids cross the page on, from the BSH screen
+   down to the TGR5 one (see useBileAcidFlight.ts, which places and sizes
+   each shape every frame). They wear the two diagrams' own classes, so the
+   colours come from those rules. */
+.bile-acid-flight {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  overflow: visible;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* The acids already on the TGR5 screen wait until the ones flying down from
+   the BSH screen land on them (see useBileAcidFlight.ts), so the two are
+   never both drawn — the hand-over is a straight swap on the same spots. */
+.tgr5-pool {
+  opacity: var(--acids-in, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tgr5-pool {
+    opacity: 1;
+  }
+}
+
+/* SOFTWARE DOWNLOAD BANNER
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-19
+   Purpose: make the "download our software" option unmissable (team request):
+   a full-width, high-contrast panel with a large primary button. */
+.software-download {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin: 1.75rem 0;
+  padding: 1.5rem 1.75rem;
+  border: 3px solid var(--color-text);
+  border-radius: 1rem;
+  background: linear-gradient(135deg, var(--color-accent), #e6defa);
+  color: #33283f;
+  box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.25);
+}
+
+.software-download-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1 1 18rem;
+}
+
+.software-download-kicker {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.software-download-title {
+  font-size: 1.7rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.software-download-desc {
+  font-size: 1rem;
+}
+
+.software-download-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.software-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.4rem;
+  border: 2px solid #33283f;
+  border-radius: 999px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: #33283f;
+  background: #fff;
+}
+
+.software-download-btn:hover {
+  background: #f3effc;
+  color: #33283f;
+}
+
+.software-download-btn--primary {
+  padding: 1rem 2rem;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #fff;
+  background: #33283f;
+}
+
+.software-download-btn--primary:hover {
+  background: #4a3b5c;
+  color: #fff;
+}
+
+.software-download-btn svg {
+  width: 1.5em;
+  height: 1.5em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .events-timeline-card,
+  .events-timeline-card-inner {
+    transition: none;
+  }
+}
+
+/* GLOSSARY TERM
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-19 (team request)
+   Purpose: a word with a dotted underline that opens a little speech bubble
+   with Elle explaining it (see GlossaryTerm.tsx). The bubble is a fixed-size
+   light card on <body>, so it reads the same in both themes. */
+.glossary-term {
+  display: inline;
+  padding: 0;
+  border: 0;
+  border-bottom: 2px dotted #2fa4a9;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+.glossary-term:hover,
+.glossary-term[aria-expanded="true"] {
+  background-color: rgba(47, 164, 169, 0.18);
+}
+
+.glossary-pop {
+  position: fixed;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  border: 2px solid #2fa4a9;
+  border-radius: 1rem;
+  background: #fbfafe;
+  color: #33283f;
+  box-shadow: 0 0.8rem 2rem rgba(51, 40, 63, 0.3);
+  animation: events-fade-in 0.15s ease;
+}
+
+.glossary-pop--above {
+  transform: translateY(-100%);
+}
+
+.glossary-pop p {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.glossary-pop-elle {
+  flex: none;
+  width: 3rem;
+  height: auto;
+}
+
+.table-compact ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+/* PARTS TABLES (Parts page)
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20
+   Purpose: Basic/Composite part tables in last year's layout — full width,
+   a thin rule between rows, part codes as registry links. */
+.parts-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.parts-table th,
+.parts-table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--color-border, rgba(128, 128, 128, 0.35));
+  vertical-align: middle;
+}
+
+.parts-table td:first-child {
+  white-space: nowrap;
+}
+
+.parts-footnote {
+  margin-top: 0.75rem;
+  font-size: 0.9em;
+}
+
+/* Compact tables with more than three columns of similar weight: equal
+   widths instead of the wide first two columns of .table-compact. */
+.table-cols-even.table-compact.table-responsive-rounded .table-bordered th:first-child,
+.table-cols-even.table-compact.table-responsive-rounded .table-bordered td:first-child,
+.table-cols-even.table-compact.table-responsive-rounded .table-bordered th:nth-child(2),
+.table-cols-even.table-compact.table-responsive-rounded .table-bordered td:nth-child(2) {
+  width: auto;
+}
+
+/* CHECKLIST
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request)
+   Purpose: the tick-off table on the Contribution page (see Checklist.tsx). */
+.checklist-row {
+  cursor: pointer;
+}
+
+.checklist-row td {
+  transition: background-color 0.15s ease;
+}
+
+.checklist-row:hover td {
+  background-color: rgba(47, 164, 169, 0.1);
+}
+
+.checklist-row--done td {
+  background-color: rgba(47, 164, 169, 0.18);
+}
+
+.checklist-table td:last-child {
+  text-align: center;
+}
+
+.checklist-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 2px solid #2fa4a9;
+  border-radius: 0.35rem;
+  background: #ffffff;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.checklist-row--done .checklist-box {
+  background: #2fa4a9;
+}
+
+.checklist-clear {
+  display: block;
+  margin: 0 0 1.25rem auto;
+  padding: 0.4rem 1.25rem;
+  border: 2px solid #2fa4a9;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.checklist-clear:hover:not(:disabled) {
+  background-color: rgba(47, 164, 169, 0.18);
+}
+
+.checklist-clear:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
