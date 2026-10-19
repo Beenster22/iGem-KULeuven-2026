@@ -5995,10 +5995,13 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 /* The illustration on its own light background, framed like the office. */
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-19 (team request): bigger,
+   and with the framing gone — no teal border, no backing colour and no
+   shadow, so the drawing sits straight on the band. */
 .quest-gut {
   position: relative;
   flex: none;
-  height: min(54vh, 40rem);
+  height: min(62vh, 46rem);
   aspect-ratio: 976 / 1192;
 }
 
@@ -6006,20 +6009,21 @@ body:not(.home-fullscreen) .home-hero {
   display: block;
   width: 100%;
   height: 100%;
-  border: 0.4rem solid #2fa4a9;
-  border-radius: 1.25rem;
-  background: #e7f5f6;
-  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
 }
 
 /* The magnifying glass: 34% of the gut's width, its top-left corner moved
-   between five spots (the lens centred on the small intestine, the
-   ascending colon, the transverse colon, the descending colon and the
-   lower small intestine), pausing at each. */
+   between five spots, pausing at each.
+   Edited with Claude Opus 5 (Anthropic), 2026-10-19 (team request: it must
+   not cross the gut's outline): the five spots were worked out from the
+   drawing itself — each lens centre is at least 19% of the width clear of
+   the silhouette's edge, against a lens radius of 17%, so the glass always
+   sits wholly on the gut with ~2% to spare. Re-work them if the drawing is
+   re-exported. The tour runs upper left, upper right, lower right, lower
+   left, then the middle. */
 .quest-lens {
   position: absolute;
-  left: 33%;
-  top: 33.1%;
+  left: 9.6%;
+  top: 18%;
   width: 34%;
   aspect-ratio: 1;
 }
@@ -6031,32 +6035,32 @@ body:not(.home-fullscreen) .home-hero {
 @keyframes quest-lens-tour {
   0%,
   11.2% {
-    left: 33%;
-    top: 33.1%;
+    left: 9.6%;
+    top: 18%;
   }
   20%,
   31.2% {
-    left: -1%;
-    top: 31.1%;
+    left: 53.5%;
+    top: 15.6%;
   }
   40%,
   51.2% {
-    left: 35%;
-    top: -1.9%;
+    left: 57.2%;
+    top: 50.5%;
   }
   60%,
   71.2% {
-    left: 69%;
-    top: 28.1%;
+    left: 6.4%;
+    top: 41.8%;
   }
   80%,
   91.2% {
-    left: 25%;
-    top: 52.1%;
+    left: 40.4%;
+    top: 34.1%;
   }
   100% {
-    left: 33%;
-    top: 33.1%;
+    left: 9.6%;
+    top: 18%;
   }
 }
 

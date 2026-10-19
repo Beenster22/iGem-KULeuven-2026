@@ -278,9 +278,86 @@ function ClockArt() {
 const GUT_SRC = "https://static.igem.wiki/teams/6299/wiki/home-page/intestines-hq.avif";
 const MICROBES_SRC = "https://static.igem.wiki/teams/6299/wiki/home-page/microbes-hq.avif";
 
-function GutArt() {
-  return (
-    <div className="quest-gut">
+// Generated with Claude Opus 5 (Anthropic), 2026-10-19 (team request: take
+// the background off the gut): the drawing is uploaded on a pale backing
+// colour rather than on transparency, which shows as a light rectangle on
+// this dark band. So it is drawn to a canvas with that backing taken out —
+// only the backing that reaches the edge of the picture, so pale parts
+// inside the drawing itself are left alone, and with a soft edge so the
+// outline does not come out jagged. If anything stops that (an image that
+// cannot be read pixel by pixel, say), the picture is shown as it is.
+//
+// Replace this with a plain <img> once the drawing is re-uploaded with a
+// transparent background.
+const GUT_BACKING_CLEAR = 12; // fully transparent within this of the backing
+const GUT_BACKING_EDGE = 48; // fully opaque beyond it
+
+function GutPicture() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.src = GUT_SRC;
+    image
+      .decode()
+      .then(() => {
+        const canvas = canvasRef.current;
+        if (cancelled || !canvas) return;
+        const w = image.naturalWidth;
+        const h = image.naturalHeight;
+        canvas.width = w;
+        canvas.height = h;
+        const context = canvas.getContext("2d", { willReadFrequently: false });
+        if (!context) throw new Error("no 2d context");
+        context.drawImage(image, 0, 0);
+        const picture = context.getImageData(0, 0, w, h);
+        const pixels = picture.data;
+        // The backing colour, read off a corner.
+        const [br, bg, bb] = [pixels[0], pixels[1], pixels[2]];
+        const seen = new Uint8Array(w * h);
+        const queue: number[] = [];
+        for (let x = 0; x < w; x++) queue.push(x, (h - 1) * w + x);
+        for (let y = 0; y < h; y++) queue.push(y * w, y * w + w - 1);
+        while (queue.length) {
+          const cell = queue.pop() as number;
+          if (seen[cell]) continue;
+          const at = cell * 4;
+          const away = Math.hypot(
+            pixels[at] - br,
+            pixels[at + 1] - bg,
+            pixels[at + 2] - bb,
+          );
+          if (away >= GUT_BACKING_EDGE) continue;
+          seen[cell] = 1;
+          pixels[at + 3] =
+            away <= GUT_BACKING_CLEAR
+              ? 0
+              : Math.round(
+                  (255 * (away - GUT_BACKING_CLEAR)) /
+                    (GUT_BACKING_EDGE - GUT_BACKING_CLEAR),
+                );
+          const y = (cell / w) | 0;
+          const x = cell % w;
+          if (x > 0) queue.push(cell - 1);
+          if (x < w - 1) queue.push(cell + 1);
+          if (y > 0) queue.push(cell - w);
+          if (y < h - 1) queue.push(cell + w);
+        }
+        context.putImageData(picture, 0, 0);
+      })
+      .catch(() => {
+        if (!cancelled) setFailed(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (failed) {
+    return (
       <img
         className="quest-gut-picture"
         src={GUT_SRC}
@@ -288,6 +365,22 @@ function GutArt() {
         width={976}
         height={1192}
       />
+    );
+  }
+  return (
+    <canvas
+      ref={canvasRef}
+      className="quest-gut-picture"
+      role="img"
+      aria-label="The human intestines"
+    />
+  );
+}
+
+function GutArt() {
+  return (
+    <div className="quest-gut">
+      <GutPicture />
       <div className="quest-lens" aria-hidden="true">
         <div className="quest-lens-glass">
           <div className="quest-lens-drift">
