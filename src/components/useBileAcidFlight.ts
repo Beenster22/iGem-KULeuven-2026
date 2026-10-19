@@ -87,6 +87,18 @@ const STATEMENT = ".story-step--single";
 // "But why is this reaction important?" is on the screen, not still
 // catching up on it).
 const SIZED_BY = 0.6;
+// Where the whole arrangement gathers on that screen before it drops, as a
+// share of the window, and how far through the hold it is gathered by
+// (team request: they float about on that screen and have taken up their
+// places well before its end, so the drop is the group moving as one and
+// nothing rearranges on the way down).
+const FORMATION_Y = 0.74;
+const FORMED_BY = 0.8;
+// How far each one wanders as it crosses that screen, in pixels. It is tied
+// to the scroll like everything else here, and dies away as they take up
+// their places, so they drift about rather than slide straight over and the
+// arrangement they end on is still exact.
+const DRIFT = 14;
 // Where the fall sets off when that sentence has no pinned wrapper to give
 // it a beat of its own, as a share of the window above the TGR5 screen.
 const FALL_LEAD = 0.5;
@@ -280,12 +292,19 @@ export function useBileAcidFlight({
       const from = diagramBox;
       const to = target.getBoundingClientRect();
       if (!from.width || !to.width) return rest();
-      // Which stretch of the journey this is, and how far along it.
-      const falling = window.scrollY >= fallAt;
-      const leg = easeInOut(
-        falling
-          ? clamp01((window.scrollY - fallAt) / (endAt - fallAt))
-          : clamp01((window.scrollY - startAt) / (floatAt - startAt)),
+      // The three stretches, each running on its own: out onto the screen,
+      // about it and into their places, then down. Running them as nested
+      // mixes rather than as a choice of one means every hand-over lands on
+      // the position the stretch before it ended at, so none of them shows.
+      const formAt = floatAt + (fallAt - floatAt) * FORMED_BY;
+      const outLeg = easeInOut(
+        clamp01((window.scrollY - startAt) / (floatAt - startAt)),
+      );
+      const formLeg = easeInOut(
+        clamp01((window.scrollY - floatAt) / (formAt - floatAt)),
+      );
+      const fallLeg = easeInOut(
+        clamp01((window.scrollY - fallAt) / (endAt - fallAt)),
       );
 
       // Each end's hexagon, as the reader sees it. All of the growing is
@@ -299,32 +318,57 @@ export function useBileAcidFlight({
       );
       const scale = lerp(fromR, toR, grow) / BASE_HEX_R;
 
+      // Where the acids on the TGR5 screen are now, and what it would take
+      // to lift that whole arrangement onto this one. The pool keeps
+      // drifting, so this is read every frame and the arrangement up here
+      // drifts with it; the drop then only has to take the offset away.
+      const seats = Array.from(acids, (acid) => acid.getBoundingClientRect());
+      const mid = seats.reduce(
+        (sum, seat) => [
+          sum[0] + (seat.left + seat.width / 2) / seats.length,
+          sum[1] + (seat.top + seat.height / 2) / seats.length,
+        ],
+        [0, 0],
+      );
+      const liftX = window.innerWidth / 2 - mid[0];
+      const liftY = window.innerHeight * FORMATION_Y - mid[1];
+
       overlay.style.visibility = "visible";
       stage.style.setProperty("--acids-in", "0");
       shapes.forEach((shape, i) => {
-        // Its counterpart's own spot, read live — the pool drifts about.
-        const seat = acids[i].getBoundingClientRect();
-        // Where it drifts out to in between, held in the window so it stays
-        // where it is on the page while that screen does.
-        const floatX = shape.float[0] * window.innerWidth;
-        const floatY = shape.float[1] * window.innerHeight;
-        const x = falling
-          ? lerp(floatX, seat.left + seat.width / 2, leg)
-          : lerp(from.left + shape.from[0] * from.width, floatX, leg);
-        const y = falling
-          ? lerp(floatY, seat.top + seat.height / 2, leg)
-          : lerp(from.top + shape.from[1] * from.height, floatY, leg);
+        const seat = seats[i];
+        const seatX = seat.left + seat.width / 2;
+        const seatY = seat.top + seat.height / 2;
+        // Out of the drawing, about the screen, into its place in the
+        // arrangement, and down onto its counterpart.
+        let x = lerp(
+          from.left + shape.from[0] * from.width,
+          shape.float[0] * window.innerWidth,
+          outLeg,
+        );
+        let y = lerp(
+          from.top + shape.from[1] * from.height,
+          shape.float[1] * window.innerHeight,
+          outLeg,
+        );
+        x = lerp(x, seatX + liftX, formLeg);
+        y = lerp(y, seatY + liftY, formLeg);
+        // A wander of its own on the way, gone by the time it is in place.
+        const wander = DRIFT * (1 - formLeg) * outLeg;
+        x += Math.sin(window.scrollY / 90 + i * 1.7) * wander;
+        y += Math.cos(window.scrollY / 70 + i * 2.3) * wander;
+        x = lerp(x, seatX, fallLeg);
+        y = lerp(y, seatY, fallLeg);
         // Its counterpart lies at an angle of its own, which it only takes
-        // up once the TGR5 screen is animating — so there is nothing to
-        // match until the fall. Turn into it over the fall itself, which
-        // leaves them steady while they float and still has them square
-        // with their counterpart when the two swap over.
+        // up once the TGR5 screen is animating. Turn into it as they take
+        // up their places, so by the end of that screen each one is sitting
+        // exactly as its counterpart does and the drop changes nothing.
         const m = acids[i].getScreenCTM();
         const turn = m ? (Math.atan2(m.b, m.a) * 180) / Math.PI : 0;
         shape.group.setAttribute(
           "transform",
           `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(
-            turn * (falling ? leg : 0)
+            turn * formLeg
           ).toFixed(1)}) scale(${scale.toFixed(3)})`,
         );
       });
