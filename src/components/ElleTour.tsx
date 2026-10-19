@@ -132,8 +132,8 @@ const LENS_X = GLASS_LEFT + (GLASS_SIZE * 20) / 48;
 const LENS_Y = GLASS_TOP + (GLASS_SIZE * 20) / 48;
 
 // The teal question mark of the old "etiology" screen (see
-// .story-art--question in App.css), on its own under the sentence (team
-// request, 2026-10-18).
+// .story-art--question in App.css), on its own beside the sentence (team
+// request, 2026-10-18; moved to its right and stilled, 2026-10-20).
 function QuestionMark() {
   return (
     <div
@@ -311,8 +311,9 @@ export function ElleTour() {
       });
       const q = smooth((t - QUESTIONS_AT) / 0.5);
       if (questionsRef.current) {
+        // Fades in once Elle is sad, at its own size: the team want the
+        // mark itself to stand still (2026-10-20).
         questionsRef.current.style.opacity = String(q);
-        questionsRef.current.style.scale = String(0.6 + 0.4 * q);
       }
     };
 
