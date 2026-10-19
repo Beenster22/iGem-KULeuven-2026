@@ -14550,3 +14550,12 @@ a.protocol-download:hover {
   margin: 0;
   padding-left: 1.1rem;
 }
+
+/* Compact tables with more than three columns of similar weight: equal
+   widths instead of the wide first two columns of .table-compact. */
+.table-cols-even.table-compact.table-responsive-rounded .table-bordered th:first-child,
+.table-cols-even.table-compact.table-responsive-rounded .table-bordered td:first-child,
+.table-cols-even.table-compact.table-responsive-rounded .table-bordered th:nth-child(2),
+.table-cols-even.table-compact.table-responsive-rounded .table-bordered td:nth-child(2) {
+  width: auto;
+}
