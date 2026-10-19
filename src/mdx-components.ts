@@ -32,6 +32,7 @@ import {
   PmosDefinition,
 } from "./components/BodySymptomsSection";
 import { PmosEffectsSection } from "./components/PmosEffectsSection";
+import { ElleTour } from "./components/ElleTour";
 import { InflammationSliderSection } from "./components/InflammationSliderSection";
 import { BshStreamAnimation } from "./components/BshStreamAnimation";
 import { MicChart } from "./components/MicChart";
@@ -41,6 +42,7 @@ import { MarketRings, MarketRing } from "./components/MarketRings";
 import { BusinessModelCanvas } from "./components/BusinessModelCanvas";
 import { Roadmap } from "./components/Roadmap";
 import { PhasePager } from "./components/PhasePager";
+import { IntegrationSummary, IntegrationPoint } from "./components/IntegrationSummary";
 import { MicrobeBackdrop } from "./components/MicrobeBackdrop";
 import { TwoGutsSection } from "./components/TwoGutsSection";
 import {
@@ -59,13 +61,14 @@ import { HomeSnapScroll } from "./components/HomeSnapScroll";
 import { DBTLCycles, DBTLCycle, DBTLStage } from "./components/DBTLCycles";
 import { ZoomableImage } from "./components/ZoomableImage";
 import { ElleSays } from "./components/ElleSays";
-import { SuccessCards, SuccessCard } from "./components/SuccessCards";
 import {
   ResultSection,
   KeyTakeaways,
   Takeaway,
   FigureSlot,
 } from "./components/ResultsKit";
+import { ResultsPipelines } from "./components/ResultsPipelines";
+import { TherapeuticsOverview } from "./components/TherapeuticsOverview";
 import { ImageFlowSelector, FlowStep } from "./components/ImageFlowSelector";
 import {
   StakeholderGroups,
@@ -88,6 +91,13 @@ import {
   InfoCard,
 } from "./components/QuestionSelector";
 import { PhenotypeVenn } from "./components/PhenotypeVenn";
+import {
+  EvolutionIcon,
+  DnaIcon,
+  InsulinIcon,
+  GlobeLeafIcon,
+  BrainIcon,
+} from "./components/HypothesisIcons";
 import { Link } from "react-router-dom";
 
 export const mdxComponents = {
@@ -111,6 +121,7 @@ export const mdxComponents = {
   PmosOverview,
   SymptomGroups,
   PmosEffectsSection,
+  ElleTour,
   PmosDefinition,
   BshStreamAnimation,
   InflammationSliderSection,
@@ -124,6 +135,8 @@ export const mdxComponents = {
   BusinessModelCanvas,
   Roadmap,
   PhasePager,
+  IntegrationSummary,
+  IntegrationPoint,
   MicrobeBackdrop,
   TwoGutsSection,
   StoryScrollSection,
@@ -138,10 +151,6 @@ export const mdxComponents = {
   HomeSnapScroll,
   ZoomableImage,
   ElleSays,
-  // Generated with Claude Opus 5 (Anthropic), 2026-10-16
-  // Purpose: the headline result cards at the top of the results page.
-  SuccessCards,
-  SuccessCard,
   // Generated with Claude Opus 5 (Anthropic), 2026-10-17
   // Purpose: the results page's layout kit — the key-takeaway cards and the
   // placeholder boxes for figures that have not been added yet.
@@ -149,6 +158,10 @@ export const mdxComponents = {
   KeyTakeaways,
   Takeaway,
   FigureSlot,
+  // Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-19
+  // Purpose: the results page's pipeline switch, section index and pager.
+  ResultsPipelines,
+  TherapeuticsOverview,
   ImageFlowSelector,
   FlowStep,
   DockingHeatmap,
@@ -198,4 +211,12 @@ export const mdxComponents = {
   DBTLCycles,
   DBTLCycle,
   DBTLStage,
+  // Generated with Claude Sonnet 5 (Anthropic), 2026-10-19
+  // Purpose: the PMOS hypothesis figure's wedge icons (project description
+  // page), one per hypothesis in Nisa et al.'s grouping of five.
+  EvolutionIcon,
+  DnaIcon,
+  InsulinIcon,
+  GlobeLeafIcon,
+  BrainIcon,
 };

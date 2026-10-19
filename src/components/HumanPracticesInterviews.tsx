@@ -483,11 +483,21 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
       if (index === -1) return;
       setOpenIndex(index);
       // Park the page on the interviews behind the popup, so closing it does
-      // not leave the reader at the top of the page.
-      window.setTimeout(
-        () => document.getElementById("interviews")?.scrollIntoView({ block: "start", behavior: "instant" }),
-        0,
-      );
+      // not leave the reader at the top of the page. The interviews sit in a
+      // section the page shows one at a time (PhasePager), so that section is
+      // revealed first; headings get their ids a moment after the page renders.
+      const id = "feedback-cycle-and-interviews";
+      let tries = 0;
+      const park = () => {
+        const heading = document.getElementById(id);
+        if (!heading) {
+          if (tries++ < 120) window.setTimeout(park, 16);
+          return;
+        }
+        window.dispatchEvent(new CustomEvent("reveal-section", { detail: id }));
+        heading.scrollIntoView({ block: "start", behavior: "instant" });
+      };
+      park();
     };
     open();
     // A plain #link changes the hash without going through the router.

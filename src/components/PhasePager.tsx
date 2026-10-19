@@ -64,7 +64,8 @@ export function PhasePager() {
     show(0);
 
     // Headings only get their ids once the section index has scanned the page,
-    // so a #hash from the address bar may need a frame or two to resolve.
+    // so a #hash from the address bar may need a while to resolve (a page opened
+    // from a link elsewhere on the site renders slower than a reload).
     const hash = decodeURIComponent(window.location.hash.slice(1));
     let tries = 0;
     let frame = 0;
@@ -72,12 +73,12 @@ export function PhasePager() {
       const target = hash ? document.getElementById(hash) : null;
       if (target) {
         reveal(hash);
-        target.scrollIntoView({ block: "start" });
-      } else if (hash && tries++ < 10) {
-        frame = window.requestAnimationFrame(revealHash);
+        target.scrollIntoView({ block: "start", behavior: "instant" });
+      } else if (hash && tries++ < 120) {
+        frame = window.setTimeout(revealHash, 16);
       }
     };
-    if (hash) frame = window.requestAnimationFrame(revealHash);
+    if (hash) frame = window.setTimeout(revealHash, 16);
 
     const onReveal = (event: Event) => reveal((event as CustomEvent<string>).detail);
     const onClick = (event: MouseEvent) => {
@@ -91,7 +92,7 @@ export function PhasePager() {
     window.addEventListener("hashchange", onHashChange);
     document.addEventListener("click", onClick, true);
     return () => {
-      window.cancelAnimationFrame(frame);
+      window.clearTimeout(frame);
       window.removeEventListener("reveal-section", onReveal);
       window.removeEventListener("hashchange", onHashChange);
       document.removeEventListener("click", onClick, true);

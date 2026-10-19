@@ -1,8 +1,8 @@
 // Generated with Claude Opus 5 (Anthropic), 2026-10-17
 // Purpose: let a link from another page reach a heading that sits inside a
-// tab or segment which is not the open one — e.g. the experimental overview
-// pointing at "CRISPR construct design", which lives in the Therapeutics
-// segment of the results page.
+// tab or segment which is not the open one — e.g. a link to "CRISPR
+// construct design", which lives in the Therapeutics segment of the results
+// page.
 //
 // Only the active panel's content is rendered (see TabbedSections and
 // SegmentedSelector), so the heading the hash names does not exist in the

@@ -16,6 +16,9 @@ const SPHERE_FRACTION = Math.tan(Math.asin(1 / 3.2)) / Math.tan((25 * Math.PI) /
 // Scroll progress (0 = the globe screen's top at the bottom of the window,
 // 1 = it fills the window) by which the ring has closed around the globe.
 const CLOSED_AT = 0.85;
+// Share of the scroll between the line letting go and Elle's bubble
+// reaching the nav bar that the line spends travelling and closing.
+const FADE_SHARE_START = 0.5;
 const POINTS = 96;
 
 // The halo's ring width in px (--halo-w on .pmos-globe-halo), which the line
@@ -28,7 +31,10 @@ function haloWidth(stage: HTMLElement) {
 
 const clamp01 =(v: number) => Math.min(1, Math.max(0, v));
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
+// 0 → 1 over t = 0 … 1, leaving 0 at slope `startRate` and arriving at 1
+// flat (a cubic Hermite curve); always rising for startRate ≥ 0.
+const settle = (t: number, startRate: number) =>
+  startRate * (t ** 3 - 2 * t ** 2 + t) + (3 * t ** 2 - 2 * t ** 3);
 
 // An arc of the given length bent through `angle` radians, its middle at
 // (mx, my) and bulging downwards — a straight line at angle 0, a closed
@@ -107,12 +113,23 @@ export function useLineToGlobe({
       }
 
       // Scroll positions where the line lets go (its "170 Million" reaches
-      // the nav bar) and where the ring has closed round the globe.
+      // the nav bar) and where the ring has closed round the globe: halfway
+      // between letting go and the top of Elle's speech bubble reaching the
+      // nav bar, or when the globe screen has settled if that is sooner
+      // (team feedback, 2026-10-18).
       const lineBox = line.getBoundingClientRect();
       const releaseAt = lineBox.top + window.scrollY - navBottom();
-      const closedAt =
+      const bubble = section.querySelector(".elle-bubble");
+      const bubbleAt = bubble
+        ? bubble.getBoundingClientRect().top + window.scrollY - navBottom()
+        : -Infinity;
+      const settledAt =
         section.getBoundingClientRect().top + window.scrollY -
         window.innerHeight * (1 - CLOSED_AT);
+      const closedAt =
+        bubbleAt > releaseAt
+          ? Math.min(settledAt, releaseAt + (bubbleAt - releaseAt) * FADE_SHARE_START)
+          : settledAt;
       const q =
         closedAt > releaseAt
           ? (window.scrollY - releaseAt) / (closedAt - releaseAt)
@@ -126,7 +143,9 @@ export function useLineToGlobe({
         return;
       }
       if (q >= 1) {
-        // Closed: the globe's own halo takes over.
+        // Closed: the globe's own halo takes over and stays, at full
+        // strength, until the globe turns into the next screen's circle
+        // (team feedback 2026-10-18: it briefly faded out here instead).
         overlay.style.visibility = "hidden";
         line.classList.add("is-detached");
         show(1, 1);
@@ -141,18 +160,34 @@ export function useLineToGlobe({
       const fromY = lineBox.bottom + shift - fromThickness / 2;
       // To: the globe's sphere, centred in its canvas.
       const to = canvas.getBoundingClientRect();
-      const radius = (to.width * SPHERE_FRACTION) / 2;
+      // The closed ring is the halo exactly: its stroke centred half a ring
+      // width outside the sphere's edge (see .pmos-globe-halo).
       const toThickness = haloWidth(stage);
+      const radius = (to.width * SPHERE_FRACTION) / 2 + toThickness / 2;
 
-      const e = easeInOut(q);
-      const mx = lerp(fromX, to.left + to.width / 2, e);
-      const my = lerp(fromY, to.top + to.height / 2 + radius, e);
+      // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback:
+      // it dipped, then jumped to line up): the ring's position is now
+      // measured from the globe (which keeps scrolling up meanwhile), not
+      // aimed at it. Its offset from the globe shrinks along a curve that
+      // starts at just the speed that holds the ring still where it let go
+      // and ends at zero, so it settles onto the globe moving with it —
+      // no sudden turn or snap at either end.
+      const gx = to.left + to.width / 2;
+      const gy = to.top + to.height / 2 + radius;
+      const gy0 = gy + shift; // where the globe was when the line let go
+      const gap0 = gy0 - fromY;
+      const startRate = gap0 > 0 ? Math.min(1.5, (closedAt - releaseAt) / gap0) : 0;
+      const e = settle(q, startRate);
+      const mx = gx + (fromX - gx) * (1 - e);
+      const my = gy + (fromY - gy0) * (1 - e);
       const length = lerp(lineBox.width, 2 * Math.PI * radius, e);
       path.setAttribute("d", arcPath(mx, my, length, 2 * Math.PI * e));
       path.setAttribute("stroke-width", String(lerp(fromThickness, toThickness, e)));
       // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request):
       // takes on the globe's atmosphere colour and glow as it closes round it.
-      path.style.setProperty("--tint", String(clamp01((e - 0.35) / 0.65)));
+      // Edited again 2026-10-18 (team feedback): the shift starts the moment
+      // the line lets go and runs the whole way, ending on the halo's colour.
+      path.style.setProperty("--tint", String(clamp01(e)));
 
       overlay.style.visibility = "";
       line.classList.add("is-detached");

@@ -23,8 +23,21 @@
 // page keep finding them by their slug.
 import type { ReactNode } from "react";
 
-export function ResultSection({ children }: { children: ReactNode }) {
-  return <section className="content-section">{children}</section>;
+interface ResultSectionProps {
+  children: ReactNode;
+  /** Set by ResultsPipelines, which shows one section of a pipeline at a time. */
+  hidden?: boolean;
+  /** Set by ResultsPipelines: the Previous / Next buttons. */
+  footer?: ReactNode;
+}
+
+export function ResultSection({ children, hidden, footer }: ResultSectionProps) {
+  return (
+    <section className="content-section" hidden={hidden}>
+      {children}
+      {footer}
+    </section>
+  );
 }
 
 export function KeyTakeaways({ children }: { children: ReactNode }) {

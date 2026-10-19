@@ -3,43 +3,14 @@
 <span data-toc-collapsible hidden />
 
 {/* Page structure laid out with Claude Opus 5 (Anthropic), 2026-10-17, from the team's sketch of the results page (Notes_261017). */}
-{/* The title sits top left, Elle greets from the right — both in the page header box itself, see App.tsx's HEADER_ASIDE — and the four headline success cards start the content, jumping to their section before the page splits into the Toolkit and Therapeutics pipelines. */}
+{/* The title sits top left, Elle greets from the right — both in the page header box itself, see App.tsx's HEADER_ASIDE — the Toolkit / Therapeutics switch and an index of the chosen pipeline's sections come first (the headline success-card row that used to sit here was dropped, team feedback), then the pipeline's sections one at a time (ResultsPipelines). */}
 {/* The MIC write-up is the team's own text, carried over unchanged from the previous version of this page. */}
-{/* TO FILL IN: every "Placeholder" paragraph; every <FigureSlot>, which names the figure or table that belongs there and is meant to be deleted once the real one is in; the explanation line on each <Takeaway>, plus a real label for the cryptic ones ("salt -> LB", "H2O", "X"); and the four <SuccessCard> labels at the top. */}
-{/* A <SuccessCard>'s `to` is the slug of its target heading, so "### Bile salt deconjugation by 15 bile salt hydrolases" is reached with to="bile-salt-deconjugation-by-15-bile-salt-hydrolases". */}
+{/* TO FILL IN: every "Placeholder" paragraph; every <FigureSlot>, which names the figure or table that belongs there and is meant to be deleted once the real one is in; the explanation line on each <Takeaway>. */}
 {/* Keep every comment on this page to a single line: prettier reflows a multi-line MDX comment into markdown and breaks the page. */}
 
-<SuccessCards>
-  <SuccessCard to="antibiotic-susceptibility-of-p-vulgatus">
-    Three antibiotics inhibit <em>P. vulgatus</em>
-  </SuccessCard>
-  <SuccessCard to="a-characterized-promoter-library-for-p-vulgatus">
-    A 20/20 promoter library
-  </SuccessCard>
-  <SuccessCard to="screening-bsh-activity-on-bile-salt-plates">
-    BSH activity on bile salt plates
-  </SuccessCard>
-  <SuccessCard to="bile-salt-deconjugation-by-15-bile-salt-hydrolases">
-    5 of 15 hydrolases are active
-  </SuccessCard>
-</SuccessCards>
+{/* The pipeline switch and the index of the chosen pipeline's sections open the page, see ResultsPipelines. */}
 
-{/* Two logo files, one per theme, swapped in CSS — the same pair the navbar uses. */}
-
-<div className="pipeline-divider">
-  <img
-    className="pipeline-divider-logo pipeline-divider-logo--light"
-    src="https://static.igem.wiki/teams/6299/wiki/icons/logo-dark-purple-no-text.avif"
-    alt=""
-  />
-  <img
-    className="pipeline-divider-logo pipeline-divider-logo--dark"
-    src="https://static.igem.wiki/teams/6299/wiki/icons/logo-light-purple-no-text.avif"
-    alt=""
-  />
-</div>
-
-<SegmentedSelector tone="pipeline">
+<ResultsPipelines>
 
 <SectionItem label="Toolkit">
 
@@ -49,9 +20,67 @@
 
 ### Introduction
 
-Placeholder — replace with the introduction to the toolkit pipeline, ending in
-a pointer to the <Link to="/experimental-overview">experimental overview</Link>
-for how these experiments fit together.
+{/* The wet lab wheel, as on the Project description page (same seven sections, keep them in step); layout="side" (team feedback, 2026-10-19 — the "dropdown" layout left nothing showing until a wedge was clicked) always shows the selected section's text beside the wheel, starting with the first one. */}
+
+<WheelSelector layout="side" label="Toolkit sections" id="toolkit-sections">
+
+<SectionItem label="Strain selection">
+
+<h4 data-toc-ignore="true">Strain selection</h4>
+
+{/* TO FILL IN: a short description of this section. */}
+
+</SectionItem>
+
+<SectionItem label="Antibiotic selection">
+
+<h4 data-toc-ignore="true">Antibiotic selection</h4>
+
+{/* TO FILL IN: a short description of this section. */}
+
+</SectionItem>
+
+<SectionItem label="Reporter gene output">
+
+<h4 data-toc-ignore="true">Reporter gene output</h4>
+
+{/* TO FILL IN: a short description of this section. */}
+
+</SectionItem>
+
+<SectionItem label="Medium comparison">
+
+<h4 data-toc-ignore="true">Medium comparison</h4>
+
+{/* TO FILL IN: a short description of this section. */}
+
+</SectionItem>
+
+<SectionItem label="Conjugation efficiency testing">
+
+<h4 data-toc-ignore="true">Conjugation efficiency testing</h4>
+
+{/* TO FILL IN: a short description of this section. */}
+
+</SectionItem>
+
+<SectionItem label="Promotor screening">
+
+<h4 data-toc-ignore="true">Promotor screening</h4>
+
+{/* TO FILL IN: a short description of this section. */}
+
+</SectionItem>
+
+<SectionItem label="Codon Optimization & Harmonization tool">
+
+<h4 data-toc-ignore="true">Codon Optimization & Harmonization tool</h4>
+
+{/* TO FILL IN: a short description of this section. */}
+
+</SectionItem>
+
+</WheelSelector>
 
 </ResultSection>
 
@@ -1647,9 +1676,9 @@ Placeholder — what the library gives a future team.
 
 ### Introduction
 
-Placeholder — replace with the introduction to the therapeutics pipeline,
-ending in a pointer to the <Link to="/experimental-overview">experimental overview</Link>
-for how these experiments fit together.
+{/* The team's figure of the therapeutics pipeline, added with Claude Opus 5 (Anthropic), 2026-10-19: its five numbered steps are clickable — 1-4 open that step's write-up underneath, 5 sends the reader to the conjugation section of the Toolkit wheel above. Text from the team's "Experimental overview of therapeutics" document. */}
+
+<TherapeuticsOverview />
 
 <div className="all-data-label">All data</div>
 
@@ -1788,7 +1817,7 @@ Placeholder — the text that goes with the figure the reader has selected.
 #### Predicted affinity does not track observed activity
 
 Placeholder — docking scores against measured deconjugation. The docking heat
-map itself lives on the <Link to="/dry-lab">dry lab</Link> page.
+map itself lives on the <Link to="/dry-lab#2-3-bsh-bile-salt-interaction-using-autodock-vina">dry lab</Link> page.
 
 <FigureSlot label="Table 1">
   Predicted affinity next to measured activity, per hydrolase.
@@ -2078,7 +2107,7 @@ For additional information about risk and safety see the <Link to="/safety-and-s
 
 </SectionItem>
 
-</SegmentedSelector>
+</ResultsPipelines>
 
 [^construct-crispr-gut]: CRISPR-Cas-based genome editing for human gut commensals. ACS Synthetic Biology, 11(1), 464. https://pubs.acs.org/asbcd6/article-abstract/11/1/464/1497030/CRISPR-Cas-Based-Genome-Editing-for-Human-Gut
 
