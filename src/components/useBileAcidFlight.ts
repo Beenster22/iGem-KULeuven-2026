@@ -103,25 +103,22 @@ function floatSpot(n: number, total: number) {
     (low ? 0.79 : 0.21) + jitter * 0.22,
   ] as [number, number];
 }
-// How far each one wanders around its place, in pixels: DRIFT as the
-// reader scrolls, and SWAY of its own accord with the clock, so they are
-// never quite still even when the page is (team request). The two run at
-// different rates in x and y, so each one wanders a small loop rather than
-// sliding to and fro along one line.
-const DRIFT = 26;
+// How far each one wanders around its place, in pixels. It keeps to its
+// place as the reader scrolls (team request) and only sways of its own
+// accord, with the clock, so scrolling through that screen does not shift
+// them and they are still never quite still.
 const SWAY = 20;
 // How long one sway takes, in milliseconds, across and down. They are
 // close but not equal, so a pair of them drifts in and out of step and no
 // one of them ever retraces the same little loop.
 const SWAY_X_MS = 5200;
 const SWAY_Y_MS = 4100;
-// How far above the TGR5 screen the fall sets off, as a share of the
-// window (team request: they float for the whole of that sentence's
-// screen, and only once it has gone do they drop). Measuring it from the
-// TGR5 screen rather than from the end of the pinned step matters: the
-// sentence is still readable for most of a window after that step ends,
-// and the acids used to have left the page by then.
-const FALL_LEAD = 0.5;
+// How long the fall itself takes, as a share of the window, and the most
+// of the TGR5 screen's own pinned step it may use up — they have to be
+// down before that screen starts moving again, or there would be nothing
+// left of it to land on.
+const FALL_LEN = 0.6;
+const FALL_OF_STEP = 0.7;
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
@@ -264,28 +261,31 @@ export function useBileAcidFlight({
       const startAt =
         stageRests + insideStage + underside * diagramBox.height - navBottom();
       const pin = stage.closest<HTMLElement>(".home-snap-pin") ?? stage;
+      const pinBox = pin.getBoundingClientRect();
+      // The wave the TGR5 screen begins on. They keep their places until
+      // the navigation bar comes down to it, and only then fall (team
+      // request), so this is the mark the fall sets off from.
+      const fallAt = pinBox.top + window.scrollY - navBottom();
+      // And they are down while that screen is still being held, so the
+      // pool is there to land on rather than sliding away under them.
+      const stepHeld = pinBox.height - stage.getBoundingClientRect().height;
       const endAt =
-        pin.getBoundingClientRect().top + window.scrollY - navBottom();
-      // The screen in between. Its band is pinned, so measure its wrapper,
-      // which is not: they are in place as the sentence settles, hold for
-      // the whole of the step it is held there, and fall on the next.
+        fallAt +
+        (stepHeld > 0
+          ? Math.min(window.innerHeight * FALL_LEN, stepHeld * FALL_OF_STEP)
+          : window.innerHeight * FALL_LEN);
+      // The screen they cross in between. Its band is pinned, so measure
+      // its wrapper, which is not: they are in place as it settles and hold
+      // their places for the whole of it.
       const band = document
         .querySelector<HTMLElement>(STATEMENT)
         ?.closest<HTMLElement>(".home-section");
       const bandPin = band?.closest<HTMLElement>(".home-snap-pin");
-      const span = endAt - startAt;
       const floatAt = bandPin
         ? bandPin.getBoundingClientRect().top + window.scrollY
         : band
           ? band.getBoundingClientRect().top + window.scrollY - navBottom()
-          : startAt + span * 0.4;
-      // They float for the whole of that sentence's screen and set off only
-      // as the TGR5 one comes up, so this is measured from that screen and
-      // not from the end of the step the sentence is pinned for.
-      const fallAt = Math.max(
-        floatAt + span * 0.1,
-        endAt - window.innerHeight * FALL_LEAD,
-      );
+          : startAt + (fallAt - startAt) * 0.4;
       if (!(startAt < floatAt && floatAt < fallAt && fallAt < endAt))
         return rest();
       if (window.scrollY <= startAt) {
@@ -356,15 +356,9 @@ export function useBileAcidFlight({
         // A wander of its own around that place — with the scroll, and
         // with the clock so it keeps moving while the reader is still.
         // Both fade out as it drops, so that the landing is still exact.
-        const settle = outLeg * (1 - fallLeg);
-        const drift = DRIFT * settle;
-        const sway = SWAY * settle;
-        x +=
-          Math.sin(window.scrollY / 90 + i * 1.7) * drift +
-          Math.sin((now / SWAY_X_MS) * 2 * Math.PI + i * 1.3) * sway;
-        y +=
-          Math.cos(window.scrollY / 70 + i * 2.3) * drift +
-          Math.cos((now / SWAY_Y_MS) * 2 * Math.PI + i * 2.1) * sway;
+        const sway = SWAY * outLeg * (1 - fallLeg);
+        x += Math.sin((now / SWAY_X_MS) * 2 * Math.PI + i * 1.3) * sway;
+        y += Math.cos((now / SWAY_Y_MS) * 2 * Math.PI + i * 2.1) * sway;
         // And home, onto its counterpart.
         x = lerp(x, seatX, fallLeg);
         y = lerp(y, seatY, fallLeg);
