@@ -13786,3 +13786,160 @@ a.protocol-download:hover {
     max-height: calc(100vh - 7rem - var(--results-bar-h, 0px));
   }
 }
+
+/* THERAPEUTICS OVERVIEW FIGURE
+   Generated with Claude Opus 5 (Anthropic), 2026-10-19
+   Purpose: the team's therapeutics pipeline figure on the results page
+   (TherapeuticsOverview.tsx), whose five numbered steps are buttons. The
+   badges sit on the circles drawn into the artwork — teal, so they read as
+   clickable against the figure's blues and pinks — and are placed as
+   percentages of the figure, so they hold their spots at every size. */
+.therapeutics-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.therapeutics-overview-figure {
+  position: relative;
+  width: 100%;
+  max-width: 1057px;
+  margin-inline: auto;
+  aspect-ratio: 1057 / 510;
+}
+
+.therapeutics-overview-figure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+}
+
+/* Sized from the figure's width so a badge keeps covering its circle; the
+   artwork's own circles are about 3% of it across. */
+.therapeutics-overview-badge {
+  position: absolute;
+  translate: -50% -50%;
+  width: 3.4%;
+  aspect-ratio: 1;
+  min-width: 22px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 2px solid #eaf4f5;
+  border-radius: 50%;
+  background: #2fa4a9;
+  color: #fff;
+  font-family: inherit;
+  font-size: clamp(0.7rem, 1.35vw, 1.05rem);
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    scale 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.therapeutics-overview-badge:hover,
+.therapeutics-overview-badge:focus-visible {
+  scale: 1.15;
+  background: #1f7479;
+  box-shadow: 0 0 0 0.3rem rgba(47, 164, 169, 0.3);
+}
+
+.therapeutics-overview-badge.is-open {
+  background: #1f7479;
+  box-shadow: 0 0 0 0.3rem rgba(47, 164, 169, 0.45);
+}
+
+/* Step 5 leaves this figure for the Toolkit wheel, so it is marked out with
+   a ring rather than reading as another panel to open. */
+.therapeutics-overview-badge--link {
+  border-style: dashed;
+}
+
+.therapeutics-overview-badge .visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The step's write-up, in the same box as the section it sits in
+   (.content-section), a shade lighter as it is inside one. */
+.therapeutics-overview-panel {
+  padding: 2rem 2.25rem;
+  border-radius: 1.25rem;
+  background-color: color-mix(in srgb, var(--color-body-bg) 35%, #fff);
+  animation: therapeutics-overview-in 0.3s ease;
+}
+
+[data-theme="dark"] .therapeutics-overview-panel {
+  background-color: color-mix(in srgb, var(--color-body-bg) 74%, #fff);
+}
+
+.therapeutics-overview-panel > :first-child {
+  margin-top: 0;
+}
+
+.therapeutics-overview-panel > :last-child {
+  margin-bottom: 0;
+}
+
+.therapeutics-overview-panel h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* The step's number, repeated so the panel says which badge opened it. */
+.therapeutics-overview-panel-number {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.8em;
+  height: 1.8em;
+  border-radius: 50%;
+  background: #2fa4a9;
+  color: #fff;
+  font-size: 0.7em;
+  font-weight: 800;
+}
+
+.therapeutics-overview-panel h5 {
+  margin-bottom: 0.3rem;
+  font-size: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+}
+
+@keyframes therapeutics-overview-in {
+  from {
+    opacity: 0;
+    translate: 0 -0.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .therapeutics-overview-panel {
+    padding: 1.25rem 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .therapeutics-overview-badge {
+    transition: none;
+  }
+
+  .therapeutics-overview-panel {
+    animation: none;
+  }
+}

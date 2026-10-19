@@ -22,7 +22,7 @@
 
 {/* The wet lab wheel, as on the Project description page (same seven sections, keep them in step); layout="side" (team feedback, 2026-10-19 — the "dropdown" layout left nothing showing until a wedge was clicked) always shows the selected section's text beside the wheel, starting with the first one. */}
 
-<WheelSelector layout="side" label="Toolkit sections">
+<WheelSelector layout="side" label="Toolkit sections" id="toolkit-sections">
 
 <SectionItem label="Strain selection">
 
@@ -1675,6 +1675,10 @@ Placeholder — what the library gives a future team.
 <ResultSection>
 
 ### Introduction
+
+{/* The team's figure of the therapeutics pipeline, added with Claude Opus 5 (Anthropic), 2026-10-19: its five numbered steps are clickable — 1-4 open that step's write-up underneath, 5 sends the reader to the conjugation section of the Toolkit wheel above. Text from the team's "Experimental overview of therapeutics" document. */}
+
+<TherapeuticsOverview />
 
 <div className="all-data-label">All data</div>
 
