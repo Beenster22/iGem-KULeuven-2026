@@ -2786,6 +2786,24 @@ a[data-footnote-ref]:focus {
   pointer-events: none;
 }
 
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-10-19
+   Purpose: the hub's text alternative to the bacterium (WheelSelector's
+   hubLabel prop), used by the PMOS hypothesis figure. */
+.wheel-selector-hub-label {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  fill: #33283f;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* The small icon shown above a wedge's label when its SectionItem has an
+   `icon` prop (PMOS hypothesis figure). */
+.wheel-selector-wedge-icon {
+  pointer-events: none;
+}
+
 .wheel-selector-selected {
   fill: none;
   stroke: #33283f;

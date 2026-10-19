@@ -21,6 +21,13 @@ interface WheelSelectorProps {
   layout?: "below" | "side" | "dropdown";
   /** Accessible name for the ring of wedges. */
   label?: string;
+  /**
+   * Added 2026-10-19 (PMOS hypothesis figure, project description page):
+   * replaces the hub's bacterium image with this short text, split onto one
+   * line per word (e.g. "PMOS Hypothesis"). Leave unset for the wet lab
+   * wheel's bacterium.
+   */
+  hubLabel?: string;
 }
 
 const SIZE = 520;
@@ -28,6 +35,11 @@ const CENTER = SIZE / 2;
 const OUTER_RADIUS = SIZE / 2 - 10;
 const INNER_RADIUS = 108;
 const LABEL_RADIUS = (OUTER_RADIUS + INNER_RADIUS) / 2 + 4;
+// When a wedge has an icon (PMOS hypothesis figure), it sits near the rim —
+// the wedge's widest point — well clear of the label at LABEL_RADIUS, which
+// keeps its usual spot rather than being squeezed toward the narrow hub end.
+const ICON_RADIUS = OUTER_RADIUS - 26;
+const ICON_SIZE = 30;
 const LINE_HEIGHT = 20;
 // Longest label line, in characters, before it wraps onto the next.
 const MAX_LINE = 14;
@@ -107,6 +119,22 @@ const BACTERIUM = {
   height: 160,
 };
 
+// The hub's alternative to the bacterium: a short label split one word per
+// line (e.g. ["PMOS", "HYPOTHESIS"]), for figures with no drawing of their
+// own (PMOS hypothesis figure, project description page).
+function HubText({ text }: { text: string }) {
+  const lines = text.toUpperCase().split(" ");
+  return (
+    <text className="wheel-selector-hub-label" x={CENTER} y={CENTER} textAnchor="middle">
+      {lines.map((line, i) => (
+        <tspan key={i} x={CENTER} dy={i === 0 ? `${-(lines.length - 1) * 0.6}em` : "1.2em"}>
+          {line}
+        </tspan>
+      ))}
+    </text>
+  );
+}
+
 function Bacterium() {
   return (
     <>
@@ -130,6 +158,7 @@ export function WheelSelector({
   children,
   layout = "below",
   label = "Wet lab sections",
+  hubLabel,
 }: WheelSelectorProps) {
   const items = useMemo(() => extractLabeledChildren(children), [children]);
   const count = items.length;
@@ -179,10 +208,9 @@ export function WheelSelector({
         >
           {items.map((item, index) => {
             const startAngle = -90 + index * step;
-            const labelPos = polarToCartesian(
-              LABEL_RADIUS,
-              midAngle(index, count),
-            );
+            const hasIcon = Boolean(item.icon);
+            const labelPos = polarToCartesian(LABEL_RADIUS, midAngle(index, count));
+            const iconPos = polarToCartesian(ICON_RADIUS, midAngle(index, count));
             const isActive = index === activeIndex && open;
             const colours = PALETTE[index % PALETTE.length];
             const lines = wrapLabel(item.label);
@@ -210,6 +238,19 @@ export function WheelSelector({
                   d={wedgePath(startAngle, startAngle + step)}
                   fill={colours.fill}
                 />
+                {hasIcon && (
+                  // Turned back like the label below, so the icon stays
+                  // upright all the way round too.
+                  <g
+                    className="wheel-selector-wedge-icon"
+                    style={{ color: colours.ink }}
+                    transform={`translate(${iconPos.x} ${iconPos.y}) rotate(${-rotation})`}
+                  >
+                    <g transform={`translate(${-ICON_SIZE / 2} ${-ICON_SIZE / 2})`}>
+                      {item.icon}
+                    </g>
+                  </g>
+                )}
                 {/* Turned back by as much as the wheel is turned, so the
                     label stays upright all the way round. */}
                 <g transform={`translate(${labelPos.x} ${labelPos.y})`}>
@@ -241,7 +282,7 @@ export function WheelSelector({
           cy={CENTER}
           r={INNER_RADIUS}
         />
-        <Bacterium />
+        {hubLabel ? <HubText text={hubLabel} /> : <Bacterium />}
         {/* The selected wedge is the one at rest: outlined there, with a
             pointer from it towards its content. */}
         <path

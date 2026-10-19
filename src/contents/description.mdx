@@ -69,13 +69,53 @@ That gap is precisely what motivates our approach. By targeting the biological r
 
 <ExpandableText title="Learn more about the different hypotheses of PMOS etiology">
 
-As the actual cause of this condition remains unknown, over the years there have been many hypotheses created around the root cause of PMOS. Nisa et al. group them into five[ref: https://pmc.ncbi.nlm.nih.gov/articles/PMC10784448/]:
+As the actual cause of this condition remains unknown, over the years there have been many hypotheses created around the root cause of PMOS. Nisa et al. group them into five[ref: https://pmc.ncbi.nlm.nih.gov/articles/PMC10784448/]. Click an icon below to read about each one.
 
-- **Evolutionary hypothesis** — proposes how under ancestral conditions, such as heavy physical labor, periods of famine and epidemic disease, favoring efficient energy storage would have been advantageous[^thrifty]. Considering a drastic life change of continuous food availability and sedentary living, the same genotype is hypothesized to contribute to the rise in obesity and type 2 diabetes, and possibly to PMOS[^thrifty].
-- **Genetic hypothesis** — addresses that PMOS tends to run in families, which strongly suggests that genes play a part in who develops it. Because the condition affects so many systems at once, researchers have looked at genes involved in hormone production, insulin signaling, inflammation, blood sugar control, and normal ovarian function[^pmos-genes]. So far, the clearest links involve genes that affect how the body handles insulin and fat, and genes that control androgen and reproductive hormone levels. Together, these genes may explain common symptoms of PMOS.
-- **Insulin hypothesis** — emphasizes that insulin does more than just control blood sugar: it also helps regulate how the ovaries grow and how much androgen they produce[ref: Dapas M, Lin FT, Nadkarni GN, Sisk R, Legro RS, Urbanek M, et al. Distinct subtypes of polycystic ovary syndrome with novel genetic associations: an unsupervised, phenotypic clustering analysis. PLoS Med. 2020;17(6):e1003132. https://doi.org/10.1371/journal.pmed.1003132]. Many women with PMOS, roughly 50–70%, have higher-than-normal insulin levels[ref: Poretsky L, Cataldo NA, Rosenwaks Z, Giudice LC. The insulin-related ovarian regulatory system in health and disease. Endocr Rev. 1999;20(4):535–582. https://doi.org/10.1210/edrv.20.4.0374]. Muscle and fat respond less to insulin, so the body compensates by making more of it[ref: Diamanti-Kandarakis E, Papavassiliou AG. Outstanding questions. Trends Mol Med. 2006;7(12):324–332. https://doi.org/10.1016/j.molmed.2006.05.006][^petersen2018]. This extra insulin pushes androgen levels up in several ways. It works alongside Luteinizing Hormone (LH) to boost androgen production in the ovaries[^petersen2018], stimulates the adrenal glands, shifts the hormone balance toward LH over Follicle-Stimulating Hormone (FSH)[ref: Tosi F, Negri C, Brun E, Castello R, Faccini G, Bonora E, et al. Insulin enhances ACTH-stimulated androgen and glucocorticoid metabolism in hyperandrogenic women. Eur J Endocrinol. 2011;164(2):197. https://doi.org/10.1530/EJE-10-0782], and lowers Sex Hormone-Binding Globulin (SHBG) so that more testosterone circulates freely[ref: Feng C, Jin Z, Chi X, Zhang B, Wang X, Sun L, et al. SHBG expression is correlated with PI3K/AKT pathway activity in a cellular model of human insulin resistance. Gynecol Endocrinol. 2018;34(7):567–573. https://doi.org/10.1080/09513590.2017.1411474]. Insulin resistance and excess androgens therefore feed into each other, and this cycle is thought to be one of the main drivers of PMOS.
-- **Environmental hypothesis** — places importance on emerging evidence that suggests how environmental toxins may play a role in PMOS, with endocrine-disrupting chemicals (EDCs) being the most studied. Because their structure resembles natural hormones, these chemicals can bind hormone receptors, disrupting metabolic and reproductive processes. Everyday exposure comes largely from plastics, including food packaging, cosmetics, baby bottles and receipts, which release compounds like BPA and phthalates.
-- **Neuroendocrine hypothesis** — places the primary defect upstream of the ovary, in the hypothalamic circuits controlling reproduction. Gonadotropin-Releasing Hormone (GnRH) is released in pulses whose frequency determines which gonadotropin dominates. Fast pulses favor LH, slow pulses FSH[ref: Chang RJ. The reproductive phenotype in polycystic ovary syndrome. Nat Clin Pract Endocrinol Metab. 2007;3(10):688–695.] and in PMOS this balance shifts toward LH, driving theca-cell androgen production while reduced FSH arrests follicular development[ref: Chang RJ. The reproductive phenotype in polycystic ovary syndrome. Nat Clin Pract Endocrinol Metab. 2007;3(10):688–695. Jonard S, Dewailly D. The follicular excess in polycystic ovaries, due to intra-ovarian hyperandrogenism, may be the main culprit for the follicular arrest. Hum Reprod Update. 2004;10(2):107–117.]. Furthermore, it has been tested in vivo that prenatal exposure to androgens can reproduce the phenotype[ref: Sullivan SD, Moenter SM. Prenatal androgens alter GABAergic drive to gonadotropin-releasing hormone neurons: implications for a common fertility disorder. Proc Natl Acad Sci U S A. 2004;101(18):7129–7134.], as does elevated prenatal anti-Müllerian hormone[ref: Tata B, Mimouni NEH, Barbotin AL, Malone SA, Loyens A, Pigny P, et al. Elevated prenatal anti-Müllerian hormone reprograms the fetus and induces polycystic ovary syndrome in adulthood. Nat Med. 2018;24(6):834–846.]. Whether the neuroendocrine change is cause or consequence remains unresolved[ref: https://pubmed.ncbi.nlm.nih.gov/31265059/], but it definitely has a big impact on PMOS.
+{/* The PMOS hypothesis figure, added with Claude Sonnet 5 (Anthropic), 2026-10-19, after the team's drawing of five icons (evolution, brain, DNA, globe + leaf, insulin) around a PMOS Hypothesis centre — reuses the wet lab wheel's dropdown behaviour, clicking an icon drops its hypothesis down underneath. */}
+
+<WheelSelector layout="dropdown" label="PMOS hypotheses" hubLabel="PMOS Hypothesis">
+
+<SectionItem label="Evolutionary hypothesis" icon={<EvolutionIcon />}>
+
+<h4 data-toc-ignore="true">Evolutionary hypothesis</h4>
+
+Proposes how under ancestral conditions, such as heavy physical labor, periods of famine and epidemic disease, favoring efficient energy storage would have been advantageous[^thrifty]. Considering a drastic life change of continuous food availability and sedentary living, the same genotype is hypothesized to contribute to the rise in obesity and type 2 diabetes, and possibly to PMOS[^thrifty].
+
+</SectionItem>
+
+<SectionItem label="Genetic hypothesis" icon={<DnaIcon />}>
+
+<h4 data-toc-ignore="true">Genetic hypothesis</h4>
+
+Addresses that PMOS tends to run in families, which strongly suggests that genes play a part in who develops it. Because the condition affects so many systems at once, researchers have looked at genes involved in hormone production, insulin signaling, inflammation, blood sugar control, and normal ovarian function[^pmos-genes]. So far, the clearest links involve genes that affect how the body handles insulin and fat, and genes that control androgen and reproductive hormone levels. Together, these genes may explain common symptoms of PMOS.
+
+</SectionItem>
+
+<SectionItem label="Insulin hypothesis" icon={<InsulinIcon />}>
+
+<h4 data-toc-ignore="true">Insulin hypothesis</h4>
+
+Emphasizes that insulin does more than just control blood sugar: it also helps regulate how the ovaries grow and how much androgen they produce[ref: Dapas M, Lin FT, Nadkarni GN, Sisk R, Legro RS, Urbanek M, et al. Distinct subtypes of polycystic ovary syndrome with novel genetic associations: an unsupervised, phenotypic clustering analysis. PLoS Med. 2020;17(6):e1003132. https://doi.org/10.1371/journal.pmed.1003132]. Many women with PMOS, roughly 50–70%, have higher-than-normal insulin levels[ref: Poretsky L, Cataldo NA, Rosenwaks Z, Giudice LC. The insulin-related ovarian regulatory system in health and disease. Endocr Rev. 1999;20(4):535–582. https://doi.org/10.1210/edrv.20.4.0374]. Muscle and fat respond less to insulin, so the body compensates by making more of it[ref: Diamanti-Kandarakis E, Papavassiliou AG. Outstanding questions. Trends Mol Med. 2006;7(12):324–332. https://doi.org/10.1016/j.molmed.2006.05.006][^petersen2018]. This extra insulin pushes androgen levels up in several ways. It works alongside Luteinizing Hormone (LH) to boost androgen production in the ovaries[^petersen2018], stimulates the adrenal glands, shifts the hormone balance toward LH over Follicle-Stimulating Hormone (FSH)[ref: Tosi F, Negri C, Brun E, Castello R, Faccini G, Bonora E, et al. Insulin enhances ACTH-stimulated androgen and glucocorticoid metabolism in hyperandrogenic women. Eur J Endocrinol. 2011;164(2):197. https://doi.org/10.1530/EJE-10-0782], and lowers Sex Hormone-Binding Globulin (SHBG) so that more testosterone circulates freely[ref: Feng C, Jin Z, Chi X, Zhang B, Wang X, Sun L, et al. SHBG expression is correlated with PI3K/AKT pathway activity in a cellular model of human insulin resistance. Gynecol Endocrinol. 2018;34(7):567–573. https://doi.org/10.1080/09513590.2017.1411474]. Insulin resistance and excess androgens therefore feed into each other, and this cycle is thought to be one of the main drivers of PMOS.
+
+</SectionItem>
+
+<SectionItem label="Environmental hypothesis" icon={<GlobeLeafIcon />}>
+
+<h4 data-toc-ignore="true">Environmental hypothesis</h4>
+
+Places importance on emerging evidence that suggests how environmental toxins may play a role in PMOS, with endocrine-disrupting chemicals (EDCs) being the most studied. Because their structure resembles natural hormones, these chemicals can bind hormone receptors, disrupting metabolic and reproductive processes. Everyday exposure comes largely from plastics, including food packaging, cosmetics, baby bottles and receipts, which release compounds like BPA and phthalates.
+
+</SectionItem>
+
+<SectionItem label="Neuroendocrine hypothesis" icon={<BrainIcon />}>
+
+<h4 data-toc-ignore="true">Neuroendocrine hypothesis</h4>
+
+Places the primary defect upstream of the ovary, in the hypothalamic circuits controlling reproduction. Gonadotropin-Releasing Hormone (GnRH) is released in pulses whose frequency determines which gonadotropin dominates. Fast pulses favor LH, slow pulses FSH[ref: Chang RJ. The reproductive phenotype in polycystic ovary syndrome. Nat Clin Pract Endocrinol Metab. 2007;3(10):688–695.] and in PMOS this balance shifts toward LH, driving theca-cell androgen production while reduced FSH arrests follicular development[ref: Chang RJ. The reproductive phenotype in polycystic ovary syndrome. Nat Clin Pract Endocrinol Metab. 2007;3(10):688–695. Jonard S, Dewailly D. The follicular excess in polycystic ovaries, due to intra-ovarian hyperandrogenism, may be the main culprit for the follicular arrest. Hum Reprod Update. 2004;10(2):107–117.]. Furthermore, it has been tested in vivo that prenatal exposure to androgens can reproduce the phenotype[ref: Sullivan SD, Moenter SM. Prenatal androgens alter GABAergic drive to gonadotropin-releasing hormone neurons: implications for a common fertility disorder. Proc Natl Acad Sci U S A. 2004;101(18):7129–7134.], as does elevated prenatal anti-Müllerian hormone[ref: Tata B, Mimouni NEH, Barbotin AL, Malone SA, Loyens A, Pigny P, et al. Elevated prenatal anti-Müllerian hormone reprograms the fetus and induces polycystic ovary syndrome in adulthood. Nat Med. 2018;24(6):834–846.]. Whether the neuroendocrine change is cause or consequence remains unresolved[ref: https://pubmed.ncbi.nlm.nih.gov/31265059/], but it definitely has a big impact on PMOS.
+
+</SectionItem>
+
+</WheelSelector>
 
 </ExpandableText>
 
