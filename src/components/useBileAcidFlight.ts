@@ -19,6 +19,7 @@
 // Modelled on useLensToGutWindow.ts, which hands the magnifying glass over
 // to the circle of bacteria the same way.
 import { useEffect, type RefObject } from "react";
+import { navBottom } from "./useFallingM";
 
 /** The screen they arrive on, and the acids already drawn there. */
 const TGR5_STAGE = ".tgr5";
@@ -153,7 +154,17 @@ export function useBileAcidFlight({
         hex.setAttribute("points", HEX_POINTS);
         group.append(hex);
         overlay.append(group);
-        return { group, from: anchorFor(conjugated, stream, n, totals.get(key) ?? 1) };
+        return {
+          group,
+          from: anchorFor(conjugated, stream, n, totals.get(key) ?? 1),
+          // Filled in below, once the whole set is known.
+          float: [0.5, 0.5] as [number, number],
+        };
+      });
+      // Spread over the page in the order they are drawn, so the scatter is
+      // even rather than grouped by kind.
+      shapes.forEach((shape, i) => {
+        shape.float = floatSpot(i, shapes.length);
       });
     };
 
@@ -172,14 +183,35 @@ export function useBileAcidFlight({
       if (!stage || !target || !acids?.length || !section) return rest();
       if (shapes.length !== acids.length) build(acids);
 
-      // From the BSH screen beginning to leave, to the TGR5 screen reaching
-      // the top of the window — the stretch that holds "But why is this
-      // reaction important?" in between.
+      // Three marks, so the journey reads as one move and then another:
+      // they leave once the navigation bar comes down to the bottom of the
+      // bacterium, drift across the page while "But why is this reaction
+      // important?" holds the screen, and fall from there onto the pool.
+      const diagramBox = diagram.getBoundingClientRect();
+      // The BSH drawing rides a sticky stage, so its own position on the
+      // page moves with the scroll; the stage's wrapper does not. Measure
+      // the bacterium's place inside the stage and add the wrapper's top,
+      // so the mark stays put however far the reader has come.
+      const bshStage = diagram.closest<HTMLElement>(".home-snap-stage");
+      const bshPin = diagram.closest<HTMLElement>(".home-snap-pin") ?? section;
+      const insideStage = bshStage
+        ? diagramBox.top - bshStage.getBoundingClientRect().top
+        : 0;
       const startAt =
-        section.getBoundingClientRect().bottom + window.scrollY - window.innerHeight;
+        bshPin.getBoundingClientRect().top +
+        window.scrollY +
+        insideStage +
+        BACTERIUM_BOTTOM * diagramBox.height -
+        navBottom();
+      const statement = document.querySelector<HTMLElement>(STATEMENT);
       const pin = stage.closest<HTMLElement>(".home-snap-pin") ?? stage;
       const endAt = pin.getBoundingClientRect().top + window.scrollY;
-      if (endAt <= startAt) return rest();
+      // Settled on the statement screen: its own top at the top of the
+      // window, below the bar. Half way along if that screen is not there.
+      const floatAt = statement
+        ? statement.getBoundingClientRect().top + window.scrollY - navBottom()
+        : (startAt + endAt) / 2;
+      if (endAt <= startAt || floatAt <= startAt || endAt <= floatAt) return rest();
       const q = clamp01((window.scrollY - startAt) / (endAt - startAt));
       if (q <= 0) {
         stage.style.removeProperty("--acids-in");
@@ -191,9 +223,16 @@ export function useBileAcidFlight({
         return rest();
       }
 
-      const from = diagram.getBoundingClientRect();
+      const from = diagramBox;
       const to = target.getBoundingClientRect();
       if (!from.width || !to.width) return rest();
+      // Which leg of the journey, and how far along it.
+      const falling = window.scrollY >= floatAt;
+      const leg = easeInOut(
+        falling
+          ? clamp01((window.scrollY - floatAt) / (endAt - floatAt))
+          : clamp01((window.scrollY - startAt) / (floatAt - startAt)),
+      );
 
       const e = easeInOut(q);
       // Each end's hexagon, as the reader sees it.
@@ -206,16 +245,16 @@ export function useBileAcidFlight({
       shapes.forEach((shape, i) => {
         // Its counterpart's own spot, read live — the pool drifts about.
         const seat = acids[i].getBoundingClientRect();
-        const x = lerp(
-          from.left + shape.from[0] * from.width,
-          seat.left + seat.width / 2,
-          e,
-        );
-        const y = lerp(
-          from.top + shape.from[1] * from.height,
-          seat.top + seat.height / 2,
-          e,
-        );
+        // Where it drifts to on the page in between, held in the window so
+        // it stays put while that screen does.
+        const floatX = shape.float[0] * window.innerWidth;
+        const floatY = shape.float[1] * window.innerHeight;
+        const x = falling
+          ? lerp(floatX, seat.left + seat.width / 2, leg)
+          : lerp(from.left + shape.from[0] * from.width, floatX, leg);
+        const y = falling
+          ? lerp(floatY, seat.top + seat.height / 2, leg)
+          : lerp(from.top + shape.from[1] * from.height, floatY, leg);
         shape.group.setAttribute(
           "transform",
           `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${scale.toFixed(3)})`,
