@@ -12947,11 +12947,7 @@ a.protocol-download:hover {
 
 .integration-summary-row {
   padding: 1rem 0;
-  border-top: 1px solid rgba(51, 40, 63, 0.18);
-}
-
-[data-theme="dark"] .integration-summary-row {
-  border-top-color: rgba(255, 255, 255, 0.16);
+  border-top: 3px solid rgba(47, 164, 169, 0.6);
 }
 
 /* A row that carries on from the one above shares its point, so the divider
