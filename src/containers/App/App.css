@@ -13957,3 +13957,10 @@ a.protocol-download:hover {
     animation: none;
   }
 }
+
+/* Compact table with only the header row in the brand's dark purple (the
+   budget table on the Entrepreneurship page); every other cell stays plain. */
+.table-head-purple.table-responsive-rounded .table-bordered thead th {
+  background-color: #33283f;
+  color: #ffffff;
+}
