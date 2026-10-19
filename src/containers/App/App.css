@@ -4231,6 +4231,20 @@ body.home-fullscreen {
   pointer-events: none;
 }
 
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-19
+   Purpose: on a portrait screen (phones) the hero is far taller than the
+   2.37:1 video, so "cover" scaled it up to the screen height and cropped to
+   a ~390px sliver — a super-zoomed fragment of the logo. In portrait the
+   video/still are fitted to the width instead (letterboxed on the hero's
+   accent background), so the whole frame stays visible. */
+@media (orientation: portrait) {
+  .home-hero-video,
+  .home-hero-embed {
+    width: 100cqw;
+    height: calc(100cqw / var(--home-hero-aspect));
+  }
+}
+
 .home-hero-layer {
   position: absolute;
   inset: 0;
