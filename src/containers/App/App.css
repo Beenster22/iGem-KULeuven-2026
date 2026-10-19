@@ -4026,26 +4026,31 @@ body.home-fullscreen {
   background-color: var(--color-accent);
 }
 
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback): the
-   video's bacterium -> logo morph is the final transition, so the still sits
-   at exactly the embed's geometry and is swapped in instantly (no dissolve,
-   no resize afterwards) — it just holds the video's last frame on screen.
-   Both are sized to fit entirely inside the hero ("contain", so the logo is
-   never cropped on any window shape, per the earlier team call) and then
-   shrunk slightly by --home-hero-video-scale. The video's edges are the same
-   lavender as .home-hero's background, so the margin this leaves blends in. */
+/* Edited with Claude Sonnet 5 (Anthropic), 2026-10-19 (team call: full
+   edge-to-edge coverage, no margin on any side, ever — supersedes the Oct 18
+   "contain" compromise below). Both elements now use "cover" (max(), not
+   min()): the box always grows to at least fill the hero in both
+   dimensions, so .home-hero's overflow:hidden crops whichever axis
+   overflows rather than ever leaving a gap. The video was re-exported on a
+   wide 2560x1080 (~2.37:1) canvas specifically so this crops much less than
+   it would have on the original 16:9 source — the aspect ratio below must
+   stay in sync with HomeHero.tsx's actual source dimensions. */
 .home-hero {
   container-type: size;
-  --home-hero-video-scale: 0.85;
+  /* A bare "2560 / 1080" isn't a valid number once substituted into another
+     calc() (it splits into two numbers and a stray slash) — calc() here
+     pre-computes it to a single <number> so the formulas below can divide
+     by var(--home-hero-aspect) directly. */
+  --home-hero-aspect: calc(2560 / 1080);
 }
 
 .home-hero-video {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(100cqw, calc(100cqh * 16 / 9));
-  height: min(100cqh, calc(100cqw * 9 / 16));
-  transform: translate(-50%, -50%) scale(var(--home-hero-video-scale));
+  width: max(100cqw, calc(100cqh * var(--home-hero-aspect)));
+  height: max(100cqh, calc(100cqw / var(--home-hero-aspect)));
+  transform: translate(-50%, -50%);
   object-fit: cover;
   display: block;
   opacity: 0;
@@ -4057,18 +4062,15 @@ body.home-fullscreen {
 
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-10-12
    Purpose: object-fit doesn't apply to an <iframe>, so the 16:9 video embed
-   is sized and centred by hand.
-   Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback): no
-   longer full-bleed/cropped — it now uses the exact same "contain" box as
-   .home-hero-video above, so its last frame and the still line up
-   pixel-for-pixel and the logo is never cropped or oversized. */
+   is sized and centred by hand, matching .home-hero-video's exact box so
+   its last frame and the still line up pixel-for-pixel at the handoff. */
 .home-hero-embed {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(100cqw, calc(100cqh * 16 / 9));
-  height: min(100cqh, calc(100cqw * 9 / 16));
-  transform: translate(-50%, -50%) scale(var(--home-hero-video-scale));
+  width: max(100cqw, calc(100cqh * var(--home-hero-aspect)));
+  height: max(100cqh, calc(100cqw / var(--home-hero-aspect)));
+  transform: translate(-50%, -50%);
   border: 0;
   pointer-events: none;
 }
