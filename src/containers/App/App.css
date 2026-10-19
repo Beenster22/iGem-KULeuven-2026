@@ -9867,8 +9867,13 @@ body:not(.home-fullscreen) .home-hero {
   font-weight: 600;
 }
 
-.stakeholder-matrix-phase span {
+.stakeholder-matrix-phase button {
   padding: 0.3rem 0.9rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
   border-radius: 999px;
   opacity: 0.45;
   transition:
@@ -9876,7 +9881,12 @@ body:not(.home-fullscreen) .home-hero {
     background-color 0.2s ease;
 }
 
-.stakeholder-matrix-phase span.is-active {
+.stakeholder-matrix-phase button:hover,
+.stakeholder-matrix-phase button:focus-visible {
+  opacity: 0.8;
+}
+
+.stakeholder-matrix-phase button.is-active {
   opacity: 1;
   background-color: var(--color-body-bg);
 }
@@ -10014,11 +10024,11 @@ body:not(.home-fullscreen) .home-hero {
   opacity: calc(var(--ghost-fade, 0) * 0.85);
 }
 
-[data-theme="dark"] .stakeholder-matrix-phase span {
+[data-theme="dark"] .stakeholder-matrix-phase button {
   opacity: 0.7;
 }
 
-[data-theme="dark"] .stakeholder-matrix-phase span.is-active {
+[data-theme="dark"] .stakeholder-matrix-phase button.is-active {
   opacity: 1;
   background-color: #2fa4a9;
   color: #ffffff;
