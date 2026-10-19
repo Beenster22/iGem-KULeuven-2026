@@ -67,9 +67,14 @@ function anchorFor(conjugated: boolean, stream: number, n: number, total: number
   return [x, y] as [number, number];
 }
 
-// The bottom of the bacterium in the BSH drawing, as a share of its height
-// (BAC_Y + BAC_H over VB_H in BshStreamAnimation.tsx): the acids only start
-// to fall once the navigation bar has come down to it (team request).
+// The bottom of the bacterium in the BSH drawing: the acids only start to
+// fall once the navigation bar has come down to it (team request). The
+// team pointed at the fimbriae hanging below the cell, not the capsule's
+// own edge, so this is read off the drawn hairs rather than worked out
+// from BAC_Y + BAC_H, which would sit about a fifth of the cell's height
+// too high. The figure below is that fallback, for when they are not
+// drawn (BAC_Y + BAC_H over VB_H in BshStreamAnimation.tsx).
+const BACTERIUM = ".bsh-pili";
 const BACTERIUM_BOTTOM = (72 + 116) / 300;
 
 // The screen they drift across on the way, and where they drift to on it,
@@ -218,11 +223,16 @@ export function useBileAcidFlight({
         bshPinBox.bottom +
         window.scrollY -
         (bshStage?.getBoundingClientRect().height ?? bshPinBox.height);
+      // How far down the drawing the bacterium's underside falls, hairs
+      // and all, as the reader sees it.
+      const hairs = diagram.querySelector<SVGGraphicsElement>(BACTERIUM);
+      const hairsBox = hairs?.getBoundingClientRect();
+      const underside =
+        hairsBox?.height && diagramBox.height
+          ? (hairsBox.bottom - diagramBox.top) / diagramBox.height
+          : BACTERIUM_BOTTOM;
       const startAt =
-        stageRests +
-        insideStage +
-        BACTERIUM_BOTTOM * diagramBox.height -
-        navBottom();
+        stageRests + insideStage + underside * diagramBox.height - navBottom();
       const pin = stage.closest<HTMLElement>(".home-snap-pin") ?? stage;
       const endAt =
         pin.getBoundingClientRect().top + window.scrollY - navBottom();
