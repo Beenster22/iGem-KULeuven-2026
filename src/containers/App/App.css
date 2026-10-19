@@ -7755,27 +7755,32 @@ body:not(.home-fullscreen) .home-hero {
   --ic-line: #eaf4f5;
   --card-tagline: #1f6a6e;
   background-color: #c9bde8;
+  /* A frame in the dark purple, so the lavender card still stands out when
+     the band behind it is lavender too. */
+  border-color: #33283f;
   color: #33283f;
-}
-
-/* In dark mode the section behind the cards is the same lavender as the
-   light cards, so with no border they vanish into it. The dark cards already
-   carry an outline; give the light ones the dark plum one. */
-[data-theme="dark"] .find-more-card--light {
-  border-color: rgba(51, 40, 63, 0.55);
-}
-
-[data-theme="dark"] .find-more-card--light:hover,
-[data-theme="dark"] .find-more-card--light:focus-visible {
-  border-color: #2fa4a9;
 }
 
 .find-more-card:hover,
 .find-more-card:focus-visible {
   border-color: #2fa4a9;
   box-shadow: 0 0.9rem 1.8rem rgba(47, 164, 169, 0.35);
-  color: inherit;
   transform: translateY(-6px);
+}
+
+/* Each card keeps its own text colour on hover and focus. Letting it inherit
+   (as before) turned the dark cards' titles dark purple on dark purple, and
+   the link styles of the page would otherwise recolour them too. */
+.find-more-card--dark,
+.find-more-card--dark:hover,
+.find-more-card--dark:focus-visible {
+  color: #eaf4f5;
+}
+
+.find-more-card--light,
+.find-more-card--light:hover,
+.find-more-card--light:focus-visible {
+  color: #33283f;
 }
 
 .find-more-card-art {
