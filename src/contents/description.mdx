@@ -71,9 +71,9 @@ That gap is precisely what motivates our approach. By targeting the biological r
 
 As the actual cause of this condition remains unknown, over the years there have been many hypotheses created around the root cause of PMOS. Nisa et al. group them into five[ref: https://pmc.ncbi.nlm.nih.gov/articles/PMC10784448/]. Click an icon below to read about each one.
 
-{/* The PMOS hypothesis figure, added with Claude Sonnet 5 (Anthropic), 2026-10-19, after the team's drawing of five icons (evolution, brain, DNA, globe + leaf, insulin) around a PMOS Hypothesis centre — reuses the wet lab wheel's dropdown behaviour, clicking an icon drops its hypothesis down underneath. */}
+{/* The PMOS hypothesis figure, added with Claude Sonnet 5 (Anthropic), 2026-10-19, after the team's drawing of five icons (evolution, brain, DNA, globe + leaf, insulin) around a PMOS Hypothesis centre — reuses the wet lab wheel's dropdown behaviour; layout="side-dropdown" (team feedback, 2026-10-19) grows the panel out sideways instead of underneath, so the figure stays compact when closed. */}
 
-<WheelSelector layout="dropdown" label="PMOS hypotheses" hubLabel="PMOS Hypothesis">
+<WheelSelector layout="side-dropdown" label="PMOS hypotheses" hubLabel="PMOS Hypothesis">
 
 <SectionItem label="Evolutionary hypothesis" icon={<EvolutionIcon />}>
 
