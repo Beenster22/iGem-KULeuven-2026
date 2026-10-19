@@ -4231,6 +4231,20 @@ body.home-fullscreen {
   pointer-events: none;
 }
 
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-19
+   Purpose: on a portrait screen (phones) the hero is far taller than the
+   2.37:1 video, so "cover" scaled it up to the screen height and cropped to
+   a ~390px sliver — a super-zoomed fragment of the logo. In portrait the
+   video/still are fitted to the width instead (letterboxed on the hero's
+   accent background), so the whole frame stays visible. */
+@media (orientation: portrait) {
+  .home-hero-video,
+  .home-hero-embed {
+    width: 100cqw;
+    height: calc(100cqw / var(--home-hero-aspect));
+  }
+}
+
 .home-hero-layer {
   position: absolute;
   inset: 0;
@@ -13797,6 +13811,14 @@ a.protocol-download:hover {
   background-color: var(--color-body-bg);
 }
 
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-19: a jump to a heading
+   on the results page (a #hash link from another page, the page index) must
+   clear the pinned Toolkit / Therapeutics bar as well as the navbar, or the
+   bar covers the heading it landed on. */
+.results-pipelines :is(h2, h3, h4)[id] {
+  scroll-margin-top: calc(5rem + var(--results-bar-h, 0px) + 0.5rem);
+}
+
 @media (min-width: 992px) {
   .section-progress-box {
     top: calc(5rem + var(--results-bar-h, 0px));
@@ -13961,6 +13983,59 @@ a.protocol-download:hover {
   }
 }
 
+/* Restored with Claude Sonnet 5.5 (Anthropic), 2026-10-19: the success cards'
+   styles were dropped from this file while SuccessCards.tsx stayed in use,
+   which left the cards and their arrow icons unstyled. */
+.success-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.success-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 6rem;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid rgba(51, 40, 63, 0.15);
+  border-radius: 1rem;
+  background-color: var(--color-page-bg);
+  color: var(--color-text);
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 0.25rem 0.75rem rgba(51, 40, 63, 0.12);
+  transition:
+    transform 0.15s ease-out,
+    box-shadow 0.15s ease-out;
+}
+
+[data-theme="dark"] .success-card {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.success-card:hover,
+.success-card:focus-visible {
+  color: var(--color-text);
+  transform: translateY(-0.2rem);
+  box-shadow: 0 0.5rem 1.25rem rgba(51, 40, 63, 0.2);
+}
+
+.success-card-arrow {
+  flex: 0 0 auto;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+@media (max-width: 767.98px) {
+  .success-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 /* Compact table with only the header row in the brand's dark purple (the
    budget table on the Entrepreneurship page); every other cell stays plain. */
 .table-head-purple.table-responsive-rounded .table-bordered thead th {
@@ -14055,6 +14130,21 @@ a.protocol-download:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .success-card {
+    transition: none;
+  }
+
+  .success-card:hover,
+  .success-card:focus-visible {
+    transform: none;
+  }
+}
+
+.results-pipelines > .success-cards {
+  margin-top: 1.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
   .story-step--active .quest-lens-photo,
   .story-step--active .quest-lens-circle {
     animation: none;
@@ -14076,4 +14166,17 @@ a.protocol-download:hover {
   overflow: visible;
   pointer-events: none;
   visibility: hidden;
+}
+
+/* The acids already on the TGR5 screen wait until the ones flying down from
+   the BSH screen land on them (see useBileAcidFlight.ts), so the two are
+   never both drawn — the hand-over is a straight swap on the same spots. */
+.tgr5-pool {
+  opacity: var(--acids-in, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tgr5-pool {
+    opacity: 1;
+  }
 }

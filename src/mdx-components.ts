@@ -68,6 +68,7 @@ import {
   FigureSlot,
 } from "./components/ResultsKit";
 import { ResultsPipelines } from "./components/ResultsPipelines";
+import { SuccessCards, SuccessCard } from "./components/SuccessCards";
 import { TherapeuticsOverview } from "./components/TherapeuticsOverview";
 import { ImageFlowSelector, FlowStep } from "./components/ImageFlowSelector";
 import {
@@ -161,6 +162,10 @@ export const mdxComponents = {
   // Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-19
   // Purpose: the results page's pipeline switch, section index and pager.
   ResultsPipelines,
+  // Generated with Claude Opus 5 (Anthropic), 2026-10-16
+  // Purpose: the headline result cards at the top of the results page.
+  SuccessCards,
+  SuccessCard,
   TherapeuticsOverview,
   ImageFlowSelector,
   FlowStep,
