@@ -321,7 +321,7 @@ export function WheelSelector({
           inert={!open}
         >
           <div className="wheel-selector-dropdown-inner">
-            {active && (
+            {open && active && (
               <div className="wheel-selector-content" key={activeIndex}>
                 {active.content}
               </div>

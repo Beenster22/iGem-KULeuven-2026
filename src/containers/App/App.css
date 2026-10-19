@@ -2947,7 +2947,6 @@ a[data-footnote-ref]:focus {
   align-items: center;
   gap: 1.5rem;
   justify-content: center;
-  flex-wrap: wrap;
 }
 
 .wheel-selector--side-dropdown .wheel-selector-svg {
