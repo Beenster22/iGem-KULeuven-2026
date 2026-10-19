@@ -75,7 +75,14 @@ const ICONS: Record<string, ReactNode> = {
   // A rod-shaped bacterium with flagella.
   gut: (
     <>
-      <rect x="4" y="8" width="14" height="8" rx="4" transform="rotate(-30 11 12)" />
+      <rect
+        x="4"
+        y="8"
+        width="14"
+        height="8"
+        rx="4"
+        transform="rotate(-30 11 12)"
+      />
       <path d="M17.5 6.5c1.5-1 2.5-.5 3.5-2M18.5 9c1.8-.2 2.6.6 3.8.1M4.5 17.5c-1.5 1-1.8 2.3-3 2.8" />
       <circle cx="9" cy="13" r="0.9" />
       <circle cx="12.5" cy="10.5" r="0.9" />
@@ -105,8 +112,7 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
     symptoms: [
       {
         label: "Hyperandrogenism",
-        explanation:
-          "Increased levels of male hormones (androgens).",
+        explanation: "Increased levels of male hormones (androgens).",
       },
       {
         label: "Hirsutism and androgenic alopecia",
@@ -120,8 +126,7 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
       },
       {
         label: "Anovulation",
-        explanation:
-          "Missing ovulation: the ovaries do not release an egg.",
+        explanation: "Missing ovulation: the ovaries do not release an egg.",
       },
       {
         label: "Polycystic ovarian morphology",
@@ -161,8 +166,7 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
       },
       {
         label: "Hepatic steatosis",
-        explanation:
-          "Fat building up in the liver (fatty liver).",
+        explanation: "Fat building up in the liver (fatty liver).",
       },
     ],
   },
@@ -185,11 +189,13 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
   {
     id: "gut",
     title: "Gut microbiome",
-    symptoms: [{
+    symptoms: [
+      {
         label: "Reduced microbial diversity",
         explanation:
           "A less varied community of bacteria in the gut than in women without PMOS.",
-      }],
+      },
+    ],
   },
 ];
 
@@ -208,7 +214,9 @@ export function PmosDefinition() {
                     below and becomes the M of "Million" (useFallingM.ts). */}
                 <span
                   className="body-symptoms-acrostic-letter"
-                  {...(word === "Metabolic" ? { [FALLING_M_SOURCE_ATTR]: "" } : {})}
+                  {...(word === "Metabolic"
+                    ? { [FALLING_M_SOURCE_ATTR]: "" }
+                    : {})}
                 >
                   {word[0]}
                 </span>
@@ -224,42 +232,55 @@ export function PmosDefinition() {
   );
 }
 
+// Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request): the
+// four cards are now a jigsaw — wellbeing across the top, metabolic and
+// hormonal below it either side, and the gut microbiome as the missing piece
+// in the middle that the other three are cut around (clip-paths in App.css,
+// .symptoms-puzzle). DOM order is the phone's stacking order.
+const PUZZLE_ORDER = ["wellbeing", "gut", "metabolic", "hormonal"];
+const PUZZLE_SLOTS = ["top", "gut", "left", "right"];
+
 export function SymptomGroups() {
+  const groups = PUZZLE_ORDER.map(
+    (id) => SYMPTOM_GROUPS.find((g) => g.id === id)!,
+  );
   return (
-    <div className="symptoms-overview-grid">
-      {SYMPTOM_GROUPS.map((group) => (
-        <article
-          key={group.id}
-          className={`symptom-card symptom-group--${group.id}`}
-        >
-          <div className="symptom-card-head">
-            <svg
-              className="symptom-card-icon"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              {ICONS[group.id]}
-            </svg>
-            <h3 className="symptom-card-title">{group.title}</h3>
-          </div>
-          <ul className="symptom-card-list">
-            {group.symptoms.map((symptom) => (
-              <li
-                key={symptom.label}
-                className={symptom.explanation ? "has-tip" : undefined}
-                tabIndex={symptom.explanation ? 0 : undefined}
+    <div className="symptoms-puzzle-wrap">
+      <div className="symptoms-puzzle">
+        {groups.map((group) => (
+          <article
+            key={group.id}
+            className={`symptom-card symptom-piece--${PUZZLE_SLOTS[groups.indexOf(group)]} symptom-group--${group.id}`}
+          >
+            <div className="symptom-card-head">
+              <svg
+                className="symptom-card-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
               >
-                {symptom.label}
-                {symptom.explanation && (
-                  <span role="tooltip" className="symptom-tip">
-                    {symptom.explanation}
-                  </span>
-                )}
-              </li>
-            ))}
-          </ul>
-        </article>
-      ))}
+                {ICONS[group.id]}
+              </svg>
+              <h3 className="symptom-card-title">{group.title}</h3>
+            </div>
+            <ul className="symptom-card-list">
+              {group.symptoms.map((symptom) => (
+                <li
+                  key={symptom.label}
+                  className={symptom.explanation ? "has-tip" : undefined}
+                  tabIndex={symptom.explanation ? 0 : undefined}
+                >
+                  {symptom.label}
+                  {symptom.explanation && (
+                    <span role="tooltip" className="symptom-tip">
+                      {symptom.explanation}
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
     </div>
   );
 }

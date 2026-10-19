@@ -4948,10 +4948,161 @@ body:not(.home-fullscreen) .home-hero {
   font-size: clamp(1.8rem, 4vw, 3rem);
 }
 
-.symptoms-overview-grid {
+.symptoms-puzzle-wrap {
+  container-type: inline-size;
+}
+
+.symptoms-puzzle {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(0.9rem, 2vw, 1.5rem);
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request): on
+   wide screens the four cards become a jigsaw. The gut microbiome (1) is the
+   missing piece in the middle; the hormonal card (2) runs across the top, the
+   metabolic (3) and wellbeing (4) cards sit below it either side — each one
+   cut around the gut piece, so without it there is a gap.
+   Layout: 4 equal columns; rows = [top band, --pz-h (the gut piece), bottom].
+   The hormonal card spans the top band + the gut row, the other two span the
+   gut row + the bottom. Each card's shape is a clip-path on its ::before
+   (so tooltips and text are never clipped), inset by half of --pz-g from every
+   seam so the pieces sit --pz-g apart. Switches on by the wrapper's own width
+   (a container query), not the window's: the page's side menu eats space. --pz-lip is how far the top card
+   reaches down past the gut piece's top edge, either side of it. */
+@container (min-width: 720px) {
+  .symptoms-puzzle {
+    --pz-g: 0.7rem;
+    --pz-h: 14rem;
+    --pz-lip: 4rem;
+    --pz-pad: 1.4rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: auto var(--pz-h) auto;
+    gap: 0;
+  }
+
+  .symptoms-puzzle .symptom-card {
+    position: relative;
+    isolation: isolate;
+    padding: var(--pz-pad);
+    border-top: 0;
+    border-radius: 0;
+    background: none;
+    transition: none;
+  }
+
+  .symptoms-puzzle .symptom-card:hover,
+  .symptoms-puzzle .symptom-card:focus-within {
+    translate: none;
+    background: none;
+    z-index: 2;
+  }
+
+  .symptoms-puzzle .symptom-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: color-mix(in srgb, var(--symptom-color) 30%, transparent);
+    transition: background-color 0.25s ease;
+  }
+
+  .symptoms-puzzle .symptom-card:hover::before {
+    background-color: color-mix(in srgb, var(--symptom-color) 46%, transparent);
+  }
+
+  /* 2: across the top, reaching down either side of the gut piece. */
+  .symptoms-puzzle .symptom-piece--top {
+    grid-column: 1 / -1;
+    grid-row: 1 / 3;
+    padding-bottom: calc(var(--pz-h) + var(--pz-pad));
+  }
+
+  .symptom-piece--top::before {
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% calc(100% - var(--pz-h) + var(--pz-lip) - var(--pz-g) / 2),
+      calc(75% + var(--pz-g) / 2)
+        calc(100% - var(--pz-h) + var(--pz-lip) - var(--pz-g) / 2),
+      calc(75% + var(--pz-g) / 2) calc(100% - var(--pz-h) - var(--pz-g) / 2),
+      calc(25% - var(--pz-g) / 2) calc(100% - var(--pz-h) - var(--pz-g) / 2),
+      calc(25% - var(--pz-g) / 2)
+        calc(100% - var(--pz-h) + var(--pz-lip) - var(--pz-g) / 2),
+      0 calc(100% - var(--pz-h) + var(--pz-lip) - var(--pz-g) / 2)
+    );
+  }
+
+  /* 1: the missing piece. */
+  .symptom-piece--gut {
+    grid-column: 2 / 4;
+    grid-row: 2;
+    margin: calc(var(--pz-g) / 2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .symptom-piece--gut .symptom-card-head {
+    flex-direction: column;
+  }
+
+  .symptom-piece--gut .symptom-card-list {
+    justify-content: center;
+  }
+
+  /* 3 and 4: an L each, wrapped round the gut piece's bottom corner. Their
+     heading sits beside the gut piece, their chips below it. */
+  .symptoms-puzzle .symptom-piece--left,
+  .symptoms-puzzle .symptom-piece--right {
+    grid-row: 2 / 4;
+    padding-top: calc(var(--pz-lip) + var(--pz-g) / 2 + var(--pz-pad));
+  }
+
+  .symptom-piece--left {
+    grid-column: 1 / 3;
+  }
+
+  .symptom-piece--right {
+    grid-column: 3 / 5;
+  }
+
+  .symptom-piece--left .symptom-card-head,
+  .symptom-piece--right .symptom-card-head {
+    box-sizing: border-box;
+    width: calc(50% + var(--pz-pad) - var(--pz-g) / 2 - 2 * var(--pz-pad));
+    height: calc(var(--pz-h) - var(--pz-lip) - var(--pz-pad));
+    margin-bottom: var(--pz-pad);
+    align-items: flex-start;
+  }
+
+  .symptom-piece--right .symptom-card-head {
+    margin-left: auto;
+  }
+
+  .symptom-piece--left::before {
+    clip-path: polygon(
+      0 calc(var(--pz-lip) + var(--pz-g) / 2),
+      calc(50% - var(--pz-g) / 2) calc(var(--pz-lip) + var(--pz-g) / 2),
+      calc(50% - var(--pz-g) / 2) calc(var(--pz-h) + var(--pz-g) / 2),
+      calc(100% - var(--pz-g) / 2) calc(var(--pz-h) + var(--pz-g) / 2),
+      calc(100% - var(--pz-g) / 2) 100%,
+      0 100%
+    );
+  }
+
+  .symptom-piece--right::before {
+    clip-path: polygon(
+      calc(50% + var(--pz-g) / 2) calc(var(--pz-lip) + var(--pz-g) / 2),
+      100% calc(var(--pz-lip) + var(--pz-g) / 2),
+      100% 100%,
+      calc(var(--pz-g) / 2) 100%,
+      calc(var(--pz-g) / 2) calc(var(--pz-h) + var(--pz-g) / 2),
+      calc(50% + var(--pz-g) / 2) calc(var(--pz-h) + var(--pz-g) / 2)
+    );
+  }
 }
 
 .symptom-group--hormonal {
@@ -5089,10 +5240,6 @@ body:not(.home-fullscreen) .home-hero {
 
 /* Phones: one card per row, a little tighter. */
 @media (max-width: 699.98px) {
-  .symptoms-overview-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   .symptom-card-list {
     gap: 0.35rem;
     font-size: 0.8rem;
