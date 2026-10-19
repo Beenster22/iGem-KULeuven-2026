@@ -14607,3 +14607,77 @@ a.protocol-download:hover {
   margin-top: 0.75rem;
   font-size: 0.9em;
 }
+
+/* Compact tables with more than three columns of similar weight: equal
+   widths instead of the wide first two columns of .table-compact. */
+.table-cols-even.table-compact.table-responsive-rounded .table-bordered th:first-child,
+.table-cols-even.table-compact.table-responsive-rounded .table-bordered td:first-child,
+.table-cols-even.table-compact.table-responsive-rounded .table-bordered th:nth-child(2),
+.table-cols-even.table-compact.table-responsive-rounded .table-bordered td:nth-child(2) {
+  width: auto;
+}
+
+/* CHECKLIST
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request)
+   Purpose: the tick-off table on the Contribution page (see Checklist.tsx). */
+.checklist-row {
+  cursor: pointer;
+}
+
+.checklist-row td {
+  transition: background-color 0.15s ease;
+}
+
+.checklist-row:hover td {
+  background-color: rgba(47, 164, 169, 0.1);
+}
+
+.checklist-row--done td {
+  background-color: rgba(47, 164, 169, 0.18);
+}
+
+.checklist-table td:last-child {
+  text-align: center;
+}
+
+.checklist-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 2px solid #2fa4a9;
+  border-radius: 0.35rem;
+  background: #ffffff;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.checklist-row--done .checklist-box {
+  background: #2fa4a9;
+}
+
+.checklist-clear {
+  display: block;
+  margin: 0 0 1.25rem auto;
+  padding: 0.4rem 1.25rem;
+  border: 2px solid #2fa4a9;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.checklist-clear:hover:not(:disabled) {
+  background-color: rgba(47, 164, 169, 0.18);
+}
+
+.checklist-clear:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
