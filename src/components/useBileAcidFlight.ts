@@ -109,7 +109,12 @@ function floatSpot(n: number, total: number) {
 // different rates in x and y, so each one wanders a small loop rather than
 // sliding to and fro along one line.
 const DRIFT = 26;
-const SWAY = 9;
+const SWAY = 20;
+// How long one sway takes, in milliseconds, across and down. They are
+// close but not equal, so a pair of them drifts in and out of step and no
+// one of them ever retraces the same little loop.
+const SWAY_X_MS = 5200;
+const SWAY_Y_MS = 4100;
 // How far above the TGR5 screen the fall sets off, as a share of the
 // window (team request: they float for the whole of that sentence's
 // screen, and only once it has gone do they drop). Measuring it from the
@@ -356,10 +361,10 @@ export function useBileAcidFlight({
         const sway = SWAY * settle;
         x +=
           Math.sin(window.scrollY / 90 + i * 1.7) * drift +
-          Math.sin(now / 2300 + i * 1.3) * sway;
+          Math.sin((now / SWAY_X_MS) * 2 * Math.PI + i * 1.3) * sway;
         y +=
           Math.cos(window.scrollY / 70 + i * 2.3) * drift +
-          Math.cos(now / 1900 + i * 2.1) * sway;
+          Math.cos((now / SWAY_Y_MS) * 2 * Math.PI + i * 2.1) * sway;
         // And home, onto its counterpart.
         x = lerp(x, seatX, fallLeg);
         y = lerp(y, seatY, fallLeg);
