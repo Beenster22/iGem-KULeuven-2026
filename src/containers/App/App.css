@@ -13126,11 +13126,7 @@ a.protocol-download:hover {
 
 .integration-summary-row {
   padding: 1rem 0;
-  border-top: 1px solid rgba(51, 40, 63, 0.18);
-}
-
-[data-theme="dark"] .integration-summary-row {
-  border-top-color: rgba(255, 255, 255, 0.16);
+  border-top: 3px solid rgba(47, 164, 169, 0.6);
 }
 
 /* A row that carries on from the one above shares its point, so the divider
@@ -13140,10 +13136,9 @@ a.protocol-download:hover {
   padding-top: 0;
 }
 
-/* Thick rules between the columns — deliberately heavier than the hairlines
-   that separate the rows, so the three columns read as the main split. */
-.integration-summary-integrated,
-.integration-summary-impact {
+/* One rule between the two prose columns. The marker column needs none —
+   its bar already sits there, and a rule beside it read as a double line. */
+.integration-summary-integrated {
   border-left: 3px solid rgba(47, 164, 169, 0.6);
   padding-left: 1.5rem;
 }
@@ -13243,8 +13238,7 @@ a.protocol-download:hover {
     color: #2fa4a9;
   }
 
-  .integration-summary-integrated,
-  .integration-summary-impact {
+  .integration-summary-integrated {
     border-left: none;
     padding-left: 0;
   }
