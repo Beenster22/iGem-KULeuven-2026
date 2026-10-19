@@ -103,9 +103,13 @@ function floatSpot(n: number, total: number) {
     (low ? 0.79 : 0.21) + jitter * 0.22,
   ] as [number, number];
 }
-// How far each one wanders around its place, in pixels, tied to the scroll
-// like everything else here.
+// How far each one wanders around its place, in pixels: DRIFT as the
+// reader scrolls, and SWAY of its own accord with the clock, so they are
+// never quite still even when the page is (team request). The two run at
+// different rates in x and y, so each one wanders a small loop rather than
+// sliding to and fro along one line.
 const DRIFT = 26;
+const SWAY = 9;
 // How far above the TGR5 screen the fall sets off, as a share of the
 // window (team request: they float for the whole of that sentence's
 // screen, and only once it has gone do they drop). Measuring it from the
@@ -206,12 +210,16 @@ export function useBileAcidFlight({
 
     let frame: number | null = null;
 
+    /** Hidden, and nothing more to draw until the reader moves again. */
     const rest = () => {
       overlay.style.visibility = "hidden";
+      return false;
     };
 
+    /** Draws a frame; true while they are on screen and still moving. */
     const update = () => {
       frame = null;
+      const now = performance.now();
       const stage = document.querySelector<HTMLElement>(TGR5_STAGE);
       const target = stage?.querySelector<SVGGraphicsElement>(TGR5_SVG);
       const acids = stage?.querySelectorAll<SVGGraphicsElement>(TGR5_ACID);
@@ -340,11 +348,18 @@ export function useBileAcidFlight({
           spot[1] * window.innerHeight,
           outLeg,
         );
-        // A wander of its own around that place, which fades out as it
-        // drops so that the landing is still exact.
-        const wander = DRIFT * outLeg * (1 - fallLeg);
-        x += Math.sin(window.scrollY / 90 + i * 1.7) * wander;
-        y += Math.cos(window.scrollY / 70 + i * 2.3) * wander;
+        // A wander of its own around that place — with the scroll, and
+        // with the clock so it keeps moving while the reader is still.
+        // Both fade out as it drops, so that the landing is still exact.
+        const settle = outLeg * (1 - fallLeg);
+        const drift = DRIFT * settle;
+        const sway = SWAY * settle;
+        x +=
+          Math.sin(window.scrollY / 90 + i * 1.7) * drift +
+          Math.sin(now / 2300 + i * 1.3) * sway;
+        y +=
+          Math.cos(window.scrollY / 70 + i * 2.3) * drift +
+          Math.cos(now / 1900 + i * 2.1) * sway;
         // And home, onto its counterpart.
         x = lerp(x, seatX, fallLeg);
         y = lerp(y, seatY, fallLeg);
@@ -366,6 +381,14 @@ export function useBileAcidFlight({
           ).toFixed(1)}) scale(${scale.toFixed(3)})`,
         );
       });
+      return true;
+    };
+
+    // While they are on screen this keeps itself going, so they carry on
+    // swaying when the reader stops scrolling; it stops as soon as they
+    // are done, and any scroll starts it again.
+    const tick = () => {
+      if (update()) frame = requestAnimationFrame(tick);
     };
 
     // Replaces any frame still waiting rather than skipping: a frame asked
@@ -373,10 +396,10 @@ export function useBileAcidFlight({
     // that would leave the flight stuck once the reader came back.
     const onScroll = () => {
       if (frame !== null) cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(update);
+      frame = requestAnimationFrame(tick);
     };
 
-    update();
+    tick();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     return () => {
