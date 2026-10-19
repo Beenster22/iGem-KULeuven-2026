@@ -13961,6 +13961,13 @@ a.protocol-download:hover {
   }
 }
 
+/* Compact table with only the header row in the brand's dark purple (the
+   budget table on the Entrepreneurship page); every other cell stays plain. */
+.table-head-purple.table-responsive-rounded .table-bordered thead th {
+  background-color: #33283f;
+  color: #ffffff;
+}
+
 /* LENS → GUT WINDOW
    Generated with Claude Opus 5 (Anthropic), 2026-10-19 (team request)
    Purpose: the stand-in that carries what the magnifying glass is showing
