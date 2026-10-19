@@ -1,11 +1,18 @@
 // Generated with Claude Opus 5 (Anthropic), 2026-10-19 (team request)
-// Purpose: the home page's last hand-off — what the magnifying glass is
-// showing on the gut ("quest" step, StoryScrollSection.tsx) becomes the
-// circle of bacteria on the screen below it (TwoGutsSection.tsx). As that
-// screen scrolls in, a stand-in lens travels from the glass to where the
-// circle comes to rest, growing to its size, and its close-up of the
-// microbes fades into the drawn bacteria as it arrives. Tied to the scroll
-// position, so scrolling back up plays it the other way.
+// Purpose: the home page's last hand-off — the magnifying glass on the gut
+// ("quest" step, StoryScrollSection.tsx) becomes the circle of bacteria on
+// the screen below it (TwoGutsSection.tsx). As that screen scrolls in, a
+// stand-in copy of the glass travels down to where the circle comes to
+// rest, growing to its size; the glass steps aside while it flies and the
+// circle waits until it arrives. Tied to the scroll position, so scrolling
+// back up plays it the other way.
+//
+// Edited with Claude Opus 5 (Anthropic), 2026-10-19 (team request: make it
+// quicker): the glass already shows that same circle by its last stop (see
+// .quest-lens-circle in App.css), so there is nothing to cross-fade — the
+// hand-over is pure movement, and the circle simply takes over on arrival.
+// The stand-in is a copy of the glass as it stands, frozen, so it sets off
+// as exactly what the reader was looking at even mid-tour.
 //
 // Modelled on useLineToGlobe.ts, which hands the counter's underline over
 // to the globe the same way.
@@ -18,8 +25,6 @@ const WINDOW_CIRCLE = ".two-guts-lens-bg";
 // Scroll progress (0 = the next screen's top at the bottom of the window,
 // 1 = it has reached the top) by which the hand-over is done.
 const CLOSED_AT = 0.8;
-// The microbes give way to the drawn bacteria over the last of the journey.
-const FADE_FROM = 0.55;
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -42,13 +47,6 @@ export function useLensToGutWindow({
     const overlay = document.createElement("div");
     overlay.className = "lens-to-window";
     overlay.setAttribute("aria-hidden", "true");
-    overlay.innerHTML =
-      '<div class="quest-lens-glass">' +
-      '<div class="quest-lens-drift"><div class="quest-lens-spin">' +
-      '<img class="quest-lens-view" alt="" />' +
-      "</div></div></div>";
-    const spin = overlay.querySelector<HTMLElement>(".quest-lens-spin");
-    const view = overlay.querySelector<HTMLImageElement>(".quest-lens-view");
     document.body.appendChild(overlay);
 
     let frame: number | null = null;
@@ -58,6 +56,40 @@ export function useLensToGutWindow({
       overlay.style.visibility = "hidden";
       magnifier.style.visibility = "";
       flying = false;
+    };
+
+    // A copy of the glass exactly as it looks now: its layers' opacities and
+    // the patch of the microbes under it are driven by animations, which a
+    // plain clone would restart, so they are written in as plain styles.
+    const takeCopy = () => {
+      const copy = glass.cloneNode(true) as HTMLElement;
+      copy.style.position = "absolute";
+      copy.style.inset = "0";
+      const freeze = (selector: string, properties: string[]) => {
+        const live = glass.querySelector(selector);
+        const made = copy.querySelector<HTMLElement>(selector);
+        if (!live || !made) return;
+        const now = getComputedStyle(live);
+        made.style.animation = "none";
+        for (const property of properties) {
+          made.style.setProperty(property, now.getPropertyValue(property));
+        }
+      };
+      freeze(".quest-lens-photo", ["opacity"]);
+      freeze(".quest-lens-circle", ["opacity"]);
+      freeze(".quest-lens-drift", ["translate", "rotate"]);
+      freeze(".quest-lens-spin", ["rotate"]);
+      freeze(".quest-lens-view", ["translate"]);
+      // The copied circle brings a clip path whose name is already in use.
+      const clip = copy.querySelector("clipPath");
+      if (clip) {
+        const name = `${clip.id}-copy`;
+        copy.querySelectorAll("[clip-path]").forEach((node) => {
+          node.setAttribute("clip-path", `url(#${name})`);
+        });
+        clip.id = name;
+      }
+      overlay.replaceChildren(copy);
     };
 
     const update = () => {
@@ -83,38 +115,22 @@ export function useLensToGutWindow({
       const to = target.getBoundingClientRect();
       if (!from.width || !to.width) return rest();
 
-      // Freeze the patch of the microbes the glass was showing, so the
-      // stand-in starts as exactly what was under the lens.
       if (!flying) {
         flying = true;
-        const liveSpin = glass.querySelector<HTMLElement>(".quest-lens-spin");
-        const liveView = glass.querySelector<HTMLImageElement>(".quest-lens-view");
-        if (spin && liveSpin) spin.style.rotate = getComputedStyle(liveSpin).rotate;
-        if (view && liveView) {
-          view.src = liveView.currentSrc || liveView.src;
-          view.style.translate = getComputedStyle(liveView).translate;
-        }
+        takeCopy();
       }
 
       const e = easeInOut(g / CLOSED_AT);
       const size = lerp(from.width, to.width, e);
+      const x = lerp(from.left + from.width / 2, to.left + to.width / 2, e);
+      const y = lerp(from.top + from.height / 2, to.top + to.height / 2, e);
       // Explicit: the stylesheet keeps it hidden while it is not flying.
       overlay.style.visibility = "visible";
       overlay.style.width = `${size}px`;
       overlay.style.height = `${size}px`;
-      overlay.style.transform = `translate(${lerp(
-        from.left + from.width / 2,
-        to.left + to.width / 2,
-        e,
-      ) - size / 2}px, ${lerp(
-        from.top + from.height / 2,
-        to.top + to.height / 2,
-        e,
-      ) - size / 2}px)`;
-      // The microbes hand over to the drawn bacteria on the way in.
-      const swap = clamp01((g / CLOSED_AT - FADE_FROM) / (1 - FADE_FROM));
-      overlay.style.opacity = String(1 - swap);
-      stage.style.setProperty("--window-in", String(swap));
+      overlay.style.transform = `translate(${x - size / 2}px, ${y - size / 2}px)`;
+      // Nothing to cross-fade: the circle below simply waits its turn.
+      stage.style.setProperty("--window-in", "0");
       magnifier.style.visibility = "hidden";
     };
 

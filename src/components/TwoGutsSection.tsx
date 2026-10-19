@@ -41,7 +41,7 @@
 // team's source, but the cell counts are only chosen to show that direction.
 // The cells drift and turn on a CSS loop (off under prefers-reduced-motion,
 // see App.css).
-import { Fragment, useRef, type CSSProperties } from "react";
+import { Fragment, useId, useRef, type CSSProperties } from "react";
 import { SnapSteps } from "./HomeSnapScroll";
 import { usePinnedStep } from "./usePinnedStep";
 
@@ -306,13 +306,28 @@ function GutWindow({ pmos }: { pmos: boolean }) {
           ? "Gut microbiome with PMOS"
           : "Normal gut microbiome composition"}
       </figcaption>
+      <MicrobeLens />
+      <CompositionBar pmos={pmos} />
+    </figure>
+  );
+}
+
+// Generated with Claude Opus 5 (Anthropic), 2026-10-19 (team request): the
+// circle of bacteria on its own, so the magnifying glass on the gut above
+// can show the very same thing before handing over to it (see
+// useLensToGutWindow.ts). The clip path is named per instance, since the
+// two are on the page together. Which cells show is driven by the
+// .two-guts--pmos ancestor, so on its own it is the healthy community.
+export function MicrobeLens() {
+  const clipId = useId();
+  return (
       <svg
         viewBox={`0 0 ${VB} ${VB}`}
         className="two-guts-lens"
         aria-hidden="true"
       >
         <defs>
-          <clipPath id="two-guts-clip">
+          <clipPath id={clipId}>
             <circle cx={CENTER} cy={CENTER} r={LENS_R} />
           </clipPath>
         </defs>
@@ -322,7 +337,7 @@ function GutWindow({ pmos }: { pmos: boolean }) {
           r={LENS_R}
           className="two-guts-lens-bg"
         />
-        <g clipPath="url(#two-guts-clip)">
+        <g clipPath={`url(#${clipId})`}>
           {SLOT_LAYOUT.map((slot, i) => {
             const healthyGroup = GROUPS[slot.groupIndex];
             const pmosGroup = GROUPS[slot.pmosGroupIndex];
@@ -389,8 +404,6 @@ function GutWindow({ pmos }: { pmos: boolean }) {
           className="two-guts-lens-rim"
         />
       </svg>
-      <CompositionBar pmos={pmos} />
-    </figure>
   );
 }
 

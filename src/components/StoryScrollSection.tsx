@@ -35,6 +35,7 @@ import { useReducedMotion } from "framer-motion";
 import { SnapSteps } from "./HomeSnapScroll";
 import { usePinnedStep } from "./usePinnedStep";
 import { useLensToGutWindow } from "./useLensToGutWindow";
+import { MicrobeLens } from "./TwoGutsSection";
 import { ElleSays, type ElleMood } from "./ElleSays";
 
 interface StoryStep {
@@ -390,10 +391,20 @@ function GutArt() {
       <GutPicture />
       <div className="quest-lens" aria-hidden="true">
         <div className="quest-lens-glass" ref={lensRef}>
-          <div className="quest-lens-drift">
-            <div className="quest-lens-spin">
-              <img className="quest-lens-view" src={MICROBES_SRC} alt="" />
+          <div className="quest-lens-photo">
+            <div className="quest-lens-drift">
+              <div className="quest-lens-spin">
+                <img className="quest-lens-view" src={MICROBES_SRC} alt="" />
+              </div>
             </div>
+          </div>
+          {/* Edited with Claude Opus 5 (Anthropic), 2026-10-19 (team
+              request: a quicker hand-over): at its last stop the glass
+              swaps to the very circle of bacteria it is about to become
+              on the screen below, so that hand-over is pure movement with
+              nothing to cross-fade. */}
+          <div className="quest-lens-circle">
+            <MicrobeLens />
           </div>
         </div>
         <svg className="quest-lens-handle" viewBox="0 0 10 10">

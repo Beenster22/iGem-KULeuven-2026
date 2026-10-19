@@ -13985,3 +13985,68 @@ a.protocol-download:hover {
     opacity: 1;
   }
 }
+
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-19 (team request: a
+   quicker hand-over to the screen below): the glass tours the gut showing
+   the microbes close-up, then at its last stop swaps to the circle of
+   bacteria it is about to become. Both layers fill the glass; the swap runs
+   once, in step with the tour (same 12.5s and 1s delay, see
+   .quest-lens-tour), and stays swapped. */
+.quest-lens-photo,
+.quest-lens-circle {
+  position: absolute;
+  inset: 0;
+}
+
+.quest-lens-circle {
+  display: grid;
+  place-items: center;
+  opacity: 0;
+}
+
+.quest-lens-circle svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* The circle brings its own rim, so the glass's own ring would double up. */
+.quest-lens-circle .two-guts-lens-rim {
+  display: none;
+}
+
+.story-step--active .quest-lens-photo {
+  animation: quest-lens-hand-off-out 12.5s linear 1s 1 forwards;
+}
+
+.story-step--active .quest-lens-circle {
+  animation: quest-lens-hand-off-in 12.5s linear 1s 1 forwards;
+}
+
+@keyframes quest-lens-hand-off-out {
+  0%,
+  76% {
+    opacity: 1;
+  }
+  82%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes quest-lens-hand-off-in {
+  0%,
+  76% {
+    opacity: 0;
+  }
+  82%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-step--active .quest-lens-photo,
+  .story-step--active .quest-lens-circle {
+    animation: none;
+  }
+}
