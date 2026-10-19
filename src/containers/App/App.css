@@ -7747,8 +7747,22 @@ body:not(.home-fullscreen) .home-hero {
 .find-more-card:focus-visible {
   border-color: #2fa4a9;
   box-shadow: 0 0.9rem 1.8rem rgba(47, 164, 169, 0.35);
-  color: inherit;
   transform: translateY(-6px);
+}
+
+/* Each card keeps its own text colour on hover and focus. Letting it inherit
+   (as before) turned the dark cards' titles dark purple on dark purple, and
+   the link styles of the page would otherwise recolour them too. */
+.find-more-card--dark,
+.find-more-card--dark:hover,
+.find-more-card--dark:focus-visible {
+  color: #eaf4f5;
+}
+
+.find-more-card--light,
+.find-more-card--light:hover,
+.find-more-card--light:focus-visible {
+  color: #33283f;
 }
 
 .find-more-card-art {
