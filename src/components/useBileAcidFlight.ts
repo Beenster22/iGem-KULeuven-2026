@@ -57,29 +57,6 @@ function anchorFor(conjugated: boolean, stream: number, n: number, total: number
   return [x, y] as [number, number];
 }
 
-// The bottom of the bacterium in the BSH drawing, as a share of its height
-// (BAC_Y + BAC_H over VB_H in BshStreamAnimation.tsx): the acids only start
-// to fall once the navigation bar has come down to it (team request).
-const BACTERIUM_BOTTOM = (72 + 116) / 300;
-
-// The screen they drift across on the way, and where they drift to on it,
-// as shares of the window. Two loose bands, across the full width and clear
-// of the sentence in the middle, so they read as floating on the page
-// rather than ringing the words (team request).
-const STATEMENT = ".story-step--single";
-function floatSpot(n: number, total: number) {
-  const half = Math.ceil(total / 2);
-  const lower = n >= half;
-  const col = lower ? n - half : n;
-  const across = half > 1 ? col / (half - 1) : 0.5;
-  // A settled, repeatable scatter rather than a straight row.
-  const jitter = ((n * 37) % 11) / 11 - 0.5;
-  return [
-    0.08 + across * 0.84,
-    (lower ? 0.72 : 0.16) + jitter * 0.13,
-  ] as [number, number];
-}
-
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
@@ -106,11 +83,7 @@ export function useBileAcidFlight({
     // Built once the TGR5 acids are known, so there is one of each, matched
     // in kind. Streams alternate within each kind, so both the upper
     // stream's orange and the lower one's purple make the journey.
-    let shapes: {
-      group: SVGGElement;
-      from: [number, number];
-      float: [number, number];
-    }[] = [];
+    let shapes: { group: SVGGElement; from: [number, number] }[] = [];
 
     const build = (targets: NodeListOf<SVGGraphicsElement>) => {
       overlay.replaceChildren();
