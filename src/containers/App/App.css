@@ -5993,7 +5993,7 @@ body:not(.home-fullscreen) .home-hero {
   flex-direction: column;
   gap: clamp(0.75rem, 2.5vh, 1.5rem);
   text-align: center;
-  padding-top: clamp(2rem, 6vh, 4rem);
+  padding-top: clamp(3rem, 9vh, 7rem);
 }
 
 .story-step--gut .story-text {
