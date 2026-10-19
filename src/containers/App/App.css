@@ -5215,57 +5215,6 @@ body:not(.home-fullscreen) .home-hero {
   text-underline-offset: 0.2em;
 }
 
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
-   panels wait until the globe has landed on the first circle (.is-landed,
-   set by PmosEffectsSection.tsx), then come in by themselves one after
-   another, left to right — each --i steps later (0.25s apart) — with no
-   more scrolling. The first circle is where the globe lands, so it appears
-   at once (the globe has just turned into it) and only its drawing and
-   label fade in. Going back up hides them straight away, ready to play
-   again. */
-.pmos-effect,
-.pmos-effects-more {
-  transition:
-    opacity 0.5s ease,
-    translate 0.5s ease;
-}
-
-.pmos-effects.is-landed .pmos-effect,
-.pmos-effects.is-landed .pmos-effects-more {
-  transition-delay: calc(var(--i) * 0.25s);
-}
-
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback: going
-   back up wasn't smooth): leaving, they now go one after another too, in
-   reverse — the link first, the circle next to the globe last — quicker
-   than they came in so the globe has its room back as it rises. */
-.pmos-effects:not(.is-landed) .pmos-effect,
-.pmos-effects:not(.is-landed) .pmos-effects-more {
-  opacity: 0;
-  translate: -1.5rem 0;
-  transition-duration: 0.35s;
-  transition-delay: calc((4 - var(--i)) * 0.08s);
-}
-
-.pmos-effects:not(.is-landed) .pmos-effect.symptom-group--hormonal {
-  opacity: 1;
-  translate: none;
-}
-
-.pmos-effects:not(.is-landed) .symptom-group--hormonal .pmos-effect-art {
-  visibility: hidden;
-}
-
-.pmos-effect.symptom-group--hormonal .pmos-effect-art svg,
-.pmos-effect.symptom-group--hormonal .pmos-effect-label {
-  transition: opacity 0.5s ease;
-}
-
-.pmos-effects:not(.is-landed) .symptom-group--hormonal .pmos-effect-art svg,
-.pmos-effects:not(.is-landed) .symptom-group--hormonal .pmos-effect-label {
-  opacity: 0;
-}
-
 /* Tablets and phones: two by two. */
 @media (max-width: 799.98px) {
   .pmos-effects-grid {
@@ -8085,43 +8034,6 @@ body:not(.home-fullscreen) .home-hero {
   transform: scaleX(1);
 }
 
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): while
-   the underline is curling up into the globe (useLineToGlobe.ts) the
-   overlay draws it, so the real one steps aside. */
-.pmos-counter--revealed .pmos-counter-number.is-detached::after {
-  transition: none;
-  opacity: 0;
-}
-
-.line-to-globe {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 5;
-  pointer-events: none;
-  overflow: visible;
-}
-
-/* --tint (0 → 1, set per frame) shifts the line from its own colour to the
-   globe's atmosphere colour (--color-accent, see atmosphereColor in
-   PmosGlobe.tsx) and gives it that glow as the ring closes. */
-.line-to-globe path {
-  --tint: 0;
-  fill: none;
-  stroke: color-mix(
-    in srgb,
-    var(--color-accent) calc(var(--tint) * 100%),
-    var(--color-header-bg)
-  );
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(
-    0 0 calc(var(--tint) * 14px)
-      color-mix(in srgb, var(--color-accent) calc(var(--tint) * 90%), transparent)
-  );
-}
-
 .falling-m,
 .falling-m-stairs {
   left: 0;
@@ -8170,6 +8082,10 @@ body:not(.home-fullscreen) .home-hero {
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: the globe always
    takes the left half of the section, with the text (the invitation, then
    the clicked continent's figures) on the right. */
+.pmos-globe-section {
+  margin: 1.5rem 0;
+}
+
 .pmos-globe-wrap {
   width: min(100%, 1050px);
   display: flex;
@@ -8192,89 +8108,6 @@ body:not(.home-fullscreen) .home-hero {
 
 .pmos-globe-stage.is-hovering canvas {
   cursor: pointer !important;
-}
-
-/* GLOBE DROP
-   Generated with Claude Opus 5.5 (Anthropic), 2026-10-18
-   Purpose: the globe falling onto the next screen's first circle (see
-   useGlobeDrop in PmosGlobe.tsx, which sets the transform, --fly-scale and
-   --morph). While it falls it must paint over the band below, which comes
-   later in the page and would otherwise cover it. */
-.pmos-globe-fly {
-  position: relative;
-  transform-origin: center;
-  will-change: transform;
-}
-
-.pmos-globe-wrap.is-dropping {
-  z-index: 5;
-}
-
-.pmos-globe-wrap.is-dropping .pmos-globe-fly {
-  pointer-events: none;
-}
-
-.pmos-globe-wrap.is-dropping .pmos-globe-fly > :not(.pmos-globe-morph) {
-  opacity: calc(1 - var(--morph, 0));
-}
-
-/* Matches .pmos-effect-art (border and disc colour), sized to the sphere
-   (SPHERE_FRACTION in PmosGlobe.tsx); the border is divided by the scale so
-   it lands at the circle's own 4px. */
-.pmos-globe-morph {
-  position: absolute;
-  /* Above the globe's own element (see .pmos-globe-halo). */
-  z-index: 2;
-  left: 50%;
-  top: 50%;
-  width: 70.5%;
-  aspect-ratio: 1;
-  translate: -50% -50%;
-  border-radius: 50%;
-  border: calc(4px / var(--fly-scale, 1)) solid var(--symptom-color);
-  background-color: color-mix(in srgb, var(--symptom-color) 22%, #fff);
-  opacity: var(--morph, 0);
-  pointer-events: none;
-}
-
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
-   halo round the sphere. Sized to the sphere (SPHERE_FRACTION in
-   PmosGlobe.tsx) plus twice its ring width, so the ring sits just outside
-   the sphere's edge — exactly where useLineToGlobe.ts closes the line;
-   --halo (set there) keeps it hidden until that line arrives.
-   Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback:
-   raised continents vanished behind it): it is painted behind the globe
-   (z-index 0, the globe's own element 1), so hovered/clicked continents
-   rise in front of it. */
-.pmos-globe-fly > :first-child {
-  position: relative;
-  z-index: 1;
-}
-
-.pmos-globe-halo {
-  --halo-w: 4px;
-  position: absolute;
-  z-index: 0;
-  left: 50%;
-  top: 50%;
-  width: calc(100% * 0.7051 + 2 * var(--halo-w));
-  aspect-ratio: 1;
-  translate: -50% -50%;
-  border-radius: 50%;
-  border: var(--halo-w) solid var(--color-accent);
-  box-shadow: 0 0 14px color-mix(in srgb, var(--color-accent) 90%, transparent);
-  opacity: var(--halo, 1);
-  pointer-events: none;
-}
-
-/* The drop's fade (above) must not bring a faded-out halo back. */
-.pmos-globe-wrap.is-dropping .pmos-globe-fly > .pmos-globe-halo {
-  opacity: calc(var(--halo, 1) * (1 - var(--morph, 0)));
-}
-
-/* Landed: the real circle has taken over. */
-.pmos-globe-wrap.is-landed .pmos-globe-fly {
-  visibility: hidden;
 }
 
 .pmos-globe-info {
@@ -8357,39 +8190,6 @@ body:not(.home-fullscreen) .home-hero {
   font-size: 0.85rem;
   text-align: center;
   line-height: 1.4;
-}
-
-/* PREVALENCE ELLE (Elle + "how we got these numbers", in PmosOverview.tsx)
-   Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
-   Purpose: Elle (ElleSays.tsx) stands in the corner of the globe section with
-   her line already in a speech bubble, rather than behind a click-to-open
-   info button — pinned to the section itself (not the globe/text pair) so
-   she stays in the same spot whether .pmos-globe-wrap is a row (desktop) or
-   a stacked column (mobile, see the media query below). The ">" selector
-   beats the specificity of the ".pmos-overview > :not(.microbe-backdrop)"
-   rule above that would otherwise force this back to position: relative. */
-.pmos-overview > .pmos-prevalence-elle {
-  position: absolute;
-  top: clamp(0.5rem, 3vh, 1.5rem);
-  right: clamp(0.5rem, 3vw, 1.5rem);
-  z-index: 3;
-  max-width: min(34rem, calc(100vw - 2rem));
-}
-
-.pmos-prevalence-elle .elle {
-  margin: 0;
-}
-
-@media (max-width: 768px) {
-  .pmos-overview > .pmos-prevalence-elle {
-    position: static;
-    margin: 0 auto 1rem;
-  }
-
-  .pmos-prevalence-elle .elle {
-    --elle-size: clamp(6rem, 24vw, 8rem);
-    justify-content: center;
-  }
 }
 
 @media (max-width: 768px) {
