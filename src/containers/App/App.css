@@ -4948,10 +4948,76 @@ body:not(.home-fullscreen) .home-hero {
   font-size: clamp(1.8rem, 4vw, 3rem);
 }
 
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request): the gut
+   microbiome card sits in the middle, with the hormonal and metabolic cards
+   above it to either side and the wellbeing card below it, each joined to it
+   by a line (drawn in the SVG overlay SymptomGroups measures and places, see
+   BodySymptomsSection.tsx). */
 .symptoms-overview-grid {
+  --hub-gap: clamp(1.6rem, 4vw, 3rem);
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(0.9rem, 2vw, 1.5rem);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-areas:
+    "hormonal . metabolic"
+    ". gut ."
+    ". wellbeing .";
+  gap: var(--hub-gap);
+}
+
+.symptoms-hub-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.symptoms-hub-lines line {
+  stroke: #2fa4a9;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.symptoms-hub-lines circle {
+  fill: #2fa4a9;
+}
+
+.symptom-group--hormonal {
+  grid-area: hormonal;
+}
+
+.symptom-group--metabolic {
+  grid-area: metabolic;
+}
+
+.symptom-group--wellbeing {
+  grid-area: wellbeing;
+}
+
+.symptom-group--gut {
+  grid-area: gut;
+  border: 2px solid #2fa4a9;
+  border-top-width: 5px;
+}
+
+/* Below this the three columns get too narrow: one card per row, the gut
+   first, and no lines (the overlay is not drawn). */
+@media (max-width: 899.98px) {
+  .symptoms-overview-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: none;
+  }
+
+  .symptom-group--hormonal,
+  .symptom-group--metabolic,
+  .symptom-group--wellbeing,
+  .symptom-group--gut {
+    grid-area: auto;
+  }
+
+  .symptom-group--gut {
+    order: -1;
+  }
 }
 
 .symptom-group--hormonal {
@@ -4971,6 +5037,7 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .symptom-card {
+  position: relative;
   padding: clamp(1rem, 2.2vw, 1.5rem);
   border-radius: 1.25rem;
   border-top: 5px solid var(--symptom-color);

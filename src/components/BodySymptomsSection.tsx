@@ -35,7 +35,7 @@
 // chips show an explanation on hover/focus again (text supplied by the team).
 // Purpose: home-page "What is PMOS?" definition (PmosDefinition), and — the definition on its own
 // the team's four symptom groups as cards (SymptomGroups, description page).
-import type { ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { GlossaryTerm } from "./GlossaryTerm";
 import { FALLING_M_SOURCE_ATTR } from "./useFallingM";
 
@@ -238,12 +238,114 @@ export function PmosDefinition() {
   );
 }
 
+interface HubLine {
+  id: string;
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}
+
+// How far in from a card's corner a line starts, so it meets the straight
+// part of the edge rather than the rounded corner.
+const CORNER_INSET = 22;
+
 export function SymptomGroups() {
+  const gridRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<Record<string, HTMLElement | null>>({});
+  const [lines, setLines] = useState<HubLine[]>([]);
+  const [size, setSize] = useState({ width: 0, height: 0 });
+
+  // The gut microbiome card sits in the middle and the other three around it,
+  // joined to it by lines. Where those lines run depends on where the cards
+  // end up (their heights follow their text), so they are measured rather
+  // than guessed, and drawn in an overlay on top of the grid.
+  useLayoutEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    const measure = () => {
+      const base = grid.getBoundingClientRect();
+      const rect = (id: string) => {
+        const box = cardRefs.current[id]?.getBoundingClientRect();
+        return box && {
+          left: box.left - base.left,
+          right: box.right - base.left,
+          top: box.top - base.top,
+          bottom: box.bottom - base.top,
+        };
+      };
+      const gut = rect("gut");
+      const hormonal = rect("hormonal");
+      const metabolic = rect("metabolic");
+      const wellbeing = rect("wellbeing");
+      setSize({ width: base.width, height: base.height });
+      // Below the width where the cards stack, there is nothing to join.
+      if (!gut || !hormonal || !metabolic || !wellbeing || window.innerWidth < 900) {
+        setLines([]);
+        return;
+      }
+      setLines([
+        {
+          id: "hormonal",
+          x1: hormonal.right - CORNER_INSET,
+          y1: hormonal.bottom,
+          x2: gut.left + CORNER_INSET,
+          y2: gut.top,
+        },
+        {
+          id: "metabolic",
+          x1: metabolic.left + CORNER_INSET,
+          y1: metabolic.bottom,
+          x2: gut.right - CORNER_INSET,
+          y2: gut.top,
+        },
+        {
+          id: "wellbeing",
+          x1: (gut.left + gut.right) / 2,
+          y1: gut.bottom,
+          x2: (wellbeing.left + wellbeing.right) / 2,
+          y2: wellbeing.top,
+        },
+      ]);
+    };
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(grid);
+    Object.values(cardRefs.current).forEach((card) => card && observer.observe(card));
+    window.addEventListener("resize", measure);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
+
   return (
-    <div className="symptoms-overview-grid">
+    <div className="symptoms-overview-grid" ref={gridRef}>
+      {lines.length > 0 && (
+        <svg
+          className="symptoms-hub-lines"
+          width={size.width}
+          height={size.height}
+          viewBox={`0 0 ${size.width} ${size.height}`}
+          aria-hidden="true"
+        >
+          {lines.map((line) => (
+            <g key={line.id}>
+              <line x1={line.x1} y1={line.y1} x2={line.x2} y2={line.y2} />
+              <circle cx={line.x1} cy={line.y1} r={5} />
+              <circle cx={line.x2} cy={line.y2} r={5} />
+            </g>
+          ))}
+        </svg>
+      )}
       {SYMPTOM_GROUPS.map((group) => (
         <article
           key={group.id}
+          ref={(element) => {
+            cardRefs.current[group.id] = element;
+          }}
           className={`symptom-card symptom-group--${group.id}`}
         >
           <div className="symptom-card-head">
