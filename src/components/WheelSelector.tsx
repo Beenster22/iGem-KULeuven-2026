@@ -17,10 +17,21 @@ interface WheelSelectorProps {
    * "dropdown" (added 2026-10-19, results page): the "side" wheel's size,
    * nothing selected at first; clicking a wedge turns it to the bottom and
    * drops its content down underneath, clicking it again folds it away.
+   * "side-dropdown" (added 2026-10-19, PMOS hypothesis figure): the "side"
+   * wheel's row layout, but nothing selected at first — clicking a wedge
+   * turns it to the right and grows its content out sideways, clicking it
+   * again folds it away, so the figure stays compact until it's used.
    */
-  layout?: "below" | "side" | "dropdown";
+  layout?: "below" | "side" | "dropdown" | "side-dropdown";
   /** Accessible name for the ring of wedges. */
   label?: string;
+  /**
+   * Added 2026-10-19 (PMOS hypothesis figure, project description page):
+   * replaces the hub's bacterium image with this short text, split onto one
+   * line per word (e.g. "PMOS Hypothesis"). Leave unset for the wet lab
+   * wheel's bacterium.
+   */
+  hubLabel?: string;
 }
 
 const SIZE = 520;
@@ -28,6 +39,11 @@ const CENTER = SIZE / 2;
 const OUTER_RADIUS = SIZE / 2 - 10;
 const INNER_RADIUS = 108;
 const LABEL_RADIUS = (OUTER_RADIUS + INNER_RADIUS) / 2 + 4;
+// When a wedge has an icon (PMOS hypothesis figure), it sits near the rim —
+// the wedge's widest point — well clear of the label at LABEL_RADIUS, which
+// keeps its usual spot rather than being squeezed toward the narrow hub end.
+const ICON_RADIUS = OUTER_RADIUS - 26;
+const ICON_SIZE = 30;
 const LINE_HEIGHT = 20;
 // Longest label line, in characters, before it wraps onto the next.
 const MAX_LINE = 14;
@@ -93,7 +109,12 @@ const midAngle = (index: number, count: number) =>
 
 // Where the selected wedge comes to rest, in degrees clockwise from "east":
 // at the bottom of the wheel, or at its right-hand side.
-const REST_DEGREES = { below: 90, side: 0, dropdown: 90 } as const;
+const REST_DEGREES = {
+  below: 90,
+  side: 0,
+  dropdown: 90,
+  "side-dropdown": 0,
+} as const;
 
 // How far the wheel is turned to bring wedge `index` to its resting place.
 const restAngle = (index: number, count: number, rest: number) =>
@@ -106,6 +127,22 @@ const BACTERIUM = {
   width: 186,
   height: 160,
 };
+
+// The hub's alternative to the bacterium: a short label split one word per
+// line (e.g. ["PMOS", "HYPOTHESIS"]), for figures with no drawing of their
+// own (PMOS hypothesis figure, project description page).
+function HubText({ text }: { text: string }) {
+  const lines = text.toUpperCase().split(" ");
+  return (
+    <text className="wheel-selector-hub-label" x={CENTER} y={CENTER} textAnchor="middle">
+      {lines.map((line, i) => (
+        <tspan key={i} x={CENTER} dy={i === 0 ? `${-(lines.length - 1) * 0.6}em` : "1.2em"}>
+          {line}
+        </tspan>
+      ))}
+    </text>
+  );
+}
 
 function Bacterium() {
   return (
@@ -130,6 +167,7 @@ export function WheelSelector({
   children,
   layout = "below",
   label = "Wet lab sections",
+  hubLabel,
 }: WheelSelectorProps) {
   const items = useMemo(() => extractLabeledChildren(children), [children]);
   const count = items.length;
@@ -138,16 +176,18 @@ export function WheelSelector({
   // Kept as a running total (not reduced to 0–360) so each turn takes the
   // shorter way round instead of unwinding.
   const [rotation, setRotation] = useState(() => restAngle(0, count, rest));
-  // Edited with Claude Opus 5.5 (Anthropic), 2026-10-19: the "dropdown"
-  // layout starts with nothing open; the others always show their content.
-  const isDropdown = layout === "dropdown";
-  const [open, setOpen] = useState(!isDropdown);
+  // Edited with Claude Opus 5.5 (Anthropic), 2026-10-19: the "dropdown" and
+  // "side-dropdown" layouts start with nothing open; the others always show
+  // their content.
+  const isToggle = layout === "dropdown" || layout === "side-dropdown";
+  const opensToSide = layout === "side" || layout === "side-dropdown";
+  const [open, setOpen] = useState(!isToggle);
   const panelId = useId();
   const active = items[activeIndex];
   const step = 360 / count;
 
   const select = (index: number) => {
-    if (isDropdown && index === activeIndex && open) {
+    if (isToggle && index === activeIndex && open) {
       setOpen(false);
       return;
     }
@@ -162,7 +202,7 @@ export function WheelSelector({
 
   return (
     <div
-      className={`wheel-selector wheel-selector--${layout}${open ? " is-open" : ""}`}
+      className={`wheel-selector wheel-selector--${layout}${isToggle ? " wheel-selector--toggle" : ""}${open ? " is-open" : ""}`}
     >
       <svg
         className="wheel-selector-svg"
@@ -179,10 +219,9 @@ export function WheelSelector({
         >
           {items.map((item, index) => {
             const startAngle = -90 + index * step;
-            const labelPos = polarToCartesian(
-              LABEL_RADIUS,
-              midAngle(index, count),
-            );
+            const hasIcon = Boolean(item.icon);
+            const labelPos = polarToCartesian(LABEL_RADIUS, midAngle(index, count));
+            const iconPos = polarToCartesian(ICON_RADIUS, midAngle(index, count));
             const isActive = index === activeIndex && open;
             const colours = PALETTE[index % PALETTE.length];
             const lines = wrapLabel(item.label);
@@ -195,8 +234,8 @@ export function WheelSelector({
                 role="tab"
                 tabIndex={0}
                 aria-selected={isActive}
-                aria-expanded={isDropdown ? isActive : undefined}
-                aria-controls={isDropdown ? panelId : undefined}
+                aria-expanded={isToggle ? isActive : undefined}
+                aria-controls={isToggle ? panelId : undefined}
                 className={`wheel-selector-wedge${isActive ? " active" : ""}`}
                 onClick={() => select(index)}
                 onKeyDown={(event) => {
@@ -210,6 +249,19 @@ export function WheelSelector({
                   d={wedgePath(startAngle, startAngle + step)}
                   fill={colours.fill}
                 />
+                {hasIcon && (
+                  // Turned back like the label below, so the icon stays
+                  // upright all the way round too.
+                  <g
+                    className="wheel-selector-wedge-icon"
+                    style={{ color: colours.ink }}
+                    transform={`translate(${iconPos.x} ${iconPos.y}) rotate(${-rotation})`}
+                  >
+                    <g transform={`translate(${-ICON_SIZE / 2} ${-ICON_SIZE / 2})`}>
+                      {item.icon}
+                    </g>
+                  </g>
+                )}
                 {/* Turned back by as much as the wheel is turned, so the
                     label stays upright all the way round. */}
                 <g transform={`translate(${labelPos.x} ${labelPos.y})`}>
@@ -241,7 +293,7 @@ export function WheelSelector({
           cy={CENTER}
           r={INNER_RADIUS}
         />
-        <Bacterium />
+        {hubLabel ? <HubText text={hubLabel} /> : <Bacterium />}
         {/* The selected wedge is the one at rest: outlined there, with a
             pointer from it towards its content. */}
         <path
@@ -251,24 +303,25 @@ export function WheelSelector({
         <path
           className="wheel-selector-pointer"
           d={
-            layout === "side"
+            opensToSide
               ? `M${SIZE - 10},${CENTER - 12} v24 l10,-12 Z`
               : `M${CENTER - 12},${SIZE - 10} h24 l-12,10 Z`
           }
         />
       </svg>
-      {isDropdown ? (
-        // Opens and folds away (see .wheel-selector-dropdown in App.css);
+      {isToggle ? (
+        // Opens and folds away — down for "dropdown" (.wheel-selector-dropdown
+        // in App.css), sideways for "side-dropdown" (.wheel-selector-dropdown--side);
         // keyed on the section so switching sections fades the new one in.
         <div
           id={panelId}
-          className="wheel-selector-dropdown"
+          className={`wheel-selector-dropdown${opensToSide ? " wheel-selector-dropdown--side" : ""}`}
           role="region"
           aria-label={active?.label}
           inert={!open}
         >
           <div className="wheel-selector-dropdown-inner">
-            {active && (
+            {open && active && (
               <div className="wheel-selector-content" key={activeIndex}>
                 {active.content}
               </div>

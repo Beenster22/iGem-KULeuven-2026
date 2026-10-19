@@ -2788,6 +2788,24 @@ a[data-footnote-ref]:focus {
   pointer-events: none;
 }
 
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-10-19
+   Purpose: the hub's text alternative to the bacterium (WheelSelector's
+   hubLabel prop), used by the PMOS hypothesis figure. */
+.wheel-selector-hub-label {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  fill: #33283f;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* The small icon shown above a wedge's label when its SectionItem has an
+   `icon` prop (PMOS hypothesis figure). */
+.wheel-selector-wedge-icon {
+  pointer-events: none;
+}
+
 .wheel-selector-selected {
   fill: none;
   stroke: #33283f;
@@ -2841,79 +2859,51 @@ a[data-footnote-ref]:focus {
 }
 
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-10-19
-   Purpose: the "dropdown" wheel (WheelSelector layout="dropdown", results
-   page): the "side" wheel's size, its selected wedge turning to the bottom
-   to point down at a panel that drops open under it. Nothing is selected
-   until a wedge is clicked, so the outline and pointer wait until then. */
-.wheel-selector--dropdown {
+   Purpose: shared bits of the two "nothing selected until clicked" wheels —
+   "dropdown" (results page), whose panel grows down from underneath, and
+   "side-dropdown" (added 2026-10-19, PMOS hypothesis figure), whose panel
+   grows out sideways instead, so the figure doesn't push the rest of the
+   page down while closed. The outline and pointer wait for a click too. */
+.wheel-selector--toggle {
   gap: 1rem;
 }
 
-.wheel-selector--dropdown .wheel-selector-svg {
-  width: min(100%, 460px);
+.wheel-selector--toggle .wheel-selector-svg {
+  width: min(100%, 320px);
 }
 
-.wheel-selector--dropdown .wheel-selector-selected,
-.wheel-selector--dropdown .wheel-selector-pointer {
+.wheel-selector--toggle .wheel-selector-selected,
+.wheel-selector--toggle .wheel-selector-pointer {
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
-.wheel-selector--dropdown.is-open .wheel-selector-selected,
-.wheel-selector--dropdown.is-open .wheel-selector-pointer {
+.wheel-selector--toggle.is-open .wheel-selector-selected,
+.wheel-selector--toggle.is-open .wheel-selector-pointer {
   opacity: 1;
   transition-delay: 0.35s;
 }
 
-/* Opens by growing its one grid row from 0 to its content's height. */
-.wheel-selector-dropdown {
-  display: grid;
-  grid-template-rows: 0fr;
-  width: min(100%, 40rem);
-  transition: grid-template-rows 0.45s cubic-bezier(0.45, 0, 0.2, 1);
-}
-
-.wheel-selector--dropdown.is-open .wheel-selector-dropdown {
-  grid-template-rows: 1fr;
-}
-
 .wheel-selector-dropdown-inner {
   min-height: 0;
+  min-width: 0;
   overflow: hidden;
 }
 
-/* Styled like the page's section boxes (.content-section) — a shade
-   lighter, as it sits inside one — with its title in the heading face, as
-   their headings are (team request, 2026-10-19). */
-.wheel-selector--dropdown .wheel-selector-content {
-  padding: 2rem 2.25rem;
-  border-radius: 1.25rem;
-  background-color: color-mix(in srgb, var(--color-body-bg) 35%, #fff);
+.wheel-selector--toggle .wheel-selector-content {
+  padding: 1.25rem 1.5rem;
+  border: 2px solid rgba(51, 40, 63, 0.18);
+  border-radius: 1rem;
+  background: #fdf0f7;
+  color: #33283f;
   animation: wheel-selector-dropdown-in 0.35s ease;
 }
 
-[data-theme="dark"] .wheel-selector--dropdown .wheel-selector-content {
-  background-color: color-mix(in srgb, var(--color-body-bg) 74%, #fff);
-}
-
-.wheel-selector--dropdown .wheel-selector-content h4 {
-  font-family: "Luckiest Guy", "Poppins", sans-serif;
-  font-weight: 400;
-  font-size: clamp(1.3rem, 2.2vw, 1.5rem);
-  letter-spacing: 0.02em;
-}
-
-@media (max-width: 576px) {
-  .wheel-selector--dropdown .wheel-selector-content {
-    padding: 1.25rem 1rem;
-  }
-}
-
-.wheel-selector--dropdown .wheel-selector-content > :first-child {
+.wheel-selector--toggle .wheel-selector-content > :first-child {
   margin-top: 0;
 }
 
-.wheel-selector--dropdown .wheel-selector-content > :last-child {
+.wheel-selector--toggle .wheel-selector-content > :last-child {
   margin-bottom: 0;
 }
 
@@ -2926,26 +2916,94 @@ a[data-footnote-ref]:focus {
 
 @media (prefers-reduced-motion: reduce) {
   .wheel-selector-dropdown,
-  .wheel-selector--dropdown .wheel-selector-selected,
-  .wheel-selector--dropdown .wheel-selector-pointer {
+  .wheel-selector--toggle .wheel-selector-selected,
+  .wheel-selector--toggle .wheel-selector-pointer {
     transition: none;
   }
 
-  .wheel-selector--dropdown .wheel-selector-content {
+  .wheel-selector--toggle .wheel-selector-content {
     animation: none;
   }
 }
 
-/* Too narrow to read a paragraph beside the wheel: it goes back under it,
-   still pointing right — the pointer is part of the drawing. */
+/* "dropdown" (results page): opens by growing its one grid row from 0 to
+   its content's height, underneath the wheel. */
+.wheel-selector-dropdown {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: min(100%, 40rem);
+  transition: grid-template-rows 0.45s cubic-bezier(0.45, 0, 0.2, 1);
+}
+
+.wheel-selector--dropdown.is-open .wheel-selector-dropdown {
+  grid-template-rows: 1fr;
+}
+
+/* Generated with Claude Sonnet 5 (Anthropic), 2026-10-19
+   Purpose: "side-dropdown" (PMOS hypothesis figure, project description
+   page) — the "side" wheel's row layout, but nothing is selected at first
+   and the panel grows out of the wheel's right-hand side on click instead
+   of always sitting there, so the collapsed figure takes up less room. */
+.wheel-selector--side-dropdown {
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.wheel-selector--side-dropdown .wheel-selector-svg {
+  flex: none;
+  width: clamp(200px, 38%, 320px);
+}
+
+/* Opens by growing its one grid column from 0 to its content's width —
+   overrides the base .wheel-selector-dropdown rule's row-based collapse,
+   which would otherwise clip this to 0 height regardless of its width. */
+.wheel-selector-dropdown--side {
+  display: grid;
+  grid-template-rows: none;
+  grid-template-columns: 0fr;
+  width: auto;
+  flex: 1 1 20rem;
+  min-width: 0;
+  transition: grid-template-columns 0.45s cubic-bezier(0.45, 0, 0.2, 1);
+}
+
+.wheel-selector--side-dropdown.is-open .wheel-selector-dropdown--side {
+  grid-template-columns: 1fr;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wheel-selector-dropdown--side {
+    transition: none;
+  }
+}
+
+/* Too narrow for the wheel and an open panel side by side: the panel goes
+   back underneath, growing down instead of sideways. */
 @media (max-width: 767.98px) {
-  .wheel-selector--side {
+  .wheel-selector--side,
+  .wheel-selector--side-dropdown {
     flex-direction: column;
     gap: 1.5rem;
   }
 
-  .wheel-selector--side .wheel-selector-svg {
+  .wheel-selector--side .wheel-selector-svg,
+  .wheel-selector--side-dropdown .wheel-selector-svg {
     width: min(100%, 320px);
+  }
+
+  .wheel-selector-dropdown--side {
+    grid-template-columns: none;
+    grid-template-rows: 0fr;
+    width: 100%;
+    flex: none;
+    transition: grid-template-rows 0.45s cubic-bezier(0.45, 0, 0.2, 1);
+  }
+
+  .wheel-selector--side-dropdown.is-open .wheel-selector-dropdown--side {
+    grid-template-columns: none;
+    grid-template-rows: 1fr;
   }
 }
 

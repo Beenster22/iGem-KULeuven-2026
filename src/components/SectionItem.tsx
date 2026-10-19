@@ -2,6 +2,8 @@ import { ReactNode } from "react";
 
 interface SectionItemProps {
   label: string;
+  /** Small icon shown next to the label on a WheelSelector wedge, if given. */
+  icon?: ReactNode;
   children: ReactNode;
 }
 
