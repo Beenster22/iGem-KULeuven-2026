@@ -34,6 +34,8 @@ import {
 import { useReducedMotion } from "framer-motion";
 import { SnapSteps } from "./HomeSnapScroll";
 import { usePinnedStep } from "./usePinnedStep";
+import { useLensToGutWindow } from "./useLensToGutWindow";
+import { MicrobeLens } from "./TwoGutsSection";
 import { ElleSays, type ElleMood } from "./ElleSays";
 
 interface StoryStep {
@@ -83,7 +85,7 @@ const STEPS: StoryStep[] = [
     position: "presentation",
     lines: [
       <>
-        There currently is no actual therapeutic solution that tackles{" "}
+        There is currently no actual therapeutic solution that tackles{" "}
         <strong>all of the symptoms at once!</strong>
       </>,
     ],
@@ -378,15 +380,31 @@ function GutPicture() {
 }
 
 function GutArt() {
+  const prefersReducedMotion = useReducedMotion();
+  const lensRef = useRef<HTMLDivElement>(null);
+  // What the glass is showing becomes the circle of bacteria on the screen
+  // below (useLensToGutWindow.ts).
+  useLensToGutWindow({ lensRef, skip: !!prefersReducedMotion });
+
   return (
     <div className="quest-gut">
       <GutPicture />
       <div className="quest-lens" aria-hidden="true">
-        <div className="quest-lens-glass">
-          <div className="quest-lens-drift">
-            <div className="quest-lens-spin">
-              <img className="quest-lens-view" src={MICROBES_SRC} alt="" />
+        <div className="quest-lens-glass" ref={lensRef}>
+          <div className="quest-lens-photo">
+            <div className="quest-lens-drift">
+              <div className="quest-lens-spin">
+                <img className="quest-lens-view" src={MICROBES_SRC} alt="" />
+              </div>
             </div>
+          </div>
+          {/* Edited with Claude Opus 5 (Anthropic), 2026-10-19 (team
+              request: a quicker hand-over): at its last stop the glass
+              swaps to the very circle of bacteria it is about to become
+              on the screen below, so that hand-over is pure movement with
+              nothing to cross-fade. */}
+          <div className="quest-lens-circle">
+            <MicrobeLens />
           </div>
         </div>
         <svg className="quest-lens-handle" viewBox="0 0 10 10">
