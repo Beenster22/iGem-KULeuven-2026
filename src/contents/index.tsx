@@ -19,6 +19,7 @@ export { default as Measurement } from "./measurement.mdx";
 // iHP
 export { default as HumanPractices } from "./human-practices.mdx";
 export { default as Events } from "./events.mdx";
+export { default as ScienceCommunication } from "./science-communication.mdx";
 // Entrepreneurship
 export { default as Entrepreneurship } from "./entrepreneurship.mdx";
 // Prizes and Medals / Judging Form
