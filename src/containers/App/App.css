@@ -5347,20 +5347,29 @@ body:not(.home-fullscreen) .home-hero {
   mix-blend-mode: lighten;
 }
 
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-20 (team request): Elle
+   ends up level with the top of the lady rather than half way down her,
+   and stands off a little rather than right against her. The slot is only
+   a placeholder — she is drawn on the fixed layer over it — so moving it
+   moves her. */
 .elle-tour-slot {
   width: calc(var(--fig-h) * 0.3);
   aspect-ratio: 1668 / 1211;
+  align-self: start;
+  margin-top: calc(var(--fig-h) * 0.02);
+  margin-inline-start: clamp(0.5rem, 2.5vw, 2.5rem);
 }
 
 .elle-tour-words {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: clamp(0.75rem, 3vh, 1.75rem);
+  gap: clamp(0.5rem, 2vw, 1.5rem);
 }
 
 .elle-tour-words .story-text {
-  align-self: stretch;
+  align-self: center;
+  text-align: center;
 }
 
 .elle-tour-line {
@@ -5377,9 +5386,13 @@ body:not(.home-fullscreen) .home-hero {
   transform-origin: center;
 }
 
-/* Just the teal question mark (team request, 2026-10-18), centred under
-   the sentence: out of the three-mark arrangement's absolute layout and
-   into the flow, still bobbing. */
+/* Just the teal question mark (team request, 2026-10-18), out of the
+   three-mark arrangement's absolute layout and into the flow. Edited
+   2026-10-20 (team request): it sits beside the sentence on its right
+   rather than under it, and is a plain mark standing still — no bubble,
+   no bobbing. It is deliberately far larger than the words and set apart
+   from them, because the sentence is not a question and the mark must not
+   be read as its punctuation. */
 .story-art--question.elle-tour-questions {
   width: auto;
   height: auto;
@@ -5388,9 +5401,14 @@ body:not(.home-fullscreen) .home-hero {
 
 .story-art--question.elle-tour-questions span:nth-child(1) {
   position: static;
-  width: clamp(5rem, 10vw, 7.5rem);
-  height: clamp(5rem, 10vw, 7.5rem);
-  font-size: clamp(3rem, 6vw, 4.6rem);
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  font-size: clamp(4rem, 9vw, 7rem);
+  color: #2fa4a9;
+  background: none;
+  box-shadow: none;
+  animation: none;
 }
 
 /* The fixed layer Elle and the close-ups are drawn on. */
