@@ -5055,6 +5055,38 @@ body:not(.home-fullscreen) .home-hero {
   background-color: var(--symptom-color);
 }
 
+/* Symptom explanation tooltip (shown on hover / keyboard focus). */
+.symptom-card-list li.has-tip {
+  position: relative;
+  cursor: help;
+}
+
+.symptom-tip {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  bottom: calc(100% + 0.5rem);
+  width: max-content;
+  max-width: min(18rem, 80vw);
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.75rem;
+  background-color: #221b2b;
+  color: #fff;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.symptom-card-list li.has-tip:hover .symptom-tip,
+.symptom-card-list li.has-tip:focus .symptom-tip {
+  opacity: 1;
+  visibility: visible;
+}
+
 /* Phones: one card per row, a little tighter. */
 @media (max-width: 699.98px) {
   .symptoms-overview-grid {
@@ -14540,6 +14572,31 @@ a.protocol-download:hover {
 .table-compact ul {
   margin: 0;
   padding-left: 1.1rem;
+}
+
+/* PARTS TABLES (Parts page)
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20
+   Purpose: Basic/Composite part tables in last year's layout — full width,
+   a thin rule between rows, part codes as registry links. */
+.parts-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.parts-table th,
+.parts-table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--color-border, rgba(128, 128, 128, 0.35));
+  vertical-align: middle;
+}
+
+.parts-table td:first-child {
+  white-space: nowrap;
+}
+
+.parts-footnote {
+  margin-top: 0.75rem;
+  font-size: 0.9em;
 }
 
 /* Compact tables with more than three columns of similar weight: equal

@@ -31,6 +31,8 @@
 // SymptomGroups (no full-screen band, no title of its own — the page's
 // heading introduces it). The home page now shows PmosEffectsSection
 // (PmosEffectsSection.tsx) in their place.
+// Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request): symptom
+// chips show an explanation on hover/focus again (text supplied by the team).
 // Purpose: home-page "What is PMOS?" definition (PmosDefinition), and — the definition on its own
 // the team's four symptom groups as cards (SymptomGroups, description page).
 import type { ReactNode } from "react";
@@ -81,10 +83,17 @@ const ICONS: Record<string, ReactNode> = {
   ),
 };
 
+interface Symptom {
+  label: string;
+  // Shown in a tooltip on hover / keyboard focus. Supplied by the team; a
+  // symptom without one gets no tooltip.
+  explanation?: string;
+}
+
 interface SymptomGroup {
   id: string;
   title: string;
-  symptoms: string[];
+  symptoms: Symptom[];
 }
 
 // Group and symptom names as supplied by the team ("Text for HOME PAGE",
@@ -94,34 +103,93 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
     id: "hormonal",
     title: "Hormonal and reproductive issues",
     symptoms: [
-      "Hyperandrogenism",
-      "Hirsutism and androgenic alopecia",
-      "Acne and oily skin",
-      "Anovulation",
-      "Polycystic ovarian morphology",
-      "Irregular or absent periods",
-      "Infertility",
+      {
+        label: "Hyperandrogenism",
+        explanation:
+          "Increased levels of male hormones (androgens).",
+      },
+      {
+        label: "Hirsutism and androgenic alopecia",
+        explanation:
+          "Irregular hair growth: excess hair on the face and body, and thinning hair on the scalp.",
+      },
+      {
+        label: "Acne and oily skin",
+        explanation:
+          "Extra androgens make the skin produce more oil, which can cause breakouts.",
+      },
+      {
+        label: "Anovulation",
+        explanation:
+          "Missing ovulation: the ovaries do not release an egg.",
+      },
+      {
+        label: "Polycystic ovarian morphology",
+        explanation:
+          "Ovaries with undeveloped follicles that look like cysts on an ultrasound.",
+      },
+      {
+        label: "Irregular or absent periods",
+        explanation:
+          "Cycles that are infrequent, unpredictable or missing altogether, often because ovulation does not happen.",
+      },
+      {
+        label: "Infertility",
+        explanation:
+          "Difficulty getting pregnant, mostly as a result of missing ovulation.",
+      },
     ],
   },
   {
     id: "metabolic",
     title: "Metabolic",
     symptoms: [
-      "Low grade chronic inflammation",
-      "Hyperinsulinaemia",
-      "Dyslipidaemia and raised cardiovascular risk",
-      "Hepatic steatosis",
+      {
+        label: "Low grade chronic inflammation",
+        explanation:
+          "A mild but long-lasting activation of the immune system, often linked to excess body fat.",
+      },
+      {
+        label: "Hyperinsulinaemia",
+        explanation:
+          "Higher than normal insulin levels in the blood, as the body tries to compensate for a reduced response to insulin.",
+      },
+      {
+        label: "Dyslipidaemia and raised cardiovascular risk",
+        explanation:
+          "Unhealthy levels of fats (lipids) in the blood, which raise the risk of heart and blood vessel disease.",
+      },
+      {
+        label: "Hepatic steatosis",
+        explanation:
+          "Fat building up in the liver (fatty liver).",
+      },
     ],
   },
   {
     id: "wellbeing",
     title: "Wellbeing",
-    symptoms: ["Anxiety and depression", "Diagnostic delay – mental burden"],
+    symptoms: [
+      {
+        label: "Anxiety and depression",
+        explanation:
+          "Psychological challenges: persistent worry, low mood and loss of interest are more common in PMOS.",
+      },
+      {
+        label: "Diagnostic delay – mental burden",
+        explanation:
+          "Many women wait years and see several doctors before getting a diagnosis, which takes a toll on their mental health.",
+      },
+    ],
   },
   {
     id: "gut",
     title: "Gut microbiome",
-    symptoms: ["Reduced microbial diversity"],
+    symptoms: [{
+        label: "Reduced microbial diversity",
+        explanation:
+          "A less varied community of bacteria in the gut than in women without PMOS.",
+      }],
   },
 ];
 
@@ -176,7 +244,18 @@ export function SymptomGroups() {
           </div>
           <ul className="symptom-card-list">
             {group.symptoms.map((symptom) => (
-              <li key={symptom}>{symptom}</li>
+              <li
+                key={symptom.label}
+                className={symptom.explanation ? "has-tip" : undefined}
+                tabIndex={symptom.explanation ? 0 : undefined}
+              >
+                {symptom.label}
+                {symptom.explanation && (
+                  <span role="tooltip" className="symptom-tip">
+                    {symptom.explanation}
+                  </span>
+                )}
+              </li>
             ))}
           </ul>
         </article>
