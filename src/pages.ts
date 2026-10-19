@@ -17,6 +17,7 @@ import {
   Protocols,
   Results,
   SafetyAndSecurity,
+  ScienceCommunication,
   Sponsors,
 } from "./contents";
 import {
@@ -26,6 +27,7 @@ import {
   CodeIcon,
   DbtlCycleIcon,
   HandshakeIcon,
+  MegaphoneIcon,
   NotebookIcon,
   PeopleIcon,
   PuzzleIcon,
@@ -198,6 +200,13 @@ const Pages: (Page | Folder)[] = [
         component: Events,
         lead: "A timeline of the talks, workshops, meetups, and outreach activities our team took part in throughout the season.",
         icon: CalendarIcon,
+      },
+      {
+        name: "Science Communication & Community",
+        title: "Science Communication & Community",
+        path: "/science-communication",
+        component: ScienceCommunication,
+        icon: MegaphoneIcon,
       },
     ],
   },
