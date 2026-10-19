@@ -65,6 +65,11 @@ export function MicChart() {
   const [threshold, setThreshold] = useState<Threshold>("90");
   const [ready, setReady] = useState(false);
   const [narrow, setNarrow] = useState(false);
+  // The results page keeps sections it is not showing in the page with
+  // `hidden` (see ResultsPipelines), where the chart has no size to lay out
+  // in. Drawing then measures a zero-height plot and caches it, so the chart
+  // is only drawn once it has a width, and again when it is shown.
+  const [visible, setVisible] = useState(false);
   // The legend/axis chrome take up the same space for both thresholds, so
   // once the real plot height is measured for the current `narrow` layout it
   // is reused on every later threshold switch — otherwise each switch redraws
@@ -99,7 +104,7 @@ export function MicChart() {
   useEffect(() => {
     const Plotly = plotlyRef.current;
     const el = containerRef.current;
-    if (!Plotly || !el) return;
+    if (!Plotly || !el || !visible) return;
 
     const margin = narrow
       ? { l: 45, r: 10, t: 105, b: 150 }
@@ -204,22 +209,32 @@ export function MicChart() {
     return () => {
       cancelled = true;
     };
-  }, [ready, threshold, narrow]);
+  }, [ready, threshold, narrow, visible]);
 
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    const observer = new ResizeObserver((entries) => {
-      const width = entries[0]?.contentRect.width ?? 0;
+    const update = (width: number) => {
       const isNarrow = width > 0 && width < NARROW_BREAKPOINT;
+      setVisible(width > 0);
       setNarrow((prev) => {
         if (prev !== isNarrow) measuredHeightRef.current = null;
         return isNarrow;
       });
       if (plotlyRef.current) void plotlyRef.current.Plots.resize(el);
-    });
+    };
+    // Measured once straight away too: the first observer callback waits for
+    // the next frame, which a page opened in a background tab never gets.
+    update(el.clientWidth);
+    const observer = new ResizeObserver((entries) => update(entries[0]?.contentRect.width ?? 0));
     observer.observe(el);
-    return () => observer.disconnect();
+    // ResultsPipelines dispatches a resize when it shows a section.
+    const onResize = () => update(el.clientWidth);
+    window.addEventListener("resize", onResize);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", onResize);
+    };
   }, [ready]);
 
   return (

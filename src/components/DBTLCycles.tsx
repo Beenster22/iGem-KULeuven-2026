@@ -62,21 +62,14 @@ const ARROW_HEAD = "M154.62 183.32L255.97 93.6L154.47 -0.02Z";
 
 function Wheel({
   active,
+  spin,
   onPick,
 }: {
   active: StageName;
+  spin: number;
   onPick: (s: StageName) => void;
 }) {
-  // The wheel turns to bring the picked arrow to the top, the short way round.
-  const [spin, setSpin] = useState(49.4);
   const arcId = useId().replace(/:/g, "");
-
-  const pick = (stage: StageName) => {
-    const target = -(STAGES.find((s) => s.name === stage)?.angle ?? 0);
-    const delta = ((((target - spin) % 360) + 540) % 360) - 180;
-    setSpin(spin + delta);
-    onPick(stage);
-  };
 
   return (
     <svg viewBox="-60 -2 574 574" className="dbtl-wheel" role="group" aria-label="Design, Build, Test, Learn cycle">
@@ -94,11 +87,11 @@ function Wheel({
               tabIndex={0}
               aria-pressed={on}
               aria-label={s.label}
-              onClick={() => pick(s.name)}
+              onClick={() => onPick(s.name)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
-                  pick(s.name);
+                  onPick(s.name);
                 }
               }}
             >
@@ -129,8 +122,35 @@ export function DBTLCycles({ children }: { children: ReactNode }) {
   );
   const [index, setIndex] = useState(0);
   const [stage, setStage] = useState<StageName>("design");
+  // The wheel turns to bring the picked arrow to the top, the short way round.
+  const [spin, setSpin] = useState(49.4);
   const cycle = cycles[index];
   if (!cycle) return null;
+
+  const pick = (next: StageName) => {
+    const target = -(STAGES.find((s) => s.name === next)?.angle ?? 0);
+    const delta = ((((target - spin) % 360) + 540) % 360) - 180;
+    setSpin(spin + delta);
+    setStage(next);
+  };
+
+  // "Next" steps through Design, Build, Test, Learn, then on to the next cycle.
+  const stageIndex = STAGES.findIndex((s) => s.name === stage);
+  const nextStage = STAGES[stageIndex + 1];
+  const nextCycle = cycles[index + 1];
+  const goNext = () => {
+    if (nextStage) {
+      pick(nextStage.name);
+    } else if (nextCycle) {
+      setIndex(index + 1);
+      pick("design");
+    }
+  };
+  const nextLabel = nextStage
+    ? `Next: ${nextStage.label}`
+    : nextCycle
+      ? `Next: ${nextCycle.props.label}`
+      : null;
 
   const stages = Children.toArray(cycle.props.children).filter(
     (c): c is ReactElement<DBTLStageProps> => isValidElement(c),
@@ -156,12 +176,19 @@ export function DBTLCycles({ children }: { children: ReactNode }) {
       </div>
       {cycle.props.title && <h4 className="dbtl-title">{cycle.props.title}</h4>}
       <div className="dbtl-body">
-        <Wheel active={stage} onPick={setStage} />
-        {/* A fixed-height box that scrolls inside itself (keyed so it starts at the top for each stage), so a stage with many
-            figures never pushes the page around or moves the wheel. */}
-        <div key={`${index}-${stage}`} className="dbtl-box" tabIndex={0} role="region" aria-label={`${label} stage`}>
-          <div className="dbtl-box-label">{label}:</div>
-          <div className="dbtl-box-text">{current?.props.children}</div>
+        <Wheel active={stage} spin={spin} onPick={pick} />
+        <div className="dbtl-main">
+          {/* A fixed-height box that scrolls inside itself (keyed so it starts at the top for each stage), so a stage with many
+              figures never pushes the page around or moves the wheel. */}
+          <div key={`${index}-${stage}`} className="dbtl-box" tabIndex={0} role="region" aria-label={`${label} stage`}>
+            <div className="dbtl-box-label">{label}:</div>
+            <div className="dbtl-box-text">{current?.props.children}</div>
+          </div>
+          {nextLabel && (
+            <button type="button" className="dbtl-next" onClick={goNext}>
+              {nextLabel} <span aria-hidden="true">→</span>
+            </button>
+          )}
         </div>
       </div>
     </div>
