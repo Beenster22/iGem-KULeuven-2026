@@ -1,0 +1,16 @@
+name: Mirror to GitLab
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Push main to GitLab
+        run: git push --force https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.igem.org/2026/kuleuven.git HEAD:main
