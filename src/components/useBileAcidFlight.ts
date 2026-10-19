@@ -82,9 +82,13 @@ const BACTERIUM_BOTTOM = (72 + 116) / 300;
 // of the sentence in the middle, so they read as floating on the page
 // rather than ringing the words (team request).
 const STATEMENT = ".story-step--single";
-// How much of the way to their final size they reach before the hold, and
-// how far above the TGR5 screen the fall sets off, as a share of the window.
-const FLOAT_SCALE = 0.45;
+// How much of the way to their final size they have reached by the time
+// they settle. All of it (team request: the size should not change at the
+// last minute), so they drift out growing, float at the size they will
+// land at, and the fall is a move and nothing else.
+const FLOAT_SCALE = 1;
+// Where the fall sets off when that sentence has no pinned wrapper to give
+// it a beat of its own, as a share of the window above the TGR5 screen.
 const FALL_LEAD = 0.5;
 function floatSpot(n: number, total: number) {
   const half = Math.ceil(total / 2);
@@ -236,19 +240,31 @@ export function useBileAcidFlight({
       const pin = stage.closest<HTMLElement>(".home-snap-pin") ?? stage;
       const endAt =
         pin.getBoundingClientRect().top + window.scrollY - navBottom();
-      // The screen in between, taken as its whole band rather than the line
-      // of text on it: they are in place by the time it reaches the bar, and
-      // set off again half a window before the TGR5 screen.
+      // The screen in between. Its band is pinned, so measure its wrapper,
+      // which is not: they are in place as the sentence settles, hold for
+      // the whole of the step it is held there, and fall on the next.
       const band = document
         .querySelector<HTMLElement>(STATEMENT)
         ?.closest<HTMLElement>(".home-section");
+      const bandPin = band?.closest<HTMLElement>(".home-snap-pin");
       const span = endAt - startAt;
-      const floatAt = band
-        ? band.getBoundingClientRect().top + window.scrollY - navBottom()
-        : startAt + span * 0.4;
-      const fallAt = band
-        ? endAt + navBottom() - window.innerHeight * FALL_LEAD
-        : startAt + span * 0.75;
+      const floatAt = bandPin
+        ? bandPin.getBoundingClientRect().top + window.scrollY
+        : band
+          ? band.getBoundingClientRect().top + window.scrollY - navBottom()
+          : startAt + span * 0.4;
+      // How long it is held there: the wrapper's extra height over the band
+      // is the step the reader scrolls through while it stays put.
+      const held = bandPin
+        ? bandPin.getBoundingClientRect().height -
+          (band?.getBoundingClientRect().height ?? 0)
+        : 0;
+      const fallAt =
+        held > 0
+          ? floatAt + held
+          : band
+            ? endAt + navBottom() - window.innerHeight * FALL_LEAD
+            : startAt + span * 0.75;
       if (!(startAt < floatAt && floatAt < fallAt && fallAt < endAt))
         return rest();
       if (window.scrollY <= startAt) {

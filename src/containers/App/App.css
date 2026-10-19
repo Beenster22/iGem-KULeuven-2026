@@ -4410,6 +4410,22 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-19 (team request: the
+   acids should float on "But why is this reaction important?" for one turn
+   of the wheel and fall on the next): that sentence is pinned for a step of
+   its own, which gives the two beats somewhere to happen. */
+.home-statement-pin {
+  --snap-steps: 1;
+}
+
+/* Nothing flies across it when motion is reduced (see useBileAcidFlight.ts),
+   so the sentence does not need the extra step of scrolling either. */
+@media (prefers-reduced-motion: reduce) {
+  .home-statement-pin {
+    --snap-steps: 0;
+  }
+}
+
 .home-snap-pin > .home-snap-stage {
   position: sticky;
   top: 0;
