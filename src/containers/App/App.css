@@ -5122,6 +5122,7 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .symptom-card {
+  position: relative;
   padding: clamp(1rem, 2.2vw, 1.5rem);
   border-radius: 1.25rem;
   border-top: 5px solid var(--symptom-color);
@@ -5411,12 +5412,33 @@ body:not(.home-fullscreen) .home-hero {
   height: 100vh;
   height: 100svh;
   display: grid;
-  grid-template-columns: auto auto minmax(0, max-content);
+  /* Edited with Claude Opus 5 (Anthropic), 2026-10-20 (team request: the
+     sentence sat too far out to the right): Elle and the sentence share
+     one column beside the lady rather than taking one each, Elle on the
+     top row and the sentence under her, which brings the words in towards
+     the lady instead of leaving a gap the width of Elle between them. The
+     first row is only as tall as Elle, so she stays level with the lady's
+     top and the sentence has the rest of the height to sit in. */
+  grid-template-columns: auto minmax(0, max-content);
+  grid-template-rows: min-content 1fr;
   justify-content: center;
   align-items: center;
   gap: clamp(1rem, 3vw, 2.5rem);
   padding: calc(var(--home-nav-h) + 1.5rem) clamp(0.5rem, 3vw, 2.5rem)
     calc(var(--home-wave-h) + 1.5rem);
+}
+
+.elle-tour-stage > .elle-tour-lady {
+  grid-row: 1 / span 2;
+}
+
+.elle-tour-stage > .elle-tour-words {
+  align-self: center;
+  justify-self: center;
+  /* Lifted a little off centre (team request, 2026-10-20), so it sits
+     closer under Elle rather than low beside the lady. Tied to the
+     figure's height so it keeps its place as the screen changes size. */
+  translate: 0 calc(var(--fig-h) * -0.09);
 }
 
 /* Her picture is the video frame, on the video's own near-black; "lighten"
@@ -5443,20 +5465,30 @@ body:not(.home-fullscreen) .home-hero {
   mix-blend-mode: lighten;
 }
 
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-20 (team request): Elle
+   ends up level with the top of the lady rather than half way down her,
+   and stands off a little rather than right against her. The slot is only
+   a placeholder — she is drawn on the fixed layer over it — so moving it
+   moves her. */
 .elle-tour-slot {
   width: calc(var(--fig-h) * 0.3);
   aspect-ratio: 1668 / 1211;
+  align-self: start;
+  justify-self: start;
+  margin-top: calc(var(--fig-h) * 0.02);
+  margin-inline-start: clamp(0.5rem, 2.5vw, 2.5rem);
 }
 
 .elle-tour-words {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: clamp(0.75rem, 3vh, 1.75rem);
+  gap: clamp(0.5rem, 2vw, 1.5rem);
 }
 
 .elle-tour-words .story-text {
-  align-self: stretch;
+  align-self: center;
+  text-align: center;
 }
 
 .elle-tour-line {
@@ -5473,9 +5505,13 @@ body:not(.home-fullscreen) .home-hero {
   transform-origin: center;
 }
 
-/* Just the teal question mark (team request, 2026-10-18), centred under
-   the sentence: out of the three-mark arrangement's absolute layout and
-   into the flow, still bobbing. */
+/* Just the teal question mark (team request, 2026-10-18), out of the
+   three-mark arrangement's absolute layout and into the flow. Edited
+   2026-10-20 (team request): it sits beside the sentence on its right
+   rather than under it, and is a plain mark standing still — no bubble,
+   no bobbing. It is deliberately far larger than the words and set apart
+   from them, because the sentence is not a question and the mark must not
+   be read as its punctuation. */
 .story-art--question.elle-tour-questions {
   width: auto;
   height: auto;
@@ -5484,9 +5520,14 @@ body:not(.home-fullscreen) .home-hero {
 
 .story-art--question.elle-tour-questions span:nth-child(1) {
   position: static;
-  width: clamp(5rem, 10vw, 7.5rem);
-  height: clamp(5rem, 10vw, 7.5rem);
-  font-size: clamp(3rem, 6vw, 4.6rem);
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  font-size: clamp(4rem, 9vw, 7rem);
+  color: #2fa4a9;
+  background: none;
+  box-shadow: none;
+  animation: none;
 }
 
 /* The fixed layer Elle and the close-ups are drawn on. */
@@ -5588,13 +5629,24 @@ body:not(.home-fullscreen) .home-hero {
   .elle-tour-stage {
     --fig-h: min(46svh, 26rem);
     grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto auto;
     align-content: center;
     row-gap: 1rem;
   }
 
-  .elle-tour-lady {
+  /* The lady on her own row again, with Elle and the sentence side by side
+     under her, rather than the two-row column the wider layout uses. */
+  .elle-tour-stage > .elle-tour-lady {
     grid-column: 1 / -1;
+    grid-row: auto;
     justify-self: center;
+  }
+
+  .elle-tour-slot {
+    align-self: center;
+    justify-self: auto;
+    margin-top: 0;
+    margin-inline-start: 0;
   }
 
   .elle-tour-words .story-text {
@@ -7843,8 +7895,22 @@ body:not(.home-fullscreen) .home-hero {
 .find-more-card:focus-visible {
   border-color: #2fa4a9;
   box-shadow: 0 0.9rem 1.8rem rgba(47, 164, 169, 0.35);
-  color: inherit;
   transform: translateY(-6px);
+}
+
+/* Each card keeps its own text colour on hover and focus. Letting it inherit
+   (as before) turned the dark cards' titles dark purple on dark purple, and
+   the link styles of the page would otherwise recolour them too. */
+.find-more-card--dark,
+.find-more-card--dark:hover,
+.find-more-card--dark:focus-visible {
+  color: #eaf4f5;
+}
+
+.find-more-card--light,
+.find-more-card--light:hover,
+.find-more-card--light:focus-visible {
+  color: #33283f;
 }
 
 .find-more-card-art {
@@ -14628,4 +14694,11 @@ a.protocol-download:hover {
 .checklist-clear:disabled {
   opacity: 0.4;
   cursor: default;
+}
+
+/* Terms inside the symptom chips: dotted underline in the chip's own weight. */
+.symptom-card-list .glossary-term {
+  font-weight: inherit;
+  border-bottom: 2px dotted #2fa4a9;
+  text-decoration: none;
 }

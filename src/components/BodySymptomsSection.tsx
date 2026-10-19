@@ -36,6 +36,7 @@
 // Purpose: home-page "What is PMOS?" definition (PmosDefinition), and — the definition on its own
 // the team's four symptom groups as cards (SymptomGroups, description page).
 import type { ReactNode } from "react";
+import { GlossaryTerm } from "./GlossaryTerm";
 import { FALLING_M_SOURCE_ATTR } from "./useFallingM";
 
 // Wording supplied by the team ("Text for HOME PAGE", Section 3) — keep as
@@ -95,6 +96,11 @@ interface Symptom {
   // Shown in a tooltip on hover / keyboard focus. Supplied by the team; a
   // symptom without one gets no tooltip.
   explanation?: string;
+  // The term explained by Elle in a bubble when it is clicked (see
+  // GlossaryTerm.tsx), as on the funding table of the Entrepreneurship page.
+  // Takes the place of the hover tooltip for this symptom. Supplied by the team
+  // (2026-10-20).
+  definition?: string;
 }
 
 interface SymptomGroup {
@@ -112,10 +118,13 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
     symptoms: [
       {
         label: "Hyperandrogenism",
-        explanation: "Increased levels of male hormones (androgens).",
+        definition: "Elevated male hormone levels.",
+        explanation:
+          "Increased levels of male hormones (androgens).",
       },
       {
         label: "Hirsutism and androgenic alopecia",
+        definition: "Hirsutism: excessive male-pattern hair growth in women. Androgenic alopecia: hair thinning and hair loss.",
         explanation:
           "Irregular hair growth: excess hair on the face and body, and thinning hair on the scalp.",
       },
@@ -126,10 +135,13 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
       },
       {
         label: "Anovulation",
-        explanation: "Missing ovulation: the ovaries do not release an egg.",
+        definition: "Absence of ovulation.",
+        explanation:
+          "Missing ovulation: the ovaries do not release an egg.",
       },
       {
         label: "Polycystic ovarian morphology",
+        definition: "Ovaries containing multiple immature eggs.",
         explanation:
           "Ovaries with undeveloped follicles that look like cysts on an ultrasound.",
       },
@@ -151,22 +163,27 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
     symptoms: [
       {
         label: "Low grade chronic inflammation",
+        definition: "Persistent, low-level inflammation throughout the body.",
         explanation:
           "A mild but long-lasting activation of the immune system, often linked to excess body fat.",
       },
       {
         label: "Hyperinsulinaemia",
+        definition: "High insulin levels in the blood.",
         explanation:
           "Higher than normal insulin levels in the blood, as the body tries to compensate for a reduced response to insulin.",
       },
       {
         label: "Dyslipidaemia and raised cardiovascular risk",
+        definition: "Dyslipidaemia: abnormal levels of fats in the blood.",
         explanation:
           "Unhealthy levels of fats (lipids) in the blood, which raise the risk of heart and blood vessel disease.",
       },
       {
         label: "Hepatic steatosis",
-        explanation: "Fat building up in the liver (fatty liver).",
+        definition: "Fat buildup in the liver.",
+        explanation:
+          "Fat building up in the liver (fatty liver).",
       },
     ],
   },
@@ -264,16 +281,17 @@ export function SymptomGroups() {
             </div>
             <ul className="symptom-card-list">
               {group.symptoms.map((symptom) => (
-                <li
-                  key={symptom.label}
-                  className={symptom.explanation ? "has-tip" : undefined}
-                  tabIndex={symptom.explanation ? 0 : undefined}
-                >
-                  {symptom.label}
-                  {symptom.explanation && (
-                    <span role="tooltip" className="symptom-tip">
-                      {symptom.explanation}
-                    </span>
+                <li key={symptom.label}>
+                  {symptom.definition || symptom.explanation ? (
+                    <GlossaryTerm
+                      definition={
+                        (symptom.definition ?? symptom.explanation) as string
+                      }
+                    >
+                      {symptom.label}
+                    </GlossaryTerm>
+                  ) : (
+                    symptom.label
                   )}
                 </li>
               ))}
