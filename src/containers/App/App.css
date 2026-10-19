@@ -615,13 +615,16 @@ a[data-footnote-ref]:focus {
   flex: 1 1 calc((100% - 1.7rem) / 3);
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request): a
+   short trailing row now starts at the left, its tiles lining up under the
+   first ones of the row above (e.g. Safety under Description), instead of
+   being centred. (The class name is kept from when it centred them.) */
 .mega-menu-row--centered {
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 /* A short row's tiles stay the same width as a full row's (not stretched
-   to fill the leftover space) — that's what makes "centered" read as a
-   smaller row, not just left-aligned tiles with room to spare. */
+   to fill the leftover space), so they line up with the columns above. */
 .mega-menu-row--centered .mega-menu-link {
   flex: 0 0 calc((100% - 1.7rem) / 3);
 }
