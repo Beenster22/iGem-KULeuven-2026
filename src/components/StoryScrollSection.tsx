@@ -30,6 +30,7 @@ import {
   useState,
   type CSSProperties,
   type ReactNode,
+  type RefObject,
 } from "react";
 import { useReducedMotion } from "framer-motion";
 import { SnapSteps } from "./HomeSnapScroll";
@@ -41,8 +42,9 @@ interface StoryStep {
   // How the screen is laid out (see .story-step--* in App.css). "pair-left"
   // puts the first sentence top left and the second bottom right;
   // "pair-right" is its mirror image; "presentation" is Elle as a professor
-  // pointing at the sentence on a presentation screen.
-  position: "pair-left" | "pair-right" | "split" | "presentation";
+  // pointing at the sentence on a presentation screen; "office" is the GP's
+  // office scene on the left with the sentences on the right.
+  position: "pair-left" | "pair-right" | "split" | "presentation" | "office";
   art?: "clock" | "microbiome";
   lines: ReactNode[];
   // The screen's second sentence (the pair layouts).
@@ -81,10 +83,13 @@ const STEPS: StoryStep[] = [
       </>,
     ],
   },
+  // Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request): a
+  // GP's office on the left — the presentation screen's box turns into its
+  // sign (see useScreenToSign), over the team's doctor-and-patient picture
+  // with the clock on the wall — and the sentences on the right.
   {
     id: "diagnosis",
-    position: "pair-right",
-    art: "clock",
+    position: "office",
     lines: [
       <>
         <strong>Diagnosis takes quite a while</strong> because PMOS manifests
@@ -164,6 +169,32 @@ function Professor({ here }: { here: boolean }) {
         <line x1={0} y1={100} x2={100} y2={0} />
         <line className="story-professor-stick-tip" x1={92} y1={8} x2={100} y2={0} />
       </svg>
+    </div>
+  );
+}
+
+// The team's picture of a patient talking with her doctor (on the dark
+// background of the home-page video, which here is the office wall).
+const OFFICE_SRC =
+  "https://static.igem.wiki/teams/6299/wiki/home-page/doctor-patient-silhouette.avif";
+
+// Generated with Claude Opus 5.5 (Anthropic), 2026-10-19
+// Purpose: the "diagnosis" step's GP's office — its sign (which the
+// presentation screen's box turns into, see useScreenToSign) above the room,
+// with the ticking clock on the wall over the doctor.
+function OfficeArt() {
+  return (
+    <div className="story-office">
+      <p className="story-office-sign">GP’s office</p>
+      <div className="story-office-room">
+        <img
+          src={OFFICE_SRC}
+          alt="A patient talking with her doctor"
+          width={2000}
+          height={1878}
+        />
+        <ClockArt />
+      </div>
     </div>
   );
 }
@@ -380,10 +411,117 @@ export function StoryStatement({ children }: { children: ReactNode }) {
   );
 }
 
+// Generated with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request)
+// Purpose: between the "presentation" step and the "office" step after it,
+// the presentation screen's box turns into the GP's office sign (and back,
+// scrolling up): a stand-in box goes from the one to where the other comes
+// to rest, its sentence fading into "GP's office" on the way, while the
+// real two are hidden. The steps themselves keep their usual fade.
+const MORPH_MS = 750;
+
+function useScreenToSign(
+  stageRef: RefObject<HTMLElement | null>,
+  step: number,
+  enabled: boolean,
+) {
+  const previous = useRef(step);
+
+  useEffect(() => {
+    const from = previous.current;
+    previous.current = step;
+    const stage = stageRef.current;
+    const screenIndex = STEPS.findIndex((s) => s.position === "presentation");
+    const officeIndex = STEPS.findIndex((s) => s.position === "office");
+    const forwards = from === screenIndex && step === officeIndex;
+    const backwards = from === officeIndex && step === screenIndex;
+    if (!enabled || !stage || !(forwards || backwards)) return;
+    const screen = stage.querySelector<HTMLElement>(".story-screen");
+    const sign = stage.querySelector<HTMLElement>(".story-office-sign");
+    const screenText = screen?.querySelector<HTMLElement>(".story-text");
+    if (!screen || !sign || !screenText) return;
+    const [box, target] = forwards ? [screen, sign] : [sign, screen];
+    const [oldText, newText] = forwards ? [screenText, sign] : [sign, screenText];
+
+    // Where an element is now, and where it comes to rest once its step has
+    // slid into place (the steps arrive with a translate, see .story-step).
+    const rest = (el: HTMLElement) => {
+      const r = el.getBoundingClientRect();
+      const stepEl = el.closest(".story-step");
+      const parts = stepEl ? getComputedStyle(stepEl).translate.split(" ") : [];
+      const dy = parts.length > 1 ? parseFloat(parts[1]) || 0 : 0;
+      return { left: r.left, top: r.top - dy, width: r.width, height: r.height };
+    };
+    const start = rest(box);
+    const end = rest(target);
+
+    const ghost = document.createElement("div");
+    ghost.className = "story-morph";
+    ghost.setAttribute("aria-hidden", "true");
+    const label = (source: HTMLElement) => {
+      const el = document.createElement("div");
+      const style = getComputedStyle(source);
+      el.className = "story-morph-text";
+      el.textContent = source.textContent;
+      Object.assign(el.style, {
+        width: `${source.getBoundingClientRect().width}px`,
+        fontFamily: style.fontFamily,
+        fontSize: style.fontSize,
+        fontWeight: style.fontWeight,
+        lineHeight: style.lineHeight,
+        letterSpacing: style.letterSpacing,
+        textAlign: style.textAlign,
+      });
+      ghost.appendChild(el);
+      return el;
+    };
+    const fading = label(oldText);
+    const arriving = label(newText);
+    const px = (r: typeof start) => ({
+      left: `${r.left}px`,
+      top: `${r.top}px`,
+      width: `${r.width}px`,
+      height: `${r.height}px`,
+    });
+    Object.assign(ghost.style, px(start));
+    document.body.appendChild(ghost);
+    box.style.visibility = "hidden";
+    target.style.visibility = "hidden";
+
+    const easing = "cubic-bezier(0.65, 0, 0.35, 1)";
+    const moving = ghost.animate([px(start), px(end)], {
+      duration: MORPH_MS,
+      easing,
+      fill: "forwards",
+    });
+    fading.animate([{ opacity: 1 }, { opacity: 0 }], {
+      duration: MORPH_MS * 0.4,
+      fill: "forwards",
+    });
+    arriving.animate([{ opacity: 0 }, { opacity: 1 }], {
+      duration: MORPH_MS * 0.4,
+      delay: MORPH_MS * 0.6,
+      fill: "both",
+    });
+
+    const finish = () => {
+      box.style.visibility = "";
+      target.style.visibility = "";
+      ghost.remove();
+    };
+    moving.finished.then(finish, finish);
+    return () => {
+      moving.cancel();
+      finish();
+    };
+  }, [stageRef, step, enabled]);
+}
+
 export function StoryScrollSection() {
   const prefersReducedMotion = useReducedMotion();
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const step = usePinnedStep(wrapperRef, STEPS.length);
+  useScreenToSign(stageRef, step, !prefersReducedMotion);
 
   return (
     <div
@@ -394,6 +532,7 @@ export function StoryScrollSection() {
       {!prefersReducedMotion && <SnapSteps steps={STEPS.length} />}
       <div
         className={`story-stage${prefersReducedMotion ? "" : " home-snap-stage"}`}
+        ref={stageRef}
       >
         {STEPS.map((entry, i) => {
           const state = prefersReducedMotion
@@ -453,6 +592,16 @@ export function StoryScrollSection() {
                 <>
                   <Professor here={!!prefersReducedMotion} />
                   <div className="story-screen">{text(entry.lines, 0)}</div>
+                </>
+              ) : entry.position === "office" ? (
+                <>
+                  <OfficeArt />
+                  <div className="story-office-words">
+                    {text(entry.lines, 0)}
+                    {entry.second &&
+                      text(entry.second, entry.lines.length, " story-text--second")}
+                  </div>
+                  {elle}
                 </>
               ) : entry.second ? (
                 <>
