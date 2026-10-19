@@ -12,6 +12,9 @@
 // Web Animations API — as it only ever plays once.
 // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback): the
 // fall is now scroll-linked into a blank screen and the stairs are bars.
+// Edited with Claude Opus 5 (Anthropic), 2026-10-19: the stand-in now takes
+// over on the source letter's baseline instead of centred on its line box,
+// which dropped it 8px the moment it let go of "Metabolic".
 import { useEffect, useRef, type RefObject } from "react";
 
 // Put this attribute on the letter the M falls from (see PmosDefinition).
@@ -141,15 +144,27 @@ export function useFallingM({
         lineHeight: `${target.h}px`,
       });
 
-      // Start: on top of the source letter (same size, vertically centred on
-      // it — the two lines have different leading), or a screen above.
+      // Start: on top of the source letter (same size, sitting on the same
+      // baseline), or a screen above. The two lines have different leading,
+      // so the stand-in's box is not the source's box: lining the boxes up
+      // (or centring one in the other) drops the letter off its own word's
+      // baseline. Its baseline sits `baseline` below its box's top, scaled
+      // down with it; the source's sits baselineOffset() below its own.
       const sourceBox = source ? pageBox(source) : null;
       const startScale = source
         ? parseFloat(getComputedStyle(source).fontSize) / targetSize
         : 1;
-      startPose = sourceBox
-        ? { x: sourceBox.x, y: sourceBox.y + (sourceBox.h - startScale * target.h) / 2, s: startScale }
-        : { x: target.x, y: target.y - window.innerHeight, s: startScale };
+      startPose =
+        source && sourceBox
+          ? {
+              x: sourceBox.x,
+              y:
+                sourceBox.y +
+                baselineOffset(source, sourceBox.h) -
+                startScale * baseline,
+              s: startScale,
+            }
+          : { x: target.x, y: target.y - window.innerHeight, s: startScale };
       startColor = source ? getComputedStyle(source).color : endColor;
 
       // The stairs: bars rising to the right like a little bar chart, all
