@@ -13,12 +13,14 @@ import {
   Measurement,
   Members,
   Notebook,
+  Parts,
   Protocols,
   Results,
   SafetyAndSecurity,
   Sponsors,
 } from "./contents";
 import {
+  BlocksIcon,
   CalendarIcon,
   ClipboardIcon,
   CodeIcon,
@@ -158,6 +160,14 @@ const Pages: (Page | Folder)[] = [
         component: Protocols,
         lead: "Detailed, step-by-step protocols used throughout the project so other teams can replicate our work.",
         icon: ClipboardIcon,
+      },
+      {
+        name: "Parts",
+        title: "Parts",
+        path: "/parts",
+        component: Parts,
+        lead: "The basic and composite parts of our Promoter Reporter Library, each linked to its iGEM Registry page.",
+        icon: BlocksIcon,
       },
       {
         name: "Dry Lab",

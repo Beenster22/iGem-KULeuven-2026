@@ -1,10 +1,12 @@
 import { TeamMembers, TeamMemberCard } from "./components/TeamMembers";
 import { ProtocolBox } from "./components/ProtocolBox";
 import { ProtocolCalculator } from "./components/ProtocolCalculator";
+import { SoftwareDownload } from "./components/SoftwareDownload";
 import { ProtocolCalcGrid } from "./components/ProtocolCalcGrid";
 import { ProtocolCalculations } from "./components/ProtocolCalculations";
 import { ProtocolNote } from "./components/ProtocolNote";
 import { ProtocolDownloads } from "./components/ProtocolDownloads";
+import { PartsTable } from "./components/PartsTable";
 import { PageLayout } from "./components/PageLayout";
 import { Callout } from "./components/Callout";
 import { TabbedSections, TabSection } from "./components/TabbedSections";
@@ -42,6 +44,7 @@ import { MarketRings, MarketRing } from "./components/MarketRings";
 import { BusinessModelCanvas } from "./components/BusinessModelCanvas";
 import { Roadmap } from "./components/Roadmap";
 import { GlossaryTerm } from "./components/GlossaryTerm";
+import { Checklist } from "./components/Checklist";
 import { PhasePager } from "./components/PhasePager";
 import { IntegrationSummary, IntegrationPoint } from "./components/IntegrationSummary";
 import { MicrobeBackdrop } from "./components/MicrobeBackdrop";
@@ -119,6 +122,10 @@ export const mdxComponents = {
   ProtocolCalculations,
   ProtocolNote,
   ProtocolDownloads,
+  SoftwareDownload,
+  // Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20
+  // Purpose: the Basic / Composite part tables on the Parts page.
+  PartsTable,
   PageLayout,
   PmosOverview,
   SymptomGroups,
@@ -137,6 +144,7 @@ export const mdxComponents = {
   BusinessModelCanvas,
   Roadmap,
   GlossaryTerm,
+  Checklist,
   PhasePager,
   IntegrationSummary,
   IntegrationPoint,
