@@ -42,6 +42,7 @@ import { FanSelector, FanBranch } from "./components/FanSelector";
 import { MarketRings, MarketRing } from "./components/MarketRings";
 import { BusinessModelCanvas } from "./components/BusinessModelCanvas";
 import { Roadmap } from "./components/Roadmap";
+import { GlossaryTerm } from "./components/GlossaryTerm";
 import { PhasePager } from "./components/PhasePager";
 import { IntegrationSummary, IntegrationPoint } from "./components/IntegrationSummary";
 import { MicrobeBackdrop } from "./components/MicrobeBackdrop";
@@ -137,6 +138,7 @@ export const mdxComponents = {
   MarketRing,
   BusinessModelCanvas,
   Roadmap,
+  GlossaryTerm,
   PhasePager,
   IntegrationSummary,
   IntegrationPoint,

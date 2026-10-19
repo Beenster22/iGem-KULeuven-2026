@@ -4598,6 +4598,22 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-19 (team request: the
+   acids should float on "But why is this reaction important?" for one turn
+   of the wheel and fall on the next): that sentence is pinned for a step of
+   its own, which gives the two beats somewhere to happen. */
+.home-statement-pin {
+  --snap-steps: 1;
+}
+
+/* Nothing flies across it when motion is reduced (see useBileAcidFlight.ts),
+   so the sentence does not need the extra step of scrolling either. */
+@media (prefers-reduced-motion: reduce) {
+  .home-statement-pin {
+    --snap-steps: 0;
+  }
+}
+
 .home-snap-pin > .home-snap-stage {
   position: sticky;
   top: 0;
@@ -14469,8 +14485,68 @@ a.protocol-download:hover {
 
 @media (prefers-reduced-motion: reduce) {
   .events-timeline-card,
-  .events-timeline-card-inner,
-  .events-timeline-marker {
+  .events-timeline-card-inner {
     transition: none;
   }
+}
+
+/* GLOSSARY TERM
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-19 (team request)
+   Purpose: a word with a dotted underline that opens a little speech bubble
+   with Elle explaining it (see GlossaryTerm.tsx). The bubble is a fixed-size
+   light card on <body>, so it reads the same in both themes. */
+.glossary-term {
+  display: inline;
+  padding: 0;
+  border: 0;
+  border-bottom: 2px dotted #2fa4a9;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+.glossary-term:hover,
+.glossary-term[aria-expanded="true"] {
+  background-color: rgba(47, 164, 169, 0.18);
+}
+
+.glossary-pop {
+  position: fixed;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  border: 2px solid #2fa4a9;
+  border-radius: 1rem;
+  background: #fbfafe;
+  color: #33283f;
+  box-shadow: 0 0.8rem 2rem rgba(51, 40, 63, 0.3);
+  animation: events-fade-in 0.15s ease;
+}
+
+.glossary-pop--above {
+  transform: translateY(-100%);
+}
+
+.glossary-pop p {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.glossary-pop-elle {
+  flex: none;
+  width: 3rem;
+  height: auto;
+}
+
+.table-compact ul {
+  margin: 0;
+  padding-left: 1.1rem;
 }
