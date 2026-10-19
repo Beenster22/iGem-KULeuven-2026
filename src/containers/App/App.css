@@ -5392,7 +5392,7 @@ body:not(.home-fullscreen) .home-hero {
 
 .story-office {
   flex: 0 1 auto;
-  width: min(46%, 32rem);
+  width: min(54%, 38rem);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -5413,10 +5413,14 @@ body:not(.home-fullscreen) .home-hero {
   box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
 }
 
+/* Always exactly the picture's shape (content-box, width capped by the
+   height instead of a max-height), so the moving parts cut from it line up
+   with it. */
 .story-office-room {
+  --room-max-h: 60vh;
   position: relative;
-  width: 100%;
-  max-height: 52vh;
+  box-sizing: content-box;
+  width: min(calc(100% - 0.8rem), calc(var(--room-max-h) * 2000 / 1878));
   aspect-ratio: 2000 / 1878;
   overflow: hidden;
   border: 0.4rem solid #2fa4a9;
@@ -5432,20 +5436,122 @@ body:not(.home-fullscreen) .home-hero {
   object-fit: contain;
 }
 
-/* On the wall, in the gap between the two heads (the patient's is at about
-   26% across, the doctor's at 68–84%), towards the doctor's side. */
+/* The two women talking (team request, 2026-10-19): each part is a copy of
+   the picture cut down to it — the polygon includes a margin of plain wall
+   (and ends across flat parts of the neck, coat or thigh), so as it turns
+   the still picture underneath stays covered and no edge shows — turned a
+   few degrees about where it joins the body. The doctor talks (head and
+   clipboard), the patient listens and nods; gentle, and each on its own
+   beat so it never looks mechanical. */
+.story-office-part {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: 3.4s ease-in-out infinite;
+}
+
+.story-office-part--doctor-head {
+  clip-path: polygon(65.5% 5.5%, 83.5% 5.5%, 83.5% 21.5%, 75% 23.2%,
+    74.5% 23.6%, 69.5% 23.6%, 65.5% 21%);
+  transform-origin: 72% 23.5%;
+  animation-name: story-office-doctor-head;
+}
+
+.story-office-part--doctor-hands {
+  clip-path: polygon(54.5% 36%, 66% 36%, 70.5% 42%, 71.5% 50%, 70% 54.5%,
+    55% 56%);
+  transform-origin: 70.5% 47%;
+  animation-name: story-office-doctor-hands;
+  animation-duration: 2.6s;
+  animation-delay: -0.8s;
+}
+
+.story-office-part--patient-head {
+  clip-path: polygon(16.5% 6%, 31.5% 6%, 31.5% 22%, 28.5% 24.5%, 17% 25%);
+  transform-origin: 24% 24%;
+  animation-name: story-office-patient-head;
+  animation-duration: 5.2s;
+  animation-delay: -1.5s;
+}
+
+/* Talking: small tilts and nods towards the patient. */
+@keyframes story-office-doctor-head {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  18% {
+    rotate: -3deg;
+  }
+  36% {
+    rotate: 1deg;
+  }
+  55% {
+    rotate: -2deg;
+  }
+  75% {
+    rotate: 1.5deg;
+  }
+}
+
+/* Gesturing a little with the clipboard. */
+@keyframes story-office-doctor-hands {
+  0%,
+  100% {
+    rotate: 0deg;
+    translate: 0 0;
+  }
+  30% {
+    rotate: -2.5deg;
+    translate: 0 -0.4%;
+  }
+  60% {
+    rotate: 0.8deg;
+    translate: 0 0.2%;
+  }
+}
+
+/* Listening: an occasional nod. */
+@keyframes story-office-patient-head {
+  0%,
+  45%,
+  100% {
+    rotate: 0deg;
+  }
+  55% {
+    rotate: 2.5deg;
+  }
+  65% {
+    rotate: 0deg;
+  }
+  75% {
+    rotate: 2deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-office-part {
+    animation: none;
+  }
+}
+
+/* Small, in the wall's top-right corner (team request, 2026-10-19). */
 .story-office-room .story-art--clock {
   position: absolute;
-  top: 5%;
-  left: 46%;
-  width: 18%;
+  top: 4%;
+  right: 4%;
+  width: 11%;
+  filter: drop-shadow(0 0.3rem 0.5rem rgba(0, 0, 0, 0.3));
 }
 
 .story-office-words {
   flex: 0 1 26rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: clamp(1.5rem, 6vh, 3rem);
+  /* Centred in its column (team request, 2026-10-19). */
+  text-align: center;
 }
 
 /* A little smaller than the other screens' sentences: two of them share
@@ -5484,11 +5590,11 @@ body:not(.home-fullscreen) .home-hero {
   }
 
   .story-office {
-    width: min(80%, 20rem);
+    width: min(92%, 24rem);
   }
 
   .story-office-room {
-    max-height: 32vh;
+    --room-max-h: 40vh;
   }
 
   .story-office-words {

@@ -96,12 +96,8 @@ const STEPS: StoryStep[] = [
         differently between each patient…
       </>,
     ],
-    second: [
-      <>
-        With so much passion about women’s health, we knew we needed to{" "}
-        <strong>do something about this!</strong>
-      </>,
-    ],
+    // "With so much passion about women's health, we knew we needed to do
+    // something about this!" removed here (team request, 2026-10-19).
     elle: {
       says: <>Let’s find out together!</>,
       corner: "right",
@@ -119,17 +115,8 @@ const STEPS: StoryStep[] = [
         …we looked into the <strong>gut microbiome</strong>…
       </>,
     ],
-    // No magnifying glass of her own here: this step's drawing already is
-    // one, and two on the same screen read as a mistake.
-    elle: {
-      // Right, not left: on this layout both halves of the sentence sit in
-      // the bottom-left corner, so the free corner is the one under the
-      // magnifying glass.
-      says: <>Let’s have a look together!</>,
-      corner: "right",
-      mood: "excited",
-      delay: 2600,
-    },
+    // Elle's "Let's have a look together!" removed here (team request,
+    // 2026-10-19).
   },
 ];
 
@@ -181,7 +168,16 @@ const OFFICE_SRC =
 // Generated with Claude Opus 5.5 (Anthropic), 2026-10-19
 // Purpose: the "diagnosis" step's GP's office — its sign (which the
 // presentation screen's box turns into, see useScreenToSign) above the room,
-// with the ticking clock on the wall over the doctor.
+// with the ticking clock in the wall's top-right corner.
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request): the
+// two women talk — the doctor's head and her hands with the clipboard move
+// gently, the patient nods now and then. The picture is one flat image, so
+// each moving part is a copy of it cut down to that part (plus a margin of
+// plain wall, which covers the still picture underneath as it moves) and
+// turned slightly about where it joins the body (see .story-office-part in
+// App.css).
+const OFFICE_PARTS = ["patient-head", "doctor-hands", "doctor-head"];
+
 function OfficeArt() {
   return (
     <div className="story-office">
@@ -193,6 +189,17 @@ function OfficeArt() {
           width={2000}
           height={1878}
         />
+        {OFFICE_PARTS.map((part) => (
+          <img
+            key={part}
+            className={`story-office-part story-office-part--${part}`}
+            src={OFFICE_SRC}
+            alt=""
+            aria-hidden="true"
+            width={2000}
+            height={1878}
+          />
+        ))}
         <ClockArt />
       </div>
     </div>
