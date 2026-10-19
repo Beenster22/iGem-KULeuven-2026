@@ -5983,10 +5983,15 @@ body:not(.home-fullscreen) .home-hero {
    the team's microbes picture close up: a different part of it, turned a
    different way, at each of five spots, the bacteria drifting about. Replaces
    the earlier drawn microbes and the "split" layout. */
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-19 (team feedback: "On a
+   quest…" sat too close to the navigation bar): extra room at the top, and
+   the gut below gives way rather than pushing the sentence up into the bar
+   (see .quest-gut's flex-shrink). */
 .story-step--gut {
   flex-direction: column;
   gap: clamp(0.75rem, 2.5vh, 1.5rem);
   text-align: center;
+  padding-top: clamp(2rem, 6vh, 4rem);
 }
 
 .story-step--gut .story-text {
@@ -6000,7 +6005,10 @@ body:not(.home-fullscreen) .home-hero {
    shadow, so the drawing sits straight on the band. */
 .quest-gut {
   position: relative;
-  flex: none;
+  /* Shrinks when the screen is too short for the whole column, so the
+     sentences keep their place instead of being pushed off the screen. */
+  flex: 0 1 auto;
+  min-height: 0;
   height: min(62vh, 46rem);
   aspect-ratio: 976 / 1192;
 }
