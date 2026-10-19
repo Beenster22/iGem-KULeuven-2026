@@ -5,8 +5,14 @@
 // just above its content: selecting another one turns the wheel (the shorter
 // way round) until that wedge is at the bottom, while the labels and the
 // bacterium stay upright. Design after the team's own drawing of the wheel.
-import { ReactNode, useId, useMemo, useState } from "react";
+import { ReactNode, useEffect, useId, useMemo, useState } from "react";
 import { extractLabeledChildren } from "../utils/extractLabeledChildren";
+import {
+  WHEEL_SELECT_EVENT,
+  clearPendingWheelSelection,
+  takePendingWheelSelection,
+  type WheelSelectDetail,
+} from "./wheelSelect";
 
 interface WheelSelectorProps {
   children: ReactNode;
@@ -25,6 +31,13 @@ interface WheelSelectorProps {
   layout?: "below" | "side" | "dropdown" | "side-dropdown";
   /** Accessible name for the ring of wedges. */
   label?: string;
+  /**
+   * Lets something elsewhere on the page turn this wheel to one of its
+   * wedges, by dispatching a WHEEL_SELECT_EVENT carrying this id and the
+   * wedge's label — see TherapeuticsOverview.tsx, whose step 5 opens the
+   * Toolkit wheel on "Conjugation efficiency testing".
+   */
+  id?: string;
   /**
    * Added 2026-10-19 (PMOS hypothesis figure, project description page):
    * replaces the hub's bacterium image with this short text, split onto one
@@ -168,6 +181,7 @@ export function WheelSelector({
   layout = "below",
   label = "Wet lab sections",
   hubLabel,
+  id,
 }: WheelSelectorProps) {
   const items = useMemo(() => extractLabeledChildren(children), [children]);
   const count = items.length;
@@ -200,9 +214,37 @@ export function WheelSelector({
     });
   };
 
+  // Generated with Claude Opus 5 (Anthropic), 2026-10-19: a wheel given an
+  // `id` can be turned to one of its wedges from elsewhere on the page.
+  // Always opens the wedge (never folds it away), since the caller is
+  // sending the reader here to look at it.
+  useEffect(() => {
+    if (!id) return;
+    const apply = (detail: WheelSelectDetail | null) => {
+      if (!detail || detail.wheel !== id) return;
+      const index = items.findIndex((item) => item.label === detail.label);
+      if (index === -1) return;
+      clearPendingWheelSelection();
+      setOpen(true);
+      setActiveIndex(index);
+      setRotation((current) => {
+        const delta =
+          (((restAngle(index, count, rest) - current) % 360) + 540) % 360;
+        return current + delta - 180;
+      });
+    };
+    // Asked for before this wheel was on the page (see wheelSelect.ts).
+    apply(takePendingWheelSelection(id));
+    const onSelect = (event: Event) =>
+      apply((event as CustomEvent<WheelSelectDetail>).detail);
+    window.addEventListener(WHEEL_SELECT_EVENT, onSelect);
+    return () => window.removeEventListener(WHEEL_SELECT_EVENT, onSelect);
+  }, [id, items, count, rest]);
+
   return (
     <div
       className={`wheel-selector wheel-selector--${layout}${isToggle ? " wheel-selector--toggle" : ""}${open ? " is-open" : ""}`}
+      data-wheel={id}
     >
       <svg
         className="wheel-selector-svg"

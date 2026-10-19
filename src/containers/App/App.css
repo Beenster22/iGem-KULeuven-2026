@@ -5985,10 +5985,15 @@ body:not(.home-fullscreen) .home-hero {
    the team's microbes picture close up: a different part of it, turned a
    different way, at each of five spots, the bacteria drifting about. Replaces
    the earlier drawn microbes and the "split" layout. */
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-19 (team feedback: "On a
+   quest…" sat too close to the navigation bar): extra room at the top, and
+   the gut below gives way rather than pushing the sentence up into the bar
+   (see .quest-gut's flex-shrink). */
 .story-step--gut {
   flex-direction: column;
   gap: clamp(0.75rem, 2.5vh, 1.5rem);
   text-align: center;
+  padding-top: clamp(2rem, 6vh, 4rem);
 }
 
 .story-step--gut .story-text {
@@ -5997,10 +6002,16 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 /* The illustration on its own light background, framed like the office. */
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-19 (team request): bigger,
+   and with the framing gone — no teal border, no backing colour and no
+   shadow, so the drawing sits straight on the band. */
 .quest-gut {
   position: relative;
-  flex: none;
-  height: min(54vh, 40rem);
+  /* Shrinks when the screen is too short for the whole column, so the
+     sentences keep their place instead of being pushed off the screen. */
+  flex: 0 1 auto;
+  min-height: 0;
+  height: min(62vh, 46rem);
   aspect-ratio: 976 / 1192;
 }
 
@@ -6008,20 +6019,21 @@ body:not(.home-fullscreen) .home-hero {
   display: block;
   width: 100%;
   height: 100%;
-  border: 0.4rem solid #2fa4a9;
-  border-radius: 1.25rem;
-  background: #e7f5f6;
-  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
 }
 
 /* The magnifying glass: 34% of the gut's width, its top-left corner moved
-   between five spots (the lens centred on the small intestine, the
-   ascending colon, the transverse colon, the descending colon and the
-   lower small intestine), pausing at each. */
+   between five spots, pausing at each.
+   Edited with Claude Opus 5 (Anthropic), 2026-10-19 (team request: it must
+   not cross the gut's outline): the five spots were worked out from the
+   drawing itself — each lens centre is at least 19% of the width clear of
+   the silhouette's edge, against a lens radius of 17%, so the glass always
+   sits wholly on the gut with ~2% to spare. Re-work them if the drawing is
+   re-exported. The tour runs upper left, upper right, lower right, lower
+   left, then the middle. */
 .quest-lens {
   position: absolute;
-  left: 33%;
-  top: 33.1%;
+  left: 9.6%;
+  top: 18%;
   width: 34%;
   aspect-ratio: 1;
 }
@@ -6033,32 +6045,32 @@ body:not(.home-fullscreen) .home-hero {
 @keyframes quest-lens-tour {
   0%,
   11.2% {
-    left: 33%;
-    top: 33.1%;
+    left: 9.6%;
+    top: 18%;
   }
   20%,
   31.2% {
-    left: -1%;
-    top: 31.1%;
+    left: 53.5%;
+    top: 15.6%;
   }
   40%,
   51.2% {
-    left: 35%;
-    top: -1.9%;
+    left: 57.2%;
+    top: 50.5%;
   }
   60%,
   71.2% {
-    left: 69%;
-    top: 28.1%;
+    left: 6.4%;
+    top: 41.8%;
   }
   80%,
   91.2% {
-    left: 25%;
-    top: 52.1%;
+    left: 40.4%;
+    top: 34.1%;
   }
   100% {
-    left: 33%;
-    top: 33.1%;
+    left: 9.6%;
+    top: 18%;
   }
 }
 
@@ -13786,5 +13798,162 @@ a.protocol-download:hover {
   .section-progress-box {
     top: calc(5rem + var(--results-bar-h, 0px));
     max-height: calc(100vh - 7rem - var(--results-bar-h, 0px));
+  }
+}
+
+/* THERAPEUTICS OVERVIEW FIGURE
+   Generated with Claude Opus 5 (Anthropic), 2026-10-19
+   Purpose: the team's therapeutics pipeline figure on the results page
+   (TherapeuticsOverview.tsx), whose five numbered steps are buttons. The
+   badges sit on the circles drawn into the artwork — teal, so they read as
+   clickable against the figure's blues and pinks — and are placed as
+   percentages of the figure, so they hold their spots at every size. */
+.therapeutics-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.therapeutics-overview-figure {
+  position: relative;
+  width: 100%;
+  max-width: 1057px;
+  margin-inline: auto;
+  aspect-ratio: 1057 / 510;
+}
+
+.therapeutics-overview-figure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+}
+
+/* Sized from the figure's width so a badge keeps covering its circle; the
+   artwork's own circles are about 3% of it across. */
+.therapeutics-overview-badge {
+  position: absolute;
+  translate: -50% -50%;
+  width: 3.4%;
+  aspect-ratio: 1;
+  min-width: 22px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 2px solid #eaf4f5;
+  border-radius: 50%;
+  background: #2fa4a9;
+  color: #fff;
+  font-family: inherit;
+  font-size: clamp(0.7rem, 1.35vw, 1.05rem);
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    scale 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.therapeutics-overview-badge:hover,
+.therapeutics-overview-badge:focus-visible {
+  scale: 1.15;
+  background: #1f7479;
+  box-shadow: 0 0 0 0.3rem rgba(47, 164, 169, 0.3);
+}
+
+.therapeutics-overview-badge.is-open {
+  background: #1f7479;
+  box-shadow: 0 0 0 0.3rem rgba(47, 164, 169, 0.45);
+}
+
+/* Step 5 leaves this figure for the Toolkit wheel, so it is marked out with
+   a ring rather than reading as another panel to open. */
+.therapeutics-overview-badge--link {
+  border-style: dashed;
+}
+
+.therapeutics-overview-badge .visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The step's write-up, in the same box as the section it sits in
+   (.content-section), a shade lighter as it is inside one. */
+.therapeutics-overview-panel {
+  padding: 2rem 2.25rem;
+  border-radius: 1.25rem;
+  background-color: color-mix(in srgb, var(--color-body-bg) 35%, #fff);
+  animation: therapeutics-overview-in 0.3s ease;
+}
+
+[data-theme="dark"] .therapeutics-overview-panel {
+  background-color: color-mix(in srgb, var(--color-body-bg) 74%, #fff);
+}
+
+.therapeutics-overview-panel > :first-child {
+  margin-top: 0;
+}
+
+.therapeutics-overview-panel > :last-child {
+  margin-bottom: 0;
+}
+
+.therapeutics-overview-panel h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* The step's number, repeated so the panel says which badge opened it. */
+.therapeutics-overview-panel-number {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.8em;
+  height: 1.8em;
+  border-radius: 50%;
+  background: #2fa4a9;
+  color: #fff;
+  font-size: 0.7em;
+  font-weight: 800;
+}
+
+.therapeutics-overview-panel h5 {
+  margin-bottom: 0.3rem;
+  font-size: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+}
+
+@keyframes therapeutics-overview-in {
+  from {
+    opacity: 0;
+    translate: 0 -0.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .therapeutics-overview-panel {
+    padding: 1.25rem 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .therapeutics-overview-badge {
+    transition: none;
+  }
+
+  .therapeutics-overview-panel {
+    animation: none;
   }
 }
