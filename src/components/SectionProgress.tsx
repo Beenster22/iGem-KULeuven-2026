@@ -12,6 +12,7 @@
 // deeper ("sub-sub").
 import { MouseEvent, RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { getPathMapping } from "../utils";
 import { stringToSlug } from "../utils/stringToSlug";
 
 interface Heading {
@@ -161,6 +162,10 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
   const [collapsible, setCollapsible] = useState(false);
   const [openGroup, setOpenGroup] = useState("");
   const location = useLocation();
+  // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-19
+  // Purpose: the top of the index names the page the reader is on, so anyone
+  // following a link from another page knows where they landed.
+  const pageTitle = getPathMapping()[location.pathname.replace(/(.)\/+$/, "$1") || "/"]?.title;
   const listRef = useRef<HTMLUListElement>(null);
   // Vertical center of the active row within the list, in px; null until
   // measured so the mascot first appears in place instead of sliding in.
@@ -378,7 +383,11 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
   return (
     <nav className="section-progress" aria-label="Page sections">
       <div className="section-progress-box">
-        <p className="section-progress-heading">On this page</p>
+        {pageTitle ? (
+          <p className="section-progress-heading">{pageTitle}</p>
+        ) : (
+          <p className="section-progress-heading">On this page</p>
+        )}
         <ul ref={listRef}>
           {mascotY !== null && (
             <li

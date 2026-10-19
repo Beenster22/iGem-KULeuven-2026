@@ -1,13 +1,13 @@
 // Generated with Claude Opus 5 (Anthropic), 2026-10-12
 // Purpose: the interactive version of the numbered tables in the wet lab
 // protocols. Each protocol document ships tables whose empty cells are meant
-// to be worked out in Protocol_Calculators.xlsx; this renders the same table
-// on the page with the input cells editable and the empty cells computed
-// live, so a visitor can plan a run without opening the workbook.
+// to be worked out by hand; this renders the same table on the page with the
+// input cells editable and the empty cells computed live, so a visitor can
+// plan a run without a separate tool.
 //
 // The formulas come from the "Calculations" section of each protocol
 // document — they are transcriptions, not derivations. Check a calculator
-// against the workbook tab it names before relying on it at the bench.
+// against the written protocol before relying on it at the bench.
 import { ReactNode, useMemo, useState } from "react";
 
 export interface CalcRow {
@@ -37,8 +37,6 @@ interface ProtocolCalculatorProps {
   /** ReactNode, not string: several captions italicise a species name. */
   title: ReactNode;
   rows: CalcRow[];
-  /** Tab name in Protocol_Calculators.xlsx holding the same table. */
-  workbookTab?: string;
   /** Column header for the first column. Protocols vary between these. */
   parameterHeader?: string;
 }
@@ -54,7 +52,6 @@ export function ProtocolCalculator({
   number,
   title,
   rows,
-  workbookTab,
   parameterHeader = "Parameter",
 }: ProtocolCalculatorProps) {
   const [edits, setEdits] = useState<Record<string, string>>({});
@@ -150,12 +147,6 @@ export function ProtocolCalculator({
           >
             Reset to the values printed in the protocol
           </button>
-        )}
-        {workbookTab && (
-          <span className="protocol-calc-workbook">
-            Same table in the workbook: tab <strong>“{workbookTab}”</strong> of
-            Protocol_Calculators.xlsx.
-          </span>
         )}
       </p>
     </div>

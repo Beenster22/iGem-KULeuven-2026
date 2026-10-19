@@ -1,6 +1,7 @@
 import { TeamMembers, TeamMemberCard } from "./components/TeamMembers";
 import { ProtocolBox } from "./components/ProtocolBox";
 import { ProtocolCalculator } from "./components/ProtocolCalculator";
+import { SoftwareDownload } from "./components/SoftwareDownload";
 import { ProtocolCalcGrid } from "./components/ProtocolCalcGrid";
 import { ProtocolCalculations } from "./components/ProtocolCalculations";
 import { ProtocolNote } from "./components/ProtocolNote";
@@ -118,6 +119,7 @@ export const mdxComponents = {
   ProtocolCalculations,
   ProtocolNote,
   ProtocolDownloads,
+  SoftwareDownload,
   PageLayout,
   PmosOverview,
   SymptomGroups,
