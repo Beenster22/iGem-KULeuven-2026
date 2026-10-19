@@ -40,7 +40,7 @@ export function DbtlCycleIcon(props: SVGProps<SVGSVGElement>) {
       ))}
       <text
         x="60"
-        y="65"
+        y="67"
         textAnchor="middle"
         fontSize="20"
         fontWeight="800"

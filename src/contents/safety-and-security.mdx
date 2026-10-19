@@ -9,7 +9,7 @@
 
 <PageLayout>
 
-<span data-toc-collapsible hidden />
+<span data-toc-collapsible data-toc-no-dropdowns hidden />
 
 ## 1. Risk Identification and Mitigation during Experimentation
 
@@ -20,7 +20,7 @@ Vitor B. Pinheiro's Lab and Prof. Jeroen Raes's lab under the guidance of our PI
 Vazquez-Uribe, both in the Rega Institute in KU Leuven's Gasthuisberg. Each lab hosted separate
 experimentation where a **risk analysis was written and reviewed by a representative** with the
 **KU Leuven HSE Department before wet-lab work began and were valid from 1 July to 30 September
-2026**. Risks are outlined and **addressed in-depth in every protocol** developed by our team and
+2026**. Risks are outlined and **addressed in-depth in every <Link to="/protocols">protocol</Link>** developed by our team and
 represent our commitment to safety.
 
 We followed the Code of Good
@@ -69,7 +69,7 @@ cabinets and anaerobic workstations, personal protective equipment (PPE) and tho
 
 A live biotherapeutic product is a living organism given to a patient, so the safety case reaches
 beyond the laboratory. Before any clinical use, an engineered *P. vulgatus* strain would need to
-show that it engrafts in the intended niche of the gut, that it does not spread beyond that niche,
+show that it engrafts in the intended niche of the gut[^saf-5], that it does not spread beyond that niche,
 and that it can be removed if needed. Our re-implantation approach depends on isolating the strain
 from a patient's fecal sample, engineering it in the laboratory, and returning it to the same
 patient. Each step in that loop, including the handling of patient material, would need its own risk
@@ -86,18 +86,15 @@ risk. The risk of altered homeostasis accompanies the administration of any LBP.
 
 <ExpandableText title="Mitigation strategy">
 
-{/* TODO: the team's document has "(source)" twice in this paragraph — the
-    citations still need to be added as footnotes. */}
-
 To decrease microbiome disruption, we are rewiring *P. vulgatus*, an abundant, beneficial gut
 resident. By isolating *P. vulgatus* from the stool of each patient, the strain is adapted to the
 metabolic niche already and therefore should have minimal disruptive effect. *P. vulgatus* has an
 impressive range of available carbohydrate breakdown methods encoded in its genome, which helps
-explain its adaptability (source). We hypothesize that this adaptability allows persistence in
+explain its adaptability[^saf-2]. We hypothesize that this adaptability allows persistence in
 hostile diseased environments such as PMOS patient's microbiome. Furthermore, *P. vulgatus* exhibits
 clear beneficial effects within the gut ecosystem: it actively contributes to complex carbohydrate
 degradation, produces short-chain fatty acids (SCFAs) like acetate, and promotes immune homeostasis
-by suppressing gut inflammation and regulating host metabolic pathways (source).
+by suppressing gut inflammation and regulating host metabolic pathways[^saf-3].
 
 </ExpandableText>
 
@@ -138,8 +135,8 @@ need.
 The first line of defense against unwanted growth of *P. vulgatus* lies in its strict anaerobic
 nature as it is not motile and has limited oxygen tolerance[^saf-1]. As a second line of defense, it
 is possible to include an auxotrophic marker that causes the bacterium to have a dependency on a
-supplemented compound given to the patient. This has proven success in other emerging LBP companies,
-see IHP. By pairing the intrinsic biological limitations of an obligate anaerobe with a robust
+supplemented compound given to the patient. This has proven success in other emerging LBP companies[^saf-4],
+see our <Link to="/human-practices#weston-whitaker">interview with Prof. Dr. Weston Whitaker</Link>. By pairing the intrinsic biological limitations of an obligate anaerobe with a robust
 auxotrophy, we establish a multi-layered biocontainment framework that minimizes the risk of
 environmental persistence and off-target transmission.
 
@@ -147,21 +144,18 @@ environmental persistence and off-target transmission.
 
 ### Current Regulatory Influence
 
-{/* TODO: the team's document ends this section with "See more!" — add the
-    <Link to="..."> to the page it should point to (entrepreneurship?). */}
-
 With the US as our breakout market, we are bound to the requirements of the NIH regulation for
 biocontainment enforced by the local institutional biosafety committee and the U.S. Food and Drug
 Administration (FDA) that evaluates safety and chemistry controls through an Investigational New Drug
 (IND) application. It must also undergo non-clinical safety testing which typically focuses on
 evaluating translocation (the LBP crossing the mucosal barrier into systemic circulation) and general
-pathogenicity in animal models. This is where our biocontainment plan integrates.
+pathogenicity in animal models. This is where our biocontainment plan integrates. For the full regulatory pathway, see the <Link to="/entrepreneurship#2-6-regulatory-strategy">regulatory strategy</Link> on our Entrepreneurship page.
 
 ---
 
 ## 3. Ethical Engagement
 
-To ensure appropriate patient data protection for patient interviews, we submitted a formal study
+To ensure appropriate patient data protection for patient interviews (see <Link to="/human-practices">Integrated Human Practices</Link>), we submitted a formal study
 application to the Ethical Committee for Research (EC Research) of UZ Leuven. The study was approved
 under compliance with GDPR guidelines (ref.-number: S72545), allowing us to recruit patients with
 PMOS through online channels, but also through referral of Dr. Sharon Lie Fong in the PMOS clinic of
@@ -190,17 +184,18 @@ information.
 
 {/* The "References" panel below is generated automatically from these
     footnote definitions by rehypeReferences — no heading needed here.
-
-    TODO: two references from the team's document are not cited anywhere in the
-    text yet, so they are not listed. Add a [^saf-2] / [^saf-3] marker where
-    they belong and uncomment the definitions:
-      Isabella et al. (2018). Development of a synthetic live bacterial
-      therapeutic for the human metabolic disease phenylketonuria. Nat
-      Biotechnol 36:857-864. doi:10.1038/nbt.4222
-      Yassour et al. (2018). Strain-level analysis of mother-to-child bacterial
-      transmission during the first few months of life. Cell Host Microbe
-      24(1):146-154.e4. doi:10.1016/j.chom.2018.06.007 */}
+    saf-2/saf-3 are the two "(source)" links (PMC11405475 / PMC10854360) from
+    the team's document comments; saf-5 (Yassour) was listed in the document
+    but not cited in its text — placement is a guess, team to confirm. */}
 
 [^saf-1]: Keitel, J., et al. (2023). Carbon dioxide and trace oxygen concentrations impact growth and product formation of the gut bacterium *Phocaeicola vulgatus*. *BMC Microbiology* 23:1–13. https://doi.org/10.1186/s12866-023-03127-x
+
+[^saf-2]: Gindt, M. E., Lück, R., & Deppenmeier, U. (2024). Genetic optimization of the human gut bacterium *Phocaeicola vulgatus* for enhanced succinate production. *Applied Microbiology and Biotechnology* 108:465. https://doi.org/10.1007/s00253-024-13303-2
+
+[^saf-3]: Jin, S., et al. (2024). *Phocaeicola vulgatus* alleviates diet-induced metabolic dysfunction-associated steatotic liver disease progression by downregulating histone acetylation level via 3-HPAA. *Gut Microbes* 16(1):2309683. https://doi.org/10.1080/19490976.2024.2309683
+
+[^saf-4]: Isabella, V. M., et al. (2018). Development of a synthetic live bacterial therapeutic for the human metabolic disease phenylketonuria. *Nature Biotechnology* 36:857–864. https://doi.org/10.1038/nbt.4222
+
+[^saf-5]: Yassour, M., et al. (2018). Strain-level analysis of mother-to-child bacterial transmission during the first few months of life. *Cell Host & Microbe* 24(1):146–154.e4. https://doi.org/10.1016/j.chom.2018.06.007
 
 </PageLayout>

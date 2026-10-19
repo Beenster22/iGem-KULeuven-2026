@@ -176,7 +176,11 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
     const container = containerRef.current;
     if (!container) return;
 
-    const found = collectHeadings(container);
+    // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-19
+    // Purpose: Safety page wants only its Risk 1–3 in the index, not the
+    // dropdown titles beneath them. Pages opt in with data-toc-no-dropdowns.
+    const hideDropdowns = container.querySelector("[data-toc-no-dropdowns]") !== null;
+    const found = collectHeadings(container).filter((heading) => !(hideDropdowns && heading.level === 4));
     setHeadings(found);
     setCollapsible(container.querySelector("[data-toc-collapsible]") !== null);
     setOpenGroup("");

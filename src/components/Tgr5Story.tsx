@@ -726,14 +726,18 @@ function Tgr5BindingDiagram({ animate }: { animate: boolean }) {
         </g>
       ))}
 
-      {/* Hidden until they pour in (see useBindingLoop). */}
-      <g>
+      {/* Hidden until they pour in (see useBindingLoop).
+          Edited with Claude Opus 5 (Anthropic), 2026-10-19 (team request):
+          named so the acids flying down from the BSH screen can land on
+          them and hand over (see useBileAcidFlight.ts); --acids-in keeps
+          the pool waiting until that moment. */}
+      <g className="tgr5-pool">
         {acids.map((acid, i) => {
           const at = staticAt(acid);
           return (
             <g
               key={acid.id}
-              className={`bsh-molecule--${acid.kind}`}
+              className={`tgr5-pool-acid bsh-molecule--${acid.kind}`}
               transform={`translate(${at[0]} ${at[1]})`}
               opacity={animate ? 0 : undefined}
               ref={(el) => {
@@ -952,7 +956,7 @@ export function EngineerSection() {
     <div className="engineer">
       <p className="story-text engineer-text">
         This is why we want to <strong>engineer</strong> <em>P. vulgatus</em>{" "}
-        and silence <strong>BSH expression</strong>
+        to restore bile acid and achieve a therapeutic effect in <strong>PMOS</strong>
       </p>
       {/* The cell of BshStreamAnimation.tsx, now with a genetic circuit in
           it that silences BSH (drawn with the usual blunt "inhibits" line). */}
