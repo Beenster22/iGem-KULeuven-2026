@@ -258,20 +258,13 @@ export function SymptomGroups() {
           </div>
           <ul className="symptom-card-list">
             {group.symptoms.map((symptom) => (
-              <li
-                key={symptom.label}
-                className={!symptom.definition && symptom.explanation ? "has-tip" : undefined}
-                tabIndex={!symptom.definition && symptom.explanation ? 0 : undefined}
-              >
-                {symptom.definition ? (
-                  <GlossaryTerm definition={symptom.definition}>{symptom.label}</GlossaryTerm>
+              <li key={symptom.label}>
+                {symptom.definition || symptom.explanation ? (
+                  <GlossaryTerm definition={(symptom.definition ?? symptom.explanation) as string}>
+                    {symptom.label}
+                  </GlossaryTerm>
                 ) : (
                   symptom.label
-                )}
-                {!symptom.definition && symptom.explanation && (
-                  <span role="tooltip" className="symptom-tip">
-                    {symptom.explanation}
-                  </span>
                 )}
               </li>
             ))}

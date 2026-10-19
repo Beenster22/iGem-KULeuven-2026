@@ -14737,3 +14737,10 @@ a.protocol-download:hover {
   opacity: 0.4;
   cursor: default;
 }
+
+/* Terms inside the symptom chips: dotted underline in the chip's own weight. */
+.symptom-card-list .glossary-term {
+  font-weight: inherit;
+  border-bottom: 2px dotted #2fa4a9;
+  text-decoration: none;
+}
