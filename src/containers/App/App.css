@@ -14272,3 +14272,32 @@ a.protocol-download:hover {
   margin: 0;
   padding-left: 1.1rem;
 }
+
+/* TGR5/insulin-resistance figure (project description page): text beside
+   the diagram on desktop, stacked on narrow screens. */
+.tgr5-figure-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.tgr5-figure-row-text {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.tgr5-figure-row-img {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 320px;
+}
+
+@media (max-width: 767.98px) {
+  .tgr5-figure-row {
+    flex-direction: column;
+  }
+
+  .tgr5-figure-row-img {
+    max-width: 100%;
+  }
+}
