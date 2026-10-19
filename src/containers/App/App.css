@@ -13957,3 +13957,31 @@ a.protocol-download:hover {
     animation: none;
   }
 }
+
+/* LENS → GUT WINDOW
+   Generated with Claude Opus 5 (Anthropic), 2026-10-19 (team request)
+   Purpose: the stand-in that carries what the magnifying glass is showing
+   over to the circle of bacteria on the screen below (see
+   useLensToGutWindow.ts, which places and sizes it every frame). It wears
+   the glass's own face, so the hand-over starts as exactly what was under
+   the lens. */
+.lens-to-window {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 5;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* The circle it is arriving at waits, so the two are never both solid:
+   --window-in runs 0 → 1 as the stand-in fades out. */
+.two-guts .two-guts-lens {
+  opacity: var(--window-in, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .two-guts .two-guts-lens {
+    opacity: 1;
+  }
+}

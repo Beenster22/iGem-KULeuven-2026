@@ -34,6 +34,7 @@ import {
 import { useReducedMotion } from "framer-motion";
 import { SnapSteps } from "./HomeSnapScroll";
 import { usePinnedStep } from "./usePinnedStep";
+import { useLensToGutWindow } from "./useLensToGutWindow";
 import { ElleSays, type ElleMood } from "./ElleSays";
 
 interface StoryStep {
@@ -378,11 +379,17 @@ function GutPicture() {
 }
 
 function GutArt() {
+  const prefersReducedMotion = useReducedMotion();
+  const lensRef = useRef<HTMLDivElement>(null);
+  // What the glass is showing becomes the circle of bacteria on the screen
+  // below (useLensToGutWindow.ts).
+  useLensToGutWindow({ lensRef, skip: !!prefersReducedMotion });
+
   return (
     <div className="quest-gut">
       <GutPicture />
       <div className="quest-lens" aria-hidden="true">
-        <div className="quest-lens-glass">
+        <div className="quest-lens-glass" ref={lensRef}>
           <div className="quest-lens-drift">
             <div className="quest-lens-spin">
               <img className="quest-lens-view" src={MICROBES_SRC} alt="" />
