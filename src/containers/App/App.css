@@ -5338,6 +5338,10 @@ body:not(.home-fullscreen) .home-hero {
 .elle-tour-stage > .elle-tour-words {
   align-self: center;
   justify-self: center;
+  /* Lifted a little off centre (team request, 2026-10-20), so it sits
+     closer under Elle rather than low beside the lady. Tied to the
+     figure's height so it keeps its place as the screen changes size. */
+  translate: 0 calc(var(--fig-h) * -0.09);
 }
 
 /* Her picture is the video frame, on the video's own near-black; "lighten"
