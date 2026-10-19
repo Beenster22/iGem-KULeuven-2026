@@ -16,9 +16,20 @@
 // then (--acids-in). The lower stream's purple shifts to that screen's
 // orange and yellow along the way, rather than changing at the last step.
 //
+// Edited with Claude Opus 5 (Anthropic), 2026-10-19 (team request: the
+// positions were not right): the BSH drawing rides a sticky stage, so while
+// that stage is pinned the bacterium is held still part way down the window
+// and the navigation bar never comes down to it. The mark is therefore
+// measured from where the stage comes to rest at the foot of its wrapper,
+// which is the one moment the bar does reach the bacterium's underside.
+// The drift across the next screen now has a stretch of scroll where the
+// acids simply hold their places, and the size they have reached, so they
+// read as floating on that page, before the fall sets off.
+//
 // Modelled on useLensToGutWindow.ts, which hands the magnifying glass over
 // to the circle of bacteria the same way.
 import { useEffect, type RefObject } from "react";
+import { navBottom } from "./useFallingM";
 
 /** The screen they arrive on, and the acids already drawn there. */
 const TGR5_STAGE = ".tgr5";
@@ -56,9 +67,14 @@ function anchorFor(conjugated: boolean, stream: number, n: number, total: number
   return [x, y] as [number, number];
 }
 
-// The bottom of the bacterium in the BSH drawing, as a share of its height
-// (BAC_Y + BAC_H over VB_H in BshStreamAnimation.tsx): the acids only start
-// to fall once the navigation bar has come down to it (team request).
+// The bottom of the bacterium in the BSH drawing: the acids only start to
+// fall once the navigation bar has come down to it (team request). The
+// team pointed at the fimbriae hanging below the cell, not the capsule's
+// own edge, so this is read off the drawn hairs rather than worked out
+// from BAC_Y + BAC_H, which would sit about a fifth of the cell's height
+// too high. The figure below is that fallback, for when they are not
+// drawn (BAC_Y + BAC_H over VB_H in BshStreamAnimation.tsx).
+const BACTERIUM = ".bsh-pili";
 const BACTERIUM_BOTTOM = (72 + 116) / 300;
 
 // The screen they drift across on the way, and where they drift to on it,
@@ -66,6 +82,14 @@ const BACTERIUM_BOTTOM = (72 + 116) / 300;
 // of the sentence in the middle, so they read as floating on the page
 // rather than ringing the words (team request).
 const STATEMENT = ".story-step--single";
+// How much of the way to their final size they have reached by the time
+// they settle. All of it (team request: the size should not change at the
+// last minute), so they drift out growing, float at the size they will
+// land at, and the fall is a move and nothing else.
+const FLOAT_SCALE = 1;
+// Where the fall sets off when that sentence has no pinned wrapper to give
+// it a beat of its own, as a share of the window above the TGR5 screen.
+const FALL_LEAD = 0.5;
 function floatSpot(n: number, total: number) {
   const half = Math.ceil(total / 2);
   const lower = n >= half;
@@ -153,7 +177,17 @@ export function useBileAcidFlight({
         hex.setAttribute("points", HEX_POINTS);
         group.append(hex);
         overlay.append(group);
-        return { group, from: anchorFor(conjugated, stream, n, totals.get(key) ?? 1) };
+        return {
+          group,
+          from: anchorFor(conjugated, stream, n, totals.get(key) ?? 1),
+          // Filled in below, once the whole set is known.
+          float: [0.5, 0.5] as [number, number],
+        };
+      });
+      // Spread over the page in the order they are drawn, so the scatter is
+      // even rather than grouped by kind.
+      shapes.forEach((shape, i) => {
+        shape.float = floatSpot(i, shapes.length);
       });
     };
 
@@ -172,50 +206,112 @@ export function useBileAcidFlight({
       if (!stage || !target || !acids?.length || !section) return rest();
       if (shapes.length !== acids.length) build(acids);
 
-      // From the BSH screen beginning to leave, to the TGR5 screen reaching
-      // the top of the window — the stretch that holds "But why is this
-      // reaction important?" in between.
+      // Four marks, so the journey reads as one move, a pause, then
+      // another: they leave once the navigation bar comes down to the
+      // bottom of the bacterium, drift out over the page, hold there while
+      // "But why is this reaction important?" has the screen, and only
+      // then fall onto the pool.
+      const diagramBox = diagram.getBoundingClientRect();
+      // The BSH drawing rides a sticky stage, so for most of its wrapper it
+      // is held still and the bar cannot reach it. Measure the bacterium's
+      // place inside the stage and add where the stage ends up at the foot
+      // of the wrapper — the one position from which the bar does come down
+      // to it — so the mark is both right and the same at every scroll.
+      const bshStage = diagram.closest<HTMLElement>(".home-snap-stage");
+      const bshPin = diagram.closest<HTMLElement>(".home-snap-pin") ?? section;
+      const bshPinBox = bshPin.getBoundingClientRect();
+      const insideStage = bshStage
+        ? diagramBox.top - bshStage.getBoundingClientRect().top
+        : 0;
+      const stageRests =
+        bshPinBox.bottom +
+        window.scrollY -
+        (bshStage?.getBoundingClientRect().height ?? bshPinBox.height);
+      // How far down the drawing the bacterium's underside falls, hairs
+      // and all, as the reader sees it.
+      const hairs = diagram.querySelector<SVGGraphicsElement>(BACTERIUM);
+      const hairsBox = hairs?.getBoundingClientRect();
+      const underside =
+        hairsBox?.height && diagramBox.height
+          ? (hairsBox.bottom - diagramBox.top) / diagramBox.height
+          : BACTERIUM_BOTTOM;
       const startAt =
-        section.getBoundingClientRect().bottom + window.scrollY - window.innerHeight;
+        stageRests + insideStage + underside * diagramBox.height - navBottom();
       const pin = stage.closest<HTMLElement>(".home-snap-pin") ?? stage;
-      const endAt = pin.getBoundingClientRect().top + window.scrollY;
-      if (endAt <= startAt) return rest();
-      const q = clamp01((window.scrollY - startAt) / (endAt - startAt));
-      if (q <= 0) {
+      const endAt =
+        pin.getBoundingClientRect().top + window.scrollY - navBottom();
+      // The screen in between. Its band is pinned, so measure its wrapper,
+      // which is not: they are in place as the sentence settles, hold for
+      // the whole of the step it is held there, and fall on the next.
+      const band = document
+        .querySelector<HTMLElement>(STATEMENT)
+        ?.closest<HTMLElement>(".home-section");
+      const bandPin = band?.closest<HTMLElement>(".home-snap-pin");
+      const span = endAt - startAt;
+      const floatAt = bandPin
+        ? bandPin.getBoundingClientRect().top + window.scrollY
+        : band
+          ? band.getBoundingClientRect().top + window.scrollY - navBottom()
+          : startAt + span * 0.4;
+      // How long it is held there: the wrapper's extra height over the band
+      // is the step the reader scrolls through while it stays put.
+      const held = bandPin
+        ? bandPin.getBoundingClientRect().height -
+          (band?.getBoundingClientRect().height ?? 0)
+        : 0;
+      const fallAt =
+        held > 0
+          ? floatAt + held
+          : band
+            ? endAt + navBottom() - window.innerHeight * FALL_LEAD
+            : startAt + span * 0.75;
+      if (!(startAt < floatAt && floatAt < fallAt && fallAt < endAt))
+        return rest();
+      if (window.scrollY <= startAt) {
         stage.style.removeProperty("--acids-in");
         return rest();
       }
-      if (q >= 1) {
+      if (window.scrollY >= endAt) {
         // Landed: the acids already there take over, on the same spots.
         stage.style.setProperty("--acids-in", "1");
         return rest();
       }
 
-      const from = diagram.getBoundingClientRect();
+      const from = diagramBox;
       const to = target.getBoundingClientRect();
       if (!from.width || !to.width) return rest();
+      // Which stretch of the journey this is, and how far along it.
+      const falling = window.scrollY >= fallAt;
+      const leg = easeInOut(
+        falling
+          ? clamp01((window.scrollY - fallAt) / (endAt - fallAt))
+          : clamp01((window.scrollY - startAt) / (floatAt - startAt)),
+      );
 
-      const e = easeInOut(q);
-      // Each end's hexagon, as the reader sees it.
+      // Each end's hexagon, as the reader sees it. They grow most of the
+      // way on the move out, keep that size while they hold, and finish
+      // growing on the fall.
       const fromR = BSH_HEX_R * (from.width / BSH_VB_W);
       const toR = TGR5_HEX_R * (to.width / TGR5_VB_W);
-      const scale = lerp(fromR, toR, e) / BASE_HEX_R;
+      const midR = lerp(fromR, toR, FLOAT_SCALE);
+      const scale =
+        (falling ? lerp(midR, toR, leg) : lerp(fromR, midR, leg)) / BASE_HEX_R;
 
       overlay.style.visibility = "visible";
       stage.style.setProperty("--acids-in", "0");
       shapes.forEach((shape, i) => {
         // Its counterpart's own spot, read live — the pool drifts about.
         const seat = acids[i].getBoundingClientRect();
-        const x = lerp(
-          from.left + shape.from[0] * from.width,
-          seat.left + seat.width / 2,
-          e,
-        );
-        const y = lerp(
-          from.top + shape.from[1] * from.height,
-          seat.top + seat.height / 2,
-          e,
-        );
+        // Where it drifts out to in between, held in the window so it stays
+        // where it is on the page while that screen does.
+        const floatX = shape.float[0] * window.innerWidth;
+        const floatY = shape.float[1] * window.innerHeight;
+        const x = falling
+          ? lerp(floatX, seat.left + seat.width / 2, leg)
+          : lerp(from.left + shape.from[0] * from.width, floatX, leg);
+        const y = falling
+          ? lerp(floatY, seat.top + seat.height / 2, leg)
+          : lerp(from.top + shape.from[1] * from.height, floatY, leg);
         shape.group.setAttribute(
           "transform",
           `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${scale.toFixed(3)})`,

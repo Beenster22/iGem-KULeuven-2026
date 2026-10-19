@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
-import { getPathMapping, stringToSlug } from "../../utils";
+import { Route, Routes, useLocation } from "react-router-dom";
+import { getPathMapping } from "../../utils";
 import { ReactNode, useEffect, useState } from "react";
 import { Navbar } from "../../components/Navbar";
 import { Header } from "../../components/Header";
@@ -31,10 +31,11 @@ const HEADER_ASIDE: Record<string, ReactNode> = {
 
 const App = () => {
   const pathMapping = getPathMapping();
-  const currentPath =
-    location.pathname
-      .split(`${stringToSlug(import.meta.env.VITE_TEAM_NAME)}`)
-      .pop() || "/";
+  // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-19: read from the
+  // router, which has already removed the base path, instead of splitting the
+  // URL on the team slug — that missed on GitHub Pages (base
+  // /iGem-KULeuven-2026/), so the home tab read "Not Found | EMPOWER".
+  const currentPath = useLocation().pathname.replace(/(.)\/+$/, "$1") || "/";
   const isHome = currentPath === HOME_PATH;
 
   // The home page starts as a full-screen hero with no chrome; the navbar
