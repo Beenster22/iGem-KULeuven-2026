@@ -2848,7 +2848,26 @@ a[data-footnote-ref]:focus {
 }
 
 .wheel-selector--dropdown .wheel-selector-svg {
-  width: min(100%, 320px);
+  width: min(100%, 460px);
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request): the
+   wedge labels in the site's heading face, like the section titles in the
+   panel below (Luckiest Guy has one weight, so the selected one is picked
+   out by size instead of bold). */
+.wheel-selector--dropdown .wheel-selector-label {
+  font-family: "Luckiest Guy", "Poppins", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.wheel-selector--dropdown .wheel-selector-wedge.active .wheel-selector-label {
+  font-weight: 400;
+  font-size: 18.5px;
+}
+
+.wheel-selector--dropdown .wheel-selector-wedge.active .wheel-selector-label--small {
+  font-size: 15px;
 }
 
 .wheel-selector--dropdown .wheel-selector-selected,
@@ -2880,13 +2899,31 @@ a[data-footnote-ref]:focus {
   overflow: hidden;
 }
 
+/* Styled like the page's section boxes (.content-section) — a shade
+   lighter, as it sits inside one — with its title in the heading face, as
+   their headings are (team request, 2026-10-19). */
 .wheel-selector--dropdown .wheel-selector-content {
-  padding: 1.25rem 1.5rem;
-  border: 2px solid rgba(51, 40, 63, 0.18);
-  border-radius: 1rem;
-  background: #fdf0f7;
-  color: #33283f;
+  padding: 2rem 2.25rem;
+  border-radius: 1.25rem;
+  background-color: color-mix(in srgb, var(--color-body-bg) 35%, #fff);
   animation: wheel-selector-dropdown-in 0.35s ease;
+}
+
+[data-theme="dark"] .wheel-selector--dropdown .wheel-selector-content {
+  background-color: color-mix(in srgb, var(--color-body-bg) 74%, #fff);
+}
+
+.wheel-selector--dropdown .wheel-selector-content h4 {
+  font-family: "Luckiest Guy", "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: clamp(1.3rem, 2.2vw, 1.5rem);
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 576px) {
+  .wheel-selector--dropdown .wheel-selector-content {
+    padding: 1.25rem 1rem;
+  }
 }
 
 .wheel-selector--dropdown .wheel-selector-content > :first-child {
