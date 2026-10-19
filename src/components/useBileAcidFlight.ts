@@ -82,11 +82,11 @@ const BACTERIUM_BOTTOM = (72 + 116) / 300;
 // of the sentence in the middle, so they read as floating on the page
 // rather than ringing the words (team request).
 const STATEMENT = ".story-step--single";
-// How much of the way to their final size they have reached by the time
-// they settle. All of it (team request: the size should not change at the
-// last minute), so they drift out growing, float at the size they will
-// land at, and the fall is a move and nothing else.
-const FLOAT_SCALE = 1;
+// How far into the drift out they are done growing, as a share of that
+// leg (team request: they must already be the right size by the time
+// "But why is this reaction important?" is on the screen, not still
+// catching up on it).
+const SIZED_BY = 0.6;
 // Where the fall sets off when that sentence has no pinned wrapper to give
 // it a beat of its own, as a share of the window above the TGR5 screen.
 const FALL_LEAD = 0.5;
@@ -288,14 +288,16 @@ export function useBileAcidFlight({
           : clamp01((window.scrollY - startAt) / (floatAt - startAt)),
       );
 
-      // Each end's hexagon, as the reader sees it. They grow most of the
-      // way on the move out, keep that size while they hold, and finish
-      // growing on the fall.
+      // Each end's hexagon, as the reader sees it. All of the growing is
+      // done early in the drift out, so by the time that sentence holds the
+      // screen they are already the size they will land at and nothing
+      // about them changes again.
       const fromR = BSH_HEX_R * (from.width / BSH_VB_W);
       const toR = TGR5_HEX_R * (to.width / TGR5_VB_W);
-      const midR = lerp(fromR, toR, FLOAT_SCALE);
-      const scale =
-        (falling ? lerp(midR, toR, leg) : lerp(fromR, midR, leg)) / BASE_HEX_R;
+      const grow = easeInOut(
+        clamp01((window.scrollY - startAt) / ((floatAt - startAt) * SIZED_BY)),
+      );
+      const scale = lerp(fromR, toR, grow) / BASE_HEX_R;
 
       overlay.style.visibility = "visible";
       stage.style.setProperty("--acids-in", "0");
@@ -312,9 +314,18 @@ export function useBileAcidFlight({
         const y = falling
           ? lerp(floatY, seat.top + seat.height / 2, leg)
           : lerp(from.top + shape.from[1] * from.height, floatY, leg);
+        // Its counterpart lies at an angle of its own, which it only takes
+        // up once the TGR5 screen is animating — so there is nothing to
+        // match until the fall. Turn into it over the fall itself, which
+        // leaves them steady while they float and still has them square
+        // with their counterpart when the two swap over.
+        const m = acids[i].getScreenCTM();
+        const turn = m ? (Math.atan2(m.b, m.a) * 180) / Math.PI : 0;
         shape.group.setAttribute(
           "transform",
-          `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${scale.toFixed(3)})`,
+          `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(
+            turn * (falling ? leg : 0)
+          ).toFixed(1)}) scale(${scale.toFixed(3)})`,
         );
       });
     };
