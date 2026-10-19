@@ -5315,12 +5315,29 @@ body:not(.home-fullscreen) .home-hero {
   height: 100vh;
   height: 100svh;
   display: grid;
-  grid-template-columns: auto auto minmax(0, max-content);
+  /* Edited with Claude Opus 5 (Anthropic), 2026-10-20 (team request: the
+     sentence sat too far out to the right): Elle and the sentence share
+     one column beside the lady rather than taking one each, Elle on the
+     top row and the sentence under her, which brings the words in towards
+     the lady instead of leaving a gap the width of Elle between them. The
+     first row is only as tall as Elle, so she stays level with the lady's
+     top and the sentence has the rest of the height to sit in. */
+  grid-template-columns: auto minmax(0, max-content);
+  grid-template-rows: min-content 1fr;
   justify-content: center;
   align-items: center;
   gap: clamp(1rem, 3vw, 2.5rem);
   padding: calc(var(--home-nav-h) + 1.5rem) clamp(0.5rem, 3vw, 2.5rem)
     calc(var(--home-wave-h) + 1.5rem);
+}
+
+.elle-tour-stage > .elle-tour-lady {
+  grid-row: 1 / span 2;
+}
+
+.elle-tour-stage > .elle-tour-words {
+  align-self: center;
+  justify-self: center;
 }
 
 /* Her picture is the video frame, on the video's own near-black; "lighten"
@@ -5356,6 +5373,7 @@ body:not(.home-fullscreen) .home-hero {
   width: calc(var(--fig-h) * 0.3);
   aspect-ratio: 1668 / 1211;
   align-self: start;
+  justify-self: start;
   margin-top: calc(var(--fig-h) * 0.02);
   margin-inline-start: clamp(0.5rem, 2.5vw, 2.5rem);
 }
@@ -5510,13 +5528,24 @@ body:not(.home-fullscreen) .home-hero {
   .elle-tour-stage {
     --fig-h: min(46svh, 26rem);
     grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto auto;
     align-content: center;
     row-gap: 1rem;
   }
 
-  .elle-tour-lady {
+  /* The lady on her own row again, with Elle and the sentence side by side
+     under her, rather than the two-row column the wider layout uses. */
+  .elle-tour-stage > .elle-tour-lady {
     grid-column: 1 / -1;
+    grid-row: auto;
     justify-self: center;
+  }
+
+  .elle-tour-slot {
+    align-self: center;
+    justify-self: auto;
+    margin-top: 0;
+    margin-inline-start: 0;
   }
 
   .elle-tour-words .story-text {
