@@ -77,44 +77,30 @@ function anchorFor(conjugated: boolean, stream: number, n: number, total: number
 const BACTERIUM = ".bsh-pili";
 const BACTERIUM_BOTTOM = (72 + 116) / 300;
 
-// The screen they drift across on the way, and where they drift to on it,
-// as shares of the window. Two loose bands, across the full width and clear
-// of the sentence in the middle, so they read as floating on the page
-// rather than ringing the words (team request).
+// The screen they cross on the way. Where they sit on it is not laid out
+// here: the TGR5 screen decides it (team request — work back from there),
+// so this reads its arrangement and carries it up, and the drop is that
+// same arrangement going home. Nothing is ever shuffled into place.
 const STATEMENT = ".story-step--single";
 // How far into the drift out they are done growing, as a share of that
 // leg (team request: they must already be the right size by the time
 // "But why is this reaction important?" is on the screen, not still
 // catching up on it).
 const SIZED_BY = 0.6;
-// Where the whole arrangement gathers on that screen before it drops, as a
-// share of the window, and how far through the hold it is gathered by
-// (team request: they float about on that screen and have taken up their
-// places well before its end, so the drop is the group moving as one and
-// nothing rearranges on the way down).
+// Where the TGR5 screen's arrangement sits while it is up on the sentence
+// screen, as a share of the window, and how far through that screen the
+// wandering below has died away (team request: they have settled well
+// before its end, so the drop is the group moving as one).
 const FORMATION_Y = 0.74;
-const FORMED_BY = 0.8;
-// How far each one wanders as it crosses that screen, in pixels. It is tied
-// to the scroll like everything else here, and dies away as they take up
-// their places, so they drift about rather than slide straight over and the
-// arrangement they end on is still exact.
-const DRIFT = 14;
+const SETTLED_BY = 0.8;
+// How far each one wanders while it is up there, in pixels. Tied to the
+// scroll like everything else here, and gone by the time they settle, so
+// they float about on that screen without ever leaving the arrangement
+// they will drop in.
+const DRIFT = 22;
 // Where the fall sets off when that sentence has no pinned wrapper to give
 // it a beat of its own, as a share of the window above the TGR5 screen.
 const FALL_LEAD = 0.5;
-function floatSpot(n: number, total: number) {
-  const half = Math.ceil(total / 2);
-  const lower = n >= half;
-  const col = lower ? n - half : n;
-  const across = half > 1 ? col / (half - 1) : 0.5;
-  // A settled, repeatable scatter rather than a straight row.
-  const jitter = ((n * 37) % 11) / 11 - 0.5;
-  return [
-    0.08 + across * 0.84,
-    (lower ? 0.72 : 0.16) + jitter * 0.13,
-  ] as [number, number];
-}
-
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
@@ -143,8 +129,9 @@ export function useBileAcidFlight({
     // stream's orange and the lower one's purple make the journey.
     let shapes: {
       group: SVGGElement;
+      /** The glycine or taurine tag, on conjugated ones only. */
+      tag: SVGGElement | null;
       from: [number, number];
-      float: [number, number];
     }[] = [];
 
     const build = (targets: NodeListOf<SVGGraphicsElement>) => {
@@ -170,19 +157,27 @@ export function useBileAcidFlight({
         const kind = conjugated ? "conjugated" : "deconjugated";
         const group = document.createElementNS(NS, "g");
         group.setAttribute("class", `bsh-molecule--${stream}`);
+        // The BSH drawing hangs the tag off the right of the hexagon and
+        // the TGR5 one off the left, so a traveller that matched one end
+        // had it on the wrong side at the other. It rides a turntable of
+        // its own instead and swings round as the acid travels, which
+        // leaves it right at both ends and reads as the molecule turning.
+        let tag: SVGGElement | null = null;
         if (conjugated) {
+          tag = document.createElementNS(NS, "g");
           const bond = document.createElementNS(NS, "line");
           bond.setAttribute("class", "bsh-bond");
           bond.setAttribute("x1", String(BASE_HEX_R - 1));
           bond.setAttribute("y1", "0");
           bond.setAttribute("x2", String(BASE_HEX_R + 8));
           bond.setAttribute("y2", "0");
-          const tag = document.createElementNS(NS, "circle");
-          tag.setAttribute("class", "bsh-tag");
-          tag.setAttribute("cx", String(BASE_HEX_R + 8 + BASE_TAG_R));
-          tag.setAttribute("cy", "0");
-          tag.setAttribute("r", String(BASE_TAG_R));
-          group.append(bond, tag);
+          const dot = document.createElementNS(NS, "circle");
+          dot.setAttribute("class", "bsh-tag");
+          dot.setAttribute("cx", String(BASE_HEX_R + 8 + BASE_TAG_R));
+          dot.setAttribute("cy", "0");
+          dot.setAttribute("r", String(BASE_TAG_R));
+          tag.append(bond, dot);
+          group.append(tag);
         }
         const hex = document.createElementNS(NS, "polygon");
         hex.setAttribute("class", `bsh-hex bsh-hex--${kind}`);
@@ -191,15 +186,9 @@ export function useBileAcidFlight({
         overlay.append(group);
         return {
           group,
+          tag,
           from: anchorFor(conjugated, stream, n, totals.get(key) ?? 1),
-          // Filled in below, once the whole set is known.
-          float: [0.5, 0.5] as [number, number],
         };
-      });
-      // Spread over the page in the order they are drawn, so the scatter is
-      // even rather than grouped by kind.
-      shapes.forEach((shape, i) => {
-        shape.float = floatSpot(i, shapes.length);
       });
     };
 
@@ -296,12 +285,12 @@ export function useBileAcidFlight({
       // about it and into their places, then down. Running them as nested
       // mixes rather than as a choice of one means every hand-over lands on
       // the position the stretch before it ended at, so none of them shows.
-      const formAt = floatAt + (fallAt - floatAt) * FORMED_BY;
+      const settledAt = floatAt + (fallAt - floatAt) * SETTLED_BY;
       const outLeg = easeInOut(
         clamp01((window.scrollY - startAt) / (floatAt - startAt)),
       );
-      const formLeg = easeInOut(
-        clamp01((window.scrollY - floatAt) / (formAt - floatAt)),
+      const settleLeg = easeInOut(
+        clamp01((window.scrollY - floatAt) / (settledAt - floatAt)),
       );
       const fallLeg = easeInOut(
         clamp01((window.scrollY - fallAt) / (endAt - fallAt)),
@@ -322,11 +311,19 @@ export function useBileAcidFlight({
       // to lift that whole arrangement onto this one. The pool keeps
       // drifting, so this is read every frame and the arrangement up here
       // drifts with it; the drop then only has to take the offset away.
-      const seats = Array.from(acids, (acid) => acid.getBoundingClientRect());
+      //
+      // Each one is taken from where its own drawing is placed, not from
+      // the middle of the box around it: a conjugated acid's box takes in
+      // the tag hanging off its side, so its middle is some way off the
+      // hexagon and aiming at it left every tagged one short.
+      const seats = acids.length
+        ? Array.from(acids, (acid) => acid.getScreenCTM())
+        : [];
+      if (seats.some((seat) => !seat)) return rest();
       const mid = seats.reduce(
         (sum, seat) => [
-          sum[0] + (seat.left + seat.width / 2) / seats.length,
-          sum[1] + (seat.top + seat.height / 2) / seats.length,
+          sum[0] + seat!.e / seats.length,
+          sum[1] + seat!.f / seats.length,
         ],
         [0, 0],
       );
@@ -336,39 +333,44 @@ export function useBileAcidFlight({
       overlay.style.visibility = "visible";
       stage.style.setProperty("--acids-in", "0");
       shapes.forEach((shape, i) => {
-        const seat = seats[i];
-        const seatX = seat.left + seat.width / 2;
-        const seatY = seat.top + seat.height / 2;
-        // Out of the drawing, about the screen, into its place in the
-        // arrangement, and down onto its counterpart.
+        const seat = seats[i]!;
+        const seatX = seat.e;
+        const seatY = seat.f;
+        // Out of the drawing straight to the place it holds on the TGR5
+        // screen, carried up onto this one — so it is in the arrangement
+        // from the moment it arrives and never has to find its place.
         let x = lerp(
           from.left + shape.from[0] * from.width,
-          shape.float[0] * window.innerWidth,
+          seatX + liftX,
           outLeg,
         );
         let y = lerp(
           from.top + shape.from[1] * from.height,
-          shape.float[1] * window.innerHeight,
+          seatY + liftY,
           outLeg,
         );
-        x = lerp(x, seatX + liftX, formLeg);
-        y = lerp(y, seatY + liftY, formLeg);
-        // A wander of its own on the way, gone by the time it is in place.
-        const wander = DRIFT * (1 - formLeg) * outLeg;
+        // A wander of its own while it is up there, gone once it settles.
+        const wander = DRIFT * outLeg * (1 - settleLeg);
         x += Math.sin(window.scrollY / 90 + i * 1.7) * wander;
         y += Math.cos(window.scrollY / 70 + i * 2.3) * wander;
+        // And home: the whole arrangement moving as one, the lift taken off.
         x = lerp(x, seatX, fallLeg);
         y = lerp(y, seatY, fallLeg);
         // Its counterpart lies at an angle of its own, which it only takes
         // up once the TGR5 screen is animating. Turn into it as they take
         // up their places, so by the end of that screen each one is sitting
         // exactly as its counterpart does and the drop changes nothing.
-        const m = acids[i].getScreenCTM();
-        const turn = m ? (Math.atan2(m.b, m.a) * 180) / Math.PI : 0;
+        // Half a turn of the tag over the same stretch brings it from the
+        // side the BSH drawing keeps it to the side the TGR5 one does.
+        shape.tag?.setAttribute(
+          "transform",
+          `rotate(${(180 * outLeg).toFixed(1)})`,
+        );
+        const turn = (Math.atan2(seat.b, seat.a) * 180) / Math.PI;
         shape.group.setAttribute(
           "transform",
           `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(
-            turn * formLeg
+            turn * outLeg
           ).toFixed(1)}) scale(${scale.toFixed(3)})`,
         );
       });
