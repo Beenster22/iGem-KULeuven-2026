@@ -6,6 +6,7 @@ import { ProtocolCalcGrid } from "./components/ProtocolCalcGrid";
 import { ProtocolCalculations } from "./components/ProtocolCalculations";
 import { ProtocolNote } from "./components/ProtocolNote";
 import { ProtocolDownloads } from "./components/ProtocolDownloads";
+import { PartsTable } from "./components/PartsTable";
 import { PageLayout } from "./components/PageLayout";
 import { Callout } from "./components/Callout";
 import { TabbedSections, TabSection } from "./components/TabbedSections";
@@ -121,6 +122,9 @@ export const mdxComponents = {
   ProtocolNote,
   ProtocolDownloads,
   SoftwareDownload,
+  // Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20
+  // Purpose: the Basic / Composite part tables on the Parts page.
+  PartsTable,
   PageLayout,
   PmosOverview,
   SymptomGroups,
