@@ -808,6 +808,24 @@ const ZOOM_BOX = [
   ZOOM_VIEW,
 ].join(" ");
 
+// A small burst around the receptor once it has arrived, to say it is the
+// thing being pointed at (team request, 2026-10-20). Ten thin strokes
+// standing off it, clear of the helices' own reach.
+const RAY_COUNT = 10;
+const RAY_NEAR = 34;
+const RAY_FAR = 46;
+const RAYS = Array.from({ length: RAY_COUNT }, (_, i) => {
+  const turn = ((i + 0.5) / RAY_COUNT) * 2 * Math.PI;
+  const dx = Math.cos(turn);
+  const dy = Math.sin(turn);
+  return {
+    x1: GUT_RECEPTOR_X + dx * RAY_NEAR,
+    y1: GUT.top + dy * RAY_NEAR,
+    x2: GUT_RECEPTOR_X + dx * RAY_FAR,
+    y2: GUT.top + dy * RAY_FAR,
+  };
+});
+
 function Tgr5ReceptorCloseUp() {
   return (
     <svg
@@ -817,6 +835,17 @@ function Tgr5ReceptorCloseUp() {
       role="img"
       aria-label="Illustration: a close-up of the TGR5 receptor, a bundle of four helices."
     >
+      <g className="tgr5-zoom-rays" aria-hidden="true">
+        {RAYS.map((ray) => (
+          <line
+            key={ray.x1 + "," + ray.y1}
+            x1={ray.x1}
+            y1={ray.y1}
+            x2={ray.x2}
+            y2={ray.y2}
+          />
+        ))}
+      </g>
       <ReceptorShape x={GUT_RECEPTOR_X} y={GUT.top} />
     </svg>
   );

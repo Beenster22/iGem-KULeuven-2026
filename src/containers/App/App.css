@@ -15019,6 +15019,40 @@ a.protocol-download:hover {
   opacity: var(--receptor-in, 1);
 }
 
+/* The burst around it, which comes in with it: thin strokes standing off
+   the helices, in the pale blue of the band this screen sits on. They open
+   outwards as the receptor lands, so they read as it arriving rather than
+   as part of the drawing. */
+.tgr5-zoom-rays {
+  --ray: #8fd6ea;
+  opacity: var(--receptor-in, 1);
+  scale: calc(0.68 + 0.32 * var(--receptor-in, 1));
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition:
+    opacity 0.45s ease 0.08s,
+    scale 0.55s cubic-bezier(0.2, 1.5, 0.4, 1) 0.08s;
+}
+
+/* Against the light band it would wash out, so it deepens there. */
+[data-theme="light"] .tgr5-zoom-rays {
+  --ray: #2f8fb5;
+}
+
+.tgr5-zoom-rays line {
+  stroke: var(--ray);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tgr5-zoom-rays {
+    opacity: 1;
+    scale: 1;
+    transition: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tgr5-zoom-svg .tgr5-receptor {
     opacity: 1;
