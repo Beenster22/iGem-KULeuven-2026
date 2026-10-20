@@ -894,7 +894,11 @@ const CONSEQUENCES: { title: string; detail?: string; art: ReactNode }[] = [
 // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team feedback: the
 // third consequence was too easy to skip): the last one stays on screen for
 // this many extra steps of scrolling (--snap-extra, see .home-snap-pin).
-const LAST_STEP_EXTRA = 2;
+// Edited with Claude Opus 5 (Anthropic), 2026-10-20 (team request: two
+// scrolls from the last one showing to the next screen). The last one
+// shows once two of the three steps are behind the reader, so the
+// scrolling left after it is one more than this: at 2 it came to three.
+const LAST_STEP_EXTRA = 1;
 
 export function Tgr5ConsequencesSection() {
   const prefersReducedMotion = useReducedMotion();
