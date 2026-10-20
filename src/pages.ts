@@ -73,6 +73,9 @@ class Page implements Base {
   // header (Header.tsx / App.tsx). Only prizes with a page of their own carry
   // this.
   specialPrize?: boolean;
+  // Optional: makes the page's navbar link glitter (a shimmer across the label
+  // and a few twinkling sparkles; see Navbar.tsx). Used for Awards.
+  glitter?: boolean;
   // Optional: a thin divider line before this tile in the navbar's mega-menu
   // (see Navbar.tsx), pushing it onto its own row. Used once today — Dry Lab
   // in the Lab folder, set apart from the four wet-lab-specific pages above
@@ -220,9 +223,10 @@ const Pages: (Page | Folder)[] = [
     specialPrize: true,
   },
   {
-    name: "Prizes and Medals",
-    title: "Prizes and Medals",
+    name: "Awards",
+    title: "Awards",
     path: "/awards",
+    glitter: true,
     component: Awards,
     lead: "The medal and special prizes we are competing for, why we believe we deserve each one, and where on the wiki to find the work behind it.",
     icon: TrophyIcon,
