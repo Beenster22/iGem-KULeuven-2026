@@ -21,9 +21,13 @@ function openDetailsFor(id: string) {
 export function PageShell({
   children,
   hideIndex = false,
+  end,
 }: {
   children: ReactNode;
   hideIndex?: boolean;
+  // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: rendered inside the
+  // content column (not the full-width page) so it lines up with the text.
+  end?: ReactNode;
 }) {
   const contentRef = useRef<HTMLDivElement>(null);
   // Both routes render a PageShell, so React keeps this component mounted
@@ -113,6 +117,7 @@ export function PageShell({
       {!hideIndex && <SectionProgress containerRef={contentRef} />}
       <div ref={contentRef} className="container page-shell-content">
         {children}
+        {end}
       </div>
       {returnToId && (
         <button

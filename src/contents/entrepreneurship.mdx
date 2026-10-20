@@ -8,9 +8,7 @@ export const valueChainFigure = "https://static.igem.wiki/teams/6299/wiki/entrep
 
 <PhasePager />
 
-> "The best way to predict the future is to invent it."
->
-> — Alan Kay
+<p style={{ fontSize: "1.5rem", fontWeight: "bold" }}>“The best way to predict the future is to invent it.” - Alan Kay</p>
 
 ---
 
@@ -117,6 +115,8 @@ record[^mkt-1][^mkt-2]. *Select a ring below to see how each estimate was built.
 
 **Note:** The United States (US) is considered the initial target market, with potential expansion into the European Union (EU) at a later stage. As key regulatory and development considerations differ between both regions, requirements relevant to each market are taken into account throughout the development process. Consequently, both markets are discussed in this business plan.
 
+
+
 <MarketRings>
 
 <MarketRing label="TAM" name="Total Addressable Market" value="4.7 – 17.0 million women">
@@ -146,13 +146,15 @@ impact.
 
 </MarketRing>
 
-<MarketRing label="SOM" name="Serviceable Obtainable Market" value="265,970 – 1,263,494 women">
+<MarketRing label="SOM" name="Serviceable Obtainable Market" value="265,970 – 957,492 women">
 
 The Serviceable Obtainable Market (SOM) represents the portion of the SAM that EMPOWER could
 realistically reach during its initial commercialization phase. While TAM and SAM were calculated
 using the EU-27 population to estimate the overall market opportunity, EMPOWER's initial commercialization strategy focuses on the United States (US), where the Food and Drug Administration (FDA) provides specific guidance for the clinical development of LBPs. Expansion to Europe is planned at a later stage[^mkt-9][^mkt-10]. The EU-27
-SAM was converted into a cross-market ratio (0.91–3.29% of reproductive-age women) and applied to
-the US female population as a scaling proxy. Our initial target population consists of women with PMOS whose needs are not adequately met by existing therapies. Since no comprehensive estimate is available for this group, we used first-line letrozole failure as a proxy. Clinical data show that 38.8–51.2% of patients do not achieve a successful outcome with letrozole[^mkt-11], corresponding to an estimated SOM of 265,970 to 1,263,494 women. Although some patients respond to later-line treatments, significant unmet needs remain across the treatment pathway.
+SAM was converted into a cross-market ratio (0.91–3.29% of reproductive-age women)\* and applied to
+the US female population as a scaling proxy. Our initial target population consists of women with PMOS whose needs are not adequately met by existing therapies. Since no comprehensive estimate is available for this group, we used first-line letrozole failure as a proxy. Clinical data show that 38.8–51.2% of patients do not achieve a successful outcome with letrozole[^mkt-11], corresponding to an estimated SOM of 265,970 to 957,492 women. Although some patients respond to later-line treatments, significant unmet needs remain across the treatment pathway.
+
+\**To estimate the US market, we divided the lower and upper EU SAM estimates by the total number of women aged 15-49 in the EU and applied the resulting proportions to the US female population in the same age group. We then multiplied these estimates by the percentage of women who did not achieve a clinical pregnancy following letrozole treatment to estimate the potential US target population for EMPOWER.*
 
 </MarketRing>
 
@@ -182,11 +184,11 @@ population.
 [^mkt-10]: Barberio, D., et al. (2024). Navigating regulatory and analytical challenges in live biotherapeutic product development and manufacturing. Frontiers in Microbiomes.
 [^mkt-11]: Amer, S. A., Smith, J., Mahran, A., Fox, P., & Fakis, A. (2017). Double-blind randomized controlled trial of letrozole versus clomiphene citrate in subfertile women with polycystic ovarian syndrome. Human Reproduction, 32(8), 1631–1638.
 
-### 1.3 Stakeholders and customer validation
+### 1.3 Stakeholder and patient involvement
 
-{/* TODO: section listed in the new page outline — content still to be written by the team. */}
+We developed EMPOWER through continuous engagement with the people who could shape its development and future implementation. We interviewed women with PMOS and consulted healthcare professionals, scientists, industry experts, patient advocates and legislators. Patient interviews highlighted the limitations of current treatments and helped us identify women who may benefit most from a new approach, particularly those for whom existing treatments have been insufficient. Industry experts provided input on our business strategy, intellectual property and funding opportunities.
 
-*Content to follow.*
+Explore our <Link to="/human-practices">Integrated Human Practices</Link> page to discover the interviews, the decisions they informed and our <Link to="/human-practices#stakeholder-framework-and-analysis">stakeholder analysis</Link>, which illustrates how different stakeholder groups contributed to shaping EMPOWER.
 
 ## Phase 2: Development
 
@@ -1061,7 +1063,7 @@ While bringing a new drug to market requires a median investment of USD 1.1 bill
 
 ##### Strategic modality choice for EMPOWER: the personalized model
 
-Despite the higher development and manufacturing costs, EMPOWER pursues a personalized (autologous) approach in which a patient's native *P. vulgatus* strain is isolated, engineered *ex vivo*, and re-administered. This strategy aims to maximize host-microbe compatibility and reduce potential safety concerns associated with introducing a non-native engineered strain. While risks such as horizontal gene transfer remain important considerations for any engineered LBP, a personalized approach may help reduce biological variability between patients. As discussed on our <Link to="/safety-and-security">Safety page</Link>, these considerations played an important role in the selection of our therapeutic design. We therefore believe that the additional manufacturing complexity is justified by the potential safety and translational advantages of an autologous approach.
+Despite the higher development and manufacturing costs, EMPOWER pursues a <Link to="/description#how-can-we-make-sure-our-engineered-strain-colonizes-the-gut">personalized (autologous) approach</Link> in which a patient's native *P. vulgatus* strain is isolated, engineered *ex vivo*, and re-administered. This strategy aims to maximize host-microbe compatibility and reduce potential safety concerns associated with introducing a non-native engineered strain. While risks such as horizontal gene transfer remain important considerations for any engineered LBP, a personalized approach may help reduce biological variability between patients. As discussed on our <Link to="/safety-and-security">Safety page</Link>, these considerations played an important role in the selection of our therapeutic design. We therefore believe that the additional manufacturing complexity is justified by the potential safety and translational advantages of an autologous approach.
 
 #### 3.4.2 Funding strategy
 
@@ -1286,7 +1288,7 @@ EMPOWER addresses an important unmet medical need: women with PMOS-related infer
 
 Unlike existing therapies, which primarily manage hormonal imbalances, insulin resistance, or other individual manifestations of PMOS, EMPOWER explores a novel therapeutic approach targeting the gut microbiome–bile acid–IL-22 axis. By investigating this potential upstream mechanism, we aim to address the biological pathway that is associated with inflammation, insulin resistance, and hyperandrogenism through a single, microbiome-based strategy ([Unique Value Proposition](#2-1-unique-value-proposition)).
 
-Our competitive analysis identified a potentially differentiated position for EMPOWER within the current PMOS treatment landscape, as we found no existing or emerging competitors specifically targeting this mechanism ([Competition](#competition)). Beyond its scientific rationale, our market assessment estimates a serviceable addressable market of 863,518–3,108,666 women across the EU-27, with an initial serviceable obtainable market of 265,970–1,263,494 women ([Market and Target Group](#1-2-market-and-target-group)).
+Our competitive analysis identified a potentially differentiated position for EMPOWER within the current PMOS treatment landscape, as we found no existing or emerging competitors specifically targeting this mechanism ([Competition](#competition)). Beyond its scientific rationale, our market assessment estimates a serviceable addressable market of 863,518–3,108,666 women across the EU-27, with an initial serviceable obtainable market of 265,970–957,492 women ([Market and Target Group](#1-2-market-and-target-group)).
 
 Crucially, our approach is grounded in patient and stakeholder insights. We translated these insights into a patient journey map and a concept test, which supported the potential fit of EMPOWER within the treatment pathway for women who have not benefited sufficiently from first-line therapy ([MVP](#2-4-minimal-viable-product)). Together, these findings provide a foundation for further developing and evaluating EMPOWER as a differentiated, patient-informed approach to PMOS-related infertility.
 

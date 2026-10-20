@@ -16,7 +16,7 @@
 // from the circle's and the lady's live positions every frame, so they stay
 // put while the page glides or is scrolled. Under prefers-reduced-motion the
 // screen simply shows its end state.
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useId, useRef, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { useReducedMotion } from "framer-motion";
 import { EFFECT_ART } from "./PmosEffectsSection";
@@ -155,6 +155,8 @@ function QuestionMark() {
 
 export function ElleTour() {
   const prefersReducedMotion = !!useReducedMotion();
+  // Its own id, so a second copy of this screen cannot steal the filter.
+  const inkId = useId();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const ladyRef = useRef<HTMLDivElement>(null);
   const slotRef = useRef<HTMLDivElement>(null);
@@ -436,7 +438,54 @@ export function ElleTour() {
     <div className="elle-tour" ref={wrapperRef} data-snap="">
       <div className="elle-tour-stage">
         <div className="elle-tour-lady" ref={ladyRef} aria-hidden="true">
-          <img src={LADY_SRC} alt="" width={LADY_WIDTH} height={LADY_HEIGHT} />
+          {/* Her picture is a video still with the video's near-black
+              behind her, and no transparency of its own. On the dark band
+              a "lighten" blend is enough to lose that background, but on
+              the light one it left her almost invisible and every blend
+              that did show her left her near-black rather than the colour
+              asked for. This turns the picture's own brightness into
+              transparency — the near-black becomes nothing, she becomes
+              solid — and fills what is left with one flat colour (team
+              request, 2026-10-20). TODO(team): a cut-out of her with real
+              transparency would let all of this go. */}
+          <svg className="elle-tour-ink" aria-hidden="true">
+            <filter
+              id={inkId}
+              colorInterpolationFilters="sRGB"
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+            >
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0
+                        0 0 0 0 0
+                        0 0 0 0 0
+                        0.3 0.59 0.11 0 0"
+                result="lit"
+              />
+              {/* Measured off the picture itself: seven tenths of it sits
+                  at 0.10-0.15, the near-black behind her, and a fifth at
+                  0.75-0.80, her own fill. Everything above the first is
+                  made solid and everything below it nothing, with the
+                  change spread over a little so her edge stays smooth,
+                  and the whole of her is then filled with one colour
+                  (team request, 2026-10-20: completely purple). */}
+              <feComponentTransfer in="lit" result="cut">
+                <feFuncA type="linear" slope="6" intercept="-1.8" />
+              </feComponentTransfer>
+              <feFlood className="elle-tour-ink-fill" result="ink" />
+              <feComposite in="ink" in2="cut" operator="in" />
+            </filter>
+          </svg>
+          <img
+            src={LADY_SRC}
+            alt=""
+            width={LADY_WIDTH}
+            height={LADY_HEIGHT}
+            style={{ "--lady-ink": `url(#${inkId})` } as CSSProperties}
+          />
         </div>
         {/* Where Elle ends up, beside the lady (she is drawn on the fixed
             layer below, placed over this). */}

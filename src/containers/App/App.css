@@ -1422,6 +1422,14 @@ main:focus {
   background-color: var(--content-section-bg, var(--color-page-bg));
 }
 
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team feedback): the
+   sticky header fill above is the dark purple section background in dark
+   mode, but Bootstrap's table text stays black — unreadable. The header
+   takes the theme text colour there. */
+[data-theme="dark"] .table-responsive-sticky-head thead th {
+  color: var(--color-text);
+}
+
 /* CALLOUT */
 .bd-callout {
   padding: 1.25rem;
@@ -1465,6 +1473,26 @@ main:focus {
 
 .bd-callout-danger {
   border-left-color: #d9534f;
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: a callout lifted off
+   the page for a caveat that must not be skimmed past (results, conjugation). */
+.bd-callout-raised {
+  border-left-width: 0.5rem;
+  padding: 1.5rem 1.75rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  background: rgba(240, 173, 78, 0.1);
+  box-shadow: 0 8px 28px rgba(51, 40, 63, 0.18);
+}
+
+.bd-callout-raised h4 {
+  margin-bottom: 0.75rem;
+}
+
+[data-theme="dark"] .bd-callout-raised {
+  background: rgba(240, 173, 78, 0.12);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
 }
 
 /* EXPANDABLE TEXT (protocol accordion tabs)
@@ -5049,6 +5077,54 @@ body.home-fullscreen {
   background-color: var(--color-body-bg);
 }
 
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-20 (team request): one
+   colour for the whole home page — every band and the borders between them
+   — rather than bands that alternate with a border of their own. The two
+   swatches the team gave: the light purple the page already uses in light
+   mode, and a lighter purple than the near-black it used in dark mode.
+   Scoped to the home page's own classes, so the tokens these bands used to
+   read keep their meaning on every other page. */
+:root {
+  --color-home-band: #c9bde8;
+}
+
+[data-theme="dark"] {
+  --color-home-band: #33283f;
+}
+
+/* The waves between the bands read against the band either way round
+   (team request, 2026-10-20): the light purple on the dark bands, and on
+   the light bands the same colour as the words on them. */
+:root {
+  --color-band-border: var(--color-text);
+}
+
+[data-theme="dark"] {
+  --color-band-border: #c9bde8;
+}
+
+[data-theme="dark"] body,
+.home-section--page,
+.home-section--body,
+.home-section--contrast,
+[data-theme="light"] .home-section--page,
+[data-theme="dark"] .home-section--page,
+[data-theme="dark"] .home-section--contrast,
+/* The counter screen is not one of the .home-section bands, so it needs
+   naming here too or it keeps the near-white page colour in light mode. */
+.pmos-overview,
+[data-theme="dark"] .pmos-overview {
+  background-color: var(--color-home-band);
+}
+
+/* The band is the same lightness as the page's text colour expects in each
+   theme now, so this one takes the ordinary text colour rather than the
+   header pair it used when it was the one dark band in light mode. */
+.home-section--contrast,
+[data-theme="dark"] .home-section--contrast {
+  color: var(--color-text);
+}
+
 /* HOME SNAP SECTIONS
    Generated with Claude Opus 5.5 (Anthropic), 2026-10-05
    Purpose: every home-page section fills the screen, and the page settles on
@@ -5230,16 +5306,26 @@ body:not(.home-fullscreen) .home-hero {
   --villus-w: clamp(40px, 4.5vw, 64px);
 }
 
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-20 (team request): the
+   gut wall runs down the side of each band rather than across its top, so
+   it reads as the wall the reader is travelling along rather than as a
+   divider between sections. The villus tile is the same one turned a
+   quarter turn — flat edge against the side of the screen, villi reaching
+   in — and it repeats down the band instead of across it. */
 .home-section--wave-top::before {
-  bottom: calc(100% - 1px); /* 1px overlap hides sub-pixel seams */
-  /* Edited 2026-10-20 (team request): in the border colour, not the band's
-     (was `background: inherit`). */
+  top: 0;
+  bottom: 0;
+  right: auto;
+  width: clamp(22px, 3.2vw, 52px);
+  height: auto;
   background: var(--color-band-border);
-  --wave-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 64' preserveAspectRatio='none'%3E%3Cpath d='M0 64 V15 A15 15 0 0 1 30 15 V34 A15 15 0 0 0 60 34 V64 Z'/%3E%3C/svg%3E");
-}
-
-.home-section.home-section--wave-top::before {
-  transform: scaleX(-1); /* mirrored so consecutive waves don't repeat */
+  --villus-h: clamp(40px, 4.5vw, 64px);
+  /* The tile leaves its top edge and meets its bottom edge at the same
+     point (x=30), so one villus runs straight into the next with no step
+     at the join — down a band and on into the band below it. */
+  --wave-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 45 60' preserveAspectRatio='none'%3E%3Cpath d='M0 0 H30 A15 15 0 0 1 30 30 A15 15 0 0 0 30 60 H0 Z'/%3E%3C/svg%3E");
+  -webkit-mask: var(--wave-mask) 0 0 / 100% var(--villus-h) repeat-y;
+  mask: var(--wave-mask) 0 0 / 100% var(--villus-h) repeat-y;
 }
 
 .home-section--wave-into-footer {
@@ -5277,7 +5363,8 @@ body:not(.home-fullscreen) .home-hero {
    scrolled). Edited the same day (team requests: cleaner and more faded,
    running left to right; then always behind everything else, and a little
    fainter; then half as bright again, as fast scrolling was distracting):
-   thin horizontal streaks of white that brighten towards their front and
+   thin streaks of white running down the screen (team request,
+   2026-10-20: they ran across it) that brighten towards their front and
    fade out at both ends, like speed lines. They are part of each
    band's own background, fixed to the screen, so everything in the band —
    its words, drawings, bacteria and border — is in front of them. Each runs
@@ -5288,36 +5375,36 @@ body:not(.home-fullscreen) .home-hero {
 .page-body--home .pmos-overview {
   --speed: max(var(--whoosh), calc(-1 * var(--whoosh)));
   background-image:
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.120 * var(--speed))) 19.6%, transparent 28.0%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.098 * var(--speed))) 16.5%, transparent 23.6%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.083 * var(--speed))) 19.2%, transparent 27.4%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.113 * var(--speed))) 16.2%, transparent 23.1%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.090 * var(--speed))) 18.9%, transparent 27.1%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.105 * var(--speed))) 15.4%, transparent 22.0%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.113 * var(--speed))) 16.6%, transparent 23.8%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.083 * var(--speed))) 16.3%, transparent 23.3%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.098 * var(--speed))) 19.4%, transparent 27.8%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.113 * var(--speed))) 16.0%, transparent 22.9%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.090 * var(--speed))) 18.7%, transparent 26.7%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.105 * var(--speed))) 16.0%, transparent 22.9%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.075 * var(--speed))) 16.3%, transparent 23.2%);
-  background-size: 1500px 2px, 1100px 1px, 1900px 2px, 1300px 1px, 1700px 2px, 1000px 1px, 1600px 2px, 1200px 1px, 1800px 2px, 1050px 1px, 1650px 2px, 1400px 1px, 1550px 2px;
-  background-repeat: repeat-x;
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.120 * var(--speed))) 19.6%, transparent 28.0%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.098 * var(--speed))) 16.5%, transparent 23.6%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.083 * var(--speed))) 19.2%, transparent 27.4%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.113 * var(--speed))) 16.2%, transparent 23.1%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.090 * var(--speed))) 18.9%, transparent 27.1%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.105 * var(--speed))) 15.4%, transparent 22.0%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.113 * var(--speed))) 16.6%, transparent 23.8%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.083 * var(--speed))) 16.3%, transparent 23.3%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.098 * var(--speed))) 19.4%, transparent 27.8%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.113 * var(--speed))) 16.0%, transparent 22.9%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.090 * var(--speed))) 18.7%, transparent 26.7%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.105 * var(--speed))) 16.0%, transparent 22.9%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.075 * var(--speed))) 16.3%, transparent 23.2%);
+  background-size: 2px 1500px, 1px 1100px, 2px 1900px, 1px 1300px, 2px 1700px, 1px 1000px, 2px 1600px, 1px 1200px, 2px 1800px, 1px 1050px, 2px 1650px, 1px 1400px, 2px 1550px;
+  background-repeat: repeat-y;
   background-attachment: fixed;
   background-position:
-    calc(var(--sweep, 0) * 1.6px) 7%,
-    calc(var(--sweep, 0) * 2.4px) 14%,
-    calc(var(--sweep, 0) * 1.2px) 22%,
-    calc(var(--sweep, 0) * 2.8px) 29%,
-    calc(var(--sweep, 0) * 1.9px) 37%,
-    calc(var(--sweep, 0) * 3.2px) 44%,
-    calc(var(--sweep, 0) * 1.4px) 52%,
-    calc(var(--sweep, 0) * 2.6px) 59%,
-    calc(var(--sweep, 0) * 1.7px) 66%,
-    calc(var(--sweep, 0) * 3px) 74%,
-    calc(var(--sweep, 0) * 1.3px) 81%,
-    calc(var(--sweep, 0) * 2.2px) 89%,
-    calc(var(--sweep, 0) * 1.8px) 95%;
+    7% calc(var(--sweep, 0) * 1.6px),
+    14% calc(var(--sweep, 0) * 2.4px),
+    22% calc(var(--sweep, 0) * 1.2px),
+    29% calc(var(--sweep, 0) * 2.8px),
+    37% calc(var(--sweep, 0) * 1.9px),
+    44% calc(var(--sweep, 0) * 3.2px),
+    52% calc(var(--sweep, 0) * 1.4px),
+    59% calc(var(--sweep, 0) * 2.6px),
+    66% calc(var(--sweep, 0) * 1.7px),
+    74% calc(var(--sweep, 0) * 3px),
+    81% calc(var(--sweep, 0) * 1.3px),
+    89% calc(var(--sweep, 0) * 2.2px),
+    95% calc(var(--sweep, 0) * 1.8px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -5390,14 +5477,14 @@ body:not(.home-fullscreen) .home-hero {
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: the
    passage through the gut): each item rides a mover (MicrobeBackdrop.tsx).
    As the reader scrolls through the band (--approach, 0 to 1, set by
-   useBackdropApproach in HomeSnapScroll.tsx) the mover sweeps it from left
-   to right across the screen, the nearer ones (--depth) further and
-   larger. They stay sharp as they move (team request: not blurry or
+   useBackdropApproach in HomeSnapScroll.tsx) the mover sweeps it down the
+   screen (team request, 2026-10-20: it went left to right), the nearer
+   ones (--depth) further and larger. They stay sharp as they move (team request: not blurry or
    faded); the swooshes carry the speed. On the mover rather than the
    item, so it runs along the screen whichever way the item is turned. */
 .microbe-backdrop-mover {
   position: absolute;
-  transform: translateX(calc((var(--approach, 0.5) - 0.5) * var(--depth, 0.6) * 160vw))
+  transform: translateY(calc((var(--approach, 0.5) - 0.5) * var(--depth, 0.6) * 160vh))
     scale(calc(0.7 + var(--depth, 0.6) * 0.8));
 }
 
@@ -6237,8 +6324,11 @@ body:not(.home-fullscreen) .home-hero {
   opacity: 0;
 }
 
+/* Edited 2026-10-20: the band is one colour in each theme now, so her
+   backing is that one colour rather than a token per theme. */
+.elle-tour-lady,
 [data-theme="dark"] .elle-tour-lady {
-  background-color: var(--color-body-bg);
+  background-color: var(--color-home-band);
 }
 
 .elle-tour-lady img {
@@ -6246,6 +6336,40 @@ body:not(.home-fullscreen) .home-hero {
   width: 100%;
   height: 100%;
   mix-blend-mode: lighten;
+}
+
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-20 (team request: she had
+   disappeared). "lighten" shows her by keeping whichever is lighter, her or
+   the band, which worked while this band was dark. On the light purple it
+   leaves almost nothing: her own fill is a light purple too. In light mode
+   her background is cut away by brightness and what is left filled with
+   one flat colour (the filter is in ElleTour.tsx). No blending, so she is
+   exactly the colour asked for in either theme rather than whatever a
+   blend lands on, and nothing of the picture's own background remains. */
+.elle-tour-lady {
+  background-color: transparent;
+}
+
+.elle-tour-lady img {
+  mix-blend-mode: normal;
+  filter: var(--lady-ink);
+}
+
+/* The one colour she is filled with: the page's text colour on the light
+   band, and the light purple on the dark one. */
+.elle-tour-ink-fill {
+  flood-color: var(--color-text);
+}
+
+[data-theme="dark"] .elle-tour-ink-fill {
+  flood-color: var(--color-accent);
+}
+
+/* The filter lives in the markup; nothing of it is drawn. */
+.elle-tour-ink {
+  position: absolute;
+  width: 0;
+  height: 0;
 }
 
 /* Edited with Claude Opus 5 (Anthropic), 2026-10-20 (team request): Elle
@@ -9036,8 +9160,28 @@ body:not(.home-fullscreen) .home-hero {
   position: relative;
 }
 
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: no
-   underlines anywhere): the bar that swept in under the figure is gone. */
+/* The bar under the figure, which sweeps in once the counter is revealed.
+   Taken away on 2026-10-20 ("no underlines anywhere") and asked for again
+   the same day, in the darker of the home page's two purples. It uses the
+   same token as the waves between the bands, which is that dark purple in
+   light mode and the light one in dark mode — a dark bar on the dark band
+   would not show. Drawn as a bar rather than a border so it can sweep. */
+.pmos-counter-number::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0.07em;
+  background: var(--color-band-border);
+  transform: scaleX(0);
+  transition: transform 0.7s cubic-bezier(0.3, 0, 0.2, 1);
+}
+
+.pmos-counter--revealed .pmos-counter-number::after {
+  transform: scaleX(1);
+}
+
 
 [data-theme="dark"] .pmos-counter-number {
   color: #5fd3d7;
@@ -13600,20 +13744,6 @@ a.protocol-download:hover {
   }
 }
 
-/* The "ALL DATA" divider between a pipeline's introduction and its sections,
-   as drawn on the sketch: a big, quiet label rather than a heading, so it
-   stays out of the page index. */
-.all-data-label {
-  margin: 3rem 0 2rem;
-  font-family: "Poppins", sans-serif;
-  font-size: clamp(1.75rem, 4vw, 2.75rem);
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  text-align: center;
-  opacity: 0.6;
-}
-
 /* The running text of a content page is justified (see the
    .page-shell-content :is(p, li) rule above). In a card or a placeholder
    box a justified line is only a few words wide, which opens rivers of
@@ -15759,8 +15889,17 @@ a.protocol-download:hover {
   min-width: 0;
 }
 
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: the class sits on the
+   <img>, but the flex item is the .zoomable-image-trigger button (width: 100%),
+   which claimed the whole row and squeezed the text column to a few pixels
+   (one letter per line). Size the button instead. */
+.tgr5-figure-row .zoomable-image-trigger {
+  flex: 0 0 320px;
+  width: 320px;
+  max-width: 100%;
+}
+
 .tgr5-figure-row-img {
-  flex: 0 0 auto;
   width: 100%;
   max-width: 320px;
 }
@@ -15768,6 +15907,11 @@ a.protocol-download:hover {
 @media (max-width: 767.98px) {
   .tgr5-figure-row {
     flex-direction: column;
+  }
+
+  .tgr5-figure-row .zoomable-image-trigger {
+    flex: 0 0 auto;
+    width: 100%;
   }
 
   .tgr5-figure-row-img {
@@ -17189,6 +17333,8 @@ a.protocol-download:hover {
      off the screen edge.
    - Appendix tables fit the column (smaller cells, wrapping text) instead of
      being wider than the page.
+   - The top bar slides away while scrolling down and returns on scrolling up
+     (Navbar.tsx). Below lg only, where the bar collapses into a menu.
    - The collapsed menu closes itself when a page is picked (Navbar.tsx). */
 @media (max-width: 767.98px) {
   .page-body:not(.page-body--home) .page-shell-content :is(p, li) {
@@ -17226,20 +17372,30 @@ a.protocol-download:hover {
   }
 }
 
+@media (max-width: 991.98px) {
+  .navbar-auto-hide .navbar-empower {
+    transition: translate 0.3s ease;
+  }
+
+  .navbar-auto-hide.is-hidden .navbar-empower {
+    translate: 0 -100%;
+  }
+}
+
 /* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request)
    Purpose: the "Read next" button at the end of every page (NextPage.tsx),
    built on the shared .btn-empower pill. It is a wide card rather than a
    small pill because it also previews the next page's lead. */
 .next-page {
-  display: flex;
-  justify-content: flex-end;
   margin-top: var(--space-5);
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-3);
 }
 
 .next-page-link.btn-empower {
   --btn-empower-pad: var(--space-3) var(--space-4);
-  max-width: 34rem;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
   gap: var(--space-3);
   border-radius: var(--surface-radius-lg);
   text-align: left;
@@ -17278,5 +17434,31 @@ a.protocol-download:hover {
 @media (max-width: 576px) {
   .next-page {
     justify-content: stretch;
+  }
+}
+
+/* PRIZE STAR (Awards page special-prize headings, see PrizeStar.tsx) */
+.prize-star-link {
+  display: inline-block;
+  margin-left: 0.4rem;
+  color: var(--color-interactive);
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.prize-star-link::before {
+  content: "\2605";
+}
+
+.prize-star-link:hover,
+.prize-star-link:focus-visible {
+  color: var(--color-interactive);
+  text-decoration: none;
+  transform: scale(1.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prize-star-link {
+    transition: none;
   }
 }

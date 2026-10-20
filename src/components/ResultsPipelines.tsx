@@ -317,7 +317,7 @@ export function ResultsPipelines({
               {index > 0 ? (
                 <button
                   type="button"
-                  className="phase-nav-btn"
+                  className="btn-empower phase-nav-btn"
                   onClick={() => go(index - 1)}
                 >
                   <span aria-hidden="true">←</span> Previous:{" "}
@@ -329,7 +329,7 @@ export function ResultsPipelines({
               {index < sections.length - 1 ? (
                 <button
                   type="button"
-                  className="phase-nav-btn phase-nav-next"
+                  className="btn-empower phase-nav-btn phase-nav-next"
                   onClick={() => go(index + 1)}
                 >
                   Next: {sections[index + 1].plainTitle}{" "}
@@ -338,7 +338,7 @@ export function ResultsPipelines({
               ) : pipelineIndex < pipelines.length - 1 ? (
                 <button
                   type="button"
-                  className="phase-nav-btn phase-nav-next"
+                  className="btn-empower phase-nav-btn phase-nav-next"
                   onClick={() => choosePipeline(pipelineIndex + 1)}
                 >
                   Next: {pipelines[pipelineIndex + 1].label}{" "}
@@ -346,7 +346,7 @@ export function ResultsPipelines({
                 </button>
               ) : (
                 nextPage && (
-                  <Link to={nextPage.to} className="phase-nav-btn phase-nav-next">
+                  <Link to={nextPage.to} className="btn-empower phase-nav-btn phase-nav-next">
                     Next: {nextPage.label} <span aria-hidden="true">→</span>
                   </Link>
                 )
