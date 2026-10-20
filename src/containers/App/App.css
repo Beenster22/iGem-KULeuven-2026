@@ -15759,8 +15759,17 @@ a.protocol-download:hover {
   min-width: 0;
 }
 
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: the class sits on the
+   <img>, but the flex item is the .zoomable-image-trigger button (width: 100%),
+   which claimed the whole row and squeezed the text column to a few pixels
+   (one letter per line). Size the button instead. */
+.tgr5-figure-row .zoomable-image-trigger {
+  flex: 0 0 320px;
+  width: 320px;
+  max-width: 100%;
+}
+
 .tgr5-figure-row-img {
-  flex: 0 0 auto;
   width: 100%;
   max-width: 320px;
 }
@@ -15768,6 +15777,11 @@ a.protocol-download:hover {
 @media (max-width: 767.98px) {
   .tgr5-figure-row {
     flex-direction: column;
+  }
+
+  .tgr5-figure-row .zoomable-image-trigger {
+    flex: 0 0 auto;
+    width: 100%;
   }
 
   .tgr5-figure-row-img {
