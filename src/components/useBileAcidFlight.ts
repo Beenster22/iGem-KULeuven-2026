@@ -37,12 +37,6 @@ const TGR5_STAGE = ".tgr5";
 const TGR5_SVG = ".tgr5-svg";
 const TGR5_ACID = ".tgr5-pool-acid";
 
-// The binding diagram's own space (OV_W in Tgr5Story.tsx), and the radius
-// its acids end up drawn at there: a 12-unit hexagon scaled by ACID_SCALE,
-// taken from that file rather than copied, so the two cannot drift apart.
-const TGR5_VB_W = 1000;
-const TGR5_HEX_R = 12 * ACID_SCALE;
-
 // The shapes are drawn at this radius and then scaled, so one set of points
 // serves both ends of the journey.
 const BASE_HEX_R = 12;
@@ -316,14 +310,6 @@ export function useBileAcidFlight({
       // done early in the drift out, so by the time that sentence holds the
       // screen they are already the size they will land at and nothing
       // about them changes again.
-      // One size the whole way (team request, 2026-10-20): both drawings
-      // now set their acids at the same radius in their own 1000-unit
-      // space, so there is nothing to grow into and nothing to shrink
-      // from. It is taken from the TGR5 drawing because that one keeps
-      // its size; the BSH drawing is zoomed by its own arrival, so an acid
-      // measured against it would swell and shrink with that.
-      const toR = TGR5_HEX_R * (to.width / TGR5_VB_W);
-      const scale = toR / BASE_HEX_R;
 
       // Where each acid on the TGR5 screen is, taken from where its own
       // drawing is placed rather than from the middle of the box around
@@ -341,6 +327,15 @@ export function useBileAcidFlight({
         const seat = seats[i]!;
         const seatX = seat.e;
         const seatY = seat.f;
+        // Exactly the size its counterpart is drawn at, taken from that
+        // counterpart itself. Working it out from the TGR5 drawing's width
+        // instead looked stable but was not: that drawing is laid out at
+        // different widths at different points of the scroll, so the acids
+        // waiting on the screen above changed size as the reader scrolled
+        // (team request, 2026-10-20). The counterpart carries the drawing's
+        // own scaling, whatever it happens to be; ACID_SCALE is the step
+        // from its hexagon to the one drawn here, which is the same size.
+        const scale = Math.hypot(seat.a, seat.b) * ACID_SCALE;
         // Out of the drawing and onto its own place on that sentence's
         // screen. The place is measured against that screen rather than
         // against the window (team request), so they belong to it: they
