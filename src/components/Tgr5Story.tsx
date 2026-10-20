@@ -779,7 +779,7 @@ export function Tgr5MechanismSection() {
           <div className="tgr5-figure">
             {/* Wording supplied by the team, 2026-10-20. */}
             <h3 className="tgr5-heading">
-              Bile acids interact with TGR5 receptors
+              Bile acids interact with <strong>TGR5 receptors</strong>
             </h3>
             <Tgr5BindingDiagram animate={!prefersReducedMotion} />
           </div>
