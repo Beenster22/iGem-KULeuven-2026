@@ -301,15 +301,21 @@ const TRAVELLER_H = BAC_H + TRAVELLER_PAD * 2;
 const SETTLED = 1.2;
 const RELEASE_AT = 0.55;
 
-// Where the cell sets off, as a share of the window: the hand-over begins
-// once the cell in the gut window has come up to this much of the way down
-// the screen. Edited with Claude Opus 5 (Anthropic), 2026-10-20 (team
-// request: the transition could not be seen happening). It used to begin
-// when this section's band reached the foot of the window, by which point
-// the gut window — and the cell with it — had been off the top of the
-// screen for over a thousand pixels, so the cell flew in from somewhere
-// the reader could not see and only appeared near the end.
-const DEPARTS_AT = 0.5;
+// The gut window the cell leaves: the one showing the dysbiosis, under
+// "In case of PMOS, there's a clear dysbiosis…" (team request). The window
+// is drawn by a component used in several places on this page — the
+// magnifying glass's circle of microbes is another — and each marks a cell
+// of its own, so the mark has to be looked for inside this one or the
+// first on the page wins, which is the glass's.
+const SOURCE = ".two-guts [data-pv-zoom-source]";
+
+// How long after the gut window stops being held still the cell sets off,
+// as a share of the window. Edited with Claude Opus 5 (Anthropic),
+// 2026-10-20 (team request: the transition could not be seen happening).
+// It used to begin when this section's band reached the foot of the
+// screen, long after that window had gone, so the cell flew in from
+// somewhere the reader could not see.
+const DEPARTS_AFTER = 0.15;
 
 // The cell follows the scroll position through a soft spring instead of
 // rigidly, so a quick flick of the wheel still plays out as a glide.
@@ -346,7 +352,7 @@ function usePvZoom(
   const rotate = useMotionValue(0);
 
   useEffect(() => {
-    const source = document.querySelector<SVGGElement>("[data-pv-zoom-source]");
+    const source = document.querySelector<SVGGElement>(SOURCE);
     const lens = source?.ownerSVGElement;
     const diagram = diagramRef.current;
     // Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: the gut window is
@@ -382,22 +388,20 @@ function usePvZoom(
       const toY = diagramRect.top + BAC_MID_Y * unit;
       const toW = BAC_W * unit;
 
-      // From the cell being half way down the screen to this section's band
-      // filling it. Both ends are page positions, so the share between them
-      // is the same however the reader got here — but the gut window rides
-      // a sticky stage, so the cell's own top plus the scroll moves while
-      // that stage is pinned. Measure where the stage comes to rest at the
-      // foot of its wrapper instead, which does not.
+      // From just after the gut window stops being held still — the cell is
+      // on the screen there, under the dysbiosis sentence — to this
+      // section's band filling the window. The window rides a sticky stage,
+      // so its own top plus the scroll moves while it is held; the scroll
+      // at which it comes to rest at the foot of its wrapper does not.
       const srcStage = source.closest<HTMLElement>(".home-snap-stage");
       const srcPin = source.closest<HTMLElement>(".home-snap-pin");
-      const srcRest =
+      const held =
         srcStage && srcPin
           ? srcPin.getBoundingClientRect().bottom +
             window.scrollY -
-            srcStage.getBoundingClientRect().height +
-            (sourceRect.top - srcStage.getBoundingClientRect().top)
-          : sourceRect.top + window.scrollY;
-      const departs = srcRest - window.innerHeight * DEPARTS_AT;
+            srcStage.getBoundingClientRect().height
+          : sourceRect.top + window.scrollY - window.innerHeight / 2;
+      const departs = held + window.innerHeight * DEPARTS_AFTER;
       const arrives = band.getBoundingClientRect().top + window.scrollY;
       const target =
         arrives > departs
