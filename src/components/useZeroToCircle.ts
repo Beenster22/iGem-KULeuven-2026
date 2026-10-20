@@ -8,7 +8,9 @@
 // Both ends are read live every frame, so the disc sits exactly on the
 // nought at the start and exactly on the circle at the end however the two
 // screens happen to be placed. The circles themselves wait behind
-// --circles-in until then, so the first one is never drawn twice.
+// data-circles until then, so the first one is never drawn twice; the
+// moment it arrives the rest pop in one after another, quickly, with no
+// more scrolling.
 //
 // Modelled on useBileAcidFlight.ts, which hands the bile acids over to the
 // TGR5 screen the same way.
@@ -94,13 +96,13 @@ export function useZeroToCircle({
 
       if (window.scrollY <= startAt) {
         // Not yet: the nought is still just a nought, and the circles wait.
-        section.style.setProperty("--circles-in", "0");
+        section.dataset.circles = "waiting";
         zero.style.visibility = "";
         return rest();
       }
       if (window.scrollY >= endAt) {
         // Arrived: the circles take over, the first one on this very spot.
-        section.style.setProperty("--circles-in", "1");
+        section.dataset.circles = "in";
         zero.style.visibility = "";
         return rest();
       }
@@ -140,7 +142,7 @@ export function useZeroToCircle({
       const top = lerp(from.top + from.height / 2, to.top + to.height / 2, e);
 
       zero.style.visibility = "hidden";
-      section.style.setProperty("--circles-in", "0");
+      section.dataset.circles = "waiting";
       Object.assign(ghost.style, {
         visibility: "visible",
         width: `${size.toFixed(1)}px`,
@@ -170,7 +172,7 @@ export function useZeroToCircle({
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       if (frame !== null) cancelAnimationFrame(frame);
-      section.style.removeProperty("--circles-in");
+      delete section.dataset.circles;
       document
         .querySelector<HTMLElement>(ZERO)
         ?.style.removeProperty("visibility");

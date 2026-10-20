@@ -5388,13 +5388,40 @@ body:not(.home-fullscreen) .home-hero {
 
 /* Generated with Claude Opus 5 (Anthropic), 2026-10-20 (team request): the
    circles wait while the "0" of "170 Million" flies down to become the
-   first of them (useZeroToCircle.ts), and then all come in together rather
-   than one after another. The default is 1, so they are simply there when
-   motion is reduced or the script has not run. */
-.pmos-effect,
-.pmos-effects-more {
-  opacity: var(--circles-in, 1);
-  transition: opacity 0.45s ease;
+   first of them (useZeroToCircle.ts). With no data-circles at all — no
+   script, or motion reduced — none of this applies and they are simply
+   there. */
+.pmos-effects[data-circles="waiting"] .pmos-effect,
+.pmos-effects[data-circles="waiting"] .pmos-effects-more {
+  opacity: 0;
+}
+
+/* Arrived: each one pops in just after the one before it, quickly and
+   without the reader having to scroll any further (team request). --i is
+   the circle's place in the row, set in PmosEffectsSection. */
+.pmos-effects[data-circles="in"] .pmos-effect,
+.pmos-effects[data-circles="in"] .pmos-effects-more {
+  animation: pmos-effect-pop 320ms cubic-bezier(0.2, 0.9, 0.3, 1.25)
+    backwards;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+
+/* Except the first: the nought has just turned into it, so it is already
+   there and must not pop in on top of itself. */
+.pmos-effects[data-circles="in"] .pmos-effect:first-child {
+  animation: none;
+  opacity: 1;
+}
+
+@keyframes pmos-effect-pop {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
 }
 
 /* The nought on its way to being that first circle: it carries both the
@@ -5439,9 +5466,10 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pmos-effect,
-  .pmos-effects-more {
+  .pmos-effects .pmos-effect,
+  .pmos-effects .pmos-effects-more {
     opacity: 1;
+    animation: none;
   }
 }
 
