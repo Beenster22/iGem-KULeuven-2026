@@ -51,7 +51,6 @@ import { Medal } from "./components/Medal";
 import { PrizeStar } from "./components/PrizeStar";
 import { AttributionsEmbed } from "./components/AttributionsEmbed";
 import { PhasePager } from "./components/PhasePager";
-import { PhasePillars } from "./components/PhasePillars";
 import { IntegrationSummary, IntegrationPoint } from "./components/IntegrationSummary";
 import { TwoGutsSection } from "./components/TwoGutsSection";
 import {
@@ -165,7 +164,6 @@ export const mdxComponents = {
   PrizeStar,
   AttributionsEmbed,
   PhasePager,
-  PhasePillars,
   IntegrationSummary,
   IntegrationPoint,
   TwoGutsSection,
