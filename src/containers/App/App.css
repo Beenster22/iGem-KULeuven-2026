@@ -17499,3 +17499,216 @@ a.protocol-download:hover {
     margin: 0 0 1rem;
   }
 }
+
+/* PHASE PILLARS (Entrepreneurship page, see PhasePillars.tsx)
+   Columns of rising height, each a small classical pillar (cap, shaft
+   with fluting, base) in the brand's dark purple; the selected one turns teal. */
+.phase-pillars {
+  margin: 1.5rem 0 2rem;
+}
+
+.phase-pillars-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.phase-pillars-hint svg {
+  flex: none;
+  width: 1.4rem;
+  height: 1.4rem;
+  color: var(--color-interactive);
+}
+
+.phase-pillars-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(0.75rem, 4vw, 3rem);
+}
+
+.phase-pillar {
+  --pillar-fill: #33283f;
+  --pillar-ink: #eaf4f5;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex: 0 1 13rem;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--pillar-ink);
+  cursor: pointer;
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.phase-pillar--1 { --pillar-height: 9rem; }
+.phase-pillar--2 { --pillar-height: 12rem; }
+.phase-pillar--3 { --pillar-height: 15rem; }
+.phase-pillar--4 { --pillar-height: 18rem; }
+
+.phase-pillar:hover,
+.phase-pillar:focus-visible {
+  transform: translateY(-0.35rem);
+  filter: drop-shadow(0 0.75rem 1rem rgba(51, 40, 63, 0.3));
+}
+
+.phase-pillar.active {
+  --pillar-fill: #2fa4a9;
+  --pillar-ink: #33283f;
+  transform: translateY(-0.35rem);
+  filter: drop-shadow(0 0.75rem 1rem rgba(47, 164, 169, 0.4));
+}
+
+.phase-pillar-cap,
+.phase-pillar-base {
+  display: block;
+  background-color: var(--pillar-fill);
+  transition: background-color 0.25s ease;
+}
+
+.phase-pillar-cap {
+  height: 1.1rem;
+  margin: 0 -0.6rem;
+  border-radius: 0.5rem 0.5rem 0.15rem 0.15rem;
+}
+
+.phase-pillar-base {
+  height: 1.3rem;
+  margin: 0 -0.6rem;
+  border-radius: 0.15rem 0.15rem 0.5rem 0.5rem;
+}
+
+.phase-pillar-shaft {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  min-height: var(--pillar-height);
+  padding: 0.75rem 0.5rem;
+  background-color: var(--pillar-fill);
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.12) 0 2px,
+    transparent 2px 22px
+  );
+  transition: background-color 0.25s ease;
+}
+
+.phase-pillar-number {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.phase-pillar-name {
+  font-size: clamp(1.05rem, 2.4vw, 1.5rem);
+  font-weight: 800;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.phase-pillars-panel {
+  max-width: 46rem;
+  margin: 1.5rem auto 0;
+  padding: 1.25rem 1.5rem;
+  border: 2px solid #2fa4a9;
+  border-radius: 1rem;
+  background-color: var(--color-page-bg);
+  text-align: center;
+  animation: phase-pillars-in 0.3s ease;
+}
+
+@keyframes phase-pillars-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.phase-pillars-tagline {
+  margin-bottom: 1rem;
+  font-size: 1.15rem;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.phase-pillars-sections {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  list-style: none;
+}
+
+.phase-pillars-sections button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.85rem;
+  border: 1px solid #2fa4a9;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.phase-pillars-sections button:hover,
+.phase-pillars-sections button:focus-visible {
+  background-color: rgba(47, 164, 169, 0.18);
+}
+
+.phase-pillars-section-number {
+  font-weight: 800;
+  color: var(--color-interactive);
+}
+
+@media (max-width: 560px) {
+  .phase-pillars-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .phase-pillar {
+    flex-basis: auto;
+  }
+
+  .phase-pillar--1,
+  .phase-pillar--2,
+  .phase-pillar--3,
+  .phase-pillar--4 {
+    --pillar-height: 5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phase-pillar,
+  .phase-pillar-cap,
+  .phase-pillar-base,
+  .phase-pillar-shaft {
+    transition: none;
+  }
+
+  .phase-pillars-panel {
+    animation: none;
+  }
+}
