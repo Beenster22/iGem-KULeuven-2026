@@ -8360,6 +8360,13 @@ body:not(.home-fullscreen) .home-hero {
 /* Fixed while it falls with the scroll, absolute (page coordinates) once
    it is climbing — set from useFallingM.ts. */
 .falling-m {
+  /* Pinned to the top-left corner so the transform the script writes is the
+     position itself. Without left/top the box falls at the foot of the
+     document and every translate is measured from there, which put the
+     letter thousands of pixels below the window. */
+  position: absolute;
+  left: 0;
+  top: 0;
   display: block;
   transform-origin: 0 0;
   white-space: nowrap;
