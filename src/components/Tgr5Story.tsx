@@ -17,8 +17,9 @@
 //  - Tgr5ConsequencesSection: a pinned screen where the three things the
 //    team lists come in one per scroll step, joined by a line that grows
 //    from one to the next with a bacterium at its head.
-//  - EngineerSection: the team's closing statement beside P. vulgatus drawn
-//    with a genetic circuit inside.
+//  - EngineerSection (P. vulgatus with a genetic circuit inside) was
+//    removed on team request, 2026-10-20; the story now closes with the
+//    two screens of PvHeroStory.tsx.
 //  - FindOutMore: boxes linking to the main pages (and the special prizes).
 // The drawings are ILLUSTRATIONS of the mechanism as the team describes it,
 // not data. All wording is the team's; nothing was added where the team's
@@ -117,7 +118,7 @@ function buildBileAcids(): BileAcid[] {
   });
 }
 
-function BileAcidShape({ conjugated }: { conjugated: boolean }) {
+export function BileAcidShape({ conjugated }: { conjugated: boolean }) {
   return conjugated ? (
     <>
       <line
@@ -596,12 +597,27 @@ function useBindingLoop(acids: PoolAcid[], refs: LoopRefs, enabled: boolean) {
     );
     observer.observe(svg);
 
+    // Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: the
+    // bile acids should already be there as this screen arrives): while the
+    // acids flying down from the screen above are in charge of the pool
+    // (useBileAcidFlight.ts sets --acids-in on .tgr5), they are its
+    // arrival, so the pool sits in place rather than pouring in as well —
+    // the pour took a few seconds and left the fliers aiming at spots
+    // still up above the screen.
+    const handedOver = () =>
+      svg.closest<HTMLElement>(".tgr5")?.style.getPropertyValue("--acids-in") !==
+      "";
+
     const tick = (now: number) => {
       frame = requestAnimationFrame(tick);
       if (!visible) return;
       const t = (now - start) / 1000;
       const states = acids.map((acid) => poolPosition(acid, t));
-      const sinceEntry = entryAt === null ? -1 : (now - entryAt) / 1000;
+      const sinceEntry = handedOver()
+        ? Infinity
+        : entryAt === null
+          ? -1
+          : (now - entryAt) / 1000;
 
       states.forEach((s, i) => {
         const el = refs.acids.current[i];
@@ -1178,85 +1194,6 @@ export function Tgr5ConsequencesSection() {
           ))}
         </ol>
       </div>
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* Why we engineer P. vulgatus                                         */
-/* ------------------------------------------------------------------ */
-
-export function EngineerSection() {
-  return (
-    <div className="engineer">
-      <p className="story-text engineer-text">
-        This is why we want to <strong>engineer</strong> <em>P. vulgatus</em>{" "}
-        to restore bile acid balance and achieve a therapeutic effect in <strong>PMOS</strong>
-      </p>
-      {/* The cell of BshStreamAnimation.tsx, now with a genetic circuit in
-          it that silences BSH (drawn with the usual blunt "inhibits" line). */}
-      <svg
-        className="engineer-svg"
-        viewBox="0 0 300 170"
-        role="img"
-        aria-label="Illustration: Phocaeicola vulgatus with an engineered genetic circuit inside that silences expression of its BSH enzyme."
-      >
-        <rect
-          className="bsh-membrane-outer"
-          x={6}
-          y={6}
-          width={288}
-          height={158}
-          rx={79}
-        />
-        <rect
-          className="bsh-membrane-inner"
-          x={16}
-          y={16}
-          width={268}
-          height={138}
-          rx={69}
-        />
-        <g className="engineer-circuit">
-          <line className="engineer-dna" x1={52} y1={72} x2={176} y2={72} />
-          <path
-            className="engineer-promoter"
-            d="M62,72 v-20 h16 m-7,-6 l8,6 l-8,6"
-          />
-          <rect
-            className="engineer-part engineer-part--a"
-            x={86}
-            y={61}
-            width={36}
-            height={22}
-            rx={4}
-          />
-          <rect
-            className="engineer-part engineer-part--b"
-            x={128}
-            y={61}
-            width={36}
-            height={22}
-            rx={4}
-          />
-          <path className="engineer-terminator" d="M172,72 v-14 m-7,0 h14" />
-        </g>
-        <path
-          className="engineer-inhibit"
-          d="M146,86 v20 q0,12 14,12 h14 m0,-10 v20"
-        />
-        <rect
-          className="engineer-bsh"
-          x={182}
-          y={98}
-          width={78}
-          height={40}
-          rx={20}
-        />
-        <text className="engineer-bsh-label" x={221} y={124}>
-          BSH
-        </text>
-      </svg>
     </div>
   );
 }

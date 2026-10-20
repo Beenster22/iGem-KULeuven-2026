@@ -35,34 +35,48 @@ export function MicrobeBackdrop({ count = 5, seed = 1 }: MicrobeBackdropProps) {
     const top = ((row + 0.2 + seededValue(s + 1) * 0.6) / count) * 100;
     const inset = 1 + seededValue(s + 2) * 9; // % from that side's edge
     const kind = seededValue(s + 3);
-    const style = {
+    // Where it sits and how near it is, on a mover that carries it across
+    // the screen as the reader scrolls (team request, 2026-10-20: the
+    // passage through the gut; see useBackdropApproach in
+    // HomeSnapScroll.tsx). Nearer ones (--depth) travel further and are
+    // larger. The sweep and its whoosh go on the mover, so they run left
+    // to right on the screen whichever way the item itself is turned.
+    const place = {
       top: `${top}%`,
       [side]: `${inset}%`,
+      "--depth": (0.4 + seededValue(s + 9) * 0.6).toFixed(2),
+    } as React.CSSProperties;
+    // Its own turn and slow float, on the item itself.
+    const style = {
       "--r": `${Math.round(seededValue(s + 4) * 360)}deg`,
       animationDuration: `${14 + seededValue(s + 5) * 10}s`,
       animationDelay: `${-seededValue(s + 6) * 20}s`,
     } as React.CSSProperties;
 
+    let icon;
     if (kind < 0.3) {
-      return <PVulgatusIcon key={i} className="microbe-backdrop-item microbe-backdrop-item--pv" style={style} />;
-    }
-    if (kind < 0.6) {
-      return (
+      icon = <PVulgatusIcon className="microbe-backdrop-item microbe-backdrop-item--pv" style={style} />;
+    } else if (kind < 0.6) {
+      icon = (
         <BileAcidIcon
-          key={i}
           className="microbe-backdrop-item microbe-backdrop-item--hex"
           deconjugated={seededValue(s + 7) < 0.5}
           style={style}
         />
       );
+    } else {
+      icon = (
+        <OtherBacteriumIcon
+          className="microbe-backdrop-item"
+          variant={OTHER_VARIANTS[Math.floor(seededValue(s + 8) * OTHER_VARIANTS.length)]}
+          style={style}
+        />
+      );
     }
     return (
-      <OtherBacteriumIcon
-        key={i}
-        className="microbe-backdrop-item"
-        variant={OTHER_VARIANTS[Math.floor(seededValue(s + 8) * OTHER_VARIANTS.length)]}
-        style={style}
-      />
+      <span key={i} className="microbe-backdrop-mover" style={place}>
+        {icon}
+      </span>
     );
   });
 

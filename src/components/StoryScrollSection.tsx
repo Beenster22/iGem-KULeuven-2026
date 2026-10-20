@@ -25,6 +25,7 @@
 // corner.
 import {
   useEffect,
+  useId,
   useRef,
   useState,
   type CSSProperties,
@@ -32,7 +33,7 @@ import {
   type RefObject,
 } from "react";
 import { useReducedMotion } from "framer-motion";
-import { SnapSteps } from "./HomeSnapScroll";
+import { SnapSteps, StepBorder } from "./HomeSnapScroll";
 import { usePinnedStep } from "./usePinnedStep";
 import { useLensToGutWindow } from "./useLensToGutWindow";
 import { MicrobeLens } from "./TwoGutsSection";
@@ -189,20 +190,218 @@ const OFFICE_SRC =
 // with the ticking clock in the wall's top-right corner.
 // Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request): the
 // two women talk — the doctor's head and her hands with the clipboard move
-// gently, the patient nods now and then. The picture is one flat image, so
+// gently, the patient nods now and then. (Edited 2026-10-20: the doctor's
+// hand is now drawn and moves on its own, see DoctorHand.) The picture is one flat image, so
 // each moving part is a copy of it cut down to that part (plus a margin of
 // plain wall, which covers the still picture underneath as it moves) and
 // turned slightly about where it joins the body (see .story-office-part in
 // App.css).
-const OFFICE_PARTS = ["patient-head", "doctor-hands", "doctor-head"];
+const OFFICE_PARTS = ["patient-head", "doctor-head"];
+
+// Generated with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request):
+// the patient wears a white dress. The picture is flat, so the dress is a
+// shape laid over her, traced from the picture's own outline (in units of
+// a quarter of its pixels, so x 0-500, y 0-470): neckline, back, seat,
+// thigh and knee, and a skirt that falls a little past it. Her arm, which
+// lies along her side with the hand resting just short of her knee, is
+// masked out of it with its outline, so the arm and hand stay in front of
+// the dress. The nodding head (patient-head above) is cut off above the
+// neckline, so it never covers the dress.
+const DRESS_PATH =
+  "M89,127.5 Q108,140 128,127 L139,130 143,140 144,150 144,160 143,170 142,180 " +
+  "138,190 148,200 165,210 181,220 194,226 201,226.3 208,228 214,231.5 " +
+  "218,236 220.3,242 220.5,250 221,262 226,301 Q205,305 188,298 L188,266 " +
+  // Her back, measured from the picture and set just outside it, so no
+  // strip of skin shows along it (team request, the same day).
+  "77.4,263 77.15,260 76.4,250 76.15,245 75.9,235 75.9,220 76.15,210 " +
+  "76.4,200 76.9,190 77.9,180 78.9,170 80.1,160 81.9,150 82.9,145 " +
+  "84.1,140 85.6,135 88.4,130 Z";
+const DRESS_ARM_PATH =
+  "M106.5,130 Q108,121 117,121 Q126,121 127.5,130 L130.5,140 132.5,150 " +
+  "134.5,160 136.5,170 138.5,180 140,190 149,200 166,210 182,220 " +
+  "195,225.5 196,233 191,245.5 184,246 176,244.5 169.5,240 152.5,230 " +
+  "136.5,220 119.5,210 115.5,200 114.5,190 112.5,180 110.5,170 108.5,160 " +
+  "106.5,150 104.5,140 Z";
+
+function OfficeDress() {
+  const maskId = useId();
+  return (
+    <svg
+      className="story-office-dress"
+      viewBox="0 0 2000 1878"
+      preserveAspectRatio="xMidYMid meet"
+      aria-hidden="true"
+    >
+      <defs>
+        <mask id={maskId} maskUnits="userSpaceOnUse">
+          <rect width={2000} height={1878} fill="#fff" />
+          <path d={DRESS_ARM_PATH} transform="scale(4)" fill="#000" />
+        </mask>
+      </defs>
+      <g mask={`url(#${maskId})`}>
+        <path
+          className="story-office-dress-shape"
+          d={DRESS_PATH}
+          transform="scale(4)"
+        />
+      </g>
+      {/* The doctor's coat, raised a little round the back of her neck
+          into a higher collar (team request, the same day): her moving
+          head is cut off just above where the coat starts in the picture,
+          and the joint showed there. Same white as the coat, and the same
+          rounded top, only higher. */}
+      <path
+        className="story-office-sleeve"
+        d="M1434,480 Q1438,452 1490,447 Q1542,452 1547,480 Z"
+      />
+      {/* Her hand (team request, the same day): an oval like the doctor's
+          at the end of her forearm, as wide as the forearm, resting on her
+          thigh in front of the dress. It runs on from the arm, so its edge
+          is drawn only where it lies on the dress (the same mask as the
+          dress's, which leaves out the arm). */}
+      <ellipse
+        className="story-office-hand"
+        cx={769}
+        cy={950}
+        rx={62}
+        ry={47}
+        transform="rotate(25 769 950)"
+      />
+      <g mask={`url(#${maskId})`}>
+        <ellipse
+          className="story-office-hand-edge"
+          cx={769}
+          cy={950}
+          rx={62}
+          ry={47}
+          transform="rotate(25 769 950)"
+        />
+      </g>
+    </svg>
+  );
+}
+
+// The doctor's hand, drawn larger over the one in the picture so it is
+// plainly in front of the clipboard, over its edge (team request, the same
+// day). It is the one part of her that gestures: it moves a little along
+// her forearm, in and out of the cuff (see .story-office-hand--doctor in
+// App.css), while the clipboard and her knee stay still.
+function DoctorHand() {
+  return (
+    <svg
+      className="story-office-doctor-hand"
+      viewBox="0 0 2000 1878"
+      preserveAspectRatio="xMidYMid meet"
+      aria-hidden="true"
+    >
+      {/* Over the picture's own hand (with the sleeve below, wholly), so
+          none of it shows round the edge; no outline, like the picture's. */}
+      <ellipse
+        className="story-office-hand story-office-hand--doctor"
+        cx={1238}
+        cy={883}
+        rx={66}
+        ry={50}
+      />
+      {/* Her coat sleeve, carried on a little way over the clipboard
+          (team request, the same day): the sleeve's own edges run on along
+          the same lines to a cuff, drawn over the hand so the hand is
+          partly tucked into it. */}
+      <path
+        className="story-office-sleeve"
+        d="M1370,779 L1262,829 Q1255,885 1268,941 L1370,892 Z"
+      />
+      <path
+        className="story-office-sleeve-edge"
+        d="M1370,779 L1262,829 Q1255,885 1268,941 L1370,892"
+      />
+    </svg>
+  );
+}
+
+// And the doctor wears white trousers under her coat (team request, the
+// same day). A traced shape never quite sat on her legs, so instead her
+// legs themselves are recoloured: this filter turns the picture's lavender
+// skin white, but only inside the boxes round her thigh and shin (in
+// fractions of the picture), which leave out the hand on her clipboard.
+// It goes on the picture and on the moving copy of her hands, which
+// reaches down over her thigh, so the trousers move with it. Only pixels
+// close to the skin colour in all three channels change, so the coat's
+// pale lines and the clipboard keep their colours.
+const TROUSERS_FILTER_ID = "story-office-trousers";
+const TROUSER_BOXES = [
+  // Thigh, left of the clipboard hand; under it; right of it, up to the
+  // coat; then the shin down to the ankle.
+  [0.515, 0.4633, 0.0875, 0.1225],
+  [0.6025, 0.4909, 0.0525, 0.0948],
+  [0.655, 0.4633, 0.075, 0.1225],
+  [0.53, 0.5857, 0.0775, 0.3067],
+];
+// 1 near the skin's value in a channel, 0 elsewhere (at steps of 1/40).
+function band(ones: number[]) {
+  return Array.from({ length: 41 }, (_, k) => (ones.includes(k) ? 1 : 0)).join(" ");
+}
+
+function TrousersFilter() {
+  return (
+    <svg className="story-office-filters" aria-hidden="true" focusable="false">
+      <filter
+        id={TROUSERS_FILTER_ID}
+        x={0}
+        y={0}
+        width={1}
+        height={1}
+        primitiveUnits="objectBoundingBox"
+        colorInterpolationFilters="sRGB"
+      >
+        {/* The skin is rgb(199, 191, 232). */}
+        <feComponentTransfer in="SourceGraphic" result="skin">
+          <feFuncR type="table" tableValues={band([31, 32])} />
+          <feFuncG type="table" tableValues={band([29, 30, 31])} />
+          <feFuncB type="table" tableValues={band([36, 37])} />
+        </feComponentTransfer>
+        {/* Opaque only where all three match; painted the dress's white. */}
+        <feColorMatrix
+          in="skin"
+          type="matrix"
+          values="0 0 0 0 0.969  0 0 0 0 0.957  0 0 0 0 0.988  1 1 1 0 -2"
+          result="white"
+        />
+        {TROUSER_BOXES.map(([x, y, w, h], i) => (
+          <feFlood
+            key={i}
+            floodColor="#000"
+            x={x}
+            y={y}
+            width={w}
+            height={h}
+            result={`box${i}`}
+          />
+        ))}
+        <feMerge result="legs">
+          {TROUSER_BOXES.map((_, i) => (
+            <feMergeNode key={i} in={`box${i}`} />
+          ))}
+        </feMerge>
+        <feComposite in="white" in2="legs" operator="in" result="trousers" />
+        <feMerge>
+          <feMergeNode in="SourceGraphic" />
+          <feMergeNode in="trousers" />
+        </feMerge>
+      </filter>
+    </svg>
+  );
+}
 
 function OfficeArt() {
   return (
     <div className="story-office">
       <div className="story-office-room">
+        <TrousersFilter />
         <img
+          className="story-office-picture"
           src={OFFICE_SRC}
-          alt="A patient talking with her doctor"
+          alt="A patient in a white dress talking with her doctor, who wears a white coat and trousers"
           width={2000}
           height={1878}
         />
@@ -217,6 +416,8 @@ function OfficeArt() {
             height={1878}
           />
         ))}
+        <OfficeDress />
+        <DoctorHand />
         <ClockArt />
       </div>
     </div>
@@ -464,7 +665,12 @@ export function StoryStatement({ children }: { children: ReactNode }) {
 // Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request): was
 // only the presentation screen → GP's office sign; now also the office's
 // clock → the magnifying glass over the gut.
-const MORPH_MS = 750;
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: a
+// smoother clock → magnifying glass): a little slower (was 750), the two
+// looks now cross-fade with an overlap instead of one fading out before the
+// other fades in (which left an empty ring half way), the clock turns as it
+// goes, and the glass's handle fades in after it rather than popping up.
+const MORPH_MS = 1100;
 
 interface StepMorph {
   from: StoryStep["position"];
@@ -594,18 +800,41 @@ function useStepMorphs(
       fill: "forwards",
     });
     fading.animate([{ opacity: 1 }, { opacity: 0 }], {
-      duration: MORPH_MS * 0.4,
-      fill: "forwards",
-    });
-    arriving.animate([{ opacity: 0 }, { opacity: 1 }], {
-      duration: MORPH_MS * 0.4,
-      delay: MORPH_MS * 0.6,
+      duration: MORPH_MS * 0.6,
+      delay: MORPH_MS * 0.1,
+      easing: "ease-in-out",
       fill: "both",
     });
+    arriving.animate([{ opacity: 0 }, { opacity: 1 }], {
+      duration: MORPH_MS * 0.6,
+      delay: MORPH_MS * 0.3,
+      easing: "ease-in-out",
+      fill: "both",
+    });
+    if (morph.kind === "lens") {
+      // The clock face turns over into the glass, the way it is going.
+      const turn = forwards ? "120deg" : "-120deg";
+      fading.animate([{ rotate: "0deg" }, { rotate: turn }], {
+        duration: MORPH_MS,
+        easing,
+        fill: "forwards",
+      });
+    }
 
     const finish = () => {
       hidden.forEach((el) => (el.style.visibility = ""));
       ghost.remove();
+      // The glass's handle was hidden with it; bring it in gently.
+      hidden
+        .filter((el) => el.matches(".quest-lens"))
+        .forEach((lens) =>
+          lens
+            .querySelector(".quest-lens-handle")
+            ?.animate([{ opacity: 0 }, { opacity: 1 }], {
+              duration: 400,
+              easing: "ease-out",
+            }),
+        );
     };
     moving.finished.then(finish, finish);
     return () => {
@@ -634,6 +863,9 @@ export function StoryScrollSection() {
         className={`story-stage${prefersReducedMotion ? "" : " home-snap-stage"}`}
         ref={stageRef}
       >
+        {/* A border passing as each screen gives way to the next (team
+            request, 2026-10-20: a border between every section). */}
+        {!prefersReducedMotion && <StepBorder step={step} />}
         {STEPS.map((entry, i) => {
           const state = prefersReducedMotion
             ? "active"

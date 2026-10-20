@@ -48,7 +48,7 @@ interface Effect {
 }
 
 // Labels as supplied by the team (2026-10-15).
-const EFFECTS: Effect[] = [
+export const EFFECTS: Effect[] = [
   {
     id: "hormonal",
     label: "Hormonal imbalance",

@@ -113,6 +113,8 @@ export function useFallingM({
     let startPose: Pose = { x: 0, y: 0, s: 1 };
     let slotPose: Pose = { x: 0, y: 0, s: 1 };
     let startColor = "";
+    // How far below the top of the source letter's box the stand-in starts.
+    let startDrop = 0;
     let endColor = "";
     // The size it is drawn at right now, so a landing that starts early
     // picks up where the fall left off.
@@ -156,6 +158,7 @@ export function useFallingM({
             }
           : { x: target.x, y: target.y - window.innerHeight, s: startScale };
       startColor = source ? getComputedStyle(source).color : endColor;
+      startDrop = sourceBox ? startPose.y - sourceBox.y : 0;
 
     };
 
@@ -186,6 +189,18 @@ export function useFallingM({
         return;
       }
       const navY = navBottom();
+      // Edited with Claude Opus 5.5 (Anthropic), 2026-10-20: the definition
+      // screen is now held pinned for two scrolls (SnapHold), and while it
+      // is, its letters stand still as the page scrolls on, so where the M
+      // starts is read afresh until it lets go.
+      const live = source?.getBoundingClientRect();
+      if (live && live.top + startDrop > navY) {
+        startPose = {
+          ...startPose,
+          x: live.left + window.scrollX,
+          y: live.top + window.scrollY + startDrop,
+        };
+      }
       const releaseAt = startPose.y - navY; // scroll where the M meets the nav
       const landAt = sectionTop - window.innerHeight * (1 - LAND_AT);
       const q = (window.scrollY - releaseAt) / (landAt - releaseAt);

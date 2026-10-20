@@ -251,18 +251,6 @@ export function useBileAcidFlight({
         stageRests + insideStage + underside * diagramBox.height - navBottom();
       const pin = stage.closest<HTMLElement>(".home-snap-pin") ?? stage;
       const pinBox = pin.getBoundingClientRect();
-      // The wave the TGR5 screen begins on. They keep their places until
-      // the navigation bar comes down to it, and only then fall (team
-      // request), so this is the mark the fall sets off from.
-      const fallAt = pinBox.top + window.scrollY - navBottom();
-      // And they are down while that screen is still being held, so the
-      // pool is there to land on rather than sliding away under them.
-      const stepHeld = pinBox.height - stage.getBoundingClientRect().height;
-      const endAt =
-        fallAt +
-        (stepHeld > 0
-          ? Math.min(window.innerHeight * FALL_LEN, stepHeld * FALL_OF_STEP)
-          : window.innerHeight * FALL_LEN);
       // The screen they cross in between. Its band is pinned, so measure
       // its wrapper, which is not: they are in place as it settles and hold
       // their places for the whole of it.
@@ -270,6 +258,28 @@ export function useBileAcidFlight({
         .querySelector<HTMLElement>(STATEMENT)
         ?.closest<HTMLElement>(".home-section");
       const bandPin = band?.closest<HTMLElement>(".home-snap-pin");
+      // The TGR5 screen has arrived: its top has come up to the navigation
+      // bar.
+      const arrivesAt = pinBox.top + window.scrollY - navBottom();
+      // Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request:
+      // two scrolls from "But why is this reaction important?" to the TGR5
+      // screen, with the bile acids already there on the second): they float
+      // on that sentence for its one held step, fall as the TGR5 screen
+      // slides up, and are in its pool as it arrives. They used to start
+      // falling only once it had arrived, and land while it was held.
+      const stepHeld = pinBox.height - stage.getBoundingClientRect().height;
+      const fallAt = bandPin
+        ? bandPin.getBoundingClientRect().top +
+          window.scrollY +
+          bandPin.offsetHeight -
+          window.innerHeight
+        : arrivesAt;
+      const endAt = bandPin
+        ? arrivesAt
+        : arrivesAt +
+          (stepHeld > 0
+            ? Math.min(window.innerHeight * FALL_LEN, stepHeld * FALL_OF_STEP)
+            : window.innerHeight * FALL_LEN);
       // Where that screen is right now, so their places can be pinned to
       // it rather than to the window.
       const bandBox = band
