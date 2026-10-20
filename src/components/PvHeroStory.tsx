@@ -193,7 +193,7 @@ function PvEngineered({ replaced }: { replaced: boolean }) {
       <g className="pv-engineer-gene pv-engineer-gene--ours">
         <path d={GENE_PATH} />
         <text x={-4} y={8}>
-          our BSH
+          NEW BSH
         </text>
       </g>
     </g>
@@ -297,7 +297,7 @@ function PvBalanceFigure({ balanced }: { balanced: boolean }) {
       viewBox={`0 0 ${BAL_W} ${BAL_H}`}
       preserveAspectRatio="xMidYMid meet"
       role="img"
-      aria-label="Illustration: a pair of scales with conjugated bile acids on one pan and deconjugated bile acids on the other, tipped towards the deconjugated side. Phocaeicola vulgatus arrives beside it with its own BSH gene; that gene is replaced with the team's BSH, and the scales level out."
+      aria-label="Illustration: a pair of scales with conjugated bile acids on one pan and deconjugated bile acids on the other, tipped towards the deconjugated side. Phocaeicola vulgatus arrives beside it with its own BSH gene; that gene is replaced with a new BSH, and the scales level out."
     >
       <defs>
         <radialGradient id={glowId}>
