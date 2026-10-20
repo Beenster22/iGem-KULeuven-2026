@@ -883,13 +883,18 @@ export function Tgr5ZoomSection() {
         ref={stageRef}
         className={`tgr5-zoom${prefersReducedMotion ? " tgr5-zoom--static" : " home-snap-stage"}`}
       >
+        {/* Edited 2026-10-21 (team request): one sentence, no "…", its
+            second half coming in on the second step in its place, so the
+            sentence keeps one left edge. */}
         <div className="tgr5-zoom-words">
           <p className={`tgr5-zoom-line${shown >= 1 ? " tgr5-zoom-line--shown" : ""}`}>
             TGR5 is one of the <strong>most potent</strong> bile acid
-            receptors…
-          </p>
-          <p className={`tgr5-zoom-line${shown >= 2 ? " tgr5-zoom-line--shown" : ""}`}>
-            …involved in <strong>various different pathways</strong>
+            receptors,{" "}
+            <span
+              className={`tgr5-zoom-more${shown >= 2 ? " tgr5-zoom-more--shown" : ""}`}
+            >
+              involved in <strong>various different pathways</strong>
+            </span>
           </p>
         </div>
         <div className="tgr5-zoom-art">

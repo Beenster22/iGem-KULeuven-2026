@@ -13,16 +13,16 @@
 // bacteria in the background coming towards the reader meanwhile): see
 // SnapHold and useBackdropApproach below. And (team request, the same day)
 // soft white swooshes sweep left to right across the page while it is
-// scrolled, and a gut-wall border sweeps across a pinned screen when it
-// moves on to its next part (StepBorder).
+// scrolled. (A gut-wall border that swept across a pinned screen when it
+// moved on to its next part was taken out the same day, team request: no
+// horizontal gut borders but the one into the footer.)
 import {
   useEffect,
-  useState,
   type CSSProperties,
   type ReactNode,
 } from "react";
 import { useReducedMotion } from "framer-motion";
-import { scrollBusy } from "./scrollGlide";
+import { GLIDE, markScrollBusy, scrollBusy } from "./scrollGlide";
 
 export function HomeSnapScroll() {
   const prefersReducedMotion = useReducedMotion();
@@ -38,7 +38,7 @@ export function HomeSnapScroll() {
   // Also drives the swooshes, which are drawn in the bands' own backgrounds
   // (see .page-body--home .home-section in App.css).
   useBackdropApproach(!!prefersReducedMotion);
-  useSmoothWheel(!!prefersReducedMotion);
+  useWheelPaging(!!prefersReducedMotion);
 
   return null;
 }
@@ -47,17 +47,40 @@ export function HomeSnapScroll() {
 // the transitions smoother). Nearly everything that moves on this page is
 // tied to how far it has been scrolled, and a mouse wheel moves the page in
 // jumps of about 100px a notch, so every one of those moved in jumps too.
-// With a mouse or touchpad the wheel now eases the page to where it was
-// sent instead, so they all glide. It goes exactly as far as the wheel
-// would have taken it; it only takes a moment longer to get there. Not on
-// touch screens (their own scrolling is smooth already, and snaps), not
-// with the zoom gesture (ctrl + wheel), not inside a box that scrolls on
-// its own, and not while one of the page's own glides is moving it
-// (scrollBusy, see scrollGlide.ts). Taking hold of the scrollbar or using
-// the keys stops it where it is.
-// How quickly it catches up: the remaining distance halves every ~60 ms.
-const WHEEL_EASE_MS = 90;
-const LINE_PX = 40;
+// Edited the same day (team request: once a screen is showing, the next
+// scroll goes straight on to the next thing, smoothly): with a mouse or
+// touchpad, each turn of the wheel now glides the page to the next stop —
+// the `data-snap` markers at the top of every screen and every step of a
+// pinned one — or, scrolling up, back to the one before, so everything
+// tied to the scroll plays through on the way. The rest of a turn (a
+// touchpad's coasting included) is let go until the wheel has been still
+// for a moment, so one turn never skips a screen. Not on touch screens
+// (their own scrolling is smooth already, and snaps), not with the zoom
+// gesture (ctrl + wheel), not inside a box that scrolls on its own, and not
+// while one of the page's own glides is moving it (scrollBusy, see
+// scrollGlide.ts). The scrollbar and the keys still scroll freely.
+// Edited 2026-10-21 (team request: three scrolls on every screen before
+// the next one, with the background moving every time): going down, when
+// the next stop is the start of the next screen (rather than the next step
+// of this one), the first two turns of the wheel hold the page still while
+// the bacteria and swooshes behind it carry on (nudgeBackdrop), and the
+// third moves on. Not on the opening video: the first turn leaves it.
+// Turns of the wheel, once on a screen, that it takes to leave it.
+const TURNS_TO_LEAVE = 3;
+// How far a held turn carries the background on (screens), and how long:
+// about as far and as fast as a glide to the next screen, so it looks the
+// same every time.
+const NUDGE_SCREENS = 1;
+const NUDGE_MS = 900;
+
+// How long a glide takes: a base, plus a little more the further it goes.
+const GLIDE_BASE_MS = 650;
+const GLIDE_PER_SCREEN_MS = 250;
+const GLIDE_MAX_MS = 1300;
+// How long the wheel must be still before the next turn counts as a new one.
+const TURN_GAP_MS = 180;
+// Stops closer than this to where the page is count as where it is.
+const NEAR_PX = 6;
 
 function scrollsItself(start: EventTarget | null, deltaY: number) {
   for (
@@ -80,88 +103,116 @@ function scrollsItself(start: EventTarget | null, deltaY: number) {
   return false;
 }
 
-function useSmoothWheel(skip: boolean) {
+function useWheelPaging(skip: boolean) {
   useEffect(() => {
     if (skip || !window.matchMedia("(hover: hover) and (pointer: fine)").matches)
       return;
-    let target = window.scrollY;
-    let current = window.scrollY;
-    let placed = window.scrollY;
-    let last = 0;
     let frame: number | null = null;
+    let gliding = false;
+    let lastWheel = 0;
+    // Turns held so far on the screen the page is resting on, and where.
+    let held = 0;
+    let heldAt = -1;
+    let nudgeFrame: number | null = null;
 
-    const stop = () => {
-      if (frame !== null) cancelAnimationFrame(frame);
-      frame = null;
+    const nudgeBackdrop = () => {
+      const from = sweepOffset;
+      const by = window.innerHeight * NUDGE_SCREENS;
+      const start = performance.now();
+      const step = (now: number) => {
+        const u = Math.min(1, (now - start) / NUDGE_MS);
+        sweepOffset = from + by * GLIDE(u, 0);
+        refreshBackdrop?.();
+        nudgeFrame = u < 1 ? requestAnimationFrame(step) : null;
+      };
+      if (nudgeFrame !== null) cancelAnimationFrame(nudgeFrame);
+      nudgeFrame = requestAnimationFrame(step);
     };
 
-    const step = (now: number) => {
-      frame = null;
-      // Moved by something else meanwhile (the scrollbar, the keys, one of
-      // the page's own glides): let go, from wherever it now is.
-      if (scrollBusy() || Math.abs(window.scrollY - placed) > 2) return;
-      const dt = Math.min(64, now - last);
-      last = now;
-      current += (target - current) * (1 - Math.exp(-dt / WHEEL_EASE_MS));
-      if (Math.abs(target - current) < 0.5) current = target;
-      window.scrollTo({ top: current, behavior: "instant" });
-      placed = window.scrollY;
-      if (current !== target) frame = requestAnimationFrame(step);
+    // Each stop, and whether it starts a screen (data-snap="") rather than
+    // being the next step of one (data-snap="step"); the top and bottom of
+    // the page count as screens.
+    const stops = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const list = [
+        { y: 0, screen: true },
+        { y: max, screen: true },
+      ];
+      document.querySelectorAll<HTMLElement>("[data-snap]").forEach((el) => {
+        // One inside a pinned screen moves with it while it is pinned; its
+        // pin's own markers stand for it.
+        if (el.closest(".home-snap-stage")) return;
+        const y = Math.round(el.getBoundingClientRect().top + window.scrollY);
+        if (y > 0 && y < max) list.push({ y, screen: el.dataset.snap !== "step" });
+      });
+      return list.sort((a, b) => a.y - b.y);
+    };
+
+    const glideTo = (to: number) => {
+      const from = window.scrollY;
+      const distance = to - from;
+      const duration = Math.min(
+        GLIDE_MAX_MS,
+        GLIDE_BASE_MS +
+          (Math.abs(distance) / window.innerHeight) * GLIDE_PER_SCREEN_MS,
+      );
+      const start = performance.now();
+      gliding = true;
+      markScrollBusy(start + duration);
+      const step = (now: number) => {
+        const u = Math.min(1, (now - start) / duration);
+        window.scrollTo({ top: from + distance * GLIDE(u, 0), behavior: "instant" });
+        if (u < 1) {
+          frame = requestAnimationFrame(step);
+        } else {
+          frame = null;
+          gliding = false;
+        }
+      };
+      frame = requestAnimationFrame(step);
     };
 
     const onWheel = (event: WheelEvent) => {
       if (event.defaultPrevented || event.ctrlKey) return;
-      if (scrollBusy()) {
-        event.preventDefault();
-        stop();
-        return;
-      }
       if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
       if (scrollsItself(event.target, event.deltaY)) return;
       event.preventDefault();
-      const delta =
-        event.deltaMode === 1
-          ? event.deltaY * LINE_PX
-          : event.deltaMode === 2
-            ? event.deltaY * window.innerHeight
-            : event.deltaY;
-      if (frame === null) {
-        target = current = placed = window.scrollY;
-        last = performance.now();
+      const now = performance.now();
+      const sameTurn = now - lastWheel < TURN_GAP_MS;
+      lastWheel = now;
+      // Still gliding, one of the page's own glides is moving it, or this
+      // is the rest of the turn that started the glide: let it go.
+      if (gliding || scrollBusy() || sameTurn || event.deltaY === 0) return;
+      const y = window.scrollY;
+      const list = stops();
+      const to =
+        event.deltaY > 0
+          ? list.find((stop) => stop.y > y + NEAR_PX)
+          : [...list].reverse().find((stop) => stop.y < y - NEAR_PX);
+      if (!to) return;
+      if (event.deltaY > 0 && to.screen && y > NEAR_PX) {
+        if (Math.abs(y - heldAt) > NEAR_PX) {
+          heldAt = y;
+          held = 0;
+        }
+        held += 1;
+        if (held < TURNS_TO_LEAVE) {
+          nudgeBackdrop();
+          return;
+        }
       }
-      const max =
-        document.documentElement.scrollHeight - window.innerHeight;
-      target = Math.min(max, Math.max(0, target + delta));
-      if (frame === null) frame = requestAnimationFrame(step);
+      held = 0;
+      heldAt = -1;
+      glideTo(to.y);
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
     return () => {
       window.removeEventListener("wheel", onWheel);
-      stop();
+      if (frame !== null) cancelAnimationFrame(frame);
+      if (nudgeFrame !== null) cancelAnimationFrame(nudgeFrame);
     };
   }, [skip]);
-}
-
-// A border passing over a pinned screen as it moves on to its next part, as
-// if the reader were scrolling past the edge between two sections: up the
-// screen going forwards, down it going back. Put it in the screen's stage
-// with the index of the part showing.
-export function StepBorder({ step }: { step: number }) {
-  const [seen, setSeen] = useState(step);
-  const [pass, setPass] = useState<{ n: number; up: boolean } | null>(null);
-  if (step !== seen) {
-    setSeen(step);
-    setPass({ n: (pass?.n ?? 0) + 1, up: step > seen });
-  }
-  if (!pass) return null;
-  return (
-    <div
-      key={pass.n}
-      className={`home-step-border home-step-border--${pass.up ? "up" : "down"}`}
-      aria-hidden="true"
-    />
-  );
 }
 
 // The stops of a pinned section: one invisible marker per step, spaced down
@@ -185,8 +236,8 @@ export function SnapSteps({ steps }: { steps: number }) {
 }
 
 // A screen that shows everything at once (no steps of its own), pinned
-// like the stepped ones so the reader scrolls twice before the next screen
-// comes up: one step, held for one more (--snap-extra, see .home-snap-pin).
+// like the stepped ones: one step, held for one more (--snap-extra, see
+// .home-snap-pin).
 // Wrap it round the screen in home.mdx. Without motion it is just the
 // screen.
 export function SnapHold({ children }: { children: ReactNode }) {
@@ -204,10 +255,9 @@ export function SnapHold({ children }: { children: ReactNode }) {
 }
 
 // The faint bacteria behind each band (MicrobeBackdrop.tsx) travel as the
-// reader scrolls through it: each backdrop gets --approach, 0 as its
-// stretch of page comes up from the bottom of the window and 1 as it leaves
-// at the top, and the items sweep across with it (see MICROBE BACKDROP in
-// App.css). The stretch is the band, or the pinned screen the backdrop is
+// reader scrolls: they flow down the screen with --sweep (below), and each
+// backdrop gets --band-top, where it is on the screen, so they flow on
+// from one band into the next (see MICROBE BACKDROP in App.css). The stretch is the band, or the pinned screen the backdrop is
 // held in, so the bacteria keep moving while the words stand still.
 // Edited 2026-10-20 (team request: a whoosh, as if passing through the
 // gut): <html> also gets --whoosh, the scrolling speed from -1 (up) to 1
@@ -215,6 +265,12 @@ export function SnapHold({ children }: { children: ReactNode }) {
 // streak with it.
 // How fast (px per ms) counts as full speed.
 const WHOOSH_FULL = 5;
+// Edited 2026-10-21 (team request: the background keeps moving on a turn
+// of the wheel that holds the page still): how far the background has been
+// carried on beyond the page's own scroll position (see useWheelPaging),
+// and how to redraw it after moving it on.
+let sweepOffset = 0;
+let refreshBackdrop: (() => void) | null = null;
 // How long after the last scroll the whoosh starts to die away (ms).
 const WHOOSH_SETTLE = 120;
 
@@ -222,7 +278,7 @@ function useBackdropApproach(skip: boolean) {
   useEffect(() => {
     if (skip) return;
     let frame: number | null = null;
-    let lastY = window.scrollY;
+    let lastY = window.scrollY + sweepOffset;
     let lastTime = performance.now();
     let settle: number | undefined;
     const root = document.documentElement;
@@ -230,17 +286,18 @@ function useBackdropApproach(skip: boolean) {
     const whoosh = () => {
       const now = performance.now();
       const dt = now - lastTime;
+      const y = window.scrollY + sweepOffset;
       if (dt > 0) {
-        const speed = (window.scrollY - lastY) / dt / WHOOSH_FULL;
+        const speed = (y - lastY) / dt / WHOOSH_FULL;
         root.style.setProperty(
           "--whoosh",
           Math.max(-1, Math.min(1, speed)).toFixed(3),
         );
       }
-      lastY = window.scrollY;
+      lastY = y;
       lastTime = now;
-      // How far the swooshes have travelled: with the page, left to right.
-      root.style.setProperty("--sweep", window.scrollY.toFixed(0));
+      // How far the swooshes and bacteria have travelled.
+      root.style.setProperty("--sweep", y.toFixed(0));
       window.clearTimeout(settle);
       settle = window.setTimeout(
         () => root.style.setProperty("--whoosh", "0"),
@@ -262,11 +319,15 @@ function useBackdropApproach(skip: boolean) {
           if (!stretch) return;
           const box = stretch.getBoundingClientRect();
           if (box.bottom < -vh || box.top > 2 * vh) return;
-          const approach = Math.min(
-            1,
-            Math.max(0, (vh - box.top) / (box.height + vh)),
+          // Edited 2026-10-20 (team request: the bacteria flow on from one
+          // band into the next): every band draws the same field of
+          // bacteria, placed on the screen rather than in the band, so this
+          // band's own offset is taken back off (see .microbe-backdrop-mover
+          // in App.css).
+          backdrop.style.setProperty(
+            "--band-top",
+            `${backdrop.getBoundingClientRect().top.toFixed(1)}px`,
           );
-          backdrop.style.setProperty("--approach", approach.toFixed(4));
         });
     };
     const onScroll = () => {
@@ -274,9 +335,11 @@ function useBackdropApproach(skip: boolean) {
     };
 
     update();
+    refreshBackdrop = onScroll;
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     return () => {
+      refreshBackdrop = null;
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       if (frame !== null) cancelAnimationFrame(frame);

@@ -17,32 +17,39 @@ function seededValue(seed: number) {
   return x - Math.floor(x);
 }
 
-const OTHER_VARIANTS: OtherBacteriumVariant[] = ["rod", "short-rod", "coccus"];
+const OTHER_VARIANTS: OtherBacteriumVariant[] = ["rod", "curved", "wavy", "cocci"];
 
-interface MicrobeBackdropProps {
-  // Items per side. Taller bands can take more without looking crowded.
-  count?: number;
-  // Changes the arrangement so neighbouring bands don't look identical.
-  seed?: number;
-}
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: the
+// bacteria flow on from one band into the next, with no border between):
+// every band draws the same field, laid out over the screen rather than
+// the band, so where two bands meet their bacteria line up and run on
+// across the edge. Hence one fixed count and seed instead of a count and
+// seed per band.
+// Items per side, spread down one screen. Edited the same day (team
+// request: more bacteria and gut metabolites): 9, was 5.
+const FIELD_COUNT = 9;
+const FIELD_SEED = 3;
 
-export function MicrobeBackdrop({ count = 5, seed = 1 }: MicrobeBackdropProps) {
+export function MicrobeBackdrop() {
+  const count = FIELD_COUNT;
   const items = Array.from({ length: count * 2 }, (_, i) => {
-    const s = seed * 100 + i;
+    const s = FIELD_SEED * 100 + i;
     const side = i % 2 === 0 ? "left" : "right";
     const row = Math.floor(i / 2);
     // Evenly spaced rows with jitter, so each side is covered top to bottom.
     const top = ((row + 0.2 + seededValue(s + 1) * 0.6) / count) * 100;
-    const inset = 1 + seededValue(s + 2) * 9; // % from that side's edge
+    // % from that side's edge.
+    const inset = 1.5 + seededValue(s + 2) * 11;
     const kind = seededValue(s + 3);
     // Where it sits and how near it is, on a mover that carries it across
     // the screen as the reader scrolls (team request, 2026-10-20: the
     // passage through the gut; see useBackdropApproach in
-    // HomeSnapScroll.tsx). Nearer ones (--depth) travel further and are
-    // larger. The sweep and its whoosh go on the mover, so they run left
-    // to right on the screen whichever way the item itself is turned.
+    // HomeSnapScroll.tsx). Nearer ones (--depth) travel faster and are
+    // larger. The sweep goes on the mover, so it runs down the screen
+    // whichever way the item itself is turned. --y0 is where it starts, as
+    // a fraction of the screen (see .microbe-backdrop-mover in App.css).
     const place = {
-      top: `${top}%`,
+      "--y0": (top / 100).toFixed(4),
       [side]: `${inset}%`,
       "--depth": (0.4 + seededValue(s + 9) * 0.6).toFixed(2),
     } as React.CSSProperties;
@@ -53,10 +60,12 @@ export function MicrobeBackdrop({ count = 5, seed = 1 }: MicrobeBackdropProps) {
       animationDelay: `${-seededValue(s + 6) * 20}s`,
     } as React.CSSProperties;
 
+    // A little over a third are bile acids, the gut metabolites the page
+    // is about.
     let icon;
-    if (kind < 0.3) {
+    if (kind < 0.25) {
       icon = <PVulgatusIcon className="microbe-backdrop-item microbe-backdrop-item--pv" style={style} />;
-    } else if (kind < 0.6) {
+    } else if (kind < 0.62) {
       icon = (
         <BileAcidIcon
           className="microbe-backdrop-item microbe-backdrop-item--hex"

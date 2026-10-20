@@ -70,10 +70,10 @@ export function PmosOverview() {
   return (
     <section
       ref={sectionRef}
-      className="pmos-overview home-snap-screen home-section--wave-top"
+      className="pmos-overview home-snap-screen"
       data-snap=""
     >
-      <MicrobeBackdrop count={4} seed={1} />
+      <MicrobeBackdrop />
       <div
         className={
           "pmos-counter" +

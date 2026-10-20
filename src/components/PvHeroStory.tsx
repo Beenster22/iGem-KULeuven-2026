@@ -6,10 +6,11 @@
 //    restore bile acid balance…". A pair of scales holds conjugated bile
 //    acids on one pan and deconjugated ones on the other. Edited 2026-10-20
 //    (team requests): on the first scroll it hangs to one side on its own;
-//    on the second P. vulgatus flies in from the left, engineered — the
-//    team's drawing of it with its genetic circuit inside and BSH beside
-//    it, in the caped one's style and hairs — and drifts there; on the
-//    third the circuit's "inhibits" line reaches BSH and the scales level.
+//    on the second P. vulgatus flies in from the left, engineered, in the
+//    caped one's style and hairs, with its BSH gene on the DNA inside it —
+//    and drifts there; on the third that gene is swapped for the team's
+//    replacement and the scales level. (Edited 2026-10-21: it used to have
+//    a genetic circuit inside, silencing BSH with an "inhibits" line.)
 //    (Before that it was the caped one flying in, and before that the
 //    three consequence circles above flying down and becoming it.)
 //  - PvCureSection: "… and achieve a therapeutic effect in PMOS". The four
@@ -142,42 +143,25 @@ function PvHero() {
 /* ------------------------------------------------------------------ */
 
 // Generated with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request,
-// with the team's picture of it): P. vulgatus lying on its side with the
-// genetic circuit inside it — promoter, two parts and a terminator — and
-// beside it the BSH it silences, reached by the blunt "inhibits" line. The
-// same cell as the caped one (same purple, same hairs), only longer, so the
-// circuit fits. Drawn about its centre; the circuit is the old "why we
-// engineer" drawing's, moved to that centre.
+// with the team's picture of it): P. vulgatus lying on its side, the same
+// cell as the caped one (same purple, same hairs), only longer. Edited
+// 2026-10-21 (team request: show that the BSH is replaced): instead of a
+// genetic circuit silencing BSH with an "inhibits" line, a strand of DNA
+// runs through it with its own BSH gene on it, and on the third step that
+// gene lifts out and the team's replacement drops into its place (see
+// .pv-engineer-gene in App.css). Drawn about its centre.
 const CELL = { w: 288, h: 158 };
 // Drawn upright and turned on its side, so the hairs come from the same
 // recipe as the caped cell's.
 const CELL_PILI = capsulePili(CELL.h, CELL.w, 46, 950);
-// From the yellow part down and across to BSH, ending in the blunt bar.
-const INHIBIT_PATH = "M-4,1 v20 q0,12 14,12 h14 m0,-10 v20";
+// A gene, drawn as an arrow along the DNA, centred on it.
+const GENE_PATH = "M-62,-18 H48 L64,0 L48,18 H-62 Z";
 
-function PvEngineered() {
-  // The dashed line is uncovered along its length by a solid copy of it
-  // that grows from the yellow part to BSH (stroke-dashoffset on a path one
-  // unit long), so it stays dashed as it draws out.
-  const revealId = useId();
+// `replaced` is marked on the cell itself, not the screen around it, so the
+// copy that flies on to the next screen (useCellToHero.ts) keeps it.
+function PvEngineered({ replaced }: { replaced: boolean }) {
   return (
-    <g className="pv-engineer">
-      <defs>
-        <mask
-          id={revealId}
-          maskUnits="userSpaceOnUse"
-          x={-200}
-          y={-200}
-          width={400}
-          height={400}
-        >
-          <path
-            className="pv-engineer-inhibit-reveal"
-            d={INHIBIT_PATH}
-            pathLength={1}
-          />
-        </mask>
-      </defs>
+    <g className={`pv-engineer${replaced ? " pv-engineer--replaced" : ""}`}>
       <g transform="rotate(90)">
         <path className="pv-hero-pili-halo" d={CELL_PILI} />
         <path className="pv-hero-pili" d={CELL_PILI} />
@@ -198,46 +182,20 @@ function PvEngineered() {
           rx={CELL.h / 2 - 10}
         />
       </g>
-      <line className="pv-engineer-dna" x1={-98} y1={-13} x2={26} y2={-13} />
-      <path
-        className="pv-engineer-promoter"
-        d="M-88,-13 v-20 h16 m-7,-6 l8,6 l-8,6"
-      />
-      <rect
-        className="pv-engineer-part pv-engineer-part--a"
-        x={-64}
-        y={-24}
-        width={36}
-        height={22}
-        rx={4}
-      />
-      <rect
-        className="pv-engineer-part pv-engineer-part--b"
-        x={-22}
-        y={-24}
-        width={36}
-        height={22}
-        rx={4}
-      />
-      <path className="pv-engineer-terminator" d="M22,-13 v-14 m-7,0 h14" />
-      {/* The line draws itself out on the third step and BSH dims as it
-          is reached (see .pv-engineer-* in App.css). */}
-      <path
-        className="pv-engineer-inhibit"
-        d={INHIBIT_PATH}
-        mask={`url(#${revealId})`}
-      />
-      <rect
-        className="pv-engineer-bsh"
-        x={32}
-        y={13}
-        width={78}
-        height={40}
-        rx={20}
-      />
-      <text className="pv-engineer-bsh-label" x={71} y={39}>
-        BSH
-      </text>
+      <line className="pv-engineer-dna" x1={-112} y1={0} x2={112} y2={0} />
+      {/* Its own BSH gene, and the team's, which takes its place. */}
+      <g className="pv-engineer-gene pv-engineer-gene--native">
+        <path d={GENE_PATH} />
+        <text x={-4} y={8}>
+          BSH
+        </text>
+      </g>
+      <g className="pv-engineer-gene pv-engineer-gene--ours">
+        <path d={GENE_PATH} />
+        <text x={-4} y={8}>
+          our BSH
+        </text>
+      </g>
     </g>
   );
 }
@@ -330,7 +288,7 @@ function Pan({
   );
 }
 
-function PvBalanceFigure() {
+function PvBalanceFigure({ balanced }: { balanced: boolean }) {
   // Its own id, so a second copy of this drawing cannot steal the glow.
   const glowId = useId();
   return (
@@ -339,7 +297,7 @@ function PvBalanceFigure() {
       viewBox={`0 0 ${BAL_W} ${BAL_H}`}
       preserveAspectRatio="xMidYMid meet"
       role="img"
-      aria-label="Illustration: a pair of scales with conjugated bile acids on one pan and deconjugated bile acids on the other, tipped towards the deconjugated side. Phocaeicola vulgatus, engineered with a genetic circuit inside it, arrives beside it; the circuit silences its BSH enzyme, and the scales level out."
+      aria-label="Illustration: a pair of scales with conjugated bile acids on one pan and deconjugated bile acids on the other, tipped towards the deconjugated side. Phocaeicola vulgatus arrives beside it with its own BSH gene; that gene is replaced with the team's BSH, and the scales level out."
     >
       <defs>
         <radialGradient id={glowId}>
@@ -363,7 +321,7 @@ function PvBalanceFigure() {
             place (.pv-cell-drift). */}
         <g className="pv-cell-arrive">
           <g className="pv-cell-drift">
-            <PvEngineered />
+            <PvEngineered replaced={balanced} />
           </g>
         </g>
       </g>
@@ -439,7 +397,7 @@ export function PvBalanceSection() {
           This is why we want to engineer <em>P. vulgatus</em> to{" "}
           <strong>restore bile acid balance</strong>…
         </h3>
-        <PvBalanceFigure />
+        <PvBalanceFigure balanced={balanced} />
       </section>
     </div>
   );
@@ -705,10 +663,10 @@ export function PvCureSection() {
   );
   return (
     <section className="pv-cure home-snap-screen" data-snap="" ref={ref}>
-      {/* Wording supplied by the team, 2026-10-20 (reworded the same day:
-          "potentially"). */}
+      {/* Wording supplied by the team, 2026-10-20 ("potentially" taken out
+          again, team request, 2026-10-21). */}
       <h3 className="pv-heading">
-        … and potentially achieve a <strong>therapeutic effect</strong> in PMOS
+        … and achieve a <strong>therapeutic effect</strong> in PMOS
       </h3>
       <PvCureFigure at={at} cleared={cleared} away={away} logo={logo} />
     </section>

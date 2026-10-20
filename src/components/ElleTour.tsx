@@ -21,7 +21,7 @@ import { createPortal } from "react-dom";
 import { useReducedMotion } from "framer-motion";
 import { EFFECT_ART } from "./PmosEffectsSection";
 import { PMOS_EFFECTS_ID } from "./globeDrop";
-import { GLIDE, glideStartRate, markScrollBusy } from "./scrollGlide";
+import { GLIDE, glideStartRate, markScrollBusy, scrollBusy } from "./scrollGlide";
 import { navBottom } from "./useFallingM";
 
 // Elle's place on the next screen, presenting (StoryScrollSection.tsx).
@@ -400,7 +400,10 @@ export function ElleTour() {
         }
         if (direction <= 0 && t < END && down && top < START_AT * vh && top > -vh) {
           play(1);
-          if (top > 2 && now >= busyUntil) glideTo(y + top);
+          // Not while the wheel is already gliding the page onto this
+          // screen (useWheelPaging in HomeSnapScroll.tsx): two glides at
+          // once would fight.
+          if (top > 2 && now >= busyUntil && !scrollBusy()) glideTo(y + top);
         } else if (direction >= 0 && t > 0 && top > REWIND_AT * vh) {
           play(-1);
         }

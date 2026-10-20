@@ -283,11 +283,15 @@ export function WheelSelector({
       >
         <g
           className="wheel-selector-wheel"
-          style={{
-            transform: `rotate(${rotation}deg)`,
-            transformOrigin: `${CENTER}px ${CENTER}px`,
-          }}
+          style={{ transform: `rotate(${rotation}deg)` }}
         >
+          {/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-21: an
+              unpainted circle the size of the drawing, so the group's own
+              box is centred on the wheel and it turns about that centre
+              (see .wheel-selector-wheel). Safari placed a px
+              transform-origin on an SVG group differently, so the wheel
+              and its labels swung about the wrong point. */}
+          <circle cx={CENTER} cy={CENTER} r={SIZE / 2} fill="none" pointerEvents="none" />
           {items.map((item, index) => {
             const startAngle = -90 + index * step;
             const hasIcon = Boolean(item.icon);
