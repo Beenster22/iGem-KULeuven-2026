@@ -60,24 +60,19 @@ export function HomeSnapScroll() {
 // gesture (ctrl + wheel), not inside a box that scrolls on its own, and not
 // while one of the page's own glides is moving it (scrollBusy, see
 // scrollGlide.ts). The scrollbar and the keys still scroll freely.
-// Edited 2026-10-21 (team request: three scrolls on every screen before
-// the next one, with the background moving every time): going down, when
-// the next stop is the start of the next screen (rather than the next step
-// of this one), the first two turns of the wheel hold the page still while
-// the bacteria and swooshes behind it carry on (nudgeBackdrop), and the
-// third moves on. Not on the opening video: the first turn leaves it.
-// Turns of the wheel, once on a screen, that it takes to leave it.
-const TURNS_TO_LEAVE = 3;
-// How far a held turn carries the background on (screens), and how long:
-// about as far and as fast as a glide to the next screen, so it looks the
-// same every time.
-const NUDGE_SCREENS = 1;
-const NUDGE_MS = 900;
+// (Edited 2026-10-21: for a while the wheel was held for two or three
+// turns on each screen before moving on; taken back out the same day, team
+// request — one turn to a screen, the next turn on to the next.) Edited
+// again the same day (team feedback: it still took an extra turn): a turn
+// made while a glide is still running used to be dropped, so the reader
+// had to turn again; it is now kept, and the page glides on to the next
+// stop as soon as the current glide lands. The glides are a little quicker
+// too.
 
 // How long a glide takes: a base, plus a little more the further it goes.
-const GLIDE_BASE_MS = 650;
-const GLIDE_PER_SCREEN_MS = 250;
-const GLIDE_MAX_MS = 1300;
+const GLIDE_BASE_MS = 550;
+const GLIDE_PER_SCREEN_MS = 200;
+const GLIDE_MAX_MS = 1050;
 // How long the wheel must be still before the next turn counts as a new one.
 const TURN_GAP_MS = 180;
 // Stops closer than this to where the page is count as where it is.
@@ -111,42 +106,22 @@ function useWheelPaging(skip: boolean) {
     let frame: number | null = null;
     let gliding = false;
     let lastWheel = 0;
-    // Turns held so far on the screen the page is resting on, and where.
-    let held = 0;
-    let heldAt = -1;
-    let nudgeFrame: number | null = null;
+    // A turn made while the page was still gliding (1 down, -1 up, 0 none),
+    // to carry out as soon as it lands.
+    let queued = 0;
+    let waiting: number | undefined;
 
-    const nudgeBackdrop = () => {
-      const from = sweepOffset;
-      const by = window.innerHeight * NUDGE_SCREENS;
-      const start = performance.now();
-      const step = (now: number) => {
-        const u = Math.min(1, (now - start) / NUDGE_MS);
-        sweepOffset = from + by * GLIDE(u, 0);
-        refreshBackdrop?.();
-        nudgeFrame = u < 1 ? requestAnimationFrame(step) : null;
-      };
-      if (nudgeFrame !== null) cancelAnimationFrame(nudgeFrame);
-      nudgeFrame = requestAnimationFrame(step);
-    };
-
-    // Each stop, and whether it starts a screen (data-snap="") rather than
-    // being the next step of one (data-snap="step"); the top and bottom of
-    // the page count as screens.
     const stops = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
-      const list = [
-        { y: 0, screen: true },
-        { y: max, screen: true },
-      ];
+      const list = [0, max];
       document.querySelectorAll<HTMLElement>("[data-snap]").forEach((el) => {
         // One inside a pinned screen moves with it while it is pinned; its
         // pin's own markers stand for it.
         if (el.closest(".home-snap-stage")) return;
         const y = Math.round(el.getBoundingClientRect().top + window.scrollY);
-        if (y > 0 && y < max) list.push({ y, screen: el.dataset.snap !== "step" });
+        if (y > 0 && y < max) list.push(y);
       });
-      return list.sort((a, b) => a.y - b.y);
+      return list.sort((a, b) => a - b);
     };
 
     const glideTo = (to: number) => {
@@ -168,9 +143,34 @@ function useWheelPaging(skip: boolean) {
         } else {
           frame = null;
           gliding = false;
+          carryOn();
         }
       };
       frame = requestAnimationFrame(step);
+    };
+
+    // On to the next stop in that direction (or back to the one before).
+    const go = (direction: number) => {
+      const y = window.scrollY;
+      const list = stops();
+      const to =
+        direction > 0
+          ? list.find((stop) => stop > y + NEAR_PX)
+          : [...list].reverse().find((stop) => stop < y - NEAR_PX);
+      if (to !== undefined) glideTo(to);
+    };
+
+    // A turn kept from while the page was moving: once it is still.
+    const carryOn = () => {
+      window.clearTimeout(waiting);
+      if (!queued || gliding) return;
+      if (scrollBusy()) {
+        waiting = window.setTimeout(carryOn, 100);
+        return;
+      }
+      const direction = queued;
+      queued = 0;
+      go(direction);
     };
 
     const onWheel = (event: WheelEvent) => {
@@ -181,37 +181,25 @@ function useWheelPaging(skip: boolean) {
       const now = performance.now();
       const sameTurn = now - lastWheel < TURN_GAP_MS;
       lastWheel = now;
-      // Still gliding, one of the page's own glides is moving it, or this
-      // is the rest of the turn that started the glide: let it go.
-      if (gliding || scrollBusy() || sameTurn || event.deltaY === 0) return;
-      const y = window.scrollY;
-      const list = stops();
-      const to =
-        event.deltaY > 0
-          ? list.find((stop) => stop.y > y + NEAR_PX)
-          : [...list].reverse().find((stop) => stop.y < y - NEAR_PX);
-      if (!to) return;
-      if (event.deltaY > 0 && to.screen && y > NEAR_PX) {
-        if (Math.abs(y - heldAt) > NEAR_PX) {
-          heldAt = y;
-          held = 0;
-        }
-        held += 1;
-        if (held < TURNS_TO_LEAVE) {
-          nudgeBackdrop();
-          return;
-        }
+      // The rest of a turn already acted on (a touchpad's coasting
+      // included): let it go.
+      if (sameTurn || event.deltaY === 0) return;
+      const direction = Math.sign(event.deltaY);
+      // A new turn while the page is still moving: keep it for when it
+      // lands.
+      if (gliding || scrollBusy()) {
+        queued = direction;
+        if (!gliding) carryOn();
+        return;
       }
-      held = 0;
-      heldAt = -1;
-      glideTo(to.y);
+      go(direction);
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
     return () => {
       window.removeEventListener("wheel", onWheel);
       if (frame !== null) cancelAnimationFrame(frame);
-      if (nudgeFrame !== null) cancelAnimationFrame(nudgeFrame);
+      window.clearTimeout(waiting);
     };
   }, [skip]);
 }
@@ -267,12 +255,6 @@ export function SnapHold({ children }: { children: ReactNode }) {
 // the screen (--clip-top, --clip-bottom), so it shows only over them.
 // How fast (px per ms) counts as full speed.
 const WHOOSH_FULL = 5;
-// Edited 2026-10-21 (team request: the background keeps moving on a turn
-// of the wheel that holds the page still): how far the background has been
-// carried on beyond the page's own scroll position (see useWheelPaging),
-// and how to redraw it after moving it on.
-let sweepOffset = 0;
-let refreshBackdrop: (() => void) | null = null;
 // How long after the last scroll the whoosh starts to die away (ms).
 const WHOOSH_SETTLE = 120;
 
@@ -282,7 +264,7 @@ function useBackdropApproach(skip: boolean) {
     const layer = document.querySelector<HTMLElement>(".microbe-backdrop");
     if (!layer) return;
     let frame: number | null = null;
-    let lastY = window.scrollY + sweepOffset;
+    let lastY = window.scrollY;
     let lastTime = performance.now();
     let settle: number | undefined;
     let clip = "";
@@ -290,7 +272,7 @@ function useBackdropApproach(skip: boolean) {
     const whoosh = () => {
       const now = performance.now();
       const dt = now - lastTime;
-      const y = window.scrollY + sweepOffset;
+      const y = window.scrollY;
       if (dt > 0) {
         const speed = (y - lastY) / dt / WHOOSH_FULL;
         layer.style.setProperty(
@@ -339,11 +321,9 @@ function useBackdropApproach(skip: boolean) {
     };
 
     update();
-    refreshBackdrop = onScroll;
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     return () => {
-      refreshBackdrop = null;
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       if (frame !== null) cancelAnimationFrame(frame);

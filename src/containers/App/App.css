@@ -5409,7 +5409,7 @@ body:not(.home-fullscreen) .home-hero {
   will-change: transform;
 }
 
-/* Faint, as they pass behind the words too. */
+/* Faint, so they stay in the background. */
 .microbe-backdrop-item {
   display: block;
   width: clamp(40px, 4.5vw, 84px);
@@ -5460,9 +5460,11 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
-/* Phones: half as many, so they don't crowd the words. */
-@media (max-width: 699.98px) {
-  .microbe-backdrop-mover:nth-of-type(2n) {
+/* Below ~laptop width the content fills the page, so the margins the
+   bacteria keep to don't exist — leave them out rather than clutter the
+   words (the swooshes stay). */
+@media (max-width: 991.98px) {
+  .microbe-backdrop-mover {
     display: none;
   }
 }

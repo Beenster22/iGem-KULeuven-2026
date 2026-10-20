@@ -220,7 +220,7 @@ const Pages: (Page | Folder)[] = [
     title: "Entrepreneurship",
     path: "/entrepreneurship",
     component: Entrepreneurship,
-    lead: "The business case for EMPOWER, phase by phase, from mission and problem to market, funding and a sustainable venture.",
+    lead: "“The best way to predict the future is to invent it.” - Alan Kay",
     icon: RocketIcon,
     specialPrize: true,
   },
