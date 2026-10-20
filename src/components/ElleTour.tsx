@@ -91,11 +91,6 @@ const END = QUESTIONS_AT + 0.5;
 // (Anthropic), 2026-10-20 (team request: going back to the uterus took too
 // long).
 const REWIND_SPEED = 5;
-// Edited 2026-10-21 (team request: the second turn of the wheel carries on
-// to the next screen, Elle's flight to it and all): turning the wheel on
-// before the tour is over plays the rest of it this much faster, and the
-// page waits for it to finish before it glides on (see hurryOn below).
-const HURRY_SPEED = 8;
 
 // Scroll triggers, as a share of the window's height: the tour starts once
 // its screen's top has come up past START_AT, and rewinds once it has gone
@@ -340,15 +335,11 @@ export function ElleTour() {
       }
     };
 
-    // Hurrying on to the end (see hurryOn).
-    let hurry = false;
     const tick = (now: number) => {
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
-      const speed = direction < 0 ? REWIND_SPEED : hurry ? HURRY_SPEED : 1;
-      t = Math.min(END, Math.max(0, t + direction * dt * speed));
+      t = Math.min(END, Math.max(0, t + direction * dt * (direction < 0 ? REWIND_SPEED : 1)));
       if ((direction > 0 && t >= END) || (direction < 0 && t <= 0)) direction = 0;
-      if (direction === 0) hurry = false;
       render();
       frame = direction !== 0 ? requestAnimationFrame(tick) : null;
     };
@@ -385,20 +376,20 @@ export function ElleTour() {
     const block = (event: Event) => {
       if (performance.now() < busyUntil) event.preventDefault();
     };
-    // A turn of the wheel down while resting on this screen with the tour
-    // not over yet: play the rest of it quickly, and keep the page still
-    // until it is done (markScrollBusy — useWheelPaging in
-    // HomeSnapScroll.tsx keeps the turn and glides on once it may), so
-    // Elle is ready to fly on to the next screen with the glide rather
-    // than jumping to the end of her tour partway down. Listened for
-    // before the page's own wheel handling, so it is in place in time.
-    const hurryOn = (event: WheelEvent) => {
+    // Edited 2026-10-21 (team request: the turn of the wheel that leaves
+    // this screen plays the transition to the next, at the tour's own
+    // pace): a turn down while resting on this screen with the tour not
+    // over yet holds the page where it is (markScrollBusy, which
+    // useWheelPaging in HomeSnapScroll.tsx respects), rather than gliding
+    // on and making Elle jump to the end of her tour partway down. Once
+    // the tour is over, the next turn glides on and she flies to her place
+    // on the next screen with it. Listened for before the page's own wheel
+    // handling, so the hold is in place in time.
+    const holdUntilDone = (event: WheelEvent) => {
       if (prefersReducedMotion || event.deltaY <= 0 || t >= END) return;
       const top = wrapper.getBoundingClientRect().top;
       if (Math.abs(top) > 0.1 * window.innerHeight) return;
-      hurry = true;
-      play(1);
-      markScrollBusy(performance.now() + ((END - t) / HURRY_SPEED) * 1000 + 100);
+      markScrollBusy(performance.now() + 200);
     };
 
     const onScroll = () => {
@@ -447,13 +438,13 @@ export function ElleTour() {
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     window.addEventListener("wheel", block, { passive: false });
-    window.addEventListener("wheel", hurryOn, { capture: true, passive: true });
+    window.addEventListener("wheel", holdUntilDone, { capture: true, passive: true });
     window.addEventListener("touchmove", block, { passive: false });
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       window.removeEventListener("wheel", block);
-      window.removeEventListener("wheel", hurryOn, { capture: true });
+      window.removeEventListener("wheel", holdUntilDone, { capture: true });
       window.removeEventListener("touchmove", block);
       if (frame !== null) cancelAnimationFrame(frame);
       if (glideFrame !== null) cancelAnimationFrame(glideFrame);

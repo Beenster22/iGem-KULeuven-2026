@@ -62,12 +62,11 @@ export function HomeSnapScroll() {
 // scrollGlide.ts). The scrollbar and the keys still scroll freely.
 // (Edited 2026-10-21: for a while the wheel was held for two or three
 // turns on each screen before moving on; taken back out the same day, team
-// request — one turn to a screen, the next turn on to the next.) Edited
-// again the same day (team feedback: it still took an extra turn): a turn
-// made while a glide is still running used to be dropped, so the reader
-// had to turn again; it is now kept, and the page glides on to the next
-// stop as soon as the current glide lands. The glides are a little quicker
-// too.
+// request — one turn to a screen, the next turn on to the next.) The
+// glides were made a little quicker the same day. (A turn made during a
+// glide was briefly kept and carried out when it landed; taken out again,
+// team request: the page should only ever move when the reader turns the
+// wheel.)
 
 // How long a glide takes: a base, plus a little more the further it goes.
 const GLIDE_BASE_MS = 550;
@@ -106,10 +105,6 @@ function useWheelPaging(skip: boolean) {
     let frame: number | null = null;
     let gliding = false;
     let lastWheel = 0;
-    // A turn made while the page was still gliding (1 down, -1 up, 0 none),
-    // to carry out as soon as it lands.
-    let queued = 0;
-    let waiting: number | undefined;
 
     const stops = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
@@ -143,7 +138,6 @@ function useWheelPaging(skip: boolean) {
         } else {
           frame = null;
           gliding = false;
-          carryOn();
         }
       };
       frame = requestAnimationFrame(step);
@@ -160,19 +154,6 @@ function useWheelPaging(skip: boolean) {
       if (to !== undefined) glideTo(to);
     };
 
-    // A turn kept from while the page was moving: once it is still.
-    const carryOn = () => {
-      window.clearTimeout(waiting);
-      if (!queued || gliding) return;
-      if (scrollBusy()) {
-        waiting = window.setTimeout(carryOn, 100);
-        return;
-      }
-      const direction = queued;
-      queued = 0;
-      go(direction);
-    };
-
     const onWheel = (event: WheelEvent) => {
       if (event.defaultPrevented || event.ctrlKey) return;
       if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
@@ -181,25 +162,17 @@ function useWheelPaging(skip: boolean) {
       const now = performance.now();
       const sameTurn = now - lastWheel < TURN_GAP_MS;
       lastWheel = now;
-      // The rest of a turn already acted on (a touchpad's coasting
-      // included): let it go.
-      if (sameTurn || event.deltaY === 0) return;
-      const direction = Math.sign(event.deltaY);
-      // A new turn while the page is still moving: keep it for when it
-      // lands.
-      if (gliding || scrollBusy()) {
-        queued = direction;
-        if (!gliding) carryOn();
-        return;
-      }
-      go(direction);
+      // Still gliding, one of the page's own glides is moving it or a
+      // screen is holding it (scrollBusy), or this is the rest of a turn
+      // already acted on (a touchpad's coasting included): let it go.
+      if (gliding || scrollBusy() || sameTurn || event.deltaY === 0) return;
+      go(Math.sign(event.deltaY));
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
     return () => {
       window.removeEventListener("wheel", onWheel);
       if (frame !== null) cancelAnimationFrame(frame);
-      window.clearTimeout(waiting);
     };
   }, [skip]);
 }
