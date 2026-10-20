@@ -107,6 +107,10 @@ interface InstagramPostProps {
   caption?: string;
   /** Link to the post itself on Instagram. */
   href?: string;
+  /** A reel (video): the image is its cover, with a play badge that opens
+   * the reel on Instagram (videos on the wiki itself must come from iGEM
+   * Video Universe). */
+  reel?: boolean;
 }
 
 // A labeled slot read by InstagramCarousel; never rendered on its own.
@@ -114,7 +118,7 @@ export function InstagramPost(_props: InstagramPostProps) {
   return null;
 }
 
-function PostCard({ title, images = [], caption, href }: InstagramPostProps) {
+function PostCard({ title, images = [], caption, href, reel }: InstagramPostProps) {
   const avatar = useAvatarCutout();
   const [slide, setSlide] = useState(0);
   const [captionOpen, setCaptionOpen] = useState(false);
@@ -154,8 +158,19 @@ function PostCard({ title, images = [], caption, href }: InstagramPostProps) {
         ) : (
           <div className="ig-post-placeholder">
             <strong>{title}</strong>
-            <span>Post screenshots coming soon</span>
+            <span>{reel ? "Reel cover coming soon" : "Post screenshots coming soon"}</span>
           </div>
+        )}
+        {reel && href && (
+          <a
+            className="ig-post-reel"
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Watch the reel “${title}” on Instagram`}
+          >
+            ▶
+          </a>
         )}
         {count > 1 && (
           <>

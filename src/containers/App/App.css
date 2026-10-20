@@ -14991,6 +14991,30 @@ a.protocol-download:hover {
   right: 8px;
 }
 
+/* Play badge on a reel card; opens the reel on Instagram. */
+.ig-post-reel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 4px;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 1.4rem;
+  text-decoration: none;
+}
+
+.ig-post-reel:hover {
+  background: rgba(0, 0, 0, 0.75);
+}
+
 .ig-post-dots {
   position: absolute;
   bottom: 10px;
