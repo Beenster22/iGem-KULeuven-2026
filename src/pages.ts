@@ -209,7 +209,7 @@ const Pages: (Page | Folder)[] = [
         title: "Science Communication & Outreach",
         path: "/science-communication",
         component: ScienceCommunication,
-        lead: "How we brought PMOS to students, patients and the wider public: events, social media, publications, an app, and collaborations with other iGEM teams.",
+        lead: "How we brought PMOS to students, patients and the wider public: events, social media, publications, and collaborations with other iGEM teams, plus an app made to support all women, not just PMOS patients.",
         icon: MegaphoneIcon,
       },
     ],
