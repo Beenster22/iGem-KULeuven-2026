@@ -9,9 +9,11 @@
 // drawing for this one), then the team's own uterus and ovaries and brain
 // (BodyOrgans.tsx) and liver (LiverDrawing.tsx). Colours match the symptom
 // groups' (.symptom-group--*).
-import { type CSSProperties, type ReactNode } from "react";
+import { useRef, type CSSProperties, type ReactNode } from "react";
+import { useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { PMOS_EFFECTS_ID } from "./globeDrop";
+import { useZeroToCircle } from "./useZeroToCircle";
 import { BrainOrgan, UterusOrgan } from "./BodyOrgans";
 import {
   LIVER_DRAWING_HEIGHT,
@@ -84,11 +86,22 @@ export const EFFECT_ART: Record<
 
 // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request): the
 // globe no longer drops onto the first circle (it moved to the Project
-// description appendix); the circles come in one after another, left to
-// right, as soon as the section is on screen (the delays are --i in App.css).
+// description appendix).
+// Edited with Claude Opus 5 (Anthropic), 2026-10-20 (team request): the "0"
+// of "170 Million" above flies down and becomes the first circle instead
+// (useZeroToCircle.ts), and the moment it arrives the rest appear with it,
+// all together, rather than one after another as the reader scrolls on.
 export function PmosEffectsSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+  useZeroToCircle({ sectionRef, skip: !!prefersReducedMotion });
   return (
-    <section id={PMOS_EFFECTS_ID} className="pmos-effects" data-snap="">
+    <section
+      id={PMOS_EFFECTS_ID}
+      className="pmos-effects"
+      data-snap=""
+      ref={sectionRef}
+    >
       <h2 className="pmos-effects-title">
         PMOS manifests differently in patients
       </h2>

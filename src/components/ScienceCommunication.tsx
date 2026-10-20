@@ -1,214 +1,359 @@
-// Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20
-// Purpose: the showcase pieces for the Science Communication & Community page — an
-// Instagram-style post carousel (screenshots of our real posts), a tabbed showcase for
-// documents such as flyers and posters, a phone frame for an embedded page, and a video
-// slot. Every piece shows a dashed placeholder until its image / link is supplied, so
-// nothing is invented. Styled by the `.ig-*`, `.pub-showcase-*`, `.phone-*` and
-// `.video-slot-*` rules in App.css.
-import { ReactNode, useRef, useState } from "react";
+// Generated with Claude Opus 5.5 (Anthropic), 2026-10-20
+// Purpose: the showcase pieces of the Science Communication & Outreach page
+// (science-communication.mdx): an Instagram-style carousel of our posts, a
+// tabbed card for the articles we published, a phone mockup for the app, and
+// a slot for each collaboration video. Every piece renders a clearly marked
+// placeholder until its images / links / embed are filled in, so the page
+// can go up before all the material has been uploaded.
+import {
+  Children,
+  ReactElement,
+  ReactNode,
+  isValidElement,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
-const INSTAGRAM_URL = "https://www.instagram.com/igemkuleuven/";
-const HANDLE = "igemkuleuven";
+// Reads the props straight off slot children such as <InstagramPost> or
+// <Publication>, the same way extractLabeledChildren does for TabSection.
+function slotProps<P>(children: ReactNode): P[] {
+  return Children.toArray(children)
+    .filter((child): child is ReactElement<P> => isValidElement(child))
+    .map((child) => child.props);
+}
+
+const INSTAGRAM_HANDLE = "igemkuleuven";
+const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;
+const AVATAR_SRC =
+  "https://static.igem.wiki/teams/6299/wiki/icons/logo-dark-purple-no-text.avif";
+
+/* ------------------------------------------------------------------ */
+/* Instagram posts                                                     */
+/* ------------------------------------------------------------------ */
 
 interface InstagramPostProps {
-  /** One screenshot, or several for a swipeable multi-image post. Omit while waiting for the file. */
+  /** Short name of the post, shown on the placeholder and used as alt text. */
+  title: string;
+  /** One URL per slide of the post (uploaded via the iGEM uploads tool). */
   images?: string[];
-  caption?: ReactNode;
-  /** Permalink of the post on Instagram. */
+  /** The post's caption, shown under the action row. */
+  caption?: string;
+  /** Link to the post itself on Instagram. */
   href?: string;
-  /** Shown in the placeholder so the team knows which post belongs here. */
-  label?: string;
 }
 
-function ActionIcons() {
-  return (
-    <div className="ig-post-actions" aria-hidden="true">
-      <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.3-9.2C1.4 8.3 3.5 5 6.8 5c2 0 3.4 1.1 5.2 3 1.8-1.9 3.2-3 5.2-3 3.3 0 5.4 3.300 4.100 6.800C19.500 16.400 12 21 12 21z" /></svg>
-      <svg viewBox="0 0 24 24"><path d="M21 12a8.500 8.500 0 0 1-12.300 7.600L3 21l1.400-5.500A8.500 8.500 0 1 1 21 12z" /></svg>
-      <svg viewBox="0 0 24 24"><path d="M22 3 2 10.500l7.500 3L12.500 21 22 3zM9.500 13.500 22 3" /></svg>
-      <svg className="ig-post-save" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4.500L6 21V3z" /></svg>
-    </div>
-  );
+// A labeled slot read by InstagramCarousel; never rendered on its own.
+export function InstagramPost(_props: InstagramPostProps) {
+  return null;
 }
 
-export function InstagramPost({ images = [], caption, href, label }: InstagramPostProps) {
-  const [index, setIndex] = useState(0);
-  const multi = images.length > 1;
-  const step = (d: number) => setIndex((i) => (i + d + images.length) % images.length);
+function PostCard({ title, images = [], caption, href }: InstagramPostProps) {
+  const [slide, setSlide] = useState(0);
+  const count = images.length;
+
   return (
     <article className="ig-post">
-      <div className="ig-post-header">
-        <a className="ig-post-handle" href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
-          {HANDLE}
+      <header className="ig-post-header">
+        <img className="ig-post-avatar" src={AVATAR_SRC} alt="" />
+        <a
+          className="ig-post-handle"
+          href={href ?? INSTAGRAM_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {INSTAGRAM_HANDLE}
         </a>
-        <span className="ig-post-more" aria-hidden="true">•••</span>
-      </div>
+        <span className="ig-post-more" aria-hidden="true">
+          •••
+        </span>
+      </header>
+
       <div className="ig-post-media">
-        {images.length > 0 ? (
-          <>
-            <img src={images[index]} alt={label ?? "Instagram post from @igemkuleuven"} loading="lazy" />
-            {multi && (
-              <>
-                <button type="button" className="ig-post-arrow ig-post-arrow--prev" aria-label="Previous image" onClick={() => step(-1)}>‹</button>
-                <button type="button" className="ig-post-arrow ig-post-arrow--next" aria-label="Next image" onClick={() => step(1)}>›</button>
-                <div className="ig-post-dots">
-                  {images.map((_, i) => <span key={i} className={i === index ? "active" : undefined} />)}
-                </div>
-              </>
-            )}
-          </>
+        {count > 0 ? (
+          <img
+            src={images[slide]}
+            alt={`${title} — slide ${slide + 1} of ${count}`}
+            loading="lazy"
+          />
         ) : (
           <div className="ig-post-placeholder">
-            <strong>{label ?? "Instagram post"}</strong>
-            <span>Screenshot coming soon</span>
+            <strong>{title}</strong>
+            <span>Post screenshots coming soon</span>
+          </div>
+        )}
+        {slide > 0 && (
+          <button
+            type="button"
+            className="ig-post-arrow ig-post-arrow--prev"
+            aria-label="Previous slide"
+            onClick={() => setSlide(slide - 1)}
+          >
+            ‹
+          </button>
+        )}
+        {slide < count - 1 && (
+          <button
+            type="button"
+            className="ig-post-arrow ig-post-arrow--next"
+            aria-label="Next slide"
+            onClick={() => setSlide(slide + 1)}
+          >
+            ›
+          </button>
+        )}
+        {count > 1 && (
+          <div className="ig-post-dots" aria-hidden="true">
+            {images.map((_, i) => (
+              <span key={i} className={i === slide ? "active" : ""} />
+            ))}
           </div>
         )}
       </div>
-      <ActionIcons />
-      <p className="ig-post-caption">
-        {caption}
-        {href && (
-          <>
-            {caption ? " " : ""}
-            <a href={href} target="_blank" rel="noreferrer">View on Instagram</a>
-          </>
-        )}
-      </p>
+
+      <div className="ig-post-actions" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 21s-7.5-4.6-9.5-9.4C1.2 8.4 3.3 5 6.7 5c2 0 3.5 1.1 4.3 2.6h2C13.8 6.1 15.3 5 17.3 5c3.4 0 5.5 3.4 4.2 6.6C19.5 16.4 12 21 12 21Z" />
+        </svg>
+        <svg viewBox="0 0 24 24">
+          <path d="M20.5 12a8.5 8.5 0 1 1-3.4-6.8A8.4 8.4 0 0 1 20.5 12Zm0 0 1 8-5-2.5" />
+        </svg>
+        <svg viewBox="0 0 24 24">
+          <path d="M22 3 9.5 10.5M22 3l-7 18-3.5-8.5L3 9Z" />
+        </svg>
+        <svg viewBox="0 0 24 24" className="ig-post-save">
+          <path d="M19 21l-7-5-7 5V3h14Z" />
+        </svg>
+      </div>
+
+      {caption && (
+        <p className="ig-post-caption">
+          <strong>{INSTAGRAM_HANDLE}</strong> {caption}
+        </p>
+      )}
     </article>
   );
 }
 
-export function InstagramCarousel({ children }: { children: ReactNode }) {
-  const track = useRef<HTMLDivElement | null>(null);
-  const scroll = (d: number) => {
-    const el = track.current;
-    if (el) el.scrollBy({ left: d * Math.max(el.clientWidth * 0.8, 280), behavior: "smooth" });
+interface InstagramCarouselProps {
+  children: ReactNode;
+}
+
+// A horizontally scrolling row of Instagram-style post cards, with arrow
+// buttons to page through them; each card pages through its own slides.
+export function InstagramCarousel({ children }: InstagramCarouselProps) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const posts = useMemo(() => slotProps<InstagramPostProps>(children), [children]);
+
+  const page = (direction: 1 | -1) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const card = track.querySelector<HTMLElement>(".ig-post");
+    const step = card ? card.offsetWidth + 24 : track.clientWidth;
+    track.scrollBy({ left: direction * step, behavior: "smooth" });
   };
+
   return (
     <div className="ig-carousel">
-      <button type="button" className="ig-carousel-arrow ig-carousel-arrow--prev" aria-label="Scroll posts left" onClick={() => scroll(-1)}>‹</button>
-      <div className="ig-carousel-track" ref={track}>{children}</div>
-      <button type="button" className="ig-carousel-arrow ig-carousel-arrow--next" aria-label="Scroll posts right" onClick={() => scroll(1)}>›</button>
+      <button
+        type="button"
+        className="ig-carousel-arrow ig-carousel-arrow--prev"
+        aria-label="Previous post"
+        onClick={() => page(-1)}
+      >
+        ‹
+      </button>
+      <div className="ig-carousel-track" ref={trackRef}>
+        {posts.map((post) => (
+          <PostCard key={post.title} {...post} />
+        ))}
+      </div>
+      <button
+        type="button"
+        className="ig-carousel-arrow ig-carousel-arrow--next"
+        aria-label="Next post"
+        onClick={() => page(1)}
+      >
+        ›
+      </button>
       <p className="ig-carousel-follow">
-        Follow along on Instagram:{" "}
-        <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">@{HANDLE}</a>
+        Follow along on{" "}
+        <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
+          Instagram @{INSTAGRAM_HANDLE}
+        </a>
       </p>
     </div>
   );
 }
 
-interface ShowcaseItemProps {
+/* ------------------------------------------------------------------ */
+/* Publications                                                        */
+/* ------------------------------------------------------------------ */
+
+interface PublicationProps {
+  /** Tab label, e.g. the outlet's name. */
   label: string;
-  /** Preview image (e.g. the first page of a flyer), uploaded via the iGEM uploads tool. */
+  /** Screenshot of the article (uploaded via the iGEM uploads tool). */
   image?: string;
-  /** Where the full document lives; the button only appears once this is set. */
-  href?: string;
-  children?: ReactNode;
+  href: string;
+  linkLabel: string;
+  children: ReactNode;
 }
 
-// Never rendered directly — PublicationShowcase reads its props.
-export function ShowcaseItem({ children }: ShowcaseItemProps) {
-  return <>{children}</>;
+// A labeled slot read by PublicationShowcase; never rendered on its own.
+export function Publication(_props: PublicationProps) {
+  return null;
 }
 
+// One card with a tab per article: the article's preview on the left, our
+// description and a link to read it on the right.
 export function PublicationShowcase({ children }: { children: ReactNode }) {
-  const items = (Array.isArray(children) ? children : [children]).filter(
-    (c): c is { props: ShowcaseItemProps } & object => !!c && typeof c === "object" && "props" in c,
-  );
+  const items = useMemo(() => slotProps<PublicationProps>(children), [children]);
   const [active, setActive] = useState(0);
-  const item = items[active]?.props;
-  if (!item) return null;
+  const pub = items[active];
+
   return (
     <div className="pub-showcase">
       <div className="pub-showcase-tabs" role="tablist">
-        {items.map(({ props }, i) => (
+        {items.map((item, i) => (
           <button
-            key={props.label}
+            key={item.label}
             type="button"
             role="tab"
             aria-selected={i === active}
             className={`pub-showcase-tab${i === active ? " active" : ""}`}
             onClick={() => setActive(i)}
           >
-            {props.label}
+            {item.label}
           </button>
         ))}
       </div>
-      <div className="pub-showcase-body">
-        {item.image ? (
-          <a className="pub-showcase-preview" href={item.href} target="_blank" rel="noreferrer">
-            <img src={item.image} alt={`${item.label} preview`} loading="lazy" />
+      {pub && (
+        <div className="pub-showcase-body">
+          <a
+            className="pub-showcase-preview"
+            href={pub.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {pub.image ? (
+              <img src={pub.image} alt={`${pub.label} article`} loading="lazy" />
+            ) : (
+              <span className="pub-showcase-placeholder">
+                <strong>{pub.label}</strong>
+                Article screenshot coming soon
+              </span>
+            )}
           </a>
-        ) : (
-          <div className="pub-showcase-preview">
-            <div className="pub-showcase-placeholder">
-              <strong>{item.label}</strong>
-              <span>Preview coming soon</span>
-            </div>
-          </div>
-        )}
-        <div className="pub-showcase-text">
-          {item.children}
-          {item.href && (
-            <a className="pub-showcase-link" href={item.href} target="_blank" rel="noreferrer">
-              Open {item.label}
+          <div className="pub-showcase-text">
+            {pub.children}
+            <a
+              className="pub-showcase-link"
+              href={pub.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {pub.linkLabel} ↗
             </a>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-interface PhoneScreen {
-  title: string;
-  /** Page to show inside the phone. */
-  src?: string;
-  /** Screenshot shown instead of a live page. */
-  image?: string;
-}
-
-export function PhoneShowcase({ screens }: { screens: PhoneScreen[] }) {
-  const [i, setI] = useState(0);
-  const screen = screens[i];
-  if (!screen) return null;
-  return (
-    <div className="phone-showcase">
-      <div className="phone-frame">
-        <div className="phone-notch" />
-        <div className="phone-screen">
-          {screen.src ? (
-            <iframe src={screen.src} title={screen.title} loading="lazy" />
-          ) : screen.image ? (
-            <img src={screen.image} alt={screen.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          ) : (
-            <div className="phone-placeholder">
-              <strong>{screen.title}</strong>
-              <span>Coming soon</span>
-            </div>
-          )}
-        </div>
-      </div>
-      {screens.length > 1 && (
-        <div className="phone-controls">
-          <button type="button" aria-label="Previous" onClick={() => setI((i - 1 + screens.length) % screens.length)}>‹</button>
-          <span>{screen.title}</span>
-          <button type="button" aria-label="Next" onClick={() => setI((i + 1) % screens.length)}>›</button>
+          </div>
         </div>
       )}
     </div>
   );
 }
 
-/** A 16:9 slot for a video hosted on the iGEM servers (or an embeddable player). */
-export function VideoSlot({ src, title }: { src?: string; title: string }) {
+/* ------------------------------------------------------------------ */
+/* App phone mockup                                                    */
+/* ------------------------------------------------------------------ */
+
+interface PhoneShowcaseProps {
+  /** A web build of the app to embed live inside the phone. */
+  src?: string;
+  /** Otherwise: screenshots of the app's screens, tapped through in order. */
+  screens?: string[];
+  title?: string;
+}
+
+// A phone frame showing the app: live (src), as tap-through screenshots
+// (screens), or a placeholder until either is available.
+export function PhoneShowcase({ src, screens = [], title = "Our app" }: PhoneShowcaseProps) {
+  const [screen, setScreen] = useState(0);
+  const count = screens.length;
+
+  return (
+    <div className="phone-showcase">
+      <div className="phone-frame">
+        <div className="phone-notch" aria-hidden="true" />
+        <div className="phone-screen">
+          {src ? (
+            <iframe src={src} title={title} />
+          ) : count > 0 ? (
+            <button
+              type="button"
+              className="phone-screen-tap"
+              onClick={() => setScreen((screen + 1) % count)}
+              aria-label="Next screen"
+            >
+              <img src={screens[screen]} alt={`${title} — screen ${screen + 1} of ${count}`} />
+            </button>
+          ) : (
+            <div className="phone-placeholder">
+              <strong>{title}</strong>
+              <span>App preview coming soon</span>
+            </div>
+          )}
+        </div>
+      </div>
+      {!src && count > 1 && (
+        <div className="phone-controls">
+          <button
+            type="button"
+            onClick={() => setScreen((screen - 1 + count) % count)}
+            aria-label="Previous screen"
+          >
+            ‹
+          </button>
+          <span>
+            {screen + 1} / {count}
+          </span>
+          <button
+            type="button"
+            onClick={() => setScreen((screen + 1) % count)}
+            aria-label="Next screen"
+          >
+            ›
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Collaboration videos                                                */
+/* ------------------------------------------------------------------ */
+
+interface VideoSlotProps {
+  title: string;
+  /** A video.igem.org embed URL — iGEM requires videos to be hosted there. */
+  embedSrc?: string;
+}
+
+export function VideoSlot({ title, embedSrc }: VideoSlotProps) {
   return (
     <div className="video-slot">
-      {src ? (
-        <iframe src={src} title={title} allowFullScreen loading="lazy" />
+      {embedSrc ? (
+        <iframe
+          src={embedSrc}
+          title={title}
+          allow="fullscreen"
+          sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+        />
       ) : (
         <div className="video-slot-placeholder">
-          <div className="video-slot-play" aria-hidden="true">▶</div>
+          <span className="video-slot-play" aria-hidden="true">
+            ▶
+          </span>
           <strong>{title}</strong>
           <span>Video coming soon</span>
         </div>

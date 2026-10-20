@@ -48,8 +48,10 @@ export function PmosOverview() {
   // screen starts blank. The M of "Million" falls in from the PMOS acrostic
   // above as it is scrolled to and climbs a bar-chart staircase
   // (useFallingM.ts); "illion" appears once it has landed ("landed"), and
-  // once the stairs are gone the figure counts up with its underline and
-  // the sentence ("revealed").
+  // the figure then counts up with its underline and the sentence
+  // ("revealed"). Edited 2026-10-20 (team request): the M falls straight
+  // into place, with no staircase to climb, and the nought it lands beside
+  // flies on to the first symptom circle (see useZeroToCircle.ts).
   const sectionRef = useRef<HTMLElement>(null);
   const mSlotRef = useRef<HTMLSpanElement>(null);
   const [stage, setStage] = useState<"blank" | "landed" | "revealed">("blank");
@@ -93,7 +95,19 @@ export function PmosOverview() {
               className="pmos-counter-figure"
               style={{ minWidth: `${String(totalMillions).length}ch` }}
             >
-              {millions}
+              {/* The last digit on its own: it flies down and becomes the
+                  first symptom circle once the figure is complete (see
+                  useZeroToCircle.ts). */}
+              {millions === totalMillions ? (
+                <>
+                  {String(millions).slice(0, -1)}
+                  <span className="pmos-counter-zero">
+                    {String(millions).slice(-1)}
+                  </span>
+                </>
+              ) : (
+                millions
+              )}
             </span>{" "}
             <span ref={mSlotRef} className="pmos-counter-m">
               M

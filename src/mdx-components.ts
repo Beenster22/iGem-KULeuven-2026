@@ -109,7 +109,7 @@ import {
   InstagramCarousel,
   InstagramPost,
   PublicationShowcase,
-  ShowcaseItem,
+  Publication,
   PhoneShowcase,
   VideoSlot,
 } from "./components/ScienceCommunication";
@@ -202,6 +202,15 @@ export const mdxComponents = {
   Callout,
   TabbedSections,
   TabSection,
+  // Generated with Claude Opus 5.5 (Anthropic), 2026-10-20
+  // Purpose: the Science Communication & Outreach page — Instagram post
+  // carousel, publications card, app phone mockup and collaboration videos.
+  InstagramCarousel,
+  InstagramPost,
+  PublicationShowcase,
+  Publication,
+  PhoneShowcase,
+  VideoSlot,
   SectionItem,
   WheelSelector,
   SegmentedSelector,
@@ -246,13 +255,4 @@ export const mdxComponents = {
   InsulinIcon,
   GlobeLeafIcon,
   BrainIcon,
-  // Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20
-  // Purpose: the Instagram carousel, document showcase, phone frame and video
-  // slot on the Science Communication & Community page.
-  InstagramCarousel,
-  InstagramPost,
-  PublicationShowcase,
-  ShowcaseItem,
-  PhoneShowcase,
-  VideoSlot,
 };

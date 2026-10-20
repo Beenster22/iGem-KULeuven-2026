@@ -1,164 +1,91 @@
+{/*
+  HOW TO FILL IN THE REMAINING PLACEHOLDERS
+
+  Instagram posts — each <InstagramPost> takes:
+    images={["https://static.igem.wiki/teams/6299/wiki/outreach/instagram/...avif", ...]}
+      one URL per slide, uploaded via the iGEM uploads tool
+    caption="..."   the post's caption (optional)
+    href="https://www.instagram.com/p/..."   link to the post itself (optional)
+  Add or remove <InstagramPost> entries freely; the carousel adapts.
+
+  Publications — add image="https://static.igem.wiki/..." to a <Publication>
+  for a screenshot of the article.
+
+  App — give <PhoneShowcase> either src="..." (a web build of the app, shown
+  live inside the phone) or screens={["...", "..."]} (screenshots, tapped
+  through in order).
+
+  Videos — give <VideoSlot> embedSrc="https://video.igem.org/videos/embed/<id>"
+  once the video is on iGEM Video Universe (iGEM requires videos to be hosted
+  there).
+*/}
+
 <PageLayout>
 
 <span data-toc-collapsible hidden />
 
-Communicating EMPOWER is a two-way street. At every iGEM meetup we presented
-our project to other teams, judges and advisors, and every time their questions
-changed how we explain it. This page collects what we heard and what we took
-away. The events themselves are described on the <Link to="/events">Events</Link>
-page.
+Science communication helped us put a spotlight on PMOS while making the condition easier to understand. We focused our engagement on three audiences: (young) students, patients and the wider public. At a range of events and information booths, we set out to inspire, raise awareness and teach people about iGEM and our project, EMPOWER. Beyond these in-person activities, we shared our journey on Instagram and LinkedIn. Additionally, we had the opportunity to publish articles on the ISALA project's blog and in Flair magazine. To support the community in a more lasting way, we also developed an app made for the wider public, not only for people with PMOS. Finally, we collaborated with other iGEM teams to highlight the importance of community within iGEM and to show that science communication can be entertaining too.
 
-## Feedback from iGEM meetups
+<TabbedSections>
 
-Pick a meetup to see what we were asked, the advice we received, and how we
-responded.
+<TabSection label="Events & Booths">
 
-<SegmentedSelector>
+We took part in a wide range of events, from job fairs where we ran our own booth to educational workshops and iGEM meetups across Europe. A full overview can be found on our <Link to="/events">Events page</Link>.
 
-<SectionItem label="BFH, Hamburg">
+</TabSection>
 
-**Questions and suggestions from the judges**
+<TabSection label="Digital Science Communication">
 
-- A judge suggested writing a protocol for our kit, so future iGEM teams could
-  adapt it to other bacteria.
-- Would we use native bacterial parts?
-- What are our next steps after iGEM, and which prizes do we aim for?
-
-**How we responded**
-
-- We explained our plan to develop *P. vulgatus*-specific promoters.
-- We discussed future mouse studies if our approach works, or improving our
-  design if it does not.
-
-**What we took away**
-
-- Use our dry lab work to identify the most conserved BSH gene sequence, and
-  explain the link between bile acids, IL-22 and PCOS better.
-- We discussed our potential contributions to Human Practices, Measurement and
-  Part Collection.
-- Every team member must be able to explain our poster, experiments and future
-  plans with confidence, so we decided to organise booth shifts for upcoming
-  events.
-
-</SectionItem>
-
-<SectionItem label="Utrecht">
-
-**Advice**
-
-- Make the presentation more visual, explain *P. vulgatus* more clearly, and
-  focus on our solution and strategy.
-- Sowmya, a former iGEM judge, encouraged us to prepare for biosafety
-  questions and to document team responsibilities clearly on our wiki.
-
-**Questions we were asked**
-
-- How does diet affect *P. vulgatus*?
-- How would we measure and control its abundance?
-- Could administering *E. coli* cause an immune response or lead to its
-  clearance?
-
-**How we responded**
-
-- Diet may influence bacterial abundance, and we plan to measure both BSH
-  activity and bacterial levels.
-- Our approach modifies the patient's own *P. vulgatus* outside the body,
-  without administering *E. coli*.
-
-This feedback helped us improve our explanations and showed us which areas
-needed more attention.
-
-</SectionItem>
-
-<SectionItem label="Münster">
-
-**Questions we were asked**
-
-- How would we monitor and control the modified *P. vulgatus*? (We discussed
-  sequencing and colony counting.)
-- Why did we choose our CRISPR system?
-- How would we deliver the treatment to patients, and how might it affect the
-  gut microbiome?
-- Could removing BSH increase bacterial growth, and would the strain be
-  cleared, requiring repeated treatment?
-- How are patients involved, how do we handle biosafety, and how do we prevent
-  our engineered DNA from spreading to other bacteria?
-
-**How we responded**
-
-- We explained our plan to modify the patient's own bacteria outside the body
-  and return them without the *E. coli* donor.
-
-The last set of questions, on patient involvement, biosafety and DNA spread,
-were the most important ones we took home.
-
-</SectionItem>
-
-<SectionItem label="Málaga">
-
-**Advice**
-
-- We learned about entrepreneurship and met an iGEM Space Coordinator, who
-  gave us advice on preparing for the Grand Jamboree.
-- Focus on our target customers, our market and what makes our solution
-  different.
-- Make sure every team member understands the project, and document our work
-  early.
-
-**Questions we were asked**
-
-- What is the experimental design for conjugation, especially with anaerobic
-  bacteria?
-- What is our approach to promoter optimisation?
-- How would *P. vulgatus* be administered into the body, and with which
-  medication or delivery method?
-- How do we plan to perform our halo assay?
-
-These questions showed us which areas still needed development.
-
-</SectionItem>
-
-</SegmentedSelector>
-
-## Engagement
-
-Alongside the meetups, we shared our journey online. Our posts below are
-screenshots from our Instagram, and the materials we prepared for the meetups sit
-underneath.
-
-### Our Instagram
+On Instagram and LinkedIn, we put a spotlight on PMOS. We started with the basics: what PMOS is, how it affects the body, and how our project EMPOWER aims to help. From there, our symptom spotlight series explored the symptoms one by one, and we shared where to find help and further resources. Based on the recommendations we received from <Link to="/human-practices#sarah-noelmans">Sarah Noelmans</Link>, we highlighted the role of diet in managing PMOS by sharing a PMOS-friendly meal. We also raised awareness of the striking funding gap in PMOS research, showing how little attention the condition receives compared to how many people it affects.
 
 <InstagramCarousel>
-<InstagramPost label="BFH meetup" />
-<InstagramPost label="Utrecht meetup" />
-<InstagramPost label="Münster meetup" />
-<InstagramPost label="Málaga meetup" />
+  <InstagramPost title="What is PMOS?" />
+  <InstagramPost title="How PMOS affects the body" />
+  <InstagramPost title="How EMPOWER aims to help" />
+  <InstagramPost title="Symptom spotlight" />
+  <InstagramPost title="A PMOS-friendly meal" />
+  <InstagramPost title="The PMOS funding gap" />
+  <InstagramPost title="PMOS awareness month" />
 </InstagramCarousel>
 
-### Meetup materials
+</TabSection>
+
+<TabSection label="Publications">
 
 <PublicationShowcase>
-<ShowcaseItem label="Málaga flyer">
-The flyer we prepared for the Málaga meetup.
-</ShowcaseItem>
-<ShowcaseItem label="Málaga poster">
-The poster we presented at the Málaga meetup.
-</ShowcaseItem>
+
+<Publication label="ISALA blog" href="https://isala.be/door-isala-geinspireerde-studenten-van-het-ku-leuven-igem-team-vragen-aandacht-voor-pmos/" linkLabel="Read the blog post">
+
+The ISALA project is a citizen science project at the University of Antwerp that studies the vaginal microbiome and its role in women's health. It is coordinated by <Link to="/human-practices#sarah-lebeer">Prof. Sarah Lebeer</Link>. Both of our projects share the same mission: bringing microbes and reproductive health out of the shadows. Through this collaboration, we wanted to reach ISALA's large and engaged community to draw attention to PMOS and our project. In their blog post, we introduced PMOS and presented our <Link to="/description">goals</Link>.
+
+</Publication>
+
+<Publication label="Flair" href="https://www.flair.be/nl/self-love/mind-body/pcos-pmos-aandoening-vragen-antwoorden/" linkLabel="Read the article in Flair">
+
+We also had the opportunity to publish an article in Flair, a popular Belgian women's magazine covering lifestyle, fashion and health. We answered the most common questions about PMOS, from what the condition is to why its name has changed. Our goal was to reach a broad audience of young women outside the scientific world, to bring awareness and education to those who may recognize the symptoms in themselves without knowing the name.
+
+</Publication>
+
 </PublicationShowcase>
 
-### On your phone
+</TabSection>
 
-<PhoneShowcase screens={[{ title: "Instagram story" }, { title: "Project page" }]} />
+<TabSection label="App">
 
-### Video
+During our patient interviews, most women told us they felt they did not have enough educational resources provided by their doctor. In addition, they felt like they had to really get to know their body on their own by tracking nutrition, lifestyle, symptoms and treatment. To support all women beyond our engagement, posts and articles, we created an app that brings everything they need together in one place. The app is made for the wider public, not just for PMOS patients. A built-in personalized period tracker helps users follow their cycle and spot irregularities. Alongside it, the app offers practical tips for daily life, short courses that explain PMOS step by step, and a collection of trusted resources for further support. Users can also learn about EMPOWER and how our research aims to improve the lives of people with PMOS in the future. Check out the app below.
 
-<VideoSlot title="EMPOWER in 60 seconds" />
+<PhoneShowcase title="EMPOWER app" />
 
-## Where to find more
+</TabSection>
 
-- <Link to="/events">Events</Link> — a timeline of the talks, workshops, and
-  outreach activities we took part in.
-- <Link to="/human-practices">Integrated Human Practices</Link> — the stakeholders
-  we spoke with and how their feedback shaped the project.
+<TabSection label="Collaborations">
+
+Together with iGEM Málaga, iGEM VUB Brussels, iGEM Leiden, iGEM Lund and iGEM Eindhoven, we created a joint video to show that iGEM is about far more than a science project. Behind every team are students who learn from one another, share their struggles and successes, and support each other throughout the season. Although each of our six projects tackles a different challenge, we all work towards the same goal: using synthetic biology to build a better future.
+
+<VideoSlot title="Joint iGEM teams video" embedSrc="https://video.igem.org/videos/embed/w8iP56Ww1bJDs8fg5wDJ9q" />
+
+</TabSection>
+
+</TabbedSections>
 
 </PageLayout>

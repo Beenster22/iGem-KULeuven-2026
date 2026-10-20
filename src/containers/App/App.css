@@ -5386,6 +5386,47 @@ body:not(.home-fullscreen) .home-hero {
   list-style: none;
 }
 
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-20 (team request): the
+   circles wait while the "0" of "170 Million" flies down to become the
+   first of them (useZeroToCircle.ts), and then all come in together rather
+   than one after another. The default is 1, so they are simply there when
+   motion is reduced or the script has not run. */
+.pmos-effect,
+.pmos-effects-more {
+  opacity: var(--circles-in, 1);
+  transition: opacity 0.45s ease;
+}
+
+/* The disc in flight: the nought on its way to being that first circle. */
+.zero-circle-flight {
+  position: fixed;
+  z-index: 4;
+  visibility: hidden;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  border: 4px solid currentColor;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.zero-circle-flight-art {
+  width: 64%;
+  height: 64%;
+}
+
+.zero-circle-flight-art svg {
+  width: 100%;
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pmos-effect,
+  .pmos-effects-more {
+    opacity: 1;
+  }
+}
+
 .pmos-effect {
   display: flex;
   flex-direction: column;
@@ -8316,14 +8357,6 @@ body:not(.home-fullscreen) .home-hero {
   transform: scaleX(1);
 }
 
-.falling-m,
-.falling-m-stairs {
-  left: 0;
-  top: 0;
-  z-index: 5;
-  pointer-events: none;
-}
-
 /* Fixed while it falls with the scroll, absolute (page coordinates) once
    it is climbing — set from useFallingM.ts. */
 .falling-m {
@@ -8331,18 +8364,6 @@ body:not(.home-fullscreen) .home-hero {
   transform-origin: 0 0;
   white-space: nowrap;
   will-change: transform;
-}
-
-.falling-m-stairs {
-  position: absolute;
-  overflow: visible;
-}
-
-.falling-m-stairs rect {
-  fill: var(--color-header-bg);
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
-  transform: scaleY(0);
 }
 
 .pmos-overview-source {
@@ -14837,7 +14858,12 @@ a.protocol-download:hover {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   padding: 0.5rem 0.25rem 1rem;
-  scrollbar-width: thin;
+  /* Paged with the arrow buttons (or a swipe), so no scrollbar strip. */
+  scrollbar-width: none;
+}
+
+.ig-carousel-track::-webkit-scrollbar {
+  display: none;
 }
 
 .ig-post {

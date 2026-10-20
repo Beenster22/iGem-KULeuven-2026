@@ -2,34 +2,32 @@
 // Purpose: the home page's "M" hand-off (team request). The counter screen
 // below the PMOS definition starts blank; as the visitor scrolls down to
 // it, the teal M of "Metabolic" (PmosDefinition) falls with the scroll into
-// that empty screen while a bar-chart staircase rises out of it. Once the
-// screen is (nearly) in place the M climbs the stairs on its own and settles
-// as the M of "Million" (onLanded); the stairs then sink away (onDone) and
-// PmosOverview reveals the figure and its underline.
+// that empty screen, and settles straight into the M of "Million"
+// (onLanded); PmosOverview then reveals the figure (onDone).
 // The fall is tied to the scroll position, so scrolling back up puts the M
 // back in "Metabolic"; the climb, once started, plays through. It is all
 // done imperatively — throwaway elements appended to <body>, moved with the
 // Web Animations API — as it only ever plays once.
 // Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback): the
-// fall is now scroll-linked into a blank screen and the stairs are bars.
+// fall is now scroll-linked into a blank screen.
 // Edited with Claude Opus 5 (Anthropic), 2026-10-19: the stand-in now takes
 // over on the source letter's baseline instead of centred on its line box,
 // which dropped it 8px the moment it let go of "Metabolic".
+// Edited with Claude Opus 5 (Anthropic), 2026-10-20 (team request): the
+// bar-chart staircase is gone. The M used to drop onto the lowest bar and
+// hop up four of them into the slot; it now falls the whole way to the
+// slot, growing to size as it goes, and only lands.
 import { useEffect, useRef, type RefObject } from "react";
 
 // Put this attribute on the letter the M falls from (see PmosDefinition).
 export const FALLING_M_SOURCE_ATTR = "data-falling-m-source";
 
-const STEP_COUNT = 4;
 // Scroll progress (0 = the counter screen's top at the bottom of the
-// window, 1 = it fills the window) at which the M has landed and climbs.
-const CLIMB_AT = 0.9;
+// window, 1 = it fills the window) at which the M has arrived.
+const LAND_AT = 0.9;
 const LAND_MS = 200;
 const SQUASH_MS = 160;
-const HOP_MS = 380;
 const PAUSE_MS = 350;
-const SINK_MS = 500;
-const BAR_GAP = 0.08; // of a step's width
 
 interface Box {
   x: number;
@@ -103,30 +101,22 @@ export function useFallingM({
     }
 
     const source = document.querySelector<HTMLElement>(`[${FALLING_M_SOURCE_ATTR}]`);
-    const svgNs = "http://www.w3.org/2000/svg";
-    const stairs = document.createElementNS(svgNs, "svg");
-    stairs.setAttribute("aria-hidden", "true");
-    stairs.setAttribute("class", "falling-m-stairs");
-    const bars = Array.from({ length: STEP_COUNT }, () => {
-      const bar = document.createElementNS(svgNs, "rect");
-      stairs.appendChild(bar);
-      return bar;
-    });
     const flyer = document.createElement("span");
     flyer.setAttribute("aria-hidden", "true");
     flyer.className = "falling-m";
     flyer.textContent = slot.textContent;
     flyer.style.visibility = "hidden";
-    document.body.append(stairs, flyer);
+    document.body.append(flyer);
 
     // Everything below is in page coordinates, measured by measure().
     let sectionTop = 0;
     let startPose: Pose = { x: 0, y: 0, s: 1 };
-    let poses: Pose[] = []; // poses[k]: standing on step k; poses[-1] ≈ slot
     let slotPose: Pose = { x: 0, y: 0, s: 1 };
     let startColor = "";
     let endColor = "";
-    let stepH = 0;
+    // The size it is drawn at right now, so a landing that starts early
+    // picks up where the fall left off.
+    let fallScale = 1;
 
     const measure = () => {
       const slotStyle = getComputedStyle(slot);
@@ -167,51 +157,9 @@ export function useFallingM({
           : { x: target.x, y: target.y - window.innerHeight, s: startScale };
       startColor = source ? getComputedStyle(source).color : endColor;
 
-      // The stairs: bars rising to the right like a little bar chart, all
-      // below the figure's line, the tallest right under the slot (narrowed
-      // if the screen has no room for them).
-      const line = slot.closest(".pmos-counter-number") ?? slot;
-      const lineBox = pageBox(line);
-      stepH = target.h * 0.26;
-      const top0 = lineBox.y + lineBox.h + target.h * 0.08;
-      const bottom = top0 + STEP_COUNT * stepH;
-      const right = target.x + target.w * 1.08;
-      const left0 = target.x - target.w * 0.08;
-      const stepW = Math.max(
-        12,
-        Math.min(target.w * 0.95, (left0 - window.scrollX - 8) / (STEP_COUNT - 1)),
-      );
-      const barLeft = (k: number) => left0 - k * stepW;
-      const barRight = (k: number) => (k === 0 ? right : barLeft(k - 1));
-      const barTop = (k: number) => top0 + k * stepH;
-      const minX = barLeft(STEP_COUNT - 1);
-
-      Object.assign(stairs.style, {
-        left: `${minX}px`,
-        top: `${top0}px`,
-        width: `${right - minX}px`,
-        height: `${bottom - top0}px`,
-      });
-      stairs.setAttribute("viewBox", `${minX} ${top0} ${right - minX} ${bottom - top0}`);
-      bars.forEach((bar, k) => {
-        const gap = k === 0 ? 0 : stepW * BAR_GAP;
-        bar.setAttribute("x", String(barLeft(k) + gap / 2));
-        bar.setAttribute("y", String(barTop(k)));
-        bar.setAttribute("width", String(barRight(k) - barLeft(k) - gap));
-        bar.setAttribute("height", String(bottom - barTop(k)));
-        bar.setAttribute("rx", String(Math.min(6, stepW * 0.06)));
-      });
-
-      // The M grows from the source size on the lowest bar to full size on
-      // the tallest; on each bar it stands centred.
-      poses = bars.map((_, k) => {
-        const s = 1 + (startScale - 1) * (k / (STEP_COUNT - 1));
-        const centre = (barLeft(k) + barRight(k)) / 2;
-        return { x: centre - (s * target.w) / 2, y: barTop(k) - s * baseline, s };
-      });
     };
 
-    let phase: "falling" | "climbing" = "falling";
+    let phase: "falling" | "landing" = "falling";
     let cancelled = false;
     const running: Animation[] = [];
     const run = (el: Element, keyframes: Keyframe[], options: KeyframeAnimationOptions) => {
@@ -225,31 +173,21 @@ export function useFallingM({
     const progress = () =>
       clamp01(1 - section.getBoundingClientRect().top / window.innerHeight);
 
-    const setBars = (p: number) => {
-      bars.forEach((bar, k) => {
-        // Lowest bar (rightmost index) first, tallest last.
-        const order = STEP_COUNT - 1 - k;
-        const g = clamp01((p - 0.3 - order * 0.07) / 0.35);
-        bar.style.transform = `scaleY(${g})`;
-      });
-    };
-
     // While falling the M is position: fixed, so it is placed in window
     // coordinates. Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team
     // feedback): it stays in "Metabolic" until that line has scrolled up to
     // the navigation bar, lets go right there and then falls (accelerating)
-    // to the lowest bar, reaching it as the counter screen settles.
+    // to the slot itself, reaching it as the counter screen settles.
     const renderFall = () => {
       if (phase !== "falling") return;
       const p = progress();
-      if (p >= CLIMB_AT) {
-        climb();
+      if (p >= LAND_AT) {
+        land();
         return;
       }
-      setBars(p);
       const navY = navBottom();
       const releaseAt = startPose.y - navY; // scroll where the M meets the nav
-      const landAt = sectionTop - window.innerHeight * (1 - CLIMB_AT);
+      const landAt = sectionTop - window.innerHeight * (1 - LAND_AT);
       const q = (window.scrollY - releaseAt) / (landAt - releaseAt);
       if (!(q > 0) || landAt <= releaseAt) {
         flyer.style.visibility = "hidden";
@@ -262,12 +200,14 @@ export function useFallingM({
       flyer.style.color = startColor;
       const t = q ** 2;
       const from = { x: startPose.x - window.scrollX, y: navY };
-      const low = poses[STEP_COUNT - 1];
-      const to = { x: low.x - window.scrollX, y: low.y - landAt };
+      // Straight to the slot now, growing to its size on the way, so it
+      // arrives as the M of "Million" rather than on a bar below it.
+      const to = { x: slotPose.x - window.scrollX, y: slotPose.y - landAt };
+      fallScale = startPose.s + (1 - startPose.s) * t;
       flyer.style.transform = place({
         x: from.x + (to.x - from.x) * t,
         y: from.y + (to.y - from.y) * t,
-        s: startPose.s,
+        s: fallScale,
       });
     };
 
@@ -282,21 +222,26 @@ export function useFallingM({
       onScroll();
     };
 
-    async function climb() {
-      phase = "climbing";
+    // It has arrived: the last of the drop onto the slot, a small squash
+    // as it lands, and the counter's teal taken on along the way.
+    // Scrolling no longer moves it from here.
+    async function land() {
+      phase = "landing";
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       if (source) source.style.visibility = "hidden";
-      bars.forEach((bar) => (bar.style.transform = "scaleY(1)"));
 
       // From here on, page coordinates (position: absolute), so scrolling
-      // mid-climb doesn't knock the M off course.
-      const low = poses[STEP_COUNT - 1];
+      // mid-landing doesn't knock the M off course.
       const wasFalling = flyer.style.visibility !== "hidden";
       const r = flyer.getBoundingClientRect();
       const here: Pose = wasFalling
-        ? { x: r.left + window.scrollX, y: r.top + window.scrollY, s: low.s }
-        : { x: low.x, y: low.y - stepH * 3, s: low.s };
+        ? { x: r.left + window.scrollX, y: r.top + window.scrollY, s: fallScale }
+        : {
+            x: slotPose.x,
+            y: slotPose.y - window.innerHeight * 0.25,
+            s: fallScale,
+          };
       Object.assign(flyer.style, {
         position: "absolute",
         visibility: "",
@@ -305,63 +250,43 @@ export function useFallingM({
       });
 
       try {
-        await run(flyer, [{ transform: place(here) }, { transform: place(low) }], {
-          duration: LAND_MS,
-          easing: "cubic-bezier(0.55, 0, 1, 0.45)",
+        run(flyer, [{ color: startColor }, { color: endColor }], {
+          duration: LAND_MS + SQUASH_MS,
         });
-        // A small squash on landing, pivoting on the M's feet.
-        const squash = `translate(${low.x - low.s * flyer.offsetWidth * 0.06}px, ${
-          low.y + low.s * flyer.offsetHeight * 0.12
-        }px) scale(${low.s * 1.12}, ${low.s * 0.85})`;
         await run(
           flyer,
-          [{ transform: place(low) }, { transform: squash }, { transform: place(low) }],
+          [{ transform: place(here) }, { transform: place(slotPose) }],
+          { duration: LAND_MS, easing: "cubic-bezier(0.55, 0, 1, 0.45)" },
+        );
+        // A small squash on landing, pivoting on the M's feet.
+        const squash =
+          "translate(" +
+          (slotPose.x - slotPose.s * flyer.offsetWidth * 0.06) +
+          "px, " +
+          (slotPose.y + slotPose.s * flyer.offsetHeight * 0.12) +
+          "px) scale(" +
+          slotPose.s * 1.12 +
+          ", " +
+          slotPose.s * 0.85 +
+          ")";
+        await run(
+          flyer,
+          [
+            { transform: place(slotPose) },
+            { transform: squash },
+            { transform: place(slotPose) },
+          ],
           { duration: SQUASH_MS * 2, easing: "ease-out" },
         );
-
-        // Up the stairs one bar at a time, then up into the slot, shifting
-        // to the counter's teal on the way.
-        run(flyer, [{ color: startColor }, { color: endColor }], {
-          duration: HOP_MS * STEP_COUNT,
-        });
-        const path = [...poses].reverse().concat(slotPose);
-        for (let i = 0; i < path.length - 1; i++) {
-          const from = path[i];
-          const to = path[i + 1];
-          const peak: Pose = {
-            x: (from.x + to.x) / 2,
-            y: Math.min(from.y, to.y) - stepH * 1.1,
-            s: (from.s + to.s) / 2,
-          };
-          await run(
-            flyer,
-            [
-              { transform: place(from), easing: "ease-out" },
-              { transform: place(peak), easing: "ease-in", offset: 0.5 },
-              { transform: place(to) },
-            ],
-            { duration: HOP_MS },
-          );
-        }
         if (cancelled) return;
 
         // In place: hand over to the real letter ("illion" appears), let it
-        // sit a moment, then sink the bars away and reveal the figure.
+        // sit a moment, then reveal the figure.
         callbacks.current.onLanded();
         flyer.remove();
         if (source) source.style.visibility = "";
         await new Promise((resolve) => setTimeout(resolve, PAUSE_MS));
         if (cancelled) return;
-        await Promise.all(
-          bars.map((bar, k) =>
-            run(bar, [{ transform: "scaleY(1)" }, { transform: "scaleY(0)" }], {
-              duration: SINK_MS,
-              delay: k * 70,
-              easing: "cubic-bezier(0.5, 0, 0.75, 0)",
-            }),
-          ),
-        );
-        stairs.remove();
         callbacks.current.onDone();
       } catch {
         // An animation was cancelled by the cleanup below.
@@ -385,7 +310,6 @@ export function useFallingM({
       window.removeEventListener("resize", onResize);
       running.forEach((animation) => animation.cancel());
       flyer.remove();
-      stairs.remove();
       if (source) source.style.visibility = "";
     };
   }, [skip, sectionRef, slotRef]);
