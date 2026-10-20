@@ -6256,7 +6256,8 @@ body:not(.home-fullscreen) .home-hero {
 .story-text strong,
 .bsh-stream-heading strong,
 .tgr5-heading strong,
-.tgr5-zoom-line strong {
+.tgr5-zoom-line strong,
+.tgr5-impaired-heading strong {
   font-weight: inherit;
   background: linear-gradient(var(--color-interactive), var(--color-interactive)) 0 92% / 100% 0.14em no-repeat;
   padding-bottom: 0.05em;
@@ -15109,6 +15110,43 @@ a.protocol-download:hover {
   }
 }
 
+/* A knock each time one of them arrives. One acid reaches the receptor
+   1.68s into the twelve-second cycle and another every 2.4s after that, so
+   this is a 2.4s loop started at the first of them. */
+.tgr5-impaired-receptor {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: tgr5-impaired-knock 2.4s ease-in-out infinite;
+  animation-delay: 1.68s;
+}
+
+@keyframes tgr5-impaired-knock {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  4% {
+    transform: rotate(2.2deg);
+  }
+
+  9% {
+    transform: rotate(-1.8deg);
+  }
+
+  14% {
+    transform: rotate(1.2deg);
+  }
+
+  19% {
+    transform: rotate(-0.6deg);
+  }
+
+  24%,
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
 /* The refusal: a red cross at the receptor, on just as its own acid gets
    there. It sits where that acid is turned away. */
 .tgr5-impaired-no {
@@ -15157,7 +15195,8 @@ a.protocol-download:hover {
 @media (prefers-reduced-motion: reduce) {
   .tgr5-impaired-dive,
   .tgr5-impaired-float,
-  .tgr5-impaired-no {
+  .tgr5-impaired-no,
+  .tgr5-impaired-receptor {
     animation: none;
   }
 

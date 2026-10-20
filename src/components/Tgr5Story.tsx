@@ -906,12 +906,14 @@ const IMPAIRED_DOCK = {
 };
 
 // Where each one waits its turn, floating above the receptor.
+// `stream` picks which of the two colours it is drawn in, the same two the
+// bile acids have everywhere else on the page (bsh-molecule--0 and --1).
 const IMPAIRED_ACIDS = [
-  { x: 250, y: 112 },
-  { x: 385, y: 152 },
-  { x: 515, y: 96 },
-  { x: 645, y: 148 },
-  { x: 775, y: 118 },
+  { x: 250, y: 112, stream: 0 },
+  { x: 385, y: 152, stream: 1 },
+  { x: 515, y: 96, stream: 0 },
+  { x: 645, y: 148, stream: 1 },
+  { x: 775, y: 118, stream: 1 },
 ].map((home, i) => ({
   ...home,
   i,
@@ -931,7 +933,11 @@ function Tgr5ImpairedFigure() {
       <g
         transform={`translate(${IMPAIRED_CENTRE.x} ${IMPAIRED_CENTRE.y}) scale(${IMPAIRED_RECEPTOR_SCALE})`}
       >
-        <ReceptorShape x={0} y={0} />
+        {/* Shaken off by each one in turn, which is why it is wrapped: the
+            group above carries the placement, this one the knock. */}
+        <g className="tgr5-impaired-receptor">
+          <ReceptorShape x={0} y={0} />
+        </g>
       </g>
       {IMPAIRED_ACIDS.map((acid) => (
         <g key={acid.i} transform={`translate(${acid.x} ${acid.y})`}>
@@ -946,7 +952,10 @@ function Tgr5ImpairedFigure() {
             }
           >
             <g className="tgr5-impaired-float" style={{ "--i": acid.i } as CSSProperties}>
-              <g transform={`scale(${ACID_SCALE})`}>
+              <g
+                className={`bsh-molecule--${acid.stream}`}
+                transform={`scale(${ACID_SCALE})`}
+              >
                 <AcidShape conjugated />
               </g>
             </g>
@@ -975,8 +984,8 @@ export function Tgr5ImpairedSection() {
   return (
     <section className="tgr5-impaired home-snap-screen" data-snap="">
       <h3 className="tgr5-impaired-heading">
-        When bile acid pool is <strong>disbalanced</strong>, binding to TGR5
-        is impaired
+        When bile acid pool is <strong>disbalanced</strong>,{" "}
+        <strong>binding to TGR5 is impaired</strong>
       </h3>
       <Tgr5ImpairedFigure />
     </section>
