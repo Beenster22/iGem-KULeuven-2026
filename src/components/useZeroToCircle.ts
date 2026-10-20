@@ -20,8 +20,12 @@ const ZERO = ".pmos-counter-zero";
 /** The disc of the first symptom circle, and the circles that wait. */
 const ART = ".pmos-effect-art";
 
-// How much of a window's scrolling the flight takes.
-const FLIGHT = 0.75;
+// Where the circles' band has to have reached, as a share of the window
+// down from its top, before the nought starts to go anywhere (team
+// request: it holds its place until that border is arriving, rather than
+// setting off the moment the reader scrolls). It finishes as that border
+// meets the navigation bar.
+const BORDER_AT = 0.7;
 // When the drawing inside the disc starts to show, as a share of the way.
 const ART_FROM = 0.45;
 
@@ -62,10 +66,11 @@ export function useZeroToCircle({
       const first = section.querySelector<HTMLElement>(ART);
       if (!zero || !first) return rest();
 
-      // Settled: the circles' own screen up against the navigation bar.
-      const endAt =
-        section.getBoundingClientRect().top + window.scrollY - navBottom();
-      const startAt = endAt - window.innerHeight * FLIGHT;
+      // From the band's border coming up the screen to it meeting the
+      // navigation bar.
+      const bandTop = section.getBoundingClientRect().top + window.scrollY;
+      const endAt = bandTop - navBottom();
+      const startAt = bandTop - window.innerHeight * BORDER_AT;
       if (endAt <= startAt) return rest();
 
       if (window.scrollY <= startAt) {

@@ -8367,6 +8367,10 @@ body:not(.home-fullscreen) .home-hero {
   position: absolute;
   left: 0;
   top: 0;
+  /* Over the bands it crosses: each one paints on its own, so without this
+     the letter slid behind the purple on its way down (team request). Well
+     under the navigation bar's 1030. */
+  z-index: 6;
   display: block;
   transform-origin: 0 0;
   white-space: nowrap;
@@ -14991,12 +14995,18 @@ a.protocol-download:hover {
   right: 8px;
 }
 
-/* Play badge on a reel card; opens the reel on Instagram. */
+/* A reel card: the whole picture is a link that plays the reel, with a
+   play badge in the middle. */
 .ig-post-reel {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.ig-post-reel span {
   width: 56px;
   height: 56px;
   border-radius: 50%;
@@ -15008,11 +15018,12 @@ a.protocol-download:hover {
   background: rgba(0, 0, 0, 0.55);
   color: #fff;
   font-size: 1.4rem;
-  text-decoration: none;
+  transition: background 0.15s ease, transform 0.15s ease;
 }
 
-.ig-post-reel:hover {
+.ig-post-reel:hover span {
   background: rgba(0, 0, 0, 0.75);
+  transform: scale(1.08);
 }
 
 .ig-post-dots {
