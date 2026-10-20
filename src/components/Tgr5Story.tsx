@@ -27,8 +27,8 @@
 import {
   useEffect,
   useMemo,
+  useId,
   useRef,
-  useState,
   type CSSProperties,
   type ReactNode,
   type RefObject,
@@ -44,6 +44,7 @@ import {
   RulerIcon,
 } from "./FindOutMoreIcons";
 import { usePinnedStep } from "./usePinnedStep";
+import { useReceptorZoom } from "./useReceptorZoom";
 
 function seededValue(seed: number) {
   const x = Math.sin(seed * 12.9898) * 43758.5453;
@@ -795,40 +796,48 @@ export function Tgr5MechanismSection() {
 // interact with it. The drawing zooms in as the screen is reached — it
 // starts small, the size it is in the diagram above, and opens out — and
 // the sentence beside it arrives in two parts, one per scroll.
-const ZOOM_HELICES = [-27, -9, 9, 27];
+// The close-up is the binding diagram's own receptor, cropped to it alone
+// and so magnified — the same helices, not a second drawing of them (team
+// request, 2026-10-20), so what the reader zooms into is what they were
+// just looking at. The gut wall it stands in up there is left behind: the
+// team want the receptor on its own here.
+const ZOOM_VIEW = 120;
+const ZOOM_BOX = [
+  GUT_RECEPTOR_X - ZOOM_VIEW / 2,
+  GUT.top - ZOOM_VIEW / 2,
+  ZOOM_VIEW,
+  ZOOM_VIEW,
+].join(" ");
 
+// The receptor is the one thing on this screen, so it carries a soft
+// glow behind it once it has arrived — enough to make it the thing being
+// looked at, without anything drawn around it (team request, 2026-10-20).
 function Tgr5ReceptorCloseUp() {
+  // Its own id, so a second copy of this drawing cannot steal the glow.
+  const glowId = useId();
   return (
     <svg
       className="tgr5-zoom-svg"
-      viewBox="0 0 320 300"
+      viewBox={ZOOM_BOX}
       preserveAspectRatio="xMidYMid meet"
       role="img"
-      aria-label="Illustration: a close-up of the TGR5 receptor, a bundle of four helices crossing the cell membrane."
+      aria-label="Illustration: a close-up of the TGR5 receptor, a bundle of four helices."
     >
-      {/* The membrane the receptor sits in, cut away so the helices read as
-          passing through it. */}
-      <rect className="tgr5-zoom-membrane" x={0} y={116} width={320} height={68} />
-      <line className="tgr5-zoom-membrane-edge" x1={0} y1={116} x2={320} y2={116} />
-      <line className="tgr5-zoom-membrane-edge" x1={0} y1={184} x2={320} y2={184} />
-      <g className="tgr5-receptor">
-        {ZOOM_HELICES.map((dx, i) => (
-          <rect
-            key={dx}
-            x={160 + dx - 11}
-            y={72}
-            width={22}
-            height={156}
-            rx={11}
-            transform={`rotate(${i % 2 ? 6 : -6} ${160 + dx} 150)`}
-          />
-        ))}
-      </g>
-      {/* On the band's own background rather than on a cell, so it takes
-          the text colour around it rather than the dark one. */}
-      <text className="tgr5-label" x={160} y={262}>
-        TGR5
-      </text>
+      <defs>
+        <radialGradient id={glowId}>
+          <stop offset="0%" stopColor="currentColor" stopOpacity={0.22} />
+          <stop offset="55%" stopColor="currentColor" stopOpacity={0.09} />
+          <stop offset="100%" stopColor="currentColor" stopOpacity={0} />
+        </radialGradient>
+      </defs>
+      <circle
+        className="tgr5-zoom-glow"
+        cx={GUT_RECEPTOR_X}
+        cy={GUT.top}
+        r={54}
+        fill={`url(#${glowId})`}
+      />
+      <ReceptorShape x={GUT_RECEPTOR_X} y={GUT.top} />
     </svg>
   );
 }
@@ -837,22 +846,10 @@ export function Tgr5ZoomSection() {
   const prefersReducedMotion = useReducedMotion();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  const [seen, setSeen] = useState(false);
   const step = usePinnedStep(wrapperRef, 2);
   const shown = prefersReducedMotion ? 2 : step + 1;
-
-  // The zoom plays once, when the screen is reached, rather than following
-  // the scroll: it reads as arriving at the receptor, not as a slider.
-  useEffect(() => {
-    const el = stageRef.current;
-    if (!el || prefersReducedMotion) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => entry.isIntersecting && setSeen(true),
-      { threshold: 0.4 },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [prefersReducedMotion]);
+  // The receptor on the screen above flies down and becomes this one.
+  useReceptorZoom({ stageRef, skip: !!prefersReducedMotion });
 
   return (
     <div
@@ -863,7 +860,7 @@ export function Tgr5ZoomSection() {
       {!prefersReducedMotion && <SnapSteps steps={2} />}
       <div
         ref={stageRef}
-        className={`tgr5-zoom${prefersReducedMotion ? " tgr5-zoom--static" : " home-snap-stage"}${seen || prefersReducedMotion ? " tgr5-zoom--in" : ""}`}
+        className={`tgr5-zoom${prefersReducedMotion ? " tgr5-zoom--static" : " home-snap-stage"}`}
       >
         <div className="tgr5-zoom-words">
           <p className={`tgr5-zoom-line${shown >= 1 ? " tgr5-zoom-line--shown" : ""}`}>
