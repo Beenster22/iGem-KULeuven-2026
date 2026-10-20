@@ -376,6 +376,21 @@ export function ElleTour() {
     const block = (event: Event) => {
       if (performance.now() < busyUntil) event.preventDefault();
     };
+    // Edited 2026-10-21 (team request: the turn of the wheel that leaves
+    // this screen plays the transition to the next, at the tour's own
+    // pace): a turn down while resting on this screen with the tour not
+    // over yet holds the page where it is (markScrollBusy, which
+    // useWheelPaging in HomeSnapScroll.tsx respects), rather than gliding
+    // on and making Elle jump to the end of her tour partway down. Once
+    // the tour is over, the next turn glides on and she flies to her place
+    // on the next screen with it. Listened for before the page's own wheel
+    // handling, so the hold is in place in time.
+    const holdUntilDone = (event: WheelEvent) => {
+      if (prefersReducedMotion || event.deltaY <= 0 || t >= END) return;
+      const top = wrapper.getBoundingClientRect().top;
+      if (Math.abs(top) > 0.1 * window.innerHeight) return;
+      markScrollBusy(performance.now() + 200);
+    };
 
     const onScroll = () => {
       const y = window.scrollY;
@@ -423,11 +438,13 @@ export function ElleTour() {
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     window.addEventListener("wheel", block, { passive: false });
+    window.addEventListener("wheel", holdUntilDone, { capture: true, passive: true });
     window.addEventListener("touchmove", block, { passive: false });
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       window.removeEventListener("wheel", block);
+      window.removeEventListener("wheel", holdUntilDone, { capture: true });
       window.removeEventListener("touchmove", block);
       if (frame !== null) cancelAnimationFrame(frame);
       if (glideFrame !== null) cancelAnimationFrame(glideFrame);

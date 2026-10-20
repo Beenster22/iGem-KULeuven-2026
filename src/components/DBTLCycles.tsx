@@ -5,6 +5,7 @@
 // .mdx as <DBTLCycles><DBTLCycle label="Cycle 1" title="…"><DBTLStage
 // stage="design">…</DBTLStage>…</DBTLCycle></DBTLCycles>.
 import { Children, ReactElement, ReactNode, isValidElement, useId, useState } from "react";
+import { useEasedAngle } from "./useEasedAngle";
 
 type StageName = "design" | "build" | "test" | "learn";
 
@@ -70,20 +71,16 @@ function Wheel({
   onPick: (s: StageName) => void;
 }) {
   const arcId = useId().replace(/:/g, "");
+  // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-21: eased here as an SVG
+  // rotate attribute, not a CSS transition (see useEasedAngle.ts).
+  const shown = useEasedAngle(spin, 700, [0.4, 0, 0.2, 1]);
 
   return (
     <svg viewBox="-60 -2 574 574" className="dbtl-wheel" role="group" aria-label="Design, Build, Test, Learn cycle">
       <g
         className="dbtl-wheel-spinner"
-        style={{ transform: `rotate(${spin}deg)` }}
+        transform={`rotate(${shown} ${CENTRE_X} ${CENTRE_Y})`}
       >
-        {/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-21: an unpainted
-            circle the size of the viewBox, so the group's own box is centred
-            on the wheel. The spinner turns about that box's centre (see
-            .dbtl-wheel-spinner), the same in every browser; Safari placed a
-            px transform-origin on an SVG group differently and the wheel
-            swung off-centre as it turned. */}
-        <circle cx={CENTRE_X} cy={CENTRE_Y} r={287} fill="none" pointerEvents="none" />
         {STAGES.map((s) => {
           const on = s.name === active;
           return (
