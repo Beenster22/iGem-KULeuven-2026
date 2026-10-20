@@ -69,7 +69,7 @@ function Pair({
 
 export function BileSaltRatioTable() {
   return (
-    <div className="bsr">
+    <div className="bsr surface">
       <div className="bsr-legend">
         <span className="bsr-legend-item">
           <span className="bsr-swatch" data-band="high" aria-hidden="true" />

@@ -127,7 +127,11 @@ export function PhasePager({
         createPortal(
           <>
             {index > 0 ? (
-              <button type="button" className="phase-nav-btn" onClick={() => go(index - 1)}>
+              <button
+                type="button"
+                className="btn-empower phase-nav-btn"
+                onClick={() => go(index - 1)}
+              >
                 <span aria-hidden="true">←</span> Previous: {slots[index - 1].title}
               </button>
             ) : (
@@ -136,14 +140,14 @@ export function PhasePager({
             {index < slots.length - 1 ? (
               <button
                 type="button"
-                className="phase-nav-btn phase-nav-next"
+                className="btn-empower phase-nav-btn phase-nav-next"
                 onClick={() => go(index + 1)}
               >
                 Next: {slots[index + 1].title} <span aria-hidden="true">→</span>
               </button>
             ) : (
               nextPage && (
-                <Link to={nextPage.to} className="phase-nav-btn phase-nav-next">
+                <Link to={nextPage.to} className="btn-empower phase-nav-btn phase-nav-next">
                   Next: {nextPage.label} <span aria-hidden="true">→</span>
                 </Link>
               )

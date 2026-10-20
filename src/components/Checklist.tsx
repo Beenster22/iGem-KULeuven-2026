@@ -61,7 +61,7 @@ export function Checklist({ items }: ChecklistProps) {
       </div>
       <button
         type="button"
-        className="checklist-clear"
+        className="btn-empower checklist-clear"
         disabled={!anyDone}
         onClick={() => setDone(items.map(() => false))}
       >

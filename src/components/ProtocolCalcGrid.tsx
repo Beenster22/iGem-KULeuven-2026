@@ -75,7 +75,7 @@ export function ProtocolCalcGrid({
   const hasEdits = Object.keys(edits).length > 0;
 
   return (
-    <div className="protocol-calc">
+    <div className="protocol-calc surface">
       <div className="protocol-calc-caption">
         <strong>Table {number}.</strong> {title}{" "}
         <span className="protocol-calc-hint">
@@ -134,7 +134,7 @@ export function ProtocolCalcGrid({
         {hasEdits && (
           <button
             type="button"
-            className="protocol-calc-reset"
+            className="btn-empower btn-empower--sm protocol-calc-reset"
             onClick={() => setEdits({})}
           >
             Reset to the values printed in the protocol
