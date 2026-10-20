@@ -31,3 +31,6 @@ dist-ssr
 # Local PDF working copies (branded PDFs to upload to static.igem.wiki)
 /wiki-pdfs/
 /wiki-pdfs-branded/
+
+# Local draft documents
+brand-identity-draft.docx

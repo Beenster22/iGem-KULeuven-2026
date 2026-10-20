@@ -19,3 +19,17 @@ export function glideStartRate(velocity: number, distance: number, duration: num
   if (distance === 0 || Math.sign(velocity) !== Math.sign(distance)) return 0;
   return Math.min(MAX_START_RATE, (velocity * duration) / distance);
 }
+
+// Added with Claude Opus 5.5 (Anthropic), 2026-10-20: while one of these
+// glides is moving the page it marks the page busy until the given time
+// (performance.now()), and the eased wheel scrolling (useSmoothWheel in
+// HomeSnapScroll.tsx) keeps out of its way until then.
+let busyUntil = 0;
+
+export function markScrollBusy(until: number) {
+  busyUntil = Math.max(busyUntil, until);
+}
+
+export function scrollBusy() {
+  return performance.now() < busyUntil;
+}

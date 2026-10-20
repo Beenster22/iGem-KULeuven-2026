@@ -78,6 +78,10 @@ export function Navbar() {
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
   const { pathname: currentPath } = useLocation();
+  // Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request,
+  // phones): the collapsed menu is controlled here so it can close itself
+  // once a page is picked.
+  const [expanded, setExpanded] = useState(false);
 
   // Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request:
   // color-code the top-level folders — see Header.tsx's matching data-folder
@@ -126,11 +130,16 @@ export function Navbar() {
   // has moved away.
   const closeNow = () => {
     setOpenMenu(null);
+    setExpanded(false);
     const active = document.activeElement as HTMLElement | null;
     if (active && navRef.current?.contains(active)) {
       active.blur();
     }
   };
+
+  useEffect(() => {
+    setExpanded(false);
+  }, [currentPath]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -242,6 +251,8 @@ export function Navbar() {
     <div ref={navRef}>
       <BootstrapNavbar
         expand="lg"
+        expanded={expanded}
+        onToggle={setExpanded}
         variant={mode === "dark" ? "dark" : "light"}
         className="navbar-empower"
         fixed="top"
