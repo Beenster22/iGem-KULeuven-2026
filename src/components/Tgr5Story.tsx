@@ -28,6 +28,7 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
   type CSSProperties,
   type ReactNode,
   type RefObject,
@@ -783,6 +784,98 @@ export function Tgr5MechanismSection() {
             </h3>
             <Tgr5BindingDiagram animate={!prefersReducedMotion} />
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Generated with Claude Opus 5 (Anthropic), 2026-10-20 (team request): a
+// close-up of the receptor itself, under the screen that says bile acids
+// interact with it. The drawing zooms in as the screen is reached — it
+// starts small, the size it is in the diagram above, and opens out — and
+// the sentence beside it arrives in two parts, one per scroll.
+const ZOOM_HELICES = [-27, -9, 9, 27];
+
+function Tgr5ReceptorCloseUp() {
+  return (
+    <svg
+      className="tgr5-zoom-svg"
+      viewBox="0 0 320 300"
+      preserveAspectRatio="xMidYMid meet"
+      role="img"
+      aria-label="Illustration: a close-up of the TGR5 receptor, a bundle of four helices crossing the cell membrane."
+    >
+      {/* The membrane the receptor sits in, cut away so the helices read as
+          passing through it. */}
+      <rect className="tgr5-zoom-membrane" x={0} y={116} width={320} height={68} />
+      <line className="tgr5-zoom-membrane-edge" x1={0} y1={116} x2={320} y2={116} />
+      <line className="tgr5-zoom-membrane-edge" x1={0} y1={184} x2={320} y2={184} />
+      <g className="tgr5-receptor">
+        {ZOOM_HELICES.map((dx, i) => (
+          <rect
+            key={dx}
+            x={160 + dx - 11}
+            y={72}
+            width={22}
+            height={156}
+            rx={11}
+            transform={`rotate(${i % 2 ? 6 : -6} ${160 + dx} 150)`}
+          />
+        ))}
+      </g>
+      {/* On the band's own background rather than on a cell, so it takes
+          the text colour around it rather than the dark one. */}
+      <text className="tgr5-label" x={160} y={262}>
+        TGR5
+      </text>
+    </svg>
+  );
+}
+
+export function Tgr5ZoomSection() {
+  const prefersReducedMotion = useReducedMotion();
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [seen, setSeen] = useState(false);
+  const step = usePinnedStep(wrapperRef, 2);
+  const shown = prefersReducedMotion ? 2 : step + 1;
+
+  // The zoom plays once, when the screen is reached, rather than following
+  // the scroll: it reads as arriving at the receptor, not as a slider.
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el || prefersReducedMotion) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && setSeen(true),
+      { threshold: 0.4 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [prefersReducedMotion]);
+
+  return (
+    <div
+      className={prefersReducedMotion ? undefined : "home-snap-pin"}
+      ref={wrapperRef}
+      style={{ "--snap-steps": 2 } as CSSProperties}
+    >
+      {!prefersReducedMotion && <SnapSteps steps={2} />}
+      <div
+        ref={stageRef}
+        className={`tgr5-zoom${prefersReducedMotion ? " tgr5-zoom--static" : " home-snap-stage"}${seen || prefersReducedMotion ? " tgr5-zoom--in" : ""}`}
+      >
+        <div className="tgr5-zoom-words">
+          <p className={`tgr5-zoom-line${shown >= 1 ? " tgr5-zoom-line--shown" : ""}`}>
+            TGR5 is one of the <strong>most potent</strong> bile acid
+            receptors…
+          </p>
+          <p className={`tgr5-zoom-line${shown >= 2 ? " tgr5-zoom-line--shown" : ""}`}>
+            …involved in <strong>various different pathways</strong>
+          </p>
+        </div>
+        <div className="tgr5-zoom-art">
+          <Tgr5ReceptorCloseUp />
         </div>
       </div>
     </div>
