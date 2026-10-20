@@ -301,6 +301,16 @@ const TRAVELLER_H = BAC_H + TRAVELLER_PAD * 2;
 const SETTLED = 1.2;
 const RELEASE_AT = 0.55;
 
+// Where the cell sets off, as a share of the window: the hand-over begins
+// once the cell in the gut window has come up to this much of the way down
+// the screen. Edited with Claude Opus 5 (Anthropic), 2026-10-20 (team
+// request: the transition could not be seen happening). It used to begin
+// when this section's band reached the foot of the window, by which point
+// the gut window — and the cell with it — had been off the top of the
+// screen for over a thousand pixels, so the cell flew in from somewhere
+// the reader could not see and only appeared near the end.
+const DEPARTS_AT = 0.5;
+
 // The cell follows the scroll position through a soft spring instead of
 // rigidly, so a quick flick of the wheel still plays out as a glide.
 const FOLLOW_SPRING = { stiffness: 45, damping: 18, restDelta: 0.0005 };
@@ -372,7 +382,27 @@ function usePvZoom(
       const toY = diagramRect.top + BAC_MID_Y * unit;
       const toW = BAC_W * unit;
 
-      const target = 1 - band.getBoundingClientRect().top / window.innerHeight;
+      // From the cell being half way down the screen to this section's band
+      // filling it. Both ends are page positions, so the share between them
+      // is the same however the reader got here — but the gut window rides
+      // a sticky stage, so the cell's own top plus the scroll moves while
+      // that stage is pinned. Measure where the stage comes to rest at the
+      // foot of its wrapper instead, which does not.
+      const srcStage = source.closest<HTMLElement>(".home-snap-stage");
+      const srcPin = source.closest<HTMLElement>(".home-snap-pin");
+      const srcRest =
+        srcStage && srcPin
+          ? srcPin.getBoundingClientRect().bottom +
+            window.scrollY -
+            srcStage.getBoundingClientRect().height +
+            (sourceRect.top - srcStage.getBoundingClientRect().top)
+          : sourceRect.top + window.scrollY;
+      const departs = srcRest - window.innerHeight * DEPARTS_AT;
+      const arrives = band.getBoundingClientRect().top + window.scrollY;
+      const target =
+        arrives > departs
+          ? (window.scrollY - departs) / (arrives - departs)
+          : 1;
       return { fromX, fromY, fromW, toX, toY, toW, target };
     };
 
