@@ -6253,7 +6253,9 @@ body:not(.home-fullscreen) .home-hero {
 
 /* The key words: marked with the brand teal rather than coloured in it,
    which would not be readable on this band in light mode. */
-.story-text strong {
+.story-text strong,
+.bsh-stream-heading strong,
+.tgr5-heading strong {
   font-weight: inherit;
   background: linear-gradient(var(--color-interactive), var(--color-interactive)) 0 92% / 100% 0.14em no-repeat;
   padding-bottom: 0.05em;
