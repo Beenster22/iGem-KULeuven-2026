@@ -27,6 +27,7 @@
 import {
   useEffect,
   useMemo,
+  useId,
   useRef,
   type CSSProperties,
   type ReactNode,
@@ -808,38 +809,12 @@ const ZOOM_BOX = [
   ZOOM_VIEW,
 ].join(" ");
 
-// A burst around the receptor once it has arrived, to say it is the thing
-// being pointed at (team request, 2026-10-20): the drawn-on lines of a
-// comic panel. Each is a sliver tapering to a point at the receptor and
-// widening as it goes out, so they read as coming from it. Their lengths
-// and widths vary, which is what keeps them from looking like a cog.
-const RAY_COUNT = 56;
-const RAY_NEAR = 31;
-
-// A settled, repeatable scatter: the same burst on every visit.
-const rayWobble = (n: number, salt: number) =>
-  (Math.sin(n * 12.9898 + salt) * 43758.5453) % 1;
-
-const RAYS = Array.from({ length: RAY_COUNT }, (_, i) => {
-  const turn = ((i + 0.5) / RAY_COUNT) * 2 * Math.PI;
-  const far = 43 + Math.abs(rayWobble(i, 1.7)) * 13;
-  const half = (0.9 + Math.abs(rayWobble(i, 4.2)) * 1.5) * (Math.PI / 180);
-  const at = (angle: number, radius: number) =>
-    `${(GUT_RECEPTOR_X + Math.cos(angle) * radius).toFixed(2)},${(
-      GUT.top +
-      Math.sin(angle) * radius
-    ).toFixed(2)}`;
-  return {
-    key: i,
-    points: [
-      at(turn, RAY_NEAR),
-      at(turn - half, far),
-      at(turn + half, far),
-    ].join(" "),
-  };
-});
-
+// The receptor is the one thing on this screen, so it carries a soft
+// glow behind it once it has arrived — enough to make it the thing being
+// looked at, without anything drawn around it (team request, 2026-10-20).
 function Tgr5ReceptorCloseUp() {
+  // Its own id, so a second copy of this drawing cannot steal the glow.
+  const glowId = useId();
   return (
     <svg
       className="tgr5-zoom-svg"
@@ -848,11 +823,20 @@ function Tgr5ReceptorCloseUp() {
       role="img"
       aria-label="Illustration: a close-up of the TGR5 receptor, a bundle of four helices."
     >
-      <g className="tgr5-zoom-rays" aria-hidden="true">
-        {RAYS.map((ray) => (
-          <polygon key={ray.key} points={ray.points} />
-        ))}
-      </g>
+      <defs>
+        <radialGradient id={glowId}>
+          <stop offset="0%" stopColor="currentColor" stopOpacity={0.22} />
+          <stop offset="55%" stopColor="currentColor" stopOpacity={0.09} />
+          <stop offset="100%" stopColor="currentColor" stopOpacity={0} />
+        </radialGradient>
+      </defs>
+      <circle
+        className="tgr5-zoom-glow"
+        cx={GUT_RECEPTOR_X}
+        cy={GUT.top}
+        r={54}
+        fill={`url(#${glowId})`}
+      />
       <ReceptorShape x={GUT_RECEPTOR_X} y={GUT.top} />
     </svg>
   );
