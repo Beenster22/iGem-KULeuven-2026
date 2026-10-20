@@ -3219,15 +3219,6 @@ main:focus {
   overflow: visible;
 }
 
-/* Each turns about the centre of its own box (the wheel's box is pinned to
-   the drawing by an unpainted circle), which every browser places alike. */
-.wheel-selector-wheel,
-.wheel-selector-label {
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: transform 0.7s cubic-bezier(0.45, 0, 0.2, 1);
-}
-
 .wheel-selector-wedge {
   cursor: pointer;
   outline: none;
@@ -3299,12 +3290,6 @@ main:focus {
   fill: #33283f;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .wheel-selector-wheel,
-  .wheel-selector-label {
-    transition: none;
-  }
-}
 
 .wheel-selector-content {
   width: 100%;
@@ -11701,12 +11686,6 @@ body:not(.home-fullscreen) .home-hero {
   overflow: visible;
 }
 
-.feedback-wheel-rotor {
-  transform-box: view-box;
-  transform-origin: 200px 200px;
-  transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
-}
-
 .feedback-wheel-arrow {
   fill: #a9d9db;
   transition: fill 0.4s ease;
@@ -11995,10 +11974,6 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .feedback-wheel-rotor {
-    transition: none;
-  }
-
   .feedback-wheel-label {
     animation: none;
   }
@@ -14819,8 +14794,6 @@ a.protocol-download:hover {
 .dbtl-wheel-learn { --dbtl-w: #c9bde8; --dbtl-t: #33283f; }
 .dbtl-wheel-arrow { fill: var(--dbtl-w); stroke: transparent; stroke-width: 6; stroke-linejoin: round; }
 .dbtl-wheel-stage:focus-visible .dbtl-wheel-arrow { stroke: var(--color-text); }
-.dbtl-wheel-spinner { transform-box: fill-box; transform-origin: center; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
-@media (prefers-reduced-motion: reduce) { .dbtl-wheel-spinner { transition: none; } }
 .dbtl-wheel-label { fill: var(--dbtl-t); font-size: 36px; font-weight: 700; pointer-events: none; }
 .dbtl-wheel-centre { fill: currentColor; font-size: 28px; font-weight: 600; }
 /* The Next button hangs below the box instead of sitting in the column, so the

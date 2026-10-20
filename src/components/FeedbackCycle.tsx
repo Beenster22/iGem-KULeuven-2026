@@ -15,6 +15,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useEasedAngle } from "./useEasedAngle";
 
 /* ---------- Steps ---------- */
 
@@ -86,6 +87,9 @@ function CycleWheel({ active }: { active: number }) {
   // way instead of snapping back when the value wraps past a full turn.
   const rotationRef = useRef(-STEPS[active].angle);
   const [rotation, setRotation] = useState(rotationRef.current);
+  // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-21: the angle on screen,
+  // eased towards `rotation` (see useEasedAngle.ts for why not a CSS transition).
+  const shown = useEasedAngle(rotation, 900, [0.65, 0, 0.35, 1]);
 
   useEffect(() => {
     const target = -STEPS[active].angle;
@@ -105,7 +109,7 @@ function CycleWheel({ active }: { active: number }) {
     >
       <g
         className="feedback-wheel-rotor"
-        style={{ transform: `rotate(${rotation}deg)` }}
+        transform={`rotate(${shown} ${C} ${C})`}
       >
         {STEPS.map((step, index) => {
           // Where this arrow ends up once the wheel has turned
