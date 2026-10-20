@@ -13,6 +13,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { stringToSlug } from "../utils";
 import { Trophy } from "./Trophy";
 
 interface EventEntryProps {
@@ -376,6 +377,7 @@ export function EventsTimeline({ children, perRow = DEFAULT_EVENTS_PER_ROW }: Ev
             {row.map(({ event, index }, slot) => (
               <li
                 key={event.title}
+                id={stringToSlug(event.title)}
                 className="events-timeline-item"
                 style={
                   {

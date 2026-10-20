@@ -633,6 +633,121 @@ a[data-footnote-ref]:focus {
   .page-header-icon {
     width: 3.75rem;
   }
+
+  /* The icon takes a fifth of the width, leaving the title about 235px at
+     360px wide: a long single word such as "Entrepreneurship" at Bootstrap's
+     display-4 size (~33px) is wider than that and pushed the whole page
+     sideways. Smaller type fits it; min-width and overflow-wrap are the
+     safety net for any other long word. */
+  .page-header-box-icon-row > div {
+    min-width: 0;
+  }
+
+  .page-header-box h1 {
+    font-size: 1.6rem;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* PAGE SKELETON
+   Shown while a page's code is downloading (PageSkeleton.tsx). The blocks are
+   currentColor at low opacity, so they suit light and dark mode alike, with a
+   slow shimmer that stops for visitors who ask for reduced motion. */
+.skeleton-page {
+  min-height: 70vh;
+}
+
+.skeleton-block {
+  display: block;
+  border-radius: 0.5rem;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, currentColor 10%, transparent) 25%,
+    color-mix(in srgb, currentColor 18%, transparent) 50%,
+    color-mix(in srgb, currentColor 10%, transparent) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-block {
+    animation: none;
+  }
+}
+
+.skeleton-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-top: 1rem;
+}
+
+.skeleton-index {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .skeleton-index {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    width: 13.5rem;
+    flex: none;
+    padding: 1rem 1.5rem 0;
+  }
+}
+
+.skeleton-line {
+  height: 0.9rem;
+}
+
+.skeleton-paragraph {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.skeleton-heading {
+  height: 2rem;
+  width: 55%;
+}
+
+.skeleton-heading--short {
+  width: 35%;
+}
+
+.skeleton-card {
+  height: 11rem;
+  border-radius: 1rem;
+}
+
+/* Skip link: hidden until it takes keyboard focus (Bootstrap's
+   .visually-hidden-focusable), then pinned above the fixed navbar. */
+.skip-link:focus {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 2000;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--color-interactive);
+  color: #33283f;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+main:focus {
+  outline: none;
 }
 
 /* NAVBAR */
@@ -2552,12 +2667,6 @@ a[data-footnote-ref]:focus {
 .page-shell-content {
   flex: 1 1 0%;
   min-width: 0;
-  /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: Bootstrap's fixed
-     0.75rem-per-side container gutter felt tight on a large phone and loose
-     on desktop (it only ever changes at a breakpoint, not smoothly). Scales
-     continuously between the two instead. */
-  padding-left: clamp(1rem, 4vw, 2.5rem);
-  padding-right: clamp(1rem, 4vw, 2.5rem);
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): the
@@ -2565,19 +2674,11 @@ a[data-footnote-ref]:focus {
    the right as in a paper. Words are never split over two lines (team
    review, same day: automatic hyphenation read badly). The home page is left
    alone, and so is anything a page centres on purpose (Bootstrap's
-   .text-center is !important).
-   Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: capped at ~75
-   characters regardless of how wide the column itself is — a page with no
-   Inspirations sidebar (PageLayout.tsx) used to let justified text stretch
-   to the full container width on a wide monitor, which widens the gaps
-   between justified words into visible "rivers". Scoped to bare p/li so
-   custom components (figures, diagrams, grids), which use their own classed
-   wrappers, are unaffected. */
+   .text-center is !important). */
 .page-body:not(.page-body--home) .page-shell-content :is(p, li) {
   text-align: justify;
   hyphens: manual;
   line-height: 1.75;
-  max-width: 75ch;
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): more
@@ -4884,6 +4985,15 @@ body.home-fullscreen {
    reading as separate cards floating on top of one background. The
    .container reintroduced inside each section in home.mdx keeps the actual
    content (headings, lists, etc.) at the site's normal reading width. */
+/* 50vw includes the width of a classic (always-visible) scrollbar, so the
+   bands overshoot the visible page by the scrollbar's width and the home
+   page scrolled sideways by ~8px on Windows. Clipping (not hiding: clip makes
+   no scroll container, so sticky and snap behaviour are untouched) the
+   overshoot on the page body removes it. */
+.page-body--home {
+  overflow-x: clip;
+}
+
 .home-section {
   margin-left: calc(-50vw + 50%);
   margin-right: calc(-50vw + 50%);
@@ -10403,7 +10513,50 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .fan-selector-band:hover path {
-  opacity: 0.9;
+  opacity: 1;
+  stroke: var(--color-interactive);
+  stroke-width: 5;
+}
+
+.fan-selector-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.fan-selector-hint svg {
+  flex: none;
+  width: 1.4rem;
+  height: 1.4rem;
+  color: var(--color-interactive);
+}
+
+.fan-selector-chevron circle {
+  fill: #33283f;
+  transition: fill 0.2s ease;
+}
+
+.fan-selector-chevron path {
+  fill: none;
+  stroke: #eaf4f5;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fan-selector-band:hover .fan-selector-chevron circle,
+.fan-selector-band.active .fan-selector-chevron circle {
+  fill: var(--color-interactive);
+}
+
+.fan-selector-band.active .fan-selector-chevron path {
+  stroke: #fff;
 }
 
 .fan-selector-band.active path {
@@ -10434,7 +10587,7 @@ body:not(.home-fullscreen) .home-hero {
 
 .fan-selector-band:not(.active) text,
 .fan-selector-band:not(.active) .fan-selector-icon {
-  opacity: 0.75;
+  opacity: 0.9;
 }
 
 .fan-selector-icon {
@@ -10475,6 +10628,11 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .fan-selector-tab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  cursor: pointer;
   padding: 0.65rem 1rem;
   border: 2px solid rgba(51, 40, 63, 0.35);
   border-radius: 0.5rem;
@@ -10482,6 +10640,17 @@ body:not(.home-fullscreen) .home-hero {
   font-weight: 600;
   text-align: left;
   opacity: 0.8;
+}
+
+.fan-selector-tab svg {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.fan-selector-tab:hover {
+  opacity: 1;
+  border-color: var(--color-interactive);
 }
 
 .fan-selector-tab.active {
@@ -15716,6 +15885,8 @@ a.protocol-download:hover {
 }
 
 .ig-post {
+  /* Search jumps to a post by id; keep it clear of the fixed navbar. */
+  scroll-margin-top: 5rem;
   flex: 0 0 min(300px, 80%);
   scroll-snap-align: start;
   background: var(--color-page-bg);
@@ -16968,5 +17139,107 @@ a.protocol-download:hover {
 
   .pv-symptom-label {
     font-size: 32px;
+  }
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request)
+   Purpose: phone fixes from a round of testing on a real device.
+   - Running text is left-aligned: justified lines in a ~300px column opened
+     huge gaps between words.
+   - Home hero: the sentence is no longer lifted by the desktop offset, which
+     pushed it up over the lady's feet when it sits under her.
+   - BSH diagram: its two captions wrap inside their half instead of running
+     off the screen edge.
+   - Appendix tables fit the column (smaller cells, wrapping text) instead of
+     being wider than the page.
+   - The collapsed menu closes itself when a page is picked (Navbar.tsx). */
+@media (max-width: 767.98px) {
+  .page-body:not(.page-body--home) .page-shell-content :is(p, li) {
+    text-align: left;
+  }
+
+  .appendix-table table {
+    display: table;
+    table-layout: fixed;
+    overflow: visible;
+    font-size: 0.85rem;
+  }
+
+  .appendix-table table :is(th, td) {
+    padding: 0.45rem 0.5rem;
+    overflow-wrap: anywhere;
+  }
+
+  .appendix-table--compact table {
+    min-width: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 699.98px) {
+  .elle-tour-stage > .elle-tour-words {
+    translate: none;
+  }
+
+  .bsh-stream-caption:not(.bsh-stream-caption--species) {
+    width: 34%;
+    white-space: normal;
+    text-align: center;
+    font-size: 0.8rem;
+  }
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request)
+   Purpose: the "Read next" button at the end of every page (NextPage.tsx),
+   built on the shared .btn-empower pill. It is a wide card rather than a
+   small pill because it also previews the next page's lead. */
+.next-page {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.next-page-link.btn-empower {
+  --btn-empower-pad: var(--space-3) var(--space-4);
+  max-width: 34rem;
+  gap: var(--space-3);
+  border-radius: var(--surface-radius-lg);
+  text-align: left;
+  text-decoration: none;
+}
+
+.next-page-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.next-page-kicker {
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-interactive);
+}
+
+.next-page-title {
+  font-size: 1.2rem;
+}
+
+.next-page-lead {
+  font-size: 0.9rem;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.next-page-link svg {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+@media (max-width: 576px) {
+  .next-page {
+    justify-content: stretch;
   }
 }

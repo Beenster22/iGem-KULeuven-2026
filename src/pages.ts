@@ -20,6 +20,7 @@ import {
   ScienceCommunication,
   Sponsors,
 } from "./contents";
+import type { PageComponent } from "./contents";
 import {
   BlocksIcon,
   CalendarIcon,
@@ -59,7 +60,7 @@ class Page implements Base {
   name: string | undefined;
   title: string | undefined;
   path: string | undefined;
-  component: React.FC | undefined;
+  component: PageComponent | undefined;
   // Optional: pages whose lead has not been written yet show the title alone
   // (see Header.tsx) instead of iGEM's own judging prompt.
   lead?: string;
@@ -151,6 +152,14 @@ const Pages: (Page | Folder)[] = [
         specialPrize: true,
       },
       {
+        name: "Dry Lab",
+        title: "Dry Lab",
+        path: "/dry-lab",
+        component: DryLab,
+        lead: "A toolkit for engineering Bacteroides species, and the computational screening that narrowed our bile salt hydrolase candidates.",
+        icon: CodeIcon,
+      },
+      {
         name: "Notebook",
         title: "Notebook",
         path: "/notebook",
@@ -173,14 +182,6 @@ const Pages: (Page | Folder)[] = [
         component: Parts,
         lead: "The basic and composite parts of our Promoter Reporter Library, each linked to its iGEM Registry page.",
         icon: BlocksIcon,
-      },
-      {
-        name: "Dry Lab",
-        title: "Dry Lab",
-        path: "/dry-lab",
-        component: DryLab,
-        lead: "A toolkit for engineering Bacteroides species, and the computational screening that narrowed our bile salt hydrolase candidates.",
-        icon: CodeIcon,
       },
     ],
   },
