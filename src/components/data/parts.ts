@@ -15,6 +15,8 @@ export interface Part {
   usage: string;
   // Marks the row with an asterisk and prints this text under its table.
   footnote?: string;
+  // Optional link appended to the footnote text, closing with ").".
+  footnoteLink?: { text: string; to: string };
 }
 
 export const PARTS: Part[] = [
@@ -38,22 +40,26 @@ export const PARTS: Part[] = [
   { code: "BBa_26HAQ60N", name: "Bfp1E6-KOFP7", type: "Composite Part", usage: "Promoter Reporter Library" },
   { code: "BBa_26VM4LBB", name: "Bfp1E6-mCherry", type: "Composite Part", usage: "Promoter Reporter Library" },
   { code: "BBa_26OGTOKC", name: "Bfp1E6-GFP", type: "Composite Part", usage: "Promoter Reporter Library" },
-  { code: "BBa_26QEHAQR", name: "rpiL", type: "Basic Part", usage: "Promoter Reporter Library" },
-  { code: "BBa_26TKMNW3", name: "rrnB T1", type: "Basic Part", usage: "Promoter Reporter Library" },
-  { code: "BBa_264MT6BZ", name: "NanoLuc", type: "Basic Part", usage: "Promoter Reporter Library" },
-  { code: "BBa_26OFZ23W", name: "mCherry", type: "Basic Part", usage: "Promoter Reporter Library" },
-  { code: "BBa_26RRDVIB", name: "GFP", type: "Basic Part", usage: "Promoter Reporter Library" },
-  { code: "BBa_26O5Q2UI", name: "KOFP-7", type: "Basic Part", usage: "Promoter Reporter Library" },
-  { code: "BBa_26YAK9O9", name: "cfxA", type: "Basic Part", usage: "Promoter Reporter Library" },
-  { code: "BBa_26N22478", name: "PAM", type: "Basic Part", usage: "Promoter Reporter Library" },
-  { code: "BBa_26ZSXZLD", name: "BT1311", type: "Basic Part", usage: "Promoter Reporter Library" },
-  { code: "BBa_26I902HD", name: "BT4001", type: "Basic Part", usage: "Promoter Reporter Library" },
   {
     code: "BBa_263M4C35",
     name: "Bfp1E6",
     type: "Basic Part",
     usage: "Promoter Reporter Library",
     footnote:
-      "This part was submitted to the Registry by HZAU-China (2026), designed by Binbin He. We added the first documentation to it.",
+      "This part was submitted to the Registry by HZAU-China (2026), designed by Binbin He. We added the first documentation to it. We chose to use it because it was recommended to us by Prof. Dr. Weston Whitaker, who advised using strong, well-established promoters (see our",
+    footnoteLink: {
+      text: "Integrated Human Practices page",
+      to: "/human-practices#weston-whitaker",
+    },
   },
+  { code: "BBa_26I902HD", name: "BT4001", type: "Basic Part", usage: "Promoter Reporter Library" },
+  { code: "BBa_26ZSXZLD", name: "BT1311", type: "Basic Part", usage: "Promoter Reporter Library" },
+  { code: "BBa_26N22478", name: "PAM", type: "Basic Part", usage: "Promoter Reporter Library" },
+  { code: "BBa_26YAK9O9", name: "cfxA", type: "Basic Part", usage: "Promoter Reporter Library" },
+  { code: "BBa_26QEHAQR", name: "rpiL", type: "Basic Part", usage: "Promoter Reporter Library" },
+  { code: "BBa_26RRDVIB", name: "GFP", type: "Basic Part", usage: "Promoter Reporter Library" },
+  { code: "BBa_26O5Q2UI", name: "KOFP-7", type: "Basic Part", usage: "Promoter Reporter Library" },
+  { code: "BBa_26OFZ23W", name: "mCherry", type: "Basic Part", usage: "Promoter Reporter Library" },
+  { code: "BBa_264MT6BZ", name: "NanoLuc", type: "Basic Part", usage: "Promoter Reporter Library" },
+  { code: "BBa_26TKMNW3", name: "rrnB T1", type: "Basic Part", usage: "Promoter Reporter Library" },
 ];

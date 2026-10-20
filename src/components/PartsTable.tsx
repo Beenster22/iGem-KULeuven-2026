@@ -2,6 +2,7 @@
 // Purpose: one table of the Parts page (Basic Parts or Composite Parts), laid
 // out like last year's team's: Part code (linked to the iGEM Registry), Part
 // name, Usage. Rows come from data/parts.ts.
+import { Link } from "react-router-dom";
 import { PARTS, type PartType } from "./data/parts";
 
 const registryUrl = (code: string) =>
@@ -39,6 +40,12 @@ export function PartsTable({ type }: { type: PartType }) {
           part.footnote && (
             <p key={part.code} className="parts-footnote">
               * <strong>{part.code}</strong>: {part.footnote}
+              {part.footnoteLink && (
+                <>
+                  {" "}
+                  <Link to={part.footnoteLink.to}>{part.footnoteLink.text}</Link>).
+                </>
+              )}
             </p>
           ),
       )}

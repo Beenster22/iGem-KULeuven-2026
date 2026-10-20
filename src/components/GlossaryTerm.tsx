@@ -17,6 +17,8 @@ interface GlossaryTermProps {
   /** What Elle says when the word is clicked. */
   definition: string;
   children: ReactNode;
+  /** Open on hover / keyboard focus instead of on click (a tap still opens it). */
+  hover?: boolean;
 }
 
 interface Placement {
@@ -26,7 +28,7 @@ interface Placement {
   above: boolean;
 }
 
-export function GlossaryTerm({ definition, children }: GlossaryTermProps) {
+export function GlossaryTerm({ definition, children, hover }: GlossaryTermProps) {
   const [open, setOpen] = useState(false);
   const [placement, setPlacement] = useState<Placement | null>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -75,7 +77,15 @@ export function GlossaryTerm({ definition, children }: GlossaryTermProps) {
         type="button"
         className="glossary-term"
         aria-expanded={open}
-        onClick={() => setOpen((current) => !current)}
+        onClick={() => setOpen((current) => (hover ? true : !current))}
+        {...(hover
+          ? {
+              onMouseEnter: () => setOpen(true),
+              onMouseLeave: () => setOpen(false),
+              onFocus: () => setOpen(true),
+              onBlur: () => setOpen(false),
+            }
+          : {})}
       >
         {children}
       </button>
@@ -86,7 +96,12 @@ export function GlossaryTerm({ definition, children }: GlossaryTermProps) {
             ref={bubbleRef}
             role="dialog"
             className={`glossary-pop${placement.above ? " glossary-pop--above" : ""}`}
-            style={{ top: placement.top, left: placement.left, width: placement.width }}
+            style={{
+              top: placement.top,
+              left: placement.left,
+              width: placement.width,
+              ...(hover ? { pointerEvents: "none" } : {}),
+            }}
           >
             <img src={`${MASCOT_BASE}/uterus-smile.avif`} alt="" className="glossary-pop-elle" />
             <p>{definition}</p>

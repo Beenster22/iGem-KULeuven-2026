@@ -35,7 +35,7 @@
 // chips show an explanation on hover/focus again (text supplied by the team).
 // Purpose: home-page "What is PMOS?" definition (PmosDefinition), and — the definition on its own
 // the team's four symptom groups as cards (SymptomGroups, description page).
-import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { GlossaryTerm } from "./GlossaryTerm";
 import { FALLING_M_SOURCE_ATTR } from "./useFallingM";
 
@@ -76,7 +76,14 @@ const ICONS: Record<string, ReactNode> = {
   // A rod-shaped bacterium with flagella.
   gut: (
     <>
-      <rect x="4" y="8" width="14" height="8" rx="4" transform="rotate(-30 11 12)" />
+      <rect
+        x="4"
+        y="8"
+        width="14"
+        height="8"
+        rx="4"
+        transform="rotate(-30 11 12)"
+      />
       <path d="M17.5 6.5c1.5-1 2.5-.5 3.5-2M18.5 9c1.8-.2 2.6.6 3.8.1M4.5 17.5c-1.5 1-1.8 2.3-3 2.8" />
       <circle cx="9" cy="13" r="0.9" />
       <circle cx="12.5" cy="10.5" r="0.9" />
@@ -112,15 +119,19 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
       {
         label: "Hyperandrogenism",
         definition: "Elevated male hormone levels.",
-        explanation:
-          "Increased levels of male hormones (androgens).",
+        explanation: "Increased levels of male hormones (androgens).",
       },
       {
-        label: "Hirsutism and androgenic alopecia",
-        definition: "Hirsutism: excessive male-pattern hair growth in women. Androgenic alopecia: hair thinning and hair loss.",
-        explanation:
-          "Irregular hair growth: excess hair on the face and body, and thinning hair on the scalp.",
+        label: "Hirsutism",
+        definition: "Excessive male-pattern hair growth in women.",
+        explanation: "Irregular hair growth: excess hair on the face and body.",
       },
+      {
+        label: "Androgenic alopecia",
+        definition: "Hair thinning and hair loss.",
+        explanation: "Thinning hair on the scalp.",
+      },
+
       {
         label: "Acne and oily skin",
         explanation:
@@ -129,8 +140,7 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
       {
         label: "Anovulation",
         definition: "Absence of ovulation.",
-        explanation:
-          "Missing ovulation: the ovaries do not release an egg.",
+        explanation: "Missing ovulation: the ovaries do not release an egg.",
       },
       {
         label: "Polycystic ovarian morphology",
@@ -152,7 +162,7 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
   },
   {
     id: "metabolic",
-    title: "Metabolic",
+    title: "Metabolic complications",
     symptoms: [
       {
         label: "Low grade chronic inflammation",
@@ -167,22 +177,27 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
           "Higher than normal insulin levels in the blood, as the body tries to compensate for a reduced response to insulin.",
       },
       {
-        label: "Dyslipidaemia and raised cardiovascular risk",
-        definition: "Dyslipidaemia: abnormal levels of fats in the blood.",
-        explanation:
-          "Unhealthy levels of fats (lipids) in the blood, which raise the risk of heart and blood vessel disease.",
+        label: "Dyslipidaemia",
+        definition: "Abnormal levels of fats in the blood.",
+        explanation: "Unhealthy levels of fats (lipids) in the blood.",
       },
+      {
+        label: "Raised cardiovascular risk",
+        definition: "A higher risk of heart and blood vessel disease.",
+        explanation:
+          "Unhealthy blood fats raise the risk of heart and blood vessel disease.",
+      },
+
       {
         label: "Hepatic steatosis",
         definition: "Fat buildup in the liver.",
-        explanation:
-          "Fat building up in the liver (fatty liver).",
+        explanation: "Fat building up in the liver (fatty liver).",
       },
     ],
   },
   {
     id: "wellbeing",
-    title: "Wellbeing",
+    title: "Psychological symptoms",
     symptoms: [
       {
         label: "Anxiety and depression",
@@ -198,12 +213,14 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
   },
   {
     id: "gut",
-    title: "Gut microbiome",
-    symptoms: [{
+    title: "Reduced microbial diversity",
+    symptoms: [
+      {
         label: "Reduced microbial diversity",
         explanation:
           "A less varied community of bacteria in the gut than in women without PMOS.",
-      }],
+      },
+    ],
   },
 ];
 
@@ -222,7 +239,9 @@ export function PmosDefinition() {
                     below and becomes the M of "Million" (useFallingM.ts). */}
                 <span
                   className="body-symptoms-acrostic-letter"
-                  {...(word === "Metabolic" ? { [FALLING_M_SOURCE_ATTR]: "" } : {})}
+                  {...(word === "Metabolic"
+                    ? { [FALLING_M_SOURCE_ATTR]: "" }
+                    : {})}
                 >
                   {word[0]}
                 </span>
@@ -238,141 +257,70 @@ export function PmosDefinition() {
   );
 }
 
-interface HubLine {
-  id: string;
-  x1: number;
-  y1: number;
-  x2: number;
-  y2: number;
-}
-
-// How far in from a card's corner a line starts, so it meets the straight
-// part of the edge rather than the rounded corner.
-const CORNER_INSET = 22;
+// Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request): the
+// four cards are now a jigsaw — wellbeing across the top, metabolic and
+// hormonal below it either side, and the gut microbiome as the missing piece
+// in the middle that the other three are cut around (clip-paths in App.css,
+// .symptoms-puzzle). DOM order is the phone's stacking order.
+const PUZZLE_ORDER = ["wellbeing", "gut", "metabolic", "hormonal"];
+const PUZZLE_SLOTS = ["top", "gut", "left", "right"];
 
 export function SymptomGroups() {
-  const gridRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<Record<string, HTMLElement | null>>({});
-  const [lines, setLines] = useState<HubLine[]>([]);
-  const [size, setSize] = useState({ width: 0, height: 0 });
-
-  // The gut microbiome card sits in the middle and the other three around it,
-  // joined to it by lines. Where those lines run depends on where the cards
-  // end up (their heights follow their text), so they are measured rather
-  // than guessed, and drawn in an overlay on top of the grid.
-  useLayoutEffect(() => {
-    const grid = gridRef.current;
-    if (!grid) return;
-
-    const measure = () => {
-      const base = grid.getBoundingClientRect();
-      const rect = (id: string) => {
-        const box = cardRefs.current[id]?.getBoundingClientRect();
-        return box && {
-          left: box.left - base.left,
-          right: box.right - base.left,
-          top: box.top - base.top,
-          bottom: box.bottom - base.top,
-        };
-      };
-      const gut = rect("gut");
-      const hormonal = rect("hormonal");
-      const metabolic = rect("metabolic");
-      const wellbeing = rect("wellbeing");
-      setSize({ width: base.width, height: base.height });
-      // Below the width where the cards stack, there is nothing to join.
-      if (!gut || !hormonal || !metabolic || !wellbeing || window.innerWidth < 900) {
-        setLines([]);
-        return;
-      }
-      setLines([
-        {
-          id: "hormonal",
-          x1: hormonal.right - CORNER_INSET,
-          y1: hormonal.bottom,
-          x2: gut.left + CORNER_INSET,
-          y2: gut.top,
-        },
-        {
-          id: "metabolic",
-          x1: metabolic.left + CORNER_INSET,
-          y1: metabolic.bottom,
-          x2: gut.right - CORNER_INSET,
-          y2: gut.top,
-        },
-        {
-          id: "wellbeing",
-          x1: (gut.left + gut.right) / 2,
-          y1: gut.bottom,
-          x2: (wellbeing.left + wellbeing.right) / 2,
-          y2: wellbeing.top,
-        },
-      ]);
-    };
-
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(grid);
-    Object.values(cardRefs.current).forEach((card) => card && observer.observe(card));
-    window.addEventListener("resize", measure);
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", measure);
-    };
-  }, []);
-
+  const groups = PUZZLE_ORDER.map(
+    (id) => SYMPTOM_GROUPS.find((g) => g.id === id)!,
+  );
   return (
-    <div className="symptoms-overview-grid" ref={gridRef}>
-      {lines.length > 0 && (
-        <svg
-          className="symptoms-hub-lines"
-          width={size.width}
-          height={size.height}
-          viewBox={`0 0 ${size.width} ${size.height}`}
-          aria-hidden="true"
-        >
-          {lines.map((line) => (
-            <g key={line.id}>
-              <line x1={line.x1} y1={line.y1} x2={line.x2} y2={line.y2} />
-              <circle cx={line.x1} cy={line.y1} r={5} />
-              <circle cx={line.x2} cy={line.y2} r={5} />
-            </g>
-          ))}
-        </svg>
-      )}
-      {SYMPTOM_GROUPS.map((group) => (
-        <article
-          key={group.id}
-          ref={(element) => {
-            cardRefs.current[group.id] = element;
-          }}
-          className={`symptom-card symptom-group--${group.id}`}
-        >
-          <div className="symptom-card-head">
-            <svg
-              className="symptom-card-icon"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              {ICONS[group.id]}
-            </svg>
-            <h3 className="symptom-card-title">{group.title}</h3>
-          </div>
-          <ul className="symptom-card-list">
-            {group.symptoms.map((symptom) => (
-              <li key={symptom.label}>
-                {symptom.definition || symptom.explanation ? (
-                  <GlossaryTerm definition={(symptom.definition ?? symptom.explanation) as string}>
-                    {symptom.label}
+    <div className="symptoms-puzzle-wrap">
+      <div className="symptoms-puzzle">
+        {groups.map((group) => (
+          <article
+            key={group.id}
+            className={`symptom-card symptom-piece--${PUZZLE_SLOTS[groups.indexOf(group)]} symptom-group--${group.id}`}
+          >
+            <div className="symptom-card-head">
+              <svg
+                className="symptom-card-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                {ICONS[group.id]}
+              </svg>
+              <h3 className="symptom-card-title">
+                {group.id === "gut" ? (
+                  <GlossaryTerm
+                    hover
+                    definition={group.symptoms[0].explanation as string}
+                  >
+                    {group.title}
                   </GlossaryTerm>
                 ) : (
-                  symptom.label
+                  group.title
                 )}
-              </li>
-            ))}
-          </ul>
-        </article>
-      ))}
+              </h3>
+            </div>
+            {group.id !== "gut" && (
+              <ul className="symptom-card-list">
+                {group.symptoms.map((symptom) => (
+                  <li key={symptom.label}>
+                    {symptom.definition || symptom.explanation ? (
+                      <GlossaryTerm
+                        hover
+                        definition={
+                          (symptom.definition ?? symptom.explanation) as string
+                        }
+                      >
+                        {symptom.label}
+                      </GlossaryTerm>
+                    ) : (
+                      symptom.label
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </article>
+        ))}
+      </div>
     </div>
   );
 }

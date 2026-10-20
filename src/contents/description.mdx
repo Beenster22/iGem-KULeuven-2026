@@ -6,9 +6,7 @@
 
 Polyendocrine Metabolic Ovarian Syndrome (PMOS) is the most common metabolic and endocrine disorder affecting approximately 1 in 8 women of reproductive age. However, high prevalence and severity of the condition does not reflect the funding, research, and understanding it deserves. To this day, no approved disease-modifying treatment exists.
 
-Recent studies show that the intestinal microbiome can play a crucial role in the development and progression of PMOS. We hypothesize that a shift in microbial composition, and the following altered bile acid pool, sits upstream of symptoms such as insulin resistance, inflammation, hyperandrogenism, and fertility complications.
-
-*Phocaeicola vulgatus*, a commensal species overabundant in PMOS, contributes to this shift through its bile salt hydrolase (BSH) activity, modifying the bile acid pool and indirectly depleting IL-22 signaling. This cascade is linked to hormonal dysregulation and systemic inflammation. Engineering this non-model anaerobe is challenging. This is why we first built a synthetic biology toolkit for *P. vulgatus*: with characterized promoters across four fluorescent reporters, optimized conjugation, a MIC assay, and more. On that foundation we developed EMPOWER (Engineering Microbes to Promote Ovarian WEllbeing and Recovery), which selectively targets BSH activity in *P. vulgatus* to restore physiological bile acid signaling and hormonal balance.
+Recent studies show that the intestinal microbiome can play a crucial role in the development and progression of PMOS. We hypothesize that a shift in microbial composition, and the following altered bile acid pool, sits upstream of symptoms such as insulin resistance, inflammation, hyperandrogenism, and fertility complications. Rather than eliminating this bacterium, we aim to engineer *P. vulgatus* to modulate bile acid metabolism and harness its potential as a therapeutic microorganism. However, the genetic engineering of this non-model anaerobe remains challenging, with limited tools available. To address this gap, we developed a synthetic biology toolkit for *P. vulgatus*, including characterized promoters evaluated using four fluorescent reporters, optimized conjugation, and a minimum inhibitory concentration (MIC) assay. Building on this foundation, we developed EMPOWER (Engineering Microbes to Promote Ovarian WEllbeing and Recovery), a strategy designed to selectively modulate BSH activity in *P. vulgatus*, with the goal of restoring beneficial bile acid signaling and improving hormonal and metabolic function in PMOS.
 
 ## Polyendocrine Metabolic Ovarian Syndrome
 
@@ -211,9 +209,17 @@ The more we looked into various pathways driving PMOS, the more we found the pat
 
 <ExpandableText title="How is TGR5 involved in insulin resistance and hyperandrogenism?">
 
+<div className="tgr5-figure-row">
+
+<div className="tgr5-figure-row-text">
+
 Insulin resistance and hyperandrogenism are symptoms of PMOS that interplay with each other. By binding the TGR5 receptor, conjugated bile acids lead to the production of Glucagon-like Peptide-1 (GLP1)[^apsb2024][^chiang2017][^fmicb2025]. This leads to hyperinsulinemia, which in turn causes less Sex Hormone-Binding Globulin (SHBG) synthesis in the liver and more androgen production in ovarian theca cells[ref: Plymate, S. R., Matej, L. A., Jones, R. E., & Friedl, K. E. (1988). Inhibition of sex hormone-binding globulin production in the human hepatoma (Hep G2) cell line by insulin and prolactin. *The Journal of Clinical Endocrinology & Metabolism*, *67*(3), 460–464. https://doi.org/10.1210/jcem-67-3-460]. A dysregulated Hypothalamic-Pituitary-Adrenal axis (HPA) also contributes to hyperandrogenism[^hpa-axis].
 
-<img src="https://static.igem.wiki/teams/6299/wiki/project/description/proj-description-figure.avif" alt="Diagram of the GLP-1, insulin resistance and hyperandrogenism pathway: enteroendocrine L-cells signal through GPBAR1/TGR5 to hyperinsulinemia, which lowers SHBG and raises theca-cell androgen production, alongside GnRH driving LH/FSH and androgens." className="img-fluid rounded" style={{ maxWidth: "560px" }} />
+</div>
+
+<img src="https://static.igem.wiki/teams/6299/wiki/project/description/proj-description-figure.avif" alt="Diagram of the GLP-1, insulin resistance and hyperandrogenism pathway: enteroendocrine L-cells signal through GPBAR1/TGR5 to hyperinsulinemia, which lowers SHBG and raises theca-cell androgen production, alongside GnRH driving LH/FSH and androgens." className="img-fluid rounded tgr5-figure-row-img" />
+
+</div>
 
 </ExpandableText>
 
@@ -317,6 +323,12 @@ We proved engineering *P. vulgatus* is attainable and gathered the pieces of inf
 ### How many people live with PMOS?
 
 In order to understand the scale of the problem we're addressing, finding the most accurate estimate of how many women are affected by this condition and how these cases are distributed across the world is crucial[ref: Lin, T., Xie, B., Yang, J., et al. (2025). Changes in the global burden of polycystic ovary syndrome from 1990 to 2021. *Reproductive Health*, *22*, Article 86.]. Most published studies report results for large statistical regions rather than specific continents, so we calculated the continent totals ourselves from openly available data.
+
+Explore the same figures on the globe: click a continent to see its estimate.
+
+<PmosGlobeSection />
+
+Figures per continent: IHME Global Burden of Disease data, [The Lancet (2026)](https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(26)00717-8/fulltext), and [Springer (2025)](https://link.springer.com/article/10.1186/s12978-025-02016-y).
 
 We used the Global Burden of Disease (GBD) Results, made available by the Institute for Health Metrics and Evaluation (IHME)[ref: Institute for Health Metrics and Evaluation. (2024). *Global Burden of Disease (GBD) 2023 results* [Data set]. https://ghdx.healthdata.org/]. GBD is the most comprehensive dataset on disease burden worldwide. It provides standardized estimates for 204 countries and territories, which makes numbers comparable between countries.
 

@@ -22,6 +22,7 @@ import {
 } from "./components/NotebookDropdown";
 import { NotebookEntryMeta } from "./components/NotebookEntryMeta";
 import { EventsTimeline, EventEntry } from "./components/EventsTimeline";
+import { PdfEmbed } from "./components/PdfEmbed";
 import {
   HumanPracticesInterviews,
   HPSection,
@@ -29,6 +30,7 @@ import {
   Interviewee,
 } from "./components/HumanPracticesInterviews";
 import { PmosOverview } from "./components/PmosOverview";
+import { PmosGlobeSection } from "./components/PmosGlobeSection";
 import {
   SymptomGroups,
   PmosDefinition,
@@ -136,6 +138,7 @@ export const mdxComponents = {
   PartsTable,
   PageLayout,
   PmosOverview,
+  PmosGlobeSection,
   SymptomGroups,
   PmosEffectsSection,
   ElleTour,
@@ -223,6 +226,7 @@ export const mdxComponents = {
   NotebookEntryMeta,
   EventsTimeline,
   EventEntry,
+  PdfEmbed,
   HumanPracticesInterviews,
   HPSection,
   HPIntro,

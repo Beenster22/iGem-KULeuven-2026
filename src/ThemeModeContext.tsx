@@ -10,7 +10,6 @@ import {
 } from "react";
 import {
   applyThemeMode,
-  getSystemPrefersDark,
   readStoredThemeMode,
   ThemeMode,
   writeStoredThemeMode,
@@ -24,24 +23,14 @@ interface ThemeModeContextValue {
 const ThemeModeContext = createContext<ThemeModeContextValue | null>(null);
 
 export function ThemeModeProvider({ children }: { children: ReactNode }) {
+  // Dark is the default; only an explicit toggle pick (persisted) overrides it.
   const [mode, setMode] = useState<ThemeMode>(
-    () => readStoredThemeMode() ?? (getSystemPrefersDark() ? "dark" : "light"),
+    () => readStoredThemeMode() ?? "dark",
   );
 
   useEffect(() => {
     applyThemeMode(mode);
   }, [mode]);
-
-  // Follow the OS-level preference live, but only until the user makes an
-  // explicit choice via the toggle (see toggleMode, which persists a pick).
-  useEffect(() => {
-    if (readStoredThemeMode() !== null) return;
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const onChange = (event: MediaQueryListEvent) =>
-      setMode(event.matches ? "dark" : "light");
-    mediaQuery.addEventListener("change", onChange);
-    return () => mediaQuery.removeEventListener("change", onChange);
-  }, []);
 
   const toggleMode = () => {
     setMode((prev) => {
