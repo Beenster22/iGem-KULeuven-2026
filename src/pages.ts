@@ -205,8 +205,8 @@ const Pages: (Page | Folder)[] = [
         icon: CalendarIcon,
       },
       {
-        name: "Science Communication & Community",
-        title: "Science Communication & Community",
+        name: "Science Communication & Outreach",
+        title: "Science Communication & Outreach",
         path: "/science-communication",
         component: ScienceCommunication,
         lead: "How we brought PMOS to students, patients and the wider public: events, social media, publications, an app, and collaborations with other iGEM teams.",

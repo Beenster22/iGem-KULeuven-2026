@@ -203,7 +203,7 @@ export const mdxComponents = {
   TabbedSections,
   TabSection,
   // Generated with Claude Opus 5.5 (Anthropic), 2026-10-20
-  // Purpose: the Science Communication & Community page — Instagram post
+  // Purpose: the Science Communication & Outreach page — Instagram post
   // carousel, publications card, app phone mockup and collaboration videos.
   InstagramCarousel,
   InstagramPost,

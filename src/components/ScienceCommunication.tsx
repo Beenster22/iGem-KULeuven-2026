@@ -1,5 +1,5 @@
 // Generated with Claude Opus 5.5 (Anthropic), 2026-10-20
-// Purpose: the showcase pieces of the Science Communication & Community page
+// Purpose: the showcase pieces of the Science Communication & Outreach page
 // (science-communication.mdx): an Instagram-style carousel of our posts, a
 // tabbed card for the articles we published, a phone mockup for the app, and
 // a slot for each collaboration video. Every piece renders a clearly marked
