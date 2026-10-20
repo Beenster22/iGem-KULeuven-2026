@@ -199,8 +199,12 @@ export function Navbar() {
             <>
               <span className="nav-glitter-text">{item.name}</span>
               <span className="nav-glitter-spark nav-glitter-spark--1" aria-hidden="true">✦</span>
-              <span className="nav-glitter-spark nav-glitter-spark--2" aria-hidden="true">✦</span>
+              <span className="nav-glitter-spark nav-glitter-spark--2" aria-hidden="true">✧</span>
               <span className="nav-glitter-spark nav-glitter-spark--3" aria-hidden="true">✦</span>
+              <span className="nav-glitter-spark nav-glitter-spark--4" aria-hidden="true">✧</span>
+              <span className="nav-glitter-spark nav-glitter-spark--5" aria-hidden="true">✦</span>
+              <span className="nav-glitter-spark nav-glitter-spark--6" aria-hidden="true">✧</span>
+              <span className="nav-glitter-spark nav-glitter-spark--7" aria-hidden="true">✦</span>
             </>
           ) : (
             item.name
