@@ -879,6 +879,119 @@ export function Tgr5ZoomSection() {
   );
 }
 
+// Generated with Claude Opus 5 (Anthropic), 2026-10-20 (team request): the
+// screen where the binding fails. The receptor stands on the left, two
+// bile acids come in from the right and go for it, and each time one
+// reaches it a red cross says no and it is knocked back. It runs on a
+// loop of its own rather than on the scroll, so the refusal repeats for
+// as long as the reader watches.
+// Drawn in the same 1000-unit space as the screens either side, so a bile
+// acid here is the size it is there (team request, 2026-10-20) without a
+// second figure to keep in step. The receptor stands in the middle, a
+// little larger than it is drawn elsewhere, since it is what this screen
+// is about.
+const IMPAIRED_W = 1000;
+const IMPAIRED_H = 440;
+const IMPAIRED_CENTRE = { x: 500, y: 330 };
+const IMPAIRED_RECEPTOR_SCALE = 1.3;
+// Where an acid is turned away: just off the receptor's outer end, about
+// where it would have docked.
+const IMPAIRED_DOCK = {
+  x: IMPAIRED_CENTRE.x,
+  y:
+    IMPAIRED_CENTRE.y -
+    RECEPTOR_HALF * IMPAIRED_RECEPTOR_SCALE -
+    ACID_R -
+    4,
+};
+
+// Where each one waits its turn, floating above the receptor.
+// `stream` picks which of the two colours it is drawn in, the same two the
+// bile acids have everywhere else on the page (bsh-molecule--0 and --1).
+const IMPAIRED_ACIDS = [
+  { x: 250, y: 112, stream: 0 },
+  { x: 385, y: 152, stream: 1 },
+  { x: 515, y: 96, stream: 0 },
+  { x: 645, y: 148, stream: 1 },
+  { x: 775, y: 118, stream: 1 },
+].map((home, i) => ({
+  ...home,
+  i,
+  dx: IMPAIRED_DOCK.x - home.x,
+  dy: IMPAIRED_DOCK.y - home.y,
+}));
+
+function Tgr5ImpairedFigure() {
+  return (
+    <svg
+      className="tgr5-impaired-svg"
+      viewBox={`0 0 ${IMPAIRED_W} ${IMPAIRED_H}`}
+      preserveAspectRatio="xMidYMid meet"
+      role="img"
+      aria-label="Illustration: bile acids float above a TGR5 receptor and go down to it one at a time, each refused by a red cross."
+    >
+      <g
+        transform={`translate(${IMPAIRED_CENTRE.x} ${IMPAIRED_CENTRE.y}) scale(${IMPAIRED_RECEPTOR_SCALE})`}
+      >
+        {/* Shaken off by each one in turn, which is why it is wrapped: the
+            group above carries the placement, this one the knock. */}
+        <g className="tgr5-impaired-receptor">
+          <ReceptorShape x={0} y={0} />
+        </g>
+      </g>
+      {IMPAIRED_ACIDS.map((acid) => (
+        <g key={acid.i} transform={`translate(${acid.x} ${acid.y})`}>
+          <g
+            className="tgr5-impaired-dive"
+            style={
+              {
+                "--dx": acid.dx,
+                "--dy": acid.dy,
+                "--i": acid.i,
+              } as CSSProperties
+            }
+          >
+            <g className="tgr5-impaired-float" style={{ "--i": acid.i } as CSSProperties}>
+              <g
+                className={`bsh-molecule--${acid.stream}`}
+                transform={`scale(${ACID_SCALE})`}
+              >
+                <AcidShape conjugated />
+              </g>
+            </g>
+          </g>
+          {/* The refusal, which waits at the receptor for its own turn. */}
+          <g
+            className="tgr5-impaired-no"
+            style={
+              {
+                "--dx": acid.dx,
+                "--dy": acid.dy,
+                "--i": acid.i,
+              } as CSSProperties
+            }
+          >
+            <line x1={-13} y1={-13} x2={13} y2={13} />
+            <line x1={13} y1={-13} x2={-13} y2={13} />
+          </g>
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+export function Tgr5ImpairedSection() {
+  return (
+    <section className="tgr5-impaired home-snap-screen" data-snap="">
+      <h3 className="tgr5-impaired-heading">
+        When bile acid pool is <strong>disbalanced</strong>,{" "}
+        <strong>binding to TGR5 is impaired</strong>
+      </h3>
+      <Tgr5ImpairedFigure />
+    </section>
+  );
+}
+
 // The ILC3 close-up that used to be the second step of the screen above.
 // Taken off the home page on Marie's review (2026-10-08) but kept whole, so
 // it can go on another page: drop <Tgr5Ilc3Figure /> into any .mdx file.
