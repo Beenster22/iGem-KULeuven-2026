@@ -879,6 +879,66 @@ export function Tgr5ZoomSection() {
   );
 }
 
+// Generated with Claude Opus 5 (Anthropic), 2026-10-20 (team request): the
+// screen where the binding fails. The receptor stands on the left, two
+// bile acids come in from the right and go for it, and each time one
+// reaches it a red cross says no and it is knocked back. It runs on a
+// loop of its own rather than on the scroll, so the refusal repeats for
+// as long as the reader watches.
+const IMPAIRED_W = 620;
+const IMPAIRED_H = 260;
+const IMPAIRED_RECEPTOR = { x: 170, y: 150 };
+// Where an acid comes to rest when it is refused: short of the receptor,
+// about where it would have docked.
+const IMPAIRED_DOCK = {
+  x: IMPAIRED_RECEPTOR.x + 4,
+  y: IMPAIRED_RECEPTOR.y - DOCK_GAP,
+};
+
+function Tgr5ImpairedFigure() {
+  return (
+    <svg
+      className="tgr5-impaired-svg"
+      viewBox={`0 0 ${IMPAIRED_W} ${IMPAIRED_H}`}
+      preserveAspectRatio="xMidYMid meet"
+      role="img"
+      aria-label="Illustration: two bile acids come in from the right towards a TGR5 receptor and fail to bind, each refused by a red cross."
+    >
+      <ReceptorShape x={IMPAIRED_RECEPTOR.x} y={IMPAIRED_RECEPTOR.y} />
+      {[0, 1].map((n) => (
+        <g
+          key={n}
+          transform={`translate(${IMPAIRED_DOCK.x} ${
+            IMPAIRED_DOCK.y + (n ? 34 : 0)
+          })`}
+        >
+          <g className={`tgr5-impaired-acid tgr5-impaired-acid--${n}`}>
+            <g transform={`scale(${ACID_SCALE})`}>
+              <AcidShape conjugated />
+            </g>
+          </g>
+          <g className={`tgr5-impaired-no tgr5-impaired-no--${n}`}>
+            <line x1={-13} y1={-13} x2={13} y2={13} />
+            <line x1={13} y1={-13} x2={-13} y2={13} />
+          </g>
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+export function Tgr5ImpairedSection() {
+  return (
+    <section className="tgr5-impaired home-snap-screen" data-snap="">
+      <h3 className="tgr5-impaired-heading">
+        When bile acid pool is <strong>disbalanced</strong>, binding to TGR5
+        is impaired
+      </h3>
+      <Tgr5ImpairedFigure />
+    </section>
+  );
+}
+
 // The ILC3 close-up that used to be the second step of the screen above.
 // Taken off the home page on Marie's review (2026-10-08) but kept whole, so
 // it can go on another page: drop <Tgr5Ilc3Figure /> into any .mdx file.
