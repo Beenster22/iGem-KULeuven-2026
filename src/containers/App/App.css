@@ -15016,7 +15016,8 @@ a.protocol-download:hover {
   visibility: hidden;
 }
 
-.tgr5-zoom-svg .tgr5-receptor {
+.tgr5-zoom-svg .tgr5-receptor,
+.tgr5-impaired-svg .tgr5-receptor {
   opacity: var(--receptor-in, 1);
 }
 

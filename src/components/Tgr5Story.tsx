@@ -849,7 +849,12 @@ export function Tgr5ZoomSection() {
   const step = usePinnedStep(wrapperRef, 2);
   const shown = prefersReducedMotion ? 2 : step + 1;
   // The receptor on the screen above flies down and becomes this one.
-  useReceptorZoom({ stageRef, skip: !!prefersReducedMotion });
+  useReceptorZoom({
+    stageRef,
+    from: ".tgr5-svg--overview .tgr5-receptor",
+    to: ".tgr5-zoom-svg .tgr5-receptor",
+    skip: !!prefersReducedMotion,
+  });
 
   return (
     <div
@@ -893,7 +898,7 @@ export function Tgr5ZoomSection() {
 const IMPAIRED_W = 1000;
 const IMPAIRED_H = 440;
 const IMPAIRED_CENTRE = { x: 500, y: 330 };
-const IMPAIRED_RECEPTOR_SCALE = 1.3;
+const IMPAIRED_RECEPTOR_SCALE = 2.2;
 // Where an acid is turned away: just off the receptor's outer end, about
 // where it would have docked.
 const IMPAIRED_DOCK = {
@@ -981,8 +986,21 @@ function Tgr5ImpairedFigure() {
 }
 
 export function Tgr5ImpairedSection() {
+  const prefersReducedMotion = useReducedMotion();
+  const stageRef = useRef<HTMLElement>(null);
+  // The receptor from the close-up above comes down and becomes this one.
+  useReceptorZoom({
+    stageRef,
+    from: ".tgr5-zoom-svg .tgr5-receptor",
+    to: ".tgr5-impaired-svg .tgr5-receptor",
+    skip: !!prefersReducedMotion,
+  });
   return (
-    <section className="tgr5-impaired home-snap-screen" data-snap="">
+    <section
+      className="tgr5-impaired home-snap-screen"
+      data-snap=""
+      ref={stageRef}
+    >
       <h3 className="tgr5-impaired-heading">
         When bile acid pool is <strong>disbalanced</strong>,{" "}
         <strong>binding to TGR5 is impaired</strong>
