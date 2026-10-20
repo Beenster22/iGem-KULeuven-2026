@@ -15048,67 +15048,76 @@ a.protocol-download:hover {
   max-height: 46vh;
 }
 
-/* In from the right, a shove at the receptor, then knocked back. */
-.tgr5-impaired-acid {
-  animation: tgr5-impaired-run 3.6s ease-in-out infinite;
+/* Five acids, each taking its turn: they drift above the receptor, and one
+   at a time one of them goes down to it, is crossed out and comes back up.
+   One cycle covers all five, so --i spaces their turns out and exactly one
+   is on its way down at any moment. */
+.tgr5-impaired-dive {
+  animation: tgr5-impaired-dive 12s ease-in-out infinite;
+  animation-delay: calc(var(--i) * -2.4s);
 }
 
-.tgr5-impaired-acid--1 {
-  animation-delay: -1.8s;
-}
-
-@keyframes tgr5-impaired-run {
-  0% {
-    transform: translateX(380px);
-    opacity: 0;
+@keyframes tgr5-impaired-dive {
+  0%,
+  6% {
+    transform: translate(0, 0);
   }
 
-  8% {
-    opacity: 1;
+  /* Down to the receptor. */
+  14% {
+    transform: translate(calc(var(--dx) * 1px), calc(var(--dy) * 1px));
   }
 
-  34% {
-    transform: translateX(26px);
+  /* Turned away: a shove back, a second go, and away. */
+  17% {
+    transform: translate(
+      calc(var(--dx) * 1px),
+      calc(var(--dy) * 1px + 16px)
+    );
   }
 
-  40% {
-    transform: translateX(6px);
+  20% {
+    transform: translate(calc(var(--dx) * 1px), calc(var(--dy) * 1px + 3px));
   }
 
-  46% {
-    transform: translateX(30px);
+  23% {
+    transform: translate(
+      calc(var(--dx) * 1px),
+      calc(var(--dy) * 1px + 14px)
+    );
   }
 
-  52% {
-    transform: translateX(10px);
-  }
-
-  58% {
-    transform: translateX(34px);
-  }
-
-  78% {
-    transform: translateX(380px);
-    opacity: 1;
-  }
-
-  82%,
+  32%,
   100% {
-    transform: translateX(380px);
-    opacity: 0;
+    transform: translate(0, 0);
   }
 }
 
-/* The refusal: a red cross, on at the moment it is turned away. */
+/* The drift they keep up while they wait, on top of all that. */
+.tgr5-impaired-float {
+  animation: tgr5-impaired-float 5.4s ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -1.1s);
+}
+
+@keyframes tgr5-impaired-float {
+  from {
+    transform: translate(-7px, -5px);
+  }
+
+  to {
+    transform: translate(7px, 6px);
+  }
+}
+
+/* The refusal: a red cross at the receptor, on just as its own acid gets
+   there. It sits where that acid is turned away. */
 .tgr5-impaired-no {
   opacity: 0;
   transform-box: fill-box;
   transform-origin: 50% 50%;
-  animation: tgr5-impaired-no 3.6s ease-out infinite;
-}
-
-.tgr5-impaired-no--1 {
-  animation-delay: -1.8s;
+  translate: calc(var(--dx) * 1px) calc(var(--dy) * 1px);
+  animation: tgr5-impaired-no 12s ease-out infinite;
+  animation-delay: calc(var(--i) * -2.4s);
 }
 
 .tgr5-impaired-no line {
@@ -15119,26 +15128,26 @@ a.protocol-download:hover {
 
 @keyframes tgr5-impaired-no {
   0%,
-  37% {
+  13% {
     opacity: 0;
     scale: 0.5;
   }
 
-  41% {
+  15% {
     opacity: 1;
-    scale: 1.15;
+    scale: 1.2;
   }
 
-  46% {
+  18% {
     scale: 1;
   }
 
-  60% {
+  26% {
     opacity: 1;
     scale: 1;
   }
 
-  68%,
+  30%,
   100% {
     opacity: 0;
     scale: 1;
@@ -15146,18 +15155,14 @@ a.protocol-download:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tgr5-impaired-acid,
+  .tgr5-impaired-dive,
+  .tgr5-impaired-float,
   .tgr5-impaired-no {
     animation: none;
   }
 
-  .tgr5-impaired-acid {
-    transform: translateX(30px);
-  }
-
   .tgr5-impaired-no {
     opacity: 1;
-    scale: 1;
   }
 }
 

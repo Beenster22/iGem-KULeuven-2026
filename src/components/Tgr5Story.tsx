@@ -885,15 +885,39 @@ export function Tgr5ZoomSection() {
 // reaches it a red cross says no and it is knocked back. It runs on a
 // loop of its own rather than on the scroll, so the refusal repeats for
 // as long as the reader watches.
-const IMPAIRED_W = 620;
-const IMPAIRED_H = 260;
-const IMPAIRED_RECEPTOR = { x: 170, y: 150 };
-// Where an acid comes to rest when it is refused: short of the receptor,
-// about where it would have docked.
+// Drawn in the same 1000-unit space as the screens either side, so a bile
+// acid here is the size it is there (team request, 2026-10-20) without a
+// second figure to keep in step. The receptor stands in the middle, a
+// little larger than it is drawn elsewhere, since it is what this screen
+// is about.
+const IMPAIRED_W = 1000;
+const IMPAIRED_H = 440;
+const IMPAIRED_CENTRE = { x: 500, y: 330 };
+const IMPAIRED_RECEPTOR_SCALE = 1.3;
+// Where an acid is turned away: just off the receptor's outer end, about
+// where it would have docked.
 const IMPAIRED_DOCK = {
-  x: IMPAIRED_RECEPTOR.x + 4,
-  y: IMPAIRED_RECEPTOR.y - DOCK_GAP,
+  x: IMPAIRED_CENTRE.x,
+  y:
+    IMPAIRED_CENTRE.y -
+    RECEPTOR_HALF * IMPAIRED_RECEPTOR_SCALE -
+    ACID_R -
+    4,
 };
+
+// Where each one waits its turn, floating above the receptor.
+const IMPAIRED_ACIDS = [
+  { x: 250, y: 112 },
+  { x: 385, y: 152 },
+  { x: 515, y: 96 },
+  { x: 645, y: 148 },
+  { x: 775, y: 118 },
+].map((home, i) => ({
+  ...home,
+  i,
+  dx: IMPAIRED_DOCK.x - home.x,
+  dy: IMPAIRED_DOCK.y - home.y,
+}));
 
 function Tgr5ImpairedFigure() {
   return (
@@ -902,22 +926,42 @@ function Tgr5ImpairedFigure() {
       viewBox={`0 0 ${IMPAIRED_W} ${IMPAIRED_H}`}
       preserveAspectRatio="xMidYMid meet"
       role="img"
-      aria-label="Illustration: two bile acids come in from the right towards a TGR5 receptor and fail to bind, each refused by a red cross."
+      aria-label="Illustration: bile acids float above a TGR5 receptor and go down to it one at a time, each refused by a red cross."
     >
-      <ReceptorShape x={IMPAIRED_RECEPTOR.x} y={IMPAIRED_RECEPTOR.y} />
-      {[0, 1].map((n) => (
-        <g
-          key={n}
-          transform={`translate(${IMPAIRED_DOCK.x} ${
-            IMPAIRED_DOCK.y + (n ? 34 : 0)
-          })`}
-        >
-          <g className={`tgr5-impaired-acid tgr5-impaired-acid--${n}`}>
-            <g transform={`scale(${ACID_SCALE})`}>
-              <AcidShape conjugated />
+      <g
+        transform={`translate(${IMPAIRED_CENTRE.x} ${IMPAIRED_CENTRE.y}) scale(${IMPAIRED_RECEPTOR_SCALE})`}
+      >
+        <ReceptorShape x={0} y={0} />
+      </g>
+      {IMPAIRED_ACIDS.map((acid) => (
+        <g key={acid.i} transform={`translate(${acid.x} ${acid.y})`}>
+          <g
+            className="tgr5-impaired-dive"
+            style={
+              {
+                "--dx": acid.dx,
+                "--dy": acid.dy,
+                "--i": acid.i,
+              } as CSSProperties
+            }
+          >
+            <g className="tgr5-impaired-float" style={{ "--i": acid.i } as CSSProperties}>
+              <g transform={`scale(${ACID_SCALE})`}>
+                <AcidShape conjugated />
+              </g>
             </g>
           </g>
-          <g className={`tgr5-impaired-no tgr5-impaired-no--${n}`}>
+          {/* The refusal, which waits at the receptor for its own turn. */}
+          <g
+            className="tgr5-impaired-no"
+            style={
+              {
+                "--dx": acid.dx,
+                "--dy": acid.dy,
+                "--i": acid.i,
+              } as CSSProperties
+            }
+          >
             <line x1={-13} y1={-13} x2={13} y2={13} />
             <line x1={13} y1={-13} x2={-13} y2={13} />
           </g>
