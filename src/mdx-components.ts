@@ -49,6 +49,7 @@ import { GlossaryTerm } from "./components/GlossaryTerm";
 import { Checklist } from "./components/Checklist";
 import { Medal } from "./components/Medal";
 import { PrizeStar } from "./components/PrizeStar";
+import { AttributionsEmbed } from "./components/AttributionsEmbed";
 import { PhasePager } from "./components/PhasePager";
 import { PhasePillars } from "./components/PhasePillars";
 import { IntegrationSummary, IntegrationPoint } from "./components/IntegrationSummary";
@@ -162,6 +163,7 @@ export const mdxComponents = {
   Checklist,
   Medal,
   PrizeStar,
+  AttributionsEmbed,
   PhasePager,
   PhasePillars,
   IntegrationSummary,
