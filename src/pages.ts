@@ -220,8 +220,8 @@ const Pages: (Page | Folder)[] = [
     specialPrize: true,
   },
   {
-    name: "Prizes and Medals",
-    title: "Prizes and Medals",
+    name: "Awards",
+    title: "Awards",
     path: "/awards",
     component: Awards,
     lead: "The medal and special prizes we are competing for, why we believe we deserve each one, and where on the wiki to find the work behind it.",
