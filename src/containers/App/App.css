@@ -17476,35 +17476,22 @@ a.protocol-download:hover {
 }
 
 /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-21 (team request): the
-   explanation box takes the colour of the stage selected on the wheel: Design
-   dark purple, Build teal, Test light pink, Learn light purple (the brand
-   swatches). Figures keep their own light panels inside. */
+   explanation box takes a soft tint of the stage selected on the wheel, with
+   the stage's brand colour as its border: Design dark purple, Build teal,
+   Test light pink, Learn light purple. The text stays dark purple. */
 .dbtl-box-design {
-  background: #33283f;
+  background: #ebe7ef;
   border-color: #33283f;
-  color: #ffffff;
 }
-.dbtl-box-design a { color: #c9bde8; }
 .dbtl-box-build {
-  background: #2fa4a9;
+  background: #dff1f2;
   border-color: #2fa4a9;
-  color: #33283f;
 }
-.dbtl-box-build a { color: #33283f; text-decoration: underline; }
 .dbtl-box-test {
-  background: #f1c3d4;
+  background: #fcf0f5;
   border-color: #f1c3d4;
-  color: #33283f;
 }
 .dbtl-box-learn {
-  background: #c9bde8;
+  background: #f0ecf9;
   border-color: #c9bde8;
-  color: #33283f;
-}
-.dbtl-box-design:focus-visible,
-.dbtl-box-build:focus-visible,
-.dbtl-box-test:focus-visible,
-.dbtl-box-learn:focus-visible {
-  outline: 2px solid var(--color-text);
-  outline-offset: 2px;
 }
