@@ -4096,7 +4096,9 @@ footer hr {
   font-weight: 700;
   font-size: 1rem;
   text-align: center;
-  color: var(--color-text);
+  /* The tile is always white, so the text must stay dark in dark mode too
+     (var(--color-text) turns light there and vanished on the white tile). */
+  color: #33283f;
   opacity: 0.6;
 }
 
@@ -4625,9 +4627,13 @@ body:not(.home-fullscreen) .home-hero {
 
 .home-snap-pin {
   --snap-step: 60vh;
+  /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team feedback: the
+     third consequence is too easy to skip): extra steps' worth of scrolling
+     the last step stays pinned for. Keep in step with usePinnedStep.ts. */
+  --snap-extra: 0;
   position: relative;
-  height: calc(100vh + var(--snap-steps) * var(--snap-step));
-  height: calc(100svh + var(--snap-steps) * var(--snap-step));
+  height: calc(100vh + (var(--snap-steps) + var(--snap-extra)) * var(--snap-step));
+  height: calc(100svh + (var(--snap-steps) + var(--snap-extra)) * var(--snap-step));
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-15 (team feedback: too

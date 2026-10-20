@@ -16,6 +16,9 @@ const EARLY = 0.1;
 export function usePinnedStep(
   wrapperRef: RefObject<HTMLElement | null>,
   steps: number,
+  // Extra steps' worth of scrolling the last step is held for (--snap-extra
+  // on the wrapper). Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20.
+  extra = 0,
 ) {
   const [step, setStep] = useState(0);
 
@@ -26,7 +29,8 @@ export function usePinnedStep(
 
     const update = () => {
       frame = null;
-      const stepPx = (wrapper.offsetHeight - window.innerHeight) / steps;
+      const stepPx =
+        (wrapper.offsetHeight - window.innerHeight) / (steps + extra);
       if (stepPx <= 0) return;
       const scrolled = -wrapper.getBoundingClientRect().top;
       setStep(
@@ -48,7 +52,7 @@ export function usePinnedStep(
       window.removeEventListener("resize", onScroll);
       if (frame !== null) cancelAnimationFrame(frame);
     };
-  }, [wrapperRef, steps]);
+  }, [wrapperRef, steps, extra]);
 
   return step;
 }
