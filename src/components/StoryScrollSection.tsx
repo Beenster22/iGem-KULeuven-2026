@@ -90,10 +90,11 @@ const STEPS: StoryStep[] = [
       </>,
     ],
   },
-  // Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request): a
-  // GP's office on the left — the presentation screen's box turns into its
-  // sign (see useStepMorphs), over the team's doctor-and-patient picture
-  // with the clock on the wall — and the sentences on the right.
+  // Edited with Claude Opus 5.5 (Anthropic), 2026-10-19 (team request): the
+  // team's doctor-and-patient picture with the clock on the wall on the left
+  // — the presentation screen's box turns into the box around it (see
+  // useStepMorphs; no "GP's office" sign any more) — and the sentences on
+  // the right.
   {
     id: "diagnosis",
     position: "office",
@@ -185,7 +186,6 @@ const OFFICE_PARTS = ["patient-head", "doctor-hands", "doctor-head"];
 function OfficeArt() {
   return (
     <div className="story-office">
-      <p className="story-office-sign">GP’s office</p>
       <div className="story-office-room">
         <img
           src={OFFICE_SRC}
@@ -473,7 +473,7 @@ const STEP_MORPHS: StepMorph[] = [
     from: "presentation",
     to: "office",
     a: ".story-screen",
-    b: ".story-office-sign",
+    b: ".story-office-room",
     kind: "label",
   },
   {
@@ -529,7 +529,11 @@ function useStepMorphs(
     // What each end looks like inside the stand-in.
     const look = (el: HTMLElement) => {
       let part: HTMLElement;
-      if (morph.kind === "label") {
+      if (el.matches(".story-office-room")) {
+        // The doctor-and-patient box: the dark wall the picture sits on.
+        part = document.createElement("div");
+        part.className = "story-morph-room";
+      } else if (morph.kind === "label") {
         const source = el.querySelector<HTMLElement>(".story-text") ?? el;
         const style = getComputedStyle(source);
         part = document.createElement("div");

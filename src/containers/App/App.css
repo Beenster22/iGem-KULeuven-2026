@@ -4948,75 +4948,176 @@ body:not(.home-fullscreen) .home-hero {
   font-size: clamp(1.8rem, 4vw, 3rem);
 }
 
-/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request): the gut
-   microbiome card sits in the middle, with the hormonal and metabolic cards
-   above it to either side and the wellbeing card below it, each joined to it
-   by a line (drawn in the SVG overlay SymptomGroups measures and places, see
-   BodySymptomsSection.tsx). */
-.symptoms-overview-grid {
-  --hub-gap: clamp(1.6rem, 4vw, 3rem);
-  position: relative;
+.symptoms-puzzle-wrap {
+  container-type: inline-size;
+}
+
+.symptoms-puzzle {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-template-areas:
-    "hormonal . metabolic"
-    ". gut ."
-    ". wellbeing .";
-  gap: var(--hub-gap);
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(0.9rem, 2vw, 1.5rem);
 }
 
-.symptoms-hub-lines {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: visible;
-}
-
-.symptoms-hub-lines line {
-  stroke: #2fa4a9;
-  stroke-width: 4;
-  stroke-linecap: round;
-}
-
-.symptoms-hub-lines circle {
-  fill: #2fa4a9;
-}
-
-.symptom-group--hormonal {
-  grid-area: hormonal;
-}
-
-.symptom-group--metabolic {
-  grid-area: metabolic;
-}
-
-.symptom-group--wellbeing {
-  grid-area: wellbeing;
-}
-
-.symptom-group--gut {
-  grid-area: gut;
-  border: 2px solid #2fa4a9;
-  border-top-width: 5px;
-}
-
-/* Below this the three columns get too narrow: one card per row, the gut
-   first, and no lines (the overlay is not drawn). */
-@media (max-width: 899.98px) {
-  .symptoms-overview-grid {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: none;
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request): on
+   wide screens the four cards become a jigsaw. The gut microbiome (1) is the
+   missing piece in the middle; the hormonal card (2) runs across the top, the
+   metabolic (3) and wellbeing (4) cards sit below it either side — each one
+   cut around the gut piece, so without it there is a gap.
+   Layout: 4 equal columns; rows = [top band, --pz-h (the gut piece), bottom].
+   The hormonal card spans the top band + the gut row, the other two span the
+   gut row + the bottom. Each card's shape is a clip-path on its ::before
+   (so tooltips and text are never clipped), inset by half of --pz-g from every
+   seam so the pieces sit --pz-g apart. Switches on by the wrapper's own width
+   (a container query), not the window's: the page's side menu eats space. --pz-lip is how far the top card
+   reaches down past the gut piece's top edge, either side of it. */
+@container (min-width: 720px) {
+  .symptoms-puzzle {
+    --pz-g: 0.7rem;
+    --pz-h: 10.5rem;
+    --pz-lip: 3rem;
+    --pz-pad: 1.1rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: auto var(--pz-h) auto;
+    gap: 0;
   }
 
-  .symptom-group--hormonal,
-  .symptom-group--metabolic,
-  .symptom-group--wellbeing,
-  .symptom-group--gut {
-    grid-area: auto;
+  .symptoms-puzzle .symptom-card {
+    position: relative;
+    isolation: isolate;
+    padding: var(--pz-pad);
+    border-top: 0;
+    border-radius: 0;
+    background: none;
+    transition: none;
   }
 
-  .symptom-group--gut {
-    order: -1;
+  .symptoms-puzzle .symptom-card:hover,
+  .symptoms-puzzle .symptom-card:focus-within {
+    translate: none;
+    background: none;
+    z-index: 2;
+  }
+
+  .symptoms-puzzle .symptom-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: color-mix(in srgb, var(--symptom-color) 30%, transparent);
+    transition: background-color 0.25s ease;
+  }
+
+  /* Hovering anywhere on a piece lights the whole piece up. */
+  .symptoms-puzzle .symptom-card:hover::before,
+  .symptoms-puzzle .symptom-card:focus-within::before {
+    background-color: color-mix(in srgb, var(--symptom-color) 62%, transparent);
+  }
+
+  /* The cards' boxes overlap (each spans rows the gut piece sits in), so only
+     the clipped shape and the content count for the pointer — otherwise the
+     later cards would swallow hovers meant for the gut piece. */
+  .symptoms-puzzle .symptom-card {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .symptoms-puzzle .symptom-card::before,
+  .symptoms-puzzle .symptom-card-head,
+  .symptoms-puzzle .symptom-card-list {
+    pointer-events: auto;
+  }
+
+  /* 2: across the top, reaching down either side of the gut piece. */
+  .symptoms-puzzle .symptom-piece--top {
+    grid-column: 1 / -1;
+    grid-row: 1 / 3;
+    padding-bottom: calc(var(--pz-h) + var(--pz-pad));
+  }
+
+  .symptom-piece--top::before {
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% calc(100% - var(--pz-h) + var(--pz-lip) - var(--pz-g) / 2),
+      calc(75% + var(--pz-g) / 2)
+        calc(100% - var(--pz-h) + var(--pz-lip) - var(--pz-g) / 2),
+      calc(75% + var(--pz-g) / 2) calc(100% - var(--pz-h) - var(--pz-g) / 2),
+      calc(25% - var(--pz-g) / 2) calc(100% - var(--pz-h) - var(--pz-g) / 2),
+      calc(25% - var(--pz-g) / 2)
+        calc(100% - var(--pz-h) + var(--pz-lip) - var(--pz-g) / 2),
+      0 calc(100% - var(--pz-h) + var(--pz-lip) - var(--pz-g) / 2)
+    );
+  }
+
+  /* 1: the missing piece. */
+  .symptom-piece--gut {
+    grid-column: 2 / 4;
+    grid-row: 2;
+    margin: calc(var(--pz-g) / 2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .symptom-piece--gut .symptom-card-head {
+    flex-direction: column;
+  }
+
+  .symptom-piece--gut .symptom-card-list {
+    justify-content: center;
+  }
+
+  /* 3 and 4: an L each, wrapped round the gut piece's bottom corner. Their
+     heading sits beside the gut piece, their chips below it. */
+  .symptoms-puzzle .symptom-piece--left,
+  .symptoms-puzzle .symptom-piece--right {
+    grid-row: 2 / 4;
+    padding-top: calc(var(--pz-lip) + var(--pz-g) / 2 + var(--pz-pad));
+  }
+
+  .symptom-piece--left {
+    grid-column: 1 / 3;
+  }
+
+  .symptom-piece--right {
+    grid-column: 3 / 5;
+  }
+
+  .symptom-piece--left .symptom-card-head,
+  .symptom-piece--right .symptom-card-head {
+    box-sizing: border-box;
+    width: calc(50% + var(--pz-pad) - var(--pz-g) / 2 - 2 * var(--pz-pad));
+    height: calc(var(--pz-h) - var(--pz-lip) - var(--pz-pad));
+    margin-bottom: var(--pz-pad);
+    align-items: flex-start;
+  }
+
+  .symptom-piece--right .symptom-card-head {
+    margin-left: auto;
+  }
+
+  .symptom-piece--left::before {
+    clip-path: polygon(
+      0 calc(var(--pz-lip) + var(--pz-g) / 2),
+      calc(50% - var(--pz-g) / 2) calc(var(--pz-lip) + var(--pz-g) / 2),
+      calc(50% - var(--pz-g) / 2) calc(var(--pz-h) + var(--pz-g) / 2),
+      calc(100% - var(--pz-g) / 2) calc(var(--pz-h) + var(--pz-g) / 2),
+      calc(100% - var(--pz-g) / 2) 100%,
+      0 100%
+    );
+  }
+
+  .symptom-piece--right::before {
+    clip-path: polygon(
+      calc(50% + var(--pz-g) / 2) calc(var(--pz-lip) + var(--pz-g) / 2),
+      100% calc(var(--pz-lip) + var(--pz-g) / 2),
+      100% 100%,
+      calc(var(--pz-g) / 2) 100%,
+      calc(var(--pz-g) / 2) calc(var(--pz-h) + var(--pz-g) / 2),
+      calc(50% + var(--pz-g) / 2) calc(var(--pz-h) + var(--pz-g) / 2)
+    );
   }
 }
 
@@ -5156,10 +5257,6 @@ body:not(.home-fullscreen) .home-hero {
 
 /* Phones: one card per row, a little tighter. */
 @media (max-width: 699.98px) {
-  .symptoms-overview-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   .symptom-card-list {
     gap: 0.35rem;
     font-size: 0.8rem;
@@ -5282,57 +5379,6 @@ body:not(.home-fullscreen) .home-hero {
   text-underline-offset: 0.2em;
 }
 
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
-   panels wait until the globe has landed on the first circle (.is-landed,
-   set by PmosEffectsSection.tsx), then come in by themselves one after
-   another, left to right — each --i steps later (0.25s apart) — with no
-   more scrolling. The first circle is where the globe lands, so it appears
-   at once (the globe has just turned into it) and only its drawing and
-   label fade in. Going back up hides them straight away, ready to play
-   again. */
-.pmos-effect,
-.pmos-effects-more {
-  transition:
-    opacity 0.5s ease,
-    translate 0.5s ease;
-}
-
-.pmos-effects.is-landed .pmos-effect,
-.pmos-effects.is-landed .pmos-effects-more {
-  transition-delay: calc(var(--i) * 0.25s);
-}
-
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback: going
-   back up wasn't smooth): leaving, they now go one after another too, in
-   reverse — the link first, the circle next to the globe last — quicker
-   than they came in so the globe has its room back as it rises. */
-.pmos-effects:not(.is-landed) .pmos-effect,
-.pmos-effects:not(.is-landed) .pmos-effects-more {
-  opacity: 0;
-  translate: -1.5rem 0;
-  transition-duration: 0.35s;
-  transition-delay: calc((4 - var(--i)) * 0.08s);
-}
-
-.pmos-effects:not(.is-landed) .pmos-effect.symptom-group--hormonal {
-  opacity: 1;
-  translate: none;
-}
-
-.pmos-effects:not(.is-landed) .symptom-group--hormonal .pmos-effect-art {
-  visibility: hidden;
-}
-
-.pmos-effect.symptom-group--hormonal .pmos-effect-art svg,
-.pmos-effect.symptom-group--hormonal .pmos-effect-label {
-  transition: opacity 0.5s ease;
-}
-
-.pmos-effects:not(.is-landed) .symptom-group--hormonal .pmos-effect-art svg,
-.pmos-effects:not(.is-landed) .symptom-group--hormonal .pmos-effect-label {
-  opacity: 0;
-}
-
 /* Tablets and phones: two by two. */
 @media (max-width: 799.98px) {
   .pmos-effects-grid {
@@ -5408,7 +5454,7 @@ body:not(.home-fullscreen) .home-hero {
   /* Lifted a little off centre (team request, 2026-10-20), so it sits
      closer under Elle rather than low beside the lady. Tied to the
      figure's height so it keeps its place as the screen changes size. */
-  translate: 0 calc(var(--fig-h) * -0.09);
+  translate: 0 calc(var(--fig-h) * -0.15);
 }
 
 /* Her picture is the video frame, on the video's own near-black; "lighten"
@@ -5906,9 +5952,9 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-10-19
-   Purpose: the "office" step — a GP's office on the left (its sign, which
-   the presentation screen's box turns into, over the doctor-and-patient
-   picture with the clock on the wall) and the sentences on the right (see
+   Purpose: the "office" step — the doctor-and-patient picture with the
+   clock on the wall on the left (framed in the box the presentation
+   screen's box turns into) and the sentences on the right (see
    OfficeArt in StoryScrollSection.tsx). The picture keeps its own dark
    background as the office wall, framed, so it shows on this band in both
    themes. */
@@ -5918,32 +5964,17 @@ body:not(.home-fullscreen) .home-hero {
 
 .story-office {
   flex: 0 1 auto;
-  width: min(54%, 38rem);
+  width: min(58%, 48rem);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(0.75rem, 2.5vh, 1.25rem);
-}
-
-/* Styled like the presentation screen it grows out of. */
-.story-office-sign {
-  margin: 0;
-  padding: 0.4em 1.2em;
-  border: 0.4rem solid #2fa4a9;
-  border-radius: 1rem;
-  background: #eaf4f5;
-  color: #33283f;
-  font-size: clamp(1.1rem, 2vw, 1.6rem);
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
 }
 
 /* Always exactly the picture's shape (content-box, width capped by the
    height instead of a max-height), so the moving parts cut from it line up
    with it. */
 .story-office-room {
-  --room-max-h: 60vh;
+  --room-max-h: 74vh;
   position: relative;
   box-sizing: content-box;
   width: min(calc(100% - 0.8rem), calc(var(--room-max-h) * 2000 / 1878));
@@ -6099,6 +6130,12 @@ body:not(.home-fullscreen) .home-hero {
   color: #33283f;
   box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
   pointer-events: none;
+}
+
+.story-morph-room {
+  position: absolute;
+  inset: 0;
+  background: #1b1823;
 }
 
 .story-morph-text {
@@ -8208,43 +8245,6 @@ body:not(.home-fullscreen) .home-hero {
   transform: scaleX(1);
 }
 
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): while
-   the underline is curling up into the globe (useLineToGlobe.ts) the
-   overlay draws it, so the real one steps aside. */
-.pmos-counter--revealed .pmos-counter-number.is-detached::after {
-  transition: none;
-  opacity: 0;
-}
-
-.line-to-globe {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 5;
-  pointer-events: none;
-  overflow: visible;
-}
-
-/* --tint (0 → 1, set per frame) shifts the line from its own colour to the
-   globe's atmosphere colour (--color-accent, see atmosphereColor in
-   PmosGlobe.tsx) and gives it that glow as the ring closes. */
-.line-to-globe path {
-  --tint: 0;
-  fill: none;
-  stroke: color-mix(
-    in srgb,
-    var(--color-accent) calc(var(--tint) * 100%),
-    var(--color-header-bg)
-  );
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(
-    0 0 calc(var(--tint) * 14px)
-      color-mix(in srgb, var(--color-accent) calc(var(--tint) * 90%), transparent)
-  );
-}
-
 .falling-m,
 .falling-m-stairs {
   left: 0;
@@ -8293,6 +8293,10 @@ body:not(.home-fullscreen) .home-hero {
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-05: the globe always
    takes the left half of the section, with the text (the invitation, then
    the clicked continent's figures) on the right. */
+.pmos-globe-section {
+  margin: 1.5rem 0;
+}
+
 .pmos-globe-wrap {
   width: min(100%, 1050px);
   display: flex;
@@ -8315,89 +8319,6 @@ body:not(.home-fullscreen) .home-hero {
 
 .pmos-globe-stage.is-hovering canvas {
   cursor: pointer !important;
-}
-
-/* GLOBE DROP
-   Generated with Claude Opus 5.5 (Anthropic), 2026-10-18
-   Purpose: the globe falling onto the next screen's first circle (see
-   useGlobeDrop in PmosGlobe.tsx, which sets the transform, --fly-scale and
-   --morph). While it falls it must paint over the band below, which comes
-   later in the page and would otherwise cover it. */
-.pmos-globe-fly {
-  position: relative;
-  transform-origin: center;
-  will-change: transform;
-}
-
-.pmos-globe-wrap.is-dropping {
-  z-index: 5;
-}
-
-.pmos-globe-wrap.is-dropping .pmos-globe-fly {
-  pointer-events: none;
-}
-
-.pmos-globe-wrap.is-dropping .pmos-globe-fly > :not(.pmos-globe-morph) {
-  opacity: calc(1 - var(--morph, 0));
-}
-
-/* Matches .pmos-effect-art (border and disc colour), sized to the sphere
-   (SPHERE_FRACTION in PmosGlobe.tsx); the border is divided by the scale so
-   it lands at the circle's own 4px. */
-.pmos-globe-morph {
-  position: absolute;
-  /* Above the globe's own element (see .pmos-globe-halo). */
-  z-index: 2;
-  left: 50%;
-  top: 50%;
-  width: 70.5%;
-  aspect-ratio: 1;
-  translate: -50% -50%;
-  border-radius: 50%;
-  border: calc(4px / var(--fly-scale, 1)) solid var(--symptom-color);
-  background-color: color-mix(in srgb, var(--symptom-color) 22%, #fff);
-  opacity: var(--morph, 0);
-  pointer-events: none;
-}
-
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team request): the
-   halo round the sphere. Sized to the sphere (SPHERE_FRACTION in
-   PmosGlobe.tsx) plus twice its ring width, so the ring sits just outside
-   the sphere's edge — exactly where useLineToGlobe.ts closes the line;
-   --halo (set there) keeps it hidden until that line arrives.
-   Edited with Claude Opus 5.5 (Anthropic), 2026-10-18 (team feedback:
-   raised continents vanished behind it): it is painted behind the globe
-   (z-index 0, the globe's own element 1), so hovered/clicked continents
-   rise in front of it. */
-.pmos-globe-fly > :first-child {
-  position: relative;
-  z-index: 1;
-}
-
-.pmos-globe-halo {
-  --halo-w: 4px;
-  position: absolute;
-  z-index: 0;
-  left: 50%;
-  top: 50%;
-  width: calc(100% * 0.7051 + 2 * var(--halo-w));
-  aspect-ratio: 1;
-  translate: -50% -50%;
-  border-radius: 50%;
-  border: var(--halo-w) solid var(--color-accent);
-  box-shadow: 0 0 14px color-mix(in srgb, var(--color-accent) 90%, transparent);
-  opacity: var(--halo, 1);
-  pointer-events: none;
-}
-
-/* The drop's fade (above) must not bring a faded-out halo back. */
-.pmos-globe-wrap.is-dropping .pmos-globe-fly > .pmos-globe-halo {
-  opacity: calc(var(--halo, 1) * (1 - var(--morph, 0)));
-}
-
-/* Landed: the real circle has taken over. */
-.pmos-globe-wrap.is-landed .pmos-globe-fly {
-  visibility: hidden;
 }
 
 .pmos-globe-info {
@@ -8480,39 +8401,6 @@ body:not(.home-fullscreen) .home-hero {
   font-size: 0.85rem;
   text-align: center;
   line-height: 1.4;
-}
-
-/* PREVALENCE ELLE (Elle + "how we got these numbers", in PmosOverview.tsx)
-   Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
-   Purpose: Elle (ElleSays.tsx) stands in the corner of the globe section with
-   her line already in a speech bubble, rather than behind a click-to-open
-   info button — pinned to the section itself (not the globe/text pair) so
-   she stays in the same spot whether .pmos-globe-wrap is a row (desktop) or
-   a stacked column (mobile, see the media query below). The ">" selector
-   beats the specificity of the ".pmos-overview > :not(.microbe-backdrop)"
-   rule above that would otherwise force this back to position: relative. */
-.pmos-overview > .pmos-prevalence-elle {
-  position: absolute;
-  top: clamp(0.5rem, 3vh, 1.5rem);
-  right: clamp(0.5rem, 3vw, 1.5rem);
-  z-index: 3;
-  max-width: min(34rem, calc(100vw - 2rem));
-}
-
-.pmos-prevalence-elle .elle {
-  margin: 0;
-}
-
-@media (max-width: 768px) {
-  .pmos-overview > .pmos-prevalence-elle {
-    position: static;
-    margin: 0 auto 1rem;
-  }
-
-  .pmos-prevalence-elle .elle {
-    --elle-size: clamp(6rem, 24vw, 8rem);
-    justify-content: center;
-  }
 }
 
 @media (max-width: 768px) {
@@ -10199,8 +10087,13 @@ body:not(.home-fullscreen) .home-hero {
   font-weight: 600;
 }
 
-.stakeholder-matrix-phase span {
+.stakeholder-matrix-phase button {
   padding: 0.3rem 0.9rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
   border-radius: 999px;
   opacity: 0.45;
   transition:
@@ -10208,7 +10101,12 @@ body:not(.home-fullscreen) .home-hero {
     background-color 0.2s ease;
 }
 
-.stakeholder-matrix-phase span.is-active {
+.stakeholder-matrix-phase button:hover,
+.stakeholder-matrix-phase button:focus-visible {
+  opacity: 0.8;
+}
+
+.stakeholder-matrix-phase button.is-active {
   opacity: 1;
   background-color: var(--color-body-bg);
 }
@@ -10346,11 +10244,11 @@ body:not(.home-fullscreen) .home-hero {
   opacity: calc(var(--ghost-fade, 0) * 0.85);
 }
 
-[data-theme="dark"] .stakeholder-matrix-phase span {
+[data-theme="dark"] .stakeholder-matrix-phase button {
   opacity: 0.7;
 }
 
-[data-theme="dark"] .stakeholder-matrix-phase span.is-active {
+[data-theme="dark"] .stakeholder-matrix-phase button.is-active {
   opacity: 1;
   background-color: #2fa4a9;
   color: #ffffff;
@@ -14808,6 +14706,456 @@ a.protocol-download:hover {
 /* Terms inside the symptom chips: dotted underline in the chip's own weight. */
 .symptom-card-list .glossary-term {
   font-weight: inherit;
-  border-bottom: 2px dotted #2fa4a9;
+  border-bottom: 0;
   text-decoration: none;
+}
+
+/* SCIENCE COMMUNICATION & COMMUNITY
+   Generated with Claude Opus 5.5 (Anthropic), 2026-10-20
+   Purpose: the showcase pieces on the Science Communication & Community page
+   (ScienceCommunication.tsx). Cards sit on --color-page-bg, the same raised
+   card the rest of the wiki uses on the body panel, so they follow the theme;
+   the filled controls swap dark plum / light lavender per theme exactly like
+   .tab-switcher-btn.active above. */
+.ig-carousel {
+  position: relative;
+  margin: 2rem 0 1rem;
+}
+
+.ig-carousel-track {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 0.5rem 0.25rem 1rem;
+  scrollbar-width: thin;
+}
+
+.ig-post {
+  flex: 0 0 min(300px, 80%);
+  scroll-snap-align: start;
+  background: var(--color-page-bg);
+  color: var(--color-text);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(51, 40, 63, 0.18);
+  display: flex;
+  flex-direction: column;
+}
+
+.ig-post-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.8rem;
+}
+
+.ig-post-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff;
+  object-fit: contain;
+  padding: 3px;
+  border: 1px solid rgba(51, 40, 63, 0.2);
+}
+
+.ig-post-handle {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.ig-post-handle:hover {
+  text-decoration: underline;
+}
+
+.ig-post-more {
+  margin-left: auto;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  opacity: 0.7;
+}
+
+.ig-post-media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: rgba(51, 40, 63, 0.08);
+}
+
+.ig-post-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ig-post-placeholder,
+.pub-showcase-placeholder,
+.phone-placeholder,
+.video-slot-placeholder {
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--color-text);
+  font-size: 0.9rem;
+  border: 2px dashed rgba(51, 40, 63, 0.25);
+}
+
+[data-theme="dark"] .ig-post-placeholder,
+[data-theme="dark"] .pub-showcase-placeholder,
+[data-theme="dark"] .phone-placeholder,
+[data-theme="dark"] .video-slot-placeholder {
+  border-color: rgba(201, 189, 232, 0.35);
+}
+
+.ig-post-placeholder strong,
+.pub-showcase-placeholder strong,
+.phone-placeholder strong,
+.video-slot-placeholder strong {
+  font-size: 1.1rem;
+}
+
+.ig-post-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  color: #33283f;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.ig-post-arrow--prev {
+  left: 8px;
+}
+
+.ig-post-arrow--next {
+  right: 8px;
+}
+
+.ig-post-dots {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.ig-post-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.ig-post-dots span.active {
+  background: #fff;
+}
+
+.ig-post-actions {
+  display: flex;
+  gap: 0.9rem;
+  padding: 0.7rem 0.8rem 0.4rem;
+}
+
+.ig-post-actions svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.ig-post-actions svg:first-child {
+  fill: #e2445c;
+  stroke: #e2445c;
+}
+
+.ig-post-save {
+  margin-left: auto;
+}
+
+.ig-post-caption {
+  padding: 0 0.8rem 0.9rem;
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.ig-carousel-arrow {
+  position: absolute;
+  top: calc(50% - 1.5rem);
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #33283f;
+  color: #eaf4f5;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .ig-carousel-arrow {
+  background: #c9bde8;
+  color: #33283f;
+}
+
+.ig-carousel-arrow--prev {
+  left: -14px;
+}
+
+.ig-carousel-arrow--next {
+  right: -14px;
+}
+
+.ig-carousel-follow {
+  text-align: center;
+  margin: 0.5rem 0 0;
+  font-weight: 600;
+}
+
+.pub-showcase {
+  margin-top: 1.5rem;
+  background: var(--color-page-bg);
+  border-radius: 18px;
+  padding: 1.25rem;
+  box-shadow: 0 6px 18px rgba(51, 40, 63, 0.15);
+}
+
+.pub-showcase-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.pub-showcase-tab {
+  border: 2px solid rgba(51, 40, 63, 0.3);
+  background: transparent;
+  color: var(--color-text);
+  border-radius: 10px 10px 0 0;
+  padding: 0.45rem 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+[data-theme="dark"] .pub-showcase-tab {
+  border-color: rgba(201, 189, 232, 0.4);
+}
+
+.pub-showcase-tab.active {
+  background: #33283f;
+  border-color: #33283f;
+  color: #eaf4f5;
+}
+
+[data-theme="dark"] .pub-showcase-tab.active {
+  background: #c9bde8;
+  border-color: #c9bde8;
+  color: #33283f;
+}
+
+.pub-showcase-body {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.pub-showcase-preview {
+  display: block;
+  aspect-ratio: 3 / 4;
+  border-radius: 12px;
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+}
+
+.pub-showcase-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+
+.pub-showcase-placeholder {
+  border-radius: 12px;
+}
+
+.pub-showcase-text p:first-child {
+  margin-top: 0;
+}
+
+.pub-showcase-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.55rem 1.4rem;
+  border-radius: 999px;
+  background: #33283f;
+  color: #eaf4f5;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+[data-theme="dark"] .pub-showcase-link {
+  background: #c9bde8;
+  color: #33283f;
+}
+
+@media (max-width: 700px) {
+  .pub-showcase-body {
+    grid-template-columns: 1fr;
+  }
+
+  .pub-showcase-preview {
+    max-width: 260px;
+  }
+}
+
+.phone-showcase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2rem 0 1rem;
+}
+
+.phone-frame {
+  position: relative;
+  box-sizing: border-box;
+  width: min(300px, 85vw);
+  aspect-ratio: 9 / 19;
+  background: #1b1522;
+  border-radius: 42px;
+  padding: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.phone-notch {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  height: 22px;
+  border-radius: 12px;
+  background: #1b1522;
+  z-index: 1;
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 32px;
+  overflow: hidden;
+  background: var(--color-page-bg);
+}
+
+.phone-screen iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.phone-screen-tap {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.phone-screen-tap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.phone-placeholder {
+  border: none;
+}
+
+.phone-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 600;
+}
+
+.phone-controls button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #33283f;
+  color: #eaf4f5;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+[data-theme="dark"] .phone-controls button {
+  background: #c9bde8;
+  color: #33283f;
+}
+
+.video-slot {
+  aspect-ratio: 16 / 9;
+  margin: 1.5rem 0 2rem;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--color-page-bg);
+}
+
+.video-slot iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-slot-placeholder {
+  border-radius: 14px;
+}
+
+.video-slot-play {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #33283f;
+  color: #eaf4f5;
+  font-size: 1.4rem;
+  padding-left: 4px;
+  box-sizing: border-box;
+}
+
+[data-theme="dark"] .video-slot-play {
+  background: #c9bde8;
+  color: #33283f;
 }

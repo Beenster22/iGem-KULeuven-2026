@@ -214,7 +214,7 @@ export function HandshakeIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-// A megaphone with sound waves — Science Communication & Community.
+// A megaphone with sound waves — Science Communication & Outreach.
 export function MegaphoneIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...common} {...props}>

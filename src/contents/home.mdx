@@ -1,13 +1,12 @@
-{/* The text sits under the globe (see PmosOverview.tsx). Citations as
-    supplied by the team in "Text for HOME PAGE".
-    TODO(team): check each [^n] sits on the claim it actually supports, and
-    link the wiki page explaining the IHME GBD method once it exists. */}
+{/* Citations as supplied by the team in "Text for HOME PAGE".
+    TODO(team): check each [^n] sits on the claim it actually supports. */}
 {/* Each band below is its own full-screen section; the page scrolls freely
     and settles on the nearest `data-snap` stop (see HomeSnapScroll.tsx). */}
 <HomeSnapScroll />
 
 {/* What PMOS is comes first, straight after the hero video (team request,
-    2026-10-06); the counter and the globe follow. */}
+    2026-10-06); the counter follows. The prevalence globe now lives in the
+    Project description appendix. */}
 <div className="home-section home-section--flush home-section--contrast home-section--wave-top">
 <MicrobeBackdrop count={5} seed={3} />
 <div className="container">
@@ -17,11 +16,7 @@
 </div>
 </div>
 
-<PmosOverview>
-
-Figures per continent[^pmos-3][^pmos-4][^pmos-5].
-
-</PmosOverview>
+<PmosOverview />
 
 <div className="home-section home-section--flush home-section--contrast home-section--wave-top">
 <MicrobeBackdrop count={9} seed={2} />
@@ -132,7 +127,4 @@ But why is this reaction **important?**
     DOI) once checked against the papers — see the TODO above. */}
 [^pmos-1]: Prevalence of polycystic ovary syndrome: a global and regional systematic review and meta-analysis, *Hum Reprod Update*, 2026, [doi:10.1093/humupd/dmaf030](https://doi.org/10.1093/humupd/dmaf030).
 [^pmos-2]: The prevalence of polycystic ovary syndrome in a community sample assessed under contrasting diagnostic criteria, *Hum Reprod*, 2010; 25:544-551.
-[^pmos-3]: IHME Global Burden of Disease data.
-[^pmos-4]: [The Lancet (2026)](https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(26)00717-8/fulltext).
-[^pmos-5]: [Springer (2025)](https://link.springer.com/article/10.1186/s12978-025-02016-y).
 [^gut-1]: *Int. J. Mol. Sci.*, 22(4), 2048, Table 1, [mdpi.com/1422-0067/22/4/2048](https://www.mdpi.com/1422-0067/22/4/2048).
