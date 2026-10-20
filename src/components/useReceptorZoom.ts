@@ -16,11 +16,6 @@
 import { useEffect, type RefObject } from "react";
 import { navBottom } from "./useFallingM";
 
-/** The receptor it leaves: the one on the gut wall of the binding diagram. */
-const SOURCE = ".tgr5-svg--overview .tgr5-receptor";
-/** The receptor it becomes, and the drawing that holds it. */
-const TARGET = ".tgr5-zoom-svg .tgr5-receptor";
-
 // How much of a window's scrolling the flight takes, ending as the close-up
 // settles under the navigation bar.
 const FLIGHT = 0.8;
@@ -33,10 +28,16 @@ const NS = "http://www.w3.org/2000/svg";
 
 export function useReceptorZoom({
   stageRef,
+  from,
+  to,
   skip,
 }: {
-  /** The close-up's own screen (.tgr5-zoom). */
+  /** The screen it arrives on, which holds the receptor it becomes. */
   stageRef: RefObject<HTMLElement | null>;
+  /** The receptor it leaves, anywhere on the page. */
+  from: string;
+  /** The receptor it becomes, looked for inside that screen. */
+  to: string;
   skip: boolean;
 }) {
   useEffect(() => {
@@ -59,11 +60,12 @@ export function useReceptorZoom({
 
     const update = () => {
       frame = null;
-      const sources = document.querySelectorAll<SVGGraphicsElement>(SOURCE);
-      // The binding diagram draws one on the immune cell and one on the gut
-      // wall; it is the gut one the close-up is of, and it comes last.
+      const sources = document.querySelectorAll<SVGGraphicsElement>(from);
+      // A drawing may hold more than one — the binding diagram has one on
+      // the immune cell and one on the gut wall — and it is the last that
+      // the screen below is of.
       const source = sources[sources.length - 1];
-      const target = stage.querySelector<SVGGraphicsElement>(TARGET);
+      const target = stage.querySelector<SVGGraphicsElement>(to);
       const pin = stage.closest<HTMLElement>(".home-snap-pin") ?? stage;
       if (!source || !target) return rest();
 
@@ -84,9 +86,9 @@ export function useReceptorZoom({
         return rest();
       }
 
-      const from = source.getScreenCTM();
-      const to = target.getScreenCTM();
-      if (!from || !to) return rest();
+      const leaves = source.getScreenCTM();
+      const becomes = target.getScreenCTM();
+      if (!leaves || !becomes) return rest();
 
       // The helices themselves, copied once from the real drawing so the
       // thing in flight is the thing it came from.
@@ -98,14 +100,14 @@ export function useReceptorZoom({
 
       const e = easeInOut(clamp01((window.scrollY - startAt) / (endAt - startAt)));
       // Each end's own placement: where it is drawn and how large.
-      const fromScale = Math.hypot(from.a, from.b);
-      const toScale = Math.hypot(to.a, to.b);
-      const x = lerp(from.e, to.e, e);
-      const y = lerp(from.f, to.f, e);
+      const fromScale = Math.hypot(leaves.a, leaves.b);
+      const toScale = Math.hypot(becomes.a, becomes.b);
+      const x = lerp(leaves.e, becomes.e, e);
+      const y = lerp(leaves.f, becomes.f, e);
       const scale = lerp(fromScale, toScale, e);
       // The drawing's own turn, which the copy has to carry too: its
       // helices are drawn lying down and stood up by the group they are in.
-      const turn = (Math.atan2(to.b, to.a) * 180) / Math.PI;
+      const turn = (Math.atan2(becomes.b, becomes.a) * 180) / Math.PI;
 
       overlay.style.visibility = "visible";
       stage.style.setProperty("--receptor-in", "0");
@@ -132,9 +134,9 @@ export function useReceptorZoom({
       if (frame !== null) cancelAnimationFrame(frame);
       stage.style.removeProperty("--receptor-in");
       document
-        .querySelectorAll<SVGGraphicsElement>(SOURCE)
+        .querySelectorAll<SVGGraphicsElement>(from)
         .forEach((el) => el.style.removeProperty("visibility"));
       overlay.remove();
     };
-  }, [stageRef, skip]);
+  }, [stageRef, from, to, skip]);
 }
