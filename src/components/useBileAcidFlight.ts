@@ -82,11 +82,6 @@ const BACTERIUM_BOTTOM = (72 + 116) / 300;
 // so this reads its arrangement and carries it up, and the drop is that
 // same arrangement going home. Nothing is ever shuffled into place.
 const STATEMENT = ".story-step--single";
-// How far into the drift out they are done growing, as a share of that
-// leg (team request: they must already be the right size by the time
-// "But why is this reaction important?" is on the screen, not still
-// catching up on it).
-const SIZED_BY = 0.6;
 // Where they float while that sentence is up, as shares of its own screen:
 // two wide bands, one high and one low, across nearly the full width,
 // leaving the middle to the words (team request: over the whole screen,
@@ -323,12 +318,20 @@ export function useBileAcidFlight({
       // done early in the drift out, so by the time that sentence holds the
       // screen they are already the size they will land at and nothing
       // about them changes again.
-      const fromR = BSH_HEX_R * (from.width / BSH_VB_W);
+      // The acids on the TGR5 screen are drawn larger than those in the
+      // BSH one — about one and three quarters — so a traveller cannot be
+      // the size of both. It keeps the size it left the reaction at for
+      // the whole of the wait (team request, 2026-10-20: they were the
+      // larger of the two while they floated, which read as too big on
+      // that screen), and grows into its counterpart only on the way
+      // down, so it still lands exactly.
+      // Measured on the drawing itself, not on the box around it: that box
+      // is wider than the drawing, which made the acids set off half as
+      // big again as the ones they left behind.
+      const fromSvg = diagram.querySelector("svg")?.getBoundingClientRect();
+      const fromR = BSH_HEX_R * ((fromSvg?.width || from.width) / BSH_VB_W);
       const toR = TGR5_HEX_R * (to.width / TGR5_VB_W);
-      const grow = easeInOut(
-        clamp01((window.scrollY - startAt) / ((floatAt - startAt) * SIZED_BY)),
-      );
-      const scale = lerp(fromR, toR, grow) / BASE_HEX_R;
+      const scale = lerp(fromR, toR, fallLeg) / BASE_HEX_R;
 
       // Where each acid on the TGR5 screen is, taken from where its own
       // drawing is placed rather than from the middle of the box around
