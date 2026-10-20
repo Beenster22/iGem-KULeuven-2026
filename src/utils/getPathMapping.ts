@@ -1,12 +1,13 @@
 import type { SVGProps } from "react";
 import pages from "../pages.ts";
+import type { PageComponent } from "../contents";
 
 export const getPathMapping = () => {
   return pages.reduce<{
     [key: string]: {
       name: string | undefined;
       title: string | undefined;
-      component: React.FC;
+      component: PageComponent;
       lead: string | undefined;
       icon: React.FC<SVGProps<SVGSVGElement>> | undefined;
       specialPrize: boolean | undefined;

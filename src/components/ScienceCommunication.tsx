@@ -16,6 +16,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { stringToSlug } from "../utils";
 
 // Reads the props straight off slot children such as <InstagramPost> or
 // <Publication>, the same way extractLabeledChildren does for TabSection.
@@ -149,7 +150,7 @@ function PostCard({ title, images = [], caption, href, reel }: InstagramPostProp
   const step = (direction: 1 | -1) => setSlide((slide + direction + count) % count);
 
   return (
-    <article className="ig-post">
+    <article className="ig-post" id={stringToSlug(title)}>
       <header className="ig-post-header">
         {avatar ? (
           <img className="ig-post-avatar" src={avatar} alt="" />

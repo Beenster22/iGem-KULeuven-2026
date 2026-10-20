@@ -606,6 +606,121 @@ a[data-footnote-ref]:focus {
   .page-header-icon {
     width: 3.75rem;
   }
+
+  /* The icon takes a fifth of the width, leaving the title about 235px at
+     360px wide: a long single word such as "Entrepreneurship" at Bootstrap's
+     display-4 size (~33px) is wider than that and pushed the whole page
+     sideways. Smaller type fits it; min-width and overflow-wrap are the
+     safety net for any other long word. */
+  .page-header-box-icon-row > div {
+    min-width: 0;
+  }
+
+  .page-header-box h1 {
+    font-size: 1.6rem;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* PAGE SKELETON
+   Shown while a page's code is downloading (PageSkeleton.tsx). The blocks are
+   currentColor at low opacity, so they suit light and dark mode alike, with a
+   slow shimmer that stops for visitors who ask for reduced motion. */
+.skeleton-page {
+  min-height: 70vh;
+}
+
+.skeleton-block {
+  display: block;
+  border-radius: 0.5rem;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, currentColor 10%, transparent) 25%,
+    color-mix(in srgb, currentColor 18%, transparent) 50%,
+    color-mix(in srgb, currentColor 10%, transparent) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-block {
+    animation: none;
+  }
+}
+
+.skeleton-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-top: 1rem;
+}
+
+.skeleton-index {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .skeleton-index {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    width: 13.5rem;
+    flex: none;
+    padding: 1rem 1.5rem 0;
+  }
+}
+
+.skeleton-line {
+  height: 0.9rem;
+}
+
+.skeleton-paragraph {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.skeleton-heading {
+  height: 2rem;
+  width: 55%;
+}
+
+.skeleton-heading--short {
+  width: 35%;
+}
+
+.skeleton-card {
+  height: 11rem;
+  border-radius: 1rem;
+}
+
+/* Skip link: hidden until it takes keyboard focus (Bootstrap's
+   .visually-hidden-focusable), then pinned above the fixed navbar. */
+.skip-link:focus {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 2000;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--color-interactive);
+  color: #33283f;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+main:focus {
+  outline: none;
 }
 
 /* NAVBAR */
@@ -2551,6 +2666,20 @@ a[data-footnote-ref]:focus {
   hyphens: manual;
   line-height: 1.75;
   max-width: 75ch;
+}
+
+/* Centres the capped paragraphs in a wider card instead of leaving them flush
+   left with empty space on the right. Not li: auto margins would pull list
+   items away from their bullets. */
+.page-body:not(.page-body--home)
+  :is(
+    .page-shell-content,
+    .page-shell-content > .row > [class*="col"],
+    .content-section
+  )
+  > p {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): more
@@ -4857,6 +4986,15 @@ body.home-fullscreen {
    reading as separate cards floating on top of one background. The
    .container reintroduced inside each section in home.mdx keeps the actual
    content (headings, lists, etc.) at the site's normal reading width. */
+/* 50vw includes the width of a classic (always-visible) scrollbar, so the
+   bands overshoot the visible page by the scrollbar's width and the home
+   page scrolled sideways by ~8px on Windows. Clipping (not hiding: clip makes
+   no scroll container, so sticky and snap behaviour are untouched) the
+   overshoot on the page body removes it. */
+.page-body--home {
+  overflow-x: clip;
+}
+
 .home-section {
   margin-left: calc(-50vw + 50%);
   margin-right: calc(-50vw + 50%);
@@ -15587,6 +15725,8 @@ a.protocol-download:hover {
 }
 
 .ig-post {
+  /* Search jumps to a post by id; keep it clear of the fixed navbar. */
+  scroll-margin-top: 5rem;
   flex: 0 0 min(300px, 80%);
   scroll-snap-align: start;
   background: var(--color-page-bg);

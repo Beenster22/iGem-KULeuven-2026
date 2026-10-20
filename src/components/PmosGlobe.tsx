@@ -122,6 +122,9 @@ export function PmosGlobe() {
       getComputedStyle(document.documentElement)
         .getPropertyValue("--color-accent")
         .trim() || "#C9BDE8",
+    // `mode` isn't read inside, but --color-accent changes with it, so the
+    // value has to be read again when it does.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [mode],
   );
 
