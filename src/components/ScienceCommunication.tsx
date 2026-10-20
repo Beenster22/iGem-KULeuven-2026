@@ -7,6 +7,7 @@
 // can go up before all the material has been uploaded.
 import {
   Children,
+  MouseEvent,
   ReactElement,
   ReactNode,
   isValidElement,
@@ -118,6 +119,26 @@ export function InstagramPost(_props: InstagramPostProps) {
   return null;
 }
 
+// On a large screen the embed player fills a whole browser tab and blows the
+// vertical reel up to the full width; open it in a phone-sized window instead.
+// On a phone (or if the window is blocked) the link opens normally.
+function openReelWindow(event: MouseEvent<HTMLAnchorElement>) {
+  if (window.innerWidth < 768) return;
+  const width = 400;
+  const height = Math.min(760, window.screen.availHeight - 80);
+  const left = Math.max(0, window.screenX + (window.outerWidth - width) / 2);
+  const top = Math.max(0, window.screenY + (window.outerHeight - height) / 2);
+  const opened = window.open(
+    event.currentTarget.href,
+    "igem-reel",
+    `popup,width=${width},height=${height},left=${left},top=${top}`,
+  );
+  if (opened) {
+    opened.opener = null;
+    event.preventDefault();
+  }
+}
+
 function PostCard({ title, images = [], caption, href, reel }: InstagramPostProps) {
   const avatar = useAvatarCutout();
   const [slide, setSlide] = useState(0);
@@ -172,6 +193,7 @@ function PostCard({ title, images = [], caption, href, reel }: InstagramPostProp
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Watch the reel “${title}”`}
+            onClick={openReelWindow}
           >
             <span aria-hidden="true">▶</span>
           </a>
