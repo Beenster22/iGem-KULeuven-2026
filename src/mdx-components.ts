@@ -61,7 +61,9 @@ import {
   FindOutMore,
   Tgr5ConsequencesSection,
   Tgr5Ilc3Figure,
+  Tgr5ImpairedSection,
   Tgr5MechanismSection,
+  Tgr5ZoomSection,
 } from "./components/Tgr5Story";
 import { SponsorGrid } from "./components/SponsorGrid";
 import { HomeSnapScroll } from "./components/HomeSnapScroll";
@@ -166,6 +168,12 @@ export const mdxComponents = {
   StoryScrollSection,
   StoryStatement,
   Tgr5MechanismSection,
+  // Generated with Claude Opus 5 (Anthropic), 2026-10-20: the close-up of
+  // the receptor, under the screen about bile acids interacting with it.
+  Tgr5ZoomSection,
+  // Generated with Claude Opus 5 (Anthropic), 2026-10-20: the screen where
+  // the binding fails, which replaced a sentence on its own.
+  Tgr5ImpairedSection,
   // Not on the home page any more; free to use on another page.
   Tgr5Ilc3Figure,
   Tgr5ConsequencesSection,

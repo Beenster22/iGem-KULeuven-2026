@@ -27,6 +27,7 @@
 import {
   useEffect,
   useMemo,
+  useId,
   useRef,
   type CSSProperties,
   type ReactNode,
@@ -43,6 +44,7 @@ import {
   RulerIcon,
 } from "./FindOutMoreIcons";
 import { usePinnedStep } from "./usePinnedStep";
+import { useReceptorZoom } from "./useReceptorZoom";
 
 function seededValue(seed: number) {
   const x = Math.sin(seed * 12.9898) * 43758.5453;
@@ -181,7 +183,7 @@ function Tgr5Diagram({ animate }: { animate: boolean }) {
       className="tgr5-svg"
       viewBox={`0 0 ${VB_W} ${VB_H}`}
       role="img"
-      aria-label="Illustration: bile acids arrive at the TGR5 receptor on an ILC3 cell. The few conjugated bile acids bind it, the many deconjugated ones do not, and less IL-22 is produced."
+      aria-label="Illustration: bile acids arrive at the TGR5 receptor on an immune cell. The few conjugated bile acids bind it, the many deconjugated ones do not, and less IL-22 is produced."
     >
       <defs>
         <marker
@@ -291,7 +293,7 @@ function Tgr5Diagram({ animate }: { animate: boolean }) {
       />
 
       <text className="tgr5-label tgr5-label--cell" x={CELL.x} y={VB_H - 6}>
-        ILC3
+        Immune cell
       </text>
 
       <BileAcids animate={animate} />
@@ -335,7 +337,12 @@ const IMMUNE = { x: 250, y: 370, r: 110 };
 // Half the length of a receptor standing upright (see ReceptorShape).
 const RECEPTOR_HALF = 27;
 // The bile acids are drawn larger here than in the rest of the page.
-const ACID_SCALE = 1.6;
+// Edited with Claude Opus 5 (Anthropic), 2026-10-20: briefly 11/12, to
+// match the BSH reaction, but the team want this screen at the size it
+// had been, so it is back at 1.6. The acids that fly down to it take
+// their size from here (useBileAcidFlight.ts imports this), so they wait
+// and fall at this size too and nothing changes size on the way.
+export const ACID_SCALE = 1.6;
 // How far above the top of a receptor a docked bile acid sits.
 const ACID_R = HEX_R * ACID_SCALE;
 const DOCK_GAP = RECEPTOR_HALF + ACID_R + 3;
@@ -698,7 +705,7 @@ function Tgr5BindingDiagram({ animate }: { animate: boolean }) {
       <path className="tgr5-gut" d={gutPath} />
       <path className="tgr5-gut tgr5-gut--cells" d={gutPath} />
       <text className="tgr5-label" x={GUT_RECEPTOR_X} y={OV_H - 8}>
-        Epithelial cell
+        Intestinal Epithelial Cell
       </text>
 
       {SITES.map((site, i) => (
@@ -772,16 +779,234 @@ export function Tgr5MechanismSection() {
       >
         <div className="tgr5-figures">
           <div className="tgr5-figure">
-            {/* TODO(team): heading written by the assistant from the review
-              comment, not supplied by the team. Check or replace. */}
+            {/* Wording supplied by the team, 2026-10-20. */}
             <h3 className="tgr5-heading">
-              Conjugated bile acids bind TGR5 receptors on cells in the gut
+              Bile acids interact with <strong>TGR5 receptors</strong>
             </h3>
             <Tgr5BindingDiagram animate={!prefersReducedMotion} />
           </div>
         </div>
       </div>
     </div>
+  );
+}
+
+// Generated with Claude Opus 5 (Anthropic), 2026-10-20 (team request): a
+// close-up of the receptor itself, under the screen that says bile acids
+// interact with it. The drawing zooms in as the screen is reached — it
+// starts small, the size it is in the diagram above, and opens out — and
+// the sentence beside it arrives in two parts, one per scroll.
+// The close-up is the binding diagram's own receptor, cropped to it alone
+// and so magnified — the same helices, not a second drawing of them (team
+// request, 2026-10-20), so what the reader zooms into is what they were
+// just looking at. The gut wall it stands in up there is left behind: the
+// team want the receptor on its own here.
+const ZOOM_VIEW = 120;
+const ZOOM_BOX = [
+  GUT_RECEPTOR_X - ZOOM_VIEW / 2,
+  GUT.top - ZOOM_VIEW / 2,
+  ZOOM_VIEW,
+  ZOOM_VIEW,
+].join(" ");
+
+// The receptor is the one thing on this screen, so it carries a soft
+// glow behind it once it has arrived — enough to make it the thing being
+// looked at, without anything drawn around it (team request, 2026-10-20).
+function Tgr5ReceptorCloseUp() {
+  // Its own id, so a second copy of this drawing cannot steal the glow.
+  const glowId = useId();
+  return (
+    <svg
+      className="tgr5-zoom-svg"
+      viewBox={ZOOM_BOX}
+      preserveAspectRatio="xMidYMid meet"
+      role="img"
+      aria-label="Illustration: a close-up of the TGR5 receptor, a bundle of four helices."
+    >
+      <defs>
+        <radialGradient id={glowId}>
+          <stop offset="0%" stopColor="currentColor" stopOpacity={0.22} />
+          <stop offset="55%" stopColor="currentColor" stopOpacity={0.09} />
+          <stop offset="100%" stopColor="currentColor" stopOpacity={0} />
+        </radialGradient>
+      </defs>
+      <circle
+        className="tgr5-zoom-glow"
+        cx={GUT_RECEPTOR_X}
+        cy={GUT.top}
+        r={54}
+        fill={`url(#${glowId})`}
+      />
+      <ReceptorShape x={GUT_RECEPTOR_X} y={GUT.top} />
+    </svg>
+  );
+}
+
+export function Tgr5ZoomSection() {
+  const prefersReducedMotion = useReducedMotion();
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const step = usePinnedStep(wrapperRef, 2);
+  const shown = prefersReducedMotion ? 2 : step + 1;
+  // The receptor on the screen above flies down and becomes this one.
+  useReceptorZoom({
+    stageRef,
+    from: ".tgr5-svg--overview .tgr5-receptor",
+    to: ".tgr5-zoom-svg .tgr5-receptor",
+    skip: !!prefersReducedMotion,
+  });
+
+  return (
+    <div
+      className={prefersReducedMotion ? undefined : "home-snap-pin"}
+      ref={wrapperRef}
+      style={{ "--snap-steps": 2 } as CSSProperties}
+    >
+      {!prefersReducedMotion && <SnapSteps steps={2} />}
+      <div
+        ref={stageRef}
+        className={`tgr5-zoom${prefersReducedMotion ? " tgr5-zoom--static" : " home-snap-stage"}`}
+      >
+        <div className="tgr5-zoom-words">
+          <p className={`tgr5-zoom-line${shown >= 1 ? " tgr5-zoom-line--shown" : ""}`}>
+            TGR5 is one of the <strong>most potent</strong> bile acid
+            receptors…
+          </p>
+          <p className={`tgr5-zoom-line${shown >= 2 ? " tgr5-zoom-line--shown" : ""}`}>
+            …involved in <strong>various different pathways</strong>
+          </p>
+        </div>
+        <div className="tgr5-zoom-art">
+          <Tgr5ReceptorCloseUp />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Generated with Claude Opus 5 (Anthropic), 2026-10-20 (team request): the
+// screen where the binding fails. The receptor stands on the left, two
+// bile acids come in from the right and go for it, and each time one
+// reaches it a red cross says no and it is knocked back. It runs on a
+// loop of its own rather than on the scroll, so the refusal repeats for
+// as long as the reader watches.
+// Drawn in the same 1000-unit space as the screens either side, so a bile
+// acid here is the size it is there (team request, 2026-10-20) without a
+// second figure to keep in step. The receptor stands in the middle, a
+// little larger than it is drawn elsewhere, since it is what this screen
+// is about.
+const IMPAIRED_W = 1000;
+const IMPAIRED_H = 440;
+const IMPAIRED_CENTRE = { x: 500, y: 330 };
+const IMPAIRED_RECEPTOR_SCALE = 2.2;
+// Where an acid is turned away: just off the receptor's outer end, about
+// where it would have docked.
+const IMPAIRED_DOCK = {
+  x: IMPAIRED_CENTRE.x,
+  y:
+    IMPAIRED_CENTRE.y -
+    RECEPTOR_HALF * IMPAIRED_RECEPTOR_SCALE -
+    ACID_R -
+    4,
+};
+
+// Where each one waits its turn, floating above the receptor.
+// `stream` picks which of the two colours it is drawn in, the same two the
+// bile acids have everywhere else on the page (bsh-molecule--0 and --1).
+const IMPAIRED_ACIDS = [
+  { x: 250, y: 112, stream: 0 },
+  { x: 385, y: 152, stream: 1 },
+  { x: 515, y: 96, stream: 0 },
+  { x: 645, y: 148, stream: 1 },
+  { x: 775, y: 118, stream: 1 },
+].map((home, i) => ({
+  ...home,
+  i,
+  dx: IMPAIRED_DOCK.x - home.x,
+  dy: IMPAIRED_DOCK.y - home.y,
+}));
+
+function Tgr5ImpairedFigure() {
+  return (
+    <svg
+      className="tgr5-impaired-svg"
+      viewBox={`0 0 ${IMPAIRED_W} ${IMPAIRED_H}`}
+      preserveAspectRatio="xMidYMid meet"
+      role="img"
+      aria-label="Illustration: bile acids float above a TGR5 receptor and go down to it one at a time, each refused by a red cross."
+    >
+      <g
+        transform={`translate(${IMPAIRED_CENTRE.x} ${IMPAIRED_CENTRE.y}) scale(${IMPAIRED_RECEPTOR_SCALE})`}
+      >
+        {/* Shaken off by each one in turn, which is why it is wrapped: the
+            group above carries the placement, this one the knock. */}
+        <g className="tgr5-impaired-receptor">
+          <ReceptorShape x={0} y={0} />
+        </g>
+      </g>
+      {IMPAIRED_ACIDS.map((acid) => (
+        <g key={acid.i} transform={`translate(${acid.x} ${acid.y})`}>
+          <g
+            className="tgr5-impaired-dive"
+            style={
+              {
+                "--dx": acid.dx,
+                "--dy": acid.dy,
+                "--i": acid.i,
+              } as CSSProperties
+            }
+          >
+            <g className="tgr5-impaired-float" style={{ "--i": acid.i } as CSSProperties}>
+              <g
+                className={`bsh-molecule--${acid.stream}`}
+                transform={`scale(${ACID_SCALE})`}
+              >
+                <AcidShape conjugated />
+              </g>
+            </g>
+          </g>
+          {/* The refusal, which waits at the receptor for its own turn. */}
+          <g
+            className="tgr5-impaired-no"
+            style={
+              {
+                "--dx": acid.dx,
+                "--dy": acid.dy,
+                "--i": acid.i,
+              } as CSSProperties
+            }
+          >
+            <line x1={-13} y1={-13} x2={13} y2={13} />
+            <line x1={13} y1={-13} x2={-13} y2={13} />
+          </g>
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+export function Tgr5ImpairedSection() {
+  const prefersReducedMotion = useReducedMotion();
+  const stageRef = useRef<HTMLElement>(null);
+  // The receptor from the close-up above comes down and becomes this one.
+  useReceptorZoom({
+    stageRef,
+    from: ".tgr5-zoom-svg .tgr5-receptor",
+    to: ".tgr5-impaired-svg .tgr5-receptor",
+    skip: !!prefersReducedMotion,
+  });
+  return (
+    <section
+      className="tgr5-impaired home-snap-screen"
+      data-snap=""
+      ref={stageRef}
+    >
+      <h3 className="tgr5-impaired-heading">
+        When bile acid pool is <strong>disbalanced</strong>,{" "}
+        <strong>binding to TGR5 is impaired</strong>
+      </h3>
+      <Tgr5ImpairedFigure />
+    </section>
   );
 }
 
@@ -882,15 +1107,19 @@ function AnovulationArt() {
 // notes ("still thinking what to write").
 // TODO(team): add the explanations as `detail` once written.
 const CONSEQUENCES: { title: string; detail?: string; art: ReactNode }[] = [
-  { title: "Hyperinsulinaemia", art: <InsulinArt /> },
+  { title: "Insulin resistance", art: <InsulinArt /> },
   { title: "Anovulation", art: <AnovulationArt /> },
-  { title: "Hyperandrogenism", art: <AndrogenArt /> },
+  { title: "Higher androgen levels", art: <AndrogenArt /> },
 ];
 
 // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team feedback: the
 // third consequence was too easy to skip): the last one stays on screen for
 // this many extra steps of scrolling (--snap-extra, see .home-snap-pin).
-const LAST_STEP_EXTRA = 2;
+// Edited with Claude Opus 5 (Anthropic), 2026-10-20 (team request: two
+// scrolls from the last one showing to the next screen). The last one
+// shows once two of the three steps are behind the reader, so the
+// scrolling left after it is one more than this: at 2 it came to three.
+const LAST_STEP_EXTRA = 1;
 
 export function Tgr5ConsequencesSection() {
   const prefersReducedMotion = useReducedMotion();
@@ -913,16 +1142,12 @@ export function Tgr5ConsequencesSection() {
       <div
         className={`tgr5-effects${prefersReducedMotion ? " tgr5-effects--static" : " home-snap-stage"}`}
       >
-        {/* Retitled on Marie's review (2026-10-08): TGR5 is not inactivated.
-            Reworded on team request (2026-10-16). Reworded again on team
-            feedback (2026-10-17): the jump from the binding diagram above to
-            this screen read as a non sequitur, so the title now names "this
-            binding" explicitly and states the causal step (unbalanced pool
-            -> less binding) before its consequences. */}
-        <h3 className="tgr5-effects-heading">
-          If the bile acid pool is unbalanced, this binding happens less.
-          This may lead to:
-        </h3>
+        {/* Retitled on Marie's review (2026-10-08) and reworded on team
+            request several times since. Edited 2026-10-20 (team request):
+            the causal step it used to carry — an unbalanced pool meaning
+            less binding — is a screen of its own now, just above this one
+            (see home.mdx), so this is only the list's lead-in. */}
+        <h3 className="tgr5-effects-heading">This is linked to:</h3>
         <ol
           className="tgr5-effects-list"
           style={

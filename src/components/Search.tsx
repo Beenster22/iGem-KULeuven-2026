@@ -4,7 +4,7 @@
 // src/search/searchIndexPlugin.ts and only downloaded the first time the
 // dialog opens. Results link to the matching heading; a heading inside a
 // closed dropdown (protocols, notebook) is reached by opening the dropdown.
-import { FC, KeyboardEvent as ReactKeyboardEvent, ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { KeyboardEvent as ReactKeyboardEvent, ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getPathMapping, stringToSlug } from "../utils";
 import type { SearchSection } from "../search/searchIndexPlugin";
@@ -34,14 +34,14 @@ let indexPromise: Promise<Entry[]> | null = null;
 
 function loadIndex(): Promise<Entry[]> {
   indexPromise ??= import("virtual:search-index").then(({ default: pages }) => {
-    const pathByComponent = new Map<FC, { path: string; title: string; lead: string }>();
+    const pathByFile = new Map<string, { path: string; title: string; lead: string }>();
     for (const [path, page] of Object.entries(getPathMapping())) {
-      pathByComponent.set(page.component, { path, title: page.title ?? "", lead: page.lead ?? "" });
+      pathByFile.set(page.component.file, { path, title: page.title ?? "", lead: page.lead ?? "" });
     }
     const entries: Entry[] = [];
-    for (const { component, sections: pageSections } of pages) {
+    for (const { file, sections: pageSections } of pages) {
       let sections = pageSections;
-      const page = pathByComponent.get(component);
+      const page = pathByFile.get(file);
       if (!page) continue; // a content file that isn't routed in pages.ts
       const intro = sections.find((section) => !section.heading);
       // The page itself is always a result, with its lead as the text when
@@ -123,9 +123,12 @@ function resolveAnchor(anchors: string[]): { element: Element; index: number } |
   let found: { element: Element; index: number } | null = null;
   for (let index = anchors.length - 1; index >= 0; index--) {
     const slug = anchors[index];
-    const element = Array.from(scope.querySelectorAll("h1, h2, h3, h4, h5, h6")).find(
-      (heading) => stringToSlug((heading.textContent || "").trim()) === slug,
-    );
+    // Not every searchable item is a heading: event cards and Instagram posts
+    // carry the slug of their title as an element id instead.
+    const element =
+      Array.from(scope.querySelectorAll("h1, h2, h3, h4, h5, h6")).find(
+        (heading) => stringToSlug((heading.textContent || "").trim()) === slug,
+      ) ?? scope.querySelector(`[id="${CSS.escape(slug)}"]`);
     if (!element) break;
     found = { element, index };
     scope = element.closest(".expandable-container, .notebook-section, .content-section") ?? scope;

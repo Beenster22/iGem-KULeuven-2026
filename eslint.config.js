@@ -22,9 +22,16 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      // A leading underscore marks a parameter that is deliberately unused,
+      // e.g. the props of slot components that are only read by their parent
+      // (see HumanPracticesInterviews.tsx).
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_" },
+      ],
       "react-refresh/only-export-components": [
         "warn",
-        { allowConstantExport: true },
+        { allowConstantExport: true, allowExportNames: ["useThemeMode"] },
       ],
     },
   },

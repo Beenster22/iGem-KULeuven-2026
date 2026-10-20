@@ -2,9 +2,10 @@ import { useEffect, useRef, useState, type SVGProps } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import BootstrapNavbar from "react-bootstrap/Navbar";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Pages from "../pages.ts";
 import { useThemeMode } from "../ThemeModeContext";
+import { folderSlug } from "../utils";
 import { renderItalics } from "../utils/renderItalics";
 import { SearchButton } from "./Search";
 
@@ -76,6 +77,18 @@ export function Navbar() {
   // CSS :hover) to signal it's interactive, it no longer opens the menu.
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
+  const { pathname: currentPath } = useLocation();
+
+  // Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request:
+  // color-code the top-level folders — see Header.tsx's matching data-folder
+  // tint). The folder containing the page you're actually on gets a quiet
+  // underline in its color even with the mega-menu closed, so "which section
+  // am I in" doesn't require opening it.
+  const currentFolderIndex = Pages.findIndex(
+    (item) =>
+      "folder" in item &&
+      item.folder?.some((subpage) => subpage.path === currentPath),
+  );
 
   // Generated with Claude Opus 5 (Anthropic), 2026-10-19 (team feedback: a
   // home-page sentence sat right under the navigation bar): --home-nav-h is
@@ -153,6 +166,8 @@ export function Navbar() {
           key={`page-${pageIndex}`}
           href="#"
           className={`nav-link-dropdown ${openMenu === pageIndex ? "show" : ""}`}
+          data-folder={folderSlug(item.name)}
+          data-folder-current={currentFolderIndex === pageIndex ? "true" : undefined}
           aria-expanded={openMenu === pageIndex}
           aria-haspopup="true"
           onClick={(event) => {
@@ -285,7 +300,7 @@ export function Navbar() {
         {activeFolder && (
           <>
             <div className="mega-menu-bridge" />
-            <div className="mega-menu">
+            <div className="mega-menu" data-folder={folderSlug(activeItem?.name)}>
               <Container className="mega-menu-content">
                 {layoutMegaMenu(activeFolder.filter((subpage) => subpage.path)).map(
                   (group) => {

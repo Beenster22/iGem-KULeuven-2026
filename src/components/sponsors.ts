@@ -59,6 +59,10 @@ export const SPONSORS: Sponsor[] = [
     tier: "gold",
   },
   {
+    name: "Merck Healthcare & Fertility",
+    tier: "silver",
+  },
+  {
     name: "Technovation Hub",
     src: "https://static.igem.wiki/teams/6299/wiki/sponsors/technovation-hub.avif",
     href: "https://lrd.kuleuven.be/kuleuvenkick/technovation-hub",

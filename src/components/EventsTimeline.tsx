@@ -13,6 +13,8 @@ import {
   useRef,
   useState,
 } from "react";
+import { stringToSlug } from "../utils";
+import { Trophy } from "./Trophy";
 
 interface EventEntryProps {
   title: string;
@@ -20,6 +22,8 @@ interface EventEntryProps {
   location?: string;
   summary?: string;
   images?: string[];
+  /** Show the sparkly trophy badge — set when the team won an award at this event. */
+  award?: boolean;
   children: ReactNode;
 }
 
@@ -38,6 +42,7 @@ function extractEvents(children: ReactNode) {
       location: child.props.location,
       summary: child.props.summary,
       images: child.props.images ?? [],
+      award: child.props.award ?? false,
       content: child.props.children,
     }));
 }
@@ -372,6 +377,7 @@ export function EventsTimeline({ children, perRow = DEFAULT_EVENTS_PER_ROW }: Ev
             {row.map(({ event, index }, slot) => (
               <li
                 key={event.title}
+                id={stringToSlug(event.title)}
                 className="events-timeline-item"
                 style={
                   {
@@ -396,6 +402,7 @@ export function EventsTimeline({ children, perRow = DEFAULT_EVENTS_PER_ROW }: Ev
                     <span className="events-timeline-face events-timeline-front">
                       <span className="events-timeline-card-media">
                         <ImageRotator images={event.images} alt={event.title} seed={index} />
+                        {event.award && <Trophy overlay />}
                       </span>
                       <span className="events-timeline-card-body">
                         {event.location && (
@@ -441,7 +448,10 @@ export function EventsTimeline({ children, perRow = DEFAULT_EVENTS_PER_ROW }: Ev
                 {openEvent.date}
                 {openEvent.location ? ` · ${openEvent.location}` : ""}
               </span>
-              <h2 className="events-modal-title">{openEvent.title}</h2>
+              <h2 className="events-modal-title">
+                {openEvent.title}
+                {openEvent.award && <Trophy />}
+              </h2>
             </div>
             {openEvent.images.length > 0 && (
               <EventGallery
