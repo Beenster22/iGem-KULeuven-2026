@@ -15159,3 +15159,97 @@ a.protocol-download:hover {
   background: #c9bde8;
   color: #33283f;
 }
+
+/* NAVBAR GLITTER
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request)
+   Purpose: the Awards link glitters — a gold, pink and teal shimmer sweeps
+   across its label and three small sparkles twinkle around it (see the
+   `glitter` flag in pages.ts and Navbar.tsx). The shimmer is on an inner span
+   so the sparkles keep their own colour. */
+.nav-link-glitter {
+  position: relative;
+}
+
+.nav-glitter-text {
+  background-image: linear-gradient(
+    100deg,
+    currentColor 0%,
+    currentColor 40%,
+    #ffe9a3 46%,
+    #f1c3d4 50%,
+    #8fe0e4 54%,
+    currentColor 60%,
+    currentColor 100%
+  );
+  background-size: 260% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: nav-glitter-sweep 3.4s ease-in-out infinite;
+}
+
+.nav-glitter-spark {
+  position: absolute;
+  color: #ffd86b;
+  font-size: 0.55rem;
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0;
+  animation: nav-glitter-twinkle 2.4s ease-in-out infinite;
+}
+
+.nav-glitter-spark--1 {
+  top: 0.15rem;
+  left: 0.1rem;
+}
+
+.nav-glitter-spark--2 {
+  top: 0.05rem;
+  right: 0.2rem;
+  font-size: 0.7rem;
+  color: #f1c3d4;
+  animation-delay: 0.8s;
+}
+
+.nav-glitter-spark--3 {
+  bottom: 0.2rem;
+  right: 0.9rem;
+  color: #8fe0e4;
+  animation-delay: 1.6s;
+}
+
+@keyframes nav-glitter-sweep {
+  0% {
+    background-position: 100% 0;
+  }
+  55%,
+  100% {
+    background-position: 0 0;
+  }
+}
+
+@keyframes nav-glitter-twinkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.4) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1) rotate(25deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-glitter-text {
+    animation: none;
+    -webkit-text-fill-color: currentColor;
+    background-image: none;
+  }
+
+  .nav-glitter-spark {
+    animation: none;
+    opacity: 0.8;
+  }
+}
