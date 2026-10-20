@@ -200,12 +200,15 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
     title: "Psychological symptoms",
     symptoms: [
       {
-        label: "Anxiety and depression",
-        explanation:
-          "Psychological challenges: persistent worry, low mood and loss of interest are more common in PMOS.",
+        label: "Anxiety",
+        explanation: "Persistent worry is more common in PMOS.",
       },
       {
-        label: "Diagnostic delay – mental burden",
+        label: "Depression",
+        explanation: "Low mood and loss of interest are more common in PMOS.",
+      },
+      {
+        label: "Mental burden",
         explanation:
           "Many women wait years and see several doctors before getting a diagnosis, which takes a toll on their mental health.",
       },
@@ -218,7 +221,7 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
       {
         label: "Reduced microbial diversity",
         explanation:
-          "A less varied community of bacteria in the gut than in women without PMOS.",
+          "A less varied community of bacteria in the gut than in healthy women.",
       },
     ],
   },
@@ -258,11 +261,12 @@ export function PmosDefinition() {
 }
 
 // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request): the
-// four cards are now a jigsaw — wellbeing across the top, metabolic and
-// hormonal below it either side, and the gut microbiome as the missing piece
-// in the middle that the other three are cut around (clip-paths in App.css,
-// .symptoms-puzzle). DOM order is the phone's stacking order.
-const PUZZLE_ORDER = ["wellbeing", "gut", "metabolic", "hormonal"];
+// four cards are now a jigsaw — wellbeing across the top, hormonal and
+// metabolic below it either side (hormonal left, metabolic right), and the
+// gut microbiome as the missing piece in the middle that the other three are
+// cut around (clip-paths in App.css, .symptoms-puzzle). DOM order is the
+// phone's stacking order.
+const PUZZLE_ORDER = ["wellbeing", "gut", "hormonal", "metabolic"];
 const PUZZLE_SLOTS = ["top", "gut", "left", "right"];
 
 export function SymptomGroups() {
