@@ -51,7 +51,6 @@ import { Medal } from "./components/Medal";
 import { PrizeStar } from "./components/PrizeStar";
 import { PhasePager } from "./components/PhasePager";
 import { IntegrationSummary, IntegrationPoint } from "./components/IntegrationSummary";
-import { MicrobeBackdrop } from "./components/MicrobeBackdrop";
 import { TwoGutsSection } from "./components/TwoGutsSection";
 import {
   StoryScrollSection,
@@ -165,7 +164,6 @@ export const mdxComponents = {
   PhasePager,
   IntegrationSummary,
   IntegrationPoint,
-  MicrobeBackdrop,
   TwoGutsSection,
   StoryScrollSection,
   StoryStatement,

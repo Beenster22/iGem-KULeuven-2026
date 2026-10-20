@@ -76,18 +76,16 @@
   --color-band-border: #4d3d63;
 }
 
-/* How fast the page is being scrolled, -1 (up) to 1 (down), set on <html>
-   by useBackdropApproach (HomeSnapScroll.tsx) and eased back to 0 when the
-   scrolling stops; the background bacteria streak with it. Registered so
-   it can be transitioned. */
+/* How fast the page is being scrolled, -1 (up) to 1 (down), set on the
+   home page's background layer (.microbe-backdrop) by useBackdropApproach
+   (HomeSnapScroll.tsx) and eased back to 0 when the scrolling stops; the
+   swooshes show with it. Registered so it can be transitioned. Edited
+   2026-10-21 (team feedback: scrolling lagged): set and eased on that
+   layer only — on <html> it restyled the whole page every frame. */
 @property --whoosh {
   syntax: "<number>";
   inherits: true;
   initial-value: 0;
-}
-
-html {
-  transition: --whoosh 0.45s ease-out;
 }
 
 /* .surface — the shared "boxed content" treatment (tint, radius, shadow)
@@ -5306,121 +5304,143 @@ body:not(.home-fullscreen) .home-hero {
   color: var(--color-footer-text);
 }
 
-/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request:
-   swooshes sweeping left to right, as if in motion, every time the page is
-   scrolled). Edited the same day (team requests: cleaner and more faded,
-   running left to right; then always behind everything else, and a little
-   fainter; then half as bright again, as fast scrolling was distracting;
-   then 10% brighter again and 20% thicker, 2026-10-20):
-   thin streaks of white running down the screen (team request,
-   2026-10-20: they ran across it) that brighten towards their front and
-   fade out at both ends, like speed lines. They are part of each
-   band's own background, fixed to the screen, so everything in the band —
-   its words, drawings, bacteria and border — is in front of them. Each runs
-   at its own speed with the page (--sweep, in px scrolled, set on <html> by
-   useBackdropApproach in HomeSnapScroll.tsx) and they show only while it
-   is being scrolled, as strongly as it is fast (--whoosh). */
-.page-body--home .home-section,
-.page-body--home .pmos-overview {
-  --speed: max(var(--whoosh), calc(-1 * var(--whoosh)));
-  background-image:
-    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.132 * var(--speed))) 19.6%, transparent 28.0%),
-    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.108 * var(--speed))) 16.5%, transparent 23.6%),
-    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.091 * var(--speed))) 19.2%, transparent 27.4%),
-    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.124 * var(--speed))) 16.2%, transparent 23.1%),
-    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.099 * var(--speed))) 18.9%, transparent 27.1%),
-    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.116 * var(--speed))) 15.4%, transparent 22.0%),
-    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.124 * var(--speed))) 16.6%, transparent 23.8%),
-    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.091 * var(--speed))) 16.3%, transparent 23.3%),
-    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.108 * var(--speed))) 19.4%, transparent 27.8%),
-    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.124 * var(--speed))) 16.0%, transparent 22.9%),
-    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.099 * var(--speed))) 18.7%, transparent 26.7%),
-    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.116 * var(--speed))) 16.0%, transparent 22.9%),
-    linear-gradient(180deg, transparent 0, rgb(255 255 255 / calc(0.083 * var(--speed))) 16.3%, transparent 23.2%);
-  background-size: 2.4px 1500px, 1.2px 1100px, 2.4px 1900px, 1.2px 1300px, 2.4px 1700px, 1.2px 1000px, 2.4px 1600px, 1.2px 1200px, 2.4px 1800px, 1.2px 1050px, 2.4px 1650px, 1.2px 1400px, 2.4px 1550px;
-  background-repeat: repeat-y;
-  background-attachment: fixed;
-  background-position:
-    7% calc(var(--sweep, 0) * 1.6px),
-    14% calc(var(--sweep, 0) * 2.4px),
-    22% calc(var(--sweep, 0) * 1.2px),
-    29% calc(var(--sweep, 0) * 2.8px),
-    37% calc(var(--sweep, 0) * 1.9px),
-    44% calc(var(--sweep, 0) * 3.2px),
-    52% calc(var(--sweep, 0) * 1.4px),
-    59% calc(var(--sweep, 0) * 2.6px),
-    66% calc(var(--sweep, 0) * 1.7px),
-    74% calc(var(--sweep, 0) * 3px),
-    81% calc(var(--sweep, 0) * 1.3px),
-    89% calc(var(--sweep, 0) * 2.2px),
-    95% calc(var(--sweep, 0) * 1.8px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .page-body--home .home-section,
-  .page-body--home .pmos-overview {
-    background-image: none;
-  }
-}
-
-/* MICROBE BACKDROP (see MicrobeBackdrop.tsx) */
+/* MICROBE BACKDROP (see MicrobeBackdrop.tsx)
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-21 (team requests: a
+   smooth background layer of bacteria all over, not just down the sides;
+   smoother scrolling): one layer fixed to the screen behind every band.
+   The bands' own colours are below it and their words and drawings
+   (.container, z-index 1) above it. It shows only between the top of the
+   first band and the top of the last (--clip-top, --clip-bottom, set by
+   useBackdropApproach in HomeSnapScroll.tsx), so not over the opening
+   video or the "Find out more" band. Everything in it moves by transform
+   and opacity only, from --sweep (how far the page has been scrolled, in
+   px) and --whoosh (how fast), both set on it alone. */
 .microbe-backdrop {
-  position: absolute;
+  position: fixed;
   inset: 0;
+  z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  z-index: 0;
+  contain: strict;
+  /* The generic bacteria's colour: a purple that reads on the bands, a
+     darker one on the light page and a lighter one on the dark. */
+  color: #6e5b9e;
+  clip-path: inset(var(--clip-top, 0px) 0 var(--clip-bottom, 0px) 0);
+  transition: --whoosh 0.45s ease-out;
 }
 
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: the
-   passage through the gut): each item rides a mover (MicrobeBackdrop.tsx).
-   As the reader scrolls (--sweep, the page's scroll position, set by
-   useBackdropApproach in HomeSnapScroll.tsx) the mover carries it down
-   the screen (team request, 2026-10-20: it went left to right), the
-   nearer ones (--depth) faster and larger, and wraps it round: out at
-   the bottom of the screen, back in above the top. Edited the same day
-   (team request: flowing on from band to band, no border between): it is
-   placed on the screen, not in the band — --band-top, where this band is
-   on the screen, is taken back off — and every band draws the same
-   field, so at the edge between two bands their bacteria line up and run
-   straight on across it. Going back up runs it all backwards, as it only
-   depends on where the page is. They stay sharp as they move (team
-   request: not blurry or faded); the swooshes carry the speed. On the
-   mover rather than the item, so it runs along the screen whichever way
-   the item is turned. */
+[data-theme="dark"] .microbe-backdrop {
+  color: #c2b4ea;
+}
+
+/* The swooshes (team requests, 2026-10-20: speed lines as the page is
+   scrolled; cleaner and more faded; then half as bright, then 10%
+   brighter and 20% thicker; running down the screen): thin streaks of
+   white that brighten towards their front and fade out at both ends,
+   showing only while the page is being scrolled, as strongly as it is
+   fast. Three sheets of them, each sliding down at its own speed and
+   wrapping round after --period. */
+.microbe-backdrop-swooshes {
+  position: absolute;
+  inset: 0;
+  opacity: max(var(--whoosh), calc(-1 * var(--whoosh)));
+}
+
+.microbe-backdrop-swoosh {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(-1 * var(--period));
+  height: calc(100vh + var(--period));
+  background-repeat: repeat-y;
+  transform: translate3d(
+    0,
+    mod(var(--sweep, 0) * var(--speed), var(--period)),
+    0
+  );
+  will-change: transform;
+}
+
+.microbe-backdrop-swoosh--a {
+  --period: 1500px;
+  --speed: 1.6px;
+  background-image:
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / 0.13) 19%, transparent 27%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / 0.11) 19%, transparent 27%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / 0.12) 19%, transparent 27%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / 0.1) 19%, transparent 27%);
+  background-size: 2.4px 1500px, 2.4px 1500px, 1.2px 1500px, 2.4px 1500px;
+  background-position: 7% 0px, 37% 500px, 66% 1000px, 89% 250px;
+}
+
+.microbe-backdrop-swoosh--b {
+  --period: 1100px;
+  --speed: 2.4px;
+  background-image:
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / 0.11) 19%, transparent 27%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / 0.12) 19%, transparent 27%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / 0.13) 19%, transparent 27%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / 0.1) 19%, transparent 27%);
+  background-size: 1.2px 1100px, 2.4px 1100px, 2.4px 1100px, 1.2px 1100px;
+  background-position: 14% 0px, 44% 600px, 74% 300px, 95% 850px;
+}
+
+.microbe-backdrop-swoosh--c {
+  --period: 1900px;
+  --speed: 3px;
+  background-image:
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / 0.12) 19%, transparent 27%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / 0.1) 19%, transparent 27%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / 0.12) 19%, transparent 27%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / 0.11) 19%, transparent 27%),
+    linear-gradient(180deg, transparent 0, rgb(255 255 255 / 0.13) 19%, transparent 27%);
+  background-size: 2.4px 1900px, 1.2px 1900px, 1.2px 1900px, 2.4px 1900px, 1.2px 1900px;
+  background-position: 22% 0px, 29% 700px, 52% 1300px, 59% 400px, 81% 1000px;
+}
+
+/* Each item rides a mover (MicrobeBackdrop.tsx) that carries it down the
+   screen as the page is scrolled (team request, 2026-10-20: the passage
+   through the gut), the nearer ones (--depth) faster and larger, and
+   wraps it round: out at the bottom of the screen, back in above the top.
+   Going back up runs it all backwards. They stay sharp as they move (team
+   request: not blurry or faded); the swooshes carry the speed. */
 .microbe-backdrop-mover {
   --wrap-gap: 120px; /* room to leave the screen completely before wrapping */
   position: absolute;
   top: 0;
-  transform: translateY(
+  transform: translate3d(
+      0,
       calc(
         mod(
             var(--y0, 0) * (100vh + var(--wrap-gap)) +
               var(--sweep, 0) * 1px * (0.35 + var(--depth, 0.6) * 0.65),
             100vh + var(--wrap-gap)
           ) -
-          var(--wrap-gap) - var(--band-top, 0px)
-      )
+          var(--wrap-gap)
+      ),
+      0
     )
     scale(calc(0.7 + var(--depth, 0.6) * 0.8));
+  will-change: transform;
 }
 
+/* Faint, as they pass behind the words too. */
 .microbe-backdrop-item {
   display: block;
   width: clamp(40px, 4.5vw, 84px);
   height: auto;
-  opacity: 0.18;
+  opacity: 0.32;
   rotate: var(--r);
   animation: microbe-backdrop-float 18s ease-in-out infinite;
 }
 
 .microbe-backdrop-item--pv {
-  opacity: 0.28;
+  opacity: 0.24;
 }
 
 .microbe-backdrop-item--hex {
   width: clamp(18px, 1.8vw, 32px);
-  opacity: 0.3;
+  opacity: 0.26;
 }
 
 @keyframes microbe-backdrop-float {
@@ -5444,17 +5464,20 @@ body:not(.home-fullscreen) .home-hero {
     animation: none;
   }
 
-  /* Still, spread down the band where they start. */
+  .microbe-backdrop-swooshes {
+    display: none;
+  }
+
+  /* Still, spread down the screen where they start. */
   .microbe-backdrop-mover {
     top: calc(var(--y0, 0) * 100%);
     transform: none;
   }
 }
 
-/* Below ~laptop width the content fills the page, so the margins the
-   backdrop is meant for don't exist — hide it rather than clutter text. */
-@media (max-width: 991.98px) {
-  .microbe-backdrop {
+/* Phones: half as many, so they don't crowd the words. */
+@media (max-width: 699.98px) {
+  .microbe-backdrop-mover:nth-of-type(2n) {
     display: none;
   }
 }

@@ -4,7 +4,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { PMOS_TOTAL } from "./pmosContinentStats";
-import { MicrobeBackdrop } from "./MicrobeBackdrop";
 import { useFallingM } from "./useFallingM";
 
 const COUNT_DURATION_MS = 2000;
@@ -73,7 +72,6 @@ export function PmosOverview() {
       className="pmos-overview home-snap-screen"
       data-snap=""
     >
-      <MicrobeBackdrop />
       <div
         className={
           "pmos-counter" +

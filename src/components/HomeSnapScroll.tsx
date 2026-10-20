@@ -23,6 +23,7 @@ import {
 } from "react";
 import { useReducedMotion } from "framer-motion";
 import { GLIDE, markScrollBusy, scrollBusy } from "./scrollGlide";
+import { MicrobeBackdrop } from "./MicrobeBackdrop";
 
 export function HomeSnapScroll() {
   const prefersReducedMotion = useReducedMotion();
@@ -35,12 +36,12 @@ export function HomeSnapScroll() {
     };
   }, [prefersReducedMotion]);
 
-  // Also drives the swooshes, which are drawn in the bands' own backgrounds
-  // (see .page-body--home .home-section in App.css).
   useBackdropApproach(!!prefersReducedMotion);
   useWheelPaging(!!prefersReducedMotion);
 
-  return null;
+  // The background of bacteria and swooshes behind every band (edited
+  // 2026-10-21: one layer for the whole page instead of one per band).
+  return <MicrobeBackdrop />;
 }
 
 // Generated with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: all
@@ -254,15 +255,16 @@ export function SnapHold({ children }: { children: ReactNode }) {
   );
 }
 
-// The faint bacteria behind each band (MicrobeBackdrop.tsx) travel as the
-// reader scrolls: they flow down the screen with --sweep (below), and each
-// backdrop gets --band-top, where it is on the screen, so they flow on
-// from one band into the next (see MICROBE BACKDROP in App.css). The stretch is the band, or the pinned screen the backdrop is
-// held in, so the bacteria keep moving while the words stand still.
-// Edited 2026-10-20 (team request: a whoosh, as if passing through the
-// gut): <html> also gets --whoosh, the scrolling speed from -1 (up) to 1
-// (down), which falls back to 0 when the scrolling stops; the bacteria
-// streak with it.
+// The faint bacteria in the background (MicrobeBackdrop.tsx) travel as the
+// reader scrolls: they flow down the screen with --sweep, how far the page
+// has been scrolled. Edited 2026-10-20 (team request: a whoosh, as if
+// passing through the gut): the layer also gets --whoosh, the scrolling
+// speed from -1 (up) to 1 (down), which falls back to 0 when the scrolling
+// stops; the swooshes show with it. Edited 2026-10-21 (team feedback:
+// scrolling lagged): both are set on the background layer alone, which is
+// one layer for the whole page, so a frame of scrolling restyles that
+// layer and nothing else. It also gets where the bands start and end on
+// the screen (--clip-top, --clip-bottom), so it shows only over them.
 // How fast (px per ms) counts as full speed.
 const WHOOSH_FULL = 5;
 // Edited 2026-10-21 (team request: the background keeps moving on a turn
@@ -277,11 +279,13 @@ const WHOOSH_SETTLE = 120;
 function useBackdropApproach(skip: boolean) {
   useEffect(() => {
     if (skip) return;
+    const layer = document.querySelector<HTMLElement>(".microbe-backdrop");
+    if (!layer) return;
     let frame: number | null = null;
     let lastY = window.scrollY + sweepOffset;
     let lastTime = performance.now();
     let settle: number | undefined;
-    const root = document.documentElement;
+    let clip = "";
 
     const whoosh = () => {
       const now = performance.now();
@@ -289,46 +293,46 @@ function useBackdropApproach(skip: boolean) {
       const y = window.scrollY + sweepOffset;
       if (dt > 0) {
         const speed = (y - lastY) / dt / WHOOSH_FULL;
-        root.style.setProperty(
+        layer.style.setProperty(
           "--whoosh",
           Math.max(-1, Math.min(1, speed)).toFixed(3),
         );
       }
       lastY = y;
       lastTime = now;
-      // How far the swooshes and bacteria have travelled.
-      root.style.setProperty("--sweep", y.toFixed(0));
+      layer.style.setProperty("--sweep", y.toFixed(0));
       window.clearTimeout(settle);
       settle = window.setTimeout(
-        () => root.style.setProperty("--whoosh", "0"),
+        () => layer.style.setProperty("--whoosh", "0"),
         WHOOSH_SETTLE,
       );
+    };
+
+    // From the top of the first band to the top of the last ("Find out
+    // more", where the passage through the gut ends).
+    const clipToBands = () => {
+      const bands = document.querySelectorAll<HTMLElement>(
+        ".page-body--home .home-section",
+      );
+      if (!bands.length) return;
+      const vh = window.innerHeight;
+      const top = bands[0].getBoundingClientRect().top;
+      const end = bands[bands.length - 1].getBoundingClientRect().top;
+      const next = `${Math.round(Math.min(vh, Math.max(0, top)))} ${Math.round(
+        Math.min(vh, Math.max(0, vh - end)),
+      )}`;
+      // Only when it changes, which is only near either end.
+      if (next === clip) return;
+      clip = next;
+      const [clipTop, clipBottom] = next.split(" ");
+      layer.style.setProperty("--clip-top", `${clipTop}px`);
+      layer.style.setProperty("--clip-bottom", `${clipBottom}px`);
     };
 
     const update = () => {
       frame = null;
       whoosh();
-      const vh = window.innerHeight;
-      document
-        .querySelectorAll<HTMLElement>(".microbe-backdrop")
-        .forEach((backdrop) => {
-          const held = backdrop.closest(".home-snap-stage");
-          const stretch =
-            (held && backdrop.closest<HTMLElement>(".home-snap-pin")) ||
-            backdrop.parentElement;
-          if (!stretch) return;
-          const box = stretch.getBoundingClientRect();
-          if (box.bottom < -vh || box.top > 2 * vh) return;
-          // Edited 2026-10-20 (team request: the bacteria flow on from one
-          // band into the next): every band draws the same field of
-          // bacteria, placed on the screen rather than in the band, so this
-          // band's own offset is taken back off (see .microbe-backdrop-mover
-          // in App.css).
-          backdrop.style.setProperty(
-            "--band-top",
-            `${backdrop.getBoundingClientRect().top.toFixed(1)}px`,
-          );
-        });
+      clipToBands();
     };
     const onScroll = () => {
       if (frame === null) frame = requestAnimationFrame(update);
@@ -344,8 +348,6 @@ function useBackdropApproach(skip: boolean) {
       window.removeEventListener("resize", onScroll);
       if (frame !== null) cancelAnimationFrame(frame);
       window.clearTimeout(settle);
-      root.style.removeProperty("--whoosh");
-      root.style.removeProperty("--sweep");
     };
   }, [skip]);
 }
