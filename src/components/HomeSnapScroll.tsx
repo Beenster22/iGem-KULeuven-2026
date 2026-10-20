@@ -60,14 +60,15 @@ export function HomeSnapScroll() {
 // gesture (ctrl + wheel), not inside a box that scrolls on its own, and not
 // while one of the page's own glides is moving it (scrollBusy, see
 // scrollGlide.ts). The scrollbar and the keys still scroll freely.
-// Edited 2026-10-21 (team request: three scrolls on every screen before
-// the next one, with the background moving every time): going down, when
-// the next stop is the start of the next screen (rather than the next step
-// of this one), the first two turns of the wheel hold the page still while
-// the bacteria and swooshes behind it carry on (nudgeBackdrop), and the
-// third moves on. Not on the opening video: the first turn leaves it.
+// Edited 2026-10-21 (team request: two scrolls on every screen — one to
+// get there, one more on it — with the background moving every time):
+// going down, when the next stop is the start of the next screen (rather
+// than the next step of this one), the first turn of the wheel on a screen
+// holds the page still while the bacteria and swooshes behind it carry on
+// (nudgeBackdrop), and the second moves on. (It was three turns earlier
+// the same day.) Not on the opening video: the first turn leaves it.
 // Turns of the wheel, once on a screen, that it takes to leave it.
-const TURNS_TO_LEAVE = 3;
+const TURNS_TO_LEAVE = 2;
 // How far a held turn carries the background on (screens), and how long:
 // about as far and as fast as a glide to the next screen, so it looks the
 // same every time.
