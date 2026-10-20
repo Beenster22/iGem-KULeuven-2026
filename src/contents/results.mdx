@@ -1992,24 +1992,26 @@ balanced immune and metabolic modulation.
 
 #### Integration strategy
 
+{/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: swapped in the team's corrected figure (crispr-img.avif); its own numbered circles are now the clickable steps. */}
 {/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: the five steps became numbered pins on the biorender figure itself instead of a card row below it (team feedback: wanted the figure and its step-by-step explanation to work as one interactive piece, defaulting to step 1 with Previous/Next to move through the rest), and the "Note" callout was cut down to a small asterisked line since it is a caveat, not a result. */}
 
 <div className="subsection-panel">
 
 The construct must replicate and express in _E. coli_ and _P. vulgatus_ for
-conjugation. Select a numbered step on the figure, or use the arrows below it,
+conjugation. Select a numbered circle on the figure, or use the arrows below it,
 to read what happens at that stage.
 
 <ImageFlowSelector
-  image="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/crispr-conjugation-horizontal2x.avif"
-  alt="In vivo engineering with the CRISPR plasmid: the construct conjugates from E. coli into P. vulgatus, then performs CRISPR-based gene replacement at the native BSH locus."
+  image="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/crispr-img.avif"
+  alt="In vivo engineering with the CRISPR plasmid, in five numbered steps: the construct in E. coli, conjugation into P. vulgatus, the plasmid replicating there, Cas9 and the gRNA targeting the native BSH, and CRISPR-based gene replacement."
+  crop={{ x: 5, y: 30, w: 93, h: 39 }}
 >
-  <FlowStep title="E. coli replication" marker={{ x: 10, side: "above" }}>
+  <FlowStep title="E. coli replication" marker={{ x: 13.44, y: 46.11 }}>
     In _E. coli_ S17-1 λpir, R6K γ ori is used as an established origin of
     replication for stable plasmid number upkeep, while an ampicillin
     resistance cassette is expressed to select for transformed colonies.
   </FlowStep>
-  <FlowStep title="Conjugative transfer" marker={{ x: 58, side: "above" }}>
+  <FlowStep title="Conjugative transfer" marker={{ x: 52.15, y: 46.11 }}>
     Upon conjugative transfer to _P. vulgatus_ using oriT, a chloramphenicol
     resistance cassette (Cat) is used to select for positive transformants.
     Erythromycin is the usual choice for this step in the conjugation
@@ -2018,16 +2020,16 @@ to read what happens at that stage.
     isolate RCC1806 — chloramphenicol, tetracycline and metronidazole all
     inhibit both, and chloramphenicol was chosen as the marker here.
   </FlowStep>
-  <FlowStep title="Bacteroides replication" marker={{ x: 80, side: "below" }}>
+  <FlowStep title="Bacteroides replication" marker={{ x: 78.28, y: 62.99 }}>
     pB8-51 ori is used as a _Bacteroides_ origin of replication once inside
     _P. vulgatus_.
   </FlowStep>
-  <FlowStep title="Targeting the native BSH" marker={{ x: 84, side: "above" }}>
+  <FlowStep title="Targeting the native BSH" marker={{ x: 86.02, y: 36.94 }}>
     The promoter used _P. vulgatus_-specific expression for the gRNA, which
     combines with Cas9 and targets the native BSH to induce a double strand
     break.
   </FlowStep>
-  <FlowStep title="Scarless replacement" marker={{ x: 92, side: "below" }}>
+  <FlowStep title="Scarless replacement" marker={{ x: 94.38, y: 61.46 }}>
     The plasmid backbone does not integrate so it can be cured, leaving a
     scarless gene replacement.
   </FlowStep>

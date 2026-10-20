@@ -13918,6 +13918,43 @@ a.protocol-download:hover {
   top: 1.3rem;
 }
 
+/* Ring over a circle already printed on the figure: the artwork's own number
+   shows through, the ring only marks it clickable and which one is selected. */
+.image-flow-selector-figure.on-image {
+  padding: 0.5rem;
+  background-color: #e0dcf5;
+}
+
+.image-flow-selector-crop {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-flow-selector-crop .image-flow-selector-image {
+  border-radius: 0;
+}
+
+.image-flow-selector-marker.ring {
+  width: 2.1rem;
+  height: 2.1rem;
+  border: 2px solid transparent;
+  background-color: transparent;
+  color: transparent;
+  box-shadow: none;
+}
+
+.image-flow-selector-marker.ring:hover {
+  background-color: transparent;
+  border-color: var(--color-accent);
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.image-flow-selector-marker.ring.active {
+  background-color: transparent;
+  border-color: #1f7f84;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 85%, transparent);
+}
+
 .image-flow-selector-marker.below {
   top: auto;
   bottom: 1.3rem;
