@@ -21,7 +21,7 @@ import { createPortal } from "react-dom";
 import { useReducedMotion } from "framer-motion";
 import { EFFECT_ART } from "./PmosEffectsSection";
 import { PMOS_EFFECTS_ID } from "./globeDrop";
-import { GLIDE, glideStartRate } from "./scrollGlide";
+import { GLIDE, glideStartRate, markScrollBusy } from "./scrollGlide";
 import { navBottom } from "./useFallingM";
 
 // Elle's place on the next screen, presenting (StoryScrollSection.tsx).
@@ -363,6 +363,7 @@ export function ElleTour() {
       const start = performance.now();
       const startRate = glideStartRate(velocity, distance, GLIDE_MS);
       busyUntil = start + GLIDE_MS + 300;
+      markScrollBusy(busyUntil);
       const step = (now: number) => {
         const u = Math.min(1, (now - start) / GLIDE_MS);
         window.scrollTo({ top: from + distance * GLIDE(u, startRate), behavior: "instant" });

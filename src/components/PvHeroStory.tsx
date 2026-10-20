@@ -5,17 +5,19 @@
 //  - PvBalanceSection: "This is why we want to engineer P. vulgatus to
 //    restore bile acid balance…". A pair of scales holds conjugated bile
 //    acids on one pan and deconjugated ones on the other. Edited 2026-10-20
-//    (team request): on the first scroll it hangs to one side on its own;
-//    on the second P. vulgatus flies in from the left — standing upright,
-//    in its usual purple and wearing a teal cape, with a soft glow behind
-//    it like the TGR5 close-up's — and the scales level. (It used to be
-//    the three consequence circles above that flew down and became it.)
+//    (team requests): on the first scroll it hangs to one side on its own;
+//    on the second P. vulgatus flies in from the left, engineered — the
+//    team's drawing of it with its genetic circuit inside and BSH beside
+//    it, in the caped one's style and hairs — and drifts there; on the
+//    third the circuit's "inhibits" line reaches BSH and the scales level.
+//    (Before that it was the caped one flying in, and before that the
+//    three consequence circles above flying down and becoming it.)
 //  - PvCureSection: "… and achieve a therapeutic effect in PMOS". The four
 //    areas PMOS affects (the circles of PmosEffectsSection) round the edge.
-//    P. vulgatus flies on down from the screen above to the middle
-//    (useReceptorZoom.ts, as the TGR5 receptor does), then goes to each in
-//    turn and clears it, then flies off and leaves the EMPOWER logo where it
-//    stood.
+//    The engineered P. vulgatus flies on down from the screen above to the
+//    middle, turning into the caped one on the way (useCellToHero.ts), then
+//    goes to each in turn and clears it, then flies off and leaves the
+//    EMPOWER logo where it stood.
 // The drawings are ILLUSTRATIONS of the team's aim, not results: the scales
 // stand for "balance" and the clearing for "a therapeutic effect", nothing
 // more. Motion is off under prefers-reduced-motion, where both screens show
@@ -33,7 +35,7 @@ import { EFFECTS } from "./PmosEffectsSection";
 import { BileAcidShape } from "./Tgr5Story";
 import { SnapSteps } from "./HomeSnapScroll";
 import { usePinnedStep } from "./usePinnedStep";
-import { useReceptorZoom } from "./useReceptorZoom";
+import { useCellToHero } from "./useCellToHero";
 import { useThemeMode } from "../ThemeModeContext";
 
 function seededValue(seed: number) {
@@ -48,16 +50,16 @@ function seededValue(seed: number) {
 // The cell of BshStreamAnimation.tsx stood on end, drawn about its centre.
 const HERO = { w: 96, h: 210 };
 
-// Its pili, all the way round the outline: down the right side, round the
-// bottom, up the left side and over the top.
-const HERO_PILI = (() => {
-  const r = HERO.w / 2;
-  const straight = HERO.h - HERO.w;
+// Pili all the way round an upright capsule of w x h drawn about its
+// centre: down the right side, round the bottom, up the left side and over
+// the top. `seed` varies the hairs from one cell to another.
+function capsulePili(w: number, h: number, count: number, seed: number) {
+  const r = w / 2;
+  const straight = h - w;
   const perimeter = 2 * straight + 2 * Math.PI * r;
-  const count = 34;
   return Array.from({ length: count }, (_, i) => {
     const d =
-      ((i + 0.5 + (seededValue(i + 900) - 0.5) * 0.6) / count) * perimeter;
+      ((i + 0.5 + (seededValue(i + seed) - 0.5) * 0.6) / count) * perimeter;
     let x: number;
     let y: number;
     let angle: number;
@@ -76,15 +78,17 @@ const HERO_PILI = (() => {
       angle = Math.PI + (d - 2 * straight - Math.PI * r) / r;
       [x, y] = [r * Math.cos(angle), -straight / 2 + r * Math.sin(angle)];
     }
-    const length = 13 + seededValue(i * 7 + 901) * 9;
-    const lean = (seededValue(i * 7 + 902) - 0.5) * 0.7;
+    const length = 13 + seededValue(i * 7 + seed + 1) * 9;
+    const lean = (seededValue(i * 7 + seed + 2) - 0.5) * 0.7;
     const tipX = x + length * Math.cos(angle + lean);
     const tipY = y + length * Math.sin(angle + lean);
     const midX = x + length * 0.55 * Math.cos(angle - lean * 0.6);
     const midY = y + length * 0.55 * Math.sin(angle - lean * 0.6);
     return `M${x.toFixed(1)},${y.toFixed(1)} Q${midX.toFixed(1)},${midY.toFixed(1)} ${tipX.toFixed(1)},${tipY.toFixed(1)}`;
   }).join(" ");
-})();
+}
+
+const HERO_PILI = capsulePili(HERO.w, HERO.h, 34, 900);
 
 // Where the cape hangs from: across the cell's shoulders.
 const SHOULDER_Y = -HERO.h / 2 + 34;
@@ -134,12 +138,119 @@ function PvHero() {
 }
 
 /* ------------------------------------------------------------------ */
+/* P. vulgatus, engineered                                             */
+/* ------------------------------------------------------------------ */
+
+// Generated with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request,
+// with the team's picture of it): P. vulgatus lying on its side with the
+// genetic circuit inside it — promoter, two parts and a terminator — and
+// beside it the BSH it silences, reached by the blunt "inhibits" line. The
+// same cell as the caped one (same purple, same hairs), only longer, so the
+// circuit fits. Drawn about its centre; the circuit is the old "why we
+// engineer" drawing's, moved to that centre.
+const CELL = { w: 288, h: 158 };
+// Drawn upright and turned on its side, so the hairs come from the same
+// recipe as the caped cell's.
+const CELL_PILI = capsulePili(CELL.h, CELL.w, 46, 950);
+// From the yellow part down and across to BSH, ending in the blunt bar.
+const INHIBIT_PATH = "M-4,1 v20 q0,12 14,12 h14 m0,-10 v20";
+
+function PvEngineered() {
+  // The dashed line is uncovered along its length by a solid copy of it
+  // that grows from the yellow part to BSH (stroke-dashoffset on a path one
+  // unit long), so it stays dashed as it draws out.
+  const revealId = useId();
+  return (
+    <g className="pv-engineer">
+      <defs>
+        <mask
+          id={revealId}
+          maskUnits="userSpaceOnUse"
+          x={-200}
+          y={-200}
+          width={400}
+          height={400}
+        >
+          <path
+            className="pv-engineer-inhibit-reveal"
+            d={INHIBIT_PATH}
+            pathLength={1}
+          />
+        </mask>
+      </defs>
+      <g transform="rotate(90)">
+        <path className="pv-hero-pili-halo" d={CELL_PILI} />
+        <path className="pv-hero-pili" d={CELL_PILI} />
+        <rect
+          className="pv-hero-outer"
+          x={-CELL.h / 2}
+          y={-CELL.w / 2}
+          width={CELL.h}
+          height={CELL.w}
+          rx={CELL.h / 2}
+        />
+        <rect
+          className="pv-hero-inner"
+          x={-CELL.h / 2 + 10}
+          y={-CELL.w / 2 + 10}
+          width={CELL.h - 20}
+          height={CELL.w - 20}
+          rx={CELL.h / 2 - 10}
+        />
+      </g>
+      <line className="pv-engineer-dna" x1={-98} y1={-13} x2={26} y2={-13} />
+      <path
+        className="pv-engineer-promoter"
+        d="M-88,-13 v-20 h16 m-7,-6 l8,6 l-8,6"
+      />
+      <rect
+        className="pv-engineer-part pv-engineer-part--a"
+        x={-64}
+        y={-24}
+        width={36}
+        height={22}
+        rx={4}
+      />
+      <rect
+        className="pv-engineer-part pv-engineer-part--b"
+        x={-22}
+        y={-24}
+        width={36}
+        height={22}
+        rx={4}
+      />
+      <path className="pv-engineer-terminator" d="M22,-13 v-14 m-7,0 h14" />
+      {/* The line draws itself out on the third step and BSH dims as it
+          is reached (see .pv-engineer-* in App.css). */}
+      <path
+        className="pv-engineer-inhibit"
+        d={INHIBIT_PATH}
+        mask={`url(#${revealId})`}
+      />
+      <rect
+        className="pv-engineer-bsh"
+        x={32}
+        y={13}
+        width={78}
+        height={40}
+        rx={20}
+      />
+      <text className="pv-engineer-bsh-label" x={71} y={39}>
+        BSH
+      </text>
+    </g>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Restoring the balance                                               */
 /* ------------------------------------------------------------------ */
 
 const BAL_W = 1000;
 const BAL_H = 470;
-const HERO_AT = { x: 260, y: 240 };
+// Where the engineered cell lands, left of the scales.
+const CELL_AT = { x: 228, y: 236 };
+const CELL_SCALE = 1.08;
 // The scales: the pivot at the top of the post, and half the beam.
 const PIVOT = { x: 690, y: 140 };
 const ARM = 200;
@@ -228,7 +339,7 @@ function PvBalanceFigure() {
       viewBox={`0 0 ${BAL_W} ${BAL_H}`}
       preserveAspectRatio="xMidYMid meet"
       role="img"
-      aria-label="Illustration: Phocaeicola vulgatus, wearing a cape, stands beside a pair of scales with conjugated bile acids on one pan and deconjugated bile acids on the other. The scales tip towards the deconjugated side until P. vulgatus arrives, then level out."
+      aria-label="Illustration: a pair of scales with conjugated bile acids on one pan and deconjugated bile acids on the other, tipped towards the deconjugated side. Phocaeicola vulgatus, engineered with a genetic circuit inside it, arrives beside it; the circuit silences its BSH enzyme, and the scales level out."
     >
       <defs>
         <radialGradient id={glowId}>
@@ -240,14 +351,20 @@ function PvBalanceFigure() {
 
       <circle
         className="pv-hero-glow"
-        cx={HERO_AT.x}
-        cy={HERO_AT.y}
-        r={200}
+        cx={CELL_AT.x}
+        cy={CELL_AT.y}
+        r={210}
         fill={`url(#${glowId})`}
       />
-      <g transform={`translate(${HERO_AT.x} ${HERO_AT.y})`}>
-        <g className="pv-hero-arrive">
-          <PvHero />
+      <g
+        transform={`translate(${CELL_AT.x} ${CELL_AT.y}) scale(${CELL_SCALE})`}
+      >
+        {/* Flies in from the left (data-arrived), then drifts a little in
+            place (.pv-cell-drift). */}
+        <g className="pv-cell-arrive">
+          <g className="pv-cell-drift">
+            <PvEngineered />
+          </g>
         </g>
       </g>
 
@@ -292,16 +409,18 @@ function PvBalanceFigure() {
   );
 }
 
-// Two steps: the scales on their own, then P. vulgatus arriving.
-const BALANCE_STEPS = 2;
+// Three steps (team request, 2026-10-20): the scales on their own; the
+// engineered P. vulgatus flying in; its circuit silencing BSH, and the
+// scales levelling.
+const BALANCE_STEPS = 3;
 
 export function PvBalanceSection() {
   const prefersReducedMotion = useReducedMotion();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const step = usePinnedStep(wrapperRef, BALANCE_STEPS);
-  // P. vulgatus flies in, and the scales level as it lands (CSS, on
-  // data-arrived).
+  // CSS does the rest, on data-arrived and data-balanced.
   const arrived = prefersReducedMotion || step >= 1;
+  const balanced = prefersReducedMotion || step >= 2;
   return (
     <div
       className={prefersReducedMotion ? undefined : "home-snap-pin"}
@@ -313,6 +432,7 @@ export function PvBalanceSection() {
         className={`pv-balance home-snap-screen${prefersReducedMotion ? "" : " home-snap-stage"}`}
         data-snap=""
         data-arrived={arrived ? "1" : "0"}
+        data-balanced={balanced ? "1" : "0"}
       >
         {/* Wording supplied by the team, 2026-10-20. */}
         <h3 className="pv-heading">
@@ -569,12 +689,14 @@ function PvCureFigure({
 export function PvCureSection() {
   const prefersReducedMotion = useReducedMotion();
   const ref = useRef<HTMLElement>(null);
-  // P. vulgatus flies on from the balance screen above and lands in the
-  // middle of this one.
-  useReceptorZoom({
+  // The engineered P. vulgatus flies on from the balance screen above,
+  // turning into the caped one on the way, and lands in the middle of
+  // this one.
+  useCellToHero({
     stageRef: ref,
-    from: ".pv-balance-svg .pv-hero",
+    from: ".pv-balance-svg .pv-engineer",
     to: ".pv-cure-svg .pv-hero",
+    lengthRatio: HERO.h / CELL.w,
     skip: !!prefersReducedMotion,
   });
   const { at, cleared, away, logo } = useCureSequence(

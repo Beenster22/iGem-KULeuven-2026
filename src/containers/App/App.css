@@ -5166,8 +5166,9 @@ body:not(.home-fullscreen) .home-hero {
    swooshes sweeping left to right, as if in motion, every time the page is
    scrolled). Edited the same day (team requests: cleaner and more faded,
    running left to right; then always behind everything else, and a little
-   fainter): thin horizontal streaks of white that brighten towards their
-   front and fade out at both ends, like speed lines. They are part of each
+   fainter; then half as bright again, as fast scrolling was distracting):
+   thin horizontal streaks of white that brighten towards their front and
+   fade out at both ends, like speed lines. They are part of each
    band's own background, fixed to the screen, so everything in the band —
    its words, drawings, bacteria and border — is in front of them. Each runs
    at its own speed with the page (--sweep, in px scrolled, set on <html> by
@@ -5177,19 +5178,19 @@ body:not(.home-fullscreen) .home-hero {
 .page-body--home .pmos-overview {
   --speed: max(var(--whoosh), calc(-1 * var(--whoosh)));
   background-image:
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.240 * var(--speed))) 19.6%, transparent 28.0%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.195 * var(--speed))) 16.5%, transparent 23.6%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.165 * var(--speed))) 19.2%, transparent 27.4%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.225 * var(--speed))) 16.2%, transparent 23.1%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.180 * var(--speed))) 18.9%, transparent 27.1%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.210 * var(--speed))) 15.4%, transparent 22.0%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.225 * var(--speed))) 16.6%, transparent 23.8%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.165 * var(--speed))) 16.3%, transparent 23.3%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.195 * var(--speed))) 19.4%, transparent 27.8%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.225 * var(--speed))) 16.0%, transparent 22.9%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.180 * var(--speed))) 18.7%, transparent 26.7%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.210 * var(--speed))) 16.0%, transparent 22.9%),
-    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.150 * var(--speed))) 16.3%, transparent 23.2%);
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.120 * var(--speed))) 19.6%, transparent 28.0%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.098 * var(--speed))) 16.5%, transparent 23.6%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.083 * var(--speed))) 19.2%, transparent 27.4%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.113 * var(--speed))) 16.2%, transparent 23.1%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.090 * var(--speed))) 18.9%, transparent 27.1%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.105 * var(--speed))) 15.4%, transparent 22.0%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.113 * var(--speed))) 16.6%, transparent 23.8%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.083 * var(--speed))) 16.3%, transparent 23.3%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.098 * var(--speed))) 19.4%, transparent 27.8%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.113 * var(--speed))) 16.0%, transparent 22.9%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.090 * var(--speed))) 18.7%, transparent 26.7%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.105 * var(--speed))) 16.0%, transparent 22.9%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.075 * var(--speed))) 16.3%, transparent 23.2%);
   background-size: 1500px 2px, 1100px 1px, 1900px 2px, 1300px 1px, 1700px 2px, 1000px 1px, 1600px 2px, 1200px 1px, 1800px 2px, 1050px 1px, 1650px 2px, 1400px 1px, 1550px 2px;
   background-repeat: repeat-x;
   background-attachment: fixed;
@@ -16590,13 +16591,15 @@ a.protocol-download:hover {
   stroke-width: 2;
 }
 
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: on the
-   first scroll only the unbalanced scales, on the second P. vulgatus flies
-   in from the left and they level): off the left of the screen, tipped
-   forward into its flight, until the screen's second step (data-arrived on
-   .pv-balance); then it sweeps in and straightens up, turning about its own
-   middle (its group is drawn about it). Its glow comes up as it lands. */
-.pv-hero-arrive {
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team requests: on
+   the first scroll only the unbalanced scales; on the second the engineered
+   P. vulgatus flies in from the left; on the third its circuit silences BSH
+   and the scales level): off the left of the screen, tipped forward into
+   its flight, until the screen's second step (data-arrived on .pv-balance);
+   then it sweeps in and straightens up, turning about its own middle (its
+   group is drawn about it), and drifts gently where it landed. Its glow
+   comes up as it lands. */
+.pv-cell-arrive {
   opacity: 0;
   translate: -1000px -80px;
   rotate: 24deg;
@@ -16606,10 +16609,115 @@ a.protocol-download:hover {
     opacity 0.25s ease;
 }
 
-.pv-balance[data-arrived="1"] .pv-hero-arrive {
+.pv-balance[data-arrived="1"] .pv-cell-arrive {
   opacity: 1;
   translate: 0 0;
   rotate: 0deg;
+}
+
+.pv-cell-drift {
+  animation: pv-cell-drift 4.2s ease-in-out infinite alternate;
+}
+
+@keyframes pv-cell-drift {
+  0% {
+    translate: -4px 3px;
+    rotate: -1.5deg;
+  }
+  50% {
+    translate: 3px -5px;
+    rotate: 1deg;
+  }
+  100% {
+    translate: 5px 2px;
+    rotate: 2deg;
+  }
+}
+
+/* The circuit inside it, as in the team's drawing: promoter, a teal and a
+   yellow part, terminator. */
+.pv-engineer-dna {
+  stroke: #33283f;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.pv-engineer-promoter,
+.pv-engineer-terminator {
+  fill: none;
+  stroke: #33283f;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pv-engineer-part {
+  stroke: #33283f;
+  stroke-width: 2;
+}
+
+.pv-engineer-part--a {
+  fill: var(--color-interactive);
+}
+
+.pv-engineer-part--b {
+  fill: #f6cf57;
+}
+
+/* The blunt "inhibits" line, dashed, from the yellow part to BSH. It is
+   uncovered along its length on the third step (the mask path below grows
+   from 0 to the whole of it). */
+.pv-engineer-inhibit {
+  fill: none;
+  stroke: #cc4a4a;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 6 6;
+}
+
+.pv-engineer-inhibit-reveal {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 12;
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.8s ease-in-out;
+}
+
+.pv-balance[data-balanced="1"] .pv-engineer-inhibit-reveal {
+  stroke-dashoffset: 0;
+}
+
+/* BSH: whole until the line reaches it, then switched off — dashed and
+   faded, as in the team's drawing. */
+.pv-engineer-bsh {
+  fill: #dfe8f7;
+  fill-opacity: 0.95;
+  stroke: #2f4f86;
+  stroke-width: 3;
+  transition:
+    fill-opacity 0.5s ease,
+    stroke-dasharray 0s;
+}
+
+.pv-engineer-bsh-label {
+  fill: #1c2f52;
+  font-size: 22px;
+  font-weight: 800;
+  text-anchor: middle;
+  transition: fill-opacity 0.5s ease;
+}
+
+.pv-balance[data-balanced="1"] .pv-engineer-bsh {
+  fill-opacity: 0.5;
+  stroke-dasharray: 5 5;
+  transition-delay: 0.75s;
+}
+
+.pv-balance[data-balanced="1"] .pv-engineer-bsh-label {
+  fill-opacity: 0.6;
+  transition-delay: 0.75s;
 }
 
 .pv-hero-glow {
@@ -16669,9 +16777,9 @@ a.protocol-download:hover {
   transition: transform 1.4s cubic-bezier(0.34, 1.45, 0.5, 1) 0.35s;
 }
 
-/* Arriving, they wait for P. vulgatus to land first. */
-.pv-balance[data-arrived="1"] .pv-beam,
-.pv-balance[data-arrived="1"] .pv-pan {
+/* Balancing, they wait for the line to reach BSH first. */
+.pv-balance[data-balanced="1"] .pv-beam,
+.pv-balance[data-balanced="1"] .pv-pan {
   transition-delay: 0.95s;
 }
 
@@ -16683,8 +16791,8 @@ a.protocol-download:hover {
   transform: rotate(-11deg);
 }
 
-.pv-balance[data-arrived="1"] .pv-beam,
-.pv-balance[data-arrived="1"] .pv-pan {
+.pv-balance[data-balanced="1"] .pv-beam,
+.pv-balance[data-balanced="1"] .pv-pan {
   transform: rotate(0deg);
 }
 
@@ -16696,7 +16804,7 @@ a.protocol-download:hover {
     transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
 }
 
-.pv-balance[data-arrived="1"] .pv-pan-acid-move {
+.pv-balance[data-balanced="1"] .pv-pan-acid-move {
   transition-delay: 0.8s;
 }
 
@@ -16705,12 +16813,12 @@ a.protocol-download:hover {
   transform: translateY(-70px);
 }
 
-.pv-balance[data-arrived="1"] .pv-pan-acid--after .pv-pan-acid-move {
+.pv-balance[data-balanced="1"] .pv-pan-acid--after .pv-pan-acid-move {
   opacity: 1;
   transform: none;
 }
 
-.pv-balance[data-arrived="1"] .pv-pan-acid--before .pv-pan-acid-move {
+.pv-balance[data-balanced="1"] .pv-pan-acid--before .pv-pan-acid-move {
   opacity: 0;
   transform: translateY(-70px);
 }
@@ -16829,9 +16937,16 @@ a.protocol-download:hover {
     animation: none;
   }
 
-  .pv-hero-arrive,
-  .pv-hero-glow {
+  .pv-cell-arrive,
+  .pv-hero-glow,
+  .pv-engineer-inhibit-reveal,
+  .pv-engineer-bsh,
+  .pv-engineer-bsh-label {
     transition: none;
+  }
+
+  .pv-cell-drift {
+    animation: none;
   }
 
   .pv-beam,
