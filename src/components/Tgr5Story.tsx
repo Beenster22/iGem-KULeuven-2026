@@ -181,7 +181,7 @@ function Tgr5Diagram({ animate }: { animate: boolean }) {
       className="tgr5-svg"
       viewBox={`0 0 ${VB_W} ${VB_H}`}
       role="img"
-      aria-label="Illustration: bile acids arrive at the TGR5 receptor on an ILC3 cell. The few conjugated bile acids bind it, the many deconjugated ones do not, and less IL-22 is produced."
+      aria-label="Illustration: bile acids arrive at the TGR5 receptor on an immune cell. The few conjugated bile acids bind it, the many deconjugated ones do not, and less IL-22 is produced."
     >
       <defs>
         <marker
@@ -291,7 +291,7 @@ function Tgr5Diagram({ animate }: { animate: boolean }) {
       />
 
       <text className="tgr5-label tgr5-label--cell" x={CELL.x} y={VB_H - 6}>
-        ILC3
+        Immune cell
       </text>
 
       <BileAcids animate={animate} />

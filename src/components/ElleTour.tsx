@@ -74,6 +74,12 @@ const CLOSE = 0.2;
 const arrive = (k: number) => FLY + k * (HOLD + MOVE);
 const leave = (k: number) => arrive(k) + HOLD;
 const LAST_LEAVE = leave(STOPS.length - 1);
+// Her greeting, as she grows out of the circle: gone again well before she
+// starts touring the stops, so it reads as her arriving rather than
+// captioning the tour itself.
+const GREET_AT = 0.4;
+const GREET_FADE = 0.35;
+
 // The sentence comes in with the lady; the question marks only once Elle
 // has turned sad beside her (team request, 2026-10-18).
 const TEXT_AT = 0.3;
@@ -160,6 +166,7 @@ export function ElleTour() {
   const happyRef = useRef<HTMLImageElement>(null);
   const sadRef = useRef<HTMLImageElement>(null);
   const glassRef = useRef<HTMLDivElement>(null);
+  const greetingRef = useRef<HTMLDivElement>(null);
   const closeUpRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
@@ -274,6 +281,13 @@ export function ElleTour() {
       setOpacity(uterusRef.current, 1 - smooth((t - 0.1) / 0.5));
       setOpacity(happyRef.current, smooth((t - 0.15) / 0.5) * (1 - sad));
       setOpacity(sadRef.current, sad);
+      const greet =
+        smooth((t - GREET_AT) / GREET_FADE) *
+        (1 - smooth((t - (leave(0) - GREET_FADE)) / GREET_FADE));
+      if (greetingRef.current) {
+        greetingRef.current.style.visibility = greet > 0.01 ? "" : "hidden";
+        greetingRef.current.style.opacity = String(greet);
+      }
       // Each close-up grows out of the lens once she is there, and shrinks
       // back into it before she moves on. It is the lens grown big, so the
       // glass itself steps aside while one is open. Kept from poking out
@@ -476,6 +490,9 @@ export function ElleTour() {
               }
             >
               <Glass />
+            </div>
+            <div ref={greetingRef} className="elle-tour-greeting">
+              Hi, I&rsquo;m Elle!
             </div>
           </div>
         </div>,

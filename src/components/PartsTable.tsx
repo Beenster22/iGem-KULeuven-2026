@@ -11,7 +11,7 @@ const registryUrl = (code: string) =>
 export function PartsTable({ type }: { type: PartType }) {
   const parts = PARTS.filter((part) => part.type === type);
   return (
-    <div className="table-responsive">
+    <div className="table-responsive surface">
       <table className="parts-table">
         <thead>
           <tr>

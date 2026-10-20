@@ -33,6 +33,9 @@
 // (PmosEffectsSection.tsx) in their place.
 // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request): symptom
 // chips show an explanation on hover/focus again (text supplied by the team).
+// Edited with Claude Sonnet 5 (Anthropic), 2026-10-20 (team feedback): the
+// puzzle wrapper now has id="symptoms" so PmosEffectsSection's "See all
+// symptoms" link can jump straight to it instead of the page top.
 // Purpose: home-page "What is PMOS?" definition (PmosDefinition), and — the definition on its own
 // the team's four symptom groups as cards (SymptomGroups, description page).
 import type { ReactNode } from "react";
@@ -274,7 +277,7 @@ export function SymptomGroups() {
     (id) => SYMPTOM_GROUPS.find((g) => g.id === id)!,
   );
   return (
-    <div className="symptoms-puzzle-wrap">
+    <div className="symptoms-puzzle-wrap" id="symptoms">
       <div className="symptoms-puzzle">
         {groups.map((group) => (
           <article

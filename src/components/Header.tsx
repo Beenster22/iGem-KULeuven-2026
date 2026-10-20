@@ -1,4 +1,5 @@
 import { ReactNode, SVGProps } from "react";
+import { folderSlug } from "../utils";
 import { renderItalics } from "../utils/renderItalics";
 
 interface HeaderProps {
@@ -19,6 +20,14 @@ interface HeaderProps {
   // pages.ts `specialPrize`) — shows the same "Special prize" badge as the
   // home page's FindOutMore cards, next to the title.
   specialPrize?: boolean;
+  // Optional: the top-level nav folder this page belongs to (pages.ts /
+  // getPathMapping's `folder`, e.g. "Project", "Lab"). Exposed as
+  // data-folder so App.css can tint this page's header band and icon chip —
+  // and Navbar.tsx the matching nav item — a little differently per folder,
+  // so a reader can tell which section of the wiki they're in without
+  // reading the breadcrumb. A page outside any folder (Home, Entrepreneurship,
+  // Awards) gets no tint.
+  folder?: string;
 }
 
 export function Header({
@@ -27,9 +36,10 @@ export function Header({
   icon: Icon,
   aside,
   specialPrize,
+  folder,
 }: HeaderProps) {
   return (
-    <header className="page-header-box">
+    <header className="page-header-box" data-folder={folderSlug(folder)}>
       <div className={`container${aside ? " page-header-box-row" : ""}`}>
         <div className="page-header-box-text">
           <div className="page-header-box-icon-row">
