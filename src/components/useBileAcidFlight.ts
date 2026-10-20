@@ -87,20 +87,38 @@ const STATEMENT = ".story-step--single";
 // "But why is this reaction important?" is on the screen, not still
 // catching up on it).
 const SIZED_BY = 0.6;
-// Where the TGR5 screen's arrangement sits while it is up on the sentence
-// screen, as a share of the window, and how far through that screen the
-// wandering below has died away (team request: they have settled well
-// before its end, so the drop is the group moving as one).
-const FORMATION_Y = 0.74;
-const SETTLED_BY = 0.8;
-// How far each one wanders while it is up there, in pixels. Tied to the
-// scroll like everything else here, and gone by the time they settle, so
-// they float about on that screen without ever leaving the arrangement
-// they will drop in.
-const DRIFT = 22;
-// Where the fall sets off when that sentence has no pinned wrapper to give
-// it a beat of its own, as a share of the window above the TGR5 screen.
-const FALL_LEAD = 0.5;
+// Where they float while that sentence is up, as shares of the window: two
+// wide bands, one high and one low, across nearly the full width, leaving
+// the middle to the words (team request: over the whole screen, not
+// gathered into a strip). `n` of `total` spreads them over both.
+function floatSpot(n: number, total: number) {
+  const half = Math.ceil(total / 2);
+  const low = n >= half;
+  const col = low ? n - half : n;
+  const across = half > 1 ? col / (half - 1) : 0.5;
+  // A settled, repeatable scatter rather than a straight row.
+  const jitter = ((n * 37) % 11) / 11 - 0.5;
+  return [
+    0.07 + across * 0.86,
+    (low ? 0.79 : 0.21) + jitter * 0.22,
+  ] as [number, number];
+}
+// How far each one wanders around its place, in pixels. It keeps to its
+// place as the reader scrolls (team request) and only sways of its own
+// accord, with the clock, so scrolling through that screen does not shift
+// them and they are still never quite still.
+const SWAY = 20;
+// How long one sway takes, in milliseconds, across and down. They are
+// close but not equal, so a pair of them drifts in and out of step and no
+// one of them ever retraces the same little loop.
+const SWAY_X_MS = 5200;
+const SWAY_Y_MS = 4100;
+// How long the fall itself takes, as a share of the window, and the most
+// of the TGR5 screen's own pinned step it may use up — they have to be
+// down before that screen starts moving again, or there would be nothing
+// left of it to land on.
+const FALL_LEN = 0.6;
+const FALL_OF_STEP = 0.7;
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
@@ -194,12 +212,16 @@ export function useBileAcidFlight({
 
     let frame: number | null = null;
 
+    /** Hidden, and nothing more to draw until the reader moves again. */
     const rest = () => {
       overlay.style.visibility = "hidden";
+      return false;
     };
 
+    /** Draws a frame; true while they are on screen and still moving. */
     const update = () => {
       frame = null;
+      const now = performance.now();
       const stage = document.querySelector<HTMLElement>(TGR5_STAGE);
       const target = stage?.querySelector<SVGGraphicsElement>(TGR5_SVG);
       const acids = stage?.querySelectorAll<SVGGraphicsElement>(TGR5_ACID);
@@ -239,33 +261,31 @@ export function useBileAcidFlight({
       const startAt =
         stageRests + insideStage + underside * diagramBox.height - navBottom();
       const pin = stage.closest<HTMLElement>(".home-snap-pin") ?? stage;
+      const pinBox = pin.getBoundingClientRect();
+      // The wave the TGR5 screen begins on. They keep their places until
+      // the navigation bar comes down to it, and only then fall (team
+      // request), so this is the mark the fall sets off from.
+      const fallAt = pinBox.top + window.scrollY - navBottom();
+      // And they are down while that screen is still being held, so the
+      // pool is there to land on rather than sliding away under them.
+      const stepHeld = pinBox.height - stage.getBoundingClientRect().height;
       const endAt =
-        pin.getBoundingClientRect().top + window.scrollY - navBottom();
-      // The screen in between. Its band is pinned, so measure its wrapper,
-      // which is not: they are in place as the sentence settles, hold for
-      // the whole of the step it is held there, and fall on the next.
+        fallAt +
+        (stepHeld > 0
+          ? Math.min(window.innerHeight * FALL_LEN, stepHeld * FALL_OF_STEP)
+          : window.innerHeight * FALL_LEN);
+      // The screen they cross in between. Its band is pinned, so measure
+      // its wrapper, which is not: they are in place as it settles and hold
+      // their places for the whole of it.
       const band = document
         .querySelector<HTMLElement>(STATEMENT)
         ?.closest<HTMLElement>(".home-section");
       const bandPin = band?.closest<HTMLElement>(".home-snap-pin");
-      const span = endAt - startAt;
       const floatAt = bandPin
         ? bandPin.getBoundingClientRect().top + window.scrollY
         : band
           ? band.getBoundingClientRect().top + window.scrollY - navBottom()
-          : startAt + span * 0.4;
-      // How long it is held there: the wrapper's extra height over the band
-      // is the step the reader scrolls through while it stays put.
-      const held = bandPin
-        ? bandPin.getBoundingClientRect().height -
-          (band?.getBoundingClientRect().height ?? 0)
-        : 0;
-      const fallAt =
-        held > 0
-          ? floatAt + held
-          : band
-            ? endAt + navBottom() - window.innerHeight * FALL_LEAD
-            : startAt + span * 0.75;
+          : startAt + (fallAt - startAt) * 0.4;
       if (!(startAt < floatAt && floatAt < fallAt && fallAt < endAt))
         return rest();
       if (window.scrollY <= startAt) {
@@ -285,12 +305,8 @@ export function useBileAcidFlight({
       // about it and into their places, then down. Running them as nested
       // mixes rather than as a choice of one means every hand-over lands on
       // the position the stretch before it ended at, so none of them shows.
-      const settledAt = floatAt + (fallAt - floatAt) * SETTLED_BY;
       const outLeg = easeInOut(
         clamp01((window.scrollY - startAt) / (floatAt - startAt)),
-      );
-      const settleLeg = easeInOut(
-        clamp01((window.scrollY - floatAt) / (settledAt - floatAt)),
       );
       const fallLeg = easeInOut(
         clamp01((window.scrollY - fallAt) / (endAt - fallAt)),
@@ -307,28 +323,15 @@ export function useBileAcidFlight({
       );
       const scale = lerp(fromR, toR, grow) / BASE_HEX_R;
 
-      // Where the acids on the TGR5 screen are now, and what it would take
-      // to lift that whole arrangement onto this one. The pool keeps
-      // drifting, so this is read every frame and the arrangement up here
-      // drifts with it; the drop then only has to take the offset away.
-      //
-      // Each one is taken from where its own drawing is placed, not from
-      // the middle of the box around it: a conjugated acid's box takes in
-      // the tag hanging off its side, so its middle is some way off the
-      // hexagon and aiming at it left every tagged one short.
+      // Where each acid on the TGR5 screen is, taken from where its own
+      // drawing is placed rather than from the middle of the box around
+      // it: a conjugated acid's box takes in the tag hanging off its side,
+      // so its middle is some way off the hexagon and aiming at it left
+      // every tagged one short.
       const seats = acids.length
         ? Array.from(acids, (acid) => acid.getScreenCTM())
         : [];
       if (seats.some((seat) => !seat)) return rest();
-      const mid = seats.reduce(
-        (sum, seat) => [
-          sum[0] + seat!.e / seats.length,
-          sum[1] + seat!.f / seats.length,
-        ],
-        [0, 0],
-      );
-      const liftX = window.innerWidth / 2 - mid[0];
-      const liftY = window.innerHeight * FORMATION_Y - mid[1];
 
       overlay.style.visibility = "visible";
       stage.style.setProperty("--acids-in", "0");
@@ -336,24 +339,27 @@ export function useBileAcidFlight({
         const seat = seats[i]!;
         const seatX = seat.e;
         const seatY = seat.f;
-        // Out of the drawing straight to the place it holds on the TGR5
-        // screen, carried up onto this one — so it is in the arrangement
-        // from the moment it arrives and never has to find its place.
+        // Out of the drawing and onto its own place on the screen, held in
+        // the window so it stays where it is on the page while that screen
+        // comes and goes.
+        const spot = floatSpot(i, shapes.length);
         let x = lerp(
           from.left + shape.from[0] * from.width,
-          seatX + liftX,
+          spot[0] * window.innerWidth,
           outLeg,
         );
         let y = lerp(
           from.top + shape.from[1] * from.height,
-          seatY + liftY,
+          spot[1] * window.innerHeight,
           outLeg,
         );
-        // A wander of its own while it is up there, gone once it settles.
-        const wander = DRIFT * outLeg * (1 - settleLeg);
-        x += Math.sin(window.scrollY / 90 + i * 1.7) * wander;
-        y += Math.cos(window.scrollY / 70 + i * 2.3) * wander;
-        // And home: the whole arrangement moving as one, the lift taken off.
+        // A wander of its own around that place — with the scroll, and
+        // with the clock so it keeps moving while the reader is still.
+        // Both fade out as it drops, so that the landing is still exact.
+        const sway = SWAY * outLeg * (1 - fallLeg);
+        x += Math.sin((now / SWAY_X_MS) * 2 * Math.PI + i * 1.3) * sway;
+        y += Math.cos((now / SWAY_Y_MS) * 2 * Math.PI + i * 2.1) * sway;
+        // And home, onto its counterpart.
         x = lerp(x, seatX, fallLeg);
         y = lerp(y, seatY, fallLeg);
         // Its counterpart lies at an angle of its own, which it only takes
@@ -374,6 +380,14 @@ export function useBileAcidFlight({
           ).toFixed(1)}) scale(${scale.toFixed(3)})`,
         );
       });
+      return true;
+    };
+
+    // While they are on screen this keeps itself going, so they carry on
+    // swaying when the reader stops scrolling; it stops as soon as they
+    // are done, and any scroll starts it again.
+    const tick = () => {
+      if (update()) frame = requestAnimationFrame(tick);
     };
 
     // Replaces any frame still waiting rather than skipping: a frame asked
@@ -381,10 +395,10 @@ export function useBileAcidFlight({
     // that would leave the flight stuck once the reader came back.
     const onScroll = () => {
       if (frame !== null) cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(update);
+      frame = requestAnimationFrame(tick);
     };
 
-    update();
+    tick();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     return () => {

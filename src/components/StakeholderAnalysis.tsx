@@ -9,7 +9,7 @@
 // initial position wasn't on the first draft and fades in instead. Positions are read off
 // the team's two matrix drafts (initial vs. outcome) as % of the plot area,
 // where x = interest and y = influence (0 = low, 100 = high).
-import { ReactNode, useId, useState } from "react";
+import { ReactNode, useEffect, useId, useRef, useState } from "react";
 
 /* ---------- Icons ---------- */
 
@@ -174,15 +174,56 @@ function trimmedSegment(from: Point, to: Point, trimStart: number, trimEnd: numb
 export function StakeholderMatrix() {
   const [progress, setProgress] = useState(0); // 0 = initial, 100 = final
   const t = progress / 100;
+  const frame = useRef<number>(0);
+  const progressRef = useRef(0);
+  progressRef.current = progress;
+
+  const stopAnimation = () => cancelAnimationFrame(frame.current);
+  useEffect(() => stopAnimation, []);
+
+  // Ease from the current position to an extreme; the duration scales with the distance left.
+  const animateTo = (target: number) => {
+    stopAnimation();
+    const start = progressRef.current;
+    if (start === target) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setProgress(target);
+      return;
+    }
+    const duration = 900 * (Math.abs(target - start) / 100);
+    const began = performance.now();
+    const step = (now: number) => {
+      const k = Math.min(1, (now - began) / duration);
+      const eased = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      setProgress(start + (target - start) * eased);
+      if (k < 1) frame.current = requestAnimationFrame(step);
+    };
+    frame.current = requestAnimationFrame(step);
+  };
+
   const markerId = `stakeholder-arrow-${useId().replace(/:/g, "")}`;
 
   return (
     <figure className="stakeholder-matrix">
       <figcaption className="stakeholder-matrix-heading">Influence – Interest Matrix</figcaption>
 
-      <div className="stakeholder-matrix-phase" aria-hidden="true">
-        <span className={t < 0.5 ? "is-active" : undefined}>Initial assessment</span>
-        <span className={t >= 0.5 ? "is-active" : undefined}>Final assessment</span>
+      <div className="stakeholder-matrix-phase" role="group" aria-label="Assessment">
+        <button
+          type="button"
+          className={t < 0.5 ? "is-active" : undefined}
+          aria-pressed={t < 0.5}
+          onClick={() => animateTo(0)}
+        >
+          Initial assessment
+        </button>
+        <button
+          type="button"
+          className={t >= 0.5 ? "is-active" : undefined}
+          aria-pressed={t >= 0.5}
+          onClick={() => animateTo(100)}
+        >
+          Final assessment
+        </button>
       </div>
 
       <div className="stakeholder-matrix-frame">
@@ -286,7 +327,10 @@ export function StakeholderMatrix() {
           min={0}
           max={100}
           value={progress}
-          onChange={(event) => setProgress(Number(event.target.value))}
+          onChange={(event) => {
+            stopAnimation();
+            setProgress(Number(event.target.value));
+          }}
           aria-label="Compare initial and final stakeholder assessment"
           aria-valuetext={progress < 50 ? "Initial assessment" : "Final assessment"}
           style={{ "--stakeholder-progress": `${progress}%` } as React.CSSProperties}

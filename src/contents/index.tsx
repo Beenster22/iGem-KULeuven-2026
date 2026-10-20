@@ -13,11 +13,13 @@ export { default as DryLab } from "./dry-lab.mdx";
 // Lab
 export { default as Protocols } from "./protocols.mdx";
 export { default as Notebook } from "./notebook.mdx";
+export { default as Parts } from "./parts.mdx";
 export { default as Results } from "./results.mdx";
 export { default as Measurement } from "./measurement.mdx";
 // iHP
 export { default as HumanPractices } from "./human-practices.mdx";
 export { default as Events } from "./events.mdx";
+export { default as ScienceCommunication } from "./science-communication.mdx";
 // Entrepreneurship
 export { default as Entrepreneurship } from "./entrepreneurship.mdx";
 // Prizes and Medals / Judging Form

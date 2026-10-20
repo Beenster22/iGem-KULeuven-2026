@@ -214,6 +214,21 @@ export function HandshakeIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+// A megaphone with sound waves — Science Communication & Outreach.
+export function MegaphoneIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...common} {...props}>
+      <path d="M20 48h18l40-24v72L38 72H20a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6Z" fill="var(--ic-1)" />
+      <path d="M30 72h16l6 26a6 6 0 0 1-6 6h-4a6 6 0 0 1-6-5Z" fill="var(--ic-2)" />
+      <rect x="74" y="20" width="12" height="80" rx="6" fill="var(--ic-2)" />
+      <g fill="none" stroke="var(--ic-3)" strokeWidth="6" strokeLinecap="round">
+        <path d="M96 48c5 7 5 17 0 24" />
+        <path d="M104 38c10 13 10 31 0 44" />
+      </g>
+    </svg>
+  );
+}
+
 // A screen with a code bracket and a blinking cursor — Dry Lab's
 // computational work.
 export function CodeIcon(props: SVGProps<SVGSVGElement>) {

@@ -7,7 +7,7 @@
 //
 // As with ProtocolCalculator, the formulas are transcribed from each
 // protocol's "Calculations" section and should be checked against the
-// workbook tab the table names.
+// written protocol.
 import { ReactNode, useMemo, useState } from "react";
 
 type RowValues = Record<string, number | string>;
@@ -29,7 +29,6 @@ interface ProtocolCalcGridProps {
   title: ReactNode;
   columns: GridColumn[];
   rows: RowValues[];
-  workbookTab?: string;
 }
 
 function format(value: number, decimals = 2): string {
@@ -42,7 +41,6 @@ export function ProtocolCalcGrid({
   title,
   columns,
   rows,
-  workbookTab,
 }: ProtocolCalcGridProps) {
   // Keyed "<rowIndex>:<columnKey>" so one row's edit cannot disturb another.
   const [edits, setEdits] = useState<Record<string, string>>({});
@@ -141,12 +139,6 @@ export function ProtocolCalcGrid({
           >
             Reset to the values printed in the protocol
           </button>
-        )}
-        {workbookTab && (
-          <span className="protocol-calc-workbook">
-            Same table in the workbook: tab <strong>“{workbookTab}”</strong> of
-            Protocol_Calculators.xlsx.
-          </span>
         )}
       </p>
     </div>
