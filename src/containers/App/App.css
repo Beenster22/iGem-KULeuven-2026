@@ -5397,17 +5397,35 @@ body:not(.home-fullscreen) .home-hero {
   transition: opacity 0.45s ease;
 }
 
-/* The disc in flight: the nought on its way to being that first circle. */
+/* The nought on its way to being that first circle: it carries both the
+   figure and the circle, one fading into the other as it travels, so the
+   one turns into the other rather than the circle arriving on top of it. */
 .zero-circle-flight {
   position: fixed;
   z-index: 4;
   visibility: hidden;
+  pointer-events: none;
+}
+
+.zero-circle-flight-digit,
+.zero-circle-flight-disc {
+  position: absolute;
+  inset: 0;
   display: grid;
   place-items: center;
+}
+
+.zero-circle-flight-digit {
+  line-height: 1;
+  /* Its own box is square, while a figure's is not, so it is centred in the
+     square rather than stretched to it. */
+  font-variant-numeric: tabular-nums;
+}
+
+.zero-circle-flight-disc {
   box-sizing: border-box;
-  border: 4px solid currentColor;
+  border: 0 solid currentColor;
   border-radius: 50%;
-  pointer-events: none;
 }
 
 .zero-circle-flight-art {

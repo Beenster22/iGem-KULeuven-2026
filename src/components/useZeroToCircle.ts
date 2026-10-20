@@ -26,8 +26,17 @@ const ART = ".pmos-effect-art";
 // setting off the moment the reader scrolls). It finishes as that border
 // meets the navigation bar.
 const BORDER_AT = 0.7;
-// When the drawing inside the disc starts to show, as a share of the way.
-const ART_FROM = 0.45;
+// The cross-fade, as shares of the way across. The nought itself fades out
+// while the ring fades in over it, and the drawing inside only begins once
+// the ring is nearly there — so it reads as the figure turning into the
+// circle rather than a circle laid over the figure (team request).
+const DIGIT_OUT = [0.12, 0.52];
+const DISC_IN = [0.08, 0.6];
+const ART_IN = [0.58, 1];
+
+/** How far through `span` `e` has come, as 0..1. */
+const across = (e: number, span: readonly number[]) =>
+  clamp01((e - span[0]) / (span[1] - span[0]));
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -45,15 +54,25 @@ export function useZeroToCircle({
     const section = sectionRef.current;
     if (!section || skip) return;
 
+    // The stand-in holds both ends at once: the nought it sets off as, and
+    // the circle it becomes, one fading into the other as it travels.
     const ghost = document.createElement("div");
     ghost.className = "zero-circle-flight";
     ghost.setAttribute("aria-hidden", "true");
+    const digit = document.createElement("span");
+    digit.className = "zero-circle-flight-digit";
+    const disc = document.createElement("div");
+    disc.className = "zero-circle-flight-disc";
     const art = document.createElement("div");
     art.className = "zero-circle-flight-art";
-    ghost.append(art);
+    disc.append(art);
+    ghost.append(digit, disc);
     document.body.append(ghost);
 
     let copied = false;
+    // The nought's own type size as a share of its box, so the stand-in's
+    // figure grows with the box instead of staying the size it started.
+    let digitRatio = 1;
     let frame: number | null = null;
 
     const rest = () => {
@@ -90,14 +109,24 @@ export function useZeroToCircle({
       const to = first.getBoundingClientRect();
       if (!from.width || !to.width) return rest();
 
-      // The circle's own look, taken once from the real thing so the disc
-      // that arrives is the one the reader then sees.
+      // Both ends' own looks, taken once from the real things, so what sets
+      // off is the figure the reader was just reading and what arrives is
+      // the circle they are about to see.
       if (!copied) {
-        const style = getComputedStyle(first);
-        ghost.style.borderColor = style.borderColor;
-        ghost.style.backgroundColor = style.backgroundColor;
+        const circleStyle = getComputedStyle(first);
+        disc.style.borderColor = circleStyle.borderColor;
+        disc.style.backgroundColor = circleStyle.backgroundColor;
         const svg = first.querySelector("svg");
         if (svg) art.innerHTML = svg.outerHTML;
+
+        const zeroStyle = getComputedStyle(zero);
+        digit.textContent = zero.textContent;
+        digit.style.fontFamily = zeroStyle.fontFamily;
+        digit.style.fontWeight = zeroStyle.fontWeight;
+        digit.style.color = zeroStyle.color;
+        const zeroSize = parseFloat(zeroStyle.fontSize);
+        const zeroBox = zero.getBoundingClientRect().height;
+        digitRatio = zeroBox ? zeroSize / zeroBox : 1;
         copied = true;
       }
 
@@ -118,9 +147,15 @@ export function useZeroToCircle({
         height: `${size.toFixed(1)}px`,
         left: `${(left - size / 2).toFixed(1)}px`,
         top: `${(top - size / 2).toFixed(1)}px`,
-        borderWidth: `${lerp(size * 0.07, 4, e).toFixed(2)}px`,
       });
-      art.style.opacity = String(clamp01((e - ART_FROM) / (1 - ART_FROM)));
+      // The figure fades out as the ring draws itself in over it, and the
+      // drawing inside comes last of all.
+      digit.style.fontSize = `${(size * digitRatio).toFixed(1)}px`;
+      digit.style.opacity = String(1 - across(e, DIGIT_OUT));
+      const ring = across(e, DISC_IN);
+      disc.style.opacity = String(ring);
+      disc.style.borderWidth = `${(4 * ring).toFixed(2)}px`;
+      art.style.opacity = String(across(e, ART_IN));
     };
 
     const onScroll = () => {
