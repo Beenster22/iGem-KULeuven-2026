@@ -1,29 +1,95 @@
 {/*
-  HOW TO FILL THIS PAGE
-  This page collects EMPOWER's science communication and community work:
-  how the team explained the project (and synthetic biology / women's
-  health more broadly) to people outside the lab, and the communities we
-  built or joined along the way. Individual events already have their own
-  cards on the Events page — link to it rather than repeating them here.
+  HOW TO FILL IN THE REMAINING PLACEHOLDERS
 
-  Only describe activities the team actually carried out, and only give
-  numbers (people reached, views, downloads) you can back up.
+  Instagram posts — each <InstagramPost> takes:
+    images={["https://static.igem.wiki/teams/6299/wiki/outreach/instagram/...avif", ...]}
+      one URL per slide, uploaded via the iGEM uploads tool
+    caption="..."   the post's caption (optional)
+    href="https://www.instagram.com/p/..."   link to the post itself (optional)
+  Add or remove <InstagramPost> entries freely; the carousel adapts.
 
-  Delete this comment block once the page is written.
+  Publications — add image="https://static.igem.wiki/..." to a <Publication>
+  for a screenshot of the article.
+
+  App — give <PhoneShowcase> either src="..." (a web build of the app, shown
+  live inside the phone) or screens={["...", "..."]} (screenshots, tapped
+  through in order).
+
+  Videos — give <VideoSlot> embedSrc="https://video.igem.org/videos/embed/<id>"
+  once the video is on iGEM Video Universe (iGEM requires videos to be hosted
+  there).
 */}
 
 <PageLayout>
 
 <span data-toc-collapsible hidden />
 
-*Content to follow — how we communicated EMPOWER and the science behind it to
-the public, and the communities we were part of throughout the season.*
+Science communication helped us put a spotlight on PMOS while making the condition easier to understand. We focused our engagement on three audiences: (young) students, patients and the wider public. At a range of events and information booths, we set out to inspire, raise awareness and teach people about iGEM and our project, EMPOWER. Beyond these in-person activities, we shared our journey on Instagram and LinkedIn. Additionally, we had the opportunity to publish articles on the ISALA project's blog and in Flair magazine. To support the community in a more lasting way, we also developed an app that helps people understand and manage PMOS. Finally, we collaborated with other iGEM teams to highlight the importance of community within iGEM and to show that science communication can be entertaining too.
 
-## Where to find more
+<TabbedSections>
 
-- <Link to="/events">Events</Link> — a timeline of the talks, workshops, and
-  outreach activities we took part in.
-- <Link to="/human-practices">Integrated Human Practices</Link> — the stakeholders
-  we spoke with and how their feedback shaped the project.
+<TabSection label="Events & Booths">
+
+We took part in a wide range of events, from job fairs where we ran our own booth to educational workshops and iGEM meetups across Europe. A full overview can be found on our <Link to="/events">Events page</Link>.
+
+</TabSection>
+
+<TabSection label="Digital Science Communication">
+
+On Instagram and LinkedIn, we put a spotlight on PMOS. We started with the basics: what PMOS is, how it affects the body, and how our project EMPOWER aims to help. From there, our symptom spotlight series explored the symptoms one by one, and we shared where to find help and further resources. Based on the recommendations we received from <Link to="/human-practices#sarah-noelmans">Sarah Noelmans</Link>, we highlighted the role of diet in managing PMOS by sharing a PMOS-friendly meal. We also raised awareness of the striking funding gap in PMOS research, showing how little attention the condition receives compared to how many people it affects.
+
+<InstagramCarousel>
+  <InstagramPost title="What is PMOS?" />
+  <InstagramPost title="How PMOS affects the body" />
+  <InstagramPost title="How EMPOWER aims to help" />
+  <InstagramPost title="Symptom spotlight" />
+  <InstagramPost title="A PMOS-friendly meal" />
+  <InstagramPost title="The PMOS funding gap" />
+  <InstagramPost title="PMOS awareness month" />
+</InstagramCarousel>
+
+</TabSection>
+
+<TabSection label="Publications">
+
+<PublicationShowcase>
+
+<Publication label="ISALA blog" href="https://isala.be/door-isala-geinspireerde-studenten-van-het-ku-leuven-igem-team-vragen-aandacht-voor-pmos/" linkLabel="Read the blog post">
+
+The ISALA project is a citizen science project at the University of Antwerp that studies the vaginal microbiome and its role in women's health. It is coordinated by <Link to="/human-practices#sarah-lebeer">Prof. Sarah Lebeer</Link>. Both of our projects share the same mission: bringing microbes and reproductive health out of the shadows. Through this collaboration, we wanted to reach ISALA's large and engaged community to draw attention to PMOS and our project. In their blog post, we introduced PMOS and presented our <Link to="/description">goals</Link>.
+
+</Publication>
+
+<Publication label="Flair" href="https://www.flair.be/nl/self-love/mind-body/pcos-pmos-aandoening-vragen-antwoorden/" linkLabel="Read the article in Flair">
+
+We also had the opportunity to publish an article in Flair, a popular Belgian women's magazine covering lifestyle, fashion and health. We answered the most common questions about PMOS, from what the condition is to why its name has changed. Our goal was to reach a broad audience of young women outside the scientific world, to bring awareness and education to those who may recognize the symptoms in themselves without knowing the name.
+
+</Publication>
+
+</PublicationShowcase>
+
+</TabSection>
+
+<TabSection label="App">
+
+During our patient interviews, most women told us they felt they did not have enough educational resources provided by their doctor. In addition, they felt like they had to really get to know their body on their own by tracking nutrition, lifestyle, symptoms and treatment. To support all women beyond our engagement, posts and articles, we created an app that brings everything they need together in one place. A built-in personalized period tracker helps users follow their cycle and spot irregularities. Alongside it, the app offers practical tips for daily life, short courses that explain the condition step by step, and a collection of trusted resources for further support. Users can also learn about EMPOWER and how our research aims to improve the lives of people with PMOS in the future. Check out the app below.
+
+<PhoneShowcase title="EMPOWER app" />
+
+</TabSection>
+
+<TabSection label="Collaborations">
+
+Together with iGEM Málaga, iGEM VUB Brussels, iGEM Leiden, iGEM Lund and iGEM Eindhoven, we created a joint video to show that iGEM is about far more than a science project. Behind every team are students who learn from one another, share their struggles and successes, and support each other throughout the season. Although each of our six projects tackles a different challenge, we all work towards the same goal: using synthetic biology to build a better future.
+
+<VideoSlot title="Joint iGEM teams video" />
+
+We created a mini-series together with iGEM Bielefeld, starring our two mascots, Ella and Elle. The series follows their lives as they meet, get to know each other's projects and slowly fall in love, not only with each other but also with the science they are working on. This way we could showcase our projects in a playful and memorable way. Watch episode 1 below.
+
+<VideoSlot title="Ella & Elle — episode 1" />
+
+</TabSection>
+
+</TabbedSections>
 
 </PageLayout>

@@ -14830,7 +14830,12 @@ a.protocol-download:hover {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   padding: 0.5rem 0.25rem 1rem;
-  scrollbar-width: thin;
+  /* Paged with the arrow buttons (or a swipe), so no scrollbar strip. */
+  scrollbar-width: none;
+}
+
+.ig-carousel-track::-webkit-scrollbar {
+  display: none;
 }
 
 .ig-post {
