@@ -3,9 +3,9 @@
 // of the team's Completion Tracker workbook (code, name, part type, usage).
 // Each code links to its page on the iGEM Registry, as in the sheet.
 //
-// Open question for the team: the sheet gives BBa_26KZW2V8 to both
-// cfxA-mCherry and PAM3-NanoLuc. Kept as written; one of the two is almost
-// certainly a copy-paste slip, so check the Registry and fix it here.
+// The sheet gave BBa_26KZW2V8 to both cfxA-mCherry and PAM3-NanoLuc, almost
+// certainly a copy-paste slip; the team has since given PAM3-NanoLuc its own
+// code, BBa_26I2QE0N.
 export type PartType = "Basic Part" | "Composite Part";
 
 export interface Part {
@@ -24,7 +24,7 @@ export const PARTS: Part[] = [
   { code: "BBa_26NECIU3", name: "cfxA-NanoLuc", type: "Composite Part", usage: "Promoter Reporter Library" },
   { code: "BBa_26OP711K", name: "cfxA-KOFP", type: "Composite Part", usage: "Promoter Reporter Library" },
   { code: "BBa_26GG0JE9", name: "cfxA-GFP", type: "Composite Part", usage: "Promoter Reporter Library" },
-  { code: "BBa_26KZW2V8", name: "PAM3-NanoLuc", type: "Composite Part", usage: "Promoter Reporter Library" },
+  { code: "BBa_26I2QE0N", name: "PAM3-NanoLuc", type: "Composite Part", usage: "Promoter Reporter Library" },
   { code: "BBa_26ZYB3W5", name: "PAM3-mCherry", type: "Composite Part", usage: "Promoter Reporter Library" },
   { code: "BBa_26ZY6BGI", name: "PAM3-KOFP", type: "Composite Part", usage: "Promoter Reporter Library" },
   { code: "BBa_26OUK351", name: "PAM3-GFP", type: "Composite Part", usage: "Promoter Reporter Library" },

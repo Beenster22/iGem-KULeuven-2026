@@ -50,7 +50,7 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import { SnapSteps } from "./HomeSnapScroll";
+import { SnapSteps, StepBorder } from "./HomeSnapScroll";
 import { usePinnedStep } from "./usePinnedStep";
 
 function seededValue(seed: number) {
@@ -636,6 +636,9 @@ export function BshStreamAnimation() {
         className={`bsh-stream bsh-stream--${state}${prefersReducedMotion ? "" : " home-snap-stage"}`}
       >
         {!prefersReducedMotion && <TravellingBacterium zoom={zoom} />}
+        {/* A border passing between meeting P. vulgatus and the reaction
+            (team request, 2026-10-20: a border between every section). */}
+        {!prefersReducedMotion && <StepBorder step={step} />}
         <motion.div
           className="bsh-stream-meet"
           style={{ opacity: meetOpacity }}

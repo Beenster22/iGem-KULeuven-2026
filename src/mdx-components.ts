@@ -57,7 +57,6 @@ import {
   StoryStatement,
 } from "./components/StoryScrollSection";
 import {
-  EngineerSection,
   FindOutMore,
   Tgr5ConsequencesSection,
   Tgr5Ilc3Figure,
@@ -65,8 +64,9 @@ import {
   Tgr5MechanismSection,
   Tgr5ZoomSection,
 } from "./components/Tgr5Story";
+import { PvBalanceSection, PvCureSection } from "./components/PvHeroStory";
 import { SponsorGrid } from "./components/SponsorGrid";
-import { HomeSnapScroll } from "./components/HomeSnapScroll";
+import { HomeSnapScroll, SnapHold } from "./components/HomeSnapScroll";
 import { DBTLCycles, DBTLCycle, DBTLStage } from "./components/DBTLCycles";
 import { ZoomableImage } from "./components/ZoomableImage";
 import { ElleSays } from "./components/ElleSays";
@@ -177,10 +177,17 @@ export const mdxComponents = {
   // Not on the home page any more; free to use on another page.
   Tgr5Ilc3Figure,
   Tgr5ConsequencesSection,
-  EngineerSection,
+  // Generated with Claude Opus 5.5 (Anthropic), 2026-10-20: P. vulgatus in a
+  // cape levelling the scales, then clearing the symptoms (replace
+  // EngineerSection).
+  PvBalanceSection,
+  PvCureSection,
   FindOutMore,
   SponsorGrid,
   HomeSnapScroll,
+  // Generated with Claude Opus 5.5 (Anthropic), 2026-10-20: pins a home-page
+  // screen for two scrolls once it is showing.
+  SnapHold,
   ZoomableImage,
   ElleSays,
   // Generated with Claude Opus 5 (Anthropic), 2026-10-17

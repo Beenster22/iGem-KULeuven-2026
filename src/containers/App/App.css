@@ -63,6 +63,33 @@
   --surface-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
 
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: one
+   background colour on every page, with the borders between the home
+   page's sections in a colour of their own): the gut-wall edge of each
+   band (see WAVY BAND EDGES). A lighter purple than the bands in dark mode,
+   a deeper lilac than them in light mode. */
+:root {
+  --color-band-border: #b2a3dc;
+}
+
+[data-theme="dark"] {
+  --color-band-border: #4d3d63;
+}
+
+/* How fast the page is being scrolled, -1 (up) to 1 (down), set on <html>
+   by useBackdropApproach (HomeSnapScroll.tsx) and eased back to 0 when the
+   scrolling stops; the background bacteria streak with it. Registered so
+   it can be transitioned. */
+@property --whoosh {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+html {
+  transition: --whoosh 0.45s ease-out;
+}
+
 /* .surface — the shared "boxed content" treatment (tint, radius, shadow)
    already used ad hoc by .content-section/.bd-callout/.expandable-content/
    rounded tables, offered here as a literal class for anything not already
@@ -5011,6 +5038,17 @@ body.home-fullscreen {
   color: var(--color-text);
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: the
+   same colour across all pages in dark mode): the page itself and every
+   home band are the dark purple (--color-body-bg, #33283f) the content
+   already sits on; the darker --color-page-bg is kept for the cards, menus
+   and panels that sit on top of it. */
+[data-theme="dark"] body,
+[data-theme="dark"] .home-section--page,
+[data-theme="dark"] .pmos-overview {
+  background-color: var(--color-body-bg);
+}
+
 /* HOME SNAP SECTIONS
    Generated with Claude Opus 5.5 (Anthropic), 2026-10-05
    Purpose: every home-page section fills the screen, and the page settles on
@@ -5054,8 +5092,11 @@ body:not(.home-fullscreen) .home-hero {
   --snap-step: 60vh;
   /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team feedback: the
      third consequence is too easy to skip): extra steps' worth of scrolling
-     the last step stays pinned for. Keep in step with usePinnedStep.ts. */
-  --snap-extra: 0;
+     the last step stays pinned for. Keep in step with usePinnedStep.ts.
+     Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: two
+     scrolls on every screen once everything on it is showing): one extra
+     step by default (was 0), which with the last step's own makes two. */
+  --snap-extra: 1;
   position: relative;
   height: calc(100vh + (var(--snap-steps) + var(--snap-extra)) * var(--snap-step));
   height: calc(100svh + (var(--snap-steps) + var(--snap-extra)) * var(--snap-step));
@@ -5072,7 +5113,8 @@ body:not(.home-fullscreen) .home-hero {
    stays pinned for 85vh of scrolling, so the picture changes much more
    often while scrolling. */
 @media (hover: hover), (pointer: fine) {
-  .home-snap-pin {
+  .home-snap-pin,
+  .elle-tour {
     --snap-step: 85vh;
   }
 }
@@ -5083,6 +5125,11 @@ body:not(.home-fullscreen) .home-hero {
    its own, which gives the two beats somewhere to happen. */
 .home-statement-pin {
   --snap-steps: 1;
+  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: two
+     scrolls from this sentence to the TGR5 screen): no extra step here —
+     the one step is the acids floating, and the slide to the next screen
+     is the fall (see useBileAcidFlight.ts). */
+  --snap-extra: 0;
 }
 
 /* Nothing flies across it when motion is reduced (see useBileAcidFlight.ts),
@@ -5090,6 +5137,7 @@ body:not(.home-fullscreen) .home-hero {
 @media (prefers-reduced-motion: reduce) {
   .home-statement-pin {
     --snap-steps: 0;
+    --snap-extra: 0;
   }
 }
 
@@ -5159,6 +5207,10 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 /* WAVY BAND EDGES
+   Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: the
+   borders shaped like a gut wall, in the sections' own colours): the
+   edge is now a row of villi like the gut wall in the TGR5 diagram,
+   one tile per villus repeated across, instead of one stretched wave.
    The wave is a pseudo-element hanging off the band, masked with an SVG
    wave. "wave-top" pokes up into the band above using `background: inherit`,
    so it always matches this band's colour in both themes (including the
@@ -5173,14 +5225,17 @@ body:not(.home-fullscreen) .home-hero {
   height: clamp(28px, 4vw, 64px);
   pointer-events: none;
   z-index: 2;
-  -webkit-mask: var(--wave-mask) center / 100% 100% no-repeat;
-  mask: var(--wave-mask) center / 100% 100% no-repeat;
+  -webkit-mask: var(--wave-mask) 0 0 / var(--villus-w) 100% repeat-x;
+  mask: var(--wave-mask) 0 0 / var(--villus-w) 100% repeat-x;
+  --villus-w: clamp(40px, 4.5vw, 64px);
 }
 
 .home-section--wave-top::before {
   bottom: calc(100% - 1px); /* 1px overlap hides sub-pixel seams */
-  background: inherit;
-  --wave-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 64' preserveAspectRatio='none'%3E%3Cpath d='M0 40 C 240 64 480 8 720 30 S 1200 60 1440 22 L1440 64 L0 64 Z'/%3E%3C/svg%3E");
+  /* Edited 2026-10-20 (team request): in the border colour, not the band's
+     (was `background: inherit`). */
+  background: var(--color-band-border);
+  --wave-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 64' preserveAspectRatio='none'%3E%3Cpath d='M0 64 V15 A15 15 0 0 1 30 15 V34 A15 15 0 0 0 60 34 V64 Z'/%3E%3C/svg%3E");
 }
 
 .home-section.home-section--wave-top::before {
@@ -5194,7 +5249,7 @@ body:not(.home-fullscreen) .home-hero {
 .home-section--wave-into-footer::after {
   bottom: -1px;
   background: var(--color-footer-bg);
-  --wave-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 64' preserveAspectRatio='none'%3E%3Cpath d='M0 28 C 300 0 520 58 820 36 S 1240 6 1440 34 L1440 64 L0 64 Z'/%3E%3C/svg%3E");
+  --wave-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 64' preserveAspectRatio='none'%3E%3Cpath d='M0 64 V15 A15 15 0 0 1 30 15 V34 A15 15 0 0 0 60 34 V64 Z'/%3E%3C/svg%3E");
 }
 
 /* The home page's References panel lands after the last band, i.e. below
@@ -5217,6 +5272,112 @@ body:not(.home-fullscreen) .home-hero {
   color: var(--color-footer-text);
 }
 
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request:
+   swooshes sweeping left to right, as if in motion, every time the page is
+   scrolled). Edited the same day (team requests: cleaner and more faded,
+   running left to right; then always behind everything else, and a little
+   fainter; then half as bright again, as fast scrolling was distracting):
+   thin horizontal streaks of white that brighten towards their front and
+   fade out at both ends, like speed lines. They are part of each
+   band's own background, fixed to the screen, so everything in the band —
+   its words, drawings, bacteria and border — is in front of them. Each runs
+   at its own speed with the page (--sweep, in px scrolled, set on <html> by
+   useBackdropApproach in HomeSnapScroll.tsx) and they show only while it
+   is being scrolled, as strongly as it is fast (--whoosh). */
+.page-body--home .home-section,
+.page-body--home .pmos-overview {
+  --speed: max(var(--whoosh), calc(-1 * var(--whoosh)));
+  background-image:
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.120 * var(--speed))) 19.6%, transparent 28.0%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.098 * var(--speed))) 16.5%, transparent 23.6%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.083 * var(--speed))) 19.2%, transparent 27.4%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.113 * var(--speed))) 16.2%, transparent 23.1%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.090 * var(--speed))) 18.9%, transparent 27.1%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.105 * var(--speed))) 15.4%, transparent 22.0%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.113 * var(--speed))) 16.6%, transparent 23.8%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.083 * var(--speed))) 16.3%, transparent 23.3%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.098 * var(--speed))) 19.4%, transparent 27.8%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.113 * var(--speed))) 16.0%, transparent 22.9%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.090 * var(--speed))) 18.7%, transparent 26.7%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.105 * var(--speed))) 16.0%, transparent 22.9%),
+    linear-gradient(90deg, transparent 0, rgb(255 255 255 / calc(0.075 * var(--speed))) 16.3%, transparent 23.2%);
+  background-size: 1500px 2px, 1100px 1px, 1900px 2px, 1300px 1px, 1700px 2px, 1000px 1px, 1600px 2px, 1200px 1px, 1800px 2px, 1050px 1px, 1650px 2px, 1400px 1px, 1550px 2px;
+  background-repeat: repeat-x;
+  background-attachment: fixed;
+  background-position:
+    calc(var(--sweep, 0) * 1.6px) 7%,
+    calc(var(--sweep, 0) * 2.4px) 14%,
+    calc(var(--sweep, 0) * 1.2px) 22%,
+    calc(var(--sweep, 0) * 2.8px) 29%,
+    calc(var(--sweep, 0) * 1.9px) 37%,
+    calc(var(--sweep, 0) * 3.2px) 44%,
+    calc(var(--sweep, 0) * 1.4px) 52%,
+    calc(var(--sweep, 0) * 2.6px) 59%,
+    calc(var(--sweep, 0) * 1.7px) 66%,
+    calc(var(--sweep, 0) * 3px) 74%,
+    calc(var(--sweep, 0) * 1.3px) 81%,
+    calc(var(--sweep, 0) * 2.2px) 89%,
+    calc(var(--sweep, 0) * 1.8px) 95%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-body--home .home-section,
+  .page-body--home .pmos-overview {
+    background-image: none;
+  }
+}
+
+/* The gut-wall border passing over a pinned screen as it moves on to its
+   next part (StepBorder in HomeSnapScroll.tsx): the same villi, in the
+   same colour, as the borders between the bands, crossing the whole
+   screen. Fixed, so the screen's own clipping cannot cut it short. */
+.home-step-border {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: var(--home-wave-h);
+  /* Behind everything on the screen it passes over (team request,
+     2026-10-20: what moves goes in front of the border), but over the
+     band's own colour: the screen's content is in a stacking context of its
+     own (.home-section > .container), so -1 is the bottom of that. */
+  z-index: -1;
+  pointer-events: none;
+  background: var(--color-band-border);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 64' preserveAspectRatio='none'%3E%3Cpath d='M0 64 V15 A15 15 0 0 1 30 15 V34 A15 15 0 0 0 60 34 V64 Z'/%3E%3C/svg%3E") 0 0 / clamp(40px, 4.5vw, 64px) 100% repeat-x;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 64' preserveAspectRatio='none'%3E%3Cpath d='M0 64 V15 A15 15 0 0 1 30 15 V34 A15 15 0 0 0 60 34 V64 Z'/%3E%3C/svg%3E") 0 0 / clamp(40px, 4.5vw, 64px) 100% repeat-x;
+  translate: 0 -100%;
+  animation: home-step-border-up 0.9s cubic-bezier(0.45, 0, 0.55, 1) forwards;
+}
+
+.home-step-border--down {
+  animation-name: home-step-border-down;
+}
+
+@keyframes home-step-border-up {
+  from {
+    translate: 0 100vh;
+  }
+  to {
+    translate: 0 -100%;
+  }
+}
+
+@keyframes home-step-border-down {
+  from {
+    translate: 0 -100%;
+  }
+  to {
+    translate: 0 100vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-step-border {
+    display: none;
+  }
+}
+
 /* MICROBE BACKDROP (see MicrobeBackdrop.tsx) */
 .microbe-backdrop {
   position: absolute;
@@ -5226,8 +5387,22 @@ body:not(.home-fullscreen) .home-hero {
   z-index: 0;
 }
 
-.microbe-backdrop-item {
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: the
+   passage through the gut): each item rides a mover (MicrobeBackdrop.tsx).
+   As the reader scrolls through the band (--approach, 0 to 1, set by
+   useBackdropApproach in HomeSnapScroll.tsx) the mover sweeps it from left
+   to right across the screen, the nearer ones (--depth) further and
+   larger. They stay sharp as they move (team request: not blurry or
+   faded); the swooshes carry the speed. On the mover rather than the
+   item, so it runs along the screen whichever way the item is turned. */
+.microbe-backdrop-mover {
   position: absolute;
+  transform: translateX(calc((var(--approach, 0.5) - 0.5) * var(--depth, 0.6) * 160vw))
+    scale(calc(0.7 + var(--depth, 0.6) * 0.8));
+}
+
+.microbe-backdrop-item {
+  display: block;
   width: clamp(40px, 4.5vw, 84px);
   height: auto;
   opacity: 0.18;
@@ -5263,6 +5438,10 @@ body:not(.home-fullscreen) .home-hero {
 @media (prefers-reduced-motion: reduce) {
   .microbe-backdrop-item {
     animation: none;
+  }
+
+  .microbe-backdrop-mover {
+    transform: none;
   }
 }
 
@@ -5996,9 +6175,14 @@ body:not(.home-fullscreen) .home-hero {
    of it wide (ELLE_SIZE). Opacity and placement of the parts that move are
    set from the script every frame. */
 .elle-tour {
+  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: two
+     scrolls on every screen once everything on it is showing): two steps
+     (the same length as a pinned screen's, see .home-snap-pin) added on
+     after the tour. */
+  --snap-step: 60vh;
   position: relative;
-  height: calc(100vh + 50vh);
-  height: calc(100svh + 50vh);
+  height: calc(100vh + 50vh + 2 * var(--snap-step));
+  height: calc(100svh + 50vh + 2 * var(--snap-step));
 }
 
 .elle-tour-stage {
@@ -6361,18 +6545,15 @@ body:not(.home-fullscreen) .home-hero {
   transition-delay: calc(0.3s + var(--line) * 1.6s);
 }
 
-/* The key words: marked with the brand teal rather than coloured in it,
-   which would not be readable on this band in light mode. */
+/* The key words. Edited with Claude Opus 5.5 (Anthropic), 2026-10-20
+   (team request: no underlines anywhere): they used to be marked with a
+   teal bar under them; now they are set like the rest of the sentence. */
 .story-text strong,
 .bsh-stream-heading strong,
 .tgr5-heading strong,
 .tgr5-zoom-line strong,
 .tgr5-impaired-heading strong {
   font-weight: inherit;
-  background: linear-gradient(var(--color-interactive), var(--color-interactive)) 0 92% / 100% 0.14em no-repeat;
-  padding-bottom: 0.05em;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
 }
 
 /* Two sentences on one screen: the first at the top with the drawing beside
@@ -6617,6 +6798,99 @@ body:not(.home-fullscreen) .home-hero {
   object-fit: contain;
 }
 
+/* The doctor's white trousers: her legs recoloured by an SVG filter
+   (TrousersFilter in StoryScrollSection.tsx; team request, 2026-10-20). */
+.story-office-filters {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.story-office-picture {
+  filter: url(#story-office-trousers);
+}
+
+/* The patient's white dress, laid over the picture (OfficeDress in
+   StoryScrollSection.tsx; team request, 2026-10-20). */
+.story-office-dress {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.story-office-dress-shape {
+  fill: #f7f4fc;
+  stroke: #cfc5e8;
+  stroke-width: 0.8;
+  stroke-linejoin: round;
+}
+
+/* The two women's hands, drawn in front of the clothes and the clipboard
+   in the picture's skin colour (team request, 2026-10-20). The patient's
+   has a slightly darker edge where it lies on her dress, like her arm's;
+   none where it runs on from the arm. */
+.story-office-hand {
+  fill: #c7bfe8;
+}
+
+.story-office-hand-edge {
+  fill: none;
+  stroke: #9d8fd0;
+  stroke-width: 5;
+}
+
+/* The doctor's sleeve over the clipboard, in the coat's own white and
+   line colour, taken from the picture. */
+.story-office-sleeve {
+  fill: #f5f4fa;
+}
+
+.story-office-sleeve-edge {
+  fill: none;
+  stroke: #c8c4d5;
+  stroke-width: 5;
+  stroke-linejoin: round;
+}
+
+/* The doctor's drawn hand and sleeve, over the picture. */
+.story-office-doctor-hand {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: her
+   knee moved with her hands): the gesture is now just her hand, moving a
+   little along her forearm, in and out of the cuff and over the clipboard.
+   The picture's clipboard and knee stay still (the copy of the picture that
+   used to turn her hands, clipboard and knee with it is gone). */
+.story-office-hand--doctor {
+  animation: story-office-doctor-hand 2.6s ease-in-out -0.8s infinite;
+}
+
+@keyframes story-office-doctor-hand {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  30% {
+    translate: -11px 5px;
+  }
+  60% {
+    translate: 4px -2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-office-hand--doctor {
+    animation: none;
+  }
+}
+
 /* The two women talking (team request, 2026-10-19): each part is a copy of
    the picture cut down to it — the polygon includes a margin of plain wall
    (and ends across flat parts of the neck, coat or thigh), so as it turns
@@ -6631,25 +6905,29 @@ body:not(.home-fullscreen) .home-hero {
   animation: 3.4s ease-in-out infinite;
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: fix
+   the doctor's neck): the copy used to end halfway down her neck and turn
+   about a point to the left of it, so the neck showed a step whenever her
+   head tilted. It now takes in the whole neck, down to her collar, and
+   turns about the middle of the neck there, where the coat meets it. */
 .story-office-part--doctor-head {
-  clip-path: polygon(65.5% 5.5%, 83.5% 5.5%, 83.5% 21.5%, 75% 23.2%,
-    74.5% 23.6%, 69.5% 23.6%, 65.5% 21%);
-  transform-origin: 72% 23.5%;
+  clip-path: polygon(65.5% 5.5%, 83.5% 5.5%, 83.5% 21.5%, 77% 23.5%,
+    76.6% 24.6%, 72.4% 24.6%, 72% 23.5%, 65.5% 21%);
+  transform-origin: 74.5% 24.6%;
   animation-name: story-office-doctor-head;
 }
 
-.story-office-part--doctor-hands {
-  clip-path: polygon(54.5% 36%, 66% 36%, 70.5% 42%, 71.5% 50%, 70% 54.5%,
-    55% 56%);
-  transform-origin: 70.5% 47%;
-  animation-name: story-office-doctor-hands;
-  animation-duration: 2.6s;
-  animation-delay: -0.8s;
-}
-
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: her
+   neck looked broken): the copy used to be cut straight across her neck
+   and hair, which kinked there as she nodded. It now runs down under the
+   neckline of her dress (which is drawn over it) and, where her arm is in
+   front, along the line of her shoulder; it turns about the top of that
+   shoulder, so the cut there hardly moves. */
 .story-office-part--patient-head {
-  clip-path: polygon(16.5% 6%, 31.5% 6%, 31.5% 22%, 28.5% 24.5%, 17% 25%);
-  transform-origin: 24% 24%;
+  clip-path: polygon(16.5% 6%, 31.5% 6%, 31.5% 22%, 29% 26%, 28% 28.75%,
+    25.5% 27.7%, 25.2% 26.2%, 23.4% 25.75%, 21.6% 26.1%, 21.3% 27.7%,
+    21.2% 28.2%, 18% 28.75%, 17% 26%);
+  transform-origin: 23.4% 25.8%;
   animation-name: story-office-patient-head;
   animation-duration: 5.2s;
   animation-delay: -1.5s;
@@ -6672,23 +6950,6 @@ body:not(.home-fullscreen) .home-hero {
   }
   75% {
     rotate: 1.5deg;
-  }
-}
-
-/* Gesturing a little with the clipboard. */
-@keyframes story-office-doctor-hands {
-  0%,
-  100% {
-    rotate: 0deg;
-    translate: 0 0;
-  }
-  30% {
-    rotate: -2.5deg;
-    translate: 0 -0.4%;
-  }
-  60% {
-    rotate: 0.8deg;
-    translate: 0 0.2%;
   }
 }
 
@@ -8432,119 +8693,6 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
-/* Why we engineer P. vulgatus. */
-.engineer {
-  display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-  align-items: center;
-  gap: clamp(1.5rem, 5vw, 4rem);
-  padding: 0 clamp(0.5rem, 3vw, 2.5rem);
-}
-
-.engineer-text {
-  max-width: none;
-  font-size: clamp(1.8rem, 4.4vw, 3.6rem);
-}
-
-.engineer-svg {
-  display: block;
-  width: 100%;
-  overflow: visible;
-  animation: engineer-float 5s ease-in-out infinite;
-}
-
-@keyframes engineer-float {
-  0%,
-  100% {
-    translate: 0 0;
-    rotate: -2deg;
-  }
-  50% {
-    translate: 0 -0.6rem;
-    rotate: 2deg;
-  }
-}
-
-.engineer-dna {
-  stroke: #33283f;
-  stroke-width: 4;
-  stroke-linecap: round;
-}
-
-.engineer-promoter,
-.engineer-terminator {
-  fill: none;
-  stroke: #33283f;
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.engineer-part {
-  stroke: #33283f;
-  stroke-width: 2;
-  animation: engineer-glow 2.4s ease-in-out infinite;
-}
-
-.engineer-part--a {
-  fill: var(--color-interactive);
-}
-
-.engineer-part--b {
-  fill: #e0a84a;
-  animation-delay: 0.4s;
-}
-
-@keyframes engineer-glow {
-  0%,
-  100% {
-    filter: brightness(1);
-  }
-  50% {
-    filter: brightness(1.3);
-  }
-}
-
-/* From the circuit to BSH, ending in the blunt bar that means "inhibits";
-   the dashes run along it towards BSH. */
-.engineer-inhibit {
-  fill: none;
-  stroke: #cc4a4a;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 6 6;
-  animation: tgr5-signal 1.2s linear infinite;
-}
-
-.engineer-bsh {
-  fill: #dfe8f7;
-  fill-opacity: 0.55;
-  stroke: #2f4f86;
-  stroke-width: 3;
-  stroke-dasharray: 5 5;
-}
-
-.engineer-bsh-label {
-  fill: #1c2f52;
-  fill-opacity: 0.7;
-  font-size: 20px;
-  font-weight: 700;
-  text-anchor: middle;
-}
-
-@media (max-width: 699.98px) {
-  .engineer {
-    grid-template-columns: minmax(0, 1fr);
-    text-align: center;
-  }
-
-  .engineer-svg {
-    width: min(100%, 20rem);
-    margin: 0 auto;
-  }
-}
-
 /* Find out more: boxes linking to the main pages.
    Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-17 (team request: boxes
    instead of rolling links, in the EMPOWER style): alternating dark purple and
@@ -8699,10 +8847,7 @@ body:not(.home-fullscreen) .home-hero {
 
   .tgr5-arrow--signal,
   .tgr5-svg .tgr5-down,
-  .tgr5-bob,
-  .engineer-svg,
-  .engineer-part,
-  .engineer-inhibit {
+  .tgr5-bob {
     animation: none;
   }
 }
@@ -8891,20 +9036,8 @@ body:not(.home-fullscreen) .home-hero {
   position: relative;
 }
 
-/* The underline: --color-header-bg (not --color-accent) — accent is
-   identical to the body background in light mode, which would make this
-   invisible too. Drawn as a bar (not a border) so it can sweep in. */
-.pmos-counter-number::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 0.07em;
-  background: var(--color-header-bg);
-  transform: scaleX(0);
-  transition: transform 0.7s cubic-bezier(0.3, 0, 0.2, 1);
-}
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: no
+   underlines anywhere): the bar that swept in under the figure is gone. */
 
 [data-theme="dark"] .pmos-counter-number {
   color: #5fd3d7;
@@ -8948,10 +9081,6 @@ body:not(.home-fullscreen) .home-hero {
 .pmos-counter--revealed .pmos-counter-figure,
 .pmos-counter--revealed .pmos-counter-rest {
   opacity: 1;
-}
-
-.pmos-counter--revealed .pmos-counter-number::after {
-  transform: scaleX(1);
 }
 
 /* Fixed while it falls with the scroll, absolute (page coordinates) once
@@ -16570,6 +16699,484 @@ a.protocol-download:hover {
    75-character cap, so each paragraph ends flush with the edge of the card. */
 .page-body:not(.page-body--home) .page-shell-content:has([data-wide-text]) :is(p, li) {
   max-width: none;
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request)
+   Purpose: the two screens that close the home page's story
+   (PvHeroStory.tsx), which replaced the "why we engineer" screen: P.
+   vulgatus in a cape levelling a pair of scales, then clearing the four
+   areas PMOS affects. Like the TGR5 diagrams they keep fixed colours in
+   both themes; only the glows and labels follow the text colour. */
+.pv-balance,
+.pv-cure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 4vh, 2.5rem);
+  padding-bottom: calc(var(--home-wave-h) + 1rem);
+  text-align: center;
+}
+
+.pv-heading {
+  max-width: 22em;
+  margin: 0;
+  font-size: clamp(1.3rem, 3vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.pv-balance-svg,
+.pv-cure-svg {
+  display: block;
+  width: min(100%, 60rem);
+  max-height: 62vh;
+  overflow: visible;
+}
+
+/* P. vulgatus: the BSH screen's cell, in its own purple (team request,
+   2026-10-20: briefly teal), with the cape in teal. */
+.pv-hero-outer {
+  fill: #f3eef9;
+  stroke: #6e5b9e;
+  stroke-width: 4;
+}
+
+.pv-hero-inner {
+  fill: none;
+  stroke: #6e5b9e;
+  stroke-width: 2.5;
+}
+
+.pv-hero-pili {
+  fill: none;
+  stroke: #6e5b9e;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.pv-hero-pili-halo {
+  fill: none;
+  stroke: #f3eef9;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.pv-hero-cape path {
+  fill: #2fa4a9;
+  stroke: #1b6b70;
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+/* The cape stirs, swinging out from the shoulders. */
+.pv-hero-cape {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+  animation: pv-cape 2.6s ease-in-out infinite alternate;
+}
+
+@keyframes pv-cape {
+  from {
+    transform: skewX(-5deg) scaleX(0.97);
+  }
+  to {
+    transform: skewX(5deg) scaleX(1.04);
+  }
+}
+
+.pv-hero-tie {
+  fill: none;
+  stroke: #2fa4a9;
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.pv-hero-clasp {
+  fill: #f2c94c;
+  stroke: #a3790c;
+  stroke-width: 2;
+}
+
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team requests: on
+   the first scroll only the unbalanced scales; on the second the engineered
+   P. vulgatus flies in from the left; on the third its circuit silences BSH
+   and the scales level): off the left of the screen, tipped forward into
+   its flight, until the screen's second step (data-arrived on .pv-balance);
+   then it sweeps in and straightens up, turning about its own middle (its
+   group is drawn about it), and drifts gently where it landed. Its glow
+   comes up as it lands. */
+.pv-cell-arrive {
+  opacity: 0;
+  translate: -1000px -80px;
+  rotate: 24deg;
+  transition:
+    translate 1.1s cubic-bezier(0.2, 0.85, 0.3, 1),
+    rotate 1.1s cubic-bezier(0.2, 0.85, 0.3, 1),
+    opacity 0.25s ease;
+}
+
+.pv-balance[data-arrived="1"] .pv-cell-arrive {
+  opacity: 1;
+  translate: 0 0;
+  rotate: 0deg;
+}
+
+.pv-cell-drift {
+  animation: pv-cell-drift 4.2s ease-in-out infinite alternate;
+}
+
+@keyframes pv-cell-drift {
+  0% {
+    translate: -4px 3px;
+    rotate: -1.5deg;
+  }
+  50% {
+    translate: 3px -5px;
+    rotate: 1deg;
+  }
+  100% {
+    translate: 5px 2px;
+    rotate: 2deg;
+  }
+}
+
+/* The circuit inside it, as in the team's drawing: promoter, a teal and a
+   yellow part, terminator. */
+.pv-engineer-dna {
+  stroke: #33283f;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.pv-engineer-promoter,
+.pv-engineer-terminator {
+  fill: none;
+  stroke: #33283f;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pv-engineer-part {
+  stroke: #33283f;
+  stroke-width: 2;
+}
+
+.pv-engineer-part--a {
+  fill: var(--color-interactive);
+}
+
+.pv-engineer-part--b {
+  fill: #f6cf57;
+}
+
+/* The blunt "inhibits" line, dashed, from the yellow part to BSH. It is
+   uncovered along its length on the third step (the mask path below grows
+   from 0 to the whole of it). */
+.pv-engineer-inhibit {
+  fill: none;
+  stroke: #cc4a4a;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 6 6;
+}
+
+.pv-engineer-inhibit-reveal {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 12;
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.8s ease-in-out;
+}
+
+.pv-balance[data-balanced="1"] .pv-engineer-inhibit-reveal {
+  stroke-dashoffset: 0;
+}
+
+/* BSH: whole until the line reaches it, then switched off — dashed and
+   faded, as in the team's drawing. */
+.pv-engineer-bsh {
+  fill: #dfe8f7;
+  fill-opacity: 0.95;
+  stroke: #2f4f86;
+  stroke-width: 3;
+  transition:
+    fill-opacity 0.5s ease,
+    stroke-dasharray 0s;
+}
+
+.pv-engineer-bsh-label {
+  fill: #1c2f52;
+  font-size: 22px;
+  font-weight: 800;
+  text-anchor: middle;
+  transition: fill-opacity 0.5s ease;
+}
+
+.pv-balance[data-balanced="1"] .pv-engineer-bsh {
+  fill-opacity: 0.5;
+  stroke-dasharray: 5 5;
+  transition-delay: 0.75s;
+}
+
+.pv-balance[data-balanced="1"] .pv-engineer-bsh-label {
+  fill-opacity: 0.6;
+  transition-delay: 0.75s;
+}
+
+.pv-hero-glow {
+  opacity: 0;
+  scale: 0.82;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition:
+    opacity 0.6s ease,
+    scale 0.7s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.pv-balance[data-arrived="1"] .pv-hero-glow {
+  opacity: 1;
+  scale: 1;
+  transition-delay: 0.8s;
+}
+
+/* On the cure screen it waits for the one flying down from the balance
+   screen (useReceptorZoom.ts, which sets --receptor-in). */
+.pv-cure-svg .pv-hero {
+  opacity: var(--receptor-in, 1);
+}
+
+/* The scales. They hang to the deconjugated side until P. vulgatus is
+   there, then level; each pan turns back by as much as the beam turns, on
+   the same timing, so it keeps hanging straight down. */
+.pv-scale-frame {
+  fill: #b79ad8;
+  stroke: #4a3a6b;
+  stroke-width: 3;
+}
+
+.pv-scale-pivot,
+.pv-scale-hook {
+  fill: #f2c94c;
+  stroke: #4a3a6b;
+  stroke-width: 3;
+}
+
+.pv-scale-string {
+  fill: none;
+  stroke: #4a3a6b;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.pv-scale-dish {
+  fill: #b79ad8;
+  stroke: #4a3a6b;
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+.pv-beam,
+.pv-pan {
+  transition: transform 1.4s cubic-bezier(0.34, 1.45, 0.5, 1) 0.35s;
+}
+
+/* Balancing, they wait for the line to reach BSH first. */
+.pv-balance[data-balanced="1"] .pv-beam,
+.pv-balance[data-balanced="1"] .pv-pan {
+  transition-delay: 0.95s;
+}
+
+.pv-beam {
+  transform: rotate(11deg);
+}
+
+.pv-pan {
+  transform: rotate(-11deg);
+}
+
+.pv-balance[data-balanced="1"] .pv-beam,
+.pv-balance[data-balanced="1"] .pv-pan {
+  transform: rotate(0deg);
+}
+
+/* With it, one deconjugated bile acid lifts off its pan and a conjugated
+   one drops onto the other: three on each side. */
+.pv-pan-acid-move {
+  transition:
+    opacity 0.6s ease 0.15s,
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+}
+
+.pv-balance[data-balanced="1"] .pv-pan-acid-move {
+  transition-delay: 0.8s;
+}
+
+.pv-pan-acid--after .pv-pan-acid-move {
+  opacity: 0;
+  transform: translateY(-70px);
+}
+
+.pv-balance[data-balanced="1"] .pv-pan-acid--after .pv-pan-acid-move {
+  opacity: 1;
+  transform: none;
+}
+
+.pv-balance[data-balanced="1"] .pv-pan-acid--before .pv-pan-acid-move {
+  opacity: 0;
+  transform: translateY(-70px);
+}
+
+/* The four areas PMOS affects, as on the circles further up the page. */
+.pv-symptom.symptom-group--reproductive {
+  --symptom-color: #b9a3f0;
+}
+
+.pv-symptom-disc {
+  fill: color-mix(in srgb, var(--symptom-color) 22%, #fff);
+  stroke: var(--symptom-color);
+  stroke-width: 5;
+}
+
+.pv-symptom-label {
+  fill: currentColor;
+  font-size: 26px;
+  font-weight: 800;
+  text-anchor: middle;
+  transition: opacity 0.5s ease 0.3s;
+}
+
+.pv-symptom-circle {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition:
+    transform 0.55s cubic-bezier(0.5, -0.6, 0.7, 0.4),
+    opacity 0.45s ease 0.15s;
+}
+
+.pv-symptom-rays {
+  stroke: var(--color-interactive);
+  stroke-width: 6;
+  stroke-linecap: round;
+  opacity: 0;
+}
+
+/* Cleared: the circle shrinks away with a burst, and its label dims and is
+   struck through. */
+.pv-symptom--cleared .pv-symptom-circle {
+  transform: scale(0);
+  opacity: 0;
+}
+
+.pv-symptom--cleared .pv-symptom-rays {
+  animation: pv-burst 0.7s ease-out;
+}
+
+.pv-symptom--cleared .pv-symptom-label {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+@keyframes pv-burst {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.pv-cure-hero {
+  transition: transform var(--travel, 0.9s) cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Done: it speeds off up and away, getting smaller, and fades as it goes
+   (team request, 2026-10-20). */
+.pv-cure-hero--away {
+  opacity: 0;
+  transition:
+    transform var(--travel, 1.4s) cubic-bezier(0.55, 0, 0.8, 0.4),
+    opacity 0.5s ease calc(var(--travel, 1.4s) - 0.5s);
+}
+
+/* The EMPOWER logo, which grows out of the spot it leaves. Edited
+   2026-10-20 (team request: bigger, and seen getting bigger): it starts as
+   a speck and swells slowly to full size, rather than popping in. */
+.pv-cure-logo {
+  opacity: 0;
+  transform: scale(0.08);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
+
+.pv-cure-logo--shown {
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity 0.5s ease 0.1s,
+    transform 2.2s cubic-bezier(0.25, 0.6, 0.3, 1) 0.1s;
+}
+
+/* Once the logo is out, the struck-through labels go too, leaving the
+   logo on its own (team request, 2026-10-20). */
+.pv-cure-svg--done .pv-symptom-label {
+  opacity: 0;
+  transition: opacity 0.7s ease 0.6s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pv-cure-hero--away,
+  .pv-cure-logo {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pv-hero-cape,
+  .pv-symptom-rays {
+    animation: none;
+  }
+
+  .pv-cell-arrive,
+  .pv-hero-glow,
+  .pv-engineer-inhibit-reveal,
+  .pv-engineer-bsh,
+  .pv-engineer-bsh-label {
+    transition: none;
+  }
+
+  .pv-cell-drift {
+    animation: none;
+  }
+
+  .pv-beam,
+  .pv-pan,
+  .pv-pan-acid-move,
+  .pv-symptom-circle,
+  .pv-symptom-label,
+  .pv-cure-hero {
+    transition: none;
+  }
+}
+
+/* Phones: a little more room for the drawings. */
+@media (max-width: 699.98px) {
+  .pv-balance-svg,
+  .pv-cure-svg {
+    max-height: 52vh;
+  }
+
+  .pv-symptom-label {
+    font-size: 32px;
+  }
 }
 
 /* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request)

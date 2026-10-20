@@ -1,7 +1,10 @@
 {/* Citations as supplied by the team in "Text for HOME PAGE".
     TODO(team): check each [^n] sits on the claim it actually supports. */}
 {/* Each band below is its own full-screen section; the page scrolls freely
-    and settles on the nearest `data-snap` stop (see HomeSnapScroll.tsx). */}
+    and settles on the nearest `data-snap` stop (see HomeSnapScroll.tsx).
+    Every screen takes two scrolls to leave once everything on it is
+    showing (team request, 2026-10-20): the stepped ones hold their last
+    step, and SnapHold pins the ones that show everything at once. */}
 <HomeSnapScroll />
 
 {/* What PMOS is comes first, straight after the hero video (team request,
@@ -11,12 +14,16 @@
 <MicrobeBackdrop count={5} seed={3} />
 <div className="container">
 
+<SnapHold>
 <PmosDefinition />
+</SnapHold>
 
 </div>
 </div>
 
+<SnapHold>
 <PmosOverview />
+</SnapHold>
 
 <div className="home-section home-section--flush home-section--contrast home-section--wave-top">
 <MicrobeBackdrop count={9} seed={2} />
@@ -24,11 +31,22 @@
 
 {/* The full symptom list now lives on the Project description page
     (SymptomGroups); this is the at-a-glance version. */}
+<SnapHold>
 <PmosEffectsSection />
+</SnapHold>
+
+</div>
+</div>
+
+<div className="home-section home-section--flush home-section--contrast home-section--wave-top">
+<MicrobeBackdrop count={5} seed={15} />
+<div className="container">
 
 {/* Elle's tour of the body, ending on "So many symptoms… but no known
-    etiology" (see ElleTour.tsx). On this band so the uterus she grows out
-    of, in the circles above, is on the same background. */}
+    etiology" (see ElleTour.tsx). Edited 2026-10-20 (team request: a
+    border between every section): a band of its own now; it used to share
+    the circles' band so the uterus she grows out of was on the same
+    background, which every band now is anyway. */}
 <ElleTour />
 
 </div>
@@ -86,12 +104,20 @@ But why is this reaction **important?**
 </div>
 
 {/* The rest follows the team's "Text for HOME PAGE" (2nd round of changes);
-    see Tgr5Story.tsx for all four components. */}
+    see Tgr5Story.tsx and PvHeroStory.tsx. Each screen is a band of its own,
+    so there is a border between every two (team request, 2026-10-20). */}
 <div className="home-section home-section--flush home-section--body home-section--wave-top">
 <MicrobeBackdrop count={4} seed={6} />
 <div className="container">
 
 <Tgr5MechanismSection />
+
+</div>
+</div>
+
+<div className="home-section home-section--flush home-section--page home-section--wave-top">
+<MicrobeBackdrop count={4} seed={12} />
+<div className="container">
 
 {/* A close-up of the receptor itself (team request, 2026-10-20). */}
 <Tgr5ZoomSection />
@@ -99,52 +125,56 @@ But why is this reaction **important?**
 </div>
 </div>
 
-<div className="home-section home-section--flush home-section--page home-section--wave-top">
+<div className="home-section home-section--flush home-section--body home-section--wave-top">
 <MicrobeBackdrop count={5} seed={8} />
 <div className="container">
 
 {/* The causal step on a screen of its own (team request, 2026-10-20); the
     list below used to carry it in its own heading. The sentence has the
     refusal drawn under it now (see Tgr5ImpairedSection). */}
+<SnapHold>
 <Tgr5ImpairedSection />
+</SnapHold>
+
+</div>
+</div>
+
+<div className="home-section home-section--flush home-section--page home-section--wave-top">
+<MicrobeBackdrop count={4} seed={13} />
+<div className="container">
 
 <Tgr5ConsequencesSection />
 
 </div>
 </div>
 
-<div className="home-section home-section--body home-section--wave-top home-snap-screen" data-snap="">
+<div className="home-section home-section--flush home-section--body home-section--wave-top">
 <MicrobeBackdrop count={4} seed={11} />
 <div className="container">
 
-{/* Wording supplied by the team, 2026-10-20, a screen each. */}
-<div className="home-snap-screen" data-snap="">
-
-<StoryStatement>
-
-This is why we want to engineer *P. vulgatus* to **restore bile acid balance**…
-
-</StoryStatement>
+{/* Wording supplied by the team, 2026-10-20. The scales on their own,
+    then P. vulgatus, in a cape, flies in from the left and they level
+    (team request, 2026-10-20; see PvHeroStory.tsx — it pins itself, two
+    steps). These two screens replace the "why we engineer" one with its
+    drawing of the cell. */}
+<PvBalanceSection />
 
 </div>
-
-<div className="home-snap-screen" data-snap="">
-
-<StoryStatement>
-
-… and achieve a **therapeutic effect** in PMOS
-
-</StoryStatement>
-
 </div>
 
-<EngineerSection />
+<div className="home-section home-section--flush home-section--page home-section--wave-top">
+<MicrobeBackdrop count={4} seed={14} />
+<div className="container">
+
+<SnapHold>
+<PvCureSection />
+</SnapHold>
 
 </div>
 </div>
 
 {/* A shorter band to end on: not a snap stop, the page scrolls freely here. */}
-<div className="home-section home-section--page home-section--wave-top home-section--wave-into-footer">
+<div className="home-section home-section--body home-section--wave-top home-section--wave-into-footer">
 <div className="container">
 
 <FindOutMore />
