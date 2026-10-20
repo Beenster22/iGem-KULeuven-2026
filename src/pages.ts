@@ -197,11 +197,11 @@ const Pages: (Page | Folder)[] = [
         specialPrize: true,
       },
       {
-        name: "Events",
-        title: "Events",
+        name: "Events and iGEM Community",
+        title: "Events and iGEM Community",
         path: "/events",
         component: Events,
-        lead: "A timeline of the talks, workshops, meetups, and outreach activities our team took part in throughout the season.",
+        lead: "A timeline of the talks, workshops, and outreach activities our team took part in, plus the iGEM meetups where we met other teams.",
         icon: CalendarIcon,
       },
       {

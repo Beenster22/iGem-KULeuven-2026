@@ -119,8 +119,7 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
       {
         label: "Hyperandrogenism",
         definition: "Elevated male hormone levels.",
-        explanation:
-          "Increased levels of male hormones (androgens).",
+        explanation: "Increased levels of male hormones (androgens).",
       },
       {
         label: "Hirsutism",
@@ -141,8 +140,7 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
       {
         label: "Anovulation",
         definition: "Absence of ovulation.",
-        explanation:
-          "Missing ovulation: the ovaries do not release an egg.",
+        explanation: "Missing ovulation: the ovaries do not release an egg.",
       },
       {
         label: "Polycystic ovarian morphology",
@@ -164,7 +162,7 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
   },
   {
     id: "metabolic",
-    title: "Metabolic",
+    title: "Metabolic complications",
     symptoms: [
       {
         label: "Low grade chronic inflammation",
@@ -193,14 +191,13 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
       {
         label: "Hepatic steatosis",
         definition: "Fat buildup in the liver.",
-        explanation:
-          "Fat building up in the liver (fatty liver).",
+        explanation: "Fat building up in the liver (fatty liver).",
       },
     ],
   },
   {
     id: "wellbeing",
-    title: "Wellbeing",
+    title: "Psychological symptoms",
     symptoms: [
       {
         label: "Anxiety and depression",
@@ -216,7 +213,7 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
   },
   {
     id: "gut",
-    title: "Gut microbiome",
+    title: "Reduced microbial diversity",
     symptoms: [
       {
         label: "Reduced microbial diversity",
@@ -288,26 +285,39 @@ export function SymptomGroups() {
               >
                 {ICONS[group.id]}
               </svg>
-              <h3 className="symptom-card-title">{group.title}</h3>
+              <h3 className="symptom-card-title">
+                {group.id === "gut" ? (
+                  <GlossaryTerm
+                    hover
+                    definition={group.symptoms[0].explanation as string}
+                  >
+                    {group.title}
+                  </GlossaryTerm>
+                ) : (
+                  group.title
+                )}
+              </h3>
             </div>
-            <ul className="symptom-card-list">
-              {group.symptoms.map((symptom) => (
-                <li key={symptom.label}>
-                  {symptom.definition || symptom.explanation ? (
-                    <GlossaryTerm
-                      hover
-                      definition={
-                        (symptom.definition ?? symptom.explanation) as string
-                      }
-                    >
-                      {symptom.label}
-                    </GlossaryTerm>
-                  ) : (
-                    symptom.label
-                  )}
-                </li>
-              ))}
-            </ul>
+            {group.id !== "gut" && (
+              <ul className="symptom-card-list">
+                {group.symptoms.map((symptom) => (
+                  <li key={symptom.label}>
+                    {symptom.definition || symptom.explanation ? (
+                      <GlossaryTerm
+                        hover
+                        definition={
+                          (symptom.definition ?? symptom.explanation) as string
+                        }
+                      >
+                        {symptom.label}
+                      </GlossaryTerm>
+                    ) : (
+                      symptom.label
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
           </article>
         ))}
       </div>

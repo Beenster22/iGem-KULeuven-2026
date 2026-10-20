@@ -22,6 +22,7 @@ import {
 } from "./components/NotebookDropdown";
 import { NotebookEntryMeta } from "./components/NotebookEntryMeta";
 import { EventsTimeline, EventEntry } from "./components/EventsTimeline";
+import { PdfEmbed } from "./components/PdfEmbed";
 import {
   HumanPracticesInterviews,
   HPSection,
@@ -208,6 +209,7 @@ export const mdxComponents = {
   NotebookEntryMeta,
   EventsTimeline,
   EventEntry,
+  PdfEmbed,
   HumanPracticesInterviews,
   HPSection,
   HPIntro,
