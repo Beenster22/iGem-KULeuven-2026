@@ -60,9 +60,20 @@ export function HomeSnapScroll() {
 // gesture (ctrl + wheel), not inside a box that scrolls on its own, and not
 // while one of the page's own glides is moving it (scrollBusy, see
 // scrollGlide.ts). The scrollbar and the keys still scroll freely.
-// (Edited 2026-10-21: for a while the wheel was held for two or three
-// turns on each screen before moving on; taken back out the same day, team
-// request — one turn to a screen, the next turn on to the next.)
+// Edited 2026-10-21 (team request: two scrolls on every screen — one to
+// get there, one more on it — with the background moving every time):
+// going down, when the next stop is the start of the next screen (rather
+// than the next step of this one), the first turn of the wheel on a screen
+// holds the page still while the bacteria and swooshes behind it carry on
+// (nudgeBackdrop), and the second moves on. (It was three turns earlier
+// the same day.) Not on the opening video: the first turn leaves it.
+// Turns of the wheel, once on a screen, that it takes to leave it.
+const TURNS_TO_LEAVE = 2;
+// How far a held turn carries the background on (screens), and how long:
+// about as far and as fast as a glide to the next screen, so it looks the
+// same every time.
+const NUDGE_SCREENS = 1;
+const NUDGE_MS = 900;
 
 // How long a glide takes: a base, plus a little more the further it goes.
 const GLIDE_BASE_MS = 650;
@@ -101,18 +112,42 @@ function useWheelPaging(skip: boolean) {
     let frame: number | null = null;
     let gliding = false;
     let lastWheel = 0;
+    // Turns held so far on the screen the page is resting on, and where.
+    let held = 0;
+    let heldAt = -1;
+    let nudgeFrame: number | null = null;
 
+    const nudgeBackdrop = () => {
+      const from = sweepOffset;
+      const by = window.innerHeight * NUDGE_SCREENS;
+      const start = performance.now();
+      const step = (now: number) => {
+        const u = Math.min(1, (now - start) / NUDGE_MS);
+        sweepOffset = from + by * GLIDE(u, 0);
+        refreshBackdrop?.();
+        nudgeFrame = u < 1 ? requestAnimationFrame(step) : null;
+      };
+      if (nudgeFrame !== null) cancelAnimationFrame(nudgeFrame);
+      nudgeFrame = requestAnimationFrame(step);
+    };
+
+    // Each stop, and whether it starts a screen (data-snap="") rather than
+    // being the next step of one (data-snap="step"); the top and bottom of
+    // the page count as screens.
     const stops = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
-      const list = [0, max];
+      const list = [
+        { y: 0, screen: true },
+        { y: max, screen: true },
+      ];
       document.querySelectorAll<HTMLElement>("[data-snap]").forEach((el) => {
         // One inside a pinned screen moves with it while it is pinned; its
         // pin's own markers stand for it.
         if (el.closest(".home-snap-stage")) return;
         const y = Math.round(el.getBoundingClientRect().top + window.scrollY);
-        if (y > 0 && y < max) list.push(y);
+        if (y > 0 && y < max) list.push({ y, screen: el.dataset.snap !== "step" });
       });
-      return list.sort((a, b) => a - b);
+      return list.sort((a, b) => a.y - b.y);
     };
 
     const glideTo = (to: number) => {
@@ -154,15 +189,30 @@ function useWheelPaging(skip: boolean) {
       const list = stops();
       const to =
         event.deltaY > 0
-          ? list.find((stop) => stop > y + NEAR_PX)
-          : [...list].reverse().find((stop) => stop < y - NEAR_PX);
-      if (to !== undefined) glideTo(to);
+          ? list.find((stop) => stop.y > y + NEAR_PX)
+          : [...list].reverse().find((stop) => stop.y < y - NEAR_PX);
+      if (!to) return;
+      if (event.deltaY > 0 && to.screen && y > NEAR_PX) {
+        if (Math.abs(y - heldAt) > NEAR_PX) {
+          heldAt = y;
+          held = 0;
+        }
+        held += 1;
+        if (held < TURNS_TO_LEAVE) {
+          nudgeBackdrop();
+          return;
+        }
+      }
+      held = 0;
+      heldAt = -1;
+      glideTo(to.y);
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
     return () => {
       window.removeEventListener("wheel", onWheel);
       if (frame !== null) cancelAnimationFrame(frame);
+      if (nudgeFrame !== null) cancelAnimationFrame(nudgeFrame);
     };
   }, [skip]);
 }
@@ -218,6 +268,12 @@ export function SnapHold({ children }: { children: ReactNode }) {
 // the screen (--clip-top, --clip-bottom), so it shows only over them.
 // How fast (px per ms) counts as full speed.
 const WHOOSH_FULL = 5;
+// Edited 2026-10-21 (team request: the background keeps moving on a turn
+// of the wheel that holds the page still): how far the background has been
+// carried on beyond the page's own scroll position (see useWheelPaging),
+// and how to redraw it after moving it on.
+let sweepOffset = 0;
+let refreshBackdrop: (() => void) | null = null;
 // How long after the last scroll the whoosh starts to die away (ms).
 const WHOOSH_SETTLE = 120;
 
@@ -227,7 +283,7 @@ function useBackdropApproach(skip: boolean) {
     const layer = document.querySelector<HTMLElement>(".microbe-backdrop");
     if (!layer) return;
     let frame: number | null = null;
-    let lastY = window.scrollY;
+    let lastY = window.scrollY + sweepOffset;
     let lastTime = performance.now();
     let settle: number | undefined;
     let clip = "";
@@ -235,7 +291,7 @@ function useBackdropApproach(skip: boolean) {
     const whoosh = () => {
       const now = performance.now();
       const dt = now - lastTime;
-      const y = window.scrollY;
+      const y = window.scrollY + sweepOffset;
       if (dt > 0) {
         const speed = (y - lastY) / dt / WHOOSH_FULL;
         layer.style.setProperty(
@@ -284,9 +340,11 @@ function useBackdropApproach(skip: boolean) {
     };
 
     update();
+    refreshBackdrop = onScroll;
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     return () => {
+      refreshBackdrop = null;
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       if (frame !== null) cancelAnimationFrame(frame);
