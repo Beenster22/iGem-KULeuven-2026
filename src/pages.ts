@@ -248,7 +248,7 @@ const Pages: (Page | Folder)[] = [
         title: "Meet Our Team",
         path: "/team",
         component: Members,
-        lead: "Get to know the team behind EMPOWER.",
+        lead: "Get to know the team that makes it all possible!",
         icon: PeopleIcon,
       },
       {
