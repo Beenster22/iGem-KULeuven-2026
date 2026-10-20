@@ -10,6 +10,7 @@ import {
   ReactElement,
   ReactNode,
   isValidElement,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -25,8 +26,73 @@ function slotProps<P>(children: ReactNode): P[] {
 
 const INSTAGRAM_HANDLE = "igemkuleuven";
 const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;
-const AVATAR_SRC =
-  "https://static.igem.wiki/teams/6299/wiki/icons/logo-dark-purple-no-text.avif";
+// The iGEM KU Leuven logo, as on our Instagram profile.
+const AVATAR_SRC = "https://static.igem.wiki/teams/6299/wiki/home-page/igem-logo.avif";
+
+// The uploaded logo has a grey-and-white "transparency" checkerboard baked
+// into its pixels. This clears every light, colourless pixel connected to the
+// image border (a flood fill, so the white lettering inside the logo stays)
+// and returns the result as a PNG data URL. Computed once and shared by every
+// post card; falls back to the original image if anything goes wrong.
+let cutoutPromise: Promise<string> | null = null;
+
+function loadAvatarCutout(): Promise<string> {
+  cutoutPromise ??= new Promise<string>((resolve) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onerror = () => resolve(AVATAR_SRC);
+    img.onload = () => {
+      try {
+        const { naturalWidth: w, naturalHeight: h } = img;
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return resolve(AVATAR_SRC);
+        ctx.drawImage(img, 0, 0);
+        const data = ctx.getImageData(0, 0, w, h);
+        const px = data.data;
+        const isBackground = (i: number) => {
+          const [r, g, b] = [px[i], px[i + 1], px[i + 2]];
+          return Math.min(r, g, b) >= 220 && Math.max(r, g, b) - Math.min(r, g, b) <= 16;
+        };
+        const seen = new Uint8Array(w * h);
+        const stack: number[] = [];
+        for (let x = 0; x < w; x++) stack.push(x, (h - 1) * w + x);
+        for (let y = 0; y < h; y++) stack.push(y * w, y * w + w - 1);
+        while (stack.length) {
+          const p = stack.pop()!;
+          if (seen[p] || !isBackground(p * 4)) continue;
+          seen[p] = 1;
+          px[p * 4 + 3] = 0;
+          const x = p % w;
+          if (x > 0) stack.push(p - 1);
+          if (x < w - 1) stack.push(p + 1);
+          if (p >= w) stack.push(p - w);
+          if (p < w * (h - 1)) stack.push(p + w);
+        }
+        ctx.putImageData(data, 0, 0);
+        resolve(canvas.toDataURL("image/png"));
+      } catch {
+        resolve(AVATAR_SRC);
+      }
+    };
+    img.src = AVATAR_SRC;
+  });
+  return cutoutPromise;
+}
+
+function useAvatarCutout() {
+  const [src, setSrc] = useState<string | null>(null);
+  useEffect(() => {
+    let live = true;
+    loadAvatarCutout().then((url) => live && setSrc(url));
+    return () => {
+      live = false;
+    };
+  }, []);
+  return src;
+}
 
 /* ------------------------------------------------------------------ */
 /* Instagram posts                                                     */
@@ -49,13 +115,18 @@ export function InstagramPost(_props: InstagramPostProps) {
 }
 
 function PostCard({ title, images = [], caption, href }: InstagramPostProps) {
+  const avatar = useAvatarCutout();
   const [slide, setSlide] = useState(0);
   const count = images.length;
 
   return (
     <article className="ig-post">
       <header className="ig-post-header">
-        <img className="ig-post-avatar" src={AVATAR_SRC} alt="" />
+        {avatar ? (
+          <img className="ig-post-avatar" src={avatar} alt="" />
+        ) : (
+          <span className="ig-post-avatar" aria-hidden="true" />
+        )}
         <a
           className="ig-post-handle"
           href={href ?? INSTAGRAM_URL}
