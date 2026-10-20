@@ -114,6 +114,18 @@ export function FanSelector({ hub, children }: FanSelectorProps) {
 
   return (
     <div className="fan-selector" ref={rootRef}>
+      <p className="fan-selector-hint">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M9 11V5a1.5 1.5 0 013 0v5m0-1.5a1.5 1.5 0 013 0V11m0-1a1.5 1.5 0 013 0v5a6 6 0 01-6 6h-1.5a6 6 0 01-4.7-2.3L4 15.5a1.5 1.5 0 012.3-1.9L9 16"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        Interactive: click a category to read its risks and mitigation
+      </p>
       <svg className="fan-selector-svg" viewBox={`0 0 ${WIDTH} ${height}`} role="tablist" aria-label={hub}>
         {drawOrder.map((index) => {
           const branch = branches[index];
@@ -137,18 +149,23 @@ export function FanSelector({ hub, children }: FanSelectorProps) {
             >
               <path d={bandPath(index)} fill={BAND_FILLS[index % BAND_FILLS.length]} />
               {branch.icon && (
-                <g className="fan-selector-icon" transform={`translate(${BAND_LEFT + 70} ${yMid})`}>
+                <g className="fan-selector-icon" transform={`translate(${BAND_LEFT + 58} ${yMid})`}>
                   <Icon kind={branch.icon} />
                 </g>
               )}
-              <text x={BAND_LEFT + 135} y={branch.subtitle ? yMid - 6 : yMid} dominantBaseline="middle">
+              <text x={BAND_LEFT + 118} y={branch.subtitle ? yMid - 6 : yMid} dominantBaseline="middle">
                 <tspan className="fan-selector-band-label">{branch.label}</tspan>
                 {branch.subtitle && (
-                  <tspan className="fan-selector-band-subtitle" x={BAND_LEFT + 135} dy={32}>
+                  <tspan className="fan-selector-band-subtitle" x={BAND_LEFT + 118} dy={32}>
                     {branch.subtitle}
                   </tspan>
                 )}
               </text>
+              {/* Button-like affordance: a chevron that points down at the content once selected. */}
+              <g className="fan-selector-chevron" transform={`translate(${BAND_RIGHT - 28} ${yMid})`}>
+                <circle r={17} />
+                <path d={isActive ? "M -7 -3 L 0 4 L 7 -3" : "M -3 -7 L 4 0 L -3 7"} />
+              </g>
             </g>
           );
         })}
@@ -171,7 +188,18 @@ export function FanSelector({ hub, children }: FanSelectorProps) {
             style={{ backgroundColor: BAND_FILLS[index % BAND_FILLS.length] }}
             onClick={() => setActiveIndex(index)}
           >
-            {branch.label} {branch.subtitle}
+            <span>
+              {branch.label} {branch.subtitle}
+            </span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d={index === activeIndex ? "M6 9l6 6 6-6" : "M9 6l6 6-6 6"}
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </button>
         ))}
       </div>

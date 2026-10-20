@@ -10384,7 +10384,50 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .fan-selector-band:hover path {
-  opacity: 0.9;
+  opacity: 1;
+  stroke: var(--color-interactive);
+  stroke-width: 5;
+}
+
+.fan-selector-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.fan-selector-hint svg {
+  flex: none;
+  width: 1.4rem;
+  height: 1.4rem;
+  color: var(--color-interactive);
+}
+
+.fan-selector-chevron circle {
+  fill: #33283f;
+  transition: fill 0.2s ease;
+}
+
+.fan-selector-chevron path {
+  fill: none;
+  stroke: #eaf4f5;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fan-selector-band:hover .fan-selector-chevron circle,
+.fan-selector-band.active .fan-selector-chevron circle {
+  fill: var(--color-interactive);
+}
+
+.fan-selector-band.active .fan-selector-chevron path {
+  stroke: #fff;
 }
 
 .fan-selector-band.active path {
@@ -10415,7 +10458,7 @@ body:not(.home-fullscreen) .home-hero {
 
 .fan-selector-band:not(.active) text,
 .fan-selector-band:not(.active) .fan-selector-icon {
-  opacity: 0.75;
+  opacity: 0.9;
 }
 
 .fan-selector-icon {
@@ -10456,6 +10499,11 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .fan-selector-tab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  cursor: pointer;
   padding: 0.65rem 1rem;
   border: 2px solid rgba(51, 40, 63, 0.35);
   border-radius: 0.5rem;
@@ -10463,6 +10511,17 @@ body:not(.home-fullscreen) .home-hero {
   font-weight: 600;
   text-align: left;
   opacity: 0.8;
+}
+
+.fan-selector-tab svg {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.fan-selector-tab:hover {
+  opacity: 1;
+  border-color: var(--color-interactive);
 }
 
 .fan-selector-tab.active {
@@ -16486,8 +16545,7 @@ a.protocol-download:hover {
      off the screen edge.
    - Appendix tables fit the column (smaller cells, wrapping text) instead of
      being wider than the page.
-   - The top bar slides away while scrolling down and returns on scrolling up
-     (Navbar.tsx). Below lg only, where the bar collapses into a menu. */
+   - The collapsed menu closes itself when a page is picked (Navbar.tsx). */
 @media (max-width: 767.98px) {
   .page-body:not(.page-body--home) .page-shell-content :is(p, li) {
     text-align: left;
@@ -16521,16 +16579,6 @@ a.protocol-download:hover {
     white-space: normal;
     text-align: center;
     font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 991.98px) {
-  .navbar-auto-hide .navbar-empower {
-    transition: translate 0.3s ease;
-  }
-
-  .navbar-auto-hide.is-hidden .navbar-empower {
-    translate: 0 -100%;
   }
 }
 
