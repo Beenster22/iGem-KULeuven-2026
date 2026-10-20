@@ -22,6 +22,7 @@ import {
 } from "./components/NotebookDropdown";
 import { NotebookEntryMeta } from "./components/NotebookEntryMeta";
 import { EventsTimeline, EventEntry } from "./components/EventsTimeline";
+import { PdfEmbed } from "./components/PdfEmbed";
 import {
   HumanPracticesInterviews,
   HPSection,
@@ -104,6 +105,14 @@ import {
   GlobeLeafIcon,
   BrainIcon,
 } from "./components/HypothesisIcons";
+import {
+  InstagramCarousel,
+  InstagramPost,
+  PublicationShowcase,
+  Publication,
+  PhoneShowcase,
+  VideoSlot,
+} from "./components/ScienceCommunication";
 import { Link } from "react-router-dom";
 
 export const mdxComponents = {
@@ -193,6 +202,15 @@ export const mdxComponents = {
   Callout,
   TabbedSections,
   TabSection,
+  // Generated with Claude Opus 5.5 (Anthropic), 2026-10-20
+  // Purpose: the Science Communication & Outreach page — Instagram post
+  // carousel, publications card, app phone mockup and collaboration videos.
+  InstagramCarousel,
+  InstagramPost,
+  PublicationShowcase,
+  Publication,
+  PhoneShowcase,
+  VideoSlot,
   SectionItem,
   WheelSelector,
   SegmentedSelector,
@@ -208,6 +226,7 @@ export const mdxComponents = {
   NotebookEntryMeta,
   EventsTimeline,
   EventEntry,
+  PdfEmbed,
   HumanPracticesInterviews,
   HPSection,
   HPIntro,

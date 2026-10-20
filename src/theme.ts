@@ -63,10 +63,6 @@ const DARK_THEME: ThemeColors = {
 
 const THEME_MODE_STORAGE_KEY = "empower-theme-mode";
 
-export function getSystemPrefersDark(): boolean {
-  return window.matchMedia("(prefers-color-scheme: dark)").matches;
-}
-
 export function readStoredThemeMode(): ThemeMode | null {
   try {
     const raw = localStorage.getItem(THEME_MODE_STORAGE_KEY);

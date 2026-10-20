@@ -6,9 +6,7 @@
 
 Polyendocrine Metabolic Ovarian Syndrome (PMOS) is the most common metabolic and endocrine disorder affecting approximately 1 in 8 women of reproductive age. However, high prevalence and severity of the condition does not reflect the funding, research, and understanding it deserves. To this day, no approved disease-modifying treatment exists.
 
-Recent studies show that the intestinal microbiome can play a crucial role in the development and progression of PMOS. We hypothesize that a shift in microbial composition, and the following altered bile acid pool, sits upstream of symptoms such as insulin resistance, inflammation, hyperandrogenism, and fertility complications.
-
-*Phocaeicola vulgatus*, a commensal species overabundant in PMOS, contributes to this shift through its bile salt hydrolase (BSH) activity, modifying the bile acid pool and indirectly depleting IL-22 signaling. This cascade is linked to hormonal dysregulation and systemic inflammation. Engineering this non-model anaerobe is challenging. This is why we first built a synthetic biology toolkit for *P. vulgatus*: with characterized promoters across four fluorescent reporters, optimized conjugation, a MIC assay, and more. On that foundation we developed EMPOWER (Engineering Microbes to Promote Ovarian WEllbeing and Recovery), which selectively targets BSH activity in *P. vulgatus* to restore physiological bile acid signaling and hormonal balance.
+Recent studies show that the intestinal microbiome can play a crucial role in the development and progression of PMOS. We hypothesize that a shift in microbial composition, and the following altered bile acid pool, sits upstream of symptoms such as insulin resistance, inflammation, hyperandrogenism, and fertility complications. Rather than eliminating this bacterium, we aim to engineer *P. vulgatus* to modulate bile acid metabolism and harness its potential as a therapeutic microorganism. However, the genetic engineering of this non-model anaerobe remains challenging, with limited tools available. To address this gap, we developed a synthetic biology toolkit for *P. vulgatus*, including characterized promoters evaluated using four fluorescent reporters, optimized conjugation, and a minimum inhibitory concentration (MIC) assay. Building on this foundation, we developed EMPOWER (Engineering Microbes to Promote Ovarian WEllbeing and Recovery), a strategy designed to selectively modulate BSH activity in *P. vulgatus*, with the goal of restoring beneficial bile acid signaling and improving hormonal and metabolic function in PMOS.
 
 ## Polyendocrine Metabolic Ovarian Syndrome
 
@@ -211,9 +209,17 @@ The more we looked into various pathways driving PMOS, the more we found the pat
 
 <ExpandableText title="How is TGR5 involved in insulin resistance and hyperandrogenism?">
 
+<div className="tgr5-figure-row">
+
+<div className="tgr5-figure-row-text">
+
 Insulin resistance and hyperandrogenism are symptoms of PMOS that interplay with each other. By binding the TGR5 receptor, conjugated bile acids lead to the production of Glucagon-like Peptide-1 (GLP1)[^apsb2024][^chiang2017][^fmicb2025]. This leads to hyperinsulinemia, which in turn causes less Sex Hormone-Binding Globulin (SHBG) synthesis in the liver and more androgen production in ovarian theca cells[ref: Plymate, S. R., Matej, L. A., Jones, R. E., & Friedl, K. E. (1988). Inhibition of sex hormone-binding globulin production in the human hepatoma (Hep G2) cell line by insulin and prolactin. *The Journal of Clinical Endocrinology & Metabolism*, *67*(3), 460–464. https://doi.org/10.1210/jcem-67-3-460]. A dysregulated Hypothalamic-Pituitary-Adrenal axis (HPA) also contributes to hyperandrogenism[^hpa-axis].
 
-<img src="https://static.igem.wiki/teams/6299/wiki/project/description/proj-description-figure.avif" alt="Diagram of the GLP-1, insulin resistance and hyperandrogenism pathway: enteroendocrine L-cells signal through GPBAR1/TGR5 to hyperinsulinemia, which lowers SHBG and raises theca-cell androgen production, alongside GnRH driving LH/FSH and androgens." className="img-fluid rounded" style={{ maxWidth: "560px" }} />
+</div>
+
+<img src="https://static.igem.wiki/teams/6299/wiki/project/description/proj-description-figure.avif" alt="Diagram of the GLP-1, insulin resistance and hyperandrogenism pathway: enteroendocrine L-cells signal through GPBAR1/TGR5 to hyperinsulinemia, which lowers SHBG and raises theca-cell androgen production, alongside GnRH driving LH/FSH and androgens." className="img-fluid rounded tgr5-figure-row-img" />
+
+</div>
 
 </ExpandableText>
 
@@ -225,15 +231,25 @@ The choice of *P. vulgatus* as our chassis relies on the fact that it's a commen
 
 With the right synthetic biology tools and identified BSH of interest, we want to ensure successful engineering and therapy which will ensure complete restoration of the bile acid pool and proper activation of TGR5. This approach will then mitigate multiple symptoms at once: inflammation, insulin resistance and hyperandrogenism, all challenging fertility, which is one of the most consequential symptoms of PMOS.
 
-<ExpandableText title="Additional: how can we control colonization of the gut?">
+<ExpandableText title="How can we make sure our engineered strain colonizes the gut...?">
 
-EMPOWER's solution of engineering *P. vulgatus* isolated from the patient's own body faces a crucial obstacle: competing with itself in the gut of the patient.
+Delivering an engineered microbial therapeutic requires more than a working genetic circuit. The circuit has to function inside a hostile luminal environment, carried by an organism competing against microbes that have adapted to that specific niche over thousands of generations. A well-designed construct in a poorly adapted chassis will be outcompeted before it can act.
 
-*P. vulgatus*, already abundant in the gut microbiota, carries the risk of engineered strains being washed out of the gut before they reach the necessary density to have a therapeutic effect. Since the resident strain already consumes the available gut resources and is already adapted to the environment, a reproducible colonic colonization will not be achieved if no advantage can be given to the engineered strains.
+Autologous cell therapies such as CAR-T deliver a therapeutic effect without provoking the immune response that other approaches risk. The same logic has been gaining traction in microbiome research: engineer bacteria isolated from the patient's own stool rather than a laboratory strain. Russell et al. (2022)[ref: Russell, B. J., Brown, S. D., Siguenza, N., Mai, I., Saran, A. R., Lingaraju, A., Maissy, E. S., Dantas Machado, A. C., Pinto, A. F. M., Sanchez, C., Rossitto, L. A., Miyamoto, Y., Richter, R. A., Ho, S. B., Eckmann, L., Hasty, J., Gonzalez, D. J., Saghatelian, A., Knight, R., & Zarrinpar, A. (2022). Intestinal transgene delivery with native *E. coli* chassis allows persistent physiological changes. *Cell*, *185*(17), 3263–3277.e15. https://doi.org/10.1016/j.cell.2022.06.050] investigated this directly, arguing that native bacteria are already maximally adapted to the luminal environment of their host and therefore make an ideal chassis for transgene delivery. They engineered *E. coli* strains isolated from mouse stool to carry a transgene (BSH or IL-10) and returned them to the same animals. The native isolates engrafted permanently in 100% of mice for over 110 days, while a standard laboratory chassis failed to establish.
 
-An approach described by one of the experts we talked to, <Link to="/human-practices#weston-whitaker">Whitaker</Link> et al. (2025)[ref: Whitaker, W. R., Russ, Z. N., Shepherd, E. S., Popov, L. M., Louie, A., Lam, K., Zong, D. M., Gill, C. C. C., Gehrig, J. L., Rishi, H. S., Tan, J. A., Buness, A., Godoy, J., Banta, D., Jaidka, S., Wilson, K., Flood, J., Bukshpun, P., Yocum, R., Cook, D. N., Warsi, T., McLean, L., Sonnenburg, J. L., & Deloache, W. C. (2025). Controlled colonization of the human gut with a genetically engineered microbial therapeutic. *Science*, *389*(6757), 303–308. https://doi.org/10.1126/science.adu8000], achieves controlled colonization by programming the engineered strains to metabolize a nutrient that local strains cannot use. In their case, they engineered *P. vulgatus* strains so that colonization level became tunable with the seaweed-derived polysaccharide porphyran, by adding genes that encode its utilization. Porphyran was chosen because only 2% of Western individuals harbor a resident microbe capable of using it[ref: Pudlo, N. A., Pereira, G. V., Parnami, J., Cid, M., Markert, S., Tingley, J. P., Unfried, F., Ali, A., Rechner, K., Schnizlein, M. K., Young, M. N., Schmidt, T. S. B., Zheng, H., Hehemann, J.-H., Abbott, D. W., Mirande, M., Terrapon, N., Henrissat, B., Young, V. B., ... Martens, E. C. (2022). Diverse events have transferred genes for edible seaweed digestion from marine to human gut bacteria. *Cell Host & Microbe*, *30*(3), 314–328.e311. https://doi.org/10.1016/j.chom.2022.02.007], creating an exclusive niche for the engineered bacteria. They achieved controlled colonization of healthy human volunteers in a Phase 1 trial, where 11 of 12 engrafted (7 of 8 in one dosing group and 4 of 4 in another) after gastric acid protection was included, with strain density rising roughly 10-fold for every 5-fold increase in porphyran intake. Additionally, withdrawing porphyran intake caused the strain to fall below the limit of detection in 15 of 19 engrafted volunteers.
+Considering these results, using the patient's own isolate as the chassis is an approach adopted by EMPOWER. We wouldn't have taken this route if it wasn't for our meeting with <Link to="/human-practices#weston-whitaker">Weston</Link>, who proposed this approach and shared relevant scientific papers with us.
 
-This study has shown that tuning the engraftment of engineered *P. vulgatus* strains is possible via nutrient control, enabling a controlled mechanism of colonization in the gut microbiota. We took it as a starting point for future work of EMPOWER on controlled colonization.
+</ExpandableText>
+
+<ExpandableText title="...and how do we keep control of it once it does?">
+
+Using a patient-derived chassis solves one problem and creates another. *P. vulgatus* is already abundant in the gut microbiota, so our engineered strain competes directly with a resident population that is equally well adapted and already consuming the available resources. Without some advantage, the engineered strain risks being washed out before reaching the density needed for a therapeutic effect, and reproducible colonization becomes impossible.
+
+<Link to="/human-practices#weston-whitaker">Whitaker</Link> et al. (2025)[ref: Whitaker, W. R., Russ, Z. N., Shepherd, E. S., Popov, L. M., Louie, A., Lam, K., Zong, D. M., Gill, C. C. C., Gehrig, J. L., Rishi, H. S., Tan, J. A., Buness, A., Godoy, J., Banta, D., Jaidka, S., Wilson, K., Flood, J., Bukshpun, P., Yocum, R., Cook, D. N., Warsi, T., McLean, L., Sonnenburg, J. L., & Deloache, W. C. (2025). Controlled colonization of the human gut with a genetically engineered microbial therapeutic. *Science*, *389*(6757), 303–308. https://doi.org/10.1126/science.adu8000] addressed exactly this by programming engineered strains to metabolize a nutrient that resident strains cannot. They engineered *P. vulgatus* so that its colonization level became tunable with porphyran, a seaweed-derived polysaccharide chosen because only around 2% of Western individuals carry a resident microbe capable of digesting it[ref: Pudlo, N. A., Pereira, G. V., Parnami, J., Cid, M., Markert, S., Tingley, J. P., Unfried, F., Ali, A., Rechner, K., Schnizlein, M. K., Young, M. N., Schmidt, T. S. B., Zheng, H., Hehemann, J.-H., Abbott, D. W., Mirande, M., Terrapon, N., Henrissat, B., Young, V. B., ... Martens, E. C. (2022). Diverse events have transferred genes for edible seaweed digestion from marine to human gut bacteria. *Cell Host & Microbe*, *30*(3), 314–328.e311. https://doi.org/10.1016/j.chom.2022.02.007], and the engineered strain therefore occupies an exclusive niche.
+
+Based on this study, in a Phase 1 trial in healthy volunteers, 11 of 12 participants engrafted (7 of 8 in one dosing group and 4 of 4 in another) once gastric acid protection was included, with strain density rising roughly 10-fold for every 5-fold increase in porphyran intake. Withdrawing porphyran dropped the strain below the limit of detection in 15 of 19 engrafted volunteers. Engraftment was therefore not only achievable but tunable and reversible through diet alone.
+
+Together these strategies address complementary halves of the same problem: the autologous chassis gives the engineered strain the fitness to survive, and the orthogonal nutrient gives it a reason to persist, and a switch to turn it off.
 
 </ExpandableText>
 
@@ -318,6 +334,12 @@ We proved engineering *P. vulgatus* is attainable and gathered the pieces of inf
 
 In order to understand the scale of the problem we're addressing, finding the most accurate estimate of how many women are affected by this condition and how these cases are distributed across the world is crucial[ref: Lin, T., Xie, B., Yang, J., et al. (2025). Changes in the global burden of polycystic ovary syndrome from 1990 to 2021. *Reproductive Health*, *22*, Article 86.]. Most published studies report results for large statistical regions rather than specific continents, so we calculated the continent totals ourselves from openly available data.
 
+Explore the same figures on the globe: click a continent to see its estimate.
+
+<PmosGlobeSection />
+
+Figures per continent: IHME Global Burden of Disease data, [The Lancet (2026)](https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(26)00717-8/fulltext), and [Springer (2025)](https://link.springer.com/article/10.1186/s12978-025-02016-y).
+
 We used the Global Burden of Disease (GBD) Results, made available by the Institute for Health Metrics and Evaluation (IHME)[ref: Institute for Health Metrics and Evaluation. (2024). *Global Burden of Disease (GBD) 2023 results* [Data set]. https://ghdx.healthdata.org/]. GBD is the most comprehensive dataset on disease burden worldwide. It provides standardized estimates for 204 countries and territories, which makes numbers comparable between countries.
 
 Every search we used the same settings:
@@ -367,12 +389,6 @@ For each continent, we summarized the case numbers of the selected locations. As
 | **Global** | **67.9 million** | |
 
 </div>
-
-Explore the same figures on the globe: click a continent to see its estimate.
-
-<PmosGlobeSection />
-
-Figures per continent: IHME Global Burden of Disease data, [The Lancet (2026)](https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(26)00717-8/fulltext), and [Springer (2025)](https://link.springer.com/article/10.1186/s12978-025-02016-y).
 
 <Callout title="Disclaimer: how to interpret the data">
 

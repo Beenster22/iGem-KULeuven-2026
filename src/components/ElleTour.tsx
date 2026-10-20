@@ -81,8 +81,10 @@ const SAD_AT = LAST_LEAVE + 0.15;
 const SAD_FOR = 0.5;
 const QUESTIONS_AT = SAD_AT + SAD_FOR;
 const END = QUESTIONS_AT + 0.5;
-// Rewinding goes this much faster than playing.
-const REWIND_SPEED = 2.5;
+// Rewinding goes this much faster than playing. Edited with Claude Opus 5
+// (Anthropic), 2026-10-20 (team request: going back to the uterus took too
+// long).
+const REWIND_SPEED = 5;
 
 // Scroll triggers, as a share of the window's height: the tour starts once
 // its screen's top has come up past START_AT, and rewinds once it has gone
