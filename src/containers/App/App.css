@@ -5082,6 +5082,9 @@ body.home-fullscreen {
 [data-theme="light"] .home-section--page,
 [data-theme="dark"] .home-section--page,
 [data-theme="dark"] .home-section--contrast,
+/* The counter screen is not one of the .home-section bands, so it needs
+   naming here too or it keeps the near-white page colour in light mode. */
+.pmos-overview,
 [data-theme="dark"] .pmos-overview {
   background-color: var(--color-home-band);
 }
@@ -9084,8 +9087,28 @@ body:not(.home-fullscreen) .home-hero {
   position: relative;
 }
 
-/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-20 (team request: no
-   underlines anywhere): the bar that swept in under the figure is gone. */
+/* The bar under the figure, which sweeps in once the counter is revealed.
+   Taken away on 2026-10-20 ("no underlines anywhere") and asked for again
+   the same day, in the darker of the home page's two purples. It uses the
+   same token as the waves between the bands, which is that dark purple in
+   light mode and the light one in dark mode — a dark bar on the dark band
+   would not show. Drawn as a bar rather than a border so it can sweep. */
+.pmos-counter-number::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0.07em;
+  background: var(--color-band-border);
+  transform: scaleX(0);
+  transition: transform 0.7s cubic-bezier(0.3, 0, 0.2, 1);
+}
+
+.pmos-counter--revealed .pmos-counter-number::after {
+  transform: scaleX(1);
+}
+
 
 [data-theme="dark"] .pmos-counter-number {
   color: #5fd3d7;
