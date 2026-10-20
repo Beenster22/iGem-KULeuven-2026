@@ -6,6 +6,7 @@
 // way round) until that wedge is at the bottom, while the labels and the
 // bacterium stay upright. Design after the team's own drawing of the wheel.
 import { ReactNode, useEffect, useId, useMemo, useState } from "react";
+import { useEasedAngle } from "./useEasedAngle";
 import { extractLabeledChildren } from "../utils/extractLabeledChildren";
 import {
   WHEEL_SELECT_EVENT,
@@ -216,6 +217,9 @@ export function WheelSelector({
   // their content.
   const isToggle = layout === "dropdown" || layout === "side-dropdown";
   const [open, setOpen] = useState(!isToggle);
+  // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-21: the angle on screen,
+  // eased towards `rotation` (see useEasedAngle.ts for why not a CSS transition).
+  const shown = useEasedAngle(rotation, 700, [0.45, 0, 0.2, 1]);
   const panelId = useId();
   // Resting side changed (window resized past the breakpoint): turn to it.
   useEffect(() => {
@@ -283,15 +287,8 @@ export function WheelSelector({
       >
         <g
           className="wheel-selector-wheel"
-          style={{ transform: `rotate(${rotation}deg)` }}
+          transform={`rotate(${shown} ${CENTER} ${CENTER})`}
         >
-          {/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-21: an
-              unpainted circle the size of the drawing, so the group's own
-              box is centred on the wheel and it turns about that centre
-              (see .wheel-selector-wheel). Safari placed a px
-              transform-origin on an SVG group differently, so the wheel
-              and its labels swung about the wrong point. */}
-          <circle cx={CENTER} cy={CENTER} r={SIZE / 2} fill="none" pointerEvents="none" />
           {items.map((item, index) => {
             const startAngle = -90 + index * step;
             const hasIcon = Boolean(item.icon);
@@ -330,7 +327,7 @@ export function WheelSelector({
                   <g
                     className="wheel-selector-wedge-icon"
                     style={{ color: colours.ink }}
-                    transform={`translate(${iconPos.x} ${iconPos.y}) rotate(${-rotation})`}
+                    transform={`translate(${iconPos.x} ${iconPos.y}) rotate(${-shown})`}
                   >
                     <g transform={`translate(${-ICON_SIZE / 2} ${-ICON_SIZE / 2})`}>
                       {item.icon}
@@ -342,7 +339,7 @@ export function WheelSelector({
                 <g transform={`translate(${labelPos.x} ${labelPos.y})`}>
                   <text
                     className={`wheel-selector-label${scale === 1 ? "" : " wheel-selector-label--small"}`}
-                    style={{ transform: `rotate(${-rotation}deg)` }}
+                    transform={`rotate(${-shown})`}
                     fill={colours.ink}
                     textAnchor="middle"
                   >
