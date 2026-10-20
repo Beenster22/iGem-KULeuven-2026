@@ -73,7 +73,7 @@ const BACTERIUM_BOTTOM = (72 + 116) / 300;
 // here: the TGR5 screen decides it (team request — work back from there),
 // so this reads its arrangement and carries it up, and the drop is that
 // same arrangement going home. Nothing is ever shuffled into place.
-const STATEMENT = ".story-step--single";
+const STATEMENT = ".home-statement-pin .story-step--single";
 // Where they float while that sentence is up, as shares of its own screen:
 // two wide bands, one high and one low, across nearly the full width,
 // leaving the middle to the words (team request: over the whole screen,

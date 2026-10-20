@@ -703,7 +703,7 @@ function Tgr5BindingDiagram({ animate }: { animate: boolean }) {
       <path className="tgr5-gut" d={gutPath} />
       <path className="tgr5-gut tgr5-gut--cells" d={gutPath} />
       <text className="tgr5-label" x={GUT_RECEPTOR_X} y={OV_H - 8}>
-        Epithelial cell
+        Intestinal Epithelial Cell
       </text>
 
       {SITES.map((site, i) => (
@@ -777,10 +777,9 @@ export function Tgr5MechanismSection() {
       >
         <div className="tgr5-figures">
           <div className="tgr5-figure">
-            {/* TODO(team): heading written by the assistant from the review
-              comment, not supplied by the team. Check or replace. */}
+            {/* Wording supplied by the team, 2026-10-20. */}
             <h3 className="tgr5-heading">
-              Conjugated bile acids bind TGR5 receptors on cells in the gut
+              Bile acids interact with TGR5 receptors
             </h3>
             <Tgr5BindingDiagram animate={!prefersReducedMotion} />
           </div>
@@ -887,9 +886,9 @@ function AnovulationArt() {
 // notes ("still thinking what to write").
 // TODO(team): add the explanations as `detail` once written.
 const CONSEQUENCES: { title: string; detail?: string; art: ReactNode }[] = [
-  { title: "Hyperinsulinaemia", art: <InsulinArt /> },
+  { title: "Insulin resistance", art: <InsulinArt /> },
   { title: "Anovulation", art: <AnovulationArt /> },
-  { title: "Hyperandrogenism", art: <AndrogenArt /> },
+  { title: "Higher androgen levels", art: <AndrogenArt /> },
 ];
 
 // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team feedback: the
@@ -918,16 +917,12 @@ export function Tgr5ConsequencesSection() {
       <div
         className={`tgr5-effects${prefersReducedMotion ? " tgr5-effects--static" : " home-snap-stage"}`}
       >
-        {/* Retitled on Marie's review (2026-10-08): TGR5 is not inactivated.
-            Reworded on team request (2026-10-16). Reworded again on team
-            feedback (2026-10-17): the jump from the binding diagram above to
-            this screen read as a non sequitur, so the title now names "this
-            binding" explicitly and states the causal step (unbalanced pool
-            -> less binding) before its consequences. */}
-        <h3 className="tgr5-effects-heading">
-          If the bile acid pool is unbalanced, this binding happens less.
-          This may lead to:
-        </h3>
+        {/* Retitled on Marie's review (2026-10-08) and reworded on team
+            request several times since. Edited 2026-10-20 (team request):
+            the causal step it used to carry — an unbalanced pool meaning
+            less binding — is a screen of its own now, just above this one
+            (see home.mdx), so this is only the list's lead-in. */}
+        <h3 className="tgr5-effects-heading">This is linked to:</h3>
         <ol
           className="tgr5-effects-list"
           style={
