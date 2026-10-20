@@ -229,7 +229,7 @@ const Pages: (Page | Folder)[] = [
     path: "/awards",
     glitter: true,
     component: Awards,
-    lead: "The medal and special prizes we are competing for, why we believe we deserve each one, and where on the wiki to find the work behind it.",
+    lead: "The medals and special prizes we are competing for, why we believe our work merits recognition in each category, and where to find the supporting evidence on our wiki.",
     icon: TrophyIcon,
   },
   {

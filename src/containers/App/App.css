@@ -15574,3 +15574,13 @@ a.protocol-download:hover {
     opacity: 0.8;
   }
 }
+
+/* MEDAL ICON (Awards page headings, see Medal.tsx) */
+.medal-icon {
+  display: inline-block;
+  width: auto;
+  height: 1.35em;
+  margin-right: 0.35em;
+  vertical-align: -0.2em;
+  filter: drop-shadow(0 0.1em 0.12em rgba(51, 40, 63, 0.35));
+}
