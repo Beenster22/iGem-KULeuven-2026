@@ -202,8 +202,8 @@ const Pages: (Page | Folder)[] = [
         icon: CalendarIcon,
       },
       {
-        name: "Science Communication & Community",
-        title: "Science Communication & Community",
+        name: "Science Communication & Outreach",
+        title: "Science Communication & Outreach",
         path: "/science-communication",
         component: ScienceCommunication,
         icon: MegaphoneIcon,

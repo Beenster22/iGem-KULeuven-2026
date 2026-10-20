@@ -123,11 +123,16 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
           "Increased levels of male hormones (androgens).",
       },
       {
-        label: "Hirsutism and androgenic alopecia",
-        definition: "Hirsutism: excessive male-pattern hair growth in women. Androgenic alopecia: hair thinning and hair loss.",
-        explanation:
-          "Irregular hair growth: excess hair on the face and body, and thinning hair on the scalp.",
+        label: "Hirsutism",
+        definition: "Excessive male-pattern hair growth in women.",
+        explanation: "Irregular hair growth: excess hair on the face and body.",
       },
+      {
+        label: "Androgenic alopecia",
+        definition: "Hair thinning and hair loss.",
+        explanation: "Thinning hair on the scalp.",
+      },
+
       {
         label: "Acne and oily skin",
         explanation:
@@ -174,11 +179,17 @@ const SYMPTOM_GROUPS: SymptomGroup[] = [
           "Higher than normal insulin levels in the blood, as the body tries to compensate for a reduced response to insulin.",
       },
       {
-        label: "Dyslipidaemia and raised cardiovascular risk",
-        definition: "Dyslipidaemia: abnormal levels of fats in the blood.",
-        explanation:
-          "Unhealthy levels of fats (lipids) in the blood, which raise the risk of heart and blood vessel disease.",
+        label: "Dyslipidaemia",
+        definition: "Abnormal levels of fats in the blood.",
+        explanation: "Unhealthy levels of fats (lipids) in the blood.",
       },
+      {
+        label: "Raised cardiovascular risk",
+        definition: "A higher risk of heart and blood vessel disease.",
+        explanation:
+          "Unhealthy blood fats raise the risk of heart and blood vessel disease.",
+      },
+
       {
         label: "Hepatic steatosis",
         definition: "Fat buildup in the liver.",
@@ -284,6 +295,7 @@ export function SymptomGroups() {
                 <li key={symptom.label}>
                   {symptom.definition || symptom.explanation ? (
                     <GlossaryTerm
+                      hover
                       definition={
                         (symptom.definition ?? symptom.explanation) as string
                       }

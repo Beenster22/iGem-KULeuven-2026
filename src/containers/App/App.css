@@ -4973,9 +4973,9 @@ body:not(.home-fullscreen) .home-hero {
 @container (min-width: 720px) {
   .symptoms-puzzle {
     --pz-g: 0.7rem;
-    --pz-h: 14rem;
-    --pz-lip: 4rem;
-    --pz-pad: 1.4rem;
+    --pz-h: 10.5rem;
+    --pz-lip: 3rem;
+    --pz-pad: 1.1rem;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-template-rows: auto var(--pz-h) auto;
     gap: 0;
@@ -5007,8 +5007,24 @@ body:not(.home-fullscreen) .home-hero {
     transition: background-color 0.25s ease;
   }
 
-  .symptoms-puzzle .symptom-card:hover::before {
-    background-color: color-mix(in srgb, var(--symptom-color) 46%, transparent);
+  /* Hovering anywhere on a piece lights the whole piece up. */
+  .symptoms-puzzle .symptom-card:hover::before,
+  .symptoms-puzzle .symptom-card:focus-within::before {
+    background-color: color-mix(in srgb, var(--symptom-color) 62%, transparent);
+  }
+
+  /* The cards' boxes overlap (each spans rows the gut piece sits in), so only
+     the clipped shape and the content count for the pointer — otherwise the
+     later cards would swallow hovers meant for the gut piece. */
+  .symptoms-puzzle .symptom-card {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .symptoms-puzzle .symptom-card::before,
+  .symptoms-puzzle .symptom-card-head,
+  .symptoms-puzzle .symptom-card-list {
+    pointer-events: auto;
   }
 
   /* 2: across the top, reaching down either side of the gut piece. */
@@ -5936,9 +5952,9 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-10-19
-   Purpose: the "office" step — a GP's office on the left (its sign, which
-   the presentation screen's box turns into, over the doctor-and-patient
-   picture with the clock on the wall) and the sentences on the right (see
+   Purpose: the "office" step — the doctor-and-patient picture with the
+   clock on the wall on the left (framed in the box the presentation
+   screen's box turns into) and the sentences on the right (see
    OfficeArt in StoryScrollSection.tsx). The picture keeps its own dark
    background as the office wall, framed, so it shows on this band in both
    themes. */
@@ -5948,32 +5964,17 @@ body:not(.home-fullscreen) .home-hero {
 
 .story-office {
   flex: 0 1 auto;
-  width: min(54%, 38rem);
+  width: min(58%, 48rem);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(0.75rem, 2.5vh, 1.25rem);
-}
-
-/* Styled like the presentation screen it grows out of. */
-.story-office-sign {
-  margin: 0;
-  padding: 0.4em 1.2em;
-  border: 0.4rem solid #2fa4a9;
-  border-radius: 1rem;
-  background: #eaf4f5;
-  color: #33283f;
-  font-size: clamp(1.1rem, 2vw, 1.6rem);
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
 }
 
 /* Always exactly the picture's shape (content-box, width capped by the
    height instead of a max-height), so the moving parts cut from it line up
    with it. */
 .story-office-room {
-  --room-max-h: 60vh;
+  --room-max-h: 74vh;
   position: relative;
   box-sizing: content-box;
   width: min(calc(100% - 0.8rem), calc(var(--room-max-h) * 2000 / 1878));
@@ -6129,6 +6130,12 @@ body:not(.home-fullscreen) .home-hero {
   color: #33283f;
   box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
   pointer-events: none;
+}
+
+.story-morph-room {
+  position: absolute;
+  inset: 0;
+  background: #1b1823;
 }
 
 .story-morph-text {
@@ -14699,7 +14706,7 @@ a.protocol-download:hover {
 /* Terms inside the symptom chips: dotted underline in the chip's own weight. */
 .symptom-card-list .glossary-term {
   font-weight: inherit;
-  border-bottom: 2px dotted #2fa4a9;
+  border-bottom: 0;
   text-decoration: none;
 }
 
