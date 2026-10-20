@@ -3291,7 +3291,7 @@ a[data-footnote-ref]:focus {
   margin: 0 0 var(--ev-row-gap);
   padding: 0 var(--ev-turn);
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(var(--ev-cols, 3), 1fr);
   gap: 0;
 }
 
@@ -3697,6 +3697,54 @@ a[data-footnote-ref]:focus {
   margin-bottom: 0;
 }
 
+/* PDFs shown inline in an event's popup */
+.pdf-embed {
+  margin: 1.5rem 0 0;
+}
+
+.pdf-embed-intro {
+  margin: 0 0 0.6rem;
+}
+
+.pdf-embed-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.pdf-embed-title {
+  font-weight: 700;
+  margin-right: auto;
+}
+
+.pdf-embed-open {
+  font-size: 0.8rem;
+}
+
+.pdf-embed-box {
+  max-height: min(70vh, 640px);
+  overflow-y: auto;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.04);
+  line-height: 0;
+}
+
+.pdf-embed-page {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.pdf-embed-status {
+  margin: 0;
+  padding: 2rem 1rem;
+  text-align: center;
+  line-height: 1.4;
+  opacity: 0.7;
+}
+
 @keyframes events-fade-in {
   from {
     opacity: 0;
@@ -4048,7 +4096,9 @@ footer hr {
   font-weight: 700;
   font-size: 1rem;
   text-align: center;
-  color: var(--color-text);
+  /* The tile is always white, so the text must stay dark in dark mode too
+     (var(--color-text) turns light there and vanished on the white tile). */
+  color: #33283f;
   opacity: 0.6;
 }
 
@@ -4577,9 +4627,13 @@ body:not(.home-fullscreen) .home-hero {
 
 .home-snap-pin {
   --snap-step: 60vh;
+  /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team feedback: the
+     third consequence is too easy to skip): extra steps' worth of scrolling
+     the last step stays pinned for. Keep in step with usePinnedStep.ts. */
+  --snap-extra: 0;
   position: relative;
-  height: calc(100vh + var(--snap-steps) * var(--snap-step));
-  height: calc(100svh + var(--snap-steps) * var(--snap-step));
+  height: calc(100vh + (var(--snap-steps) + var(--snap-extra)) * var(--snap-step));
+  height: calc(100svh + (var(--snap-steps) + var(--snap-extra)) * var(--snap-step));
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-15 (team feedback: too
@@ -5096,6 +5150,23 @@ body:not(.home-fullscreen) .home-hero {
 
   .symptom-piece--right .symptom-card-head {
     margin-left: auto;
+  }
+
+  /* The side columns are narrow: the title wraps inside them (and shrinks a
+     little) instead of running out over the gut piece or the card edge. */
+  .symptoms-puzzle .symptom-piece--left .symptom-card-title,
+  .symptoms-puzzle .symptom-piece--right .symptom-card-title {
+    flex: 1 1 0;
+    min-width: 0;
+    font-size: clamp(0.8rem, 1.5cqi, 1.05rem);
+    overflow-wrap: anywhere;
+  }
+
+  .symptoms-puzzle .symptom-piece--left .symptom-card-icon,
+  .symptoms-puzzle .symptom-piece--right .symptom-card-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0.4rem;
   }
 
   .symptom-piece--left::before {
@@ -14730,6 +14801,15 @@ a.protocol-download:hover {
 .checklist-clear:disabled {
   opacity: 0.4;
   cursor: default;
+}
+
+/* The gut piece's title is itself a hoverable term: keep the card-title look. */
+.symptom-card-title .glossary-term {
+  text-transform: inherit;
+  letter-spacing: inherit;
+  font-weight: inherit;
+  border-bottom: 0;
+  cursor: help;
 }
 
 /* Terms inside the symptom chips: dotted underline in the chip's own weight. */

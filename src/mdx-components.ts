@@ -22,6 +22,7 @@ import {
 } from "./components/NotebookDropdown";
 import { NotebookEntryMeta } from "./components/NotebookEntryMeta";
 import { EventsTimeline, EventEntry } from "./components/EventsTimeline";
+import { PdfEmbed } from "./components/PdfEmbed";
 import {
   HumanPracticesInterviews,
   HPSection,
@@ -104,6 +105,14 @@ import {
   GlobeLeafIcon,
   BrainIcon,
 } from "./components/HypothesisIcons";
+import {
+  InstagramCarousel,
+  InstagramPost,
+  PublicationShowcase,
+  ShowcaseItem,
+  PhoneShowcase,
+  VideoSlot,
+} from "./components/ScienceCommunication";
 import { Link } from "react-router-dom";
 
 export const mdxComponents = {
@@ -208,6 +217,7 @@ export const mdxComponents = {
   NotebookEntryMeta,
   EventsTimeline,
   EventEntry,
+  PdfEmbed,
   HumanPracticesInterviews,
   HPSection,
   HPIntro,
@@ -236,4 +246,13 @@ export const mdxComponents = {
   InsulinIcon,
   GlobeLeafIcon,
   BrainIcon,
+  // Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20
+  // Purpose: the Instagram carousel, document showcase, phone frame and video
+  // slot on the Science Communication & Community page.
+  InstagramCarousel,
+  InstagramPost,
+  PublicationShowcase,
+  ShowcaseItem,
+  PhoneShowcase,
+  VideoSlot,
 };

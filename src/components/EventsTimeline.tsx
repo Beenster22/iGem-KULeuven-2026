@@ -171,9 +171,10 @@ const LINE_HEIGHT = 110;
 const LOOP_A = 6;
 const LOOP_B = 22; // loop depth is 2 * LOOP_B; the card hole sits at that depth
 
-function buildRowPath(width: number) {
-  const S = width / 3;
-  const markers = [S / 2, S * 1.5, S * 2.5];
+// `slots` are the card centres in column units (0.5 = middle of the first column).
+function buildRowPath(width: number, columns: number, slots: number[]) {
+  const S = width / columns;
+  const markers = slots.map((slot) => S * slot);
   const loopHalf = LOOP_A * Math.PI;
   const pts: string[] = [];
   const add = (x: number, y: number) =>
@@ -201,17 +202,19 @@ function buildRowPath(width: number) {
     front.push("M" + half.join(" L"));
   }
 
-  wave(0, markers[0] - loopHalf, 1);
-  loop(markers[0]);
-  wave(markers[0] + loopHalf, markers[1] - loopHalf, -1);
-  loop(markers[1]);
-  wave(markers[1] + loopHalf, markers[2] - loopHalf, 1);
-  loop(markers[2]);
-  wave(markers[2] + loopHalf, width, -1);
+  let sign = 1;
+  let from = 0;
+  markers.forEach((m) => {
+    wave(from, m - loopHalf, sign);
+    loop(m);
+    from = m + loopHalf;
+    sign = -sign;
+  });
+  wave(from, width, sign);
   return { full: "M" + pts.join(" L"), front: front.join(" ") };
 }
 
-function RowLine() {
+function RowLine({ columns, count }: { columns: number; count: number }) {
   const ref = useRef<SVGSVGElement | null>(null);
   const [width, setWidth] = useState(0);
 
@@ -225,7 +228,12 @@ function RowLine() {
     return () => observer.disconnect();
   }, []);
 
-  const paths = useMemo(() => (width > 0 ? buildRowPath(width) : null), [width]);
+  const paths = useMemo(() => {
+    if (width <= 0) return null;
+    // A short last row is centred rather than left-aligned.
+    const slots = Array.from({ length: count }, (_, i) => (columns - count) / 2 + i + 0.5);
+    return buildRowPath(width, columns, slots);
+  }, [width, columns, count]);
   const viewBox = `0 0 ${width || 1} ${LINE_HEIGHT}`;
 
   return (
@@ -244,7 +252,7 @@ function RowLine() {
   );
 }
 
-const EVENTS_PER_ROW = 3;
+const DEFAULT_EVENTS_PER_ROW = 3;
 // Per-card accents from the site palette: marker, tag, card back and offset shadow share a colour,
 // and each card sits at a slightly different tilt until hovered.
 // Every colour must stand out on the lavender page background (so no lavender); --ev-ink is the text colour on top.
@@ -259,9 +267,11 @@ interface LightboxState {
 
 interface EventsTimelineProps {
   children: ReactNode;
+  /** Cards per row (default 3). */
+  perRow?: number;
 }
 
-export function EventsTimeline({ children }: EventsTimelineProps) {
+export function EventsTimeline({ children, perRow = DEFAULT_EVENTS_PER_ROW }: EventsTimelineProps) {
   const events = useMemo(() => extractEvents(children), [children]);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [lightbox, setLightbox] = useState<LightboxState | null>(null);
@@ -273,11 +283,11 @@ export function EventsTimeline({ children }: EventsTimelineProps) {
   const rows = useMemo(() => {
     const out: { event: (typeof events)[number]; index: number }[][] = [];
     events.forEach((event, index) => {
-      const r = Math.floor(index / EVENTS_PER_ROW);
+      const r = Math.floor(index / perRow);
       (out[r] ??= []).push({ event, index });
     });
     return out;
-  }, [events]);
+  }, [events, perRow]);
 
   function handleCardClick(index: number) {
     const noHover = window.matchMedia("(hover: none)").matches;
@@ -337,8 +347,15 @@ export function EventsTimeline({ children }: EventsTimelineProps) {
             className={`events-row${rowIndex % 2 === 1 ? " events-row-rtl" : ""}${
               rowIndex < rows.length - 1 ? " events-row-connected" : ""
             }${rowIndex > 0 ? " events-row-continued" : ""}`}
+            style={
+              {
+                "--ev-cols": perRow,
+                // A short last row is centred: double-width tracks let cards sit on half-column offsets.
+                ...(row.length < perRow && { gridTemplateColumns: `repeat(${perRow * 2}, 1fr)` }),
+              } as CSSProperties
+            }
           >
-            <RowLine />
+            <RowLine columns={perRow} count={row.length} />
             {rowIndex < rows.length - 1 && (
               <svg
                 className="events-row-turn"
@@ -352,7 +369,7 @@ export function EventsTimeline({ children }: EventsTimelineProps) {
                 />
               </svg>
             )}
-            {row.map(({ event, index }) => (
+            {row.map(({ event, index }, slot) => (
               <li
                 key={event.title}
                 className="events-timeline-item"
@@ -361,11 +378,13 @@ export function EventsTimeline({ children }: EventsTimelineProps) {
                     "--ev-c": CARD_COLORS[index % CARD_COLORS.length],
                     "--ev-ink": CARD_INKS[index % CARD_INKS.length],
                     "--ev-tilt": `${CARD_TILTS[index % CARD_TILTS.length]}deg`,
+                    ...(row.length < perRow && {
+                      gridColumn: `${slot * 2 + (perRow - row.length) + 1} / span 2`,
+                    }),
                   } as CSSProperties
                 }
               >
                 <span className="events-timeline-number">
-                  {String(index + 1).padStart(2, "0")}
                   <span className="events-timeline-number-date">{event.date}</span>
                 </span>
                 <button
