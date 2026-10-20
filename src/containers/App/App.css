@@ -2640,12 +2640,6 @@ main:focus {
 .page-shell-content {
   flex: 1 1 0%;
   min-width: 0;
-  /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: Bootstrap's fixed
-     0.75rem-per-side container gutter felt tight on a large phone and loose
-     on desktop (it only ever changes at a breakpoint, not smoothly). Scales
-     continuously between the two instead. */
-  padding-left: clamp(1rem, 4vw, 2.5rem);
-  padding-right: clamp(1rem, 4vw, 2.5rem);
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): the
@@ -2653,33 +2647,11 @@ main:focus {
    the right as in a paper. Words are never split over two lines (team
    review, same day: automatic hyphenation read badly). The home page is left
    alone, and so is anything a page centres on purpose (Bootstrap's
-   .text-center is !important).
-   Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: capped at ~75
-   characters regardless of how wide the column itself is — a page with no
-   Inspirations sidebar (PageLayout.tsx) used to let justified text stretch
-   to the full container width on a wide monitor, which widens the gaps
-   between justified words into visible "rivers". Scoped to bare p/li so
-   custom components (figures, diagrams, grids), which use their own classed
-   wrappers, are unaffected. */
+   .text-center is !important). */
 .page-body:not(.page-body--home) .page-shell-content :is(p, li) {
   text-align: justify;
   hyphens: manual;
   line-height: 1.75;
-  max-width: 75ch;
-}
-
-/* Centres the capped paragraphs in a wider card instead of leaving them flush
-   left with empty space on the right. Not li: auto margins would pull list
-   items away from their bullets. */
-.page-body:not(.page-body--home)
-  :is(
-    .page-shell-content,
-    .page-shell-content > .row > [class*="col"],
-    .content-section
-  )
-  > p {
-  margin-left: auto;
-  margin-right: auto;
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): more
@@ -16502,4 +16474,117 @@ a.protocol-download:hover {
    75-character cap, so each paragraph ends flush with the edge of the card. */
 .page-body:not(.page-body--home) .page-shell-content:has([data-wide-text]) :is(p, li) {
   max-width: none;
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request)
+   Purpose: phone fixes from a round of testing on a real device.
+   - Running text is left-aligned: justified lines in a ~300px column opened
+     huge gaps between words.
+   - Home hero: the sentence is no longer lifted by the desktop offset, which
+     pushed it up over the lady's feet when it sits under her.
+   - BSH diagram: its two captions wrap inside their half instead of running
+     off the screen edge.
+   - Appendix tables fit the column (smaller cells, wrapping text) instead of
+     being wider than the page.
+   - The top bar slides away while scrolling down and returns on scrolling up
+     (Navbar.tsx). Below lg only, where the bar collapses into a menu. */
+@media (max-width: 767.98px) {
+  .page-body:not(.page-body--home) .page-shell-content :is(p, li) {
+    text-align: left;
+  }
+
+  .appendix-table table {
+    display: table;
+    table-layout: fixed;
+    overflow: visible;
+    font-size: 0.85rem;
+  }
+
+  .appendix-table table :is(th, td) {
+    padding: 0.45rem 0.5rem;
+    overflow-wrap: anywhere;
+  }
+
+  .appendix-table--compact table {
+    min-width: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 699.98px) {
+  .elle-tour-stage > .elle-tour-words {
+    translate: none;
+  }
+
+  .bsh-stream-caption:not(.bsh-stream-caption--species) {
+    width: 34%;
+    white-space: normal;
+    text-align: center;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .navbar-auto-hide .navbar-empower {
+    transition: translate 0.3s ease;
+  }
+
+  .navbar-auto-hide.is-hidden .navbar-empower {
+    translate: 0 -100%;
+  }
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request)
+   Purpose: the "Read next" button at the end of every page (NextPage.tsx),
+   built on the shared .btn-empower pill. It is a wide card rather than a
+   small pill because it also previews the next page's lead. */
+.next-page {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.next-page-link.btn-empower {
+  --btn-empower-pad: var(--space-3) var(--space-4);
+  max-width: 34rem;
+  gap: var(--space-3);
+  border-radius: var(--surface-radius-lg);
+  text-align: left;
+  text-decoration: none;
+}
+
+.next-page-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.next-page-kicker {
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-interactive);
+}
+
+.next-page-title {
+  font-size: 1.2rem;
+}
+
+.next-page-lead {
+  font-size: 0.9rem;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.next-page-link svg {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+@media (max-width: 576px) {
+  .next-page {
+    justify-content: stretch;
+  }
 }

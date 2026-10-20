@@ -176,6 +176,25 @@ function Bacterium() {
   );
 }
 
+// Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request): on a
+// phone the side wheels stack their content underneath (see the max-width
+// 767.98px rule in App.css), so the selected wedge and pointer face down
+// there instead of to the right.
+const STACKED_QUERY = "(max-width: 767.98px)";
+
+function useStacked() {
+  const [stacked, setStacked] = useState(
+    () => typeof window !== "undefined" && window.matchMedia(STACKED_QUERY).matches,
+  );
+  useEffect(() => {
+    const query = window.matchMedia(STACKED_QUERY);
+    const update = () => setStacked(query.matches);
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+  return stacked;
+}
+
 export function WheelSelector({
   children,
   layout = "below",
@@ -185,7 +204,9 @@ export function WheelSelector({
 }: WheelSelectorProps) {
   const items = useMemo(() => extractLabeledChildren(children), [children]);
   const count = items.length;
-  const rest = REST_DEGREES[layout];
+  const stacked = useStacked();
+  const opensToSide = (layout === "side" || layout === "side-dropdown") && !stacked;
+  const rest = opensToSide ? REST_DEGREES[layout] : 90;
   const [activeIndex, setActiveIndex] = useState(0);
   // Kept as a running total (not reduced to 0–360) so each turn takes the
   // shorter way round instead of unwinding.
@@ -194,9 +215,17 @@ export function WheelSelector({
   // "side-dropdown" layouts start with nothing open; the others always show
   // their content.
   const isToggle = layout === "dropdown" || layout === "side-dropdown";
-  const opensToSide = layout === "side" || layout === "side-dropdown";
   const [open, setOpen] = useState(!isToggle);
   const panelId = useId();
+  // Resting side changed (window resized past the breakpoint): turn to it.
+  useEffect(() => {
+    setRotation((current) => {
+      const delta =
+        (((restAngle(activeIndex, count, rest) - current) % 360) + 540) % 360;
+      return current + delta - 180;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rest]);
   const active = items[activeIndex];
   const step = 360 / count;
 
@@ -357,7 +386,7 @@ export function WheelSelector({
         // keyed on the section so switching sections fades the new one in.
         <div
           id={panelId}
-          className={`wheel-selector-dropdown${opensToSide ? " wheel-selector-dropdown--side" : ""}`}
+          className={`wheel-selector-dropdown${layout === "side-dropdown" ? " wheel-selector-dropdown--side" : ""}`}
           role="region"
           aria-label={active?.label}
           inert={!open}

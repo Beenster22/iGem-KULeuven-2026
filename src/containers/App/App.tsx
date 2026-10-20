@@ -11,6 +11,7 @@ import { Footer } from "../../components/Footer";
 import { PageShell } from "../../components/PageShell";
 import { PageSkeleton } from "../../components/PageSkeleton";
 import { ReadingProgressBar } from "../../components/ReadingProgressBar";
+import { NextPage } from "../../components/NextPage";
 import { BackToTop } from "../../components/BackToTop";
 import { ThemeModeProvider } from "../../ThemeModeContext";
 import { ElleSays } from "../../components/ElleSays";
@@ -192,6 +193,8 @@ const App = () => {
           }
         />
       </Routes>
+
+      {!isHome && <NextPage currentPath={currentPath} />}
 
       {/* Footer */}
       {/* MUST mention license AND have a link to team wiki's repository on gitlab.igem.org */}
