@@ -291,7 +291,6 @@ function ClockArt() {
 // different way, at each spot — with the bacteria drifting and wobbling
 // about. All CSS animation (see .quest-* in App.css).
 const GUT_SRC = "https://static.igem.wiki/teams/6299/wiki/home-page/intestines-hq.avif";
-const MICROBES_SRC = "https://static.igem.wiki/teams/6299/wiki/home-page/microbes-hq.avif";
 
 // Generated with Claude Opus 5 (Anthropic), 2026-10-19 (team request: take
 // the background off the gut): the drawing is uploaded on a pale backing
@@ -403,19 +402,16 @@ function GutArt() {
     <div className="quest-gut">
       <GutPicture />
       <div className="quest-lens" aria-hidden="true">
+        {/* Edited with Claude Opus 5 (Anthropic), 2026-10-19 (team
+            request: a quicker hand-over): the glass carries the very
+            circle of bacteria it is about to become on the screen below,
+            so that hand-over is pure movement with nothing to cross-fade.
+            Edited 2026-10-20 (team request): it carries that circle the
+            whole way round the gut now, rather than a photograph of
+            microbes that swapped to it at the last stop — coming back up
+            showed the circle and going down showed the photograph, which
+            read as two different glasses. */}
         <div className="quest-lens-glass" ref={lensRef}>
-          <div className="quest-lens-photo">
-            <div className="quest-lens-drift">
-              <div className="quest-lens-spin">
-                <img className="quest-lens-view" src={MICROBES_SRC} alt="" />
-              </div>
-            </div>
-          </div>
-          {/* Edited with Claude Opus 5 (Anthropic), 2026-10-19 (team
-              request: a quicker hand-over): at its last stop the glass
-              swaps to the very circle of bacteria it is about to become
-              on the screen below, so that hand-over is pure movement with
-              nothing to cross-fade. */}
           <div className="quest-lens-circle">
             <MicrobeLens />
           </div>
@@ -562,9 +558,11 @@ function useStepMorphs(
           textAlign: style.textAlign,
         });
       } else if (el.matches(".quest-lens-glass")) {
-        part = document.createElement("img");
+        // Whatever the glass is carrying, so the two are the same thing.
+        part = document.createElement("div");
         part.className = "story-morph-lens";
-        (part as HTMLImageElement).src = MICROBES_SRC;
+        part.innerHTML =
+          el.querySelector(".quest-lens-circle")?.innerHTML ?? "";
       } else {
         part = el.cloneNode(true) as HTMLElement;
         part.removeAttribute("style");
