@@ -15276,6 +15276,57 @@ a.protocol-download:hover {
   border-radius: 14px;
 }
 
+/* The click-to-play cover (VideoSlot's `poster`): the image is shown whole
+   (object-fit: contain, so a portrait cover is never stretched or cropped),
+   with a blurred, dimmed copy of itself filling the rest of the 16:9 box. */
+.video-slot-cover {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  background: #000;
+  cursor: pointer;
+}
+
+.video-slot-cover-backdrop {
+  position: absolute;
+  inset: -10%;
+  width: 120%;
+  height: 120%;
+  object-fit: cover;
+  filter: blur(24px) brightness(0.6);
+}
+
+.video-slot-cover-image {
+  position: relative;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* In the bottom-right corner rather than centred, so it does not sit on top
+   of the cover's own centrepiece (the iGEM logo on the UNITED cover). */
+.video-slot-cover .video-slot-play {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  width: 68px;
+  height: 68px;
+  font-size: 1.6rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  transition: transform 0.15s ease;
+}
+
+.video-slot-cover:hover .video-slot-play {
+  transform: scale(1.08);
+}
+
 .video-slot-play {
   width: 56px;
   height: 56px;

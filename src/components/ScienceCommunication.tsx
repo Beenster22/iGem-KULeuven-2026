@@ -337,16 +337,42 @@ interface VideoSlotProps {
   title: string;
   /** A video.igem.org embed URL — iGEM requires videos to be hosted there. */
   embedSrc?: string;
+  /** Cover image shown until the reader presses play (uploaded via the iGEM
+   * uploads tool). Shown whole at its own proportions, never stretched. */
+  poster?: string;
 }
 
-export function VideoSlot({ title, embedSrc }: VideoSlotProps) {
+export function VideoSlot({ title, embedSrc, poster }: VideoSlotProps) {
+  const [playing, setPlaying] = useState(false);
+
+  if (embedSrc && poster && !playing) {
+    return (
+      <div className="video-slot">
+        <button
+          type="button"
+          className="video-slot-cover"
+          aria-label={`Play ${title}`}
+          onClick={() => setPlaying(true)}
+        >
+          {/* A blurred copy fills the 16:9 box behind the cover, the way the
+              video player itself pads a portrait video. */}
+          <img className="video-slot-cover-backdrop" src={poster} alt="" />
+          <img className="video-slot-cover-image" src={poster} alt="" />
+          <span className="video-slot-play" aria-hidden="true">
+            ▶
+          </span>
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="video-slot">
       {embedSrc ? (
         <iframe
-          src={embedSrc}
+          src={playing ? `${embedSrc}${embedSrc.includes("?") ? "&" : "?"}autoplay=1` : embedSrc}
+          allow="autoplay; fullscreen"
           title={title}
-          allow="fullscreen"
           sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
         />
       ) : (
