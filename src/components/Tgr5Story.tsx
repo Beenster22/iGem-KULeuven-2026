@@ -887,17 +887,27 @@ const CONSEQUENCES: { title: string; detail?: string; art: ReactNode }[] = [
   { title: "Hyperandrogenism", art: <AndrogenArt /> },
 ];
 
+// Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team feedback: the
+// third consequence was too easy to skip): the last one stays on screen for
+// this many extra steps of scrolling (--snap-extra, see .home-snap-pin).
+const LAST_STEP_EXTRA = 2;
+
 export function Tgr5ConsequencesSection() {
   const prefersReducedMotion = useReducedMotion();
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const step = usePinnedStep(wrapperRef, CONSEQUENCES.length);
+  const step = usePinnedStep(wrapperRef, CONSEQUENCES.length, LAST_STEP_EXTRA);
   const shown = prefersReducedMotion ? CONSEQUENCES.length : step + 1;
 
   return (
     <div
       className={prefersReducedMotion ? undefined : "home-snap-pin"}
       ref={wrapperRef}
-      style={{ "--snap-steps": CONSEQUENCES.length } as CSSProperties}
+      style={
+        {
+          "--snap-steps": CONSEQUENCES.length,
+          "--snap-extra": prefersReducedMotion ? 0 : LAST_STEP_EXTRA,
+        } as CSSProperties
+      }
     >
       {!prefersReducedMotion && <SnapSteps steps={CONSEQUENCES.length} />}
       <div

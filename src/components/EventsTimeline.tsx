@@ -171,9 +171,10 @@ const LINE_HEIGHT = 110;
 const LOOP_A = 6;
 const LOOP_B = 22; // loop depth is 2 * LOOP_B; the card hole sits at that depth
 
-function buildRowPath(width: number, columns: number) {
+// `slots` are the card centres in column units (0.5 = middle of the first column).
+function buildRowPath(width: number, columns: number, slots: number[]) {
   const S = width / columns;
-  const markers = Array.from({ length: columns }, (_, i) => S * (i + 0.5));
+  const markers = slots.map((slot) => S * slot);
   const loopHalf = LOOP_A * Math.PI;
   const pts: string[] = [];
   const add = (x: number, y: number) =>
@@ -213,7 +214,7 @@ function buildRowPath(width: number, columns: number) {
   return { full: "M" + pts.join(" L"), front: front.join(" ") };
 }
 
-function RowLine({ columns }: { columns: number }) {
+function RowLine({ columns, count }: { columns: number; count: number }) {
   const ref = useRef<SVGSVGElement | null>(null);
   const [width, setWidth] = useState(0);
 
@@ -227,7 +228,12 @@ function RowLine({ columns }: { columns: number }) {
     return () => observer.disconnect();
   }, []);
 
-  const paths = useMemo(() => (width > 0 ? buildRowPath(width, columns) : null), [width, columns]);
+  const paths = useMemo(() => {
+    if (width <= 0) return null;
+    // A short last row is centred rather than left-aligned.
+    const slots = Array.from({ length: count }, (_, i) => (columns - count) / 2 + i + 0.5);
+    return buildRowPath(width, columns, slots);
+  }, [width, columns, count]);
   const viewBox = `0 0 ${width || 1} ${LINE_HEIGHT}`;
 
   return (
@@ -341,9 +347,15 @@ export function EventsTimeline({ children, perRow = DEFAULT_EVENTS_PER_ROW }: Ev
             className={`events-row${rowIndex % 2 === 1 ? " events-row-rtl" : ""}${
               rowIndex < rows.length - 1 ? " events-row-connected" : ""
             }${rowIndex > 0 ? " events-row-continued" : ""}`}
-            style={{ "--ev-cols": perRow } as CSSProperties}
+            style={
+              {
+                "--ev-cols": perRow,
+                // A short last row is centred: double-width tracks let cards sit on half-column offsets.
+                ...(row.length < perRow && { gridTemplateColumns: `repeat(${perRow * 2}, 1fr)` }),
+              } as CSSProperties
+            }
           >
-            <RowLine columns={perRow} />
+            <RowLine columns={perRow} count={row.length} />
             {rowIndex < rows.length - 1 && (
               <svg
                 className="events-row-turn"
@@ -357,7 +369,7 @@ export function EventsTimeline({ children, perRow = DEFAULT_EVENTS_PER_ROW }: Ev
                 />
               </svg>
             )}
-            {row.map(({ event, index }) => (
+            {row.map(({ event, index }, slot) => (
               <li
                 key={event.title}
                 className="events-timeline-item"
@@ -366,6 +378,9 @@ export function EventsTimeline({ children, perRow = DEFAULT_EVENTS_PER_ROW }: Ev
                     "--ev-c": CARD_COLORS[index % CARD_COLORS.length],
                     "--ev-ink": CARD_INKS[index % CARD_INKS.length],
                     "--ev-tilt": `${CARD_TILTS[index % CARD_TILTS.length]}deg`,
+                    ...(row.length < perRow && {
+                      gridColumn: `${slot * 2 + (perRow - row.length) + 1} / span 2`,
+                    }),
                   } as CSSProperties
                 }
               >
