@@ -4,7 +4,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { PMOS_TOTAL } from "./pmosContinentStats";
-import { MicrobeBackdrop } from "./MicrobeBackdrop";
 import { useFallingM } from "./useFallingM";
 
 const COUNT_DURATION_MS = 2000;
@@ -70,10 +69,9 @@ export function PmosOverview() {
   return (
     <section
       ref={sectionRef}
-      className="pmos-overview home-snap-screen home-section--wave-top"
+      className="pmos-overview home-snap-screen"
       data-snap=""
     >
-      <MicrobeBackdrop count={4} seed={1} />
       <div
         className={
           "pmos-counter" +

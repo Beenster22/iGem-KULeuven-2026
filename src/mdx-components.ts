@@ -48,9 +48,9 @@ import { Roadmap } from "./components/Roadmap";
 import { GlossaryTerm } from "./components/GlossaryTerm";
 import { Checklist } from "./components/Checklist";
 import { Medal } from "./components/Medal";
+import { PrizeStar } from "./components/PrizeStar";
 import { PhasePager } from "./components/PhasePager";
 import { IntegrationSummary, IntegrationPoint } from "./components/IntegrationSummary";
-import { MicrobeBackdrop } from "./components/MicrobeBackdrop";
 import { TwoGutsSection } from "./components/TwoGutsSection";
 import {
   StoryScrollSection,
@@ -160,10 +160,10 @@ export const mdxComponents = {
   GlossaryTerm,
   Checklist,
   Medal,
+  PrizeStar,
   PhasePager,
   IntegrationSummary,
   IntegrationPoint,
-  MicrobeBackdrop,
   TwoGutsSection,
   StoryScrollSection,
   StoryStatement,

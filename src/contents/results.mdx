@@ -20,7 +20,7 @@
         Three antibiotics inhibit <em>P. vulgatus</em>
       </SuccessCard>
       <SuccessCard to="a-characterized-promoter-library-for-p-vulgatus">
-        A 20/20 promoter library
+        A promoter/reporter library
       </SuccessCard>
       <SuccessCard to="screening-bsh-activity-on-bile-salt-plates">
         BSH activity on bile salt plates
@@ -164,7 +164,7 @@ The type strain is used as a reference strain, as it is the only member with a c
         so its row is marked rather than left to be picked out by eye. */}
     <tr className="table-row-highlight">
       <td>DSM 1447 / ATCC 8482 (type strain)</td>
-      <td>Human faeces</td>
+      <td>Faeces</td>
       <td>Complete</td>
       <td>
         <a
@@ -185,7 +185,7 @@ The type strain is used as a reference strain, as it is the only member with a c
     </tr>
     <tr>
       <td>DSM 108222 (H4_2)</td>
-      <td>Human faeces (UK)</td>
+      <td>Faeces (UK)</td>
       <td>Shotgun</td>
       <td>
         <a
@@ -205,7 +205,7 @@ The type strain is used as a reference strain, as it is the only member with a c
     </tr>
     <tr>
       <td>DSM 108228 (H5_1)</td>
-      <td>Human faeces</td>
+      <td>Faeces</td>
       <td>Draft</td>
       <td>
         <a
@@ -222,7 +222,7 @@ The type strain is used as a reference strain, as it is the only member with a c
     </tr>
     <tr>
       <td>DSM 108234 (H6_5)</td>
-      <td>Human faeces (UK)</td>
+      <td>Faeces (UK)</td>
       <td>Draft</td>
       <td>
         <a
@@ -247,8 +247,8 @@ The type strain is used as a reference strain, as it is the only member with a c
       <td>/</td>
     </tr>
     <tr>
-      <td>RCC1806 (direct faecal isolate)</td>
-      <td>Raes lab</td>
+      <td>RCC1806</td>
+      <td>Faeces (Raes lab)</td>
       <td>None</td>
       <td>–</td>
       <td>Unpublished</td>
@@ -1562,6 +1562,143 @@ ampicillin by EUCAST.
 
 </ResultSection>
 
+{/* Conjugation section added with Claude Sonnet 5.5 (Anthropic), 2026-10-20, from the team's document "Toolkit - part 5 - Conjugation analysis"; the erythromycin caveat is the team's own text, raised out of the running text as its own callout. */}
+
+<ResultSection>
+
+### Conjugation into _P. vulgatus_
+
+<div className="results-standfirst">
+  Conjugation efficiency into six <em>P. vulgatus</em> strains, tested over three
+  DBTL cycles.
+</div>
+
+#### Major takeaways
+
+<KeyTakeaways>
+  <Takeaway>
+    DSM1447 and RCC1806 yielded the most colonies after conjugation, at more than
+    10⁷ CFU/mL.
+  </Takeaway>
+  <Takeaway>
+    DSM108228, DSM108222 and DSM3289 were less efficient, between 10⁴ and 10⁷
+    CFU/mL; DSM108234 was the least efficient, below 10⁴ CFU/mL.
+  </Takeaway>
+  <Takeaway>
+    Fluorescence microscopy gave no clear result, possibly because
+    autofluorescence interfered with KOFP-7, and the execution of the experiment
+    also went poorly.
+  </Takeaway>
+  <Takeaway>
+    These efficiencies must be read with the erythromycin caveat below: some
+    counted colonies may be false positives.
+  </Takeaway>
+</KeyTakeaways>
+
+#### Introduction
+
+Our goal is to target the most active bile salt hydrolase (BSH) via CRISPRi, which requires the CRISPR construct to be present in _P. vulgatus_. One method is conjugation: _E. coli_ S17-1 λpir transfers the CRISPR plasmid to _P. vulgatus_, where it integrates into the genome and expresses the CRISPR system. As the CRISPR construct was not yet developed, pNBU2 was used as the plasmid for conjugation. Three cycles were run: a pilot into the type strain, an extension to the clinical isolates, and a final conjugation for all six strains.
+
+<ExpandableText title="The pNBU2 construct" tocIgnore>
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/figure1-pnbu2-map.avif"
+    alt="Plasmid map of pNBU2 carrying KOFP-7, ermG and the IntN2 integrase."
+  />
+  <div className="figure-caption">
+    Figure 1. pNBU2 containing the reporter gene KOFP-7 downstream of a rhamnose-inducible promoter, a resistance cassette against erythromycin (ermG), and the IntN2 integrase for integration into the <em>P. vulgatus</em> genome.
+  </div>
+</figure>
+
+pNBU2 is a suicide plasmid in _Bacteroides_: it cannot replicate, so a colony that survives erythromycin selection should be one in which the plasmid integrated[^conj-wang].
+
+</ExpandableText>
+
+#### Results
+
+##### The pilot conjugation into DSM1447
+
+The first conjugation transferred pNBU2 from _E. coli_ S17-1 λpir into _P. vulgatus_ DSM1447. Colonies grew on mGAM + Gm + Ery, and amplification of a ParB-like gene (BVU_RS10845) confirmed that they were _P. vulgatus_. An _E. coli_ S17-1 λpir colony served as the negative control. Single colonies were only resolvable at 10⁻⁵ to 10⁻⁸, so the next cycle used only these dilutions.
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/figure2-pilot-dsm1447.avif"
+    alt="Pilot conjugation into DSM1447: plates at four dilution ranges, six re-streaked colonies and the ParB-like gene gel."
+  />
+  <div className="figure-caption">
+    Figure 2. Pilot conjugation into DSM1447: A) dilutions 10⁻¹–10⁻⁴, B) dilutions 10⁻⁵–10⁻⁸, C) six colonies plated over on mGAM + Gm + Ery, D) gel electrophoresis of the ParB-like gene from those six colonies, with <em>E. coli</em> S17-1 λpir as negative control.
+  </div>
+</figure>
+
+##### Extending to the clinical isolates
+
+Conjugation into RCC1806, DSM3289 and DSM108222 was successful, while no colonies appeared for DSM108234 and DSM108228. They may simply have been diluted too much, so the next cycle plated every dilution from 10⁻¹ to 10⁻⁸.
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/figure2b-clinical-isolates-extension.avif"
+    alt="Plates from the conjugation into the clinical isolates."
+  />
+  <div className="figure-caption">
+    Figure 2b. Conjugation into the clinical isolates, dilutions 10⁻⁵–10⁻⁸: A) RCC1806, B) DSM108228 (top) and DSM3289 (bottom), C) DSM108234 (top) and DSM108222 (bottom).
+  </div>
+</figure>
+
+##### Conjugation into all six strains
+
+All conjugations were successful. Differences between strains are visible by eye, for instance RCC1806 shows more colonies than DSM108234, and efficiency can be quantified as average colony forming units (CFU) per mL.
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/figure3-all-six-strains.avif"
+    alt="Plates of the conjugation into all six strains and the 16S rDNA PCR gel."
+  />
+  <div className="figure-caption">
+    Figure 3. Plates of the final conjugation for all six strains (dilutions 10⁻¹–10⁻⁸), the negative controls, and the gel of the 16S rDNA PCR products.
+  </div>
+</figure>
+
+**Efficiency spans five orders of magnitude.** DSM1447 and RCC1806 conjugate most efficiently, generating the most colonies. DSM108228, DSM108222, DSM3289 and DSM108234 are less efficient, in that order.
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/figure4-conjugation-efficiency.avif"
+    alt="Conjugation efficiency per P. vulgatus strain in CFU/mL on a logarithmic axis."
+  />
+  <div className="figure-caption">
+    Figure 4. Conjugation efficiency per strain (CFU/mL, logarithmic axis). Lines show the standard deviation; those of DSM1447 and RCC1806 are large because of the variability between dilutions.
+  </div>
+</figure>
+
+<Callout title="Important: the selection plates may have let false positives through" kind="warning" raised>
+
+Our MIC data, which became available after these cycles were run, exposed an error in the design. The plates carried 25 µg/mL erythromycin, while RCC1806 has an IC<sub>90%</sub> of 256 µg/mL and DSM1447 has an IC<sub>90%</sub> of 4 µg/mL. RCC1806 can therefore grow on the selection plates without ever receiving the pNBU2 plasmid, so colonies counted as transconjugants may include false positives.
+
+Antibiotic susceptibility was not tested for the other strains, but they may have a similar IC<sub>90%</sub>. To verify the plasmid, and so the false positives, integration should have been checked. We did not do this, because pNBU2 is a suicide plasmid: we assumed _P. vulgatus_ could not grow on mGAM + Gm + Ery without it. The MIC data show this assumption is wrong for RCC1806, and possibly for the other clinical isolates too.
+
+**Treat the conjugation efficiencies above with extreme caution.** Future work should check integration, or at least determine erythromycin susceptibility for every strain and use a concentration above the MIC on the plates.
+
+</Callout>
+
+<ExpandableText title="Strains, conjugation and verification" tocIgnore>
+
+**Donor.** _E. coli_ S17-1 λpir[^conj-simon].
+
+**Recipients.** _P. vulgatus_ DSM1447 as the type strain, the isolates RCC1806, DSM108222, DSM108234 and DSM108228 (all human faeces) and DSM3289 (retroperitoneal abscess). RCC1806 is a faecal isolate from the Raes lab, obtained via Ruben Vazquez Uribe.
+
+**Conjugation.** Donor and recipients were grown overnight in LB or mGAM respectively, mixed, and plated on mGAM + gentamicin (200 µg/mL) + erythromycin (25 µg/mL). Erythromycin selected for cells carrying the plasmid via ermG; gentamicin counter-selected against _E. coli_[^conj-elkhoury].
+
+**Verification.** A ParB-like gene (BVU_RS10845, 542 bp; forward CCTTGATATTACCACCGTGC, reverse CCTTGTTGTCTGACTTGAGG) was amplified to confirm DSM1447, and the 16S rDNA (1491 bp; forward AGAGTTTGATCCTGGCTCAG, reverse ACGGCTACCTTGTTACGACTT) was amplified, sequenced by Sanger sequencing and blasted to confirm the clinical isolates. Integration of pNBU2 was not verified by PCR, see the caveat above.
+
+</ExpandableText>
+
+#### DBTL cycles
+
+Three DBTL cycles were performed of the conjugation, and two of the fluorescence microscopy used to detect the plasmid through KOFP-7 expression.
+
+</ResultSection>
+
 <ResultSection>
 
 ### A characterized promoter library for _P. vulgatus_
@@ -1698,8 +1835,6 @@ Placeholder — what the library gives a future team.
 {/* The team's figure of the therapeutics pipeline, added with Claude Opus 5 (Anthropic), 2026-10-19: its five numbered steps are clickable — 1-4 open that step's write-up underneath, 5 sends the reader to the conjugation section of the Toolkit wheel above. Text from the team's "Experimental overview of therapeutics" document. */}
 
 <TherapeuticsOverview />
-
-<div className="all-data-label">All data</div>
 
 </ResultSection>
 
@@ -2177,6 +2312,9 @@ For additional information about risk and safety see the <Link to="/safety-and-s
 [^growth-wc]: Wilkins, T. D., & Chalgren, S. (1976). Medium for use in antibiotic susceptibility testing of anaerobic bacteria. Antimicrobial Agents and Chemotherapy, 10(6), 926–928. https://doi.org/10.1128/AAC.10.6.926
 
 [^growth-gibbons]: Gibbons, R. J., & Macdonald, J. B. (1960). Hemin and vitamin K compounds as required factors for the cultivation of certain strains of _Bacteroides melaninogenicus_. Journal of Bacteriology, 80(2), 164–170.
+[^conj-wang]: Wang, J., Shoemaker, N. B., Wang, G.-R., & Salyers, A. A. (2000). Characterization of a Bacteroides mobilizable transposon, NBU2, which carries a functional lincomycin resistance gene. Journal of Bacteriology, 182(12), 3559–3571. https://doi.org/10.1128/JB.182.12.3559-3571.2000
+[^conj-simon]: Simon, R., Priefer, U., & Pühler, A. (1983). A broad host range mobilization system for in vivo genetic engineering: Transposon mutagenesis in Gram negative bacteria. Bio/Technology, 1(9), 784–791. https://doi.org/10.1038/nbt1183-784
+[^conj-elkhoury]: El Khoury, J. Y., Zamarreño Beas, J., Huguenot, A., Py, B., & Barras, F. (2023). Bioenergetic state of Escherichia coli controls aminoglycoside susceptibility. mBio, 14(1), e03302-22. https://doi.org/10.1128/mbio.03302-22
 
 [^growth-bh]: Benjamini, Y., & Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. Journal of the Royal Statistical Society, Series B, 57(1), 289–300.
 

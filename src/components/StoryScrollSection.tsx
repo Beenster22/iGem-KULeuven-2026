@@ -33,7 +33,7 @@ import {
   type RefObject,
 } from "react";
 import { useReducedMotion } from "framer-motion";
-import { SnapSteps, StepBorder } from "./HomeSnapScroll";
+import { SnapSteps } from "./HomeSnapScroll";
 import { usePinnedStep } from "./usePinnedStep";
 import { useLensToGutWindow } from "./useLensToGutWindow";
 import { MicrobeLens } from "./TwoGutsSection";
@@ -865,7 +865,6 @@ export function StoryScrollSection() {
       >
         {/* A border passing as each screen gives way to the next (team
             request, 2026-10-20: a border between every section). */}
-        {!prefersReducedMotion && <StepBorder step={step} />}
         {STEPS.map((entry, i) => {
           const state = prefersReducedMotion
             ? "active"

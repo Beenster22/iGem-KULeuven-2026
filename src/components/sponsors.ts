@@ -59,7 +59,7 @@ export const SPONSORS: Sponsor[] = [
     tier: "gold",
   },
   {
-    name: "Merck Healthcare & Fertility",
+    name: "Merck nv/sa, Medical Department Fertility",
     tier: "silver",
   },
   {

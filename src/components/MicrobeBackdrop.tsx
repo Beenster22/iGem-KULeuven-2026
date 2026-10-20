@@ -1,9 +1,17 @@
 // Generated with Claude Opus 5.5 (Anthropic), 2026-09-24
 // Purpose: decorative layer of faint, slowly drifting bacteria and bile-acid
-// hexagons (the BacteriumIcons.tsx set) kept to the left/right margins of a
-// full-bleed home-page band, so wide screens don't look empty beside the
-// centred content. Drop it as the first child of any .home-section (or
-// .pmos-overview); styles live under MICROBE BACKDROP in App.css.
+// hexagons (the DiagramIcons.tsx set) behind the home page's story.
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-21 (team requests: a
+// smooth background layer of bacteria all over, not just down the sides,
+// and smoother scrolling): one layer fixed to the screen behind every band,
+// instead of a copy in each band, with the swooshes on it too. (The
+// bacteria were spread over the whole width for a while; back down the
+// sides the same day, team request.) It only ever moves by transforms and
+// opacity, worked out from two numbers set on it alone (--sweep and
+// --whoosh, by useBackdropApproach in HomeSnapScroll.tsx), so scrolling
+// never makes the browser restyle or repaint the rest of the page. Rendered
+// once, by HomeSnapScroll; styles under MICROBE BACKDROP in App.css.
+import { createPortal } from "react-dom";
 import {
   BileAcidIcon,
   OtherBacteriumIcon,
@@ -17,33 +25,35 @@ function seededValue(seed: number) {
   return x - Math.floor(x);
 }
 
-const OTHER_VARIANTS: OtherBacteriumVariant[] = ["rod", "short-rod", "coccus"];
+const OTHER_VARIANTS: OtherBacteriumVariant[] = ["rod", "curved", "wavy", "cocci"];
 
-interface MicrobeBackdropProps {
-  // Items per side. Taller bands can take more without looking crowded.
-  count?: number;
-  // Changes the arrangement so neighbouring bands don't look identical.
-  seed?: number;
-}
+// Edited 2026-10-21 (team request: only down the sides again): in the
+// left and right margins, alternating, in evenly spaced rows down one
+// screen with a little jitter, so the words have the middle to themselves.
+// Items per side.
+const PER_SIDE = 9;
+const FIELD_SEED = 3;
 
-export function MicrobeBackdrop({ count = 5, seed = 1 }: MicrobeBackdropProps) {
-  const items = Array.from({ length: count * 2 }, (_, i) => {
-    const s = seed * 100 + i;
+// The swooshes: three sheets of streaks, each scrolling at its own speed
+// (see .microbe-backdrop-swoosh--* in App.css).
+const SWOOSHES = ["a", "b", "c"];
+
+export function MicrobeBackdrop() {
+  const items = Array.from({ length: PER_SIDE * 2 }, (_, i) => {
+    const s = FIELD_SEED * 100 + i;
     const side = i % 2 === 0 ? "left" : "right";
     const row = Math.floor(i / 2);
-    // Evenly spaced rows with jitter, so each side is covered top to bottom.
-    const top = ((row + 0.2 + seededValue(s + 1) * 0.6) / count) * 100;
-    const inset = 1 + seededValue(s + 2) * 9; // % from that side's edge
+    // % in from that side's edge.
+    const inset = 1.5 + seededValue(s + 2) * 11;
+    const top = (row + 0.2 + seededValue(s + 1) * 0.6) / PER_SIDE;
     const kind = seededValue(s + 3);
-    // Where it sits and how near it is, on a mover that carries it across
-    // the screen as the reader scrolls (team request, 2026-10-20: the
-    // passage through the gut; see useBackdropApproach in
-    // HomeSnapScroll.tsx). Nearer ones (--depth) travel further and are
-    // larger. The sweep and its whoosh go on the mover, so they run left
-    // to right on the screen whichever way the item itself is turned.
+    // Where it starts (--y0, a share of the screen's height) and how near
+    // it is: nearer ones (--depth) travel faster and are larger. The sweep
+    // goes on the mover, so it runs down the screen whichever way the item
+    // itself is turned.
     const place = {
-      top: `${top}%`,
-      [side]: `${inset}%`,
+      "--y0": top.toFixed(4),
+      [side]: `${inset.toFixed(2)}%`,
       "--depth": (0.4 + seededValue(s + 9) * 0.6).toFixed(2),
     } as React.CSSProperties;
     // Its own turn and slow float, on the item itself.
@@ -53,10 +63,12 @@ export function MicrobeBackdrop({ count = 5, seed = 1 }: MicrobeBackdropProps) {
       animationDelay: `${-seededValue(s + 6) * 20}s`,
     } as React.CSSProperties;
 
+    // A little over a third are bile acids, the gut metabolites the page
+    // is about.
     let icon;
-    if (kind < 0.3) {
+    if (kind < 0.25) {
       icon = <PVulgatusIcon className="microbe-backdrop-item microbe-backdrop-item--pv" style={style} />;
-    } else if (kind < 0.6) {
+    } else if (kind < 0.62) {
       icon = (
         <BileAcidIcon
           className="microbe-backdrop-item microbe-backdrop-item--hex"
@@ -80,9 +92,18 @@ export function MicrobeBackdrop({ count = 5, seed = 1 }: MicrobeBackdropProps) {
     );
   });
 
-  return (
+  return createPortal(
     <div className="microbe-backdrop" aria-hidden="true">
+      <div className="microbe-backdrop-swooshes">
+        {SWOOSHES.map((name) => (
+          <div
+            key={name}
+            className={`microbe-backdrop-swoosh microbe-backdrop-swoosh--${name}`}
+          />
+        ))}
+      </div>
       {items}
-    </div>
+    </div>,
+    document.body,
   );
 }

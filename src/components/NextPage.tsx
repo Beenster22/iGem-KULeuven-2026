@@ -18,7 +18,7 @@ export function NextPage({ currentPath }: { currentPath: string }) {
   const next = getPathMapping()[nextPath];
 
   return (
-    <nav className="next-page container" aria-label="Next page">
+    <nav className="next-page" aria-label="Next page">
       <Link to={nextPath} className="btn-empower next-page-link">
         <span className="next-page-text">
           <span className="next-page-kicker">

@@ -10,6 +10,7 @@ import { NotFound } from "../../components/NotFound";
 import { Footer } from "../../components/Footer";
 import { PageShell } from "../../components/PageShell";
 import { PageSkeleton } from "../../components/PageSkeleton";
+import { PageErrorBoundary } from "../../components/PageErrorBoundary";
 import { ReadingProgressBar } from "../../components/ReadingProgressBar";
 import { NextPage } from "../../components/NextPage";
 import { BackToTop } from "../../components/BackToTop";
@@ -143,11 +144,13 @@ const App = () => {
                     <h1 className="visually-hidden">EMPOWER: iGEM KU Leuven 2026</h1>
                     <HomeHero />
                     <main id="main-content" tabIndex={-1} className="page-body page-body--home">
+                      <PageErrorBoundary key={currentPath}>
                       <Suspense fallback={<PageSkeleton />}>
                         <PageShell hideIndex>
                           <Component />
                         </PageShell>
                       </Suspense>
+                      </PageErrorBoundary>
                     </main>
                   </>
                 }
@@ -167,11 +170,13 @@ const App = () => {
                       folder={folder}
                     />
                     <main id="main-content" tabIndex={-1} className="page-body">
+                      <PageErrorBoundary key={currentPath}>
                       <Suspense fallback={<PageSkeleton />}>
-                        <PageShell>
+                        <PageShell end={<NextPage currentPath={path} />}>
                           <Component />
                         </PageShell>
                       </Suspense>
+                      </PageErrorBoundary>
                     </main>
                   </>
                 }
@@ -193,8 +198,6 @@ const App = () => {
           }
         />
       </Routes>
-
-      {!isHome && <NextPage currentPath={currentPath} />}
 
       {/* Footer */}
       {/* MUST mention license AND have a link to team wiki's repository on gitlab.igem.org */}

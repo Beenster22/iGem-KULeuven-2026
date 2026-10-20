@@ -75,8 +75,15 @@ function Wheel({
     <svg viewBox="-60 -2 574 574" className="dbtl-wheel" role="group" aria-label="Design, Build, Test, Learn cycle">
       <g
         className="dbtl-wheel-spinner"
-        style={{ transform: `rotate(${spin}deg)`, transformOrigin: `${CENTRE_X}px ${CENTRE_Y}px` }}
+        style={{ transform: `rotate(${spin}deg)` }}
       >
+        {/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-21: an unpainted
+            circle the size of the viewBox, so the group's own box is centred
+            on the wheel. The spinner turns about that box's centre (see
+            .dbtl-wheel-spinner), the same in every browser; Safari placed a
+            px transform-origin on an SVG group differently and the wheel
+            swung off-centre as it turned. */}
+        <circle cx={CENTRE_X} cy={CENTRE_Y} r={287} fill="none" pointerEvents="none" />
         {STAGES.map((s) => {
           const on = s.name === active;
           return (

@@ -80,8 +80,10 @@ export function Navbar() {
   const { pathname: currentPath } = useLocation();
   // Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request,
   // phones): the collapsed menu is controlled here so it can close itself
-  // once a page is picked.
+  // once a page is picked, and the bar slides away while reading (down) and
+  // returns on the way back up (see .navbar-auto-hide in App.css).
   const [expanded, setExpanded] = useState(false);
+  const [hidden, setHidden] = useState(false);
 
   // Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request:
   // color-code the top-level folders — see Header.tsx's matching data-folder
@@ -140,6 +142,18 @@ export function Navbar() {
   useEffect(() => {
     setExpanded(false);
   }, [currentPath]);
+
+  useEffect(() => {
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (Math.abs(y - lastY) < 8) return;
+      setHidden(y > lastY && y > 80);
+      lastY = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -248,7 +262,12 @@ export function Navbar() {
     // Purpose: wrapping ref lets the click-outside handler below detect
     // clicks anywhere outside the navbar + mega-menu, regardless of their
     // fixed positioning.
-    <div ref={navRef}>
+    <div
+      ref={navRef}
+      className={
+        hidden && !expanded && openMenu === null ? "navbar-auto-hide is-hidden" : "navbar-auto-hide"
+      }
+    >
       <BootstrapNavbar
         expand="lg"
         expanded={expanded}
