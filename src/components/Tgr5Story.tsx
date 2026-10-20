@@ -808,21 +808,34 @@ const ZOOM_BOX = [
   ZOOM_VIEW,
 ].join(" ");
 
-// A small burst around the receptor once it has arrived, to say it is the
-// thing being pointed at (team request, 2026-10-20). Ten thin strokes
-// standing off it, clear of the helices' own reach.
-const RAY_COUNT = 10;
-const RAY_NEAR = 34;
-const RAY_FAR = 46;
+// A burst around the receptor once it has arrived, to say it is the thing
+// being pointed at (team request, 2026-10-20): the drawn-on lines of a
+// comic panel. Each is a sliver tapering to a point at the receptor and
+// widening as it goes out, so they read as coming from it. Their lengths
+// and widths vary, which is what keeps them from looking like a cog.
+const RAY_COUNT = 56;
+const RAY_NEAR = 31;
+
+// A settled, repeatable scatter: the same burst on every visit.
+const rayWobble = (n: number, salt: number) =>
+  (Math.sin(n * 12.9898 + salt) * 43758.5453) % 1;
+
 const RAYS = Array.from({ length: RAY_COUNT }, (_, i) => {
   const turn = ((i + 0.5) / RAY_COUNT) * 2 * Math.PI;
-  const dx = Math.cos(turn);
-  const dy = Math.sin(turn);
+  const far = 43 + Math.abs(rayWobble(i, 1.7)) * 13;
+  const half = (0.9 + Math.abs(rayWobble(i, 4.2)) * 1.5) * (Math.PI / 180);
+  const at = (angle: number, radius: number) =>
+    `${(GUT_RECEPTOR_X + Math.cos(angle) * radius).toFixed(2)},${(
+      GUT.top +
+      Math.sin(angle) * radius
+    ).toFixed(2)}`;
   return {
-    x1: GUT_RECEPTOR_X + dx * RAY_NEAR,
-    y1: GUT.top + dy * RAY_NEAR,
-    x2: GUT_RECEPTOR_X + dx * RAY_FAR,
-    y2: GUT.top + dy * RAY_FAR,
+    key: i,
+    points: [
+      at(turn, RAY_NEAR),
+      at(turn - half, far),
+      at(turn + half, far),
+    ].join(" "),
   };
 });
 
@@ -837,13 +850,7 @@ function Tgr5ReceptorCloseUp() {
     >
       <g className="tgr5-zoom-rays" aria-hidden="true">
         {RAYS.map((ray) => (
-          <line
-            key={ray.x1 + "," + ray.y1}
-            x1={ray.x1}
-            y1={ray.y1}
-            x2={ray.x2}
-            y2={ray.y2}
-          />
+          <polygon key={ray.key} points={ray.points} />
         ))}
       </g>
       <ReceptorShape x={GUT_RECEPTOR_X} y={GUT.top} />
