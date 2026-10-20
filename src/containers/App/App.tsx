@@ -2,13 +2,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { getPathMapping } from "../../utils";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, Suspense, useEffect, useState } from "react";
 import { Navbar } from "../../components/Navbar";
 import { Header } from "../../components/Header";
 import { HomeHero } from "../../components/HomeHero";
 import { NotFound } from "../../components/NotFound";
 import { Footer } from "../../components/Footer";
 import { PageShell } from "../../components/PageShell";
+import { PageSkeleton } from "../../components/PageSkeleton";
 import { ReadingProgressBar } from "../../components/ReadingProgressBar";
 import { BackToTop } from "../../components/BackToTop";
 import { ThemeModeProvider } from "../../ThemeModeContext";
@@ -90,6 +91,21 @@ const App = () => {
 
   return (
     <ThemeModeProvider>
+      {/* First tab stop on every page: jumps past the navbar to the content.
+          Handled here, not as a #hash link, so the URL stays clean. */}
+      <a
+        className="skip-link visually-hidden-focusable"
+        href="#main-content"
+        onClick={(event) => {
+          event.preventDefault();
+          const main = document.getElementById("main-content");
+          main?.focus({ preventScroll: true });
+          main?.scrollIntoView();
+        }}
+      >
+        Skip to main content
+      </a>
+
       {/* Navigation */}
       {(!isHome || navRevealed) && <Navbar />}
       {!isHome && <ReadingProgressBar />}
@@ -121,11 +137,16 @@ const App = () => {
                 path={path}
                 element={
                   <>
+                    {/* The hero is an animation, so the page's one h1 is
+                        for assistive technology only. */}
+                    <h1 className="visually-hidden">EMPOWER: iGEM KU Leuven 2026</h1>
                     <HomeHero />
-                    <main className="page-body page-body--home">
-                      <PageShell hideIndex>
-                        <Component />
-                      </PageShell>
+                    <main id="main-content" tabIndex={-1} className="page-body page-body--home">
+                      <Suspense fallback={<PageSkeleton />}>
+                        <PageShell hideIndex>
+                          <Component />
+                        </PageShell>
+                      </Suspense>
                     </main>
                   </>
                 }
@@ -144,10 +165,12 @@ const App = () => {
                       specialPrize={specialPrize}
                       folder={folder}
                     />
-                    <main className="page-body">
-                      <PageShell>
-                        <Component />
-                      </PageShell>
+                    <main id="main-content" tabIndex={-1} className="page-body">
+                      <Suspense fallback={<PageSkeleton />}>
+                        <PageShell>
+                          <Component />
+                        </PageShell>
+                      </Suspense>
                     </main>
                   </>
                 }
@@ -162,7 +185,7 @@ const App = () => {
                 title="Not Found"
                 lead="The requested URL was not found on this server."
               />
-              <main className="page-body">
+              <main id="main-content" tabIndex={-1} className="page-body">
                 <NotFound />
               </main>
             </>

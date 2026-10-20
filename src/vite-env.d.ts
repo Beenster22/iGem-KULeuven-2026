@@ -13,8 +13,7 @@ interface ImportMeta {
 // Generated with Claude Opus 5.5 (Anthropic), 2026-10-14
 // Purpose: the full-text search index built by src/search/searchIndexPlugin.ts.
 declare module "virtual:search-index" {
-  import type { FC } from "react";
   import type { SearchSection } from "./search/searchIndexPlugin";
-  const pages: { component: FC; sections: SearchSection[] }[];
+  const pages: { file: string; sections: SearchSection[] }[];
   export default pages;
 }

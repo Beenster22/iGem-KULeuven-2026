@@ -5,8 +5,9 @@
 // (JSX tags, markdown syntax, comments and reference definitions removed).
 // The index is served as the virtual module "virtual:search-index", which the
 // search dialog only loads the first time it is opened. Each page is linked
-// to its route through its MDX component, so pages.ts stays the single place
-// where paths are defined.
+// to its route through its file name (the `file` of its entry in
+// src/contents/index.tsx), so pages.ts stays the single place where paths
+// are defined.
 import { readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import type { Plugin } from "vite";
@@ -32,7 +33,24 @@ export interface SearchSection {
 // Components whose title prop is rendered as a heading on the page.
 const TITLED_CONTAINERS = ["ExpandableText", "NotebookDropdown", "NotebookSection"];
 // String props whose values are visible text worth searching.
-const TEXT_PROPS = ["title", "label", "subtitle", "name", "role", "caption", "alt"];
+const TEXT_PROPS = ["title", "label", "subtitle", "name", "role", "caption", "alt", "summary", "location", "date"];
+// Long text passed as a JavaScript string, caption={"..."}, which the plain
+// prop pattern above does not see.
+const JS_STRING_PROPS = ["caption", "summary", "description"];
+// Components built from a title or label prop that the page does not render
+// as a heading (event cards, Instagram posts, article and video slots, tabs)
+// but that readers still search for by name. Each becomes a section of its
+// own. `anchored` ones carry an element id equal to the slug of their title
+// (EventsTimeline, ScienceCommunication), which the search jumps to; the rest
+// fall back to the section they sit in. `container` ones hold the content
+// that follows them, like a dropdown.
+const ITEM_TAGS: Record<string, { prop: string; anchored: boolean; container: boolean }> = {
+  EventEntry: { prop: "title", anchored: true, container: false },
+  InstagramPost: { prop: "title", anchored: true, container: false },
+  VideoSlot: { prop: "title", anchored: false, container: false },
+  Publication: { prop: "label", anchored: false, container: false },
+  TabSection: { prop: "label", anchored: false, container: true },
+};
 
 function stripInlineMarkup(text: string): string {
   return text
@@ -48,11 +66,12 @@ function stripInlineMarkup(text: string): string {
     .trim();
 }
 
-// The text of a component's title prop: title="..." or title={<>...</>}.
-function readTitle(tag: string): string | null {
-  const quoted = tag.match(/\btitle=(?:"([^"]*)"|'([^']*)')/);
+// The text of a component's title prop (or another named one, such as
+// label): title="..." or title={<>...</>}.
+function readTitle(tag: string, prop = "title"): string | null {
+  const quoted = tag.match(new RegExp(`\\b${prop}=(?:"([^"]*)"|'([^']*)')`));
   if (quoted) return quoted[1] ?? quoted[2];
-  const expression = tag.match(/\btitle=\{(.*?)\}\s*(?:\w+=|\/?>)/s);
+  const expression = tag.match(new RegExp(`\\b${prop}=\\{(.*?)\\}\\s*(?:\\w+=|\\/?>)`, "s"));
   if (expression) return stripInlineMarkup(expression[1].replace(/^["'`]|["'`]$/g, ""));
   return null;
 }
@@ -61,6 +80,14 @@ function readTextProps(tag: string): string {
   const values: string[] = [];
   const pattern = new RegExp(`\\b(?:${TEXT_PROPS.join("|")})="([^"]*)"`, "g");
   for (const match of tag.matchAll(pattern)) values.push(match[1]);
+  const jsPattern = new RegExp(`\\b(?:${JS_STRING_PROPS.join("|")})=\\{("(?:[^"\\\\]|\\\\.)*")\\}`, "g");
+  for (const match of tag.matchAll(jsPattern)) {
+    try {
+      values.push(JSON.parse(match[1]));
+    } catch {
+      values.push(match[1]);
+    }
+  }
   return values.join(" ");
 }
 
@@ -152,7 +179,14 @@ export function indexMdx(source: string): SearchSection[] {
         tag += " " + next;
       }
       const name = opening[1];
-      if (TITLED_CONTAINERS.includes(name)) {
+      const item = ITEM_TAGS[name];
+      if (item) {
+        const title = readTitle(tag, item.prop);
+        const anchor = item.anchored && title ? stringToSlug(title) || null : null;
+        if (item.container && !/\/>\s*$/.test(tag)) containers.push({ name, title, anchor: null });
+        if (title) startSection(title, anchor);
+        addText(readTextProps(tag));
+      } else if (TITLED_CONTAINERS.includes(name)) {
         const title = readTitle(tag);
         const anchor = title ? stringToSlug(title) || null : null;
         if (!/\/>\s*$/.test(tag)) containers.push({ name, title, anchor });
@@ -180,17 +214,16 @@ export function searchIndexPlugin(): Plugin {
     },
     load(id) {
       if (id !== RESOLVED_ID) return null;
-      const imports: string[] = [];
-      const entries: string[] = [];
-      mdxFiles().forEach((file, i) => {
+      const entries = mdxFiles().map((file) => {
         const path = resolve(contentsDir, file);
         this.addWatchFile(path);
-        imports.push(`import Page${i} from ${JSON.stringify(path.replace(/\\/g, "/"))};`);
-        entries.push(
-          `{ component: Page${i}, sections: ${JSON.stringify(indexMdx(readFileSync(path, "utf8")))} }`,
-        );
+        // Keyed by file name, not by the page's component: importing the pages
+        // here would pull every one of them into the search chunk and undo the
+        // per-page code splitting (see src/contents/index.tsx).
+        const name = file.replace(/\.mdx$/, "");
+        return `{ file: ${JSON.stringify(name)}, sections: ${JSON.stringify(indexMdx(readFileSync(path, "utf8")))} }`;
       });
-      return `${imports.join("\n")}\nexport default [\n${entries.join(",\n")}\n];\n`;
+      return `export default [\n${entries.join(",\n")}\n];\n`;
     },
     handleHotUpdate({ file, server }) {
       if (!file.endsWith(".mdx")) return;

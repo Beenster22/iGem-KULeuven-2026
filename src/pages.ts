@@ -20,6 +20,7 @@ import {
   ScienceCommunication,
   Sponsors,
 } from "./contents";
+import type { PageComponent } from "./contents";
 import {
   BlocksIcon,
   CalendarIcon,
@@ -59,7 +60,7 @@ class Page implements Base {
   name: string | undefined;
   title: string | undefined;
   path: string | undefined;
-  component: React.FC | undefined;
+  component: PageComponent | undefined;
   // Optional: pages whose lead has not been written yet show the title alone
   // (see Header.tsx) instead of iGEM's own judging prompt.
   lead?: string;

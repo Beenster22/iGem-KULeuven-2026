@@ -18,6 +18,27 @@
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EMPOWER</title>
+    <!-- Site-wide: this is one page that React fills in, and link previews
+         (Instagram, LinkedIn, Slack) read this file without running it, so
+         every page shares these. og:image is the wide logo still; some
+         crawlers can't read AVIF, so swap in a PNG/JPG upload if a preview
+         card comes up blank. -->
+    <meta
+      name="description"
+      content="EMPOWER, the 2026 iGEM KU Leuven project on polyendocrine metabolic ovarian syndrome (PMOS): why we went looking for its roots in the gut, and the tools and therapeutics we built for it."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="EMPOWER | iGEM KU Leuven 2026" />
+    <meta property="og:title" content="EMPOWER | iGEM KU Leuven 2026" />
+    <meta
+      property="og:description"
+      content="Why we went looking for the roots of PMOS in the gut, and the tools and therapeutics we built for it."
+    />
+    <meta
+      property="og:image"
+      content="https://static.igem.wiki/teams/6299/wiki/home-page/empower-logo-still-wide.avif"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
     <div id="root"></div>
