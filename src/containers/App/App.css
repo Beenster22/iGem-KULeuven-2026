@@ -5049,6 +5049,51 @@ body.home-fullscreen {
   background-color: var(--color-body-bg);
 }
 
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-20 (team request): one
+   colour for the whole home page — every band and the borders between them
+   — rather than bands that alternate with a border of their own. The two
+   swatches the team gave: the light purple the page already uses in light
+   mode, and a lighter purple than the near-black it used in dark mode.
+   Scoped to the home page's own classes, so the tokens these bands used to
+   read keep their meaning on every other page. */
+:root {
+  --color-home-band: #c9bde8;
+}
+
+[data-theme="dark"] {
+  --color-home-band: #4d3d63;
+}
+
+/* The waves between the bands take the other of the two swatches, so they
+   read against the band either way round (team request, 2026-10-20): the
+   lighter purple on the dark bands, the darker one on the light bands. */
+:root {
+  --color-band-border: #4d3d63;
+}
+
+[data-theme="dark"] {
+  --color-band-border: #c9bde8;
+}
+
+[data-theme="dark"] body,
+.home-section--page,
+.home-section--body,
+.home-section--contrast,
+[data-theme="light"] .home-section--page,
+[data-theme="dark"] .home-section--page,
+[data-theme="dark"] .home-section--contrast,
+[data-theme="dark"] .pmos-overview {
+  background-color: var(--color-home-band);
+}
+
+/* The band is the same lightness as the page's text colour expects in each
+   theme now, so this one takes the ordinary text colour rather than the
+   header pair it used when it was the one dark band in light mode. */
+.home-section--contrast,
+[data-theme="dark"] .home-section--contrast {
+  color: var(--color-text);
+}
+
 /* HOME SNAP SECTIONS
    Generated with Claude Opus 5.5 (Anthropic), 2026-10-05
    Purpose: every home-page section fills the screen, and the page settles on
@@ -6237,8 +6282,11 @@ body:not(.home-fullscreen) .home-hero {
   opacity: 0;
 }
 
+/* Edited 2026-10-20: the band is one colour in each theme now, so her
+   backing is that one colour rather than a token per theme. */
+.elle-tour-lady,
 [data-theme="dark"] .elle-tour-lady {
-  background-color: var(--color-body-bg);
+  background-color: var(--color-home-band);
 }
 
 .elle-tour-lady img {
