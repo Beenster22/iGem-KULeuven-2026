@@ -48,7 +48,7 @@ interface Effect {
 }
 
 // Labels as supplied by the team (2026-10-15).
-export const EFFECTS: Effect[] = [
+const EFFECTS: Effect[] = [
   {
     id: "hormonal",
     label: "Hormonal imbalance",
@@ -74,6 +74,12 @@ export const EFFECTS: Effect[] = [
     art: <BrainOrgan />,
   },
 ];
+
+// All four, in order, for the P. vulgatus screen at the end of the home
+// page, which clears them one by one (PvHeroStory.tsx). A copy, so this
+// file still only exports components and constants built by a call
+// (react-refresh).
+export const EFFECT_LIST = EFFECTS.slice();
 
 // Each circle's drawing by id, for Elle's tour of the body below
 // (ElleTour.tsx), which shows the same drawings close up.

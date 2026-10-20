@@ -31,7 +31,7 @@ import {
   type RefObject,
 } from "react";
 import { useReducedMotion } from "framer-motion";
-import { EFFECTS } from "./PmosEffectsSection";
+import { EFFECT_LIST } from "./PmosEffectsSection";
 import { BileAcidShape } from "./Tgr5Story";
 import { SnapSteps } from "./HomeSnapScroll";
 import { usePinnedStep } from "./usePinnedStep";
@@ -614,7 +614,7 @@ function PvCureFigure({
         fill={`url(#${glowId})`}
       />
 
-      {EFFECTS.map((effect, i) => {
+      {EFFECT_LIST.map((effect, i) => {
         const [x, y] = SYMPTOM_AT[i];
         const art = SYMPTOM_R * 1.25;
         return (
