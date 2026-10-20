@@ -30,20 +30,12 @@
 // to the circle of bacteria the same way.
 import { useEffect, type RefObject } from "react";
 import { navBottom } from "./useFallingM";
+import { ACID_SCALE } from "./Tgr5Story";
 
 /** The screen they arrive on, and the acids already drawn there. */
 const TGR5_STAGE = ".tgr5";
 const TGR5_SVG = ".tgr5-svg";
 const TGR5_ACID = ".tgr5-pool-acid";
-
-// The two diagrams' own coordinate spaces, for turning the sizes below into
-// a share of each drawing (see VB_W/HEX_R in the two components).
-const BSH_VB_W = 1000;
-const BSH_HEX_R = 11;
-// The binding diagram's own space (OV_W in Tgr5Story.tsx), and the radius
-// its acids end up drawn at there: a 12-unit hexagon scaled by ACID_SCALE.
-const TGR5_VB_W = 1000;
-const TGR5_HEX_R = 12 * 1.6;
 
 // The shapes are drawn at this radius and then scaled, so one set of points
 // serves both ends of the journey.
@@ -81,16 +73,11 @@ const BACTERIUM_BOTTOM = (72 + 116) / 300;
 // here: the TGR5 screen decides it (team request — work back from there),
 // so this reads its arrangement and carries it up, and the drop is that
 // same arrangement going home. Nothing is ever shuffled into place.
-const STATEMENT = ".story-step--single";
-// How far into the drift out they are done growing, as a share of that
-// leg (team request: they must already be the right size by the time
-// "But why is this reaction important?" is on the screen, not still
-// catching up on it).
-const SIZED_BY = 0.6;
-// Where they float while that sentence is up, as shares of the window: two
-// wide bands, one high and one low, across nearly the full width, leaving
-// the middle to the words (team request: over the whole screen, not
-// gathered into a strip). `n` of `total` spreads them over both.
+const STATEMENT = ".home-statement-pin .story-step--single";
+// Where they float while that sentence is up, as shares of its own screen:
+// two wide bands, one high and one low, across nearly the full width,
+// leaving the middle to the words (team request: over the whole screen,
+// not gathered into a strip). `n` of `total` spreads them over both.
 function floatSpot(n: number, total: number) {
   const half = Math.ceil(total / 2);
   const low = n >= half;
@@ -106,13 +93,15 @@ function floatSpot(n: number, total: number) {
 // How far each one wanders around its place, in pixels. It keeps to its
 // place as the reader scrolls (team request) and only sways of its own
 // accord, with the clock, so scrolling through that screen does not shift
-// them and they are still never quite still.
-const SWAY = 20;
+// them and they are still never quite still. Edited 2026-10-20: calmer
+// and slower than before — at 20px every five seconds the drift read as
+// restless while the reader was scrolling past it.
+const SWAY = 11;
 // How long one sway takes, in milliseconds, across and down. They are
 // close but not equal, so a pair of them drifts in and out of step and no
 // one of them ever retraces the same little loop.
-const SWAY_X_MS = 5200;
-const SWAY_Y_MS = 4100;
+const SWAY_X_MS = 7000;
+const SWAY_Y_MS = 5600;
 // How long the fall itself takes, as a share of the window, and the most
 // of the TGR5 screen's own pinned step it may use up — they have to be
 // down before that screen starts moving again, or there would be nothing
@@ -281,6 +270,11 @@ export function useBileAcidFlight({
         .querySelector<HTMLElement>(STATEMENT)
         ?.closest<HTMLElement>(".home-section");
       const bandPin = band?.closest<HTMLElement>(".home-snap-pin");
+      // Where that screen is right now, so their places can be pinned to
+      // it rather than to the window.
+      const bandBox = band
+        ? band.getBoundingClientRect()
+        : new DOMRect(0, 0, window.innerWidth, window.innerHeight);
       const floatAt = bandPin
         ? bandPin.getBoundingClientRect().top + window.scrollY
         : band
@@ -316,12 +310,6 @@ export function useBileAcidFlight({
       // done early in the drift out, so by the time that sentence holds the
       // screen they are already the size they will land at and nothing
       // about them changes again.
-      const fromR = BSH_HEX_R * (from.width / BSH_VB_W);
-      const toR = TGR5_HEX_R * (to.width / TGR5_VB_W);
-      const grow = easeInOut(
-        clamp01((window.scrollY - startAt) / ((floatAt - startAt) * SIZED_BY)),
-      );
-      const scale = lerp(fromR, toR, grow) / BASE_HEX_R;
 
       // Where each acid on the TGR5 screen is, taken from where its own
       // drawing is placed rather than from the middle of the box around
@@ -339,18 +327,29 @@ export function useBileAcidFlight({
         const seat = seats[i]!;
         const seatX = seat.e;
         const seatY = seat.f;
-        // Out of the drawing and onto its own place on the screen, held in
-        // the window so it stays where it is on the page while that screen
-        // comes and goes.
+        // Exactly the size its counterpart is drawn at, taken from that
+        // counterpart itself. Working it out from the TGR5 drawing's width
+        // instead looked stable but was not: that drawing is laid out at
+        // different widths at different points of the scroll, so the acids
+        // waiting on the screen above changed size as the reader scrolled
+        // (team request, 2026-10-20). The counterpart carries the drawing's
+        // own scaling, whatever it happens to be; ACID_SCALE is the step
+        // from its hexagon to the one drawn here, which is the same size.
+        const scale = Math.hypot(seat.a, seat.b) * ACID_SCALE;
+        // Out of the drawing and onto its own place on that sentence's
+        // screen. The place is measured against that screen rather than
+        // against the window (team request), so they belong to it: they
+        // stay put while it is held, and they ride up and away with it
+        // when it goes, instead of hanging in front of the reader.
         const spot = floatSpot(i, shapes.length);
         let x = lerp(
           from.left + shape.from[0] * from.width,
-          spot[0] * window.innerWidth,
+          bandBox.left + spot[0] * bandBox.width,
           outLeg,
         );
         let y = lerp(
           from.top + shape.from[1] * from.height,
-          spot[1] * window.innerHeight,
+          bandBox.top + spot[1] * bandBox.height,
           outLeg,
         );
         // A wander of its own around that place — with the scroll, and

@@ -14,6 +14,11 @@ interface ThemeColors {
   footerText: string;
   accent: string;
   logoCircleBg: string;
+  // The site's one "this responds to you" color — every link, active nav
+  // state, hover border and progress indicator uses it, so a reader learns
+  // one color means "interactive" instead of the color leaking in ad hoc
+  // (previously hardcoded as #2fa4a9 in ~90 places in App.css).
+  interactive: string;
 }
 
 const CSS_VARS: Record<keyof ThemeColors, string> = {
@@ -26,6 +31,7 @@ const CSS_VARS: Record<keyof ThemeColors, string> = {
   footerText: "--color-footer-text",
   accent: "--color-accent",
   logoCircleBg: "--color-logo-circle-bg",
+  interactive: "--color-interactive",
 };
 
 const LIGHT_THEME: ThemeColors = {
@@ -38,6 +44,7 @@ const LIGHT_THEME: ThemeColors = {
   footerText: "#C9BDE8",
   accent: "#C9BDE8",
   logoCircleBg: "#C9BDE8",
+  interactive: "#2FA4A9",
 };
 
 // A genuine dark theme: page-bg is a deep near-black purple (darker than any
@@ -59,6 +66,9 @@ const DARK_THEME: ThemeColors = {
   footerText: "#33283F",
   accent: "#C9BDE8",
   logoCircleBg: "#33283F",
+  // Same teal in both themes — it already read fine on dark surfaces as a
+  // literal, so this keeps that look rather than changing it.
+  interactive: "#2FA4A9",
 };
 
 const THEME_MODE_STORAGE_KEY = "empower-theme-mode";

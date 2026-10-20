@@ -9,6 +9,7 @@ import { HomeHero } from "../../components/HomeHero";
 import { NotFound } from "../../components/NotFound";
 import { Footer } from "../../components/Footer";
 import { PageShell } from "../../components/PageShell";
+import { ReadingProgressBar } from "../../components/ReadingProgressBar";
 import { BackToTop } from "../../components/BackToTop";
 import { ThemeModeProvider } from "../../ThemeModeContext";
 import { ElleSays } from "../../components/ElleSays";
@@ -91,6 +92,7 @@ const App = () => {
     <ThemeModeProvider>
       {/* Navigation */}
       {(!isHome || navRevealed) && <Navbar />}
+      {!isHome && <ReadingProgressBar />}
       {isHome && !navRevealed && (
         <button
           type="button"
@@ -111,7 +113,7 @@ const App = () => {
         {Object.entries(pathMapping).map(
           ([
             path,
-            { title, lead, icon, specialPrize, component: Component },
+            { title, lead, icon, specialPrize, folder, component: Component },
           ]) =>
             path === HOME_PATH ? (
               <Route
@@ -140,6 +142,7 @@ const App = () => {
                       icon={icon}
                       aside={HEADER_ASIDE[path]}
                       specialPrize={specialPrize}
+                      folder={folder}
                     />
                     <main className="page-body">
                       <PageShell>

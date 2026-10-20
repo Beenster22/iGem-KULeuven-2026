@@ -13,6 +13,7 @@
 {/* The pipeline switch opens the page, then the success cards, passed in as `highlights`, see ResultsPipelines. */}
 
 <ResultsPipelines
+  nextPage={{ to: "/measurement", label: "Read Measurements" }}
   highlights={
     <SuccessCards>
       <SuccessCard to="antibiotic-susceptibility-of-p-vulgatus">
@@ -607,7 +608,6 @@ Prepared in-house. LB powder from Sigma-Aldrich, St. Louis, MO, USA.
 </ExpandableText>
 
 Full protocol, plate layouts and run-by-run records are in the{" "}
-
 <Link to="/protocols#medium-comparison-growth-assay">Protocols</Link> (Chassis
 Characterization → Medium Comparison Growth Assay) and the{" "}
 <Link to="/notebook#notebook-str-strain-and-medium-selection">Notebook</Link>{" "}
@@ -2005,7 +2005,7 @@ to read what happens at that stage.
   alt="In vivo engineering with the CRISPR plasmid: the construct conjugates from E. coli into P. vulgatus, then performs CRISPR-based gene replacement at the native BSH locus."
 >
   <FlowStep title="E. coli replication" marker={{ x: 10, side: "above" }}>
-    In _E. coli_ S17 λ _pir_, R6K γ ori is used as an established origin of
+    In _E. coli_ S17-1 λpir, R6K γ ori is used as an established origin of
     replication for stable plasmid number upkeep, while an ampicillin
     resistance cassette is expressed to select for transformed colonies.
   </FlowStep>

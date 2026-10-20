@@ -91,6 +91,9 @@ export const EFFECT_ART: Record<
 // of "170 Million" above flies down and becomes the first circle instead
 // (useZeroToCircle.ts), and the moment it arrives the rest appear with it,
 // all together, rather than one after another as the reader scrolls on.
+// Edited with Claude Sonnet 5 (Anthropic), 2026-10-20 (team feedback: the
+// link landed on the top of the description page, not the symptoms): now
+// points at the SymptomGroups puzzle's own id (BodySymptomsSection.tsx).
 export function PmosEffectsSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = useReducedMotion();
@@ -128,7 +131,7 @@ export function PmosEffectsSection() {
       <Link
         className="pmos-effects-more"
         style={{ "--i": EFFECTS.length } as CSSProperties}
-        to="/description"
+        to="/description#symptoms"
       >
         See all symptoms on the project description page →
       </Link>

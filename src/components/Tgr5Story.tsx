@@ -181,7 +181,7 @@ function Tgr5Diagram({ animate }: { animate: boolean }) {
       className="tgr5-svg"
       viewBox={`0 0 ${VB_W} ${VB_H}`}
       role="img"
-      aria-label="Illustration: bile acids arrive at the TGR5 receptor on an ILC3 cell. The few conjugated bile acids bind it, the many deconjugated ones do not, and less IL-22 is produced."
+      aria-label="Illustration: bile acids arrive at the TGR5 receptor on an immune cell. The few conjugated bile acids bind it, the many deconjugated ones do not, and less IL-22 is produced."
     >
       <defs>
         <marker
@@ -291,7 +291,7 @@ function Tgr5Diagram({ animate }: { animate: boolean }) {
       />
 
       <text className="tgr5-label tgr5-label--cell" x={CELL.x} y={VB_H - 6}>
-        ILC3
+        Immune cell
       </text>
 
       <BileAcids animate={animate} />
@@ -335,7 +335,12 @@ const IMMUNE = { x: 250, y: 370, r: 110 };
 // Half the length of a receptor standing upright (see ReceptorShape).
 const RECEPTOR_HALF = 27;
 // The bile acids are drawn larger here than in the rest of the page.
-const ACID_SCALE = 1.6;
+// Edited with Claude Opus 5 (Anthropic), 2026-10-20: briefly 11/12, to
+// match the BSH reaction, but the team want this screen at the size it
+// had been, so it is back at 1.6. The acids that fly down to it take
+// their size from here (useBileAcidFlight.ts imports this), so they wait
+// and fall at this size too and nothing changes size on the way.
+export const ACID_SCALE = 1.6;
 // How far above the top of a receptor a docked bile acid sits.
 const ACID_R = HEX_R * ACID_SCALE;
 const DOCK_GAP = RECEPTOR_HALF + ACID_R + 3;
@@ -698,7 +703,7 @@ function Tgr5BindingDiagram({ animate }: { animate: boolean }) {
       <path className="tgr5-gut" d={gutPath} />
       <path className="tgr5-gut tgr5-gut--cells" d={gutPath} />
       <text className="tgr5-label" x={GUT_RECEPTOR_X} y={OV_H - 8}>
-        Epithelial cell
+        Intestinal Epithelial Cell
       </text>
 
       {SITES.map((site, i) => (
@@ -772,10 +777,9 @@ export function Tgr5MechanismSection() {
       >
         <div className="tgr5-figures">
           <div className="tgr5-figure">
-            {/* TODO(team): heading written by the assistant from the review
-              comment, not supplied by the team. Check or replace. */}
+            {/* Wording supplied by the team, 2026-10-20. */}
             <h3 className="tgr5-heading">
-              Conjugated bile acids bind TGR5 receptors on cells in the gut
+              Bile acids interact with TGR5 receptors
             </h3>
             <Tgr5BindingDiagram animate={!prefersReducedMotion} />
           </div>
@@ -882,9 +886,9 @@ function AnovulationArt() {
 // notes ("still thinking what to write").
 // TODO(team): add the explanations as `detail` once written.
 const CONSEQUENCES: { title: string; detail?: string; art: ReactNode }[] = [
-  { title: "Hyperinsulinaemia", art: <InsulinArt /> },
+  { title: "Insulin resistance", art: <InsulinArt /> },
   { title: "Anovulation", art: <AnovulationArt /> },
-  { title: "Hyperandrogenism", art: <AndrogenArt /> },
+  { title: "Higher androgen levels", art: <AndrogenArt /> },
 ];
 
 // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team feedback: the
@@ -913,16 +917,12 @@ export function Tgr5ConsequencesSection() {
       <div
         className={`tgr5-effects${prefersReducedMotion ? " tgr5-effects--static" : " home-snap-stage"}`}
       >
-        {/* Retitled on Marie's review (2026-10-08): TGR5 is not inactivated.
-            Reworded on team request (2026-10-16). Reworded again on team
-            feedback (2026-10-17): the jump from the binding diagram above to
-            this screen read as a non sequitur, so the title now names "this
-            binding" explicitly and states the causal step (unbalanced pool
-            -> less binding) before its consequences. */}
-        <h3 className="tgr5-effects-heading">
-          If the bile acid pool is unbalanced, this binding happens less.
-          This may lead to:
-        </h3>
+        {/* Retitled on Marie's review (2026-10-08) and reworded on team
+            request several times since. Edited 2026-10-20 (team request):
+            the causal step it used to carry — an unbalanced pool meaning
+            less binding — is a screen of its own now, just above this one
+            (see home.mdx), so this is only the list's lead-in. */}
+        <h3 className="tgr5-effects-heading">This is linked to:</h3>
         <ol
           className="tgr5-effects-list"
           style={
@@ -966,7 +966,7 @@ export function EngineerSection() {
     <div className="engineer">
       <p className="story-text engineer-text">
         This is why we want to <strong>engineer</strong> <em>P. vulgatus</em>{" "}
-        to restore bile acid and achieve a therapeutic effect in <strong>PMOS</strong>
+        to restore bile acid balance and achieve a therapeutic effect in <strong>PMOS</strong>
       </p>
       {/* The cell of BshStreamAnimation.tsx, now with a genetic circuit in
           it that silences BSH (drawn with the usual blunt "inhibits" line). */}

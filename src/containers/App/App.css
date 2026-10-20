@@ -8,6 +8,125 @@
   --color-footer-text: #c9bde8;
   --color-accent: #c9bde8;
   --color-logo-circle-bg: #c9bde8;
+  /* The site's brand teal, promoted from ~90 hardcoded #2fa4a9 literals
+     (2026-10-20) into the same CSS-variable system as the palette above, and
+     set by theme.ts like the others. It is the one color used for every
+     clickable thing site-wide: links, hover/focus borders, active nav state,
+     the section index's current-section dot, and the new .btn-empower /
+     reading-progress-bar below. */
+  --color-interactive: #2fa4a9;
+
+  /* SPACING SCALE
+     A shared rhythm for margins/padding/gaps on new and newly-touched rules
+     (2026-10-20). The ~15k lines of existing per-component CSS keep their own
+     hand-tuned values — retrofitting every one is a bigger follow-up — but
+     anything added or edited from here on should pull from this scale rather
+     than invent another one-off value. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+  --space-6: 4rem;
+
+  /* SURFACE SYSTEM
+     The "boxed content" visual language (content-section's tinted card,
+     callouts, the expandable tabs, rounded tables) had three different
+     corner radii and no shared shadow. These tokens are the shared scale;
+     .surface below composes them for anything not already on the system. */
+  --surface-radius-sm: 0.75rem;
+  --surface-radius-md: 1rem;
+  --surface-radius-lg: 1.25rem;
+  --surface-shadow: 0 2px 10px rgba(51, 40, 63, 0.08);
+
+  /* FOLDER ACCENTS
+     One color per top-level nav folder (pages.ts), used by Header.tsx's
+     data-folder and Navbar.tsx's matching attributes. Same in both themes —
+     each is only ever used as a thin accent (a border, an underline, a
+     ring), never a fill, so theme contrast isn't a concern.
+     Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team feedback: the
+     first pass used colors outside EMPOWER's five-color brand palette —
+     plum #33283f, teal #2fa4a9, lavender #c9bde8, pink #f1c3d4, pale aqua
+     #eaf4f5, see the brand palette comment above .notebook-dropdown). Every
+     accent below is now a color-mix of two of those five, the same technique
+     the notebook gradient already uses to get more usable tones out of the
+     same five swatches — nothing invented. --folder-lab stays the site's own
+     teal unmixed, since "Lab" and "the color that already means
+     science/interactive here" are a natural fit. */
+  --folder-project: color-mix(in srgb, #f1c3d4 75%, #33283f 25%);
+  --folder-lab: var(--color-interactive);
+  --folder-engagement: color-mix(in srgb, var(--color-interactive) 55%, #33283f 45%);
+  --folder-team: color-mix(in srgb, #c9bde8 55%, #33283f 45%);
+}
+
+[data-theme="dark"] {
+  --surface-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* .surface — the shared "boxed content" treatment (tint, radius, shadow)
+   already used ad hoc by .content-section/.bd-callout/.expandable-content/
+   rounded tables, offered here as a literal class for anything not already
+   on one of those systems (2026-10-20): the Parts/BSA-07/protocol-calc
+   tables below compose it instead of inventing their own card look. */
+.surface {
+  background-color: var(
+    --content-section-bg,
+    color-mix(in srgb, var(--color-body-bg) 55%, #fff)
+  );
+  border-radius: var(--surface-radius-lg);
+  box-shadow: var(--surface-shadow);
+  padding: var(--space-4);
+}
+
+[data-theme="dark"] .surface {
+  --content-section-bg: color-mix(in srgb, var(--color-body-bg) 88%, #fff);
+}
+
+/* .btn-empower — the pill/teal-outline/translucent-teal-hover treatment
+   .phase-nav-btn and .checklist-clear already shared by coincidence,
+   formalized as one base class (2026-10-20) so every inline action button
+   site-wide (and .protocol-calc-reset, previously a lavender-bordered
+   outlier) draws from the same component instead of each re-declaring it.
+   Each caller keeps its own layout (gap, margin, text-align) and adds this
+   class for the shared shape. --btn-empower-pad lets a caller size down
+   (see .btn-empower--sm) without redeclaring every other property. */
+.btn-empower {
+  --btn-empower-pad: 0.6rem 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: var(--btn-empower-pad);
+  border: 2px solid var(--color-interactive);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.btn-empower:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-interactive) 18%, transparent);
+}
+
+.btn-empower:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.btn-empower--sm {
+  --btn-empower-pad: 0.25rem 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-empower {
+    transition: none;
+  }
 }
 
 /* FONTS
@@ -66,7 +185,13 @@
 }
 
 body {
-  padding-top: 64px;
+  /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: was a flat 64px,
+     but Navbar.tsx's own ResizeObserver (see --home-nav-h, set on body on
+     every page, not just home) found the bar actually renders taller than
+     that once its contents wrap — so the fixed navbar was quietly
+     overlapping the first ~15-20px of every page's header. Falls back to the
+     old 64px before the measurement effect has run once. */
+  padding-top: var(--home-nav-h, 64px);
   background-color: var(--color-page-bg);
   color: var(--color-text);
   font-family: "Poppins", sans-serif;
@@ -137,7 +262,7 @@ a[data-footnote-ref] {
   color: inherit;
   font-weight: 600;
   text-decoration: underline;
-  text-decoration-color: #2fa4a9;
+  text-decoration-color: var(--color-interactive);
   text-decoration-thickness: 2px;
   text-underline-offset: 0.18em;
 }
@@ -366,6 +491,30 @@ a[data-footnote-ref]:focus {
   background-color: var(--color-header-bg);
   margin: 0;
   padding: 3rem 0;
+  /* FOLDER COLOR-CODING
+     Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request):
+     a quiet 5px top accent, colored per top-level nav folder (data-folder,
+     set from pages.ts via getPathMapping — see Header.tsx's folderSlug), so
+     a reader can tell "I'm in the Lab section" vs "Human Practices" at a
+     glance. Deliberately a thin bar rather than recoloring the whole band:
+     --color-header-bg already flips from near-black to near-white between
+     themes, so a bar is the one treatment guaranteed to stay legible in
+     both. A page outside any folder (Home, Entrepreneurship, Awards) has no
+     data-folder and keeps the plain header. */
+  border-top: 5px solid transparent;
+}
+
+.page-header-box[data-folder="project"] {
+  border-top-color: var(--folder-project);
+}
+.page-header-box[data-folder="lab"] {
+  border-top-color: var(--folder-lab);
+}
+.page-header-box[data-folder="engagement"] {
+  border-top-color: var(--folder-engagement);
+}
+.page-header-box[data-folder="team"] {
+  border-top-color: var(--folder-team);
 }
 
 .page-header-box h1,
@@ -389,7 +538,7 @@ a[data-footnote-ref]:focus {
 .page-header-prize-badge {
   padding: 0.25rem 0.75rem;
   border-radius: 999px;
-  background-color: #2fa4a9;
+  background-color: var(--color-interactive);
   color: #33283f;
   font-size: 0.8rem;
   font-weight: 800;
@@ -413,7 +562,7 @@ a[data-footnote-ref]:focus {
 
 .page-header-icon {
   --ic-1: #c9bde8;
-  --ic-2: #2fa4a9;
+  --ic-2: var(--color-interactive);
   --ic-3: #f1c3d4;
   --ic-line: #33283f;
   /* DbtlCycleIcon's centre text fills with currentColor rather than an
@@ -422,7 +571,25 @@ a[data-footnote-ref]:focus {
   color: var(--color-header-text);
   flex: none;
   display: block;
+  /* A soft ring in the folder's color (see .page-header-box[data-folder]
+     above) echoes the header's top accent right next to the title. */
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px transparent;
+  transition: box-shadow 0.2s ease;
   width: 6rem;
+}
+
+[data-folder="project"] .page-header-icon {
+  box-shadow: 0 0 0 3px var(--folder-project);
+}
+[data-folder="lab"] .page-header-icon {
+  box-shadow: 0 0 0 3px var(--folder-lab);
+}
+[data-folder="engagement"] .page-header-icon {
+  box-shadow: 0 0 0 3px var(--folder-engagement);
+}
+[data-folder="team"] .page-header-icon {
+  box-shadow: 0 0 0 3px var(--folder-team);
 }
 
 .page-header-icon svg {
@@ -458,6 +625,35 @@ a[data-footnote-ref]:focus {
 [data-theme="dark"] .navbar-empower {
   background-color: #33283f;
   border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+/* READING PROGRESS BAR
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request): a
+   page-level "how much is left", pinned directly under the fixed 64px
+   navbar (see body's padding-top above and .mega-menu's top: calc(64px +
+   ...), which assume the same height). Separate from .section-progress,
+   which tracks the current section rather than overall page position. */
+.reading-progress-track {
+  position: fixed;
+  /* Navbar.tsx measures the bar's real height into --home-nav-h on every
+     page (not just home, despite the name) because the bar can render
+     taller than a flat 64px once its contents wrap — using it here keeps
+     the track flush under the navbar instead of being partly hidden under
+     it. */
+  top: var(--home-nav-h, 64px);
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: transparent;
+  z-index: 1031;
+  pointer-events: none;
+}
+
+.reading-progress-fill {
+  height: 100%;
+  background-color: var(--color-interactive);
+  width: 0%;
+  transition: width 0.1s linear;
 }
 
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-09-08
@@ -496,7 +692,7 @@ a[data-footnote-ref]:focus {
    above). Kept to a bare star rather than the full "Special prize" pill —
    there isn't room for the pill text beside the nav link label. */
 .nav-link-prize-star {
-  color: #2fa4a9;
+  color: var(--color-interactive);
   margin-left: 0.3rem;
 }
 
@@ -522,6 +718,26 @@ a[data-footnote-ref]:focus {
 .navbar-empower .nav-link:focus::after,
 .navbar-empower .nav-link.show::after {
   transform: scaleX(1);
+}
+
+/* FOLDER COLOR-CODING (continued — see .page-header-box[data-folder] and
+   .mega-menu[data-folder] above). The folder you're actually on keeps a
+   quiet underline in its own color even with the mega-menu closed, so
+   "which section am I in" doesn't need the menu opened. */
+.navbar-empower .nav-link-dropdown[data-folder-current="true"]::after {
+  transform: scaleX(1);
+}
+.navbar-empower .nav-link-dropdown[data-folder-current="true"][data-folder="project"]::after {
+  background-color: var(--folder-project);
+}
+.navbar-empower .nav-link-dropdown[data-folder-current="true"][data-folder="lab"]::after {
+  background-color: var(--folder-lab);
+}
+.navbar-empower .nav-link-dropdown[data-folder-current="true"][data-folder="engagement"]::after {
+  background-color: var(--folder-engagement);
+}
+.navbar-empower .nav-link-dropdown[data-folder-current="true"][data-folder="team"]::after {
+  background-color: var(--folder-team);
 }
 
 .navbar-empower .dropdown-item:hover,
@@ -572,7 +788,7 @@ a[data-footnote-ref]:focus {
    either element (see Navbar.tsx for the matching mouseenter/leave wiring). */
 .mega-menu-bridge {
   position: fixed;
-  top: 64px;
+  top: var(--home-nav-h, 64px);
   left: 0;
   width: 100%;
   height: 0.5rem;
@@ -581,7 +797,7 @@ a[data-footnote-ref]:focus {
 
 .mega-menu {
   position: fixed;
-  top: calc(64px + 0.5rem);
+  top: calc(var(--home-nav-h, 64px) + 0.5rem);
   left: 0;
   width: 100%;
   z-index: 1029;
@@ -601,6 +817,23 @@ a[data-footnote-ref]:focus {
   background-color: rgba(51, 40, 63, 0.9);
   border-top-color: rgba(255, 255, 255, 0.08);
   border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+/* FOLDER COLOR-CODING (continued — see .page-header-box[data-folder] above).
+   The open mega-menu's top edge picks up the same folder color as that
+   folder's header band, so the color-coding is consistent whether a reader
+   reaches a section via its page header or via the nav. */
+.mega-menu[data-folder="project"] {
+  border-top-color: var(--folder-project);
+}
+.mega-menu[data-folder="lab"] {
+  border-top-color: var(--folder-lab);
+}
+.mega-menu[data-folder="engagement"] {
+  border-top-color: var(--folder-engagement);
+}
+.mega-menu[data-folder="team"] {
+  border-top-color: var(--folder-team);
 }
 
 @keyframes mega-menu-fade-in {
@@ -686,7 +919,7 @@ a[data-footnote-ref]:focus {
 
 .mega-menu-link--dark {
   --ic-1: #c9bde8;
-  --ic-2: #2fa4a9;
+  --ic-2: var(--color-interactive);
   --ic-3: #f1c3d4;
   --ic-line: #33283f;
   background-color: #33283f;
@@ -696,7 +929,7 @@ a[data-footnote-ref]:focus {
 
 .mega-menu-link--light {
   --ic-1: #33283f;
-  --ic-2: #2fa4a9;
+  --ic-2: var(--color-interactive);
   --ic-3: #f1c3d4;
   --ic-line: #eaf4f5;
   background-color: #c9bde8;
@@ -705,7 +938,7 @@ a[data-footnote-ref]:focus {
 
 .mega-menu-link:hover,
 .mega-menu-link:focus {
-  border-color: #2fa4a9;
+  border-color: var(--color-interactive);
   box-shadow: 0 0.6rem 1.4rem rgba(47, 164, 169, 0.3);
   transform: translateY(-3px);
 }
@@ -764,7 +997,7 @@ a[data-footnote-ref]:focus {
   margin-left: 0.5rem;
   padding: 0.15rem 0.6rem;
   border-radius: 999px;
-  background-color: #2fa4a9;
+  background-color: var(--color-interactive);
   color: #33283f;
   font-size: 0.7rem;
   font-weight: 800;
@@ -873,7 +1106,7 @@ a[data-footnote-ref]:focus {
    rounding happens on the wrapping .table-responsive instead (overflow:
    hidden clips the corner cells' own borders into the rounded shape). */
 .table-responsive-rounded {
-  border-radius: 0.75rem;
+  border-radius: var(--surface-radius-sm);
   overflow-x: auto;
   overflow-y: hidden;
 }
@@ -921,7 +1154,7 @@ a[data-footnote-ref]:focus {
 
 .comp-table thead th:last-child,
 .comp-table tbody td:last-child {
-  background-color: #2fa4a9;
+  background-color: var(--color-interactive);
   color: #000000;
 }
 
@@ -999,7 +1232,7 @@ a[data-footnote-ref]:focus {
   tbody
   tr:last-child
   td {
-  background-color: #2fa4a9;
+  background-color: var(--color-interactive);
   color: #000000;
 }
 
@@ -1054,7 +1287,14 @@ a[data-footnote-ref]:focus {
   margin-bottom: 1.25rem;
   border: 1px solid #e9ecef;
   border-left-width: 0.25rem;
-  border-radius: 0.25rem;
+  /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: was a sharp
+     0.25rem — the odd one out next to every other "boxed content" surface
+     on the site (.content-section, .expandable-content, rounded tables),
+     which all round to .75rem or more. Matched to the shared scale (see
+     SURFACE SYSTEM, :root) plus the same soft shadow, so a callout now
+     reads as the same kind of card as the rest. */
+  border-radius: var(--surface-radius-sm);
+  box-shadow: var(--surface-shadow);
 }
 
 .bd-callout h4 {
@@ -1106,7 +1346,7 @@ a[data-footnote-ref]:focus {
      had no visible edge — it gets a dark purple outline there. Dark mode
      keeps the border transparent (the fill already stands out). */
   border: 1px solid rgba(51, 40, 63, 0.55);
-  border-radius: 1rem;
+  border-radius: var(--surface-radius-md);
   background-color: var(--color-accent);
   /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-07: --color-accent is
      the same light purple in both themes, so the title needs a fixed dark
@@ -1130,7 +1370,7 @@ a[data-footnote-ref]:focus {
 }
 
 .expandable-header[aria-expanded="true"] {
-  border-radius: 1rem 1rem 0 0;
+  border-radius: var(--surface-radius-md) var(--surface-radius-md) 0 0;
 }
 
 .expandable-title {
@@ -1149,7 +1389,7 @@ a[data-footnote-ref]:focus {
   background-color: var(--color-page-bg);
   border: 1px solid rgba(51, 40, 63, 0.55);
   border-top: none;
-  border-radius: 0 0 1rem 1rem;
+  border-radius: 0 0 var(--surface-radius-md) var(--surface-radius-md);
 }
 
 [data-theme="dark"] .expandable-content {
@@ -1656,6 +1896,17 @@ a[data-footnote-ref]:focus {
   font-weight: 600;
 }
 
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: teal instead of the
+   ambient lavender every markdown table gets inside a dropdown (see the note
+   above .parts-table thead th) — matches the other two bespoke data-table
+   components. No row zebra here, unlike those two: this table's cells
+   already carry meaning through the red/yellow band colors above, and
+   stripes would compete with that rather than help scanning. */
+.bsr-table thead th {
+  background-color: var(--color-interactive);
+  color: #ffffff;
+}
+
 .bsr-legend {
   display: flex;
   flex-wrap: wrap;
@@ -1714,7 +1965,7 @@ a[data-footnote-ref]:focus {
    line) falls through to the plain accent and gets no badge. */
 .notebook-dropdown {
   --brand-plum: #33283f;
-  --brand-teal: #2fa4a9;
+  --brand-teal: var(--color-interactive);
   --brand-lavender: #c9bde8;
   --brand-pink: #f1c3d4;
   --brand-light: #eaf4f5;
@@ -2274,6 +2525,12 @@ a[data-footnote-ref]:focus {
 .page-shell-content {
   flex: 1 1 0%;
   min-width: 0;
+  /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: Bootstrap's fixed
+     0.75rem-per-side container gutter felt tight on a large phone and loose
+     on desktop (it only ever changes at a breakpoint, not smoothly). Scales
+     continuously between the two instead. */
+  padding-left: clamp(1rem, 4vw, 2.5rem);
+  padding-right: clamp(1rem, 4vw, 2.5rem);
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): the
@@ -2281,11 +2538,19 @@ a[data-footnote-ref]:focus {
    the right as in a paper. Words are never split over two lines (team
    review, same day: automatic hyphenation read badly). The home page is left
    alone, and so is anything a page centres on purpose (Bootstrap's
-   .text-center is !important). */
+   .text-center is !important).
+   Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: capped at ~75
+   characters regardless of how wide the column itself is — a page with no
+   Inspirations sidebar (PageLayout.tsx) used to let justified text stretch
+   to the full container width on a wide monitor, which widens the gaps
+   between justified words into visible "rivers". Scoped to bare p/li so
+   custom components (figures, diagrams, grids), which use their own classed
+   wrappers, are unaffected. */
 .page-body:not(.page-body--home) .page-shell-content :is(p, li) {
   text-align: justify;
   hyphens: manual;
   line-height: 1.75;
+  max-width: 75ch;
 }
 
 /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-06 (team request): more
@@ -2397,12 +2662,37 @@ a[data-footnote-ref]:focus {
   --content-section-bg: color-mix(in srgb, var(--color-body-bg) 55%, #fff);
   margin-top: 2.5rem;
   padding: 2rem 2.25rem;
-  border-radius: 1.25rem;
+  border-radius: var(--surface-radius-lg);
   background-color: var(--content-section-bg);
+  box-shadow: var(--surface-shadow);
 }
 
 [data-theme="dark"] .content-section {
   --content-section-bg: color-mix(in srgb, var(--color-body-bg) 88%, #fff);
+}
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team feedback: a
+   long page like Description or Results read as one undifferentiated scroll
+   once every "## " box used the exact same tint). Every other section gets a
+   second, slightly cooler tint — leaning toward the interactive teal instead
+   of pure white — so the page settles into an alternating rhythm instead of
+   a repeated card. Still each section's own box (not full-bleed): going
+   edge-to-edge would fight the rounded-card language the rest of the site
+   already uses for boxed content. */
+.content-section:nth-of-type(even) {
+  --content-section-bg: color-mix(
+    in srgb,
+    var(--color-body-bg) 45%,
+    color-mix(in srgb, var(--color-interactive) 18%, #fff)
+  );
+}
+
+[data-theme="dark"] .content-section:nth-of-type(even) {
+  --content-section-bg: color-mix(
+    in srgb,
+    var(--color-body-bg) 80%,
+    color-mix(in srgb, var(--color-interactive) 14%, #000)
+  );
 }
 
 .content-section:first-child {
@@ -3099,7 +3389,7 @@ a[data-footnote-ref]:focus {
    check mark when active, and the section below gets a matching top rule so
    the colour carries down the page. */
 .segmented-selector--pipeline {
-  --pipeline-0: #2fa4a9;
+  --pipeline-0: var(--color-interactive);
   --pipeline-1: #8a6bbf;
 }
 
@@ -4334,15 +4624,17 @@ div.sponsor-grid-card:hover {
   justify-content: center;
 }
 
-/* Edited with Claude Opus 5 (Anthropic), 2026-10-09: now that a figure is
-   drawn at its own size in the entry (above), the small ones would have
-   opened fullscreen at that same size — a click that appeared to do
-   nothing. Fullscreen therefore fills the screen, which is the one place
-   enlarging a low-resolution photo is what the reader actually asked for.
-   object-fit keeps the proportions whichever way it has to scale. */
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: the previous
+   width:100%/height:100% forced every image to fill the viewport, which
+   blew small/low-resolution photos (e.g. the fluorescence microscopy crops)
+   up far past their native resolution into a blurry, oversized mess. Intrinsic
+   sizing (auto) capped by max-width/max-height lets a small image show at its
+   own size, while a large one still shrinks to fit the screen. */
 .zoomable-image-dialog img {
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
   border-radius: 0.5rem;
 }
@@ -4372,19 +4664,34 @@ div.sponsor-grid-card:hover {
   background-color: #ffffff;
 }
 
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: the previous
+   background (15%-opacity white) was nearly transparent, so the button could
+   disappear against a light backdrop (an on-light-bg figure's white card) or
+   a busy/light image behind it. A solid dark circle with a light border and
+   shadow stays visible regardless of what's behind it, and the hover/focus
+   states make it clearly interactive. */
 .zoomable-image-close {
   position: absolute;
   top: 0.75rem;
   right: 1rem;
-  width: 2.5rem;
-  height: 2.5rem;
-  border: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 2px solid rgba(255, 255, 255, 0.9);
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(20, 15, 26, 0.85);
   color: #fff;
   font-size: 1.75rem;
   line-height: 1;
   cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+  z-index: 1;
+}
+
+.zoomable-image-close:hover,
+.zoomable-image-close:focus-visible {
+  background-color: rgba(20, 15, 26, 1);
+  transform: scale(1.08);
 }
 
 /* HOME PAGE FULLSCREEN CHROME */
@@ -4954,7 +5261,7 @@ body:not(.home-fullscreen) .home-hero {
   font-family: "Luckiest Guy", "Poppins", sans-serif;
   font-size: 1.5em;
   font-weight: 400;
-  color: #2fa4a9;
+  color: var(--color-interactive);
 }
 
 .body-symptoms-former-name {
@@ -4966,7 +5273,7 @@ body:not(.home-fullscreen) .home-hero {
 .body-symptoms-blurb {
   margin: 0;
   padding-left: clamp(1.5rem, 4vw, 3rem);
-  border-left: 3px solid #2fa4a9;
+  border-left: 3px solid var(--color-interactive);
   font-size: clamp(1.25rem, 2.5vw, 1.8rem);
   line-height: 1.5;
   opacity: 0.9;
@@ -4982,7 +5289,7 @@ body:not(.home-fullscreen) .home-hero {
   .body-symptoms-blurb {
     padding: clamp(1.5rem, 4vw, 3rem) 0 0;
     border-left: 0;
-    border-top: 3px solid #2fa4a9;
+    border-top: 3px solid var(--color-interactive);
   }
 }
 
@@ -5706,7 +6013,7 @@ body:not(.home-fullscreen) .home-hero {
   height: auto;
   border-radius: 0;
   font-size: clamp(4rem, 9vw, 7rem);
-  color: #2fa4a9;
+  color: var(--color-interactive);
   background: none;
   box-shadow: none;
   animation: none;
@@ -5765,7 +6072,7 @@ body:not(.home-fullscreen) .home-hero {
 
 .elle-tour-glass-lens {
   fill: rgba(234, 244, 245, 0.25);
-  stroke: #2fa4a9;
+  stroke: var(--color-interactive);
   stroke-width: 3.5;
 }
 
@@ -5775,6 +6082,43 @@ body:not(.home-fullscreen) .home-hero {
   stroke-width: 2;
   stroke-linecap: round;
   opacity: 0.8;
+}
+
+/* Her greeting as she grows out of the circle — beside her head, gone again
+   before she sets off round the stops (see GREET_AT/GREET_FADE in
+   ElleTour.tsx, which drive its opacity directly; no CSS transition, same as
+   the rest of this fixed layer). */
+.elle-tour-greeting {
+  position: absolute;
+  left: 100%;
+  top: 4%;
+  margin-left: 6cqw;
+  width: max-content;
+  max-width: 10rem;
+  padding: 0.55rem 0.85rem;
+  font-size: clamp(0.8rem, 1.7cqw, 1.05rem);
+  font-weight: 600;
+  text-align: left;
+  color: var(--color-text);
+  background-color: color-mix(in srgb, var(--color-accent) 35%, var(--color-page-bg));
+  border: 1px solid color-mix(in srgb, var(--color-text) 25%, transparent);
+  border-radius: 1.1rem;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.elle-tour-greeting::before {
+  content: "";
+  position: absolute;
+  top: calc(50% - 0.4rem);
+  left: -0.42rem;
+  width: 0.8rem;
+  height: 0.8rem;
+  background-color: color-mix(in srgb, var(--color-accent) 35%, var(--color-page-bg));
+  border-left: 1px solid color-mix(in srgb, var(--color-text) 25%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text) 25%, transparent);
+  border-bottom-left-radius: 0.2rem;
+  transform: rotate(45deg);
 }
 
 /* A close-up: the same disc as its circle (.pmos-effect-art), growing out
@@ -5911,7 +6255,7 @@ body:not(.home-fullscreen) .home-hero {
    which would not be readable on this band in light mode. */
 .story-text strong {
   font-weight: inherit;
-  background: linear-gradient(#2fa4a9, #2fa4a9) 0 92% / 100% 0.14em no-repeat;
+  background: linear-gradient(var(--color-interactive), var(--color-interactive)) 0 92% / 100% 0.14em no-repeat;
   padding-bottom: 0.05em;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
@@ -6062,7 +6406,7 @@ body:not(.home-fullscreen) .home-hero {
   width: fit-content;
   max-width: 100%;
   padding: clamp(1rem, 3vw, 2rem) clamp(1.25rem, 3.5vw, 2.5rem);
-  border: 0.4rem solid #2fa4a9;
+  border: 0.4rem solid var(--color-interactive);
   border-radius: 1rem;
   background: #eaf4f5;
   color: #33283f;
@@ -6146,7 +6490,7 @@ body:not(.home-fullscreen) .home-hero {
   width: min(calc(100% - 0.8rem), calc(var(--room-max-h) * 2000 / 1878));
   aspect-ratio: 2000 / 1878;
   overflow: hidden;
-  border: 0.4rem solid #2fa4a9;
+  border: 0.4rem solid var(--color-interactive);
   border-radius: 1.25rem;
   background: #1b1823;
   box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3);
@@ -6290,7 +6634,7 @@ body:not(.home-fullscreen) .home-hero {
   position: fixed;
   z-index: 6;
   overflow: hidden;
-  border: 0.4rem solid #2fa4a9;
+  border: 0.4rem solid var(--color-interactive);
   border-radius: 1rem;
   background: #eaf4f5;
   color: #33283f;
@@ -6314,7 +6658,7 @@ body:not(.home-fullscreen) .home-hero {
 /* The clock → magnifying glass stand-in: round, the clock fading into the
    lens's close-up of the microbes. */
 .story-morph--lens {
-  border: 0.35rem solid #2fa4a9;
+  border: 0.35rem solid var(--color-interactive);
   border-radius: 50%;
   background: transparent;
 }
@@ -6439,7 +6783,7 @@ body:not(.home-fullscreen) .home-hero {
   height: clamp(5.5rem, 13vw, 10rem);
   font-size: clamp(3.2rem, 8vw, 6.2rem);
   color: #ffffff;
-  background: radial-gradient(circle at 30% 25%, #66d0d5, #2fa4a9 55%, #1f7479);
+  background: radial-gradient(circle at 30% 25%, #66d0d5, var(--color-interactive) 55%, #1f7479);
   box-shadow:
     0 0.8rem 1.8rem rgba(31, 116, 121, 0.4),
     inset 0 -0.4rem 0.7rem rgba(0, 0, 0, 0.14),
@@ -6494,7 +6838,7 @@ body:not(.home-fullscreen) .home-hero {
 
 .story-clock-ring {
   fill: none;
-  stroke: #2fa4a9;
+  stroke: var(--color-interactive);
   stroke-width: 6;
 }
 
@@ -6533,13 +6877,13 @@ body:not(.home-fullscreen) .home-hero {
 
 /* Sweeps all the way round every five seconds: time visibly slipping by. */
 .story-clock-hand--second {
-  stroke: #2fa4a9;
+  stroke: var(--color-interactive);
   stroke-width: 1.6;
   animation: story-clock-turn 5s linear infinite;
 }
 
 .story-clock-pin {
-  fill: #2fa4a9;
+  fill: var(--color-interactive);
 }
 
 .story-clock-pin-core {
@@ -6653,7 +6997,7 @@ body:not(.home-fullscreen) .home-hero {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  border: 0.35rem solid #2fa4a9;
+  border: 0.35rem solid var(--color-interactive);
   border-radius: 50%;
   background: #221b2b;
   box-shadow:
@@ -6769,7 +7113,7 @@ body:not(.home-fullscreen) .home-hero {
   width: 34%;
   height: 34%;
   overflow: visible;
-  stroke: #2fa4a9;
+  stroke: var(--color-interactive);
   stroke-width: 1.6;
   stroke-linecap: round;
   transform-origin: 0 0;
@@ -7756,7 +8100,7 @@ body:not(.home-fullscreen) .home-hero {
   width: var(--reach);
   height: 100%;
   border-radius: 3px;
-  background: #2fa4a9;
+  background: var(--color-interactive);
   transition:
     width 0.8s cubic-bezier(0.65, 0, 0.35, 1),
     height 0.8s cubic-bezier(0.65, 0, 0.35, 1);
@@ -7806,7 +8150,7 @@ body:not(.home-fullscreen) .home-hero {
   height: var(--art);
   margin-bottom: 0.5rem;
   border-radius: 50%;
-  border: 4px solid #2fa4a9;
+  border: 4px solid var(--color-interactive);
   background: #f3eef9;
   color: #33283f;
 }
@@ -7948,7 +8292,7 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .engineer-part--a {
-  fill: #2fa4a9;
+  fill: var(--color-interactive);
 }
 
 .engineer-part--b {
@@ -8046,7 +8390,7 @@ body:not(.home-fullscreen) .home-hero {
 
 .find-more-card--dark {
   --ic-1: #c9bde8;
-  --ic-2: #2fa4a9;
+  --ic-2: var(--color-interactive);
   --ic-3: #f1c3d4;
   --ic-line: #33283f;
   --card-tagline: #7fd6da;
@@ -8057,7 +8401,7 @@ body:not(.home-fullscreen) .home-hero {
 
 .find-more-card--light {
   --ic-1: #33283f;
-  --ic-2: #2fa4a9;
+  --ic-2: var(--color-interactive);
   --ic-3: #f1c3d4;
   --ic-line: #eaf4f5;
   --card-tagline: #1f6a6e;
@@ -8070,7 +8414,7 @@ body:not(.home-fullscreen) .home-hero {
 
 .find-more-card:hover,
 .find-more-card:focus-visible {
-  border-color: #2fa4a9;
+  border-color: var(--color-interactive);
   box-shadow: 0 0.9rem 1.8rem rgba(47, 164, 169, 0.35);
   transform: translateY(-6px);
 }
@@ -8127,7 +8471,7 @@ body:not(.home-fullscreen) .home-hero {
   margin-top: auto;
   padding: 0.25rem 0.75rem;
   border-radius: 999px;
-  background-color: #2fa4a9;
+  background-color: var(--color-interactive);
   color: #33283f;
   font-size: 0.8rem;
   font-weight: 800;
@@ -8343,7 +8687,7 @@ body:not(.home-fullscreen) .home-hero {
   display: block;
   width: fit-content;
   margin: 0.15em auto;
-  color: #2fa4a9;
+  color: var(--color-interactive);
   font-size: clamp(2.75rem, 12vw, 8.5rem);
   line-height: 1.05;
   white-space: nowrap;
@@ -9235,7 +9579,7 @@ body:not(.home-fullscreen) .home-hero {
 .hp-section-intro {
   margin: 0 0 1.25rem;
   padding: 0.9rem 1.25rem;
-  border-left: 4px solid #2fa4a9;
+  border-left: 4px solid var(--color-interactive);
   border-radius: 0 0.9rem 0.9rem 0;
   background-color: rgba(47, 164, 169, 0.08);
 }
@@ -9250,7 +9594,7 @@ body:not(.home-fullscreen) .home-hero {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #2fa4a9;
+  color: var(--color-interactive);
 }
 
 .hp-section-intro > :last-child {
@@ -9525,7 +9869,7 @@ body:not(.home-fullscreen) .home-hero {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #2fa4a9;
+  color: var(--color-interactive);
 }
 
 .hp-modal-meta dd {
@@ -9601,7 +9945,7 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .milestone-arc-road-travelled {
-  stroke: #2fa4a9;
+  stroke: var(--color-interactive);
   stroke-width: 22;
   transition: stroke-dashoffset 0.6s ease;
 }
@@ -9662,7 +10006,7 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .milestone-arc-icon-fill-teal-strong {
-  fill: #2fa4a9;
+  fill: var(--color-interactive);
 }
 
 .milestone-arc-dot {
@@ -9673,7 +10017,7 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .milestone-arc-stop.active .milestone-arc-dot {
-  fill: #2fa4a9;
+  fill: var(--color-interactive);
 }
 
 .milestone-arc-labels {
@@ -9707,7 +10051,7 @@ body:not(.home-fullscreen) .home-hero {
 
 .milestone-arc-label.active {
   opacity: 1;
-  border-color: #2fa4a9;
+  border-color: var(--color-interactive);
   background-color: rgba(47, 164, 169, 0.12);
 }
 
@@ -9726,7 +10070,7 @@ body:not(.home-fullscreen) .home-hero {
 .fan-selector-content {
   margin-top: 1.25rem;
   padding: 1.25rem 1.5rem;
-  border-left: 4px solid #2fa4a9;
+  border-left: 4px solid var(--color-interactive);
   border-radius: 0.5rem;
   background-color: rgba(234, 244, 245, 0.45);
   animation: milestone-arc-fade-in 0.3s ease;
@@ -9801,7 +10145,7 @@ body:not(.home-fullscreen) .home-hero {
   gap: 0.4rem;
   margin-top: 1.25rem;
   padding: 0.45rem 1rem;
-  border: 2px solid #2fa4a9;
+  border: 2px solid var(--color-interactive);
   border-radius: 999px;
   background: transparent;
   color: var(--color-text);
@@ -9850,12 +10194,12 @@ body:not(.home-fullscreen) .home-hero {
 
 .fan-selector-band.active path {
   opacity: 1;
-  stroke: #2fa4a9;
+  stroke: var(--color-interactive);
   stroke-width: 7;
 }
 
 .fan-selector-band:focus-visible path {
-  stroke: #2fa4a9;
+  stroke: var(--color-interactive);
   stroke-dasharray: 10 6;
 }
 
@@ -9889,7 +10233,7 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .fan-selector-band.active .fan-selector-icon {
-  stroke: #2fa4a9;
+  stroke: var(--color-interactive);
 }
 
 .fan-selector-hub {
@@ -9927,8 +10271,8 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .fan-selector-tab.active {
-  border-color: #2fa4a9;
-  box-shadow: 0 0 0 2px #2fa4a9;
+  border-color: var(--color-interactive);
+  box-shadow: 0 0 0 2px var(--color-interactive);
   opacity: 1;
 }
 
@@ -10176,7 +10520,7 @@ body:not(.home-fullscreen) .home-hero {
   height: 3.5rem;
   border-radius: 1.1rem;
   corner-shape: squircle;
-  background-color: #2fa4a9;
+  background-color: var(--color-interactive);
   color: #eaf4f5;
 }
 
@@ -10202,7 +10546,7 @@ body:not(.home-fullscreen) .home-hero {
   margin: 0;
   font-size: 1.15rem;
   line-height: 1.3;
-  color: #2fa4a9;
+  color: var(--color-interactive);
 }
 
 /* Justified (block) text like the rest of the page. Selector is long only
@@ -10384,7 +10728,7 @@ body:not(.home-fullscreen) .home-hero {
 
 .stakeholder-matrix-bubble {
   z-index: 2;
-  background-color: #2fa4a9;
+  background-color: var(--color-interactive);
   color: #ffffff;
   box-shadow: 0 0.4rem 1rem rgba(51, 40, 63, 0.18);
 }
@@ -10392,8 +10736,8 @@ body:not(.home-fullscreen) .home-hero {
 /* --ghost-fade (0-1) is set inline as the slider moves away from "Initial" */
 .stakeholder-matrix-ghost {
   z-index: 1;
-  border: 2px dashed #2fa4a9;
-  color: #2fa4a9;
+  border: 2px dashed var(--color-interactive);
+  color: var(--color-interactive);
   opacity: calc(var(--ghost-fade, 0) * 0.55);
   pointer-events: none;
 }
@@ -10411,7 +10755,7 @@ body:not(.home-fullscreen) .home-hero {
 
 [data-theme="dark"] .stakeholder-matrix-phase button.is-active {
   opacity: 1;
-  background-color: #2fa4a9;
+  background-color: var(--color-interactive);
   color: #ffffff;
 }
 
@@ -10433,7 +10777,7 @@ body:not(.home-fullscreen) .home-hero {
   border-radius: 999px;
   background: linear-gradient(
     to right,
-    #2fa4a9 var(--stakeholder-progress, 0%),
+    var(--color-interactive) var(--stakeholder-progress, 0%),
     var(--color-body-bg) var(--stakeholder-progress, 0%)
   );
   cursor: pointer;
@@ -10444,18 +10788,18 @@ body:not(.home-fullscreen) .home-hero {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #2fa4a9;
+  background: var(--color-interactive);
   border: 3px solid var(--color-page-bg);
-  box-shadow: 0 0 0 2px #2fa4a9;
+  box-shadow: 0 0 0 2px var(--color-interactive);
 }
 
 .stakeholder-matrix-slider input::-moz-range-thumb {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #2fa4a9;
+  background: var(--color-interactive);
   border: 3px solid var(--color-page-bg);
-  box-shadow: 0 0 0 2px #2fa4a9;
+  box-shadow: 0 0 0 2px var(--color-interactive);
 }
 
 @media (max-width: 700px) {
@@ -10763,12 +11107,12 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .question-selector-card:focus-visible {
-  outline: 2px solid #2fa4a9;
+  outline: 2px solid var(--color-interactive);
   outline-offset: 2px;
 }
 
 .question-selector-card.active {
-  background-color: #2fa4a9;
+  background-color: var(--color-interactive);
   color: #fff;
 }
 
@@ -10795,7 +11139,7 @@ body:not(.home-fullscreen) .home-hero {
 .question-selector-content {
   margin-top: 1.25rem;
   padding: 1.25rem 1.5rem;
-  border-left: 4px solid #2fa4a9;
+  border-left: 4px solid var(--color-interactive);
   border-radius: 0.5rem;
   background-color: rgba(234, 244, 245, 0.45);
   animation: milestone-arc-fade-in 0.3s ease;
@@ -10866,7 +11210,7 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .feedback-wheel-step.is-active .feedback-wheel-arrow {
-  fill: #2fa4a9;
+  fill: var(--color-interactive);
 }
 
 .feedback-wheel-label {
@@ -10895,7 +11239,7 @@ body:not(.home-fullscreen) .home-hero {
 .feedback-wheel-count {
   font-family: "Luckiest Guy", "Poppins", sans-serif;
   font-size: 64px;
-  fill: #2fa4a9;
+  fill: var(--color-interactive);
 }
 
 .feedback-wheel-of {
@@ -10963,7 +11307,7 @@ body:not(.home-fullscreen) .home-hero {
   width: 2.25rem;
   height: 2.25rem;
   border-radius: 50%;
-  background-color: #2fa4a9;
+  background-color: var(--color-interactive);
   color: #ffffff;
   font-weight: 700;
 }
@@ -10995,8 +11339,8 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .feedback-outcome--active {
-  background-color: #2fa4a9;
-  border-color: #2fa4a9;
+  background-color: var(--color-interactive);
+  border-color: var(--color-interactive);
   color: #ffffff;
 }
 
@@ -11008,7 +11352,7 @@ body:not(.home-fullscreen) .home-hero {
   margin: 0 0 0.4rem;
   font-size: 1rem;
   font-weight: 700;
-  color: #2fa4a9;
+  color: var(--color-interactive);
 }
 
 .feedback-outcome--active .feedback-outcome-title {
@@ -11034,14 +11378,14 @@ body:not(.home-fullscreen) .home-hero {
 
 .feedback-implement-arrow-line {
   fill: none;
-  stroke: #2fa4a9;
+  stroke: var(--color-interactive);
   stroke-width: 3;
   stroke-linecap: round;
   stroke-dasharray: 1;
 }
 
 .feedback-implement-arrowhead {
-  fill: #2fa4a9;
+  fill: var(--color-interactive);
 }
 
 /* The Implement step gets some air above it so the line has room to land */
@@ -11082,7 +11426,7 @@ body:not(.home-fullscreen) .home-hero {
   width: 2.75rem;
   height: 2.75rem;
   border-radius: 0.9rem;
-  background-color: #2fa4a9;
+  background-color: var(--color-interactive);
   color: #ffffff;
 }
 
@@ -11201,11 +11545,17 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .protocol-calc-table thead th {
-  background-color: var(--color-accent);
-  /* The accent fill is light in both themes, so the header text stays dark
-     rather than following --color-text. */
-  color: #33283f;
+  /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: teal instead of
+     the lavender every plain markdown table uses, matching the other two
+     bespoke data-table components (.parts-table, .bsr-table) — see the note
+     above .parts-table thead th. */
+  background-color: var(--color-interactive);
+  color: #ffffff;
   font-weight: 600;
+}
+
+.protocol-calc-table tbody tr:nth-child(even) {
+  background-color: color-mix(in srgb, var(--color-interactive) 8%, transparent);
 }
 
 /* Row labels are <th scope="row"> for screen readers, but they are body
@@ -11260,24 +11610,11 @@ body:not(.home-fullscreen) .home-hero {
   font-size: 0.85rem;
 }
 
-.protocol-calc-reset {
-  padding: 0.25rem 0.7rem;
-  border: 1px solid rgba(51, 40, 63, 0.45);
-  border-radius: 999px;
-  background: none;
-  color: inherit;
-  font: inherit;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-
-[data-theme="dark"] .protocol-calc-reset {
-  border-color: rgba(201, 189, 232, 0.7);
-}
-
-.protocol-calc-reset:hover {
-  background-color: rgba(201, 189, 232, 0.25);
-}
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: used to be its own
+   lavender-bordered outline, the one inline button on the site not drawing
+   on the teal pill shape every other one uses — now plain .btn-empower
+   .btn-empower--sm (added in ProtocolCalcGrid.tsx), same as the other two
+   inline buttons, nothing left to add here. */
 
 /* NOTE AND CRITICAL BOXES */
 .protocol-note {
@@ -12569,35 +12906,21 @@ a.protocol-download:hover {
   border-top-color: rgba(234, 244, 245, 0.25);
 }
 
+/* Shared pill/hover shape now lives in .btn-empower (added alongside this
+   class in PhasePager.tsx) — this rule only adds what makes it a phase-nav
+   button rather than any other .btn-empower. */
 .phase-nav-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.25rem;
-  border: 2px solid #2fa4a9;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--color-text);
-  font-weight: 700;
   text-align: left;
-  cursor: pointer;
-  transition:
-    background-color 0.15s ease,
-    transform 0.15s ease;
-}
-
-.phase-nav-btn:hover {
-  background-color: rgba(47, 164, 169, 0.18);
 }
 
 .phase-nav-next {
   margin-left: auto;
-  background-color: #2fa4a9;
+  background-color: var(--color-interactive);
   color: #33283f;
 }
 
 .phase-nav-next:hover {
-  background-color: #2fa4a9;
+  background-color: var(--color-interactive);
   transform: translateX(2px);
 }
 
@@ -12963,17 +13286,60 @@ a.protocol-download:hover {
   font-weight: 700;
 }
 
-/* The strain panel carries seven columns, two of them full sentences. Left
-   to the width of the text column every row grows into a paragraph stack, so
-   the table keeps a readable minimum width and scrolls sideways inside its
-   .table-responsive wrapper instead. */
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: the strain panel
+   carries seven columns, two of them full sentences, which forced a 56rem
+   minimum width and a sideways scroll on anything narrower than that. A
+   fixed layout holds the table to its container's width instead — rows grow
+   taller rather than the table growing wider — matching the same fix used
+   for the Entrepreneurship team table (.table-compact). Column widths are
+   weighted toward the two sentence columns (BSH activity, antibiotic notes)
+   so the short columns (genome, NCBI) don't waste space they don't need. */
 .strain-panel-table {
-  min-width: 56rem;
+  table-layout: fixed;
+  width: 100%;
 }
 
 .strain-panel-table td,
 .strain-panel-table th {
-  font-size: 0.92rem;
+  font-size: 0.8rem;
+  padding: 0.5rem 0.6rem;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.strain-panel-table th:nth-child(1),
+.strain-panel-table td:nth-child(1) {
+  width: 14%;
+}
+
+.strain-panel-table th:nth-child(2),
+.strain-panel-table td:nth-child(2) {
+  width: 10%;
+}
+
+.strain-panel-table th:nth-child(3),
+.strain-panel-table td:nth-child(3) {
+  width: 10%;
+}
+
+.strain-panel-table th:nth-child(4),
+.strain-panel-table td:nth-child(4) {
+  width: 12%;
+}
+
+.strain-panel-table th:nth-child(5),
+.strain-panel-table td:nth-child(5) {
+  width: 11%;
+}
+
+.strain-panel-table th:nth-child(6),
+.strain-panel-table td:nth-child(6) {
+  width: 16%;
+}
+
+.strain-panel-table th:nth-child(7),
+.strain-panel-table td:nth-child(7) {
+  width: 27%;
 }
 
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
@@ -13281,7 +13647,7 @@ a.protocol-download:hover {
   justify-content: center;
   border: 2px solid #ffffff;
   border-radius: 50%;
-  background-color: #2fa4a9;
+  background-color: var(--color-interactive);
   color: #ffffff;
   font-size: 0.82rem;
   font-weight: 700;
@@ -13467,7 +13833,7 @@ a.protocol-download:hover {
   width: 1.8rem;
   height: 1.8rem;
   border-radius: 50%;
-  background-color: #2fa4a9;
+  background-color: var(--color-interactive);
   color: #ffffff;
   font-size: 0.82rem;
   font-weight: 700;
@@ -13721,7 +14087,7 @@ a.protocol-download:hover {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #2fa4a9;
+  color: var(--color-interactive);
   padding-bottom: 0.6rem;
 }
 
@@ -13773,7 +14139,7 @@ a.protocol-download:hover {
   width: 4px;
   align-self: stretch;
   border-radius: 2px;
-  background-color: #2fa4a9;
+  background-color: var(--color-interactive);
 }
 
 .integration-summary-bar--passive {
@@ -13804,7 +14170,7 @@ a.protocol-download:hover {
   font-size: 0.8rem;
   font-weight: 700;
   line-height: 1.3;
-  color: #2fa4a9;
+  color: var(--color-interactive);
 }
 
 .integration-summary-bar--none ~ .integration-summary-impact-label {
@@ -13836,7 +14202,7 @@ a.protocol-download:hover {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: #2fa4a9;
+    color: var(--color-interactive);
   }
 
   .integration-summary-integrated {
@@ -13852,7 +14218,7 @@ a.protocol-download:hover {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: #2fa4a9;
+    color: var(--color-interactive);
   }
 
   .integration-summary-impact {
@@ -14297,7 +14663,7 @@ a.protocol-download:hover {
   padding: 0;
   border: 2px solid #eaf4f5;
   border-radius: 50%;
-  background: #2fa4a9;
+  background: var(--color-interactive);
   color: #fff;
   font-family: inherit;
   font-size: clamp(0.7rem, 1.35vw, 1.05rem);
@@ -14374,7 +14740,7 @@ a.protocol-download:hover {
   width: 1.8em;
   height: 1.8em;
   border-radius: 50%;
-  background: #2fa4a9;
+  background: var(--color-interactive);
   color: #fff;
   font-size: 0.7em;
   font-weight: 800;
@@ -14677,7 +15043,7 @@ a.protocol-download:hover {
   display: inline;
   padding: 0;
   border: 0;
-  border-bottom: 2px dotted #2fa4a9;
+  border-bottom: 2px dotted var(--color-interactive);
   background: none;
   color: inherit;
   font: inherit;
@@ -14698,7 +15064,7 @@ a.protocol-download:hover {
   align-items: center;
   gap: 0.75rem;
   padding: 0.7rem 0.9rem;
-  border: 2px solid #2fa4a9;
+  border: 2px solid var(--color-interactive);
   border-radius: 1rem;
   background: #fbfafe;
   color: #33283f;
@@ -14774,6 +15140,22 @@ a.protocol-download:hover {
   vertical-align: middle;
 }
 
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request):
+   PartsTable/ProtocolCalcGrid/BileSaltRatioTable are the site's three
+   bespoke data-table components (not plain markdown tables, which already
+   share one lavender-header look via .expandable-content table th) — teal
+   marks them as "interactive data", and a shared zebra tint keeps rows
+   scannable on the wider ones. */
+.parts-table thead th {
+  background-color: var(--color-interactive);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.parts-table tbody tr:nth-child(even) {
+  background-color: color-mix(in srgb, var(--color-interactive) 8%, transparent);
+}
+
 .parts-table td:first-child {
   white-space: nowrap;
 }
@@ -14822,7 +15204,7 @@ a.protocol-download:hover {
   width: 1.5rem;
   height: 1.5rem;
   padding: 0;
-  border: 2px solid #2fa4a9;
+  border: 2px solid var(--color-interactive);
   border-radius: 0.35rem;
   background: #ffffff;
   color: #ffffff;
@@ -14833,28 +15215,15 @@ a.protocol-download:hover {
 }
 
 .checklist-row--done .checklist-box {
-  background: #2fa4a9;
+  background: var(--color-interactive);
 }
 
+/* Shared pill/hover shape now lives in .btn-empower (added alongside this
+   class in Checklist.tsx) — this rule only adds the block/margin layout
+   that makes it sit right-aligned under the table. */
 .checklist-clear {
   display: block;
   margin: 0 0 1.25rem auto;
-  padding: 0.4rem 1.25rem;
-  border: 2px solid #2fa4a9;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--color-text);
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.checklist-clear:hover:not(:disabled) {
-  background-color: rgba(47, 164, 169, 0.18);
-}
-
-.checklist-clear:disabled {
-  opacity: 0.4;
-  cursor: default;
 }
 
 /* The gut piece's title is itself a hoverable term: keep the card-title look. */
@@ -15591,4 +15960,83 @@ a.protocol-download:hover {
   margin-right: 0.35em;
   vertical-align: -0.2em;
   filter: drop-shadow(0 0.1em 0.12em rgba(51, 40, 63, 0.35));
+}
+
+/* TROPHY BADGE (award-winning events, see Trophy.tsx) */
+.trophy-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  margin-left: 0.4rem;
+  vertical-align: -0.35em;
+}
+
+.trophy-badge-overlay {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 2;
+  margin-left: 0;
+}
+
+.trophy-icon {
+  display: inline-block;
+  font-size: 1.5rem;
+  line-height: 1;
+  filter: drop-shadow(0 0.1em 0.15em rgba(51, 40, 63, 0.45));
+  animation: trophy-sway 3.2s ease-in-out infinite;
+  transform-origin: 50% 85%;
+}
+
+.trophy-spark {
+  position: absolute;
+  color: #fff7cc;
+  font-size: 0.7rem;
+  line-height: 1;
+  opacity: 0;
+  animation: nav-glitter-twinkle 2.6s ease-in-out infinite;
+}
+
+.trophy-spark--1 {
+  top: -0.3rem;
+  left: -0.4rem;
+  animation-delay: 0s;
+}
+
+.trophy-spark--2 {
+  top: 0.1rem;
+  right: -0.55rem;
+  font-size: 0.55rem;
+  animation-delay: 0.9s;
+}
+
+.trophy-spark--3 {
+  bottom: -0.2rem;
+  left: 0.35rem;
+  font-size: 0.6rem;
+  animation-delay: 1.7s;
+}
+
+@keyframes trophy-sway {
+  0%,
+  100% {
+    transform: rotate(-8deg) translate(-0.05rem, 0);
+  }
+  50% {
+    transform: rotate(8deg) translate(0.05rem, -0.1rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trophy-icon {
+    animation: none;
+  }
+
+  .trophy-spark {
+    animation: none;
+    opacity: 0.8;
+  }
 }

@@ -41,7 +41,7 @@ import {
   useState,
 } from "react";
 import { flushSync } from "react-dom";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { extractLabeledChildren } from "../utils/extractLabeledChildren";
 import { stringToSlug } from "../utils/stringToSlug";
 import { headingSlugs, textOf } from "./useHashPanel";
@@ -111,10 +111,15 @@ function readPipeline(item: { label: string; content: ReactNode }): Pipeline {
 export function ResultsPipelines({
   children,
   highlights,
+  nextPage,
 }: {
   children: ReactNode;
   /** Shown between the switch and the sections, e.g. the success cards. */
   highlights?: ReactNode;
+  // Shown after the last section of the last pipeline, so a reader who
+  // works through Toolkit and Therapeutics in turn lands on the next page
+  // in the wiki's reading order instead of a dead end (team feedback).
+  nextPage?: { to: string; label: string };
 }) {
   const pipelines = useMemo(
     () => extractLabeledChildren(children).map(readPipeline),
@@ -321,7 +326,7 @@ export function ResultsPipelines({
               ) : (
                 <span />
               )}
-              {index < sections.length - 1 && (
+              {index < sections.length - 1 ? (
                 <button
                   type="button"
                   className="phase-nav-btn phase-nav-next"
@@ -330,6 +335,21 @@ export function ResultsPipelines({
                   Next: {sections[index + 1].plainTitle}{" "}
                   <span aria-hidden="true">→</span>
                 </button>
+              ) : pipelineIndex < pipelines.length - 1 ? (
+                <button
+                  type="button"
+                  className="phase-nav-btn phase-nav-next"
+                  onClick={() => choosePipeline(pipelineIndex + 1)}
+                >
+                  Next: {pipelines[pipelineIndex + 1].label}{" "}
+                  <span aria-hidden="true">→</span>
+                </button>
+              ) : (
+                nextPage && (
+                  <Link to={nextPage.to} className="phase-nav-btn phase-nav-next">
+                    Next: {nextPage.label} <span aria-hidden="true">→</span>
+                  </Link>
+                )
               )}
             </div>
           );
