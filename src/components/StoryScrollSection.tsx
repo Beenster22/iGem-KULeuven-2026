@@ -53,6 +53,11 @@ interface StoryStep {
     | "office"
     | "gut";
   art?: "clock";
+  // How many of the reader's scroll stops this screen holds for. One
+  // unless said otherwise; the office holds for two, so it takes two
+  // scrolls to get from the doctor and patient on to the gut (team
+  // request, 2026-10-20).
+  holds?: number;
   lines: ReactNode[];
   // The screen's second sentence (the pair layouts).
   second?: ReactNode[];
@@ -98,6 +103,7 @@ const STEPS: StoryStep[] = [
   {
     id: "diagnosis",
     position: "office",
+    holds: 2,
     lines: [
       <>
         <strong>Diagnosis takes quite a while</strong> because PMOS manifests
@@ -124,6 +130,13 @@ const STEPS: StoryStep[] = [
     // 2026-10-19).
   },
 ];
+
+// One entry per scroll stop, holding the index of the screen it shows. A
+// screen that holds for more than one stop simply appears more than once,
+// so the reader scrolls on and nothing changes until its last stop is past.
+const STOPS = STEPS.flatMap((entry, i) =>
+  Array.from({ length: Math.max(1, entry.holds ?? 1) }, () => i),
+);
 
 const MASCOT_BASE = "https://static.igem.wiki/teams/6299/wiki/mascot";
 
@@ -608,16 +621,17 @@ export function StoryScrollSection() {
   const prefersReducedMotion = useReducedMotion();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  const step = usePinnedStep(wrapperRef, STEPS.length);
+  const stop = usePinnedStep(wrapperRef, STOPS.length);
+  const step = STOPS[stop] ?? 0;
   useStepMorphs(stageRef, step, !prefersReducedMotion);
 
   return (
     <div
       className={`story-scroll${prefersReducedMotion ? " story-scroll--static" : " home-snap-pin"}`}
       ref={wrapperRef}
-      style={{ "--snap-steps": STEPS.length } as CSSProperties}
+      style={{ "--snap-steps": STOPS.length } as CSSProperties}
     >
-      {!prefersReducedMotion && <SnapSteps steps={STEPS.length} />}
+      {!prefersReducedMotion && <SnapSteps steps={STOPS.length} />}
       <div
         className={`story-stage${prefersReducedMotion ? "" : " home-snap-stage"}`}
         ref={stageRef}
