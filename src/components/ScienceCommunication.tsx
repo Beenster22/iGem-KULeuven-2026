@@ -162,14 +162,18 @@ function PostCard({ title, images = [], caption, href, reel }: InstagramPostProp
           </div>
         )}
         {reel && href && (
+          // Covers the whole picture, so a click anywhere on it plays the
+          // reel. It opens Instagram's embed player, which plays for anyone,
+          // while the normal reel page asks visitors without an account to
+          // log in first.
           <a
             className="ig-post-reel"
-            href={href}
+            href={`${href.replace(/\/?$/, "/")}embed/`}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`Watch the reel “${title}” on Instagram`}
+            aria-label={`Watch the reel “${title}”`}
           >
-            ▶
+            <span aria-hidden="true">▶</span>
           </a>
         )}
         {count > 1 && (
