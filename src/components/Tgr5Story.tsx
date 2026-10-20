@@ -334,8 +334,14 @@ const GUT_RECEPTOR_X = GUT.x + GUT.r * 4 * GUT.receptor + GUT.r;
 const IMMUNE = { x: 250, y: 370, r: 110 };
 // Half the length of a receptor standing upright (see ReceptorShape).
 const RECEPTOR_HALF = 27;
-// The bile acids are drawn larger here than in the rest of the page.
-const ACID_SCALE = 1.6;
+// Edited with Claude Opus 5 (Anthropic), 2026-10-20 (team request: one
+// size across all three screens): the bile acids used to be drawn larger
+// here than in the rest of the page, at 1.6. The hexagon is 12 units here
+// and 11 in the BSH reaction (HEX_R there), and both drawings are 1000
+// units across, so this brings the two to the same size on the screen —
+// and with it the ones that fly down between them, which take their size
+// from both ends (see useBileAcidFlight.ts, which imports this).
+export const ACID_SCALE = 11 / 12;
 // How far above the top of a receptor a docked bile acid sits.
 const ACID_R = HEX_R * ACID_SCALE;
 const DOCK_GAP = RECEPTOR_HALF + ACID_R + 3;

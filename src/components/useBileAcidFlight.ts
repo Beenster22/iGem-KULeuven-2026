@@ -30,20 +30,18 @@
 // to the circle of bacteria the same way.
 import { useEffect, type RefObject } from "react";
 import { navBottom } from "./useFallingM";
+import { ACID_SCALE } from "./Tgr5Story";
 
 /** The screen they arrive on, and the acids already drawn there. */
 const TGR5_STAGE = ".tgr5";
 const TGR5_SVG = ".tgr5-svg";
 const TGR5_ACID = ".tgr5-pool-acid";
 
-// The two diagrams' own coordinate spaces, for turning the sizes below into
-// a share of each drawing (see VB_W/HEX_R in the two components).
-const BSH_VB_W = 1000;
-const BSH_HEX_R = 11;
 // The binding diagram's own space (OV_W in Tgr5Story.tsx), and the radius
-// its acids end up drawn at there: a 12-unit hexagon scaled by ACID_SCALE.
+// its acids end up drawn at there: a 12-unit hexagon scaled by ACID_SCALE,
+// taken from that file rather than copied, so the two cannot drift apart.
 const TGR5_VB_W = 1000;
-const TGR5_HEX_R = 12 * 1.6;
+const TGR5_HEX_R = 12 * ACID_SCALE;
 
 // The shapes are drawn at this radius and then scaled, so one set of points
 // serves both ends of the journey.
@@ -318,20 +316,14 @@ export function useBileAcidFlight({
       // done early in the drift out, so by the time that sentence holds the
       // screen they are already the size they will land at and nothing
       // about them changes again.
-      // The acids on the TGR5 screen are drawn larger than those in the
-      // BSH one — about one and three quarters — so a traveller cannot be
-      // the size of both. It keeps the size it left the reaction at for
-      // the whole of the wait (team request, 2026-10-20: they were the
-      // larger of the two while they floated, which read as too big on
-      // that screen), and grows into its counterpart only on the way
-      // down, so it still lands exactly.
-      // Measured on the drawing itself, not on the box around it: that box
-      // is wider than the drawing, which made the acids set off half as
-      // big again as the ones they left behind.
-      const fromSvg = diagram.querySelector("svg")?.getBoundingClientRect();
-      const fromR = BSH_HEX_R * ((fromSvg?.width || from.width) / BSH_VB_W);
+      // One size the whole way (team request, 2026-10-20): both drawings
+      // now set their acids at the same radius in their own 1000-unit
+      // space, so there is nothing to grow into and nothing to shrink
+      // from. It is taken from the TGR5 drawing because that one keeps
+      // its size; the BSH drawing is zoomed by its own arrival, so an acid
+      // measured against it would swell and shrink with that.
       const toR = TGR5_HEX_R * (to.width / TGR5_VB_W);
-      const scale = lerp(fromR, toR, fallLeg) / BASE_HEX_R;
+      const scale = toR / BASE_HEX_R;
 
       // Where each acid on the TGR5 screen is, taken from where its own
       // drawing is placed rather than from the middle of the box around
