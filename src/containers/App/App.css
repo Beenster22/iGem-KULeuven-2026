@@ -14858,6 +14858,8 @@ a.protocol-download:hover {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   padding: 0.5rem 0.25rem 1rem;
+  /* An opened caption makes only its own card taller. */
+  align-items: flex-start;
   /* Paged with the arrow buttons (or a swipe), so no scrollbar strip. */
   scrollbar-width: none;
 }
@@ -15030,9 +15032,32 @@ a.protocol-download:hover {
 
 .ig-post-caption {
   padding: 0 0.8rem 0.9rem;
-  margin: 0;
   font-size: 0.85rem;
   line-height: 1.4;
+}
+
+.ig-post-caption p {
+  margin: 0;
+  /* Keeps the caption's own line breaks, as on Instagram. */
+  white-space: pre-line;
+}
+
+/* Collapsed to two lines with a "more" button, like Instagram does. */
+.ig-post-caption--clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ig-post-caption button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  opacity: 0.65;
+  font: inherit;
+  cursor: pointer;
 }
 
 .ig-carousel-arrow {
@@ -15057,7 +15082,14 @@ a.protocol-download:hover {
 }
 
 .ig-carousel-arrow--prev {
-  left: -14px;
+  left: -34px;
+}
+
+/* On a phone the page gutter is too narrow to hang the arrow outside it. */
+@media (max-width: 576px) {
+  .ig-carousel-arrow--prev {
+    left: -10px;
+  }
 }
 
 .ig-carousel-arrow--next {

@@ -117,7 +117,11 @@ export function InstagramPost(_props: InstagramPostProps) {
 function PostCard({ title, images = [], caption, href }: InstagramPostProps) {
   const avatar = useAvatarCutout();
   const [slide, setSlide] = useState(0);
+  const [captionOpen, setCaptionOpen] = useState(false);
   const count = images.length;
+  // Both arrows are always there on a multi-slide post and wrap around, so a
+  // reader can always step back or forward.
+  const step = (direction: 1 | -1) => setSlide((slide + direction + count) % count);
 
   return (
     <article className="ig-post">
@@ -153,25 +157,25 @@ function PostCard({ title, images = [], caption, href }: InstagramPostProps) {
             <span>Post screenshots coming soon</span>
           </div>
         )}
-        {slide > 0 && (
-          <button
-            type="button"
-            className="ig-post-arrow ig-post-arrow--prev"
-            aria-label="Previous slide"
-            onClick={() => setSlide(slide - 1)}
-          >
-            ‹
-          </button>
-        )}
-        {slide < count - 1 && (
-          <button
-            type="button"
-            className="ig-post-arrow ig-post-arrow--next"
-            aria-label="Next slide"
-            onClick={() => setSlide(slide + 1)}
-          >
-            ›
-          </button>
+        {count > 1 && (
+          <>
+            <button
+              type="button"
+              className="ig-post-arrow ig-post-arrow--prev"
+              aria-label="Previous slide"
+              onClick={() => step(-1)}
+            >
+              ‹
+            </button>
+            <button
+              type="button"
+              className="ig-post-arrow ig-post-arrow--next"
+              aria-label="Next slide"
+              onClick={() => step(1)}
+            >
+              ›
+            </button>
+          </>
         )}
         {count > 1 && (
           <div className="ig-post-dots" aria-hidden="true">
@@ -198,9 +202,14 @@ function PostCard({ title, images = [], caption, href }: InstagramPostProps) {
       </div>
 
       {caption && (
-        <p className="ig-post-caption">
-          <strong>{INSTAGRAM_HANDLE}</strong> {caption}
-        </p>
+        <div className="ig-post-caption">
+          <p className={captionOpen ? "" : "ig-post-caption--clamped"}>
+            <strong>{INSTAGRAM_HANDLE}</strong> {caption}
+          </p>
+          <button type="button" onClick={() => setCaptionOpen(!captionOpen)}>
+            {captionOpen ? "less" : "more"}
+          </button>
+        </div>
       )}
     </article>
   );
