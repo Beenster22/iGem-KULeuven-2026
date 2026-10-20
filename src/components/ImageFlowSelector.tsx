@@ -6,6 +6,13 @@
 // the figure, with only that step's text showing instead of all five at
 // once). Default step is always the first; Previous/Next step through in
 // order and the current pin and heading both make the selection obvious.
+//
+// Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: a figure can now carry
+// its own numbered circles (the CRISPR figure from the team's BioRender
+// export). Give a step marker an `x` and `y` and `crop` the artwork's white
+// margin away, and the pin becomes a clickable ring sitting exactly on the
+// circle baked into the image, so the numbers on the figure and the steps
+// below it are the same ones. Positions are % of the full image.
 import { Children, ReactElement, ReactNode, isValidElement, useMemo, useState } from "react";
 
 interface FlowStepProps {
@@ -13,7 +20,7 @@ interface FlowStepProps {
   title: string;
   /** Pin position: x as a percentage across the figure, parked in the gutter
    * above or below the image so it never covers the artwork. */
-  marker: { x: number; side: "above" | "below" };
+  marker: { x: number; side: "above" | "below" } | { x: number; y: number };
   children?: ReactNode;
 }
 
@@ -26,10 +33,15 @@ export function FlowStep({ children }: FlowStepProps) {
 interface ImageFlowSelectorProps {
   image: string;
   alt: string;
+  /** Region of the image to show, in % of the full image; markers with an
+   * `x`/`y` are placed relative to the full image, not to this region. */
+  crop?: { x: number; y: number; w: number; h: number };
+  /** Width / height of the full image; needed with `crop`. */
+  imageRatio?: number;
   children: ReactNode;
 }
 
-export function ImageFlowSelector({ image, alt, children }: ImageFlowSelectorProps) {
+export function ImageFlowSelector({ image, alt, crop, imageRatio = 16 / 9, children }: ImageFlowSelectorProps) {
   const steps = useMemo(
     () =>
       Children.toArray(children)
@@ -43,21 +55,48 @@ export function ImageFlowSelector({ image, alt, children }: ImageFlowSelectorPro
 
   return (
     <div className="image-flow-selector">
-      <div className="image-flow-selector-figure">
-        <img src={image} alt={alt} className="image-flow-selector-image" />
-        {steps.map((step, index) => (
-          <button
-            key={step.title}
-            type="button"
-            className={`image-flow-selector-marker ${step.marker.side}${index === activeIndex ? " active" : ""}`}
-            style={{ left: `${step.marker.x}%` }}
-            aria-label={`Step ${index + 1} of ${count}: ${step.title}`}
-            aria-pressed={index === activeIndex}
-            onClick={() => setActiveIndex(index)}
-          >
-            {index + 1}
-          </button>
-        ))}
+      <div className={`image-flow-selector-figure${crop ? " on-image" : ""}`}>
+        <div
+          className={crop ? "image-flow-selector-crop" : undefined}
+          style={crop ? { aspectRatio: `${(crop.w / crop.h) * imageRatio}` } : undefined}
+        >
+          <img
+            src={image}
+            alt={alt}
+            className="image-flow-selector-image"
+            style={
+              crop
+                ? {
+                    position: "absolute",
+                    width: `${(100 / crop.w) * 100}%`,
+                    height: `${(100 / crop.h) * 100}%`,
+                    left: `${(-crop.x / crop.w) * 100}%`,
+                    top: `${(-crop.y / crop.h) * 100}%`,
+                    maxWidth: "none",
+                  }
+                : undefined
+            }
+          />
+          {steps.map((step, index) => {
+            const m = step.marker;
+            const onImage = "y" in m;
+            const left = crop && onImage ? ((m.x - crop.x) / crop.w) * 100 : m.x;
+            const top = crop && onImage ? ((m.y - crop.y) / crop.h) * 100 : undefined;
+            return (
+              <button
+                key={step.title}
+                type="button"
+                className={`image-flow-selector-marker ${onImage ? "ring" : m.side}${index === activeIndex ? " active" : ""}`}
+                style={{ left: `${left}%`, top: top === undefined ? undefined : `${top}%` }}
+                aria-label={`Step ${index + 1} of ${count}: ${step.title}`}
+                aria-pressed={index === activeIndex}
+                onClick={() => setActiveIndex(index)}
+              >
+                {index + 1}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <div className="image-flow-selector-panel">
