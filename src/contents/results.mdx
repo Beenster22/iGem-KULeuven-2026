@@ -13,6 +13,7 @@
 {/* The pipeline switch opens the page, then the success cards, passed in as `highlights`, see ResultsPipelines. */}
 
 <ResultsPipelines
+  nextPage={{ to: "/measurement", label: "Read Measurements" }}
   highlights={
     <SuccessCards>
       <SuccessCard to="antibiotic-susceptibility-of-p-vulgatus">
@@ -607,7 +608,6 @@ Prepared in-house. LB powder from Sigma-Aldrich, St. Louis, MO, USA.
 </ExpandableText>
 
 Full protocol, plate layouts and run-by-run records are in the{" "}
-
 <Link to="/protocols#medium-comparison-growth-assay">Protocols</Link> (Chassis
 Characterization → Medium Comparison Growth Assay) and the{" "}
 <Link to="/notebook#notebook-str-strain-and-medium-selection">Notebook</Link>{" "}

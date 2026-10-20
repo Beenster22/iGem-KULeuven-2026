@@ -4334,15 +4334,17 @@ div.sponsor-grid-card:hover {
   justify-content: center;
 }
 
-/* Edited with Claude Opus 5 (Anthropic), 2026-10-09: now that a figure is
-   drawn at its own size in the entry (above), the small ones would have
-   opened fullscreen at that same size — a click that appeared to do
-   nothing. Fullscreen therefore fills the screen, which is the one place
-   enlarging a low-resolution photo is what the reader actually asked for.
-   object-fit keeps the proportions whichever way it has to scale. */
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: the previous
+   width:100%/height:100% forced every image to fill the viewport, which
+   blew small/low-resolution photos (e.g. the fluorescence microscopy crops)
+   up far past their native resolution into a blurry, oversized mess. Intrinsic
+   sizing (auto) capped by max-width/max-height lets a small image show at its
+   own size, while a large one still shrinks to fit the screen. */
 .zoomable-image-dialog img {
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
   border-radius: 0.5rem;
 }
@@ -4372,19 +4374,34 @@ div.sponsor-grid-card:hover {
   background-color: #ffffff;
 }
 
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: the previous
+   background (15%-opacity white) was nearly transparent, so the button could
+   disappear against a light backdrop (an on-light-bg figure's white card) or
+   a busy/light image behind it. A solid dark circle with a light border and
+   shadow stays visible regardless of what's behind it, and the hover/focus
+   states make it clearly interactive. */
 .zoomable-image-close {
   position: absolute;
   top: 0.75rem;
   right: 1rem;
-  width: 2.5rem;
-  height: 2.5rem;
-  border: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 2px solid rgba(255, 255, 255, 0.9);
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(20, 15, 26, 0.85);
   color: #fff;
   font-size: 1.75rem;
   line-height: 1;
   cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+  z-index: 1;
+}
+
+.zoomable-image-close:hover,
+.zoomable-image-close:focus-visible {
+  background-color: rgba(20, 15, 26, 1);
+  transform: scale(1.08);
 }
 
 /* HOME PAGE FULLSCREEN CHROME */
@@ -12963,17 +12980,60 @@ a.protocol-download:hover {
   font-weight: 700;
 }
 
-/* The strain panel carries seven columns, two of them full sentences. Left
-   to the width of the text column every row grows into a paragraph stack, so
-   the table keeps a readable minimum width and scrolls sideways inside its
-   .table-responsive wrapper instead. */
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: the strain panel
+   carries seven columns, two of them full sentences, which forced a 56rem
+   minimum width and a sideways scroll on anything narrower than that. A
+   fixed layout holds the table to its container's width instead — rows grow
+   taller rather than the table growing wider — matching the same fix used
+   for the Entrepreneurship team table (.table-compact). Column widths are
+   weighted toward the two sentence columns (BSH activity, antibiotic notes)
+   so the short columns (genome, NCBI) don't waste space they don't need. */
 .strain-panel-table {
-  min-width: 56rem;
+  table-layout: fixed;
+  width: 100%;
 }
 
 .strain-panel-table td,
 .strain-panel-table th {
-  font-size: 0.92rem;
+  font-size: 0.8rem;
+  padding: 0.5rem 0.6rem;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.strain-panel-table th:nth-child(1),
+.strain-panel-table td:nth-child(1) {
+  width: 14%;
+}
+
+.strain-panel-table th:nth-child(2),
+.strain-panel-table td:nth-child(2) {
+  width: 10%;
+}
+
+.strain-panel-table th:nth-child(3),
+.strain-panel-table td:nth-child(3) {
+  width: 10%;
+}
+
+.strain-panel-table th:nth-child(4),
+.strain-panel-table td:nth-child(4) {
+  width: 12%;
+}
+
+.strain-panel-table th:nth-child(5),
+.strain-panel-table td:nth-child(5) {
+  width: 11%;
+}
+
+.strain-panel-table th:nth-child(6),
+.strain-panel-table td:nth-child(6) {
+  width: 16%;
+}
+
+.strain-panel-table th:nth-child(7),
+.strain-panel-table td:nth-child(7) {
+  width: 27%;
 }
 
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
