@@ -154,6 +154,14 @@ a[data-footnote-ref] {
   color: inherit;
 }
 
+/* The wheel-selector "toggle" content card (PMOS hypothesis figure, project
+   description; results-page toolkit wheel) also keeps a fixed light
+   background in both themes — same fixed-contrast problem as .table above,
+   the --color-text marker turned near-white-on-light-pink in dark mode. */
+.wheel-selector--toggle .wheel-selector-content a[data-footnote-ref] {
+  color: inherit;
+}
+
 a[data-footnote-ref]::before {
   content: "[";
 }

@@ -377,43 +377,7 @@ machine.
 
 *Narrowing a panel of candidate enzymes before committing wet lab capacity.*
 
-### 2.1 Phylogenetic analysis of the candidates
-
-To understand how our candidates relate to one another and to enzymes with confirmed bile salt
-hydrolase activity, we reconstructed a phylogeny of the full candidate panel together with
-characterized reference sequences (24 sequences in total). The reference set was chosen to span the
-taxonomic range over which BSH activity have been described: *Bifidobacterium*, *Collinsella*,
-*Lactobacillus* and other related genera such as *Blautia*, *Bacteroides*, *Phocaeicola* and
-*Parabacteroides*. In our analysis we have also included the biochemically characterized bile salt
-hydrolase of *Bifidobacterium longum* (UniProt Q9KK62) as a reference point.
-
-Prior to generating our tree we aligned the sequences with MAFFT version 7 and G-INS-1 as strategy,
-after trimming we were left with 309 aligned positions, of which 289 were parsimony-informative. A
-maximum likelihood tree was inferred in IQ-TREE 3.1.2, substitution models were screened with
-ModelFinder and Q.PFAM+I+G4 selected by BIC, with the proportion of invariable sites estimated at
-0.040 and a Gamma shape parameter of 1.96 across four rate categories. Branch support was assessed
-by performing 1000 ultrafast bootstrap replicates and 1000 SH-aLRT replicates.
-
-The resulting tree was created using iTOL and separates the candidate set into two broad groups. One
-contains the characterised *Bifidobacterium* enzyme together with the *Collinsella*, *Lactobacillus*
-and *Blautia* sequences. The second contains the Bacteroidota sequences — *Bacteroides dorei*,
-*Phocaeicola vulgatus*, *Phocaeicola plebeius* and *Parabacteroides merdae* — and is separated from
-the first by substantially longer branches.
-
-Two observations follow from this. First, sequence similarity to a known BSH is a weak guide within
-our candidate set: the Bacteroidota candidates are distant enough from the characterised enzymes that
-homology alone does not establish what reaction they catalyse. This is the concern that motivated our
-docking analysis, discussed further below. Second, the two *P. vulgatus* sequences in our set do not
-group together. *Phocaeicola vulgatus* 1 resolves alongside *B. dorei*, while *Phocaeicola vulgatus*
-2 resolves with *P. merdae* on a long branch, indicating that this single strain carries two
-divergent members of the choloylglycine hydrolase family rather than two copies of one enzyme.
-
-<div className="text-center my-3">
-<ZoomableImage src="https://static.igem.wiki/teams/6299/wiki/dry-lab/phylum-tree.avif" alt="Maximum likelihood phylogenetic tree of the bile salt hydrolase candidate panel together with characterized reference sequences, with the 24 sequences grouped by phylogenetic character" />
-<p className="figure-caption small mt-2 mb-0">Figure 1. Maximum likelihood phylogeny of the bile salt hydrolase candidate panel. Twenty-four sequences comprising the full candidate panel and characterized reference sequences were aligned with MAFFT v7 (G-INS-1) and the tree inferred in IQ-TREE 3.1.2 under Q.PFAM+I+G4, with 1000 ultrafast bootstrap and 1000 SH-aLRT replicates. The 24 sequences are grouped according to their phylogenetic character. The tree was visualized using iTOL.</p>
-</div>
-
-### 2.2 Antibiotic selection
+### 2.1 Antibiotic selection
 
 Establishing what *P. vulgatus* is susceptible to served two purposes: it gives us a containment
 route, and it establishes a clinical fallback should an engineered strain ever need to be cleared
@@ -469,7 +433,7 @@ Together these analyses gave us a foundation to rely on before starting experime
 for a strain with little published characterization, a set of genetic parts with a realistic prospect
 of functioning in *P. vulgatus*, and an empirically grounded susceptibility profile.
 
-### 2.3 BSH–bile salt interaction using AutoDock Vina
+### 2.2 BSH–bile salt interaction using AutoDock Vina
 
 Sequence-level evidence alone is not enough to call a gene a bile salt hydrolase (BSH). BSHs belong
 to the cholylglycine hydrolase family, which also contains enzymes with different substrate
