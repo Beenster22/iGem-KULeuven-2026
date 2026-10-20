@@ -106,13 +106,15 @@ function floatSpot(n: number, total: number) {
 // How far each one wanders around its place, in pixels. It keeps to its
 // place as the reader scrolls (team request) and only sways of its own
 // accord, with the clock, so scrolling through that screen does not shift
-// them and they are still never quite still.
-const SWAY = 20;
+// them and they are still never quite still. Edited 2026-10-20: calmer
+// and slower than before — at 20px every five seconds the drift read as
+// restless while the reader was scrolling past it.
+const SWAY = 11;
 // How long one sway takes, in milliseconds, across and down. They are
 // close but not equal, so a pair of them drifts in and out of step and no
 // one of them ever retraces the same little loop.
-const SWAY_X_MS = 5200;
-const SWAY_Y_MS = 4100;
+const SWAY_X_MS = 7000;
+const SWAY_Y_MS = 5600;
 // How long the fall itself takes, as a share of the window, and the most
 // of the TGR5 screen's own pinned step it may use up — they have to be
 // down before that screen starts moving again, or there would be nothing
