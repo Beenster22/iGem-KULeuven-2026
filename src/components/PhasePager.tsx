@@ -13,13 +13,21 @@
 // that holds it.
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { Link } from "react-router-dom";
 
 interface Slot {
   slot: HTMLElement;
   title: string;
 }
 
-export function PhasePager() {
+export function PhasePager({
+  nextPage,
+}: {
+  // Shown instead of nothing after the page's last section, so a reader who
+  // works through the whole page phase by phase lands on the next page in
+  // the wiki's reading order rather than a dead end (team feedback).
+  nextPage?: { to: string; label: string };
+}) {
   const markerRef = useRef<HTMLSpanElement>(null);
   const sectionsRef = useRef<HTMLElement[]>([]);
   const [slots, setSlots] = useState<Slot[]>([]);
@@ -125,7 +133,7 @@ export function PhasePager() {
             ) : (
               <span />
             )}
-            {index < slots.length - 1 && (
+            {index < slots.length - 1 ? (
               <button
                 type="button"
                 className="phase-nav-btn phase-nav-next"
@@ -133,6 +141,12 @@ export function PhasePager() {
               >
                 Next: {slots[index + 1].title} <span aria-hidden="true">→</span>
               </button>
+            ) : (
+              nextPage && (
+                <Link to={nextPage.to} className="phase-nav-btn phase-nav-next">
+                  Next: {nextPage.label} <span aria-hidden="true">→</span>
+                </Link>
+              )
             )}
           </>,
           slot,
