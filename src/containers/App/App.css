@@ -5064,11 +5064,11 @@ body.home-fullscreen {
   --color-home-band: #33283f;
 }
 
-/* The waves between the bands take the other of the two swatches, so they
-   read against the band either way round (team request, 2026-10-20): the
-   lighter purple on the dark bands, the darker one on the light bands. */
+/* The waves between the bands read against the band either way round
+   (team request, 2026-10-20): the light purple on the dark bands, and on
+   the light bands the same colour as the words on them. */
 :root {
-  --color-band-border: #4d3d63;
+  --color-band-border: var(--color-text);
 }
 
 [data-theme="dark"] {
