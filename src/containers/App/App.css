@@ -7921,19 +7921,12 @@ body:not(.home-fullscreen) .home-hero {
   margin-inline-start: clamp(1rem, 4vw, 3rem);
 }
 
+/* The drawing sits still: the zoom is the receptor flying in from the
+   screen above and growing on the way (useReceptorZoom.ts), so scaling
+   the whole drawing as well would move it twice. */
 .tgr5-zoom-art {
   display: grid;
   place-items: center;
-  scale: 0.38;
-  opacity: 0;
-  transition:
-    scale 1.1s cubic-bezier(0.2, 0.8, 0.25, 1),
-    opacity 0.7s ease;
-}
-
-.tgr5-zoom--in .tgr5-zoom-art {
-  scale: 1;
-  opacity: 1;
 }
 
 .tgr5-zoom-svg {
@@ -7942,22 +7935,7 @@ body:not(.home-fullscreen) .home-hero {
   max-height: 60vh;
 }
 
-.tgr5-zoom-membrane {
-  fill: #f3eef9;
-}
-
-.tgr5-zoom-membrane-edge {
-  stroke: #6e5b9e;
-  stroke-width: 4;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .tgr5-zoom-art {
-    scale: 1;
-    opacity: 1;
-    transition: none;
-  }
-
   .tgr5-zoom-line {
     opacity: 1;
     translate: 0 0;
@@ -15022,6 +15000,31 @@ a.protocol-download:hover {
    down to the TGR5 one (see useBileAcidFlight.ts, which places and sizes
    each shape every frame). They wear the two diagrams' own classes, so the
    colours come from those rules. */
+/* Generated with Claude Opus 5 (Anthropic), 2026-10-20 (team request): the
+   receptor in flight from the binding diagram to the close-up below it
+   (useReceptorZoom.ts). The one in the close-up waits behind
+   --receptor-in until it arrives, so it is never drawn twice. */
+.receptor-zoom-flight {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  overflow: visible;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.tgr5-zoom-svg .tgr5-receptor {
+  opacity: var(--receptor-in, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tgr5-zoom-svg .tgr5-receptor {
+    opacity: 1;
+  }
+}
+
 .bile-acid-flight {
   position: fixed;
   inset: 0;
