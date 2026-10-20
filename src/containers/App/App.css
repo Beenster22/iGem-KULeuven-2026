@@ -16040,3 +16040,10 @@ a.protocol-download:hover {
     opacity: 0.8;
   }
 }
+
+/* Pages that render a [data-wide-text] marker (the Awards page) let their
+   justified text run the full width of its box instead of stopping at the
+   75-character cap, so each paragraph ends flush with the edge of the card. */
+.page-body:not(.page-body--home) .page-shell-content:has([data-wide-text]) :is(p, li) {
+  max-width: none;
+}
