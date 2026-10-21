@@ -14509,6 +14509,19 @@ a.protocol-download:hover {
   height: auto;
 }
 
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-21
+   Purpose: the NanoLuc promoter chart (measurement-promoter-nanoluc.avif,
+   3348x1416) has 592px of white on its left (room for the y labels) but only
+   144px on its right, so the plot sat off-centre in its frame. Crop 448px off
+   the left (3348 -> 2900 wide) so both margins are 144px. Used with
+   <ZoomableImage className="... natural-ratio crop-left-nanoluc" />. */
+.figure-grid img.crop-left-nanoluc {
+  aspect-ratio: 2900 / 1416;
+  height: auto;
+  object-fit: cover;
+  object-position: right center;
+}
+
 @media (max-width: 900px) {
   .figure-grid {
     --figure-cols: 2;
