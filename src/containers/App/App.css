@@ -9870,8 +9870,13 @@ body:not(.home-fullscreen) .home-hero {
   padding: 0;
 }
 
+/* Rendered as an h3 so the section index nests it under its phase, but it is
+   still a section title, so it keeps the h1/h2 display face and size. */
 .hp-section-title {
   margin: 0 0 1rem;
+  font-family: "Luckiest Guy", "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 1.75rem;
 }
 
 /* Text-only section card (no interviewee carousel) */
@@ -9935,8 +9940,10 @@ body:not(.home-fullscreen) .home-hero {
   min-width: 0;
 }
 
+/* An h4 for index nesting; keeps the h3 size it had before. */
 .hp-featured-name {
   margin: 0;
+  font-size: 1.75rem;
 }
 
 .hp-featured-role {
@@ -10941,8 +10948,10 @@ img.hp-no-photo {
   min-width: 0;
 }
 
+/* An h4 for index nesting; keeps the h3 size it had before. */
 .hp-list-name {
   margin: 0;
+  font-size: 1.75rem;
 }
 
 .hp-list-role {
