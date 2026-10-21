@@ -10026,7 +10026,7 @@ body:not(.home-fullscreen) .home-hero {
   align-items: flex-start;
   gap: 1.25rem;
   width: max-content;
-  padding: 0.5rem 0 1rem;
+  padding: 0.5rem 0 0.25rem;
 }
 
 .hp-carousel-item {
@@ -10747,15 +10747,22 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-21 (team request: no
+   big gap under the carousels): 1rem either side of the divider instead of
+   1.75rem, and no extra margin on a summary that opens the overview. */
 .hp-section-context {
-  margin-top: 1.75rem;
-  padding-top: 1.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
   border-top: 1px solid rgba(51, 40, 63, 0.18);
   opacity: 0.9;
 }
 
 [data-theme="dark"] .hp-section-context {
   border-top-color: rgba(255, 255, 255, 0.16);
+}
+
+.hp-section-context > .integration-summary:first-child {
+  margin-top: 0;
 }
 
 .hp-section-context :last-child {
