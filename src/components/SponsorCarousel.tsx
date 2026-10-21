@@ -2,7 +2,8 @@
 // Purpose: infinite-scrolling sponsor logo band. Wrap any number of
 // <SponsorLogo> children in <SponsorCarousel> and it revolves through all of
 // them automatically — copy the example in Footer.tsx and swap in real logos.
-import { Children, ReactElement, ReactNode, isValidElement } from "react";
+import { Children, ReactElement, ReactNode, isValidElement, useRef } from "react";
+import { useScrollMarquee } from "./useScrollMarquee";
 
 interface SponsorLogoProps {
   name: string;
@@ -88,21 +89,26 @@ function SponsorTile({ sponsor, hidden }: { sponsor: Sponsor; hidden?: boolean }
   );
 }
 
+// The logos are repeated this many times so the loop never runs out (see
+// useScrollMarquee).
+const COPIES = 3;
+
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-21: the band is now a real
+// scroller driven by useScrollMarquee instead of a CSS animation, so hovering
+// it stops the drift and lets the reader scroll or drag through the logos.
 export function SponsorCarousel({ children, speed = 25 }: SponsorCarouselProps) {
   const sponsors = extractSponsors(children);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  useScrollMarquee(scrollerRef, { secondsPerLoop: speed, copies: COPIES });
 
   return (
-    <div
-      className="sponsor-carousel"
-      style={{ "--sponsor-carousel-duration": `${speed}s` } as React.CSSProperties}
-    >
+    <div className="sponsor-carousel" ref={scrollerRef}>
       <div className="sponsor-carousel-track">
-        {sponsors.map((sponsor, index) => (
-          <SponsorTile key={`${sponsor.name}-${index}`} sponsor={sponsor} />
-        ))}
-        {sponsors.map((sponsor, index) => (
-          <SponsorTile key={`${sponsor.name}-dup-${index}`} sponsor={sponsor} hidden />
-        ))}
+        {Array.from({ length: COPIES }, (_, copy) =>
+          sponsors.map((sponsor, index) => (
+            <SponsorTile key={`${sponsor.name}-${copy}-${index}`} sponsor={sponsor} hidden={copy > 0} />
+          )),
+        )}
       </div>
     </div>
   );

@@ -75,6 +75,7 @@ import { FundingGapIllustration } from "./components/FundingGapIllustration";
 import { ResearchVolumeChart } from "./components/ResearchVolumeChart";
 import { FundingInfluences } from "./components/FundingInfluences";
 import { GapReasons, GapReason } from "./components/GapReasons";
+import { PatientJourney, JourneyStep } from "./components/PatientJourney";
 import {
   ResultSection,
   KeyTakeaways,
@@ -210,6 +211,10 @@ export const mdxComponents = {
   // "Why the gap exists" cards.
   GapReasons,
   GapReason,
+  // Generated with Claude Opus 5.5 (Anthropic), 2026-10-21: the flip-card
+  // patient journey in the Patients section.
+  PatientJourney,
+  JourneyStep,
   // Generated with Claude Opus 5 (Anthropic), 2026-10-17
   // Purpose: the results page's layout kit — the key-takeaway cards and the
   // placeholder boxes for figures that have not been added yet.

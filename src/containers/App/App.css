@@ -4508,7 +4508,14 @@ footer hr {
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-07-26
    Purpose: infinite-scrolling sponsor logo band (see SponsorCarousel.tsx). */
 .sponsor-carousel {
-  overflow: hidden;
+  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-21: a real scroller
+     now, moved by useScrollMarquee (scrollbar hidden; wheel, trackpad,
+     drag and swipe scroll it by hand while the drift is paused). */
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  cursor: grab;
   width: 100%;
   mask-image: linear-gradient(
     to right,
@@ -4531,12 +4538,8 @@ footer hr {
   align-items: center;
   gap: 1.5rem;
   width: max-content;
-  animation: sponsor-carousel-scroll var(--sponsor-carousel-duration, 25s)
-    linear infinite;
-}
-
-.sponsor-carousel:hover .sponsor-carousel-track {
-  animation-play-state: paused;
+  /* Room for a tile's hover scale-up inside the scroller. */
+  padding: 0.35rem 0;
 }
 
 .sponsor-carousel-item {
@@ -4580,19 +4583,23 @@ footer hr {
   opacity: 0.6;
 }
 
-@keyframes sponsor-carousel-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+/* Shared by both scrollers (useScrollMarquee): no scrollbar, and no text
+   selection or image ghost while dragging. */
+.sponsor-carousel::-webkit-scrollbar,
+.hp-carousel::-webkit-scrollbar {
+  display: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .sponsor-carousel-track {
-    animation: none;
-  }
+.sponsor-carousel.is-dragging,
+.hp-carousel.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.sponsor-carousel img,
+.hp-carousel img {
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 /* SPONSORS PAGE
@@ -9967,7 +9974,14 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .hp-carousel {
-  overflow: hidden;
+  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-21: a real scroller
+     now, moved by useScrollMarquee (scrollbar hidden; wheel, trackpad,
+     drag and swipe scroll it by hand while the drift is paused). */
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  cursor: grab;
   width: 100%;
   mask-image: linear-gradient(
     to right,
@@ -9991,12 +10005,6 @@ body:not(.home-fullscreen) .home-hero {
   gap: 1.25rem;
   width: max-content;
   padding: 0.5rem 0 1rem;
-  animation: hp-carousel-scroll var(--hp-carousel-duration, 20s) linear infinite;
-}
-
-.hp-carousel:hover .hp-carousel-track,
-.hp-carousel:focus-within .hp-carousel-track {
-  animation-play-state: paused;
 }
 
 .hp-carousel-item {
@@ -10056,31 +10064,6 @@ body:not(.home-fullscreen) .home-hero {
   text-align: center;
 }
 
-@keyframes hp-carousel-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-/* Reduced motion: stop the auto-scroll, hide the duplicate tiles it needed
-   for a seamless loop, and let the (now un-doubled) track scroll natively
-   instead — every interviewee stays reachable without relying on motion. */
-@media (prefers-reduced-motion: reduce) {
-  .hp-carousel {
-    overflow-x: auto;
-  }
-
-  .hp-carousel-track {
-    animation: none;
-  }
-
-  .hp-carousel-item[aria-hidden="true"] {
-    display: none;
-  }
-}
 
 /* Stakeholder-group introduction at the top of a section card (HPIntro) */
 /* Same panel treatment as the entrepreneurship milestone content (the
@@ -10403,6 +10386,236 @@ body:not(.home-fullscreen) .home-hero {
     border-left: 2px solid var(--gr-head-bg);
     border-top: 0;
     border-radius: 0 0 var(--surface-radius-md) var(--surface-radius-md);
+  }
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-21: the patient
+   journey in the Patients section (PatientJourney.tsx), laid out like the
+   team's sketch — symptoms → diagnostic journey along the top, down through
+   doctors to treatments, expenses branching off to the left. Each step is a
+   card that flips over when clicked; its write-up opens in the panel below.
+   One column below 768px. */
+.patient-journey {
+  --pj-line: color-mix(in srgb, var(--color-interactive) 70%, transparent);
+  --pj-col-gap: 3.5rem;
+  --pj-row-gap: 2.25rem;
+  margin: 1.5rem 0;
+}
+
+.patient-journey-path {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "s1 s2"
+    ".  s3"
+    "s5 s4";
+  gap: var(--pj-row-gap) var(--pj-col-gap);
+  margin: 0;
+  padding: 1.5rem 0 0 2rem;
+  list-style: none;
+}
+
+.patient-journey-step {
+  position: relative;
+  perspective: 900px;
+}
+
+.patient-journey-step--1 { grid-area: s1; }
+.patient-journey-step--2 { grid-area: s2; }
+.patient-journey-step--3 { grid-area: s3; }
+.patient-journey-step--4 { grid-area: s4; }
+.patient-journey-step--5 { grid-area: s5; }
+
+/* The connecting lines: the path comes in from the top left, runs right to
+   the diagnostic journey, down through doctors to treatments, and back left
+   to expenses. */
+.patient-journey-step::before,
+.patient-journey-step::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.patient-journey-step--1::before {
+  right: 100%;
+  bottom: 50%;
+  width: 2rem;
+  height: calc(50% + 1.5rem);
+  border-left: 3px solid var(--pj-line);
+  border-bottom: 3px solid var(--pj-line);
+  border-bottom-left-radius: 0.75rem;
+}
+
+.patient-journey-step--1::after,
+.patient-journey-step--4::after {
+  top: 50%;
+  width: var(--pj-col-gap);
+  border-top: 3px solid var(--pj-line);
+}
+
+.patient-journey-step--1::after {
+  left: 100%;
+}
+
+.patient-journey-step--4::after {
+  right: 100%;
+}
+
+.patient-journey-step--2::after,
+.patient-journey-step--3::after {
+  top: 100%;
+  left: 50%;
+  height: var(--pj-row-gap);
+  border-left: 3px solid var(--pj-line);
+}
+
+.patient-journey-card {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 7.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.patient-journey-step.is-open .patient-journey-card {
+  transform: rotateY(180deg);
+}
+
+.patient-journey-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 2px solid var(--color-interactive);
+  border-radius: var(--surface-radius-md);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  text-align: center;
+  transition: box-shadow 0.2s ease;
+}
+
+.patient-journey-face--front {
+  background: color-mix(in srgb, var(--color-interactive) 14%, var(--color-page-bg));
+}
+
+[data-theme="dark"] .patient-journey-face--front {
+  background: color-mix(in srgb, var(--color-interactive) 16%, transparent);
+}
+
+.patient-journey-face--back {
+  background: var(--color-interactive);
+  color: #fff;
+  transform: rotateY(180deg);
+}
+
+.patient-journey-card:hover .patient-journey-face {
+  box-shadow: 0 6px 18px rgba(47, 164, 169, 0.3);
+}
+
+.patient-journey-card:focus-visible {
+  outline: none;
+}
+
+.patient-journey-card:focus-visible .patient-journey-face {
+  outline: 3px solid var(--color-interactive);
+  outline-offset: 3px;
+}
+
+.patient-journey-icon {
+  width: 2.4rem;
+  height: 2.4rem;
+  fill: none;
+  stroke: var(--color-interactive);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.patient-journey-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.patient-journey-hint {
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.patient-journey-panel {
+  margin-top: 1.75rem;
+  padding: 1.25rem 1.5rem;
+  border-left: 4px solid var(--color-interactive);
+  border-radius: 0.5rem;
+  background-color: rgba(234, 244, 245, 0.45);
+}
+
+[data-theme="dark"] .patient-journey-panel {
+  background-color: rgba(234, 244, 245, 0.06);
+}
+
+.patient-journey-panel-body {
+  animation: milestone-arc-fade-in 0.3s ease;
+}
+
+.patient-journey-panel-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.patient-journey-panel-body > :last-child,
+.patient-journey-prompt {
+  margin-bottom: 0;
+}
+
+.patient-journey-prompt {
+  font-style: italic;
+  opacity: 0.8;
+}
+
+@media (max-width: 767.98px) {
+  .patient-journey-path {
+    grid-template-columns: 1fr;
+    grid-template-areas: "s1" "s2" "s3" "s4" "s5";
+    padding: 0;
+  }
+
+  .patient-journey-step--1::before {
+    display: none;
+  }
+
+  .patient-journey-step--1::after,
+  .patient-journey-step--4::after {
+    top: 100%;
+    right: auto;
+    left: 50%;
+    width: 0;
+    height: var(--pj-row-gap);
+    border-top: 0;
+    border-left: 3px solid var(--pj-line);
+  }
+
+  .patient-journey-card {
+    height: 6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .patient-journey-card {
+    transition: none;
   }
 }
 
