@@ -3360,7 +3360,10 @@ a.tab-switcher-btn.active:hover {
    rests at the right-hand side and points across at its paragraph. */
 .wheel-selector--side {
   flex-direction: row;
-  align-items: center;
+  /* Top-aligned, so the wheel stays put while the paragraph beside it grows or
+     shrinks as another section is picked, rather than reserving the height of
+     the longest section as empty space. */
+  align-items: flex-start;
   gap: 2rem;
   /* The wheel and its paragraph are centred in the column as a pair, so the
      wheel sits towards the middle of the page instead of hard against the
@@ -16039,6 +16042,50 @@ a.protocol-download:hover {
 
 /* The step's write-up, in the same box as the section it sits in
    (.content-section), a shade lighter as it is inside one. */
+/* Previous / next arrows either side of the open step's panel. */
+.therapeutics-overview-stage {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.therapeutics-overview-arrow {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-interactive);
+  color: #fff;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.therapeutics-overview-arrow:hover:not(:disabled),
+.therapeutics-overview-arrow:focus-visible {
+  transform: scale(1.1);
+}
+
+.therapeutics-overview-arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+@media (max-width: 600px) {
+  .therapeutics-overview-stage {
+    gap: 0.35rem;
+  }
+
+  .therapeutics-overview-arrow {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
 .therapeutics-overview-panel {
   padding: 2rem 2.25rem;
   border-radius: 1.25rem;
@@ -16171,9 +16218,15 @@ a.protocol-download:hover {
 }
 
 .success-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 0.5rem;
+}
+
+.success-cards-grid > .success-card {
+  flex: 0 1 auto;
+  max-width: 100%;
 }
 
 .success-cards-grid[hidden] {
@@ -16229,15 +16282,9 @@ a.protocol-download:hover {
   color: #23868b;
 }
 
-@media (max-width: 900px) {
-  .success-cards-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 480px) {
-  .success-cards-grid {
-    grid-template-columns: minmax(0, 1fr);
+  .success-cards-grid > .success-card {
+    flex: 1 1 100%;
   }
 }
 

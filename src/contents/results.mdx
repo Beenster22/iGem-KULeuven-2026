@@ -45,7 +45,11 @@
 
 <h4 data-toc-ignore="true">Strain selection</h4>
 
-{/* TO FILL IN: a short description of this section. */}
+{/* Text from the team's document "Experimental overview of the toolkit" (written up here with Claude Sonnet 5.5, 2026-10-21); links are the ones its comments ask for. */}
+
+**Goal.** To get started with the wet lab work, we needed to obtain several _P. vulgatus_ strains. As the therapeutics pipeline focuses on the gut, we focused on finding fecal isolates to assess variation between them. We also needed at least one strain with annotated _bsh_ genes to serve as a query to annotate the _bsh_ genes of the remaining strains.
+
+**Results.** DSM1447/ATCC8482, the type strain, is of fecal origin and has three annotated _bsh_ genes. DSM10822, DSM108234, DSM108228 and RCC1806 are fecal isolates, while DSM3289 is an isolate from a retroperitoneal abscess. They have no annotated _bsh_ genes. See the <Link to="/results#selecting-a-phocaeicola-vulgatus-strain-panel">strain panel</Link> below.
 
 </SectionItem>
 
@@ -53,7 +57,11 @@
 
 <h4 data-toc-ignore="true">Antibiotic selection</h4>
 
-{/* TO FILL IN: a short description of this section. */}
+**Goal.** Antibiotic susceptibility of _P. vulgatus_ is not well documented. Data in the literature are often only for clinical strains, which of course vary between isolates. By determining the inhibitory concentration (IC90) of _P. vulgatus_ ATCC8482/DSM1447, a laboratory strain, towards multiple antibiotics, we wished to fill in this gap. On top of this, we also determined the IC90 of _P. vulgatus_ RCC1806, a clinical strain of the Raes lab of Bioinformatics and (Eco-)Systems Biology.
+
+**Experimental set-up.** Antibiotics used for susceptibility testing were ampicillin, chloramphenicol, erythromycin, tetracycline, metronidazole, gentamicin, kanamycin and spectinomycin. Simvastatin, a statin, was also included. Two-fold serial dilutions in mGAM were made in triplicate and inoculated with _P. vulgatus_ DSM1447 or RCC1806. After incubating anaerobically for 48 hours at 30 °C, OD600 was measured.
+
+**Results.** Tetracycline, chloramphenicol and metronidazole were the most effective antibiotics, inhibiting both strains at low concentrations (4 mg/L or less). As the European Committee on Antimicrobial Susceptibility Testing (EUCAST) specifically recommends the use of metronidazole when the susceptibility is smaller than or equal to 4 mg/L, this is most encouraged. Ampicillin and erythromycin show more variability between strains and thus, use of these antibiotics is not encouraged. The full data are in the <Link to="/results#antibiotic-susceptibility-of-p-vulgatus">MIC results</Link>.
 
 </SectionItem>
 
@@ -61,7 +69,11 @@
 
 <h4 data-toc-ignore="true">Reporter gene output</h4>
 
-{/* TO FILL IN: a short description of this section. */}
+**Goal.** Measuring promoter strength in _P. vulgatus_, when the standard reporter toolkit is unable to do so: this was our goal. Engineering this organism requires promoters of known strength to tune expression, but almost none have been characterized in it. By using a fluorescent or luminescent readout, different constitutive promoters could be ranked based on strength. The difficulty to overcome was the oxygen dependency of many reporter genes, as _P. vulgatus_ is a strictly anaerobic species, so we combined both detection principles in one library rather than relying on fluorescence alone.
+
+**Experimental set-up.** Five constitutive promoters from literature (BfP1E6, BT1311, BT4001, cfxA and PAM3) were each paired with four reporters (GFP, mCherry, KOFP-7 and NanoLuc) as twenty constructs, so that every promoter could be compared across several emission spectra. The Gibson-assembled constructs are delivered via conjugation from _E. coli_ S17-1 λpir to _P. vulgatus_ DSM1447. Fluorescence and luminescence were read per OD600 and against a wild-type DSM1447 reference, with mGAM and LB blanks and a GFP-containing _E. coli_ positive control on the same plate. More information about the assay's design and normalization can be found on the <Link to="/measurement">measurements page</Link>.
+
+**Results.** NanoLuc gave a clear, well-separated ranking of Cfx > Bfp > BT = PBT. The fluorescent reporters, on the other hand, were almost entirely uninformative: twelve of the thirteen fluorescent constructs failed to distinguish from zero in the GFP, mCherry and KOFP-7 channels once normalized. The single exception was Bfp–mCherry. This does not scale with promoter strength: if mCherry output simply followed the promoter, Cfx–mCherry should have been the brightest construct rather than one of the dimmest. The complete per-construct output, controls and growth data behind this ranking can be found on the <Link to="/results#a-characterized-promoter-library-for-p-vulgatus">promoter library results page</Link>.
 
 </SectionItem>
 
@@ -69,7 +81,11 @@
 
 <h4 data-toc-ignore="true">Medium comparison</h4>
 
-{/* TO FILL IN: a short description of this section. */}
+**Goal.** In order to work with a non-model organism and engineer it, our first priority was establishing reproducible, measurable growth. We tested four media under anaerobic conditions: rich and undefined (mGAM, BHI), lean and defined (MM), and WC as a middle ground. We also wanted to see whether our data was strain-dependent by testing two strains: type strain DSM1447 and fecal isolate RCC1806. Our final goal was to optimize the growth yield of DSM1447 in our minimal medium. We used three candidate supplements: soluble starch (carbon source), vitamin K (growth factor) and a pH adjustment to 7.2, and tested all eight combinations in a full 2³ factorial design to understand their influences and interactions.
+
+**Experimental set-up.** For our main experiment, we built a 96-well plate layout with three replicate wells per condition for precision and high statistical power, blanks in triplicate to rule out random contamination, and a 48 h timeframe growing at 37 °C in the anaerobic chamber. The plate reader shook the samples before each OD600 read every 30 minutes, so that 96 time points were collected automatically, in the hope of capturing the bacterial growth phases. Before this, we ran two rounds of experiments on DSM1447 alone, repeating the procedure with freshly plated cultures and new media. For the supplementation study, we designed a second experiment with six wells per condition, measured at OD600 for 48 hours, including the eight supplement combinations and unsupplemented MM and mGAM as references.
+
+**Results.** mGAM supported fast, dense growth in every well while WC grew consistently but far more slowly. BHI, despite carrying slightly more tissue extract than mGAM, did not sustain any growth, giving us an early hint that growth here depends on specific cofactors rather than raw nutrient richness. MM showed almost no signal for the first 20 h, but growth became clearly visible roughly six hours into the second day. The supplementation experiment showed that pH adjustment to 7.2 is necessary but not sufficient on its own: vitamin K and starch only contributed noticeably once the pH had been corrected. See the <Link to="/results#growth-curves-and-medium-comparison">growth curves and medium comparison</Link>.
 
 </SectionItem>
 
@@ -77,7 +93,11 @@
 
 <h4 data-toc-ignore="true">Conjugation efficiency testing</h4>
 
-{/* TO FILL IN: a short description of this section. */}
+**Goal.** Electroporation and heat-shock transformation have previously been used to transform _Bacteroides_ species, however, this is generally done with difficulty, and not for _P. vulgatus_[ref: Ichimura, M., Nakayama-Imaohji, H., Wakimoto, S., Morita, H., Hayashi, T., & Kuwahara, T. (2010). Efficient electrotransformation of *Bacteroides fragilis*. *Applied and Environmental Microbiology*, *76*(10), 3325–3332. https://doi.org/10.1128/AEM.02420-09]. Considering that conjugation is done more often, we wanted to optimize it for our _P. vulgatus_ strains. In the therapeutics pipeline, this would help us deliver our CRISPRi construct successfully.
+
+**Experimental set-up.** All six _P. vulgatus_ strains were tested for conjugation efficiency from _E. coli_ S17-1 λpir in a <Link to="/engineering#conjugation">DBTL</Link> consisting of 3 cycles. After growing to an OD600 = 0.2, the cells were plated out together on mGAM, and subsequently grown overnight on mGAM with gentamicin and erythromycin to select for conjugated _P. vulgatus_. PCR of a ParB-like gene or 16S rDNA combined with BLAST was performed for additional verification. Colonies were counted to determine conjugation efficiency. <Link to="/engineering#fluorescence-microscopy-conjugation">Fluorescence microscopy was done to confirm the presence of the plasmid</Link>.
+
+**Results.** _P. vulgatus_ DSM1447 was found to be most efficient in conjugation, followed by RCC1806 and the rest of the strains. Further optimization is necessary. However, the <Link to="/results#antibiotic-susceptibility-of-p-vulgatus">MIC data</Link> revealed that the experiment should be repeated using a higher erythromycin concentration or another antibiotic resistance cassette, e.g. tetracycline, due to the possible presence of false positives.
 
 </SectionItem>
 
@@ -85,7 +105,11 @@
 
 <h4 data-toc-ignore="true">Promotor screening</h4>
 
-{/* TO FILL IN: a short description of this section. */}
+**Goal.** _P. vulgatus_ has no validated native promoters, and Bacteroidaceae (check out the <Link to="/description#phocaeicola-vulgatus-and-its-nature">project description</Link> to learn more about the name change) initiate transcription from −7 and −33 consensus elements rather than the −10/−35 elements of _E. coli_, so promoters taken from model organisms cannot be assumed to work. That is why we assembled a small panel of promoters borrowed from the closest well-characterized relatives, _B. thetaiotaomicron_ and _B. fragilis_, and paired them with different suitable reporters, so that we could determine expression strength.
+
+**Experimental set-up.** A literature survey yielded twenty-four promoters validated in _Bacteroides_ spp., from which five were selected for a first pilot experiment: PBT4001, PBT1311, PPAM3, PcfxA and PBfP1E6. This selection spans different origins to limit the chance that all of them lose activity on transfer to a new host. Each promoter was combined with four reporters, giving a library of twenty constructs. A single ribosome binding site, rpiL*, described in the literature as "strong" and "reliable", was kept constant so as not to introduce more variables.
+
+**Results.** The output of this step is our construct panel itself: five promoters in combination with four reporters, all with a constant RBS. Expression strength was then measured in the <Link to="/results#a-characterized-promoter-library-for-p-vulgatus">promoter–reporter screen</Link>.
 
 </SectionItem>
 
@@ -93,7 +117,11 @@
 
 <h4 data-toc-ignore="true">Codon Optimization & Harmonization tool</h4>
 
-{/* TO FILL IN: a short description of this section. */}
+**Goal.** Until today no online tool performs codon optimization or harmonization for _Bacteroides_ species. Existing tools target _E. coli_, yeast or mammalian hosts, which are all a poor fit for an AT-rich anaerobe. That is why we built our own and made it freely available. Constructs can be adapted for _Bacteroides_ without the user needing to know the genus' detailed codon preferences. Optimization maximizes translation speed and thus also yield, while harmonization keeps the balance between slow and fast codons, which regulate the speed of protein synthesis.
+
+**Results.** Our tool returns the redesigned sequence as a FASTA file, together with a report that shows, for each check, which problems were found, which the tool fixed, and which are still left. If a sequence cannot be cleaned up completely, it is still returned but flagged as only partially solved, so users can see what is wrong and decide whether they still want to use it.
+
+**Limitations.** The tool has only been checked computationally: we did not yet grow _Bacteroides_ with a redesigned gene to see whether it gives more protein than the original. It also only optimizes codon choice; it does not account for mRNA stability or how well the ribosome can bind. Still, it is already a contribution to the scientific community, making non-model organisms better understandable and engineerable. See the <Link to="/dry-lab#1-3-codon-optimization-tool">tool on our Dry Lab page</Link>.
 
 </SectionItem>
 
@@ -711,7 +739,7 @@ A–E); the fitted parameters for every condition are in Table 2.
 
 <figure>
   <ZoomableImage
-    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-a-1.avif"
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-a-2.avif"
     alt="OD growth curves, Pilot — DSM 1447 in BHI, WC, MM and mGAM over 24 h."
   />
   <div className="figure-caption">
@@ -721,7 +749,7 @@ A–E); the fitted parameters for every condition are in Table 2.
 
 <figure>
   <ZoomableImage
-    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-b-1.avif"
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-b-2.avif"
     alt="OD growth curves, Pilot continuation — the same plate, read for a further 24 h."
   />
   <div className="figure-caption">
@@ -731,7 +759,7 @@ A–E); the fitted parameters for every condition are in Table 2.
 
 <figure>
   <ZoomableImage
-    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-c-1.avif"
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-c-2.avif"
     alt="OD growth curves, Strain effect — DSM 1447 and RCC 1806 in BHI, WC, MM and mGAM over 48 h."
   />
   <div className="figure-caption">
@@ -742,7 +770,7 @@ A–E); the fitted parameters for every condition are in Table 2.
 
 <figure>
   <ZoomableImage
-    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-d-1.avif"
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-d-2.avif"
     alt="OD growth curves, Lag reduction — both strains inoculated from fresh plate colonies, plus BHI at increased cell density."
   />
   <div className="figure-caption">
@@ -753,7 +781,7 @@ A–E); the fitted parameters for every condition are in Table 2.
 
 <figure>
   <ZoomableImage
-    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-e-1.avif"
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-e-2.avif"
     alt="OD growth curves, Full-factorial design — MM with every combination of starch, vitamin K1 and pH adjustment, against the mGAM reference."
   />
   <div className="figure-caption">
@@ -1897,6 +1925,142 @@ Placeholder — what the library gives a future team.
 
 <ResultSection>
 
+### Screening BSH activity on bile salt plates
+
+{/* Added with Claude Sonnet 5.5 (Anthropic), 2026-10-21, from the team's document "Therapeutics - part 1 - section 3a - BS ASSAY"; typos fixed, the doc's mixed "15 constructs" wording made consistent with 14 BSH constructs plus the sfGFP control. */}
+
+<div className="results-standfirst">
+  A standardized method for pouring conjugated bile salt plates, and a halo
+  screen of 14 BSH constructs on GUDCA and TUDCA.
+</div>
+
+The halo assay is the standard plate method for detecting bile salt hydrolase activity, used in the literature as the first screen before ninhydrin or LC–MS[^bsplate-jones]. The principle is simple. A construct expressing an active BSH deconjugates the bile salt in the surrounding agar. The freed bile acid is insoluble and precipitates, producing a visible white halo around the colony. The diameter of that halo gives an estimate of relative enzyme activity.
+
+A white halo cannot be read on a cloudy plate. Before any construct could be scored we therefore had to establish how to pour even bile salt plates and confirm that _E. coli_ grows on them.
+
+#### Major takeaways
+
+<KeyTakeaways>
+  <Takeaway>
+    Salt first, then LB: the preparation standard was determined. Bile salt is
+    added directly to the well, followed by LB with CaCl₂, to avoid
+    precipitation.
+  </Takeaway>
+  <Takeaway>
+    H₂O is the working solvent: DMSO is unusable, as it precipitates the medium
+    and makes it unfit for plate pouring.
+  </Takeaway>
+  <Takeaway>
+    100 mg/mL: TUDCA dissolves in water at this concentration, GUDCA does not.
+    GUDCA would not dissolve through heating or vortexing and needed a few
+    drops of 5 M NaOH.
+  </Takeaway>
+  <Takeaway>
+    14 / 14: no bile salt is inhibitory. Every construct grew on every GUDCA
+    and TUDCA plate up to 1.5 % (w/v), so the plating layout works and
+    tolerance is not the limiting factor.
+  </Takeaway>
+  <Takeaway>
+    No halo, no signal: BSH-expressing colonies were indistinguishable from the
+    sfGFP control. The drops are dense and the surrounding agar stays turbid.
+  </Takeaway>
+  <Takeaway>
+    LC–MS, a shift towards a quantitative method: the negative plate result is
+    what motivated the LC–MS deconjugation assay.
+  </Takeaway>
+</KeyTakeaways>
+
+<ExpandableText title="Assay development: solvent and pouring order" tocIgnore>
+
+Two pilots established the plate preparation standard. Can bile salts be dissolved or poured at all, and could we reduce precipitation by designing a correct pouring method?
+
+**Pouring order.** Bile salt is added directly to the well first, followed by LB with CaCl₂, which avoids the precipitation that made earlier plates unreadable.
+
+**Solvent.** Water is the working solvent: DMSO precipitates the medium and is unusable.
+
+<div className="table-responsive table-responsive-rounded my-3">
+
+<table className="table table-bordered align-middle text-center">
+  <thead>
+    <tr>
+      <th>Solvent</th>
+      <th>0.5 %</th>
+      <th>1.0 %</th>
+      <th>1.5 %</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>dH₂O</td>
+      <td>Growth</td>
+      <td>Growth</td>
+      <td>Growth</td>
+    </tr>
+    <tr>
+      <td>DMSO</td>
+      <td>Growth</td>
+      <td>No growth</td>
+      <td>No growth</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+<div className="figure-caption">
+  Table 1. Growth of BSH3 and BSH11 in <em>E. coli</em> DH5α on bile salt
+  mixture plates, by solvent and concentration (w/v). Water supports growth at
+  every concentration tested; DMSO fails above 0.5 %.
+</div>
+
+**GUDCA will not dissolve in water at the working concentration.** With the solvent and pouring order settled, the two substrates of interest were tested in the same format: six-well plates of GUDCA and TUDCA with BSH3 and BSH11 at 0.5, 1.0 and 1.5 % (w/v), prepared from 100 mg/mL stocks in dH₂O so the results stay comparable with the mixture experiment above. TUDCA dissolved as intended. GUDCA did not: neither heating nor vortexing brought it into solution at 100 mg/mL, and a few drops of 5 M NaOH were needed. The resulting stock sits at a higher pH than intended, and the plates were poured from it anyway to see what came out. All plates gave growth except 1.5 % GUDCA.
+
+</ExpandableText>
+
+#### The halo screen
+
+The full screen followed: 14 BSH constructs and an sfGFP control, drop-plated on LB + CaCl₂ + Kan containing GUDCA or TUDCA at 0.5, 1.0 and 1.5 % (w/v), with a no-bile-salt control plate. Colony formation was followed with a time-lapse colony imaging system.
+
+BSH3 is the one construct of the fifteen not included here. Plate capacity was limited, and a no-BSH negative control was the more valuable use of the slot. sfGFP took the C1 position in the first construct set. BSH3 had already been plated extensively on GUDCA and TUDCA during the pilot runs, so it was the construct whose plating behavior was best characterized and therefore the least costly to leave out.
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/bsh-plate-screen.avif"
+    className="wide-figure"
+    alt="BSH bile salt screen of 14 BSH constructs and an sfGFP control, drop-plated on LB + CaCl2 + Kan with GUDCA and TUDCA at 0.5, 1.0 and 1.5 %, against a bile-salt-free control."
+  />
+  <div className="figure-caption">
+    Figure 1. BSH bile salt plate screen in <em>E. coli</em> DH5α. Each well carries four constructs as 5 µL drops of a 16 h overnight culture, in the 2×2 order given in the row label. Every condition was plated in duplicate wells, one of each pair is shown. A clearing halo around a drop would indicate deconjugation, growth without a halo indicates tolerance only. sfGFP is the no-BSH control and appears in two rows. Figure overview put together with Claude AI.
+  </div>
+</figure>
+
+#### Discussion
+
+Two things could be determined from our work:
+
+1. **The plate method itself was established.** A standardized procedure now exists for pouring conjugated bile salt media.
+2. **The halo assay returned nothing usable.** BSH constructs did not differ from the control on any plate, at any concentration, with either substrate.
+
+The negative result still gave information: the constructs grew, the layout worked, and the control behaved as a control should. What the assay could not do is resolve deconjugation against a turbid background. That sent the screen to a more sensitive, quantitative method: the LC–MS assay.
+
+<ExpandableText title="Learn more: why the halo did not appear" tocIgnore>
+
+The halo assay assumes that an active BSH deconjugates the bile salt in the surrounding agar, precipitating the free bile acid into a visible white ring. The method is well established and was used in many papers as the plate screen preceding ninhydrin or LC–MS detection[^bsplate-jones], so the expectation was reasonable.
+
+When we observe the imaging results closely, turbidity around the TUDCA plates is more visible than around the GUDCA plates in general, and no halo was seen around the control medium. But where halo or turbidity formations did appear on the salt media, comparing the BSH strains against the control strains leaves the picture essentially unchanged. The constructs produced no additional precipitation.
+
+Several explanations are compatible with this. The drops are dense enough that any local clearing is masked by the colony itself. Or the free bile acids released from GUDCA and TUDCA (both ursodeoxycholic acid conjugates) may simply be too soluble at the pH used to precipitate visibly.
+
+</ExpandableText>
+
+#### Future prospects
+
+We proceeded with the next experiments (BSA-06 and BSA-07) as the plate assay did not meet our expectations. For a more precise and quantitative analysis we applied LC–MS to liquid cultures of the bile salt media with BSH constructs. See the <Link to="/protocols#halo-assay-failed-protocol">halo assay protocol</Link> and the <Link to="/engineering">Engineering page</Link> for the full cycle.
+
+</ResultSection>
+
+<ResultSection>
+
 ### Bile salt deconjugation by 15 bile salt hydrolases
 
 <div className="results-standfirst">
@@ -2305,6 +2469,8 @@ For additional information about risk and safety see the <Link to="/safety-and-s
 </SectionItem>
 
 </ResultsPipelines>
+
+[^bsplate-jones]: Jones, B. V., Begley, M., Hill, C., Gahan, C. G. M., & Marchesi, J. R. (2008). Functional and comparative metagenomic analysis of bile salt hydrolase activity in the human gut microbiome. Proceedings of the National Academy of Sciences, 105(36), 13580–13585. https://doi.org/10.1073/pnas.0804437105
 
 [^construct-crispr-gut]: CRISPR-Cas-based genome editing for human gut commensals. ACS Synthetic Biology, 11(1), 464. https://pubs.acs.org/asbcd6/article-abstract/11/1/464/1497030/CRISPR-Cas-Based-Genome-Editing-for-Human-Gut
 
