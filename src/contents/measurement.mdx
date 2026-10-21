@@ -79,13 +79,13 @@ mGAM gave the highest biomass and the shortest lag for both strains, with a doub
 
 </div>
 
-<div className="figure-caption">**Figure 2.** Growth curves of each iterative experiment. Every panel plots ln(OD/OD₀) against time after medium-specific blank correction; shaded bands are the Gaussian-process posterior. A. Pilot, 24 h. B. Pilot continuation, 24 h. C. Strain effect, 48 h. D. Lag-reduction screen, 42 h, read at OD630. E. Full factorial of MM supplements, 48 h, with mGAM as positive reference.</div>
+<div className="figure-caption">**Figure 2.** Growth curves of each iterative experiment. Every panel plots ln(OD/OD₀) against time after medium-specific blank correction; shaded bands represent the Gaussian-process posterior. A. Pilot, 24 h. B. Pilot continuation, 24 h. C. Strain effect, 48 h. D. Lag-reduction screen, 42 h, read at OD630. E. Full factorial of MM supplements, 48 h, with mGAM as a positive reference. Abbreviations: BHI, Brain Heart Infusion; mGAM, modified Gifu Anaerobic Medium; WC, Wilkins-Chalgren medium; MM, minimal medium; OD, optical density.</div>
 
 </div>
 
 ### Q1 · What is measured, and in what units?
 
-Kinetic OD600 absorbance in 96-well microplates, read every 30 minutes for 24–48 h under strict anaerobic conditions, fitted by Gaussian-process regression with the open-source DGrowthR package. One experiment (panel D) was read at OD630; its absolute values are not pooled with the others, though relative medium rankings are expected to be unaffected since every condition on that plate shares the wavelength.
+Kinetic OD600 absorbance in 96-well microplates, read every 30 minutes for 24–48 h under strict anaerobic conditions, fitted by Gaussian-process (GP) regression with the open-source DGrowthR package. One experiment (panel D) was read at OD630; its absolute values are not pooled with the others, though relative medium rankings are expected to be unaffected since every condition on that plate shares the wavelength.
 
 <div className="measure-table">
 
@@ -103,7 +103,7 @@ Kinetic OD600 absorbance in 96-well microplates, read every 30 minutes for 24–
 
 ### Q2 · How is it calculated?
 
-**Why a Gaussian process rather than a logistic fit.** Growth curves have a lag phase, an exponential phase and a plateau. Parametric models impose a fixed functional form on all three, which biases the estimated rate whenever the real curve departs from it, and in a non-model organism we had no grounds to assume it would not. A GP assumes no functional form: it fits a smooth curve and returns a posterior at every point. Because the fit is to ln(OD), the derivative gives the instantaneous rate µ(t) with confidence bounds. The exponential phase is identified from the data rather than chosen by eye, and measurement uncertainty propagates into µ.
+**Why a Gaussian process rather than a logistic fit.** Growth curves have a lag phase, an exponential phase and a plateau. Parametric models impose a fixed functional form on all three, which biases the estimated rate whenever the real curve departs from it, and in a non-model organism we had no grounds to assume it would not. A Gaussian process (GP) assumes no functional form: it fits a smooth curve and returns a posterior at every point. Because the fit is to ln(OD), the derivative gives the instantaneous rate µ(t) with confidence bounds. The exponential phase is identified from the data rather than chosen by eye, and measurement uncertainty propagates into µ.
 
 <div className="measure-eq">
 <div className="eq-grid">

@@ -260,7 +260,8 @@ export function ResultsPipelines({
   function go(index: number) {
     setSectionIndex(index);
     const slug = pipeline.sections[index].slug;
-    history.replaceState(null, "", `#${slug}`);
+    // history.state kept for useScrollMemory (the router's key for this visit).
+    history.replaceState(history.state, "", `#${slug}`);
     // The new section is shown once this render commits.
     window.requestAnimationFrame(() => {
       document.getElementById(slug)?.scrollIntoView({ block: "start" });
@@ -305,7 +306,7 @@ export function ResultsPipelines({
                   onClick={() => go(index - 1)}
                 >
                   <span aria-hidden="true">←</span> Previous:{" "}
-                  {sections[index - 1].plainTitle}
+                  {sections[index - 1].title}
                 </button>
               ) : (
                 <span />
@@ -316,7 +317,7 @@ export function ResultsPipelines({
                   className="btn-empower phase-nav-btn phase-nav-next"
                   onClick={() => go(index + 1)}
                 >
-                  Next: {sections[index + 1].plainTitle}{" "}
+                  Next: {sections[index + 1].title}{" "}
                   <span aria-hidden="true">→</span>
                 </button>
               ) : pipelineIndex < pipelines.length - 1 ? (

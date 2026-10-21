@@ -358,7 +358,9 @@ export function SectionProgress({ containerRef }: SectionProgressProps) {
     const target = document.getElementById(id);
     if (!target) return;
     target.scrollIntoView({ behavior: "smooth", block: "start" });
-    history.replaceState(null, "", `#${id}`);
+    // history.state kept: it carries the router's key for this visit, which
+    // useScrollMemory needs to put the reader back here with the back button.
+    history.replaceState(history.state, "", `#${id}`);
     setActiveId(id);
     window.clearTimeout(clickLock.current);
     clickLock.current = window.setTimeout(() => {

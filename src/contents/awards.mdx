@@ -92,7 +92,47 @@ Visit the [Medals page](https://competition.igem.org/judging/awards/medals) for 
 
 ---
 
-**Why we deserve it.** _To be written._
+{/* Transcribed from the team's "Measurement Awards Page" document with Claude Sonnet 5.5
+    (Anthropic), 2026-10-21. Wording is the team's; only formatting, links and
+    HTML-entity fixes were applied. */}
+
+This award recognizes exceptional effort to characterize, validate, and document measurements in an iGEM project, whether applied to parts, (non-model) organisms, or novel assay approaches.
+
+**Why we deserve it.** We believe EMPOWER demonstrates outstanding measurement practice because we built an extended toolkit for a non-model, strictly anaerobic organism with almost no published measurement literature. By systematically characterizing <Link to="/measurement#growth-and-medium-selection">growth and medium selection</Link>, <Link to="/measurement#antibiotic-susceptibility">antibiotic susceptibility</Link>, <Link to="/measurement#conjugation">conjugation efficiency</Link>, and <Link to="/measurement">promoter activity</Link>, and by documenting every detection limit, control, calibration decision, and failure mode along the way, we produced a dataset in standard units that other teams can reproduce, compare, and build on. Each assay informed the next one. The growth curve optimization established the medium and inoculum rule, while the MIC panel calibrated the selection plates and constrained the conjugation titers. From there, the conjugation series caught its own inconsistency. The promoter screen inherited all three and returned a cross-validated promoter ranking. What we provide is not only a result, it is a documented pipeline through the measurement work of establishing a new chassis organism.
+
+### Judging criteria
+
+<ExpandableText title="Could the measurement(s) be reproduced by other iGEM teams?">
+
+Every protocol on our wiki is described at the level required to repeat it: medium compositions with supplier catalogue numbers (<Link to="/protocols">Protocol: Growth Curves</Link>), plate-reader settings including gain mode and focal distance (Protocol: Promoter Screen), inoculum preparation steps (Protocols: Cell culture section), dilution series logic, and the DGrowthR Gaussian-process regression pipeline with installation instructions (<Link to="/measurement#growth-and-medium-selection">Q2: Analysis</Link>). The finding that preculture state shifts lag time more than strain choice, reducing RCC 1806’s mGAM lag from 24.2 h to 6.0 h when cultures were started from a fresh plate, is itself a reproducible rule any team working with slow-growing anaerobes can apply directly (Growth Curves: Limitations & Mitigations). Controls are named in every section, detection limits are reported from blank-well statistics, and inconsistencies in our data collection are documented with advice for future teams to avoid (<Link to="/measurement#conjugation">Conjugation: Q6: Calibration</Link>).
+
+The main difficulty to reproduction is an anaerobic environment: *P. vulgatus* requires strict anaerobic conditions throughout, and not every team has access to an anaerobic chamber or an anaerobic plate reader. We have been explicit about this dependency rather than obscuring it. For teams that do have the infrastructure, the measurement chain is self-consistent: mGAM is a commercial medium (Shimadzu Diagnostics), WC broth is available from Oxoid (CM0643), metronidazole selection concentrations are stated in mg L⁻¹, and the promoter-reporter constructs are registered parts. Reproduction is limited by organism logistics, not by missing information (Q1: Reproducibility).
+
+</ExpandableText>
+
+<ExpandableText title="Are the methods or protocols described well?">
+
+Each assay section contains a primary protocol summary and a set of expandable dropdowns covering: what is measured and in what units, how each parameter is calculated with formulae, what controls were included, how the instrument was calibrated, and what the known limitations are with their mitigations (Q1–Q7, all sections). Growth rate parameters (µmax, t_d, λ) are reported in standard units (h⁻¹, h) and are instrument-invariant by derivation: because they arise from the shape of ln(OD) vs time, a constant OD scale factor cancels in the derivative, so the same values would be obtained on any plate reader (Q2: Calculations). Antibiotic concentrations follow EUCAST convention in mg L⁻¹. Titres are reported in CFU mL⁻¹ from a defined plating volume. Fluorescence signals are normalized per OD unit and blank-corrected, with the normalization formula stated explicitly (Q2: Calculations, Promoter Screen).
+
+Where a method was altered and improved across experiments (as for example the growth curve protocol did between Pilots 1 and 2, or as the plate-reader gain settings did between the two promoter-reporter runs), we document both versions and explain what changed and why (Growth Curves: Discussion; Promoter Screen: Q5: Calibration). This is more informative than reporting only the final protocol, because it shows which variables turned out to matter and which did not. A team reading this page should be able to avoid the same experimental dead ends rather than rediscovering them independently (Limitations & Mitigations, all sections).
+
+</ExpandableText>
+
+<ExpandableText title="Could it be useful to other projects?">
+
+The toolkit was built for *P. vulgatus*, but the problems it solves are not organism-specific. The mGAM vs WC vs BHI vs MM comparison gives any team working with gut anaerobes a ranked starting point for medium selection, with doubling times and biomass yields in standard units (Growth Curves: Table A1). The inoculum rule is applicable to any slow-growing anaerobe where overnight cultures lose viability. The DGrowthR Gaussian-process fitting approach is a published, installable R package (Feldl et al., 2025) that any team can apply to their own OD time series without parametric assumptions about curve shape (Q2: Analysis). The MIC assay and its inhibition-ceiling analysis is a methodological note applicable to any MIC assay in similar conditions (MIC: Q6: Calibration).
+
+The fluorescence channel analysis is the result most likely to save other teams time. The finding that automatic gain calibration in a strongly autofluorescent medium sets the gain to a value that renders cellular fluorescence unmeasurable is a warning directly applicable to any team running a fluorescence reporter assay in mGAM, BHI, or any other rich, colored broth (Promoter Screen: Q3: Controls; Q5: Calibration). This negative result is documented in full, including the calculation of the autofluorescence ceiling and the identification of the causal mechanism, because that is the form in which it is most useful to others (Promoter Screen: Limitations & Mitigations).
+
+</ExpandableText>
+
+<ExpandableText title="Did the team validate and calibrate their measurement process appropriately for their approach?">
+
+Calibration operates at three levels across the toolkit. At the instrument level, focal distance was calculated automatically per plate and gain settings are reported explicitly, including the implication that automatic gain in mGAM is set by the broth rather than the cells (Promoter Screen: Q5: Calibration). At the assay-unit level, growth rate parameters are instrument-invariant by derivation, and antibiotic concentrations are prepared by serial dilution from a weighed stock, with the dilution series providing a built-in concentration check (MIC: Q2: Calculations). At the analysis level, the conjugation dilution series functions as a self-consistency check: back-calculated titres should be constant across dilutions, and the one series that failed this test by 2,951-fold was withdrawn (<Link to="/measurement#conjugation">Conjugation: Q6: Calibration</Link>). Detection limits (LOD, LOQ) are reported for the fluorescence assay from blank-well statistics, making the signal threshold explicit (Promoter Screen: Q3: Controls).
+
+Validation, which confirms that signals are real rather than artefacts, is addressed in each section. Growth curve results are validated by agreement between two strains across four experiments, and by biological coherence: BHI failing without hemin and vitamin K is predicted by the literature (Growth Curves: Discussion). MIC values are validated against known *P. vulgatus* susceptibility to metronidazole (MIC: Q4: Controls). The promoter-reporter screen is cross-validated by two independent reporter systems: BsP showed the highest NanoLuc luminescence signal and was the only construct to clear detection by fluorescence (mCherry, 3,411 ± 497 RFU above LOD), providing orthogonal confirmation for the one result we report with confidence (Promoter Screen: Q6: Calibration). Where validation was not possible before the wiki freeze, results are labelled provisional and the experiment needed to confirm them is described (Promoter Screen: Limitations & Mitigations).
+
+</ExpandableText>
 
 **Where to find it**
 
