@@ -10,7 +10,7 @@
 
 The lack of established measurement methods for *Phocaeicola vulgatus* DSM 1447 did not stop us. It defined the challenge we set out to solve. With almost no published genetic tools or standardized protocols to build on, we developed and systematically characterized a measurement toolkit for this non-model, strictly anaerobic organism.
 
-Our work went beyond measuring individual outcomes. We established the conditions for reliable growth and medium selection, characterized antibiotic susceptibility, quantified conjugation efficiency, and compared promoter activity. Crucially, these experiments were connected: growth optimization informed our cultivation strategy, antibiotic susceptibility guided selection conditions, and the conjugation and promoter assays built on the conditions established in the preceding experiments. Each step helped us refine the next and identify limitations that would otherwise have remained hidden.
+Our work went beyond measuring individual outcomes. We established the conditions for reliable <Link to="/results#growth-curves-and-medium-comparison">growth and medium selection</Link>, characterized <Link to="/results#antibiotic-susceptibility-of-p-vulgatus">antibiotic susceptibility</Link>, quantified <Link to="/results#conjugation-into-p-vulgatus">conjugation efficiency</Link>, and compared <Link to="/results#a-characterized-promoter-library-for-p-vulgatus">promoter activity</Link>. Crucially, these experiments were connected: growth optimization informed our cultivation strategy, antibiotic susceptibility guided selection conditions, and the conjugation and promoter assays built on the conditions established in the preceding experiments. Each step helped us refine the next and identify limitations that would otherwise have remained hidden.
 
 We documented the reasoning behind our methods, including controls, calibration decisions, detection limits, unexpected results, and unsuccessful approaches. This makes our work more than a collection of experimental results. It provides a transparent, reproducible starting point for future teams working with *P. vulgatus*, allowing them to build on our findings rather than start from scratch.
 
@@ -146,7 +146,7 @@ The GP fits to ln(OD/OD₀), where OD₀ is the first blank-corrected reading fo
 
 No pathlength correction was applied and no OD-to-CFU calibration exists for DSM 1447, so optical density is a biomass proxy on our own scale. The rate parameters are unaffected, for the reason given in Q1.
 
-- **† marginal** — conditions with ΔOD at or below [0.03 or 0.05 — fix]. At that level the growth signal is close to the noise of the measurement, so the fitted parameters are unreliable however confident the fit looks.
+- **† marginal** — conditions with ΔOD at or below 0.03. At that level the growth signal is close to the noise of the measurement, so the fitted parameters are unreliable however confident the fit looks.
 - **‡ not fitted** — conditions the package could not fit, because they contained three or fewer distinct optical densities.
 
 **The trap these exist to catch.** A tight standard deviation describes the model’s confidence in its own fit, not whether the fit reflects real growth. A GP returns a numeric fit for almost any input, including smooth noise, and reports it with a small posterior. For † rows the error bars must be read alongside the ΔOD value rather than on their own.
@@ -621,7 +621,6 @@ The second term is what makes the unit interpretable: a construct producing no r
 <ExpandableText title="Q2 · How is it calculated?">
 
 
-Every number in this section can be rebuilt from the analysis workbook reporter_promoter.xlsx [link] by following these steps.
 
 1. **Average the control wells.** Medium-only (mGAM), LB-only and plasmid-free DSM 1447, separately per channel and for OD600.
 1. **Apply the outlier rule.** Discard any well whose blank-corrected OD600 is below 0.5, and record which wells this removes.
@@ -761,22 +760,5 @@ Our output is not only ranking promoters and characterizing reporters. It is the
   calibration steps behind each measurement.
 - <Link to="/notebook">Notebook</Link> — the dated entries recording each measurement
   run as it happened.
-
----
-
-<Callout title="Best Measurement Award">
-
-Measurements are how you show that a system, physical or computational, behaves as
-expected, that data are reliable, and that a result actually matters. Strong
-contenders pick meaningful targets to measure, capture them precisely through
-experimental or computational methods, and report results clearly with appropriate
-units or metrics.
-
----
-
-Visit the [Special Awards page](https://competition.igem.org/judging/awards/special) for more
-information.
-
-</Callout>
 
 </PageLayout>
