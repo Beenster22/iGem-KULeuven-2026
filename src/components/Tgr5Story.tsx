@@ -1278,7 +1278,10 @@ const MORE_CARDS: MoreCard[] = [
     specialPrize: true,
   },
   {
-    title: "Integrated Human Practices",
+    // A non-breaking space, so it wraps as "Integrated / Human Practices"
+    // rather than leaving "Practices" on a line of its own (team request,
+    // 2026-10-21).
+    title: "Integrated Human Practices",
     tagline: "How people shaped EMPOWER",
     to: "/human-practices",
     icon: <BubblesIcon />,

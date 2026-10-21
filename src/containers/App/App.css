@@ -8963,6 +8963,12 @@ body:not(.home-fullscreen) .home-hero {
   font-size: 1.2rem;
   font-weight: 800;
   line-height: 1.2;
+  /* Edited 2026-10-21 (team request: the boxes should line up). The longest
+     title runs to two lines, and with the others on one, that card's
+     tagline and prize sat lower than everybody else's. Every title takes
+     two lines' worth of room now, whether it needs it or not, so the
+     tagline under it starts at the same height in every card. */
+  min-height: 2.4em;
 }
 
 .find-more-card-tagline {
