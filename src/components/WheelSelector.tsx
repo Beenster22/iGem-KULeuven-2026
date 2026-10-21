@@ -36,7 +36,7 @@ interface WheelSelectorProps {
    * Lets something elsewhere on the page turn this wheel to one of its
    * wedges, by dispatching a WHEEL_SELECT_EVENT carrying this id and the
    * wedge's label — see TherapeuticsOverview.tsx, whose step 5 opens the
-   * Toolkit wheel on "Conjugation efficiency testing".
+   * Toolkit wheel on "Conjugation titer testing".
    */
   id?: string;
   /**

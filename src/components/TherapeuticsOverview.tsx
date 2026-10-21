@@ -5,7 +5,7 @@
 // step's write-up in a panel under the figure (the team's text, from
 // "Experimental overview of therapeutics.docx"), and 5 — the conjugation
 // into P. vulgatus — sends the reader to the Toolkit pipeline's wheel
-// instead, opened on its "Conjugation efficiency testing" wedge.
+// instead, opened on its "Conjugation titer testing" wedge.
 //
 // The badge positions below were measured off the artwork itself (the
 // centre of each blue circle, as a percentage of the image), so they stay
@@ -23,8 +23,8 @@ const FIGURE_HEIGHT = 510;
 // the reveal below looks for, so the Toolkit pipeline and its Introduction
 // section open first — keep it in step with that wheel's SectionItem label
 // in results.mdx.
-const CONJUGATION_LABEL = "Conjugation efficiency testing";
-const CONJUGATION_SLUG = "conjugation-efficiency-testing";
+const CONJUGATION_LABEL = "Conjugation titer testing";
+const CONJUGATION_SLUG = "conjugation-titer-testing";
 
 interface Step {
   n: number;

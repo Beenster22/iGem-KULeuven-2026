@@ -40,6 +40,7 @@ import { ElleTour } from "./components/ElleTour";
 import { InflammationSliderSection } from "./components/InflammationSliderSection";
 import { BshStreamAnimation } from "./components/BshStreamAnimation";
 import { MicChart } from "./components/MicChart";
+import { ConjugationTiterChart } from "./components/ConjugationTiterChart";
 import { MilestoneArc, Milestone } from "./components/MilestoneArc";
 import { FanSelector, FanBranch } from "./components/FanSelector";
 import { MarketRings, MarketRing } from "./components/MarketRings";
@@ -158,6 +159,7 @@ export const mdxComponents = {
   BshStreamAnimation,
   InflammationSliderSection,
   MicChart,
+  ConjugationTiterChart,
   MilestoneArc,
   Milestone,
   FanSelector,

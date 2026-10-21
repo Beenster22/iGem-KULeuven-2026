@@ -9546,6 +9546,17 @@ body:not(.home-fullscreen) .home-hero {
   color: #33283f;
 }
 
+/* Conjugation titer chart (ConjugationTiterChart.tsx)
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-21 */
+.conjugation-titer-chart {
+  width: 100%;
+  min-height: 420px;
+  margin: 1.5rem 0;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
 /* TEAM MEMBERS
    Generated with Claude Sonnet 5 (Anthropic), 2026-09-09
    Purpose: grid of member cards on the Team page, each opening a popup with
@@ -19202,4 +19213,13 @@ a.protocol-download:hover {
   .page-body:not(.page-body--home) .page-shell-content blockquote p {
     font-size: 1.1rem;
   }
+}
+
+/* Description page visual abstract: trims the empty margin above and below the
+   figure in the inline thumbnail (the fullscreen view still shows it whole). */
+img.visual-abstract-img {
+  width: 100%;
+  aspect-ratio: 1600 / 840;
+  object-fit: cover;
+  object-position: 50% 56%;
 }
