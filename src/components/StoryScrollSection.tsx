@@ -671,6 +671,16 @@ export function StoryStatement({ children }: { children: ReactNode }) {
 // other fades in (which left an empty ring half way), the clock turns as it
 // goes, and the glass's handle fades in after it rather than popping up.
 const MORPH_MS = 1100;
+// Edited 2026-10-21 (team request: the clock → magnifying glass was slow
+// enough to watch the working of it). Now that the rim and the disc carry
+// through, there is nothing to cover up by taking its time, and quick
+// enough to read as one thing changing beats slow enough to study.
+const LENS_MORPH_MS = 560;
+// The clock's face and the magnifying glass's own dark glass, which the
+// stand-in's disc goes between (.story-clock-face and .quest-lens-glass in
+// App.css — keep in step with them).
+const CLOCK_FACE = "#eaf4f5";
+const LENS_GLASS = "#221b2b";
 
 interface StepMorph {
   from: StoryStep["position"];
@@ -786,6 +796,13 @@ function useStepMorphs(
       height: `${r.height}px`,
     });
     Object.assign(ghost.style, px(start));
+    // The clock's face and the lens's glass are the same disc seen at two
+    // moments, so the stand-in starts as whichever it is leaving and
+    // darkens (or lightens) into the other as it goes. Set before it is
+    // shown, or its first frame would be the colour it is heading for.
+    if (morph.kind === "lens") {
+      ghost.style.backgroundColor = forwards ? CLOCK_FACE : LENS_GLASS;
+    }
     document.body.appendChild(ghost);
     // The magnifying glass is hidden whole, handle and all.
     const hidden = [inFrom, inTo].map(
@@ -794,31 +811,48 @@ function useStepMorphs(
     hidden.forEach((el) => (el.style.visibility = "hidden"));
 
     const easing = "cubic-bezier(0.65, 0, 0.35, 1)";
+    const ms = morph.kind === "lens" ? LENS_MORPH_MS : MORPH_MS;
     const moving = ghost.animate([px(start), px(end)], {
-      duration: MORPH_MS,
+      duration: ms,
       easing,
       fill: "forwards",
     });
     fading.animate([{ opacity: 1 }, { opacity: 0 }], {
-      duration: MORPH_MS * 0.6,
-      delay: MORPH_MS * 0.1,
+      duration: ms * 0.6,
+      delay: ms * 0.1,
       easing: "ease-in-out",
       fill: "both",
     });
     arriving.animate([{ opacity: 0 }, { opacity: 1 }], {
-      duration: MORPH_MS * 0.6,
-      delay: MORPH_MS * 0.3,
+      duration: ms * 0.6,
+      delay: ms * 0.3,
       easing: "ease-in-out",
       fill: "both",
     });
     if (morph.kind === "lens") {
-      // The clock face turns over into the glass, the way it is going.
-      const turn = forwards ? "120deg" : "-120deg";
-      fading.animate([{ rotate: "0deg" }, { rotate: turn }], {
-        duration: MORPH_MS,
-        easing,
-        fill: "forwards",
-      });
+      // Edited 2026-10-21 (team request: it should actually be turning
+      // into it). Three things carry through now instead of one look
+      // swapping for another: the rim, which is the stand-in's own border
+      // and never goes anywhere; the disc inside it, which darkens from
+      // the clock's face into the glass; and the hands, which are all
+      // that is left of the clock once its own ring and face stand down
+      // (see .story-morph-clock in App.css), sweeping round as they fade
+      // the way they would if the hours were rushing by.
+      ghost.animate(
+        [
+          { backgroundColor: forwards ? CLOCK_FACE : LENS_GLASS },
+          { backgroundColor: forwards ? LENS_GLASS : CLOCK_FACE },
+        ],
+        { duration: ms, easing, fill: "forwards" },
+      );
+      const hands = forwards ? fading : arriving;
+      hands.animate(
+        [
+          { rotate: forwards ? "0deg" : "180deg" },
+          { rotate: forwards ? "180deg" : "0deg" },
+        ],
+        { duration: ms, easing, fill: "forwards" },
+      );
     }
 
     const finish = () => {
