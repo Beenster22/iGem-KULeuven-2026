@@ -10110,6 +10110,68 @@ body:not(.home-fullscreen) .home-hero {
   margin-bottom: 0;
 }
 
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-21: the funding-gap
+   illustration under the Legislators & Advocates intro
+   (FundingGapIllustration.tsx). Two cliff edges, a crowd of women on the
+   left, and a few crumbs that fall into the gap on a loop. */
+.funding-gap {
+  margin: 1.25rem 0 0;
+}
+
+.funding-gap svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 220px;
+}
+
+.funding-gap-ground {
+  fill: color-mix(in srgb, var(--color-interactive) 30%, transparent);
+  stroke: var(--color-interactive);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.funding-gap-women {
+  color: var(--color-text);
+  fill: currentColor;
+}
+
+
+.funding-gap-crumb {
+  fill: var(--color-interactive);
+  transform-box: fill-box;
+  animation: funding-gap-fall 3.2s ease-in infinite;
+}
+
+.funding-gap-crumb:nth-of-type(2) {
+  animation-delay: 1.1s;
+}
+
+.funding-gap-crumb:nth-of-type(3) {
+  animation-delay: 2.2s;
+}
+
+@keyframes funding-gap-fall {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(60px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .funding-gap-crumb {
+    animation: none;
+  }
+}
+
 .hp-section-context {
   margin-top: 1.25rem;
   opacity: 0.9;

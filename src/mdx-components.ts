@@ -71,6 +71,7 @@ import { HomeSnapScroll, SnapHold } from "./components/HomeSnapScroll";
 import { DBTLCycles, DBTLCycle, DBTLStage } from "./components/DBTLCycles";
 import { ZoomableImage } from "./components/ZoomableImage";
 import { ElleSays } from "./components/ElleSays";
+import { FundingGapIllustration } from "./components/FundingGapIllustration";
 import {
   ResultSection,
   KeyTakeaways,
@@ -195,6 +196,9 @@ export const mdxComponents = {
   SnapHold,
   ZoomableImage,
   ElleSays,
+  // Generated with Claude Opus 5.5 (Anthropic), 2026-10-21: the cliff-edge
+  // gap with women waiting, under the Legislators & Advocates intro.
+  FundingGapIllustration,
   // Generated with Claude Opus 5 (Anthropic), 2026-10-17
   // Purpose: the results page's layout kit — the key-takeaway cards and the
   // placeholder boxes for figures that have not been added yet.
