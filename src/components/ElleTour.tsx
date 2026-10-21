@@ -242,10 +242,17 @@ export function ElleTour() {
       // Her offset from that place shrinks along a curve that starts at
       // just the speed holding her still, so she leaves without a jolt.
       // She stays sad: the professor is the same sad Elle, with glasses on.
+      // Edited 2026-10-21 (team request: she should be the professor the
+      // moment that screen arrives): the handover follows the scroll, not
+      // the tour's own clock. This screen no longer holds the reader, so
+      // they can be on their way long before the tour has played out —
+      // waiting for it left her still touring on the screen below. She
+      // sets off from wherever she has got to.
       let handedOver = false;
       const professor = document.querySelector<HTMLElement>(PROFESSOR_SELECTOR);
       const story = professor?.closest<HTMLElement>(".story-scroll");
-      if (t >= END && professor && story && !prefersReducedMotion) {
+      const leaves = box;
+      if (professor && story && !prefersReducedMotion) {
         const unpinnedTop =
           wrapper.getBoundingClientRect().top + window.scrollY +
           wrapper.offsetHeight - slot.parentElement!.offsetHeight;
@@ -257,13 +264,13 @@ export function ElleTour() {
         if (q > 0) {
           const p = professor.getBoundingClientRect();
           const shift = Math.min(window.scrollY, landAt) - waistAt;
-          const gap0 = p.top + shift - sideBox.y; // how far below her it started
+          const gap0 = p.top + shift - leaves.y; // how far below her it started
           const e = GLIDE(q, gap0 > 0 ? Math.min(1.5, span / gap0) : 0);
           box = {
-            x: p.left + (sideBox.x - p.left) * (1 - e),
-            y: p.top + (sideBox.y - (p.top + shift)) * (1 - e),
-            w: lerp(sideBox.w, p.width, e),
-            h: lerp(sideBox.h, p.height, e),
+            x: p.left + (leaves.x - p.left) * (1 - e),
+            y: p.top + (leaves.y - (p.top + shift)) * (1 - e),
+            w: lerp(leaves.w, p.width, e),
+            h: lerp(leaves.h, p.height, e),
           };
           handedOver = q >= 1;
         }
