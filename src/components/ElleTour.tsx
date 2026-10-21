@@ -258,7 +258,19 @@ export function ElleTour() {
           wrapper.offsetHeight - slot.parentElement!.offsetHeight;
         const waistAt =
           unpinnedTop + (fig.top - stage.top) + WAIST * fig.height - navBottom();
-        const landAt = story.getBoundingClientRect().top + window.scrollY;
+        // Edited 2026-10-21 (team request: she should be the professor, stick
+        // and all, as soon as you scroll to her box): she lands once her
+        // spot is wholly on screen, rather than only when the stage pins at
+        // the top. Her spot sits a fixed distance into the stage, and the
+        // stage's top runs with the story's own until it pins, which gives
+        // the scroll at which her spot's bottom clears the bottom of the
+        // screen (or the pin, if that comes first).
+        const storyTop = story.getBoundingClientRect().top + window.scrollY;
+        const stageEl = professor.closest<HTMLElement>(".story-stage") ?? story;
+        const spotBottom =
+          storyTop +
+          (professor.getBoundingClientRect().bottom - stageEl.getBoundingClientRect().top);
+        const landAt = Math.min(storyTop, spotBottom - window.innerHeight * 0.95);
         const span = landAt - waistAt;
         const q = span > 0 ? clamp01((window.scrollY - waistAt) / span) : 1;
         if (q > 0) {
