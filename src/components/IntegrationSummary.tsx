@@ -33,13 +33,13 @@ export function IntegrationPoint(_props: IntegrationPointProps) {
 }
 
 interface IntegrationSummaryProps {
-  /** Optional heading above the summary. Left off by default — the column
-   *  headings already say what the two sides are. */
+  /** Title above the summary, styled like the "Introduction" label at the
+   *  top of each stakeholder group. Defaults to "Summary". */
   title?: string;
   children: ReactNode;
 }
 
-export function IntegrationSummary({ title, children }: IntegrationSummaryProps) {
+export function IntegrationSummary({ title = "Summary", children }: IntegrationSummaryProps) {
   const points = useMemo(
     () =>
       Children.toArray(children)
@@ -55,7 +55,7 @@ export function IntegrationSummary({ title, children }: IntegrationSummaryProps)
 
   return (
     <div className="integration-summary">
-      {title && <h4 className="integration-summary-title">{title}</h4>}
+      {title && <p className="integration-summary-title">{title}</p>}
 
       <div className="integration-summary-grid">
         <div className="integration-summary-headrow">

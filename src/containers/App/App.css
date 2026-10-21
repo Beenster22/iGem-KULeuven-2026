@@ -10097,13 +10097,13 @@ body:not(.home-fullscreen) .home-hero {
   background-color: rgba(234, 244, 245, 0.06);
 }
 
+/* Same title as the entrepreneurship "Mission" card
+   (.milestone-arc-content-title); the summary title above each
+   integration table matches it (.integration-summary-title). */
 .hp-section-intro-label {
-  margin: 0 0 0.4rem;
-  font-size: 0.75rem;
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-interactive);
 }
 
 .hp-section-intro > :last-child {
@@ -14717,7 +14717,8 @@ a.protocol-download:hover {
 
 .integration-summary-title {
   margin: 0 0 1rem;
-  font-size: 1.05rem;
+  font-size: 1.15rem;
+  font-weight: 700;
 }
 
 .integration-summary-headrow,
