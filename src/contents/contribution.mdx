@@ -2,157 +2,39 @@
 
 <span data-toc-collapsible hidden />
 
+<div className="hp-section-intro">
+
+<p className="hp-section-intro-label">Introduction</p>
+
+iGEM is built on the idea that what one team learns should make the next team's work easier. That principle mattered to us more than usual this year, because we worked with a non model organism for whom very little data was available.
+
+*Phocaeicola vulgatus* is a strict anaerobe and a non-model organism, which meant that most of the standard synthetic biology groundwork simply wasn't there. So we built it. We contributed 30 new parts to the Registry, each characterized in a complex anaerobic system rather than in a convenient chassis. This is data that, to our knowledge, did not previously exist in this form.
+
+Along the way we ran into the same wall repeatedly: no codon harmonization or optimization tool covered our organism. Rather than solve it privately, we built an open tool any scientist can use for work in non-model hosts.
+
+We also wanted to share two things that are rarely documented but shape every project: how we developed our brand identity, which we believe is as foundational to a project or company as the science itself, and several different strategies for building a wiki, including routes that don't require a team member who can code.
+
+</div>
+
 ## Parts
 
 iGEM EMPOWER built, submitted, and characterized 30 parts: 20 composite parts, four reporter genes, an RBS, a terminator, and four promoters. These are the building blocks of our promoter-reporter library from our genetic toolkit and represent a contribution to the scientific community to ease genetic engineering of the non-model organism *P. vulgatus*. An additional promoter used in our library was added by HZAU-China (2026), where we added the first documentation.
 
 Browse every part, with its iGEM Registry page, on our <Link to="/parts">Parts page</Link>. To see how the library was characterized and built, read the <Link to="/results#reporter-gene-output">promoter-reporter data analysis</Link> in our Results, the <Link to="/engineering#fluorescence-microscopy-conjugation">DBTL cycles</Link> on our Engineering Success page, and the <Link to="/protocols#promoter-reporter-screen">promoter-reporter screen protocol</Link>.
 
-## Wiki Writing
+## A codon optimization tool for *Bacteroides*
 
-Writing your iGEM wiki is one of the most important parts of the competition: it's how you
-communicate your experiments, results, and ideas to the judges and to everyone else. Many teams
-don't have anyone with web development experience, so we put together a set of guides on how to
-get started.
+While planning our constructs we found that no online tool could codon-optimize or harmonize a sequence for *Bacteroides*. Existing tools target hosts such as *E. coli*, yeast or mammalian cells, and their defaults are a poor fit for an AT-rich anaerobe. So we built one and made it free for anyone to use.
 
-There are three standard templates iGEM offers to start a wiki from: Markdown, HTML/CSS/JS, and
-React. That order roughly tracks two things at once, difficulty and creative freedom. Markdown is
-the simplest option, but also the most limited for realizing an ambitious design. HTML/CSS/JS is
-more advanced and can get you almost anywhere you want if you're willing to put in the work.
-React is the most complex of the three, but if you already have programming experience, it makes
-building a polished, interactive wiki far more streamlined.
+It is a Python command-line tool that takes in-frame coding sequences and returns versions that can realistically be expressed in *Bacteroides*. It supports both optimization (maximise expression) and harmonization (preserve the native folding rhythm). It runs on your own machine, and it is open source under the MIT License.
 
-Below are guides for each of those three templates, plus two of our own: how our team combined
-React with Markdown to split the work by skill level, and how to host a copy of the wiki yourself
-for faster, private previews in the run-up to the wiki freeze.
-
-<Callout title="AI disclosure">
-
-The information and structure of these guides are our own. We used Claude (Anthropic) to format
-the text, fill in code blocks and write some of the wording.
-
-</Callout>
-
-<ExpandableText title="Markdown template guide">
-
-For teams with little or no programming experience, and nobody planning to seriously learn to
-code this season. Covers the official Markdown wiki template from zero: basic syntax, uploading
-images and video the way iGEM requires, and adding pages, no coding background needed.
-
-<div className="notebook-entry-pdf">
-<iframe
-  src="https://static.igem.wiki/teams/6299/wiki/contributions/igem-wiki-guide-markdown-branded.pdf"
-  title="Markdown template guide PDF"
+<SoftwareDownload
+  name="Bacteroides codon optimization tool"
+  path="software/codon-optimization-tool"
+  description="Python command-line tool for codon optimization and harmonization in Bacteroides. Runs on your own machine."
 />
-<a
-  href="https://static.igem.wiki/teams/6299/wiki/contributions/igem-wiki-guide-markdown-branded.pdf"
-  download
-  target="_blank"
-  rel="noopener noreferrer"
-  className="notebook-entry-download"
->
-  Download PDF
-</a>
-</div>
 
-</ExpandableText>
-
-<ExpandableText title="HTML, CSS &amp; JS template guide">
-
-For teams with some web development experience who have ideas for a more advanced wiki with
-interactivity and more complicated visualizations. Covers the official HTML/CSS/JS wiki template
-from zero: tags, classes, Bootstrap's grid, basic CSS and JavaScript, and this template's page
-structure.
-
-<div className="notebook-entry-pdf">
-<iframe
-  src="https://static.igem.wiki/teams/6299/wiki/contributions/igem-wiki-guide-html-css-js-branded.pdf"
-  title="HTML, CSS and JS template guide PDF"
-/>
-<a
-  href="https://static.igem.wiki/teams/6299/wiki/contributions/igem-wiki-guide-html-css-js-branded.pdf"
-  download
-  target="_blank"
-  rel="noopener noreferrer"
-  className="notebook-entry-download"
->
-  Download PDF
-</a>
-</div>
-
-</ExpandableText>
-
-<ExpandableText title="React template guide">
-
-For teams with programming and web development experience, since it offers the most streamlined
-path to a genuinely custom wiki. Covers the official React wiki template (the one this wiki is
-built on) from zero: JSX, components, props, basic interactivity, and adding pages.
-
-<div className="notebook-entry-pdf">
-<iframe
-  src="https://static.igem.wiki/teams/6299/wiki/contributions/igem-wiki-guide-react-branded.pdf"
-  title="React template guide PDF"
-/>
-<a
-  href="https://static.igem.wiki/teams/6299/wiki/contributions/igem-wiki-guide-react-branded.pdf"
-  download
-  target="_blank"
-  rel="noopener noreferrer"
-  className="notebook-entry-download"
->
-  Download PDF
-</a>
-</div>
-
-</ExpandableText>
-
-<ExpandableText title="How our team did it: Markdown + custom React components">
-
-Our team had a big imbalance in programming skill: one person with real React experience, and
-everyone else with little to none. This guide explains the hybrid approach we built so our one
-programmer could provide a strong structure and reusable components, while everyone else wrote
-their actual page content in plain Markdown.
-
-<div className="notebook-entry-pdf">
-<iframe
-  src="https://static.igem.wiki/teams/6299/wiki/contributions/hybrid-markdown-react-approach-branded.pdf"
-  title="How our team did it: Markdown plus custom React components PDF"
-/>
-<a
-  href="https://static.igem.wiki/teams/6299/wiki/contributions/hybrid-markdown-react-approach-branded.pdf"
-  download
-  target="_blank"
-  rel="noopener noreferrer"
-  className="notebook-entry-download"
->
-  Download PDF
-</a>
-</div>
-
-</ExpandableText>
-
-<ExpandableText title="Hosting your own wiki locally">
-
-We'd also suggest hosting your own copy of the wiki for speed and privacy in the run-up to the
-wiki freeze. This tutorial walks through setting one up yourself, for free.
-
-<div className="notebook-entry-pdf">
-<iframe
-  src="https://static.igem.wiki/teams/6299/wiki/contributions/wiki-hosting-tut-branded.pdf"
-  title="Hosting your own wiki locally PDF"
-/>
-<a
-  href="https://static.igem.wiki/teams/6299/wiki/contributions/wiki-hosting-tut-branded.pdf"
-  download
-  target="_blank"
-  rel="noopener noreferrer"
-  className="notebook-entry-download"
->
-  Download PDF
-</a>
-</div>
-
-</ExpandableText>
+To learn how it works, which constraints it checks and where its limits are, read <Link to="/dry-lab#1-3-codon-optimization-tool">section 1.3 on our Dry Lab page</Link>.
 
 ## How to build a brand identity for your iGEM team
 
@@ -528,18 +410,150 @@ Here is our own short video, made to test the identity in motion:
 - Ask for consent before you show real people in photos, videos or quotes.
 - Keep the brandbook short (about 14 pages is enough) and visual, so that every team member actually uses it.
 
-## A codon optimization tool for *Bacteroides*
+## Wiki Writing
 
-While planning our constructs we found that no online tool could codon-optimize or harmonize a sequence for *Bacteroides*. Existing tools target hosts such as *E. coli*, yeast or mammalian cells, and their defaults are a poor fit for an AT-rich anaerobe. So we built one and made it free for anyone to use.
+Writing your iGEM wiki is one of the most important parts of the competition: it's how you
+communicate your experiments, results, and ideas to the judges and to everyone else. Many teams
+don't have anyone with web development experience, so we put together a set of guides on how to
+get started.
 
-It is a Python command-line tool that takes in-frame coding sequences and returns versions that can realistically be expressed in *Bacteroides*. It supports both optimization (maximise expression) and harmonization (preserve the native folding rhythm). It runs on your own machine, and it is open source under the MIT License.
+There are three standard templates iGEM offers to start a wiki from: Markdown, HTML/CSS/JS, and
+React. That order roughly tracks two things at once, difficulty and creative freedom. Markdown is
+the simplest option, but also the most limited for realizing an ambitious design. HTML/CSS/JS is
+more advanced and can get you almost anywhere you want if you're willing to put in the work.
+React is the most complex of the three, but if you already have programming experience, it makes
+building a polished, interactive wiki far more streamlined.
 
-<SoftwareDownload
-  name="Bacteroides codon optimization tool"
-  path="software/codon-optimization-tool"
-  description="Python command-line tool for codon optimization and harmonization in Bacteroides. Runs on your own machine."
+Below are guides for each of those three templates, plus two of our own: how our team combined
+React with Markdown to split the work by skill level, and how to host a copy of the wiki yourself
+for faster, private previews in the run-up to the wiki freeze.
+
+<Callout title="AI disclosure">
+
+The information and structure of these guides are our own. We used Claude (Anthropic) to format
+the text, fill in code blocks and write some of the wording.
+
+</Callout>
+
+<ExpandableText title="Markdown template guide">
+
+For teams with little or no programming experience, and nobody planning to seriously learn to
+code this season. Covers the official Markdown wiki template from zero: basic syntax, uploading
+images and video the way iGEM requires, and adding pages, no coding background needed.
+
+<div className="notebook-entry-pdf">
+<iframe
+  src="https://static.igem.wiki/teams/6299/wiki/contributions/igem-wiki-guide-markdown-branded.pdf"
+  title="Markdown template guide PDF"
 />
+<a
+  href="https://static.igem.wiki/teams/6299/wiki/contributions/igem-wiki-guide-markdown-branded.pdf"
+  download
+  target="_blank"
+  rel="noopener noreferrer"
+  className="notebook-entry-download"
+>
+  Download PDF
+</a>
+</div>
 
-To learn how it works, which constraints it checks and where its limits are, read <Link to="/dry-lab#1-3-codon-optimization-tool">section 1.3 on our Dry Lab page</Link>.
+</ExpandableText>
+
+<ExpandableText title="HTML, CSS &amp; JS template guide">
+
+For teams with some web development experience who have ideas for a more advanced wiki with
+interactivity and more complicated visualizations. Covers the official HTML/CSS/JS wiki template
+from zero: tags, classes, Bootstrap's grid, basic CSS and JavaScript, and this template's page
+structure.
+
+<div className="notebook-entry-pdf">
+<iframe
+  src="https://static.igem.wiki/teams/6299/wiki/contributions/igem-wiki-guide-html-css-js-branded.pdf"
+  title="HTML, CSS and JS template guide PDF"
+/>
+<a
+  href="https://static.igem.wiki/teams/6299/wiki/contributions/igem-wiki-guide-html-css-js-branded.pdf"
+  download
+  target="_blank"
+  rel="noopener noreferrer"
+  className="notebook-entry-download"
+>
+  Download PDF
+</a>
+</div>
+
+</ExpandableText>
+
+<ExpandableText title="React template guide">
+
+For teams with programming and web development experience, since it offers the most streamlined
+path to a genuinely custom wiki. Covers the official React wiki template (the one this wiki is
+built on) from zero: JSX, components, props, basic interactivity, and adding pages.
+
+<div className="notebook-entry-pdf">
+<iframe
+  src="https://static.igem.wiki/teams/6299/wiki/contributions/igem-wiki-guide-react-branded.pdf"
+  title="React template guide PDF"
+/>
+<a
+  href="https://static.igem.wiki/teams/6299/wiki/contributions/igem-wiki-guide-react-branded.pdf"
+  download
+  target="_blank"
+  rel="noopener noreferrer"
+  className="notebook-entry-download"
+>
+  Download PDF
+</a>
+</div>
+
+</ExpandableText>
+
+<ExpandableText title="How our team did it: Markdown + custom React components">
+
+Our team had a big imbalance in programming skill: one person with real React experience, and
+everyone else with little to none. This guide explains the hybrid approach we built so our one
+programmer could provide a strong structure and reusable components, while everyone else wrote
+their actual page content in plain Markdown.
+
+<div className="notebook-entry-pdf">
+<iframe
+  src="https://static.igem.wiki/teams/6299/wiki/contributions/hybrid-markdown-react-approach-branded.pdf"
+  title="How our team did it: Markdown plus custom React components PDF"
+/>
+<a
+  href="https://static.igem.wiki/teams/6299/wiki/contributions/hybrid-markdown-react-approach-branded.pdf"
+  download
+  target="_blank"
+  rel="noopener noreferrer"
+  className="notebook-entry-download"
+>
+  Download PDF
+</a>
+</div>
+
+</ExpandableText>
+
+<ExpandableText title="Hosting your own wiki locally">
+
+We'd also suggest hosting your own copy of the wiki for speed and privacy in the run-up to the
+wiki freeze. This tutorial walks through setting one up yourself, for free.
+
+<div className="notebook-entry-pdf">
+<iframe
+  src="https://static.igem.wiki/teams/6299/wiki/contributions/wiki-hosting-tut-branded.pdf"
+  title="Hosting your own wiki locally PDF"
+/>
+<a
+  href="https://static.igem.wiki/teams/6299/wiki/contributions/wiki-hosting-tut-branded.pdf"
+  download
+  target="_blank"
+  rel="noopener noreferrer"
+  className="notebook-entry-download"
+>
+  Download PDF
+</a>
+</div>
+
+</ExpandableText>
 
 </PageLayout>
