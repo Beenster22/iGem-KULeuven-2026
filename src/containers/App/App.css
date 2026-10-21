@@ -15481,8 +15481,17 @@ a.protocol-download:hover {
   }
 }
 
-.results-pipelines > .success-cards {
-  margin-top: 0.25rem;
+/* Edited 2026-10-21 (team request: not so much purple space above the box):
+   the box is a child of .results-top, so the old `.results-pipelines >`
+   selector never reached it and it kept its 2rem top margin on top of the
+   page's own padding (1.5rem) and the row's margin (1.5rem). The block now
+   sits tight under the page header. */
+.results-pipelines .results-top {
+  margin-top: -1.25rem;
+}
+
+.results-pipelines .results-top > .success-cards {
+  margin-top: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
