@@ -16178,10 +16178,17 @@ a.protocol-download:hover {
   background: var(--color-page-bg);
   color: var(--color-text);
   border-radius: 14px;
+  /* Edited 2026-10-21 (team request): an outline all the way round, so each
+     post reads as its own card on either theme. */
+  border: 2px solid rgba(51, 40, 63, 0.35);
   overflow: hidden;
   box-shadow: 0 6px 18px rgba(51, 40, 63, 0.18);
   display: flex;
   flex-direction: column;
+}
+
+[data-theme="dark"] .ig-post {
+  border-color: rgba(201, 189, 232, 0.5);
 }
 
 .ig-post-header {
