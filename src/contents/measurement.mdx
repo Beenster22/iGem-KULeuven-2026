@@ -103,7 +103,7 @@ Kinetic OD600 absorbance in 96-well microplates, read every 30 minutes for 24–
 
 ### Q2 · How is it calculated?
 
-**Why a Gaussian process rather than a logistic fit.** Growth curves have a lag phase, an exponential phase and a plateau. Parametric models impose a fixed functional form on all three, which biases the estimated rate whenever the real curve departs from it, and in a non-model organism we had no grounds to assume it would not. A GP assumes no functional form: it fits a smooth curve and returns a posterior at every point. Because the fit is to ln(OD), the derivative gives the instantaneous rate µ(t) with confidence bounds. The exponential phase is identified from the data rather than chosen by eye, and measurement uncertainty propagates into µ.
+**Why a Gaussian process rather than a logistic fit.** Growth curves have a lag phase, an exponential phase and a plateau. Parametric models impose a fixed functional form on all three, which biases the estimated rate whenever the real curve departs from it, and in a non-model organism we had no grounds to assume it would not. A Gaussian process (GP) assumes no functional form: it fits a smooth curve and returns a posterior at every point. Because the fit is to ln(OD), the derivative gives the instantaneous rate µ(t) with confidence bounds. The exponential phase is identified from the data rather than chosen by eye, and measurement uncertainty propagates into µ.
 
 <div className="measure-eq">
 <div className="eq-grid">
