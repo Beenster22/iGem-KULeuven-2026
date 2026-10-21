@@ -21,7 +21,7 @@ import { createPortal } from "react-dom";
 import { useReducedMotion } from "framer-motion";
 import { EFFECT_ART } from "./PmosEffectsSection";
 import { PMOS_EFFECTS_ID } from "./globeDrop";
-import { GLIDE, glideStartRate, markScrollBusy, scrollBusy } from "./scrollGlide";
+import { GLIDE } from "./scrollGlide";
 import { navBottom } from "./useFallingM";
 
 // Elle's place on the next screen, presenting (StoryScrollSection.tsx).
@@ -97,7 +97,6 @@ const REWIND_SPEED = 5;
 // back down past REWIND_AT.
 const START_AT = 0.55;
 const REWIND_AT = 0.7;
-const GLIDE_MS = 900;
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const smooth = (v: number) => {
@@ -351,74 +350,35 @@ export function ElleTour() {
       }
     };
 
-    // Brings the tour's screen exactly into place, carrying on at the
-    // page's own speed (see scrollGlide.ts); scrolling input is held back
-    // meanwhile.
-    let velocity = 0;
+    // Edited 2026-10-21 (team request: nobody is ever locked into an
+    // animation — the page scrolls whenever, either way): the tour no
+    // longer glides the page into place by itself or holds the wheel back
+    // while it does, and nothing holds the page on this screen until the
+    // tour is over. Scrolling on before it is over takes the tour straight
+    // to its end as the page starts to move, so Elle sets off for the next
+    // screen with it.
     let lastY = window.scrollY;
-    let lastTime = performance.now();
-    let busyUntil = 0;
-    let glideFrame: number | null = null;
-    const glideTo = (to: number) => {
-      const from = window.scrollY;
-      const distance = to - from;
-      const start = performance.now();
-      const startRate = glideStartRate(velocity, distance, GLIDE_MS);
-      busyUntil = start + GLIDE_MS + 300;
-      markScrollBusy(busyUntil);
-      const step = (now: number) => {
-        const u = Math.min(1, (now - start) / GLIDE_MS);
-        window.scrollTo({ top: from + distance * GLIDE(u, startRate), behavior: "instant" });
-        glideFrame = u < 1 ? requestAnimationFrame(step) : null;
-      };
-      glideFrame = requestAnimationFrame(step);
-    };
-    const block = (event: Event) => {
-      if (performance.now() < busyUntil) event.preventDefault();
-    };
-    // Edited 2026-10-21 (team request: the turn of the wheel that leaves
-    // this screen plays the transition to the next, at the tour's own
-    // pace): a turn down while resting on this screen with the tour not
-    // over yet holds the page where it is (markScrollBusy, which
-    // useWheelPaging in HomeSnapScroll.tsx respects), rather than gliding
-    // on and making Elle jump to the end of her tour partway down. Once
-    // the tour is over, the next turn glides on and she flies to her place
-    // on the next screen with it. Listened for before the page's own wheel
-    // handling, so the hold is in place in time.
-    const holdUntilDone = (event: WheelEvent) => {
-      if (prefersReducedMotion || event.deltaY <= 0 || t >= END) return;
-      const top = wrapper.getBoundingClientRect().top;
-      if (Math.abs(top) > 0.1 * window.innerHeight) return;
-      markScrollBusy(performance.now() + 200);
-    };
 
     const onScroll = () => {
       const y = window.scrollY;
-      const now = performance.now();
-      const dt = now - lastTime;
-      if (dt > 0) {
-        const sample = (y - lastY) / dt;
-        velocity = dt > 100 ? sample : velocity * 0.5 + sample * 0.5;
-      }
       const down = y > lastY;
       lastY = y;
-      lastTime = now;
 
       if (!prefersReducedMotion) {
         const top = wrapper.getBoundingClientRect().top;
         const vh = window.innerHeight;
         // Scrolled on past the screen before the tour finished: skip to its
         // end, so Elle is ready to move on to the next screen.
-        if (direction > 0 && slot.parentElement!.getBoundingClientRect().top < -0.25 * vh) {
+        if (
+          direction > 0 &&
+          down &&
+          slot.parentElement!.getBoundingClientRect().top < -0.02 * vh
+        ) {
           t = END;
           direction = 0;
         }
         if (direction <= 0 && t < END && down && top < START_AT * vh && top > -vh) {
           play(1);
-          // Not while the wheel is already gliding the page onto this
-          // screen (useWheelPaging in HomeSnapScroll.tsx): two glides at
-          // once would fight.
-          if (top > 2 && now >= busyUntil && !scrollBusy()) glideTo(y + top);
         } else if (direction >= 0 && t > 0 && top > REWIND_AT * vh) {
           play(-1);
         }
@@ -437,17 +397,10 @@ export function ElleTour() {
     render();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
-    window.addEventListener("wheel", block, { passive: false });
-    window.addEventListener("wheel", holdUntilDone, { capture: true, passive: true });
-    window.addEventListener("touchmove", block, { passive: false });
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
-      window.removeEventListener("wheel", block);
-      window.removeEventListener("wheel", holdUntilDone, { capture: true });
-      window.removeEventListener("touchmove", block);
       if (frame !== null) cancelAnimationFrame(frame);
-      if (glideFrame !== null) cancelAnimationFrame(glideFrame);
       const circle = source();
       if (circle) circle.style.visibility = "";
     };

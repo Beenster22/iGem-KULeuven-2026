@@ -22,7 +22,7 @@ import {
   type ReactNode,
 } from "react";
 import { useReducedMotion } from "framer-motion";
-import { GLIDE, markScrollBusy, scrollBusy } from "./scrollGlide";
+import { GLIDE } from "./scrollGlide";
 import { MicrobeBackdrop } from "./MicrobeBackdrop";
 
 export function HomeSnapScroll() {
@@ -57,9 +57,8 @@ export function HomeSnapScroll() {
 // touchpad's coasting included) is let go until the wheel has been still
 // for a moment, so one turn never skips a screen. Not on touch screens
 // (their own scrolling is smooth already, and snaps), not with the zoom
-// gesture (ctrl + wheel), not inside a box that scrolls on its own, and not
-// while one of the page's own glides is moving it (scrollBusy, see
-// scrollGlide.ts). The scrollbar and the keys still scroll freely.
+// gesture (ctrl + wheel), and not inside a box that scrolls on its own. The
+// scrollbar and the keys still scroll freely.
 // (Edited 2026-10-21: for a while the wheel was held for two or three
 // turns on each screen before moving on; taken back out the same day, team
 // request — one turn to a screen, the next turn on to the next.) The
@@ -72,8 +71,16 @@ export function HomeSnapScroll() {
 const GLIDE_BASE_MS = 550;
 const GLIDE_PER_SCREEN_MS = 200;
 const GLIDE_MAX_MS = 1050;
-// How long the wheel must be still before the next turn counts as a new one.
-const TURN_GAP_MS = 180;
+// Edited 2026-10-21 (team request: one scroll moves one section, never
+// more, however hard or soft — it was too sensitive): a scroll is
+// everything the wheel or touchpad sends until it has been still for
+// SCROLL_GAP_MS (a touchpad's coasting included), and it moves the page
+// one stop, once. Scrolling the same way again while the page is still
+// gliding there does nothing; scrolling the other way turns it back. The
+// faint tail of a touchpad's coasting (pushes under MIN_PUSH) never starts
+// a scroll of its own.
+const SCROLL_GAP_MS = 300;
+const MIN_PUSH = 4;
 // Stops closer than this to where the page is count as where it is.
 const NEAR_PX = 6;
 
@@ -105,6 +112,11 @@ function useWheelPaging(skip: boolean) {
     let frame: number | null = null;
     let gliding = false;
     let lastWheel = 0;
+    // The current scroll's direction, and whether it has moved the page.
+    let lastSign = 0;
+    let acted = true;
+    // Where the current glide is heading.
+    let target = 0;
 
     const stops = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
@@ -129,7 +141,8 @@ function useWheelPaging(skip: boolean) {
       );
       const start = performance.now();
       gliding = true;
-      markScrollBusy(start + duration);
+      target = to;
+      if (frame !== null) cancelAnimationFrame(frame);
       const step = (now: number) => {
         const u = Math.min(1, (now - start) / duration);
         window.scrollTo({ top: from + distance * GLIDE(u, 0), behavior: "instant" });
@@ -160,13 +173,22 @@ function useWheelPaging(skip: boolean) {
       if (scrollsItself(event.target, event.deltaY)) return;
       event.preventDefault();
       const now = performance.now();
-      const sameTurn = now - lastWheel < TURN_GAP_MS;
+      const sign = Math.sign(event.deltaY);
+      if (!sign) return;
+      // A new scroll: the wheel had stopped, or it now goes the other way.
+      if (now - lastWheel > SCROLL_GAP_MS || sign !== lastSign) acted = false;
       lastWheel = now;
-      // Still gliding, one of the page's own glides is moving it or a
-      // screen is holding it (scrollBusy), or this is the rest of a turn
-      // already acted on (a touchpad's coasting included): let it go.
-      if (gliding || scrollBusy() || sameTurn || event.deltaY === 0) return;
-      go(Math.sign(event.deltaY));
+      lastSign = sign;
+      // This scroll has already moved the page, or is only coasting. (In
+      // px: some browsers count a mouse wheel's notches in lines or pages.)
+      const push =
+        Math.abs(event.deltaY) *
+        (event.deltaMode === 1 ? 40 : event.deltaMode === 2 ? window.innerHeight : 1);
+      if (acted || push < MIN_PUSH) return;
+      acted = true;
+      // Already gliding that way: one scroll, one section.
+      if (gliding && Math.sign(target - window.scrollY) === sign) return;
+      go(sign);
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
