@@ -15291,11 +15291,11 @@ a.protocol-download:hover {
 }
 
 .success-cards-head {
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.75rem;
   color: #23868b;
-  font-size: 0.7rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-align: center;
   text-transform: uppercase;
 }
@@ -15482,7 +15482,7 @@ a.protocol-download:hover {
 }
 
 .results-pipelines > .success-cards {
-  margin-top: 1.5rem;
+  margin-top: 0.25rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
