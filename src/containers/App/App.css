@@ -9738,19 +9738,35 @@ body:not(.home-fullscreen) .home-hero {
    keyframes) with their photo on the left and the full interview write-up
    on the right. */
 .hp-section {
-  margin: 3rem 0;
-}
-
-.hp-section-card {
+  margin: 2rem 0;
+  padding: 1.75rem 1.75rem 1.5rem;
   border: 1px solid rgba(51, 40, 63, 0.15);
-  border-radius: 1.25rem;
+  border-radius: 1.5rem;
+  corner-shape: squircle;
   background-color: var(--color-page-bg);
   box-shadow: 0 0.5rem 1.5rem rgba(51, 40, 63, 0.08);
-  padding: 1.5rem 1.5rem 0.5rem;
 }
 
-[data-theme="dark"] .hp-section-card {
+@supports (corner-shape: squircle) {
+  .hp-section {
+    border-radius: 2.5rem;
+  }
+}
+
+[data-theme="dark"] .hp-section {
   border-color: rgba(255, 255, 255, 0.12);
+}
+
+@media (max-width: 575.98px) {
+  .hp-section {
+    padding: 1.25rem 1rem 1rem;
+    border-radius: 1.5rem;
+  }
+}
+
+/* The surrounding .hp-section is the frame now, so this is a plain wrapper. */
+.hp-section-card {
+  padding: 0;
 }
 
 .hp-section-title {
@@ -10067,16 +10083,18 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 /* Stakeholder-group introduction at the top of a section card (HPIntro) */
+/* Same panel treatment as the entrepreneurship milestone content (the
+   "Mission" card) — see .milestone-arc-content. */
 .hp-section-intro {
   margin: 0 0 1.25rem;
-  padding: 0.9rem 1.25rem;
+  padding: 1.25rem 1.5rem;
   border-left: 4px solid var(--color-interactive);
-  border-radius: 0 0.9rem 0.9rem 0;
-  background-color: rgba(47, 164, 169, 0.08);
+  border-radius: 0.5rem;
+  background-color: rgba(234, 244, 245, 0.45);
 }
 
 [data-theme="dark"] .hp-section-intro {
-  background-color: rgba(47, 164, 169, 0.14);
+  background-color: rgba(234, 244, 245, 0.06);
 }
 
 .hp-section-intro-label {
@@ -14658,7 +14676,11 @@ a.protocol-download:hover {
 
 .integration-summary-row {
   padding: 1rem 0;
-  border-top: 3px solid rgba(47, 164, 169, 0.6);
+  border-top: 1px solid rgba(51, 40, 63, 0.18);
+}
+
+[data-theme="dark"] .integration-summary-row {
+  border-top-color: rgba(255, 255, 255, 0.16);
 }
 
 /* A row that carries on from the one above shares its point, so the divider
