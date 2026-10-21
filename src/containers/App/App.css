@@ -3455,11 +3455,14 @@ a.tab-switcher-btn.active:hover {
 }
 
 /* "dropdown" (results page): opens by growing its one grid row from 0 to
-   its content's height, underneath the wheel. */
+   its content's height, underneath the wheel. Full width (team feedback,
+   2026-10-21 — the old 40rem cap left it narrow and adrift in the middle
+   of the much wider section) so the text fills the section like the wheel
+   above it does. */
 .wheel-selector-dropdown {
   display: grid;
   grid-template-rows: 0fr;
-  width: min(100%, 40rem);
+  width: 100%;
   transition: grid-template-rows 0.45s cubic-bezier(0.45, 0, 0.2, 1);
 }
 
