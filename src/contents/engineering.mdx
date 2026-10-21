@@ -2,6 +2,214 @@
 
 <span data-toc-collapsible hidden />
 
+## Growth curves and medium comparison
+
+<DBTLCycles>
+
+<DBTLCycle label="Cycle 1" title="Pilot experiment">
+
+<DBTLStage stage="design">
+
+In order to work with a non-model organism and engineer it, our first priority was establishing reproducible, measurable growth as without that, no downstream genetic work would be possible. Based on advice from our instructor <Link to="/human-practices#matthew-herdman">Mattew Herdman</Link> and our PI <Link to="/human-practices#ruben-vazquez-uribe">Ruben Vazquez-Uribe</Link>, we designed a pilot experiment comparing four different media chosen to span the range from rich and undefined (mGAM, BHI) to lean and defined (MM), with WC as a middle ground. We used the type strain DSM 1447, since it is commercially available and well-characterized, so that our results could be cross-checked against the literature.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+We built a 96-well plate orientation with six replicate wells per condition for precision and high statistical power, blanks in triplicate to rule out random contamination, and a 24h timeframe growing at 37 °C in the anaerobic chamber. The plate reader shook the samples before each OD600 read every 30 min. The 30-minute interval was chosen so that 48 time points would be automatically collected through the time frame to capture bacterial growth phases.
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+After 24 h of incubation, clear differences had emerged between the four media (Figure 1). mGAM supported fast, dense growth in every well, reaching the highest plateau of any condition in the study at a mean doubling time of ~46min. This was consistent with its composition as it is the only one of the four media carrying peptones, tissue extracts, carbohydrates, free amino acids, reducing agents, and both growth factors (hemin and vitamin K) at once. WC grew consistently but far more slowly, entering exponential phase nearly eight hours later and reaching roughly a third of mGAM’s density, in line with its leaner, peptone-only composition. BHI, despite carrying slightly more tissue extract than mGAM, did not sustain any growth, giving us an early hint that growth here depends on specific cofactors rather than raw nutrient richness. MM showed almost no signal for the first 20 h, but a small upward inflection became visible right at the end of the window, too close to the 24 h cutoff to tell apart from noise.
+
+<div className="figure-panel">
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-a-1.avif"
+    className="wide-figure"
+    alt="Fitted ln(OD) growth curves of DSM 1447 in the four media over 24 h"
+  />
+</figure>
+
+</div>
+
+<div className="figure-caption">**Figure 1.** Fitted ln(OD) curves, Pilot , DSM 1447, 24 h. MM’s late inflection is visible only in the final few hours of the window.</div>
+
+</div>
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+Following these results, we decided to look more closely at the differences in composition between the media. BHI’s failure to support any growth, despite a similarly rich base to mGAM, pointed toward missing growth factors specifically hemin and vitamin K, which the literature confirms are required for this group of organisms [5]. That gave us a clear hypothesis: BHI will support growth once supplemented. Separately, the small late uptick in MM raised the question of whether the 24h was simply too short of a timeframe for a lean, defined medium, or if the strain genuinely failed to grow. Rather than writing MM off or committing to a new plate before knowing the answer, the fastest way to resolve the ambiguity was to keep the same plate incubating and read it again after another 24h period.
+
+</DBTLStage>
+
+</DBTLCycle>
+
+<DBTLCycle label="Cycle 2" title="New strain and longer incubation">
+
+<DBTLStage stage="design">
+
+The design of our follow up experiment was aimed at addressing the MM. To settle whether MM’s delayed growth increase was representative of an early exponential phase, we kept the pilot plate running for a second 24 h window rather than discarding it. Because the plate was not changed, we did not supplement the BHI during this iteration. Additionally, we set up a new plate to test a fecal isolate, RCC 1806, for its closer biological relevance to gut bacterium and took measurements for 48 hours. The *P. vulgatus* pan-genome is constantly adapting to changes in nutrient availability in the gut, so, a more recently isolated strain might be more robust to nutrient deprived environments. Hence, we hypothesized that the fecal isolate should grow in BHI, even in the absence of supplements and thought this was worth testing. Running both strains in parallel allowed us to save time and resources.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+The pilot plate was returned to the reader for a second 24 h window the following day, giving a 48 h picture of the pilot conditions in DSM 1447 alone. The second plate (RCC 1806) was set up with three replicate wells per condition, so that all conditions could fit on one plate. As both plate readers were running in parallel, we lacked additional instrument space for the original 6 well test. The conditions consisted of DSM 1447 and RCC 1806 across all four media for 48h. This allows us to compare the strains under the same conditions, on the same plate, reducing batch effects.
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+The extended read (Figure 2) answered the first question as MM’s apparent flatness at 24 h was a window problem, not a growth problem. Growth became clearly visible roughly six hours into the second day and continued to a mean doubling time of 3.48h. mGAM and WC were both already at plateau from the first day and showed only a shallow residual drift. The strain-effect plate (Figure 3) told a more complicated story. The fecal isolate grew in every medium tested, including BHI, where the DSM 1447 again showed no growth. The isolate also showed something unexpected in mGAM: a full 24h lag before it began dividing, where the type strain on the same plate started almost immediately.
+
+<div className="figure-panel">
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-b-1.avif"
+    className="wide-figure"
+    alt="Fitted ln(OD) growth curves of the pilot plate, hours 24 to 48"
+  />
+</figure>
+
+</div>
+
+<div className="figure-caption">**Figure 2.**  Pilot extended window , hours 24–48. MM rises clearly from around hour 30; mGAM and WC show only plateau drift.</div>
+
+</div>
+
+<div className="figure-panel">
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-c-1.avif"
+    className="wide-figure"
+    alt="Growth curves of both strains across all four media over 48 h"
+  />
+</figure>
+
+</div>
+
+<div className="figure-caption">**Figure 3.**  Strain effect, 48 h, containing data of both strains across all four media.</div>
+
+</div>
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+We learned three takeaways from putting these two results together. First, the window-length matters. Every later plate in the study was run for over 24 h because of it. Second, growth in BHI clearly depends on more than medium composition alone. Since RCC 1806 grew we theorized that either it is more adapted to dealing with nutrient depleted environments (like the gut) or the isolate’s growth raised doubts about whether it had been cleanly recovered from the fecal background. Since RCC 1806 is recorded as a fecal isolate rather than a pure culture and any assumption about its growth would be a speculation without further experiments. We could not resolve this with the data in hand, so it remains an open caveat on every RCC 1806 result in this study. Third, the RCC 1806’s 24h lag in mGAM, a medium that supported strong growth in DSM 1447, was an area of interest. There was no obvious explanation tied to the medium batch, since DSM 1447 on the same plate showed no lag at all. Our leading hypothesis is that the two strains had been started from precultures in different physiological states, with gene expression changes associated with metabolism possibly contributing.
+
+</DBTLStage>
+
+</DBTLCycle>
+
+<DBTLCycle label="Cycle 3" title="Reducing lag">
+
+<DBTLStage stage="design">
+
+To test whether preculture state explained the isolate’s unexpected lag, we changed how both strains originated before plating. Based on the advice from <Link to="/human-practices#laurie-comstock">Laurie Comstock</Link>, leading *Bacteriodes* researcher, that most of an overnight liquid culture is already stationary or dead by the time of subculturing, we inoculated both strains from colonies picked directly off a fresh plate instead as actively dividing cells. Also, to test whether simply adding more cells, rather than changing their physiological state, would help BHI plate at a higher inoculum density.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+The next plate orientation was built with three replicate wells per condition as previously validated, testing both DSM 1447 and RCC 1806 across all four media for 42h. The cells were picked from a colony, suspended in liquid media, and normalized for starting OD. Timepoints were measured every 30 mins under OD630 and additionally 10x inoculum density was plated to test effect of adding a higher concentration of cells.
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+Fresh-plate inoculation cut the isolate’s mGAM lag from 24.2 h to 6.0h, a fourfold reduction, while the type strain, went from essentially no lag to 2.5 ± 1.9 h and doubled even faster than before (Figure 4). Dense BHI inoculation, tested in parallel, did not rescue growth. Those wells lost density over time consistent with cells settling and lysing in a medium that cannot sustain them regardless of how many are added at the start.
+
+<div className="figure-panel">
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-d-1.avif"
+    className="wide-figure"
+    alt="Growth curves of both strains inoculated from fresh plate colonies over 42 h"
+  />
+</figure>
+
+</div>
+
+<div className="figure-caption">**Figure 4.** Lag reduction, 42 h, fresh-plate inoculum, both strains, OD630.</div>
+
+</div>
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+We learned that preculture state is the single largest source of plate-to-plate variation in this study. Both strains clearly benefited from this change, which is consistent with our preculture state influence hypothesis. Growth parameters cannot be compared across plates without proper growth phase control. Which strain grew in WC and MM reversed between cycle two and three. DSM 1447 grew in both and RCC 1806 in neither. This emphasizes that strain differences cannot be treated as universally applicable if a standardized preculture protocol is not followed. With the lag problem largely solved, the remaining question was whether MM could be supplemented to close the rate gap with mGAM. It was evident now that unsupplemented BHI was attributed to the lack of DSM1447 growth.
+
+</DBTLStage>
+
+</DBTLCycle>
+
+<DBTLCycle label="Cycle 4" title="Full factorial study">
+
+<DBTLStage stage="design">
+
+Our final goal was to optimize the growth yield of DSM1447 in our minimal media. We used the literature[^tramontano] and advice of our PI Ruben to identify three candidate supplements: soluble starch (carbon source), vitamin K (growth factor) and a pH adjustment to 7.2 and tested all eight combinations in a full 2³-factorial design, to understand their influences and interactions.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+Six wells per condition were set up to be measured at OD600 for 48 hours and included eight supplement combinations plus unsupplemented MM and mGAM as references. The base medium had been contaminated during preparation and was filter-sterilized before use in an effort to reduce external effects while continuing with the prepped media available.
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+In our final test, the clearest pattern (Figure 5) was that pH adjustment appeared in every combination that grew and in none of the combinations that failed. All three supplements together gave the largest gain (+0.047 OD), but growth stayed slow (doubling time = 12.3 h), and the differences between the working combinations were not statistically significant after multiple-testing correction.
+
+<div className="figure-panel">
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-e-1.avif"
+    className="wide-figure"
+    alt="Growth curves of DSM 1447 in minimal medium with all eight supplement combinations, plus mGAM and unsupplemented MM"
+  />
+</figure>
+
+</div>
+
+<div className="figure-caption">**Figure 5.** Full factorial, 48 h, DSM 1447, all eight MM supplement combinations plus mGAM and unsupplemented MM as references. mGAM wells in panel E started at 0.30 OD with little headroom; its 3.49 h mean doubling time describes the approach to a plateau and not exponential growth.</div>
+
+</div>
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+In conclusion, we learned that pH adjustment to 7.2 is necessary but not sufficient on its own, and that the MM with complete supplements supported the highest biomass. However, the plate was underpowered (six wells per condition) for resolving the smaller effect sizes, and the contamination of the base medium added a caveat: the unsupplemented control, which had shown at least some growth in the type strain in every earlier experiment, grew in none of its wells here. This was likely because the contaminant had consumed components of the media that were missing regardless of our filter sterilization attempt to restore the media. Dose-response optimization of the supplement and a clean re-run of the unsupplemented control are the recommended next steps.
+
+</DBTLStage>
+
+</DBTLCycle>
+
+</DBTLCycles>
+
 ## MIC assay
 
 *See also: <Link to="/results#antibiotic-susceptibility-of-p-vulgatus">MIC results</Link>, <Link to="/protocols#minimum-inhibitory-concentration-testing">MIC protocol</Link> and <Link to="/dry-lab#2-1-antibiotic-selection">dry-lab antibiotic selection</Link>.*
@@ -351,7 +559,7 @@ Our iterations clearly improved the efficiency of the experiment, as conjugation
 
 <DBTLStage stage="learn">
 
-Multiple iterations of the conjugation assay led us to conclude that *P. vulgatus* DSM1447 is more efficient in conjugation than the clinical isolates, and this was determined quantitatively. However, the efficiencies of the other strains are possibly overestimated. By now, MIC data was also available, and highlighted an error in the design of all previous cycles: the concentration of erythromycin on the plates was 25 µg/mL.
+Multiple iterations of the conjugation assay led us to conclude that *P. vulgatus* DSM1447 is more efficient in conjugation than the clinical isolates, and this was determined quantitatively. However, the efficiencies of the other strains are possibly overestimated. <Link to="/results#antibiotic-susceptibility-of-p-vulgatus">By now, MIC data</Link> was also available, and highlighted an error in the design of all previous cycles: the concentration of erythromycin on the plates was 25 µg/mL.
 
 *P. vulgatus* DSM1447 has an IC90 = 4 µg/mL, so it will not grow on the plates unless it contains the pNBU2 plasmid. However, RCC1806 has an IC90 = 256 µg/mL, meaning that even without the pNBU2 plasmid, it could grow on the plates. This could have led to false positives. Antibiotic susceptibility was not tested for the other strains, but it is possible that they have a similar IC90. To verify the presence of the plasmid, and as such the presence of false-positive colonies, integration should have been checked. We did not do this, as it is a suicide plasmid. We assumed *P. vulgatus* could not grow on mGAM + Gm + Ery without containing the plasmid, which the MIC data now show to be a wrong assumption for RCC1806, and possibly for the other clinical isolates too. A recommendation to future researchers is to check integration, or at least to test erythromycin susceptibility for all *P. vulgatus* strains and use a concentration higher than the MIC on the plates.
 
@@ -513,6 +721,441 @@ The cycle ended inconclusive. *P. vulgatus* emits in both cyan and green ranges,
 
 </DBTLCycles>
 
+## Promoter-reporter combination assay
+
+<DBTLCycles>
+
+<DBTLCycle label="Cycle 1" title="Oxygen Maturation Initial Test">
+
+<DBTLStage stage="design">
+
+Five constitutive promoters were chosen from literature: Bfp1E6 (Bfp), BT1311 (BT), BT4001 (PBT), cfxA (Cfx), and PAM3 (PAM). Each was paired with four reporters (GFP, mCherry, KOFP-7, and NanoLuc), giving a full factorial design of twenty constructs, so that a promoter could be compared across multiple emission spectra. Unfortunately, constructs 17 and 20 were not successfully cloned and conjugated so these are omitted from data collection.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+Promoter, RBS, reporter CDS, and Terminator were ordered as assembled gBlocks, assembled using Gibson assembly, and transformed into *E. coli* S17 λ pir. Conjugation was used to transfer the plasmid into *P. vulgatus* to test expression in the host of interest. A 96-well plate was built to include 3 wells of each replicate in mGAM media, for reproducibility, and a well containing mGAM media without cells was used to understand background intensities. The plate was a polyacrylamide black 96wp with a transparent F-bottom, a plate typical for fluorescent measurments. The outer wells contained water to mitigate the effect of evaporation on our samples.
+
+<div className="figure-panel">
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/dbtl/promoter-cycle1-plate-layout.avif"
+    className="plate-layout"
+    alt="Plate layout table for the fluorescence pilot experiment, rows B to E, columns 2 to 12"
+  />
+</figure>
+
+</div>
+
+<div className="figure-caption">**Figure 1**. Overview of 96-well plate selection that was used for the fluorescence pilot experiment showing all promotor-reporter combinations. In column 9 to 10, three constrols are present: *P. vulgatus* DSM1447 grown in mGAM, mGAM, and LB. For this cycle following constructs were used: 1, 2, 10, 11, 13, and 19, as those were available at the time due to transformation issues.</div>
+
+</div>
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+Measurements were taken every 50 mins for a total of around 4 hours. Delays occurred due to learning curves associated with usage of the Clariostar instrument including finding a fitting gain to use for each fluorescence. mGAM ans mGAM-grown *P. vulgatus* DSM1447 were used to normalize fluorescence to account for medium autofluorescence and cell density respectively, and LB was used to normalize for the positive control GFP expressing *E. coli*. Only the mCherry, GFP, and KOFP-7 were tested because the system in the lab did not have bioluminescent capacity for the NanoLuc.
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+As an initial experiment, we learned that GFP takes around 3 hours to mature and mCherry was weakly increasing in signal towards the end of the 4 hour window. KOFP-7 showed little noticeable expression above background and did not increase over time as it does not need oxygen maturation. Because of this we determined that for our full experiment, on a plate reader including luminescent capacity, we will expose the plate to oxygen for at least 3 hours.
+
+</DBTLStage>
+
+</DBTLCycle>
+
+<DBTLCycle label="Cycle 2" title="Main Experiment with Luminescent Addition">
+
+<DBTLStage stage="design">
+
+The same base set up was included from the initial experiment. This time all promoter-reporter constructs (except for 13, 17, and 20) were used, thus also the NanoLuc constructs. Also another instrument was used that could measure bioluminescence, so a batch effect due to instrumental switch is implied.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+In an effort to account for cell density, the plate was grown overnight, OD600 measured, and during the oxygen exposure incubation a new plate was made with culture/ media ratios that gave a final OD600 of 0.3 This was recommended to us by <Link to="/human-practices">Dr. Aaron Angles Pantoja</Link> as he conveyed that intensities measured above OD600 of 0.5 is is more likely to be skewed by cell density.
+
+<div className="figure-panel">
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/dbtl/promoter-cycle2-plate-layout.avif"
+    className="plate-layout"
+    alt="Plate layout table for the final fluorescence experiment"
+  />
+</figure>
+
+</div>
+
+<div className="figure-caption">**Figure 2.** Overview of 96-well plate selection that was used for the final fluorescence experiment showing all promotor-reporter combinations. In column 11, three controls are present: *P. vulgatus* DSM1447 grown in mGAM, mGAM, and LB. For this cycle following constructs were used: 1, 2, 10, 11, 13, and 19, as those were available at the time due to transformation issues.</div>
+
+</div>
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+After 3.5 hours of oxygen maturation incubation, the fluorescent intensities were measured from the plate. The NanoLuc samples were lysed and activated with the NanoGlo promega kit and visualized on a 384wp black opaque bottom. These conditions were favorable for luciferase assays.
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+Reference wells containing only mGAM and LB media gave high intensity readouts which created difficulty when determining the signal to noise. After subtracting the background (reference wells readout), we noticed that most of the samples were not showing fluorescent intensities above the baseline.
+
+To combat this in future experiments, we recommend using a minimal media with less autofluorescence. Additionally, it was determine during data analysis that during the initial OD600 measurement at the start of the incubation time was not automatically normalized to the media-only well thus overestimating the OD. After remaking the plate, we now understand the actual cell OD600 was between 0.15-0.2 which is also a driver of the weaker signal. In the future, the normalization of OD600 for cell density will be done automatically on the instrument so that miscalculations like this can be avoided.
+
+<div className="figure-panel">
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/dbtl/promoter-cycle2-specific-fluorescence.avif"
+    className="wide-figure"
+    alt="Specific fluorescence of promoter-reporter constructs in P. vulgatus DSM1447 in the GFP, mCherry and KOFP7 channels"
+  />
+</figure>
+
+</div>
+
+<div className="figure-caption">**Figure 3.** **Specific fluorescence of promoter–reporter constructs in *P. vulgatus* DSM1447 across three detection channels.** Specific fluorescence of *P. vulgatus* carrying pNBU2-based promoter–reporter constructs, measured in the GFP (left), mCherry (middle) and KOFP7 (right) channels. Values are background-subtracted against untransformed *P. vulgatus* 1447 measured in the same plate, so 0 corresponds to the signal of the parental strain. Rows are grouped by promoter (Bfp, BT, PBT, Cfx, PAM) and, within each group, by reporter (GFP, mCherry, KOFP7, NanoLuc); *E. coli* carrying the GFP construct is included as a positive control.</div>
+
+</div>
+
+</DBTLStage>
+
+</DBTLCycle>
+
+</DBTLCycles>
+
+## BSH assay
+
+<DBTLCycles>
+
+<DBTLCycle label="Cycle 1" title="Getting a plate that pours clear and supports growth">
+
+<DBTLStage stage="design">
+
+Initially, we planned to test and evaluate BSH activity with a halo assay, where deconjugated bile salts would precipitate on the medium and form a ‘halo’ ring around the colony. Our designed included transforming *E.coli* DH5α with a plasmid constitutively expressing a BSH variant and growing them on agar plates supplemented with bile salts. Not only are these bile salts difficult to obtain but with no protocol to follow, we were unsure of how to best dissolve them. To solve this, our goals were (1) to figure out in which order the medium components must be assembled for the agar to pour cleanly, (2) whether the bile salts should be dissolved in DMSO or dH₂O, and (3) understand optimal concentrations of bile salt substrates.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+We first set up an experiment by plating *E. coli* expressing two BSH variants: C1 (BSH3) and C2 (BSH11). These two constructs had the highest DNA at synthesis from IDT, and we reasoned that it must have the lowest toxicity to yield such high amounts.
+
+<div className="figure-panel">
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/dbtl/bsh-cycle1-build-test.avif"
+    className="wide-figure"
+    alt="Build layout schematic and test photograph of the six-well plate with constructs C1 and C2 in DMSO and dH2O at 0.5%, 1.0% and 1.5% bile salt mixture"
+  />
+</figure>
+
+</div>
+
+</div>
+
+We built our first test run on a six-well plate, with two wells for each concentration of bile salt generic mixture (0.5%, 1% and 1.5%) with LB agar and CaCl<sub>2</sub> (see figure). For each concentration, one was made with dH<sub>2</sub>O and the other with DMSO as solvents. This way we were able to compare their solvent ability side by side. Wells were filled one at a time, with bile salt first and then LB and CaCl<sub>2</sub>. After solidification, each well was split into quarters, each containing a different construct, and spotted with 5 µL drops from the 10<sup>−6</sup> and 10<sup>−7</sup> dilutions, then imaged in an automatic plate reader.
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+We incubated our 6-well plate for 24h at 37°C in our RESHAPE automatic incubator.
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+Three things could be learned from this pilot experiment: (1) putting the bile salt into the well before adding LB + CaCl₂, works well and became the standard, (2) DMSO is a difficult to work with as a solvent because precipitates the medium making it is difficult to determine the colony growth, (3) 10⁻⁷ dilution is too high so we stick to 10⁻⁶ as the working dilution.
+
+</DBTLStage>
+
+</DBTLCycle>
+
+<DBTLCycle label="Cycle 2" title="testing our new plating method">
+
+<DBTLStage stage="design">
+
+Based on our findings, we decided to run another test but with (1) CaCl<sub>2</sub> mixed directly into the LB instead of adding it separately and (2) lowering our plated dilutions. Direct mixing was expected to achieve better homogeneity and less precipitation. Lowering our dilution series to 10<sup>-5</sup> and 10<sup>-6</sup>, was hypothesized to yield more growth.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+Plating conditions were the same as in our previous run.
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+Our results were much cleaner this time. There was clearly less precipitation; however, even at lowest concentrations, DMSO suppressed growth. Water supported all three concentrations of bile salt mixtures.
+
+<div className="figure-panel">
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/dbtl/bsh-cycle2-build-test.avif"
+    className="wide-figure"
+    alt="Build layout schematic and test photograph of the six-well plate, dilutions 10^-5 and 10^-6, DMSO versus dH2O at 0.5%, 1.0% and 1.5%"
+  />
+</figure>
+
+</div>
+
+</div>
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+The major conclusion here is that the precipitation was solved by adding CaCl<sub>2 </sub>directly to the LB, so the bile salts were dissolving more seamlessly. The pouring change fixed the precipitation, and in doing so it separated two variables that were confounded in cycle 1. With a clear medium, DMSO still suppresses growth at 1.0% and 1.5% while dH₂O supports it throughout, so the solvent itself limits growth rather than the precipitate obscuring the read. That settles dH₂O as the solvent for the plate assays. The next step involves testing bile salts alone to understand BSH preference and substrate-specific activity.
+
+</DBTLStage>
+
+</DBTLCycle>
+
+<DBTLCycle label="Cycle 3" title="Implementing pure bile salts">
+
+<DBTLStage stage="design">
+
+The design stayed largely consistent. We extend the plate assay to the specific conjugated bile salts GUDCA and TUDCA, which we had in highest abundance, to determine their solubility in dH<sub>2</sub>O and DMSO. Cycle three was the first use of pure bile salts due to their rarity and cost as we did not want to waste precious material on extensive optimization.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+BUILD: Below is the list of bile salts used to generate plates:
+
+- GUDCA (1 g): 6x plates 0,5%, 1%, 1,5% (w/v)
+- TUDCA (1 g): 6x plates 0,5%, 1%, 1,5% (w/v)
+- TDCA (100 mg): 2x plates, 4x wells 0,5 % (w/v)
+- GCDCA (100 mg): 2x plates, 4x wells 0,5 % (w/v)
+- TLCA (100 mg): 2x plates, 4x wells 0,5 % (w/v) -
+- TDCDA (200 mg): 3x plates 2x 0,5%, 1x 1% (w/v)
+
+All stocks were dissolved in dH₂O, with 5 µL and 2.5 µL drops per well. We tested different droplet sizes in an attempt to capture a culture with enough cells to generate a halo and fit in the allocated space. Below is the set up used:
+
+<div className="figure-panel">
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/dbtl/bsh-cycle3-build-test.avif"
+    className="wide-figure"
+    alt="Build layout schematic and test photograph of the six-well plate with GUDCA and TUDCA at 0.5%, 1.0% and 1.5%, 5 µL and 2.5 µL drops"
+  />
+</figure>
+
+</div>
+
+</div>
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+TUDCA dissolved without difficulty at 100 mg/mL and supported growth. However, GUDCA would not dissolve at all despite heating and vortexing, and needed a few drops of 5M NaOH to bring it into solution. We experienced the same with the other bile salts; TDCA, GCDCA, TLCA, and TDCDA precipitated in the water and were no longer usable as plates poured from those stocks carry visible heterogeneity, uneven setting, and bubbles at all concentrations but noticeably worse at 1.0% upward. Pilot 3 broke the assumption that different substrates would behave like the mixture; many bile salts was lost during this test.
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+With many bile salts precipitated, the need for a different solvent or a pH-adjusted buffer that increases solubility and mitigates pH is the biggest roadblock. Because the bile salts are difficult to obtain, future optimization of the Halo assay for this bile salt range was not continued in our wetlab timeline. Water was not a suitable solvent for those salts. That is why DMSO was the solvent used for the bile salts in the <Link to="/protocols#lc-ms-quantification-of-bile-acid-deconjugation">liquid assays for LC-MS</Link> at the advice of PI Ruben Vazquez-Uribe.
+
+Continuing forward with TUDCA and GUDCA only was the logical option as these had the greatest stock amounts. For these, the formulation was settled: bile salt first, CaCl<sub>2</sub> already in the LB, dH₂O as solvent, and 2.5µL of 10<sup>−6</sup> as the working dilution. We also learned that the NaOH-raised pH of the GUDCA stock, affecting both bacterial growth and bile salt chemistry. This is another control we planned to optimize futher.
+
+</DBTLStage>
+
+</DBTLCycle>
+
+<DBTLCycle label="Cycle 4" title="The halo screen">
+
+<DBTLStage stage="design">
+
+Finally, we designed the experiment to test fourteen BSH constructs against GUDCA and TUDCA at three concentrations, comparing the halo (precipitated bile acid) each one produces. sfGFP is a negative control in the place of a BSH in the construct, and a bile-salt-free LB plate was included as the reference for growth and background turbidity comparisons. We hoped to determine the substrate preference and use the quantitative halo diameter as a proxy to rank enzyme activity.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+Each bile salt was resuspended in dH₂O to a 100 mg/mL stock and poured into six-well plates. Four GUDCA, four TUDCA, and one bile-salt-free control plate, with the 0.5%, 1% and 1.5% wells were made and screened. Fourteen BSH constructs and the sfGFP control droplets were plated (5 µL of overnight culture) in a 2×2 arrangement per well on LB + CaCl<sub>2</sub> + Kan, every condition in duplicate, and imaged over time in RESHAPE.
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+All fourteen strains grew on every GUDCA and TUDCA plate up to 1.5% (w/v), so none of the conjugated bile salts inhibits growth at the concentrations tested. Unfortunately, the readout gave no measurable halo structures, as the drops are dense and the surrounding agar stays turbid. We confirm this as no difference between BSH cultures from the sfGFP control was seen.
+
+{/* TODO(team): the draft has "[Insert RESHAPE video]" here (comment: "Show kinematic picture of RESHAPE") */}
+
+<div className="figure-panel">
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/dbtl/bsh-cycle4-halo-screen.avif"
+    className="wide-figure"
+    alt="BSH bile salt screen of 14 BSH constructs and an sfGFP control on LB + CaCl2 + Kan with GUDCA and TUDCA at three concentrations, against a bile-salt-free control"
+  />
+</figure>
+
+</div>
+
+</div>
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+The screen succeeded as a tolerance experiment and failed as a measurement of BSH activity. Confirming the constructs grow normally on both substrates at every concentration is valuable since it rules out bile salt toxicity. But with no halo anywhere on the plates, the deconjugation question was still open.
+
+The limitation sits in the readout, not in the constructs. A halo depends on a precipitate forming and being visible against the agar, and nothing in these images distinguishes ‘no activity’ from ‘activity this method cannot show’. That’s why we repeated the comparison in liquid culture. Incubating the BSH constructs with GUDCA and TUDCA and measuring the conjugated and deconjugated ratios directly allows the activity and substrate preference to be quantified rather than inferred from a halo.
+
+*Please see our next steps in the <Link to="/engineering#lc-ms">LC-MS cycle</Link>.*
+
+</DBTLStage>
+
+</DBTLCycle>
+
+</DBTLCycles>
+
+## LC-MS
+
+<DBTLCycles>
+
+<DBTLCycle label="Cycle 1" title="Bile salt mixture at 0.5%">
+
+<DBTLStage stage="design">
+
+We pivoted from BSH ‘Halo’ assay to LC-MS analysis (see <Link to="/engineering#bsh-assay">BSH assay DBTL</Link> for more information). With LC-MS, we used smaller quantities of expensive bile acids while still getting precise measurements. When designing this experiment, we were aware that both the conjugated and the deconjugated bile salts in pure form are necessary as a reference, however, we only had conjugated forms at our disposal. We used a commercial bile salt mixture to calibrate the column and set up the method before any samples were measured. *See <Link to="/protocols#lc-ms-quantification-of-bile-acid-deconjugation">LC-MS measurement protocol</Link> for more information.*
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+We incubated *E. coli* expressing our BSH variants in liquid LB with 0.5% bile salt mixture (containing TUDCA and GUDCA together). These samples were then dried with speedvac on alcohol setting and redissolved in 50% MeOH. Due to a high number of samples, we were forced to split them into 2 days of work. Hence we stored the samples at -20°C, following the advice of our Prof. Jef Rozenski. This sample conservation at –20°C allowed us to do the measurements across multiple days.
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+As the instrument is expensive and sensitive, all measurements were conducted by our instructor, Prof. Jef Rozenski. For our first test, the ratio between conjugated and deconjugated bile salts was calculated and the log10 of the ratios for each of the 15 BSH variants and the sfGFP control were compared for interpretability.
+
+<div className="figure-panel">
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/dbtl/lcms-cycle1-deconjugation-table.avif"
+    className="wide-figure"
+    alt="Table of UDCA, TUDCA and GUDCA values from the LC-MS for 15 BSH variants and the sfGFP control, two replicates"
+  />
+</figure>
+
+</div>
+
+<div className="figure-caption">**Figure 1**. Color-coded overview of the UDCA, TUDCA, and GUDCA values as output from the LC-MS. A red color indicates when more than 50% of the bile salts are deconjugated and yellow for when it was more than 10%. All replicates gave exactly the same result except for samples BSH1 and BSH9. For those we suspected that those two were mixed up as the values are inverted.</div>
+
+</div>
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+Our instructor flagged that the yellow category might be misleading, because the deconjugated products of TUDCA and GUDCA are identical, so a partially deconjugated signal (UDCA) cannot be attributed to either substrate. And with a mixture it is impossible to interpret strains that prefer one bile salt over the other. For our next iteration, we decided to run each sample with GUDCA and TUDCA separately.
+
+</DBTLStage>
+
+</DBTLCycle>
+
+<DBTLCycle label="Cycle 2" title="Separating the bile salts at 0.1%">
+
+<DBTLStage stage="design">
+
+Based on our previous findings, we now designed an experiment where TUDCA and GUDCA are separated. This way, each BSH preference could be determined. Prof. Rozenski advised us to redissolve the final pellet in differing MeOH amounts proportioanl to the percentage of bile salts (0.25% or 0.1%). This means the samples would have the same final concentration, simplifying downstream calculations.
+
+</DBTLStage>
+
+<DBTLStage stage="build">
+
+Our design included 16 samples of TUDCA (×2), 16 of GUDCA (×2), both at concentrations of 0.1% and 0.25% bile salts (128 samples total). Four samples were misplaced in the rack, both C1 tubes sitting where C2 should have been and vice versa, and tubes labelled twice (A1 A1) were replicates rather than distinct samples. Prof. Rozenski assumed they were not mislabeled and acquired C1 as C1.
+
+</DBTLStage>
+
+<DBTLStage stage="test">
+
+Protein traces from the 0.5% samples were clogging the column, with a reported high backpressure. Because of this, the lower concentration samples was tested first to determine if they yielded output within a reasonable range. After confirmation, we decided that only lower concentration samples were necessary for testing.  Across all three conditions, he standardized the readout as a percentage deconjugated.
+
+<div className="figure-panel">
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/dbtl/lcms-cycle2-gudca.avif"
+    className="wide-figure"
+    alt="Bar chart of the percentage of GUDCA deconjugated into UDCA for the 15 BSH constructs and the sfGFP control"
+  />
+</figure>
+
+</div>
+
+<div className="figure-caption">**Figure 1**.  Percentage of deconjugated GUDCA into UDCA, showing all 15 BSH constructs and the sfGFP control. Five genes deconjugated GUDCA almost completely (BSH1, BSH3, BSH5, BSH6 and BSH15 (96–100%)) with only BSH7 (11.4%) and BSH14 (14.2%) showing marginal activity and the rest at control level.</div>
+
+</div>
+
+<div className="figure-panel">
+
+<div className="figure-grid">
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/dbtl/lcms-cycle2-tudca.avif"
+    className="wide-figure"
+    alt="Bar chart of the percentage of TUDCA deconjugated into UDCA for the 15 BSH constructs and the sfGFP control"
+  />
+</figure>
+
+</div>
+
+<div className="figure-caption">**Figure 2.** Percentage of deconjugated TUDCA into UDCA, showing all 15 BSH constructs and the sfGFP control. In general, TUDCA was deconjugated far less: only BSH1 (82.4%) and BSH3 (67.9%) converted a mentionable fraction, followed by BSH11 (21.0%) and BSH15 (42.0%).</div>
+
+</div>
+
+</DBTLStage>
+
+<DBTLStage stage="learn">
+
+We learned that 0.1% should be the working concentration, and the separated substrates made the output quantitative rather than indicative. Substrate preference diverges sharply as BSHs 1, 3, 5, 6, 7, 14, and 15 show GUDCA preference, and BSH11 shows TUDCA preference. This means enzyme activity is substrate specific.
+
+</DBTLStage>
+
+</DBTLCycle>
+
+</DBTLCycles>
+
 ## CRISPR design
 
 *See also: the full <Link to="/results#crispr-construct-design">CRISPR construct design</Link> in Results.*
@@ -569,9 +1212,9 @@ No DNA was assembled. However, these were the prospective parts:
 
 - BreR cassette for environmental sensing
 - gRNA and scaffold targeting the native BSH locus
-- Antibiotic selection marker, chosen from the MIC assay
+- Antibiotic selection marker, <Link to="/results#antibiotic-susceptibility-of-p-vulgatus">chosen from the MIC assay</Link>
 - dCas9
-- Promoter, from the promoter library (not yet decided, because the library had not yet been tested)
+- Promoter, <Link to="/results#a-characterized-promoter-library-for-p-vulgatus">from the promoter library</Link> (not yet decided, because the library had not yet been tested)
 - Origin of replication
 
 </DBTLStage>
@@ -595,7 +1238,7 @@ The open questions below are design gaps that an additional iteration intended t
 
 The BreR system is patented and hard to obtain, so the design was changed. The use of BreR in *Bacteroides* is documented only in patent literature.[^lu] Two ideas were noted:
 
-- Codon harmonization of the BreR sequence to the host. This changes the DNA but may not remove any patent coverage, because a patent can cover the protein itself. An intellectual property check is needed before this is revisited. The team's dry-lab codon optimization and harmonization tool could be used for this.
+- Codon harmonization of the BreR sequence to the host. This changes the DNA but may not remove any patent coverage, because a patent can cover the protein itself. An intellectual property check is needed before this is revisited. The team's <Link to="/dry-lab">dry-lab codon optimization and harmonization tool</Link> could be used for this.
 - Using a second BSH to change deconjugating activity. This idea was carried into Cycle 3.
 
 With BreR removed, the dynamic requirement was also dropped, and the design became constitutive. PI Ruben's advice to keep the change narrow strengthened the idea of alternative BSH expression. Because of this discussion, we decided against simply knocking out the native BSH. The team's rationale is that replacing the enzyme, rather than deleting it, keeps the change smaller. This is a new hypothesis to test.
@@ -622,7 +1265,7 @@ Hypothesis: Cas9-induced repair at the native BSH site replaces the enzyme with 
 
 The build is a plasmid map only. Sequences are missing for the gRNAs, the homology arms, and the replacement BSH, so the plasmid cannot yet be verified base by base.
 
-In the wet lab, the construct would be assembled by Gibson assembly[^gibson] and conjugated from *E. coli* S17-1 λpir into *P. vulgatus*.[^simon]
+In the wet lab, the construct would be assembled by <Link to="/protocols#gibson-assembly">Gibson assembly</Link>[^gibson] and <Link to="/protocols#conjugation-of-pnbu2-plasmids-into-p-vulgatus">conjugated</Link> from *E. coli* S17-1 λpir into *P. vulgatus*.[^simon]
 
 <div className="figure-panel">
 
@@ -673,6 +1316,7 @@ The Learn step is open. Four decisions are pending, and each has a trigger.
 
 {/* The "References" panel is generated from these footnote definitions. */}
 
+[^tramontano]: Tramontano, M., Andrejev, S., Pruteanu, M. *et al.* Nutritional preferences of human gut bacteria reveal their metabolic idiosyncrasies. *Nat Microbiol* **3**, 514–522 (2018). https://doi.org/10.1038/s41564-018-0123-9
 [^escalante]: Escalante, V., Nayak, R. R., Noecker, C., Babdor, J., Spitzer, M., Deutschbauer, A. M., & Turnbaugh, P. J. (2024). Simvastatin induces human gut bacterial cell surface genes. Molecular Microbiology, 122(3), 372–386. https://doi.org/10.1111/mmi.15151
 [^tuerk]: Tuerk, C., & Gold, L. (1990). Systematic evolution of ligands by exponential enrichment: RNA ligands to bacteriophage T4 DNA polymerase. Science, 249(4968), 505–510. https://doi.org/10.1126/science.2200121
 [^serganov]: Serganov, A., & Nudler, E. (2013). A decade of riboswitches. Cell, 152(1–2), 17–24. https://doi.org/10.1016/j.cell.2012.12.024
