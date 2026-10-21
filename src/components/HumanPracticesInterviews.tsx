@@ -143,15 +143,39 @@ function extractSections(children: ReactNode): Section[] {
     });
 }
 
-// Titles like "Prof." / "Dr." (any word ending in a dot) are skipped, so
-// "Prof. Dr. Shari Mackens" gives "SM" rather than "PD".
-function initials(name: string) {
-  const words = name.split(/\s+/).filter(Boolean);
-  const named = words.filter((word) => !word.endsWith("."));
-  return (named.length > 0 ? named : words)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("");
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-21 (team request): a
+// missing photo shows the team's "no picture" silhouette instead of the
+// person's initials. The upload is a grey figure on white, so it is drawn
+// through NoPhotoTint, which makes the white see-through and paints the
+// figure in the page's purple (see .hp-no-photo-ink in App.css), on the
+// tile's own background.
+const NO_PHOTO_URL = "https://static.igem.wiki/teams/6299/wiki/ihp/no-pic-account.avif";
+
+function NoPhoto({ className }: { className: string }) {
+  return (
+    <span className={className} aria-hidden="true">
+      <img className="hp-no-photo" src={NO_PHOTO_URL} alt="" />
+    </span>
+  );
+}
+
+// The colour filter NoPhoto's image is drawn through: opacity from how dark
+// each pixel is (white 0, the figure's grey fully opaque), coloured with the
+// ink. Drawn once per interviews block; the copies are identical.
+function NoPhotoTint() {
+  return (
+    <svg className="hp-no-photo-defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <filter id="hp-no-photo-tint" colorInterpolationFilters="sRGB">
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -1.012 -3.404 -0.344 0 4.76"
+          result="figure"
+        />
+        <feFlood className="hp-no-photo-ink" />
+        <feComposite in2="figure" operator="in" />
+      </filter>
+    </svg>
+  );
 }
 
 // Joint interviews (name2 set) show both names, and both roles when they differ.
@@ -166,7 +190,7 @@ function displayRole(person: FlatInterviewee) {
 
 // The photo(s) for one interview: a single photo, or — for a joint interview —
 // both photos side by side, which the parent's "is-pair" class turns into one
-// wide 2:1 image. Missing photos fall back to the person's initials.
+// wide 2:1 image. Missing photos fall back to the "no picture" silhouette.
 function PersonPhotos({ person, placeholderClass }: { person: FlatInterviewee; placeholderClass: string }) {
   const people = [{ name: person.name, image: person.image }];
   if (person.name2) people.push({ name: person.name2, image: person.image2 });
@@ -176,9 +200,7 @@ function PersonPhotos({ person, placeholderClass }: { person: FlatInterviewee; p
         p.image ? (
           <img key={p.name} src={p.image} alt="" />
         ) : (
-          <span key={p.name} className={placeholderClass} aria-hidden="true">
-            {initials(p.name)}
-          </span>
+          <NoPhoto key={p.name} className={placeholderClass} />
         ),
       )}
     </>
@@ -530,6 +552,7 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
 
   return (
     <>
+      <NoPhotoTint />
       {flat.length > 0 && (
         <div className="hp-view-toggle-row">
           <div className="segmented-selector-bar hp-view-toggle" role="group" aria-label="Interview layout">
@@ -593,9 +616,7 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
                   {openPerson.image ? (
                     <img src={openPerson.image} alt="" />
                   ) : (
-                    <span className="hp-modal-photo-placeholder" aria-hidden="true">
-                      {initials(openPerson.name)}
-                    </span>
+                    <NoPhoto className="hp-modal-photo-placeholder" />
                   )}
                 </div>
                 <div className="hp-modal-caption">
@@ -608,9 +629,7 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
                       {openPerson.image2 ? (
                         <img src={openPerson.image2} alt="" />
                       ) : (
-                        <span className="hp-modal-photo-placeholder" aria-hidden="true">
-                          {initials(openPerson.name2)}
-                        </span>
+                        <NoPhoto className="hp-modal-photo-placeholder" />
                       )}
                     </div>
                     <div className="hp-modal-caption">

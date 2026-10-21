@@ -10169,6 +10169,35 @@ body:not(.home-fullscreen) .home-hero {
   color: var(--color-accent);
 }
 
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-21 (team request): the
+   "no picture" silhouette shown for interviewees without a photo
+   (NoPhoto in HumanPracticesInterviews.tsx). It fills the tile and is drawn
+   through #hp-no-photo-tint, which keeps only the figure and paints it with
+   the ink below: the palette's plum on the light lavender tiles, lavender
+   on the dark plum ones. */
+.hp-no-photo-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.hp-no-photo-ink {
+  flood-color: #33283f;
+}
+
+[data-theme="dark"] .hp-no-photo-ink {
+  flood-color: #c9bde8;
+}
+
+img.hp-no-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: url(#hp-no-photo-tint);
+}
+
 .hp-carousel-name {
   font-size: 0.85rem;
   font-weight: 600;
