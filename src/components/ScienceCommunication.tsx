@@ -486,6 +486,12 @@ export function PhoneShowcase({ src, title = "Our app", children }: PhoneShowcas
   const [active, setActive] = useState(0);
   const swipeStart = useRef<number | null>(null);
   const go = (delta: number) => setActive((active + delta + count) % count);
+  // Edited 2026-10-21 (team request): clicking the screen opens it large,
+  // with its own arrows to go through the rest. It shares the phone's place
+  // in the list, so closing it leaves the phone on the screen last looked at.
+  const zoomRef = useRef<HTMLDialogElement>(null);
+  const zoomSwipe = useRef<number | null>(null);
+  const openZoom = () => zoomRef.current?.showModal();
 
   if (src || screens.length === 0) {
     return (
@@ -517,6 +523,17 @@ export function PhoneShowcase({ src, title = "Our app", children }: PhoneShowcas
     >
       <div className="phone-showcase-device">
         <div
+          className="phone-zoom-trigger"
+          role="button"
+          tabIndex={0}
+          aria-label={`Enlarge screen: ${screens[active].title}`}
+          onClick={openZoom}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              openZoom();
+            }
+          }}
           onTouchStart={(event) => {
             swipeStart.current = event.touches[0].clientX;
           }}
@@ -572,6 +589,66 @@ export function PhoneShowcase({ src, title = "Our app", children }: PhoneShowcas
           </div>
         ))}
       </div>
+      <dialog
+        ref={zoomRef}
+        className="phone-zoom"
+        aria-label={`${title}: ${screens[active].title}`}
+        // A click on the dark backdrop (the dialog itself, not its contents)
+        // closes it, as on the zoomable figures elsewhere on the wiki.
+        onClick={(event) => {
+          if (event.target === event.currentTarget) zoomRef.current?.close();
+        }}
+        onKeyDown={(event) => {
+          // Kept from also reaching the phone's own arrow-key handler around
+          // it, which would step twice.
+          event.stopPropagation();
+          if (event.key === "ArrowLeft") go(-1);
+          else if (event.key === "ArrowRight") go(1);
+        }}
+        onTouchStart={(event) => {
+          zoomSwipe.current = event.touches[0].clientX;
+        }}
+        onTouchEnd={(event) => {
+          if (zoomSwipe.current === null) return;
+          const dx = event.changedTouches[0].clientX - zoomSwipe.current;
+          zoomSwipe.current = null;
+          if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
+        }}
+      >
+        <button
+          type="button"
+          className="phone-zoom-close"
+          aria-label="Close"
+          onClick={() => zoomRef.current?.close()}
+        >
+          &times;
+        </button>
+        <button
+          type="button"
+          className="phone-zoom-arrow phone-zoom-arrow--prev"
+          aria-label="Previous screen"
+          onClick={() => go(-1)}
+        >
+          ‹
+        </button>
+        <figure className="phone-zoom-figure">
+          <img src={screens[active].image} alt={`${title}: ${screens[active].title}`} />
+          <figcaption>
+            {screens[active].title}
+            <span>
+              {active + 1} / {count}
+            </span>
+          </figcaption>
+        </figure>
+        <button
+          type="button"
+          className="phone-zoom-arrow phone-zoom-arrow--next"
+          aria-label="Next screen"
+          onClick={() => go(1)}
+        >
+          ›
+        </button>
+      </dialog>
     </div>
   );
 }
