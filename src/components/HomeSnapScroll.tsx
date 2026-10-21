@@ -94,12 +94,6 @@ const DIP = 0.5;
 // screen too). How far a finger has to travel for a swipe to move the page
 // on a section.
 const SWIPE_PX = 24;
-// Edited 2026-10-21 (team request: two swipes of a touchpad to a section).
-// A push this big or bigger is a notch of a mouse's wheel — a line's worth
-// is 40px and Windows sends 100 — and anything smaller is a touchpad,
-// which sends a swipe as a run of much smaller pushes.
-const MOUSE_NOTCH = 50;
-const PAD_SWIPES = 2;
 // Stops closer than this to where the page is count as where it is.
 const NEAR_PX = 6;
 
@@ -133,10 +127,9 @@ function usePaging(skip: boolean) {
     // The current scroll's direction, and whether it has moved the page.
     let lastSign = 0;
     let acted = true;
-    // The size of the last push, to tell a fresh one from a tail (below),
-    // and how many touchpad swipes have gone towards the next section.
+    // The size of the last push, and the hardest of the scroll so far, to
+    // tell a fresh push from the tail of the one before it (below).
     let lastPush = 0;
-    let pending = 0;
     let peak = 0;
     let dipped = false;
     // Where the current glide is heading.
@@ -205,8 +198,6 @@ function usePaging(skip: boolean) {
         peak = 0;
         dipped = false;
       }
-      // Turning back the other way starts the count towards a section over.
-      if (sign !== lastSign) pending = 0;
       lastWheel = now;
       lastSign = sign;
       // This scroll has already moved the page, or is only coasting. (In
@@ -227,16 +218,9 @@ function usePaging(skip: boolean) {
         dipped = false;
         peak = push;
       }
-      // A mouse's wheel turns in notches, each of which arrives as one
-      // push of about a line's worth or more; a touchpad sends a swipe as
-      // a run of much smaller ones. A swipe asks less of the hand than a
-      // notch does, so it takes two of them to a section (team request).
-      const touchpad = push < MOUSE_NOTCH;
       lastPush = push;
       if (acted || push < MIN_PUSH) return;
       acted = true;
-      if (touchpad && ++pending < PAD_SWIPES) return;
-      pending = 0;
       // Already gliding that way: one scroll, one section.
       if (gliding && Math.sign(target - window.scrollY) === sign) return;
       go(sign);
