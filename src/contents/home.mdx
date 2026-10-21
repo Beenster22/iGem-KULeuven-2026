@@ -180,7 +180,10 @@ But why is this reaction **important?**
     at. Without it the next stop down was the foot of the page and the
     cards went by on the way. The stop is the band's own top, which puts
     the heading just under it and the cards under that. */}
-<div className="home-section home-section--body" data-snap="">
+{/* Edited 2026-10-21 (team request): data-snap="free" — from here down a
+    swipe on a phone scrolls normally, so every card can be reached (see
+    usePaging in HomeSnapScroll.tsx). */}
+<div className="home-section home-section--body" data-snap="free">
 <div className="container">
 
 <FindOutMore />
