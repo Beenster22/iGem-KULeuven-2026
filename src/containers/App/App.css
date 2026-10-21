@@ -5227,15 +5227,12 @@ body:not(.home-fullscreen) .home-hero {
    threshold from almost anywhere, so on a mouse the browser pulls the page
    back to the stop it just left and a single wheel tick moves nothing at all.
    Pointer devices scroll freely instead. */
-@media (hover: none) and (pointer: coarse) {
-  html.home-snap {
-    scroll-snap-type: y proximity;
-  }
-
-  html.home-snap [data-snap] {
-    scroll-snap-align: start;
-  }
-}
+/* Edited with Claude Opus 5 (Anthropic), 2026-10-21 (team request: one
+   swipe to a section on a touch screen too): the browser's own snapping is
+   gone. A swipe is taken over in HomeSnapScroll.tsx and moves the page on
+   exactly one section, the same as a turn of the wheel, so there is
+   nothing left for "proximity" to settle — and, left on, it would have
+   pulled at the page while it glided there. */
 
 /* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-16 (team feedback: the
    home page catches and hangs while scrolling): pointer devices no longer
@@ -16360,6 +16357,14 @@ a.protocol-download:hover {
   width: 100%;
   height: auto;
   display: block;
+}
+
+/* CroppedImage's frame: the image inside is positioned by inline styles so
+   only the trimmed area shows. */
+.cropped-image {
+  position: relative;
+  display: block;
+  overflow: hidden;
 }
 
 .pub-showcase-placeholder {
