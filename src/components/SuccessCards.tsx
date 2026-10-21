@@ -2,24 +2,43 @@
 // Restored with Claude Sonnet 5.5 (Anthropic), 2026-10-19, in place of the
 // per-pipeline section timeline (team feedback: the timeline duplicated the
 // page index rail on the left; these headline cards don't).
-// Purpose: the row of headline "success" cards at the top of the results
-// page. Each card is a shortcut: clicking it scrolls to the section of the
-// page that carries the data behind that success, so a reader can start from
-// the result rather than from the method.
+// Purpose: the headline "success" shortcuts at the top of the results page.
+// Each is a shortcut: clicking it scrolls to the section of the page that
+// carries the data behind that success, so a reader can start from the result
+// rather than from the method.
 //
-// The cards link by heading slug (the same slugs SectionProgress assigns to
-// the headings of a page, see utils/stringToSlug), so a card's `to` is just
+// Redesigned with Claude Sonnet 5.5 (Anthropic), 2026-10-21 (team's compact
+// "Main key takeaways" design): one lavender box with a Toolkit / Therapeutics
+// pill switch and, under it, a numbered chip per success. A <SuccessCard>
+// with a `group` ("Toolkit", "Therapeutics") shows under that tab; without
+// any groups the chips simply sit in one row. The tabs only choose which
+// chips are shown — they do not switch the page's own pipeline.
+//
+// The chips link by heading slug (the same slugs SectionProgress assigns to
+// the headings of a page, see utils/stringToSlug), so a chip's `to` is just
 // the slugified heading text of its target section — no extra markup is
 // needed at the destination.
-import type { MouseEvent, ReactNode } from "react";
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  useState,
+  type MouseEvent,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 
 interface SuccessCardProps {
   /** Slug of the heading to jump to, without the leading "#". */
   to: string;
+  /** The tab the chip sits under, e.g. "Toolkit"; read by SuccessCards. */
+  group?: string;
+  /** Set by SuccessCards: the chip's position in the whole list. */
+  number?: number;
   children: ReactNode;
 }
 
-export function SuccessCard({ to, children }: SuccessCardProps) {
+export function SuccessCard({ to, number, children }: SuccessCardProps) {
   function handleClick(event: MouseEvent<HTMLAnchorElement>) {
     const target = document.getElementById(to);
     event.preventDefault();
@@ -44,6 +63,7 @@ export function SuccessCard({ to, children }: SuccessCardProps) {
 
   return (
     <a className="success-card" href={`#${to}`} onClick={handleClick}>
+      {number !== undefined && <span className="success-card-number">{number}</span>}
       <span className="success-card-label">{children}</span>
       <svg className="success-card-arrow" viewBox="0 0 24 24" aria-hidden="true">
         <path
@@ -60,9 +80,57 @@ export function SuccessCard({ to, children }: SuccessCardProps) {
 }
 
 export function SuccessCards({ children }: { children: ReactNode }) {
+  const cards = Children.toArray(children).filter((child): child is ReactElement<SuccessCardProps> =>
+    isValidElement(child),
+  );
+  const groups: string[] = [];
+  cards.forEach((card) => {
+    const group = card.props.group ?? "";
+    if (!groups.includes(group)) groups.push(group);
+  });
+  const [active, setActive] = useState(0);
+  const tabbed = groups.length > 1;
+
   return (
     <nav className="success-cards" aria-label="Our results at a glance">
-      {children}
+      <div className="success-cards-head">Main key takeaways</div>
+      {tabbed && (
+        <div
+          className="success-cards-tabs"
+          role="tablist"
+          data-active={active}
+          style={{ gridTemplateColumns: `repeat(${groups.length}, 1fr)` }}
+        >
+          <span
+            className="success-cards-pill"
+            aria-hidden="true"
+            style={{
+              width: `calc(${100 / groups.length}% - ${8 / groups.length}px)`,
+              transform: `translateX(${active * 100}%)`,
+            }}
+          />
+          {groups.map((group, index) => (
+            <button
+              key={group}
+              type="button"
+              role="tab"
+              aria-selected={index === active}
+              onClick={() => setActive(index)}
+            >
+              {group}
+            </button>
+          ))}
+        </div>
+      )}
+      {groups.map((group, groupIndex) => (
+        <div className="success-cards-grid" key={group} hidden={tabbed && groupIndex !== active}>
+          {cards.map((card, index) =>
+            (card.props.group ?? "") === group
+              ? cloneElement(card, { number: index + 1, key: card.props.to })
+              : null,
+          )}
+        </div>
+      ))}
     </nav>
   );
 }
