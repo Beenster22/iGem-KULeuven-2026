@@ -17773,3 +17773,122 @@ a.protocol-download:hover {
   background: #f0ecf9;
   border-color: #c9bde8;
 }
+
+/* VALUE CARDS (Human Practices introduction)
+   Generated with Claude Opus 5 (Anthropic), 2026-10-21
+   Purpose: small squircle dropdowns for the project's guiding values. Same
+   corner treatment and teal as the stakeholder squircles further down the
+   page, but compact and collapsible — see ValueCards.tsx. */
+.value-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  align-items: start;
+  gap: 1rem;
+  margin: 1.75rem 0 1rem;
+}
+
+.value-card {
+  border: 2px solid rgba(47, 164, 169, 0.45);
+  border-radius: 1.4rem;
+  corner-shape: squircle;
+  background-color: var(--color-page-bg);
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+@supports (corner-shape: squircle) {
+  .value-card {
+    border-radius: 2.2rem;
+  }
+}
+
+.value-card.is-open,
+.value-card:hover {
+  border-color: #2fa4a9;
+}
+
+.value-card-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.9rem 1.15rem;
+  border: none;
+  background: none;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+
+.value-card-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  color: #2fa4a9;
+}
+
+.value-card-chevron {
+  flex: none;
+  display: flex;
+  width: 1.1rem;
+  height: 1.1rem;
+  color: #2fa4a9;
+  transition: transform 0.2s ease;
+}
+
+.value-card.is-open .value-card-chevron {
+  transform: rotate(180deg);
+}
+
+.value-card-body {
+  padding: 0 1.15rem 1.05rem;
+  animation: value-card-in 0.2s ease;
+}
+
+/* Left-aligned rather than the site-wide justify: these cards are too narrow
+   for justified text, which would open wide gaps between words. The long
+   selector is only there to out-rank that page-wide rule. */
+.page-body .page-shell-content .value-card-body p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  text-align: left;
+}
+
+.page-body .page-shell-content .value-card-body p + p {
+  margin-top: 0.7rem;
+}
+
+.page-body .page-shell-content .value-card-body :is(ul, ol) {
+  margin: 0.6rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.page-body .page-shell-content .value-card-body li {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: left;
+}
+
+@keyframes value-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .value-card-body {
+    animation: none;
+  }
+
+  .value-card-chevron {
+    transition: none;
+  }
+}
