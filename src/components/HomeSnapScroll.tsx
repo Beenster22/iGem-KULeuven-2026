@@ -252,6 +252,16 @@ function usePaging(skip: boolean) {
     let touchFrom = 0;
     let touchAt = 0;
     let swiping = false;
+    // Edited with Claude Opus 5.5 (Anthropic), 2026-10-21 (team request: on a
+    // phone only two of the "Find out more" cards could be seen, because the
+    // swipe after them went straight to the foot of the page): from the
+    // first `data-snap="free"` band down, a swipe scrolls the page the
+    // ordinary way. Only a swipe up from that band's very top still goes
+    // back one section, into the story above it.
+    const freeFrom = () => {
+      const el = document.querySelector<HTMLElement>('[data-snap="free"]');
+      return el ? Math.round(el.getBoundingClientRect().top + window.scrollY) : null;
+    };
 
     const onTouchStart = (event: TouchEvent) => {
       swiping = event.touches.length === 1;
@@ -266,6 +276,17 @@ function usePaging(skip: boolean) {
       if (scrollsItself(event.target, moved)) {
         swiping = false;
         return;
+      }
+      const free = freeFrom();
+      if (free !== null && window.scrollY >= free - NEAR_PX) {
+        // Not stopping the browser until the finger has a direction: a
+        // swipe whose first move is blocked cannot scroll at all after.
+        if (moved === 0) return;
+        if (moved > 0 || window.scrollY > free + NEAR_PX) {
+          // In the free part: the browser scrolls, and the swipe is not paged.
+          swiping = false;
+          return;
+        }
       }
       if (event.cancelable) event.preventDefault();
     };

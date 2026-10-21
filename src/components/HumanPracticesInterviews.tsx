@@ -328,7 +328,9 @@ function HPFeatured({ interviewees, position, paused, onSelect, onOpen }: HPFeat
           <PersonPhotos person={person} placeholderClass="hp-featured-photo-placeholder" />
         </button>
         <div className="hp-featured-text">
-          <h3 className="hp-featured-name">{displayName(person)}</h3>
+          <h4 className="hp-featured-name" data-toc-sub>
+            {displayName(person)}
+          </h4>
           {displayRole(person) && <p className="hp-featured-role">{displayRole(person)}</p>}
           {/* Clicking the excerpt opens the full interview too; the button
               below stays the keyboard-accessible way in. */}
@@ -402,7 +404,7 @@ function HPList({ interviewees, onOpen }: HPListProps) {
             {carouselPhoto(person)}
           </button>
           <div className="hp-list-text">
-            <h3 className="hp-list-name">{displayName(person)}</h3>
+            <h4 className="hp-list-name" data-toc-sub>{displayName(person)}</h4>
             {displayRole(person) && <p className="hp-list-role">{displayRole(person)}</p>}
             <div className={`hp-list-summary${person.summary ? "" : " is-excerpt"}`}>
               {person.summary ? <p>{person.summary}</p> : person.content}
@@ -417,6 +419,10 @@ function HPList({ interviewees, onOpen }: HPListProps) {
   );
 }
 
+// Edited 2026-10-21 (team request): the group titles are h3 rather than h2
+// so the left-hand index nests them under their phase ("3. Feedback Cycle and
+// Interviews") and indents them. They keep the h2 look through
+// .hp-section-title in App.css.
 function HPIntroBlock({ intro }: { intro: Section["intro"] }) {
   if (!intro) return null;
   const label = intro.label ?? "Introduction";
@@ -592,7 +598,7 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
       {sections.map((section) =>
         section.interviewees.length > 0 ? (
           <section key={section.title} className="hp-section">
-            {section.showTitle && <h2 className="hp-section-title">{section.title}</h2>}
+            {section.showTitle && <h3 className="hp-section-title">{section.title}</h3>}
             <HPIntroBlock intro={section.intro} />
             <HPSectionCard section={section} view={view} paused={openIndex !== null} onOpen={setOpenIndex} />
 
@@ -602,7 +608,7 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
           // Text-only section (e.g. Patients, General Public): same layout, but
           // the write-up goes inside the card instead of a carousel.
           <section key={section.title} className="hp-section">
-            {section.showTitle && <h2 className="hp-section-title">{section.title}</h2>}
+            {section.showTitle && <h3 className="hp-section-title">{section.title}</h3>}
             <HPIntroBlock intro={section.intro} />
             {section.context.length > 0 && (
               <div className="hp-section-card hp-section-card--text">

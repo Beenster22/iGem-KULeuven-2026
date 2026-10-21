@@ -18,6 +18,15 @@
         "vite"
       ],
       "port": 5173
+    },
+    {
+      "name": "dev-npm",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 5173
     }
   ]
 }
