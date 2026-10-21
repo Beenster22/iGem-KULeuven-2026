@@ -5505,19 +5505,19 @@ body:not(.home-fullscreen) .home-hero {
    wide screen; here it only spreads them a few pixels apart.) */
 @media (max-width: 991.98px) {
   .microbe-backdrop-mover--left {
-    left: calc(var(--inset, 6) * 0.25px - 16px) !important;
+    left: calc(var(--inset, 6) * 0.25px - 22px) !important;
   }
 
   .microbe-backdrop-mover--right {
-    right: calc(var(--inset, 6) * 0.25px - 16px) !important;
+    right: calc(var(--inset, 6) * 0.25px - 22px) !important;
   }
 
   .microbe-backdrop-item {
-    width: 34px;
+    width: 28px;
   }
 
   .microbe-backdrop-item--hex {
-    width: 16px;
+    width: 14px;
   }
 }
 
