@@ -8363,8 +8363,9 @@ Protocol" and then used as the standard.
 
 </ProtocolNote>
 
-23. Calculate the number of transconjugants per millilitre and the conjugation
-    efficiency from the counts (Table 5).
+23. Calculate the number of transconjugants per millilitre (the conjugation
+    titer) and, optionally, the conjugation efficiency per recipient from the
+    counts (Table 5).
 
 <ProtocolCalculator
   number={5}
@@ -8381,6 +8382,17 @@ Protocol" and then used as the standard.
     { key: "efficiency", label: "Conjugation efficiency per recipient", unit: "–", decimals: 6, compute: (v) => v.total / v.recipients },
   ]}
 />
+
+<ProtocolNote>
+
+The conjugation efficiency per recipient was not determined by the EMPOWER team:
+our results report the conjugation titer (CFU/mL) only, because the recipient
+count from a non-selective plate of the same mating was not taken. We
+nevertheless recommend calculating the efficiency as well, since a count
+relative to the number of recipients makes results comparable between
+experiments, strains and laboratories and so improves reproducibility.
+
+</ProtocolNote>
 
 **Verification: confirming the identity of the recipient**
 

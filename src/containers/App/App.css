@@ -9870,8 +9870,13 @@ body:not(.home-fullscreen) .home-hero {
   padding: 0;
 }
 
+/* Rendered as an h3 so the section index nests it under its phase, but it is
+   still a section title, so it keeps the h1/h2 display face and size. */
 .hp-section-title {
   margin: 0 0 1rem;
+  font-family: "Luckiest Guy", "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 1.75rem;
 }
 
 /* Text-only section card (no interviewee carousel) */
@@ -9935,8 +9940,10 @@ body:not(.home-fullscreen) .home-hero {
   min-width: 0;
 }
 
+/* An h4 for index nesting; keeps the h3 size it had before. */
 .hp-featured-name {
   margin: 0;
+  font-size: 1.75rem;
 }
 
 .hp-featured-role {
@@ -10941,8 +10948,10 @@ img.hp-no-photo {
   min-width: 0;
 }
 
+/* An h4 for index nesting; keeps the h3 size it had before. */
 .hp-list-name {
   margin: 0;
+  font-size: 1.75rem;
 }
 
 .hp-list-role {
@@ -14443,6 +14452,16 @@ a.protocol-download:hover {
   width: 100%;
   object-fit: contain;
   background-color: #fff;
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-21
+   Purpose: opt-out of the pinned 1.44 box above for a single figure, via
+   <ZoomableImage className="natural-ratio" ... />. The Measurement page's
+   flow diagram is a wide strip (about 10:1) and was letterboxed into a
+   near-square white box with large empty bands above and below it. */
+.figure-grid img.natural-ratio {
+  aspect-ratio: auto;
+  height: auto;
 }
 
 @media (max-width: 900px) {
@@ -19137,3 +19156,138 @@ img.visual-abstract-img {
   object-fit: cover;
   object-position: 50% 56%;
 }
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-21
+   Purpose: typeset equations on the Measurement page (replaces monospace
+   code blocks). Fractions, square roots and overbars are plain HTML/CSS so
+   no maths library is needed; colours follow the site palette. */
+.measure-eq {
+  margin: 1.25rem 0 1.5rem;
+  padding: 1rem 1.4rem;
+  border-left: 4px solid var(--color-interactive);
+  border-radius: 0.75rem;
+  background: rgba(47, 164, 169, 0.1);
+  font-family: "Cambria Math", "STIX Two Math", "Latin Modern Math", "Times New Roman", serif;
+  font-size: 1.15rem;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+.measure-eq .eq-grid {
+  display: grid;
+  grid-template-columns: max-content max-content 1fr;
+  column-gap: 0.7rem;
+  row-gap: 0.55rem;
+  align-items: center;
+}
+.measure-eq .eq-row { display: contents; }
+.measure-eq .eq-lhs { text-align: right; }
+.measure-eq .eq-eq { opacity: 0.8; }
+.measure-eq .eq-rhs { display: flex; align-items: center; flex-wrap: wrap; gap: 0.25rem; }
+.measure-eq .eq-note {
+  margin-left: 1.25rem;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.8rem;
+  font-style: italic;
+  opacity: 0.7;
+}
+.measure-eq .eq-frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  text-align: center;
+  margin: 0 0.2rem;
+}
+.measure-eq .eq-frac > span:first-child {
+  padding: 0 0.4rem 0.12rem;
+  border-bottom: 1.5px solid currentColor;
+}
+.measure-eq .eq-frac > span:last-child { padding: 0.12rem 0.4rem 0; }
+.measure-eq .ovl { text-decoration: overline; }
+.measure-eq .eq-sqrt-body {
+  padding: 0 0.25rem;
+  border-top: 1.5px solid currentColor;
+  display: inline-block;
+}
+.measure-eq .eq-legend {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 1rem;
+  row-gap: 0.25rem;
+  margin: 0.9rem 0 0;
+  padding-top: 0.7rem;
+  border-top: 1px solid rgba(51, 40, 63, 0.18);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.85rem;
+}
+.measure-eq .eq-legend dt { text-align: right; font-weight: 400; font-family: "Cambria Math", "STIX Two Math", serif; }
+.measure-eq .eq-legend dd { margin: 0; opacity: 0.85; }
+[data-theme="dark"] .measure-eq .eq-legend { border-top-color: rgba(201, 189, 232, 0.25); }
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-21
+   Purpose: sets a table (Table B1) on its own tinted card, in pink from the
+   site palette, so it stands apart from the surrounding lavender section. */
+.measure-table-card {
+  margin: 1.5rem 0;
+  padding: 1.25rem 1.5rem 0.5rem;
+  border-radius: 1rem;
+  background: rgba(241, 195, 212, 0.45);
+  border: 1px solid rgba(241, 195, 212, 0.9);
+}
+[data-theme="dark"] .measure-table-card {
+  background: rgba(241, 195, 212, 0.12);
+  border-color: rgba(241, 195, 212, 0.35);
+}
+
+/* Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-21
+   Purpose: data tables on the Measurement page. Horizontal rules and zebra
+   rows instead of a full grid, a plum header, a bold first column and a
+   rounded frame that scrolls sideways on narrow screens without clipping
+   the last row. Palette: plum #33283f, lavender #c9bde8, teal #2fa4a9. */
+.measure-table {
+  margin: 1rem 0 1.5rem;
+  overflow-x: auto;
+  border: 1px solid rgba(51, 40, 63, 0.16);
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 10px rgba(51, 40, 63, 0.08);
+}
+.measure-table table {
+  width: 100%;
+  margin: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.93rem;
+  line-height: 1.4;
+}
+.measure-table th {
+  padding: 0.7rem 0.95rem;
+  background: #33283f;
+  color: #eaf4f5;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  text-align: left;
+  vertical-align: bottom;
+}
+.measure-table td {
+  padding: 0.65rem 0.95rem;
+  border-bottom: 1px solid rgba(51, 40, 63, 0.1);
+  text-align: left;
+  vertical-align: top;
+}
+.measure-table td:first-child { font-weight: 600; }
+.measure-table tbody tr:nth-child(even) td { background: rgba(201, 189, 232, 0.28); }
+.measure-table tbody tr:hover td { background: rgba(47, 164, 169, 0.16); }
+.measure-table tbody tr:last-child td { border-bottom: 0; }
+[data-theme="dark"] .measure-table {
+  border-color: rgba(201, 189, 232, 0.25);
+  background: rgba(0, 0, 0, 0.18);
+  box-shadow: none;
+}
+[data-theme="dark"] .measure-table th { background: #4d3d63; }
+[data-theme="dark"] .measure-table td { border-bottom-color: rgba(201, 189, 232, 0.14); }
+[data-theme="dark"] .measure-table tbody tr:nth-child(even) td { background: rgba(201, 189, 232, 0.07); }
+/* Table B1 sits on a pink card, so its header picks up the card colour. */
+.measure-table-card .measure-table th { background: #f1c3d4; color: #33283f; }
+[data-theme="dark"] .measure-table-card .measure-table th { background: #7a4a5f; color: #fff; }
