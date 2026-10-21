@@ -138,7 +138,7 @@ export const SPONSORS: Sponsor[] = [
   {
     name: "IDT",
     src: "https://static.igem.wiki/teams/6299/wiki/sponsors/idt.avif",
-    href: "https://eu.idtdna.com/page",
+    href: "https://eu.idtdna.com/",
     tier: "igem",
   },
   {

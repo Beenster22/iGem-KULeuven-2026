@@ -18749,3 +18749,274 @@ a.protocol-download:hover {
     transition: none;
   }
 }
+
+/* SURVEY TABLE
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-21
+   Purpose: Table 1 of the public survey (human-practices.mdx) laid out like
+   the team's Word document: rules above and below, each group (Gender, Age,
+   ...) with its rows indented underneath in alternating lilac / teal bands. */
+.survey-table {
+  width: 100%;
+  max-width: 44rem;
+  margin: 1.5rem auto 0.5rem;
+  border-collapse: collapse;
+  border-top: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  font-size: 0.8rem;
+  line-height: 1.25;
+}
+
+.survey-table th,
+.survey-table td {
+  padding: 0.15rem 0.75rem;
+  border: 0;
+  background: transparent;
+}
+
+.survey-table td:first-child {
+  padding-left: 1.75rem;
+}
+
+.survey-table td:last-child {
+  white-space: nowrap;
+}
+
+.survey-table .survey-group th {
+  font-weight: 600;
+  text-align: left;
+  padding-top: 0.3rem;
+}
+
+.survey-table + .figure-caption {
+  text-align: center;
+}
+
+/* Alternating group bands in the site palette: brand lilac (--color-accent)
+   and brand teal (--color-interactive) tints. */
+.survey-table .survey-group--0 > * {
+  background-color: color-mix(in srgb, var(--color-accent) 45%, transparent);
+}
+
+.survey-table .survey-group--1 > * {
+  background-color: color-mix(in srgb, var(--color-interactive) 16%, transparent);
+}
+
+/* Survey figures (human-practices.mdx): wider than the 46rem default cap so
+   the small chart text stays readable inline; click still opens the
+   fullscreen view on a white card (onLightBackground). */
+.zoomable-image-trigger img.survey-figure {
+  max-width: min(100%, 72rem);
+  padding: 0.75rem;
+}
+
+
+/* SURVEY CHARTS
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-21
+   Purpose: Figures 1 and 2 of the Public survey (SurveyCharts.tsx). Rose =
+   disagree, lilac = neutral, teal = agree; the two groups in Figure 2 are
+   lilac and teal. Text uses currentColor so both themes work. */
+.survey-chart {
+  --sv-disagree: #e8a3bb;
+  --sv-neutral: #c9bde8;
+  --sv-agree: var(--color-interactive);
+  --sv-ink: #33283f;
+  font-size: 0.9rem;
+}
+
+.survey-chart-legend,
+.survey-panel-groups {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem 1.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.survey-chart-legend {
+  margin-bottom: 1rem;
+}
+
+.survey-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.survey-key::before {
+  content: "";
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 0.2rem;
+}
+
+.survey-key--disagree::before { background: var(--sv-disagree); }
+.survey-key--neutral::before,
+.survey-key--a::before { background: var(--sv-neutral); }
+.survey-key--agree::before,
+.survey-key--b::before { background: var(--sv-agree); }
+
+.survey-stack-list {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.survey-stack-row {
+  display: grid;
+  grid-template-columns: minmax(8rem, 15rem) 1fr;
+  align-items: center;
+  gap: 1rem;
+}
+
+.survey-stack-label {
+  text-align: right;
+  line-height: 1.25;
+}
+
+.survey-stack-bar {
+  display: flex;
+  height: 2.4rem;
+  gap: 2px;
+}
+
+.survey-stack-seg {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--sv-ink);
+  outline-offset: 2px;
+  transition: filter 0.15s;
+}
+
+.survey-stack-seg:first-child { border-radius: 0.3rem 0 0 0.3rem; }
+.survey-stack-seg:last-child { border-radius: 0 0.3rem 0.3rem 0; }
+.survey-stack-seg:only-child { border-radius: 0.3rem; }
+.survey-stack-seg--disagree { background: var(--sv-disagree); }
+.survey-stack-seg--neutral { background: var(--sv-neutral); }
+.survey-stack-seg--agree { background: var(--sv-agree); color: #fff; }
+
+.survey-stack-seg:hover,
+.survey-stack-seg:focus-visible {
+  filter: brightness(0.92);
+  z-index: 2;
+}
+
+.survey-stack-seg::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 0.4rem);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 17rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 0.5rem;
+  background: #33283f;
+  color: #eaf4f5;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: left;
+  white-space: pre-line;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s;
+}
+
+[data-theme="dark"] .survey-stack-seg::after {
+  background: #eaf4f5;
+  color: #33283f;
+}
+
+.survey-stack-seg:hover::after,
+.survey-stack-seg:focus-visible::after {
+  opacity: 1;
+  z-index: 5;
+}
+
+.survey-panels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem 1.25rem;
+}
+
+.survey-panel {
+  margin: 0;
+}
+
+.survey-panel-head {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.85rem;
+  color: inherit;
+  opacity: 1;
+}
+
+.survey-panel-head strong {
+  font-size: 0.95rem;
+}
+
+.survey-panel-groups {
+  justify-content: flex-start;
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
+.survey-panel svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.survey-grid { stroke: currentColor; stroke-opacity: 0.12; }
+.survey-baseline { stroke: currentColor; stroke-opacity: 0.5; }
+
+.survey-tick,
+.survey-value {
+  fill: currentColor;
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+.survey-axis-title {
+  fill: currentColor;
+  font-size: 10px;
+}
+
+.survey-bar--a { fill: var(--sv-neutral); }
+.survey-bar--b { fill: var(--sv-agree); }
+.survey-hover { fill: currentColor; opacity: 0; }
+.survey-group:hover .survey-hover { opacity: 0.07; }
+.survey-group:hover .survey-category { opacity: 1; font-weight: 700; }
+.survey-bar:hover { filter: brightness(0.9); }
+
+@media (max-width: 767.98px) {
+  .survey-panels {
+    grid-template-columns: 1fr;
+  }
+
+  .survey-stack-row {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+
+  .survey-stack-label {
+    text-align: left;
+  }
+}
+
+/* Survey figure cards: less side padding so the charts use more of the
+   column width (Figure 1 and Figure 2). */
+.figure-panel.survey-wide {
+  padding-inline: 0.75rem;
+}
+
