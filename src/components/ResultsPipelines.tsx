@@ -305,7 +305,7 @@ export function ResultsPipelines({
                   onClick={() => go(index - 1)}
                 >
                   <span aria-hidden="true">←</span> Previous:{" "}
-                  {sections[index - 1].plainTitle}
+                  {sections[index - 1].title}
                 </button>
               ) : (
                 <span />
@@ -316,7 +316,7 @@ export function ResultsPipelines({
                   className="btn-empower phase-nav-btn phase-nav-next"
                   onClick={() => go(index + 1)}
                 >
-                  Next: {sections[index + 1].plainTitle}{" "}
+                  Next: {sections[index + 1].title}{" "}
                   <span aria-hidden="true">→</span>
                 </button>
               ) : pipelineIndex < pipelines.length - 1 ? (
