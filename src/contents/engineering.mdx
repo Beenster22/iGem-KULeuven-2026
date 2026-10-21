@@ -22,7 +22,7 @@ What this adds up to is not one successful construct, but a documented, reusable
 
 <DBTLStage stage="design">
 
-In order to work with a non-model organism and engineer it, our first priority was establishing reproducible, measurable growth as without that, no downstream genetic work would be possible. Based on advice from our instructor <Link to="/human-practices#matthew-herdman">Mattew Herdman</Link> and our PI <Link to="/human-practices#ruben-vazquez-uribe">Ruben Vazquez-Uribe</Link>, we designed a pilot experiment comparing four different media chosen to span the range from rich and undefined (mGAM, BHI) to lean and defined (MM), with WC as a middle ground. We used the type strain DSM 1447, since it is commercially available and well-characterized, so that our results could be cross-checked against the literature.
+In order to work with a non-model organism and engineer it, our first priority was establishing reproducible, measurable growth as without that, no downstream genetic work would be possible. Based on advice from our instructor <Link to="/human-practices#matthew-herdman">Matthew Herdman</Link> and our PI <Link to="/human-practices#ruben-vazquez-uribe">Ruben Vazquez-Uribe</Link>, we designed a pilot experiment comparing four different media chosen to span the range from rich and undefined (mGAM, BHI) to lean and defined (MM), with WC as a middle ground. We used the type strain DSM 1447, since it is commercially available and well-characterized, so that our results could be cross-checked against the literature.
 
 </DBTLStage>
 
@@ -743,7 +743,7 @@ Five constitutive promoters were chosen from literature: Bfp1E6 (Bfp), BT1311 (B
 
 <DBTLStage stage="build">
 
-Promoter, RBS, reporter CDS, and Terminator were ordered as assembled gBlocks, assembled using Gibson assembly, and transformed into *E. coli* S17 λ pir. Conjugation was used to transfer the plasmid into *P. vulgatus* to test expression in the host of interest. A 96-well plate was built to include 3 wells of each replicate in mGAM media, for reproducibility, and a well containing mGAM media without cells was used to understand background intensities. The plate was a polyacrylamide black 96wp with a transparent F-bottom, a plate typical for fluorescent measurments. The outer wells contained water to mitigate the effect of evaporation on our samples.
+Promoter, RBS, reporter CDS, and Terminator were ordered as assembled gBlocks, assembled using Gibson assembly, and transformed into *E. coli* S17-1 λ pir. Conjugation was used to transfer the plasmid into *P. vulgatus* to test expression in the host of interest. A 96-well plate was built to include 3 wells of each replicate in mGAM media, for reproducibility, and a well containing mGAM media without cells was used to understand background intensities. The plate was a polyacrylamide black 96wp with a transparent F-bottom, a plate typical for fluorescent measurments. The outer wells contained water to mitigate the effect of evaporation on our samples.
 
 <div className="figure-panel">
 
@@ -767,7 +767,7 @@ Promoter, RBS, reporter CDS, and Terminator were ordered as assembled gBlocks, a
 
 <DBTLStage stage="test">
 
-Measurements were taken every 50 mins for a total of around 4 hours. Delays occurred due to learning curves associated with usage of the Clariostar instrument including finding a fitting gain to use for each fluorescence. mGAM ans mGAM-grown *P. vulgatus* DSM1447 were used to normalize fluorescence to account for medium autofluorescence and cell density respectively, and LB was used to normalize for the positive control GFP expressing *E. coli*. Only the mCherry, GFP, and KOFP-7 were tested because the system in the lab did not have bioluminescent capacity for the NanoLuc.
+Measurements were taken every 50 mins for a total of around 4 hours. Delays occurred due to learning curves associated with usage of the Clariostar instrument including finding a fitting gain to use for each fluorescence. mGAM and mGAM-grown *P. vulgatus* DSM1447 were used to normalize fluorescence to account for medium autofluorescence and cell density respectively, and LB was used to normalize for the positive control GFP expressing *E. coli*. Only the mCherry, GFP, and KOFP-7 were tested because the system in the lab did not have bioluminescent capacity for the NanoLuc.
 
 </DBTLStage>
 
@@ -855,7 +855,7 @@ To combat this in future experiments, we recommend using a minimal media with le
 
 <DBTLStage stage="design">
 
-Initially, we planned to test and evaluate BSH activity with a halo assay, where deconjugated bile salts would precipitate on the medium and form a ‘halo’ ring around the colony. Our designed included transforming *E.coli* DH5α with a plasmid constitutively expressing a BSH variant and growing them on agar plates supplemented with bile salts. Not only are these bile salts difficult to obtain but with no protocol to follow, we were unsure of how to best dissolve them. To solve this, our goals were (1) to figure out in which order the medium components must be assembled for the agar to pour cleanly, (2) whether the bile salts should be dissolved in DMSO or dH₂O, and (3) understand optimal concentrations of bile salt substrates.
+Initially, we planned to test and evaluate BSH activity with a halo assay, where deconjugated bile salts would precipitate on the medium and form a ‘halo’ ring around the colony. Our designed included transforming *E. coli* DH5α with a plasmid constitutively expressing a BSH variant and growing them on agar plates supplemented with bile salts. Not only are these bile salts difficult to obtain but with no protocol to follow, we were unsure of how to best dissolve them. To solve this, our goals were (1) to figure out in which order the medium components must be assembled for the agar to pour cleanly, (2) whether the bile salts should be dissolved in DMSO or dH₂O, and (3) understand optimal concentrations of bile salt substrates.
 
 </DBTLStage>
 
@@ -1262,7 +1262,7 @@ With BreR removed, the dynamic requirement was also dropped, and the design beca
 The current design uses Cas9 to make a double-strand break at the native BSH gene. The cell's repair machinery then copies a donor carrying a replacement BSH. The design rests on three choices.
 
 - **Replace rather than knock out.** BSH is not an essential gene, and a BSH-deletion strain of *Bacteroides thetaiotaomicron* is viable.[^yao] The aim is a minimal change: a replacement BSH with a different substrate preference should keep deconjugation in the gut while leaving the bile salts the team considers most important for TGR5 signalling conjugated. TGR5 is a membrane receptor for bile acids.[^maruyama][^kawamata] TUDCA and GUDCA are weak TGR5 agonists,[^ibrahim] so the wiki should not describe them as potent TGR5 agonists.
-- **Use CRISPR.** CRISPR offers target specificity and uses homology-directed repair to insert a gene. CRISPR/Cas tools, including inducible FnCas12a, have been built for *Bacteroides* species, including *B. vulgatus*.[^zheng] An integrative pNBU2 backbone, validated in the team's conjugation protocol, was ruled out because pNBU2 integrates only at a serine tRNA site,[^wang] not at the native BSH locus.
+- **Use CRISPR.** CRISPR offers target specificity and uses homology-directed repair to insert a gene. CRISPR/Cas tools, including inducible FnCas12a, have been built for *Bacteroides* species, including *P. vulgatus*.[^zheng] An integrative pNBU2 backbone, validated in the team's conjugation protocol, was ruled out because pNBU2 integrates only at a serine tRNA site,[^wang] not at the native BSH locus.
 - **Use a constitutive system.** The dynamic control from Cycle 1 was dropped with BreR in Cycle 2. The Cas9 and gRNA are expressed from fixed promoters.
 
 Hypothesis: Cas9-induced repair at the native BSH site replaces the enzyme with one of different substrate preference. Expected readout: a changed percentage of deconjugated TUDCA and GUDCA, measured by LC-MS at 0.1% bile salt.
