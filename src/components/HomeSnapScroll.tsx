@@ -87,10 +87,19 @@ const MIN_PUSH = 4;
 // touchpad's coasting never does).
 const RE_PUSH = 1.5;
 const MIN_RE_PUSH = 8;
+// How far below the hardest push of the scroll so far it has to fall for
+// the next rise to count as the reader's hand again.
+const DIP = 0.5;
 // Edited 2026-10-21 (team request: one swipe to a section on a touch
 // screen too). How far a finger has to travel for a swipe to move the page
 // on a section.
 const SWIPE_PX = 24;
+// Edited 2026-10-21 (team request: two swipes of a touchpad to a section).
+// A push this big or bigger is a notch of a mouse's wheel — a line's worth
+// is 40px and Windows sends 100 — and anything smaller is a touchpad,
+// which sends a swipe as a run of much smaller pushes.
+const MOUSE_NOTCH = 50;
+const PAD_SWIPES = 2;
 // Stops closer than this to where the page is count as where it is.
 const NEAR_PX = 6;
 
@@ -124,8 +133,12 @@ function usePaging(skip: boolean) {
     // The current scroll's direction, and whether it has moved the page.
     let lastSign = 0;
     let acted = true;
-    // The size of the last push, to tell a fresh one from a tail (below).
+    // The size of the last push, to tell a fresh one from a tail (below),
+    // and how many touchpad swipes have gone towards the next section.
     let lastPush = 0;
+    let pending = 0;
+    let peak = 0;
+    let dipped = false;
     // Where the current glide is heading.
     let target = 0;
 
@@ -187,7 +200,13 @@ function usePaging(skip: boolean) {
       const sign = Math.sign(event.deltaY);
       if (!sign) return;
       // A new scroll: the wheel had stopped, or it now goes the other way.
-      if (now - lastWheel > SCROLL_GAP_MS || sign !== lastSign) acted = false;
+      if (now - lastWheel > SCROLL_GAP_MS || sign !== lastSign) {
+        acted = false;
+        peak = 0;
+        dipped = false;
+      }
+      // Turning back the other way starts the count towards a section over.
+      if (sign !== lastSign) pending = 0;
       lastWheel = now;
       lastSign = sign;
       // This scroll has already moved the page, or is only coasting. (In
@@ -195,15 +214,29 @@ function usePaging(skip: boolean) {
       const push =
         Math.abs(event.deltaY) *
         (event.deltaMode === 1 ? 40 : event.deltaMode === 2 ? window.innerHeight : 1);
-      // A touchpad's coasting only ever dies away, so a push bigger than
-      // the one before it is the reader's hand again, not the tail of the
-      // last swipe: that is a scroll of its own, and moves on a section.
-      if (acted && push > lastPush * RE_PUSH && push >= MIN_RE_PUSH) {
+      // A touchpad's coasting only ever dies away, so a push that rises
+      // again once it has fallen well below the hardest of the scroll so
+      // far is the reader's hand again, not the tail of the last swipe:
+      // that is a scroll of its own, and counts towards the next section.
+      // (The rise at the start of a swipe is not one — the fall has to
+      // come first, or every swipe would count twice.)
+      if (push > peak) peak = push;
+      if (push < peak * DIP) dipped = true;
+      if (dipped && push > lastPush * RE_PUSH && push >= MIN_RE_PUSH) {
         acted = false;
+        dipped = false;
+        peak = push;
       }
+      // A mouse's wheel turns in notches, each of which arrives as one
+      // push of about a line's worth or more; a touchpad sends a swipe as
+      // a run of much smaller ones. A swipe asks less of the hand than a
+      // notch does, so it takes two of them to a section (team request).
+      const touchpad = push < MOUSE_NOTCH;
       lastPush = push;
       if (acted || push < MIN_PUSH) return;
       acted = true;
+      if (touchpad && ++pending < PAD_SWIPES) return;
+      pending = 0;
       // Already gliding that way: one scroll, one section.
       if (gliding && Math.sign(target - window.scrollY) === sign) return;
       go(sign);
