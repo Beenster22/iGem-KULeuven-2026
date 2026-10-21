@@ -18,10 +18,11 @@ const IMPACT_LABEL: Record<ImpactKind, string> = {
 
 interface IntegrationPointProps {
   /** Left column. Leave it off to continue the point in the row above — the
-   *  row then shares that point's heading instead of repeating it. */
-  learned?: string;
+   *  row then shares that point's heading instead of repeating it.
+   *  ReactNode rather than string so a row can carry a <Link>. */
+  learned?: ReactNode;
   /** Right column: what we did with it. */
-  integrated: string;
+  integrated: ReactNode;
   /** Marker on the right. Leave it off when the point was never classified. */
   impact?: ImpactKind;
 }
