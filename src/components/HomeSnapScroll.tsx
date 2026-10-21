@@ -101,7 +101,18 @@ const SWIPE_PX = 24;
 // Stops closer than this to where the page is count as where it is.
 const NEAR_PX = 6;
 
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-21 (team request: the open
+// menu on a phone could not be scrolled on the home page): the menu (the
+// navbar, which scrolls within itself on narrow screens), the interview and
+// event popups and the search box are left entirely to the browser. Judging
+// them by scroll room alone let the paging take a swipe over whenever its
+// first movement was nil or went the way the menu could not go (at its top,
+// a finger's first wobble), and once a swipe is taken over the menu cannot
+// move for the rest of it.
+const OWN_SCROLLERS = ".navbar-empower, [role='dialog'], [aria-modal='true']";
+
 function scrollsItself(start: EventTarget | null, deltaY: number) {
+  if (start instanceof Element && start.closest(OWN_SCROLLERS)) return true;
   for (
     let el = start instanceof Element ? start : null;
     el && el !== document.body && el !== document.documentElement;
