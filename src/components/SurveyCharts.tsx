@@ -33,32 +33,28 @@ export function SurveyAttitudesChart() {
   return (
     <div className="survey-chart">
       <div className="survey-chart-legend" aria-hidden="true">
-        <span className="survey-key survey-key--disagree">Disagree</span>
-        <span className="survey-key survey-key--neutral">Neutral</span>
-        <span className="survey-key survey-key--agree">Agree</span>
+        {LEVELS.map((name, i) => (
+          <span key={name} className={`survey-key survey-key--lv${i}`}>
+            {name}
+          </span>
+        ))}
       </div>
       <ul className="survey-stack-list" aria-label="Attitudes toward LBP therapy (N = 176)">
         {ATTITUDES.map(({ label, counts }) => {
-          const [sd, d, n, a, sa] = counts;
-          const segments = [
-            { kind: "disagree", count: sd + d, name: "Disagree" },
-            { kind: "neutral", count: n, name: "Neutral" },
-            { kind: "agree", count: a + sa, name: "Agree" },
-          ];
           const detail = counts.map((c, i) => `${LEVELS[i]}: ${c} (${pct(c)}%)`).join(" · ");
           return (
             <li key={label} className="survey-stack-row">
               <span className="survey-stack-label">{label}</span>
               <span className="survey-stack-bar">
-                {segments.map(({ kind, count, name }) =>
+                {counts.map((count, i) =>
                   count === 0 ? null : (
                     <span
-                      key={kind}
-                      className={`survey-stack-seg survey-stack-seg--${kind}`}
+                      key={LEVELS[i]}
+                      className={`survey-stack-seg survey-stack-seg--lv${i}`}
                       style={{ flexGrow: count }}
                       tabIndex={0}
-                      data-tip={`${name}: ${count} of ${N} (${pct(count)}%)\n${detail}`}
-                      aria-label={`${label}. ${name}: ${count} of ${N} (${pct(count)}%). ${detail}`}
+                      data-tip={`${LEVELS[i]}: ${count} of ${N} (${pct(count)}%)\n${detail}`}
+                      aria-label={`${label}. ${LEVELS[i]}: ${count} of ${N} (${pct(count)}%). ${detail}`}
                     >
                       {pct(count) >= 4 ? `${pct(count)}%` : ""}
                     </span>

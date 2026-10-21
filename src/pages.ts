@@ -193,7 +193,7 @@ const Pages: (Page | Folder)[] = [
         title: "Integrated Human Practices",
         path: "/human-practices",
         component: HumanPractices,
-        lead: "The seven stakeholder groups we spoke with, how their feedback reached the project, and what it changed.",
+        lead: "The six stakeholder groups we spoke with, how their feedback reached the project, and what it changed.",
         icon: BubblesIcon,
         specialPrize: true,
       },
