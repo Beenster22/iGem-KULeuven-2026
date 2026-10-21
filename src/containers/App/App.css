@@ -8425,13 +8425,19 @@ body:not(.home-fullscreen) .home-hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
-  gap: clamp(1.5rem, 5vw, 4rem);
+  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-21 (team request: the
+     sentence a little closer to the receptor, more central): the sentence
+     sits against the middle and the drawing just right of it, with a
+     narrower gap, instead of each centred in its own half of the screen. */
+  gap: clamp(1rem, 2.5vw, 2rem);
   min-height: 100vh;
   min-height: 100svh;
   padding: calc(var(--home-nav-h) + 2rem) 0 calc(var(--home-wave-h) + 2rem);
 }
 
 .tgr5-zoom-words {
+  justify-self: end;
+  max-width: 24em;
   display: flex;
   flex-direction: column;
   gap: clamp(1rem, 3vh, 2rem);
@@ -8453,6 +8459,12 @@ body:not(.home-fullscreen) .home-hero {
   translate: 0 0;
 }
 
+/* Lines run to the column's edge (balanced lines left a strip of empty box
+   on the right, between the words and the receptor). */
+.tgr5-zoom-words .tgr5-zoom-line {
+  text-wrap: pretty;
+}
+
 /* Edited 2026-10-21 (team request: one sentence, aligned): the second half
    of the sentence fades in where it already sits, so nothing moves and the
    sentence keeps one left edge. (It used to be a second line, set in.) */
@@ -8470,13 +8482,81 @@ body:not(.home-fullscreen) .home-hero {
    the whole drawing as well would move it twice. */
 .tgr5-zoom-art {
   display: grid;
-  place-items: center;
+  place-items: center start;
 }
 
 .tgr5-zoom-svg {
   display: block;
   width: min(100%, 26rem);
   max-height: 60vh;
+  /* The drawing's frame leaves room around the receptor; pull it left so
+     the receptor itself, not that empty margin, sits by the sentence. */
+  margin-left: -14%;
+}
+
+/* The pool's bile acids drifting across the whole close-up screen
+   (DriftingAcids in Tgr5Story.tsx): a full-width layer behind the sentence
+   and the drawing, each acid crossing from one edge to the other on a
+   long loop while it bobs and turns. Faint, so the sentence stays easy to
+   read over them. */
+.tgr5-zoom-drift {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.tgr5-zoom-words,
+.tgr5-zoom-art {
+  position: relative;
+  z-index: 1;
+}
+
+.tgr5-drift-acid {
+  position: absolute;
+  left: 0;
+  width: 2.6rem;
+  animation: tgr5-drift-across var(--drift-time) linear var(--drift-delay) infinite;
+}
+
+.tgr5-drift-acid--from-right {
+  animation-direction: reverse;
+}
+
+@keyframes tgr5-drift-across {
+  from {
+    translate: -4rem 0;
+  }
+  to {
+    translate: calc(100vw + 4rem) 0;
+  }
+}
+
+.tgr5-drift-bob {
+  display: block;
+  animation: tgr5-drift-bob var(--bob-time) ease-in-out var(--bob-delay) infinite alternate;
+}
+
+@keyframes tgr5-drift-bob {
+  from {
+    translate: 0 -0.9rem;
+    rotate: calc(var(--spin) * -1);
+  }
+  to {
+    translate: 0 0.9rem;
+    rotate: var(--spin);
+  }
+}
+
+.tgr5-drift-bob svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -8495,13 +8575,19 @@ body:not(.home-fullscreen) .home-hero {
     gap: 1.5rem;
   }
 
+  .tgr5-zoom-words {
+    justify-self: stretch;
+  }
+
   .tgr5-zoom-art {
     order: -1;
+    place-items: center;
   }
 
   .tgr5-zoom-svg {
     width: min(100%, 17rem);
     max-height: 38vh;
+    margin-left: 0;
   }
 }
 
