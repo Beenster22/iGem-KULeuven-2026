@@ -14,19 +14,7 @@
 
 <ResultsPipelines
   nextPage={{ to: "/measurement", label: "Read Measurements" }}
-  highlights={
-    <SuccessCards>
-      <SuccessCard to="antibiotic-susceptibility-of-p-vulgatus" group="Toolkit">
-        Three antibiotics inhibit <em>P. vulgatus</em>
-      </SuccessCard>
-      <SuccessCard to="a-characterized-promoter-library-for-p-vulgatus" group="Toolkit">
-        A promoter/reporter library
-      </SuccessCard>
-      <SuccessCard to="bile-salt-deconjugation-by-15-bile-salt-hydrolases" group="Therapeutics">
-        5 of 15 hydrolases are active
-      </SuccessCard>
-    </SuccessCards>
-  }
+  highlights={<SuccessCards />}
 >
 
 <SectionItem label="Toolkit">
@@ -37,9 +25,9 @@
 
 ### Introduction
 
-{/* The wet lab wheel, as on the Project description page (same seven sections, keep them in step); layout="side" (team feedback, 2026-10-19 — the "dropdown" layout left nothing showing until a wedge was clicked) always shows the selected section's text beside the wheel, starting with the first one. */}
+{/* The wet lab wheel, as on the Project description page (same seven sections, keep them in step); layout="dropdown" (team feedback, 2026-10-21) centers the wheel and drops the selected section's text down underneath it on click. */}
 
-<WheelSelector layout="side" label="Toolkit sections" id="toolkit-sections">
+<WheelSelector layout="dropdown" label="Toolkit sections" id="toolkit-sections">
 
 <SectionItem label="Strain selection">
 
