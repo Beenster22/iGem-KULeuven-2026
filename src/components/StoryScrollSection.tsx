@@ -676,11 +676,14 @@ const MORPH_MS = 1100;
 // through, there is nothing to cover up by taking its time, and quick
 // enough to read as one thing changing beats slow enough to study.
 const LENS_MORPH_MS = 560;
-// The clock's face and the magnifying glass's own dark glass, which the
-// stand-in's disc goes between (.story-clock-face and .quest-lens-glass in
-// App.css — keep in step with them).
+// The clock's face and the magnifying glass's glass, which the stand-in's
+// disc goes between (.story-clock-face and .quest-lens-glass in App.css —
+// keep in step with them). Edited with Claude Opus 5.5 (Anthropic),
+// 2026-10-21 (team request): the glass is the home bands' own colour now,
+// so it is read from --color-home-band and follows the light/dark theme.
 const CLOCK_FACE = "#eaf4f5";
-const LENS_GLASS = "#221b2b";
+const lensGlass = () =>
+  getComputedStyle(document.documentElement).getPropertyValue("--color-home-band").trim() || "#33283f";
 
 interface StepMorph {
   from: StoryStep["position"];
@@ -801,7 +804,7 @@ function useStepMorphs(
     // darkens (or lightens) into the other as it goes. Set before it is
     // shown, or its first frame would be the colour it is heading for.
     if (morph.kind === "lens") {
-      ghost.style.backgroundColor = forwards ? CLOCK_FACE : LENS_GLASS;
+      ghost.style.backgroundColor = forwards ? CLOCK_FACE : lensGlass();
     }
     document.body.appendChild(ghost);
     // The magnifying glass is hidden whole, handle and all.
@@ -840,8 +843,8 @@ function useStepMorphs(
       // the way they would if the hours were rushing by.
       ghost.animate(
         [
-          { backgroundColor: forwards ? CLOCK_FACE : LENS_GLASS },
-          { backgroundColor: forwards ? LENS_GLASS : CLOCK_FACE },
+          { backgroundColor: forwards ? CLOCK_FACE : lensGlass() },
+          { backgroundColor: forwards ? lensGlass() : CLOCK_FACE },
         ],
         { duration: ms, easing, fill: "forwards" },
       );
