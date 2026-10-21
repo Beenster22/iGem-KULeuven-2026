@@ -2849,6 +2849,19 @@ main:focus {
   );
 }
 
+/* Edited 2026-10-21 (team request): a page read one section at a time
+   (Science Communication & Outreach) only ever shows one box, so the
+   alternating tint above just made the sections look different from each
+   other. A page opts out with <span data-uniform-sections hidden />, and
+   every section keeps the first, lighter tint. */
+:has(> [data-uniform-sections]) > .content-section:nth-of-type(even) {
+  --content-section-bg: color-mix(in srgb, var(--color-body-bg) 55%, #fff);
+}
+
+[data-theme="dark"] :has(> [data-uniform-sections]) > .content-section:nth-of-type(even) {
+  --content-section-bg: color-mix(in srgb, var(--color-body-bg) 88%, #fff);
+}
+
 .content-section:first-child {
   margin-top: 0;
 }
