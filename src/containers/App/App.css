@@ -18950,6 +18950,13 @@ a.protocol-download:hover {
   --sv-neutral: #c9bde8;
   --sv-agree: var(--color-interactive);
   --sv-ink: #33283f;
+  /* Figure 1: colour-blind-safe diverging ramp (orange → grey → blue),
+     strongly disagree → strongly agree; steps also differ in lightness. */
+  --sv-lv0: #b35806;
+  --sv-lv1: #f1a340;
+  --sv-lv2: #d9d9d9;
+  --sv-lv3: #67a9cf;
+  --sv-lv4: #2166ac;
   font-size: 0.9rem;
 }
 
@@ -18980,6 +18987,11 @@ a.protocol-download:hover {
   border-radius: 0.2rem;
 }
 
+.survey-key--lv0::before { background: var(--sv-lv0); }
+.survey-key--lv1::before { background: var(--sv-lv1); }
+.survey-key--lv2::before { background: var(--sv-lv2); }
+.survey-key--lv3::before { background: var(--sv-lv3); }
+.survey-key--lv4::before { background: var(--sv-lv4); }
 .survey-key--disagree::before { background: var(--sv-disagree); }
 .survey-key--neutral::before,
 .survey-key--a::before { background: var(--sv-neutral); }
@@ -19028,6 +19040,11 @@ a.protocol-download:hover {
 .survey-stack-seg:first-child { border-radius: 0.3rem 0 0 0.3rem; }
 .survey-stack-seg:last-child { border-radius: 0 0.3rem 0.3rem 0; }
 .survey-stack-seg:only-child { border-radius: 0.3rem; }
+.survey-stack-seg--lv0 { background: var(--sv-lv0); color: #fff; }
+.survey-stack-seg--lv1 { background: var(--sv-lv1); }
+.survey-stack-seg--lv2 { background: var(--sv-lv2); }
+.survey-stack-seg--lv3 { background: var(--sv-lv3); }
+.survey-stack-seg--lv4 { background: var(--sv-lv4); color: #fff; }
 .survey-stack-seg--disagree { background: var(--sv-disagree); }
 .survey-stack-seg--neutral { background: var(--sv-neutral); }
 .survey-stack-seg--agree { background: var(--sv-agree); color: #fff; }
