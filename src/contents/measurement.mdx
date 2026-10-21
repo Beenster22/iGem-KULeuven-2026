@@ -8,9 +8,9 @@
 
 <span data-toc-collapsible hidden />
 
-The organism we chose lacked measurement literature. *Phocaeicola vulgatus* DSM 1447 is a human gut commensal with known metabolic relevance but almost no published genetic toolkit: no validated promoters, no conjugation protocol with documented efficiency, no growth standards for non-standard media. That absence is the reason this page exists.
+The organism we chose to work with lacked measurement literature, which only motivated us further fill this gap. *Phocaeicola vulgatus* DSM 1447 is a human gut commensal with known metabolic relevance but almost no published genetic tools: no validated promoters, no conjugation protocol with documented efficiency, no growth standards for non-standard media. That absence is the reason this page exists.
 
-When a toolkit is being built from limited to no literature-based information, measurement is not a support activity. It is the primary one. Every number we report here was earned against an organism that did not come with a manual, and the value of reporting it, including the detection limits, the failure modes, and the protocols that did not survive, is that the next team working in *Bacteroides* does not have to earn the same number twice.
+When a toolkit is being built from limited to no literature-based information, there needs to be a way to standardize our measurements and get a reliable result. Every number we report here was earned against an organism that did not come with a manual, and the value of reporting it, including the detection limits, the failure modes, and the protocols that did not survive, gives an established base for the next team to spring off of.
 
 Science advances most reliably not through individual breakthroughs but through the quiet accumulation of reproducible, transparent work. We learned more from the experiments that revealed their own limits than from the ones that simply produced a result. Those lessons are in this page too, deliberately. Transparency about what a measurement cannot do is what makes it trustworthy for the teams who inherit it.
 
@@ -36,7 +36,7 @@ Below is the flow of the measurements supporting our genetic toolkit:
 </div>
 
 1. **Growth curves and medium comparison** come first because nothing can be expressed per cell until we know how the organism grows and in what. They also fixed the rule that makes any two plates comparable: a decrease in lag from 24.2 h to 6.0 h when cultures were started from a fresh plate rather than an old one.
-1. **Susceptibility** comes next because a selection plate is a measurement instrument, and its calibration is the inhibitory concentration. Until we knew that erythromycin inhibits DSM 1447 at [4 mg/L] while the fecal isolate tolerates [256 mg/L], we could not know whether a colony on a selection plate was a transconjugant or simply a cell the antibiotic never touched.
+1. **Susceptibility** comes next because a selection plate is a measurement instrument, and its calibration is the inhibitory concentration. Until we knew that erythromycin inhibits DSM 1447 at 4 mg/L while the fecal isolate tolerates 256 mg/L, we could not know whether a colony on a selection plate was a transconjugant or simply a cell the antibiotic never touched.
 1. **Conjugation** comes third because the constructs must be in the host before anything about them can be measured and the step before it decides whether the counts mean anything. For recipients whose inhibitory concentration exceeds the 25 µg/mL on our selection plates, the counts are upper bounds rather than titers.
 1. **The promoter–reporter screen** comes last because it inherits all three: the medium and the biomass scale from the growth work, the selection from the susceptibility work, and the strains themselves from the conjugation. It is also where the three lies above come due at once.
 
@@ -83,9 +83,10 @@ mGAM gave the highest biomass and the shortest lag for both strains, with a doub
 
 </div>
 
-### Q1 · What is measured, and in what units?
+<ExpandableText title="Q1 · What is measured, and in what units?">
 
-Kinetic OD600 absorbance in 96-well microplates, read every 30 minutes for 24–48 h under strict anaerobic conditions, fitted by Gaussian-process regression with the open-source DGrowthR package. One experiment (panel D) was read at OD630; its absolute values are not pooled with the others, though relative medium rankings are expected to be unaffected since every condition on that plate shares the wavelength.
+
+Kinetic OD600 absorbance in 96-well microplates, read every 30 minutes for 24–48 h under strict anaerobic conditions, fitted by Gaussian-process (GP) regression with the open-source DGrowthR package. One experiment (panel D) was read at OD630; its absolute values are not pooled with the others, though relative medium rankings are expected to be unaffected since every condition on that plate shares the wavelength.
 
 <div className="measure-table">
 
@@ -101,7 +102,10 @@ Kinetic OD600 absorbance in 96-well microplates, read every 30 minutes for 24–
 
 **The first three are absolute.** They are derived from the shape of ln(OD) against time, so multiplying every reading by a constant adds a constant to ln(OD) and vanishes when the derivative is taken. Another laboratory with a different reader and no pathlength correction will measure the same ~46m if the biology is the same. ΔOD scales with pathlength and does not transfer that way, which is why we say which is which rather than describing all six as standard units.
 
-### Q2 · How is it calculated?
+</ExpandableText>
+
+<ExpandableText title="Q2 · How is it calculated?">
+
 
 **Why a Gaussian process rather than a logistic fit.** Growth curves have a lag phase, an exponential phase and a plateau. Parametric models impose a fixed functional form on all three, which biases the estimated rate whenever the real curve departs from it, and in a non-model organism we had no grounds to assume it would not. A Gaussian process (GP) assumes no functional form: it fits a smooth curve and returns a posterior at every point. Because the fit is to ln(OD), the derivative gives the instantaneous rate µ(t) with confidence bounds. The exponential phase is identified from the data rather than chosen by eye, and measurement uncertainty propagates into µ.
 
@@ -118,7 +122,10 @@ Kinetic OD600 absorbance in 96-well microplates, read every 30 minutes for 24–
 
 The GP fits to ln(OD/OD₀), where OD₀ is the first blank-corrected reading for that condition. The log-transform is computed after medium-specific blanking, never before. ΔOD is computed independently from the same blank-corrected trace with no fitting, and is reported beside every fitted parameter as the model-free check on it.
 
-### Q3 · What controls were used, and what does each one exclude?
+</ExpandableText>
+
+<ExpandableText title="Q3 · What controls were used, and what does each one exclude?">
+
 
 <div className="measure-table">
 
@@ -132,7 +139,10 @@ The GP fits to ln(OD/OD₀), where OD₀ is the first blank-corrected reading fo
 
 **Why per-medium blanking is not optional.** The four media differ substantially in intrinsic absorbance. A single global blank fails in one of two directions, and both act toward the conclusion we drew: under-blanking a dark medium attributes color to growth, inflating ΔOD for exactly the medium that looks best; over-blanking a pale medium masks real growth, scoring a usable medium as dead.
 
-### Q4 · How was it calibrated, and what are the limits?
+</ExpandableText>
+
+<ExpandableText title="Q4 · How was it calibrated, and what are the limits?">
+
 
 No pathlength correction was applied and no OD-to-CFU calibration exists for DSM 1447, so optical density is a biomass proxy on our own scale. The rate parameters are unaffected, for the reason given in Q1.
 
@@ -143,7 +153,10 @@ No pathlength correction was applied and no OD-to-CFU calibration exists for DSM
 
 **The flags fall on our own best result.** The optimized MM formulation reached ΔOD = 0.044, which sits at the edge of that threshold. We therefore report the factorial’s ranking of factors, which the design supports, and we do not report MM as a working medium for *P. vulgatus* or quote a growth rate for it.
 
-### Q5 · How many replicates, and of what kind?
+</ExpandableText>
+
+<ExpandableText title="Q5 · How many replicates, and of what kind?">
+
 
 - **Technical replicates** — wells on the same plate from the same inoculum: six in the pilot plates, three in the final run. These measure pipetting and reading precision.
 - **Biological replicates** — independent plates prepared on separate days from separate precultures. These are what support a reproducibility claim.
@@ -152,7 +165,10 @@ No pathlength correction was applied and no OD-to-CFU calibration exists for DSM
 
 Because biological replication exists here, the doubling times in Table A1 are reproducibility claims and not merely precision claims. That distinction is stated explicitly because it does not hold everywhere in this document: Section D rests on technical replicates alone and says so.
 
-### Q6 · What are the limitations, and how are they mitigated?
+</ExpandableText>
+
+<ExpandableText title="Q6 · What are the limitations, and how are they mitigated?">
+
 
 <div className="measure-table">
 
@@ -166,13 +182,18 @@ Because biological replication exists here, the doubling times in Table A1 are r
 
 </div>
 
-### Q7 · What does this give another team?
+</ExpandableText>
+
+<ExpandableText title="Q7 · What does this give another team?">
+
 
 - **Blank each medium against its own cell-free wells, on every plate.** With media that differ in color, a global blank biases the comparison toward whichever medium is darkest — usually the richest, and usually the one you hope wins.
 - **Carry one medium on every plate as a cross-plate anchor, and publish the run where it failed.**
 - **Report a model-free metric beside the model-based ones.** ΔOD costs nothing, assumes nothing, and is what tells you when a confident-looking fit is fitting noise.
 - **Say which of your parameters transfer.** Rates and times in h⁻¹ and h are absolute; optical densities are not.
 - **Set the marginal threshold before you see the results**, and let it fall on your own best condition when it does.
+
+</ExpandableText>
 
 ## Antibiotic susceptibility
 
@@ -202,7 +223,8 @@ A selection plate is a measurement instrument, and its calibration is the inhibi
 
 </div>
 
-### Q1 · What is measured, and in what units?
+<ExpandableText title="Q1 · What is measured, and in what units?">
+
 
 The reported quantity is **IC90, in mg/L**: the concentration giving 90 % growth inhibition, defined on OD630 read after 48 h, prepared from weighed stocks. mg/L is the unit EUCAST and the clinical literature use, which lets our values be compared with published ones, although published data on *P. vulgatus* specifically remains scarce.
 
@@ -211,7 +233,10 @@ The reported quantity is **IC90, in mg/L**: the concentration giving 90 % growth
 - **What this shows.** Reproducibility between observers, a value that can be interpolated between two-fold steps rather than pinned to one, and an uncertainty, because the underlying measurement is continuous.
 - **What it costs.** IC90 depends on the math of the normalization for what counts as 0 % and what counts as 100 % inhibition. An MIC read by eye has no such dependency. That is exactly where the calibration problem in Q4 comes from, and the reason we report at two cutoffs.
 
-### Q2 · How is it calculated?
+</ExpandableText>
+
+<ExpandableText title="Q2 · How is it calculated?">
+
 
 Every well is converted to a percentage against two references on its own plate before any concentration is interpolated.
 
@@ -235,7 +260,10 @@ Every well is converted to a percentage against two references on its own plate 
 
 A cutoff chosen after seeing the data can always be made to produce a cleaner result, and a reader cannot tell whether it was. Because both cutoffs were planned in advance, the agreement or disagreement between them is evidence about the assay rather than a choice about the answer.
 
-### Q3 · What controls were used, and what does each one exclude?
+</ExpandableText>
+
+<ExpandableText title="Q3 · What controls were used, and what does each one exclude?">
+
 
 <div className="measure-table">
 
@@ -254,7 +282,10 @@ We chose throughput and batch control over per-well precision, deliberately. A m
 
 </ExpandableText>
 
-### Q4 · How was it calibrated, and what are the limits?
+</ExpandableText>
+
+<ExpandableText title="Q4 · How was it calibrated, and what are the limits?">
+
 
 The 90 % cutoff is not a neutral convention here. It is a calibration decision, and auditing it changed how the data are reported.
 
@@ -288,7 +319,10 @@ Every term on the right is measured, so the ceiling is computable rather than es
 
 </div>
 
-### Q5 · How many replicates, and of what kind?
+</ExpandableText>
+
+<ExpandableText title="Q5 · How many replicates, and of what kind?">
+
 
 - **Technical replicates.** The three series for an antibiotic within a round sit on the same plate. They reduce batch effects, but they are wells, not independent experiments.
 - **Biological and temporal replication.** Compounds were re-run on different days from different overnight cultures.
@@ -297,7 +331,10 @@ Every term on the right is measured, so the ceiling is computable rather than es
 
 **How to read the Kruskal–Wallis and Dunn results.** The test treats replicate wells as independent and does not model the plate as a blocking factor. Wells on one plate are not independent as they share an inoculum, a master plate, a reader pass and an incubation. So, treating them as independent inflates the effective sample size and makes p-values smaller than they should be. It is therefore best interpreted as a **descriptive ranking rather than a strict significance test**, and that is how it is reported. A mixed-effects model with plate as a random effect, or a Friedman test on plate-matched data, would use the same wells and support inference.
 
-### Q6 · What are the limitations, and how are they mitigated?
+</ExpandableText>
+
+<ExpandableText title="Q6 · What are the limitations, and how are they mitigated?">
+
 
 <div className="measure-table">
 
@@ -312,13 +349,18 @@ Every term on the right is measured, so the ceiling is computable rather than es
 
 </div>
 
-### Q7 · What does this give another team?
+</ExpandableText>
+
+<ExpandableText title="Q7 · What does this give another team?">
+
 
 - **Report in mg/L.** It costs nothing and makes the data readable against the clinical literature.
 - **Blank against the matrix you measured in.** If the sample is in rich medium and the blank is in water, a fully inhibited well cannot reach 100 % and every percentage cutoff silently moves. This applies to any plate-reader assay with a percentage endpoint.
 - **Compute your ceiling before you choose your cutoff.** It takes the sterile-medium reading, the blank and the growth control, all of which you already have.
 - **Pre-register the cutoff and the sensitivity analysis together.** The second cutoff is only evidence if it was planned before the data were seen.
 - **Give every solvent its own dilution series.** Correcting only at the top concentration leaves a gradient of uncorrected solvent down the plate.
+
+</ExpandableText>
 
 ## Conjugation
 
@@ -382,13 +424,17 @@ The first DSM 1447 conjugation gave 61, 13, 14, 24 and 18 colonies at 10⁻⁴ t
 
 </div>
 
-### Q1 · What is measured, and in what units?
+<ExpandableText title="Q1 · What is measured, and in what units?">
+
 
 The reported quantity is the **titer of transconjugants in the resuspended mating lawn, in CFU/mL** is an absolute, dimensioned unit, obtained by counting colonies at a dilution inside the countable window and multiplying back.
 
 **Titer, not efficiency.** A conjugation efficiency is transconjugants per recipient (or per donor): a dimensionless ratio that requires plating the recipient on non-selective medium in the same experiment. **Titer** depends on how much lawn was scraped and the volume it was resuspended in, both fixed by our protocol. Our titers are therefore directly comparable to each other. **Efficiency** is independent of how much material was harvested, because the same scraping appears in numerator and denominator. An efficiency would transfer to another laboratory; a titer ranks. One additional dilution series per mating, plated on non-selective mGAM, converts every titer here into a true efficiency.
 
-### Q2 · How is it calculated?
+</ExpandableText>
+
+<ExpandableText title="Q2 · How is it calculated?">
+
 
 <div className="measure-eq">
 <div className="eq-grid">
@@ -403,7 +449,10 @@ The reported quantity is the **titer of transconjugants in the resuspended matin
 
 **Countable window.** Only plates bearing roughly 3–300 colonies are used. Below that, counting error dominates; above it, colonies merge and the count is an undercount. Plates marked +, ++ and +++ contribute nothing to the calculation. Titers spanning six orders of magnitude are summarized with geometric means and plotted on a log axis.
 
-### Q3 · What controls were used, and what does each one exclude?
+</ExpandableText>
+
+<ExpandableText title="Q3 · What controls were used, and what does each one exclude?">
+
 
 <div className="measure-table">
 
@@ -424,7 +473,10 @@ The reported quantity is the **titer of transconjugants in the resuspended matin
 
 **A failed control, reported.** An earlier attempt used ParB primers to confirm species identity. Only DSM 1447 amplified. The primers had been designed against a ParB-like gene specific to 1447, so they cannot anneal to the other templates and the absence of a band says nothing about whether those colonies are *P. vulgatus*. The root cause sits one step earlier: the candidate sequence was checked *in silico* against only two genomes — DSM 1447 and *E. coli* DH5α. A search including the other five recipients would have shown the gene missing before any primers were ordered.
 
-### Q4 · How was it calibrated, and what are the limits?
+</ExpandableText>
+
+<ExpandableText title="Q4 · How was it calibrated, and what are the limits?">
+
 
 **The dilution series is its own calibration.** If the suspension is uniform and the dilutions were made correctly, the titer back-calculated from every countable dilution must be the same number. Disagreement is evidence that something other than transconjugants is being counted. This costs nothing beyond plates already poured, and it is what identified the one unusable series in our data (Table C2).
 
@@ -436,7 +488,10 @@ The reported quantity is the **titer of transconjugants in the resuspended matin
 
 It was a mistake to assume at the outset that unconjugated *P. vulgatus* could not grow on the selection plates. The correction is stated per strain rather than as a blanket caveat, because a blanket caveat would wrongly discount DSM 1447 along with RCC 1806.
 
-### Q5 · How many replicates, and of what kind?
+</ExpandableText>
+
+<ExpandableText title="Q5 · How many replicates, and of what kind?">
+
 
 - **Six recipient strains**, each conjugated with the same donor under the same protocol.
 - **Independent repeat** for DSM 1447, which is what exposed the inconsistency in the first run.
@@ -447,7 +502,10 @@ It was a mistake to assume at the outset that unconjugated *P. vulgatus* could n
 
 **What the repeat separated.** An earlier run recovered no transconjugants from two strains. Raising the recipient density to OD600 0.4 from 0.2 recovered all of them, which supports the dilution explanation over the gentamicin one. The counts then separated two cases a presence/absence readout cannot: DSM 108228 conjugates perfectly well (3.3 × 10⁷ CFU/mL) and was genuinely lost to over-dilution; DSM 108234 does not (5.9 × 10³ CFU/mL) and conjugates poorly even when the protocol works. Plating only 10⁻³ to 10⁻⁴ would have missed it entirely.
 
-### Q6 · What are the limitations, and how are they mitigated?
+</ExpandableText>
+
+<ExpandableText title="Q6 · What are the limitations, and how are they mitigated?">
+
 
 <div className="measure-table">
 
@@ -463,13 +521,18 @@ It was a mistake to assume at the outset that unconjugated *P. vulgatus* could n
 
 </div>
 
-### Q7 · What does this give another team?
+</ExpandableText>
+
+<ExpandableText title="Q7 · What does this give another team?">
+
 
 - **Count several dilutions and check they agree.** The back-calculated titer must be constant across the series. It costs nothing, needs no extra plates, and is the only thing that caught our worst data point.
 - **Plate further than you think you need to.** A strain that conjugates poorly is invisible if you only plate the dilutions that worked for your best strain, and you will mistake it for a protocol failure.
 - **Check your selection concentration against your recipient’s inhibitory concentration.** A selection plate only selects if the antibiotic actually inhibits what you are selecting against. Ours did not, for one strain of the six.
 - **Validate primers against every template you will use them on.** A negative band from a primer that cannot anneal is not information.
 - **Expect the spread.** Across six strains of one species, yields differed by five orders of magnitude. A conjugation protocol validated on one strain is not validated for the species.
+
+</ExpandableText>
 
 ## Promoter–reporter screen
 
@@ -536,7 +599,8 @@ We ranked constitutive promoter strength in *Phocaeicola vulgatus* DSM 1447 by l
 
 BfP is transcriptionally active beyond argument: 4.01 × 10⁶ a.u. OD600⁻¹ by luminescence, ninety-fold over background, with a 5.2 % coefficient of variation. The same promoter in the same host on the same plate reads −729 in GFP and −742 in KOFP-7 — below the detection limit in both. **A promoter cannot be simultaneously strong and silent.** The fluorescent channels were not accurately measuring promoter strength.
 
-### Q1 · What is measured, and in what units?
+<ExpandableText title="Q1 · What is measured, and in what units?">
+
 
 The quantity is **specific reporter output referenced to the wild type**, in arbitrary units per unit OD600. Each well is corrected for the medium it sits in, divided by the biomass in that same well, then expressed relative to plasmid-free DSM 1447 grown and read alongside it.
 
@@ -552,7 +616,10 @@ The second term is what makes the unit interpretable: a construct producing no r
 
 **These are relative units, and we say so plainly.** No fluorophore standard series was run, so we cannot report molecules of equivalent fluorescein or any other absolute unit, and we claim no comparability with another laboratory’s reader. What the controls do allow is a bound: a detection limit per channel on our own scale, and every non-detection reported as an upper bound rather than a zero.
 
-### Q2 · How is it calculated?
+</ExpandableText>
+
+<ExpandableText title="Q2 · How is it calculated?">
+
 
 Every number in this section can be rebuilt from the analysis workbook reporter_promoter.xlsx [link] by following these steps.
 
@@ -565,7 +632,10 @@ Every number in this section can be rebuilt from the analysis workbook reporter_
 1. **Classify.** Above LOQ, report the value with its standard deviation. Between LOD and LOQ, report as detected and not quantified. Below LOD, report the LOD as an upper bound and never the point value.
 1. **Cross-check the luminescence independently.** Divide raw construct RLU by raw medium-plus-substrate RLU. This uses no normalization and should agree with step 7; on this plate it does.
 
-### Q3 · What controls were used, and what does each one exclude?
+</ExpandableText>
+
+<ExpandableText title="Q3 · What controls were used, and what does each one exclude?">
+
 
 <div className="measure-table">
 
@@ -580,7 +650,10 @@ Every number in this section can be rebuilt from the analysis workbook reporter_
 
 **The missing control.** There is no promoter-less or empty-pNBU2 construct. The host-only control separates reporter signal from host autofluorescence, but not from whatever the empty vector contributes
 
-### Q4 · How was it calibrated, and what are the limits?
+</ExpandableText>
+
+<ExpandableText title="Q4 · How was it calibrated, and what are the limits?">
+
 
 **LOD**, the limit of detection, is the smallest signal that can confidently be called something other than background. Below it the only defensible statement is "less than the LOD" and never "zero", and never the measured point value, which at that level is mostly noise. **LOQ**, the limit of quantification, is the smallest signal that can carry a number; between the two a signal is real but its magnitude is not reliable, so it is reported as detected, not quantified.
 
@@ -630,13 +703,19 @@ The conventional multipliers are three standard deviations of the blank for LOD 
 
 **Upper bounds the data gives.** Every GFP construct &lt; 2,649; every KOFP-7 construct &lt; 3,611; every mCherry construct except BfP &lt; 1,071; BT– and PBT–NanoLuc &lt; 173,447 a.u. OD600⁻¹.
 
-### Q5 · How many replicates, and of what kind?
+</ExpandableText>
+
+<ExpandableText title="Q5 · How many replicates, and of what kind?">
+
 
 Each construct is three wells seeded from one overnight culture; each control is two. These are **technical replicates**. The standard deviations quoted throughout are the spread among wells of the same culture, so they measure pipetting, seeding and reading precision. A standard deviation across wells of one culture bounds the within-plate precision of the assay. It says nothing about whether a separate colony grown on a separate day would give the same number. **So we report precision and we do not report reproducibility** unlike Section A, where independent plates on separate days do support a reproducibility claim.
 
 The protocol specifies three separate colonies per construct; this plate was not run that way, and the 102 % coefficient of variation on BT–NanoLuc shows that even well-to-well variation can be severe at low signal. **Precision where there was range:** coefficients of variation of 2.5 %, 5.2 %, 14.6 % and 22 % for the four constructs that clear detection. Large replicate spreads appear only below the detection limit, which is what a detection limit predicts.
 
-### Q6 · What are the limitations, and how are they mitigated?
+</ExpandableText>
+
+<ExpandableText title="Q6 · What are the limitations, and how are they mitigated?">
+
 
 <div className="measure-table">
 
@@ -653,7 +732,10 @@ The protocol specifies three separate colonies per construct; this plate was not
 
 </div>
 
-### Q7 · What does this give another team?
+</ExpandableText>
+
+<ExpandableText title="Q7 · What does this give another team?">
+
 
 The transferable result is not our promoter ranking. It is the decision it implies, and the cost of getting it wrong.
 
@@ -664,6 +746,8 @@ The transferable result is not our promoter ranking. It is the decision it impli
 - **Report a detection limit, not a zero.** Three blank or near-blank replicates per channel convert every null into an upper bound another group can test against.
 
 The confirmation run this section points to is small and specific: the same constructs with an empty-pNBU2 control added, three separate colonies per construct, gain and focal height fixed manually once and held for the whole run, and a dilution series of one strong NanoLuc lysate to establish linear range and saturation.
+
+</ExpandableText>
 
 ## Conclusion
 

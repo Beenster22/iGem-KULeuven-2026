@@ -36,6 +36,11 @@ interface Place {
   at: number;
 }
 
+// The visit the tab opened the site on, and whether the reader has been
+// anywhere else since (see the return below).
+let firstVisit: string | null = null;
+let leftFirstVisit = false;
+
 // While a return is putting the reader back, other code that would scroll
 // the page on its own (PhasePager's jump to a #hash) holds off.
 export const RESTORING_ATTR = "data-restoring-scroll";
@@ -104,7 +109,19 @@ export function useScrollMemory() {
 
   // Coming back to a visit with back/forward: put the reader where they were.
   useEffect(() => {
+    if (firstVisit === null) firstVisit = key;
+    if (key !== firstVisit) leftFirstVisit = true;
     if (navigationType !== "POP") return;
+    // The router counts the page the tab opens on as a "POP" too. That is a
+    // return only when the browser says so (a reload, or back/forward into
+    // the site); a page opened fresh from the address bar or a link starts
+    // at the top.
+    if (key === firstVisit && !leftFirstVisit) {
+      const entry = performance.getEntriesByType("navigation")[0] as
+        | PerformanceNavigationTiming
+        | undefined;
+      if (entry && entry.type === "navigate") return;
+    }
     const place = readStore()[key];
     if (!place) return;
 
