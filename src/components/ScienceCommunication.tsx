@@ -298,11 +298,8 @@ export function InstagramCarousel({ children }: InstagramCarouselProps) {
       >
         ›
       </button>
-      <p className="ig-carousel-follow">
-        Follow along on{" "}
-        <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
-          Instagram @{INSTAGRAM_HANDLE}
-        </a>
+      <p className="ig-carousel-hint">
+        Click on the arrows to explore the rest of the post.
       </p>
     </div>
   );
