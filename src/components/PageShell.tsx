@@ -49,8 +49,14 @@ export function PageShell({
   // the top, unless the link points at a section (handled below) or the reader
   // came back with the browser's back/forward buttons, which restore their
   // place themselves. "instant" because the site scrolls smoothly otherwise.
+  // Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-21: this reset used to be
+  // skipped for any link with a #hash. But not every #hash is a heading: a link
+  // like /human-practices#weston-whitaker opens a popup and has no heading to
+  // jump to, so the reader kept the old scroll position and, on a phone, landed
+  // on the bottom of the new (still short) page, among the sponsors. The reset
+  // now always runs on a change of page; a #heading jump (below) follows it.
   useEffect(() => {
-    if (!hash && navigationType !== "POP") {
+    if (navigationType !== "POP") {
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }
     // Only on a change of page: following a #link within one must not jump.

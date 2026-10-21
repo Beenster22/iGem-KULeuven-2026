@@ -5741,6 +5741,555 @@ concentrations.
 
 </ExpandableText>
 
+<ExpandableText title="Fitness Cost-Based Ranking of BSH Constructs">
+
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/fitness-cost-based-ranking-of-bsh-constructs.pdf" />
+
+#### Introduction
+
+Carrying a plasmid is rarely free. Replicating the plasmid, transcribing its
+genes and folding the protein they encode all draw on the same pool of
+precursors, ribosomes and chaperones that the host needs for its own growth,
+and the result is a measurable reduction in growth rate relative to a strain
+without the construct. This reduction is the fitness cost of the construct, and
+it is the main reason an engineered population loses its construct over time in
+the absence of selection (San Millan & MacLean, 2017).
+
+The purpose of this assay is comparative rather than absolute. Each bile salt
+hydrolase (BSH) construct is grown under identical conditions and plated as a
+ten-fold dilution series, and the constructs are ranked by how strongly the
+maintenance of the construct obstructs growth. A construct that gives good
+hydrolase activity but a large fitness cost is a poor candidate for a chassis
+that has to persist in the gut, and the ranking is what allows that trade-off
+to be made explicitly.
+
+Growth is read as colony formation on solid medium rather than as optical
+density in liquid. Spotting 5 µL of each of three consecutive dilutions onto
+one Omnitray places every construct on the same plate, in the same agar, imaged
+by the same camera, which removes the plate-to-plate and well-to-well variation
+that otherwise dominates small differences in growth rate. The plate is
+incubated and imaged continuously for 30 hours, so that both the final colony
+count and the time at which colonies appear are available for the ranking.
+
+The drop plate format used here is the one described by Herigstad et al.
+(2001), in which a small volume of each dilution is deposited on the agar
+surface instead of a full spread plate. It uses far less medium and far fewer
+plates than spread plating, at the cost of a narrower countable range per spot,
+which is why three consecutive dilutions are always plated.
+
+#### Attributions
+
+The drop plate format and the guidance on countable spots are taken from
+Herigstad et al. (2001). The framing of plasmid maintenance as a measurable
+fitness cost follows San Millan & MacLean (2017).
+
+The imaging and incubation conditions are those of the Reshape Biotech imaging
+incubator used in the laboratory (Reshape Biotech, n.d.).
+
+#### Materials
+
+**Strains**
+
+| Item | Specification and quantity |
+|---|---|
+| *E. coli* carrying each BSH construct | One cryostock per construct; eight constructs fit one Omnitray layout |
+| *E. coli* carrying the empty backbone, and untransformed *E. coli* | The construct-free references against which the fitness cost is expressed |
+
+**Reagents**
+
+| Item | Specification and quantity |
+|---|---|
+| LB broth | 5 mL per overnight culture and per subculture |
+| LB agar with kanamycin | 20 mL per Omnitray |
+| Kanamycin stock solution, 50 mg/mL | Final concentration 50 µg/mL in both broth and agar |
+| LB broth for the dilution series | 90 µL per dilution step; sterile |
+| Ethanol, 70% (v/v) | For disinfecting the bench and the plate surface |
+
+**Consumables and tools**
+
+| Item | Specification and quantity |
+|---|---|
+| Omnitray single-well plates | One per run; the plate the dilutions are spotted on |
+| 96-well microtiter plates, sterile | One per run, for the dilution series |
+| Culture tubes, 15 mL | One per strain for the overnight culture and one for the subculture |
+| Cuvettes for OD₆₀₀ | One per measurement |
+| Multichannel pipette, micropipettes and sterile tips | 0.5–10 µL, 20–200 µL and 100–1000 µL |
+| Reservoirs | For the multichannel pipette |
+
+**Instruments**
+
+| Item | Specification and quantity |
+|---|---|
+| Shaking incubator | 37 °C, 200 rpm |
+| Spectrophotometer | OD₆₀₀ |
+| Imaging incubator (Reshape Biotech) | Timelapse imaging with incubation from 10 to 40 °C; takes Omnitray and microplate formats (Reshape Biotech, n.d.) |
+| Autoclave | For sterilizing media and glassware |
+
+**Software**
+
+| Item | Specification and quantity |
+|---|---|
+| Reshape Biotech analysis software | Colony detection and counting from the timelapse images |
+
+**Personal protective equipment**
+
+| Item | Specification and quantity |
+|---|---|
+| Lab coat | Worn closed at all times |
+| Nitrile gloves | Changed after contact with reagents or cultures |
+| Safety glasses | Required when handling hot liquids and irritant powders |
+
+#### Safety and safety data sheets
+
+Hazard classifications were taken from the supplier safety data sheets (SDS)
+and product pages cited in the table below. The SDS of the exact product and
+lot in use should be consulted before starting, because classifications can
+differ between suppliers and product grades.
+
+The strains handled here are genetically modified micro-organisms and are
+worked with under the containment level approved for the laboratory. Kanamycin
+powder is weighed in a fume hood; the stock solution is handled with gloves.
+
+**Table 1.** Hazard classification and safety data sheets (SDS) of the reagents used.
+
+| Substance | CAS no. | Classification (GHS/CLP) | Precautions | SDS |
+|---|---|---|---|---|
+| Kanamycin sulfate | 25389-94-0 | Danger. H360D: may damage the unborn child (Repr. 1B). | Wear gloves, lab coat and safety glasses. Weigh powder in a fume hood. Not to be handled during pregnancy. | Sigma-Aldrich (n.d.-b) |
+| Ethanol, 70% (v/v) | 64-17-5 | Danger. H225: highly flammable liquid and vapour. H319: causes serious eye irritation. | Keep away from open flames and hot surfaces. | Sigma-Aldrich (n.d.-a) SDS of absolute ethanol |
+| Bacterial strains and transformants | n/a | Biological agents. Transformants are genetically modified micro-organisms (contained use). | Work under the containment level approved for the laboratory. Inactivate all cultures, plates and contaminated consumables by autoclaving. | No SDS: see the institutional biosafety guidelines |
+
+**Waste disposal.** All cultures, plates and contaminated consumables are
+inactivated by autoclaving before disposal. The waste and disposal instructions
+of the laboratory in use apply.
+
+<Callout title="Still to be added">
+
+The exact model of the Reshape Biotech instrument, the catalogue number of the
+Omnitray plates and the identity of the eight BSH constructs in rows A to H
+still need to be added. The photograph of a spotted plate held by the team
+would be a useful illustration here, with a caption identifying the strains,
+the dilutions and the medium; it has to be uploaded through the iGEM uploads
+tool first.
+
+</Callout>
+
+#### Procedure
+
+**Day 0: overnight cultures**
+
+1. Prepare 5 mL of LB broth with kanamycin per strain, and inoculate each from
+   the corresponding cryostock.
+2. Include the construct-free reference strains in the same way, in LB broth
+   without kanamycin for the untransformed strain.
+
+<ProtocolNote kind="critical">
+
+The runs reported in October 2026 were performed without a construct-free
+control. Without it the fitness cost cannot be expressed as a reduction
+relative to unburdened growth, only as a difference between constructs. Every
+future run includes at least one construct-free reference strain.
+
+</ProtocolNote>
+
+3. Incubate overnight at 37 °C with shaking at 200 rpm.
+
+<ProtocolNote>
+
+All strains are started from cryostock rather than from a plate, so that none
+of them has had a different number of generations of prior growth. A difference
+in the starting state of the culture translates directly into an apparent
+difference in fitness.
+
+</ProtocolNote>
+
+**Day 1: subculture to exponential phase**
+
+4. Dilute each overnight culture 1 in 50 into fresh LB broth with kanamycin and
+   incubate at 37 °C with shaking at 200 rpm.
+5. Measure the OD₆₀₀ of each subculture until it reaches or exceeds 0.5.
+
+<ProtocolNote>
+
+A 1 in 50 dilution reaches an OD₆₀₀ of approximately 0.5 in about 3 hours. A 1
+in 100 dilution takes approximately 6 hours and is used when the subculture has
+to be started early in the day.
+
+</ProtocolNote>
+
+<ProtocolNote kind="critical">
+
+All strains are spotted from the same growth phase. Cells taken from stationary
+phase form colonies more slowly than cells taken from exponential phase, and
+that lag is indistinguishable from a fitness cost in the images.
+
+</ProtocolNote>
+
+**Day 1: normalizing to OD₆₀₀ = 0.5**
+
+6. Calculate, for each strain, the volume of subculture and the volume of fresh
+   LB broth needed to reach an OD₆₀₀ of 0.5 (Table 2).
+
+<ProtocolCalculator
+  number={2}
+  title="Normalization to OD₆₀₀ = 0.5 (OD1 × V1 = OD2 × V2)."
+ 
+  rows={[
+    { key: "od1", label: "Measured OD₆₀₀ of the subculture (OD1)", value: 0.84, unit: "–", input: true },
+    { key: "od2", label: "Target OD₆₀₀ (OD2)", value: 0.5, unit: "–", input: true },
+    { key: "v2", label: "Final volume of the normalized culture (V2)", value: 1000, unit: "µL", input: true },
+    { key: "v1", label: "Subculture to use (V1)", unit: "µL", decimals: 1, compute: (v) => (v.od2 * v.v2) / v.od1 },
+    { key: "vBroth", label: "Fresh LB broth to add", unit: "µL", decimals: 1, compute: (v) => v.v2 - v.v1 },
+    { key: "dense", label: "Is the subculture dense enough to normalize?", unit: "–", computeText: (v) => (v.od1 >= v.od2 ? "Yes — proceed" : "No — return it to the incubator") },
+  ]}
+/>
+
+7. Prepare the normalized cultures in clean tubes and mix thoroughly.
+
+<ProtocolNote>
+
+The normalization is the step that makes the assay comparative. Every spot on
+the plate then starts from the same cell density, so a difference in the number
+or the size of the colonies reflects the construct and not the inoculum.
+
+</ProtocolNote>
+
+**Day 1: ten-fold dilution series**
+
+8. Pipette 90 µL of sterile LB broth into the wells of a 96-well plate that
+   will hold the dilutions, one row per strain.
+9. Transfer 10 µL of the normalized culture into the first well, mix by
+   pipetting, and carry 10 µL forward into each following well, changing tips
+   at every step (Table 3).
+
+<ProtocolCalculator
+  number={3}
+  title="Ten-fold dilution series."
+ 
+  rows={[
+    { key: "vTransfer", label: "Volume transferred per step", value: 10, unit: "µL", input: true },
+    { key: "vDiluent", label: "Medium already in each well", value: 90, unit: "µL", input: true },
+    { key: "steps", label: "Number of steps performed", value: 7, unit: "steps", input: true },
+    { key: "factor", label: "Dilution factor per step", unit: "–", decimals: 1, compute: (v) => (v.vTransfer + v.vDiluent) / v.vTransfer },
+    { key: "dilution", label: "Dilution of the culture after n steps", unit: "–", decimals: 10, compute: (v) => Math.pow(v.factor, -v.steps) },
+    { key: "vWell", label: "Total volume per well before the transfer out", unit: "µL", decimals: 0, compute: (v) => v.vTransfer + v.vDiluent },
+  ]}
+/>
+
+<ProtocolNote kind="critical">
+
+The tips are changed at every step. Carrying cells over on the outside of a tip
+raises the apparent count of every dilution below it and flattens the series,
+which is visible afterwards as a set of spots that do not differ tenfold from
+one another.
+
+</ProtocolNote>
+
+10. Continue the series to 10⁻⁷, so that the 10⁻⁵, 10⁻⁶ and 10⁻⁷ dilutions are
+    available for spotting.
+
+**Day 1: spotting the Omnitray**
+
+11. Pour 20 mL of LB agar with kanamycin per Omnitray and allow the plates to
+    set and dry.
+
+<ProtocolNote>
+
+Twenty millilitres gives a level surface at a depth that does not absorb the
+spot too quickly. A plate that is still wet lets the spots run together; a
+plate that is too dry absorbs them before they spread evenly.
+
+</ProtocolNote>
+
+12. Mark the plate with the layout to be used, so that every spot can be
+    assigned to a strain, a replicate and a dilution (Table 4).
+
+**Table 4.** Omnitray layout used, with eight strains in rows A to H, two
+technical replicates and three dilutions per replicate. The cell gives the
+label of the spot: the row letter followed by the replicate number.
+
+| Row | 10⁻⁷ (rep. 2) | 10⁻⁶ (rep. 2) | 10⁻⁵ (rep. 2) | 10⁻⁷ (rep. 1) | 10⁻⁶ (rep. 1) | 10⁻⁵ (rep. 1) |
+|---|---|---|---|---|---|---|
+| A | A2 | A2 | A2 | A1 | A1 | A1 |
+| B | B2 | B2 | B2 | B1 | B1 | B1 |
+| C | C2 | C2 | C2 | C1 | C1 | C1 |
+| D | D2 | D2 | D2 | D1 | D1 | D1 |
+| E | E2 | E2 | E2 | E1 | E1 | E1 |
+| F | F2 | F2 | F2 | F1 | F1 | F1 |
+| G | G2 | G2 | G2 | G1 | G1 | G1 |
+| H | H2 | H2 | H2 | H1 | H1 | H1 |
+
+<ProtocolNote>
+
+The layout places the two technical replicates of a strain on the same row, as
+two blocks of three dilutions, with the dilutions running from the most dilute
+on the outside to the least dilute towards the middle of each block. Row H is
+reserved for the construct-free reference strain in future runs.
+
+</ProtocolNote>
+
+13. Spot 5 µL of each of the 10⁻⁵, 10⁻⁶ and 10⁻⁷ dilutions onto its assigned
+    position, keeping the pipette perpendicular to the agar and touching the
+    drop to the surface without pressing into it.
+
+<ProtocolNote>
+
+Three consecutive dilutions are always spotted because the countable range of a
+5 µL drop is narrow. At least one of the three normally falls in the range
+where colonies are separate and can be counted (Herigstad et al., 2001).
+
+</ProtocolNote>
+
+14. Allow the spots to dry completely with the lid off, in the flow cabinet,
+    before moving the plate.
+
+<ProtocolNote kind="critical">
+
+A plate moved before the spots have dried lets the drops run across the agar
+and merge, and the run is lost. Drying takes longer on a freshly poured plate
+than on one that has been stored.
+
+</ProtocolNote>
+
+**Day 1 to 2: incubation and imaging**
+
+15. Load the plate into the imaging incubator and run for 30 hours at 37 °C,
+    with the capture interval set so that the appearance of the first colonies
+    is resolved.
+
+<ProtocolNote>
+
+The instrument used supports capture intervals from 10 minutes to 12 hours and
+incubation from 10 to 40 °C, and takes the Omnitray format directly (Reshape
+Biotech, n.d.).
+
+</ProtocolNote>
+
+16. Record the plate identifier, the layout and the run conditions with the
+    image series.
+
+**Counting and ranking**
+
+17. Select, for each spot, the dilution at which the colonies are separate and
+    countable, and count the colonies in that spot.
+
+<ProtocolNote>
+
+Spots in which the colonies have merged into a lawn are recorded as too
+numerous to count and are not used. The next dilution along is used instead.
+
+</ProtocolNote>
+
+18. Calculate the colony-forming units per millilitre of the normalized culture
+    from the count, the spot volume and the dilution factor (Table 5).
+
+<ProtocolCalculator
+  number={5}
+  title="Colony-forming units per millilitre from a spot."
+ 
+  rows={[
+    { key: "colonies", label: "Colonies counted in the spot", value: 24, unit: "CFU", input: true },
+    { key: "vSpotUl", label: "Volume spotted", value: 5, unit: "µL", input: true },
+    { key: "exponent", label: "Dilution spotted, as the exponent of 10⁻ˣ", value: 6, unit: "–", input: true },
+    { key: "vSpotMl", label: "Volume spotted", unit: "mL", decimals: 3, compute: (v) => v.vSpotUl / 1000 },
+    { key: "cfu", label: "CFU per mL of the normalized culture", unit: "CFU/mL", decimals: 0, compute: (v) => v.colonies / (v.vSpotMl * Math.pow(10, -v.exponent)) },
+    { key: "countable", label: "Is the spot in the countable range?", unit: "–", computeText: (v) => (v.colonies >= 3 && v.colonies <= 30 ? "Yes — 3 to 30 colonies" : "No — use the next dilution along") },
+  ]}
+/>
+
+19. Average the two technical replicates of each strain.
+20. Express the result of each construct relative to the construct-free
+    reference strain, as a relative colony-forming unit yield and as a relative
+    fitness (Table 6).
+
+<ProtocolCalculator
+  number={6}
+  title="Relative yield, fitness cost and delay."
+ 
+  rows={[
+    { key: "cConstruct", label: "CFU/mL of the strain carrying the construct", value: 4.8, unit: "× 10⁹ CFU/mL", input: true },
+    { key: "cReference", label: "CFU/mL of the construct-free reference strain", value: 7.2, unit: "× 10⁹ CFU/mL", input: true },
+    { key: "yield", label: "Relative CFU yield", unit: "–", decimals: 3, compute: (v) => v.cConstruct / v.cReference },
+    { key: "cost", label: "Fitness cost of the construct", unit: "%", decimals: 1, compute: (v) => (1 - v.yield) * 100 },
+    { key: "tConstruct", label: "Time to first detectable colonies, construct", value: 9.5, unit: "h", input: true },
+    { key: "tReference", label: "Time to first detectable colonies, reference", value: 7, unit: "h", input: true },
+    { key: "delay", label: "Delay in the appearance of colonies", unit: "h", decimals: 1, compute: (v) => v.tConstruct - v.tReference },
+  ]}
+/>
+
+21. Read the time at which colonies first become detectable in each spot from
+    the image series, and record it alongside the count.
+
+<ProtocolNote>
+
+The time to detection is the second readout of the assay. Two constructs can
+reach the same final count while one of them takes several hours longer to get
+there, and that delay is a fitness cost that the endpoint count alone does not
+show.
+
+</ProtocolNote>
+
+22. Rank the constructs by relative fitness, from the lowest cost to the
+    highest, and report the ranking together with the time to detection and the
+    number of independent runs it is based on.
+
+<ProtocolNote kind="critical">
+
+The ranking is comparative and holds only within a run. Constructs are compared
+with one another on the same plate, and runs are compared with one another only
+through the construct-free reference they share.
+
+</ProtocolNote>
+
+#### Notes from the bench
+
+This section collects the experience of the team with this protocol: what was
+changed between runs, what went wrong and what is worth knowing before
+starting. Members of the team are encouraged to add their own entries, each
+starting with the month and year.
+
+<ProtocolNote date="October 2026">
+
+The first runs used three dilutions (10⁻⁵, 10⁻⁶ and 10⁻⁷) spotted as 5 µL on
+LB agar with kanamycin in an Omnitray, from cultures normalized to an OD₆₀₀ of
+0.5. The dilution steps were 10 µL into 90 µL of medium.
+
+</ProtocolNote>
+
+<ProtocolNote date="October 2026">
+
+A 1 in 50 subculture dilution reached the working optical density in
+approximately 3 hours, while a 1 in 100 dilution took approximately 6 hours.
+The 1 in 50 dilution is the practical choice when the plate is to be spotted
+the same afternoon.
+
+</ProtocolNote>
+
+<ProtocolNote date="October 2026">
+
+No construct-free control was included in the first runs. This is the single
+most important addition for the next run, because the fitness cost can only be
+expressed relative to a strain that does not carry a construct.
+
+</ProtocolNote>
+
+<ProtocolNote date="October 2026">
+
+The RESHAPE runs were 30 hours at 37 °C. Whether 30 hours is long enough for
+the slowest constructs to reach a countable spot has not yet been checked
+against the image series.
+
+</ProtocolNote>
+
+<ProtocolCalculations>
+
+This section explains the calculations used in this protocol. The symbols are
+defined for each equation, and the worked example uses the values printed in
+the corresponding table.
+
+**Normalization to OD₆₀₀ = 0.5**
+
+OD1 × V1 = OD2 × V2 → V1 = (OD2 × V2) / OD1
+
+in which:
+
+- OD1 = measured OD₆₀₀ of the subculture
+- V1 = volume of subculture to use (µL)
+- OD2 = target OD₆₀₀, being 0.5
+- V2 = final volume of the normalized culture (µL)
+
+The optical density is treated as proportional to the cell density over the
+range used here, so the relation is the same dilution relation as
+C1 × V1 = C2 × V2. The volume of broth to add is V2 − V1. The subculture must
+be above the target density for the normalization to be possible; a culture
+below OD₆₀₀ 0.5 is returned to the incubator rather than concentrated.
+
+**Worked example.** For a subculture at OD₆₀₀ 0.84 and a final volume of
+1000 µL: V1 = (0.5 × 1000) / 0.84 = 595.2 µL of subculture, made up with
+1000 − 595.2 = 404.8 µL of fresh LB broth.
+
+**Ten-fold dilution series**
+
+*f* = (*V*transfer + *V*diluent) / *V*transfer  and  *d*n = *f*^(−*n*)
+
+in which:
+
+- *f* = dilution factor per step
+- *V*transfer = volume carried into the next well (µL)
+- *V*diluent = volume of medium already in that well (µL)
+- *n* = number of steps performed
+- *d*n = dilution of the culture after *n* steps
+
+Transferring 10 µL into 90 µL gives a total of 100 µL and therefore a ten-fold
+dilution at every step, so that the exponent counts the steps directly. Tips
+are changed at every step, because cells carried on the outside of a tip raise
+the count of every dilution below it.
+
+**Worked example.** With 10 µL transferred into 90 µL: *f* = (10 + 90) / 10 =
+10. After 7 steps the dilution is 10⁻⁷, and the three dilutions spotted (10⁻⁵,
+10⁻⁶ and 10⁻⁷) are the products of 5, 6 and 7 steps.
+
+**Colony-forming units per millilitre from a spot**
+
+*C* = *N* / (*V*spot × *d*n)
+
+in which:
+
+- *C* = colony-forming units per millilitre of the normalized culture (CFU/mL)
+- *N* = number of colonies counted in the spot (CFU)
+- *V*spot = volume spotted, in millilitres
+- *d*n = dilution of the culture that was spotted, as a fraction
+
+The spot volume is converted from microlitres to millilitres before use: 5 µL
+is 0.005 mL. A drop plate spot is counted when it holds roughly 3 to 30
+colonies; above that the colonies touch and the count is an underestimate; a
+spot that has merged into a lawn is recorded as too numerous to count and the
+next dilution along is used instead. Spotting three consecutive dilutions makes
+it likely that at least one of them falls in the countable range (Herigstad et
+al., 2001).
+
+**Worked example.** For 24 colonies in the 10⁻⁶ spot of 5 µL: *C* =
+24 / (0.005 × 10⁻⁶) = 4.80 × 10⁹ CFU/mL of the normalized culture.
+
+**Relative yield, fitness cost and delay**
+
+*Y* = *C*construct / *C*reference · cost = (1 − *Y*) × 100 · Δ*t* = *t*construct − *t*reference
+
+in which:
+
+- *Y* = colony-forming unit yield of the construct relative to the construct-free reference
+- *C*construct = CFU/mL of the strain carrying the construct
+- *C*reference = CFU/mL of the construct-free reference strain
+- cost = fitness cost of the construct, as a percentage
+- *t*construct = time at which colonies first become detectable for the construct (h)
+- *t*reference = the same time for the construct-free reference (h)
+- Δ*t* = delay in the appearance of colonies (h)
+
+Both strains start from the same optical density, so a lower yield means that
+fewer of the cells spotted went on to form a colony in the time available,
+which is the fitness cost expressed as a count. The delay is reported alongside
+it because two constructs can reach the same final count with several hours
+between them. Both quantities are comparative and are only meaningful against a
+reference on the same plate; the constructs are then ranked from the lowest
+cost to the highest.
+
+**Worked example.** For a construct at 4.80 × 10⁹ CFU/mL against a
+construct-free reference at 7.20 × 10⁹ CFU/mL: *Y* =
+4.80 × 10⁹ / 7.20 × 10⁹ = 0.667, so the cost is (1 − 0.667) × 100 = 33.3%.
+With colonies first detected at 9.5 h for the construct and 7.0 h for the
+reference, Δ*t* = 2.5 h.
+
+</ProtocolCalculations>
+
+#### References
+
+- Herigstad, B., Hamilton, M., & Heersink, J. (2001). How to optimize the drop plate method for enumerating bacteria. *Journal of Microbiological Methods, 44*(2), 121–129. https://doi.org/10.1016/S0167-7012(00)00241-4
+- Reshape Biotech. (n.d.). *High-throughput imaging device* [Product information]. Retrieved October 21, 2026, from https://reshapebiotech.com/product/high-throughput-imaging-device
+- San Millan, A., & MacLean, R. C. (2017). Fitness costs of plasmids: A limit to plasmid transmission. *Microbiology Spectrum, 5*(5). https://doi.org/10.1128/microbiolspec.MTBP-0016-2017
+- Sigma-Aldrich. (n.d.-a). *Ethanol absolute for analysis EMSURE* (Product No. 1.00983) [Safety data sheet]. Retrieved October 11, 2026, from https://www.sigmaaldrich.com/BE/en/sds/mm/100983
+- Sigma-Aldrich. (n.d.-b). *Kanamycin sulfate from Streptomyces kanamyceticus* (Product No. K1377) [Safety data sheet]. Retrieved October 11, 2026, from https://www.sigmaaldrich.com/BE/en/sds/sigma/k1377
+
+</ExpandableText>
+
 ### Discontinued Methods
 
 <ExpandableText title="HALO Assay (failed protocol)" meta={<em>discontinued</em>}>
@@ -8931,8 +9480,6 @@ At 350 µL per slide this gives 5000 / 350 = 14 slides.
 
 </ExpandableText>
 
-### Reporter Characterization
-
 <ExpandableText title="Rhamnose Induction and Medium Optimization">
 
 <ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/rhamnose-induction-and-medium-optimization-3.pdf" />
@@ -9225,6 +9772,8 @@ concentration, so that rhamnose can replace glucose on a mole-for-mole basis.
 </ProtocolCalculations>
 
 </ExpandableText>
+
+### Reporter Characterization
 
 <ExpandableText title="Plate Reader Sample Preparation">
 
@@ -9867,555 +10416,6 @@ corrected OD is 0.45 − 0.05 = 0.400. Blank-corrected: (45,000 − 1200) / 0.40
 - FPbase. (n.d.-c). *Superfolder GFP*. Retrieved October 11, 2026, from https://www.fpbase.org/protein/superfolder-gfp/
 - Promega. (n.d.). *Nano-Glo luciferase assay system* (Technical Manual TM369). Retrieved October 11, 2026, from https://www.promega.com/-/media/files/resources/protocols/technical-manuals/101/nanoglo-luciferase-assay-system-protocol.pdf
 - Sigma-Aldrich. (n.d.). *Kanamycin sulfate from Streptomyces kanamyceticus* (Product No. K1377) [Safety data sheet]. Retrieved October 11, 2026, from https://www.sigmaaldrich.com/BE/en/sds/sigma/k1377
-
-</ExpandableText>
-
-<ExpandableText title="Fitness Cost-Based Ranking of BSH Constructs">
-
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/fitness-cost-based-ranking-of-bsh-constructs.pdf" />
-
-#### Introduction
-
-Carrying a plasmid is rarely free. Replicating the plasmid, transcribing its
-genes and folding the protein they encode all draw on the same pool of
-precursors, ribosomes and chaperones that the host needs for its own growth,
-and the result is a measurable reduction in growth rate relative to a strain
-without the construct. This reduction is the fitness cost of the construct, and
-it is the main reason an engineered population loses its construct over time in
-the absence of selection (San Millan & MacLean, 2017).
-
-The purpose of this assay is comparative rather than absolute. Each bile salt
-hydrolase (BSH) construct is grown under identical conditions and plated as a
-ten-fold dilution series, and the constructs are ranked by how strongly the
-maintenance of the construct obstructs growth. A construct that gives good
-hydrolase activity but a large fitness cost is a poor candidate for a chassis
-that has to persist in the gut, and the ranking is what allows that trade-off
-to be made explicitly.
-
-Growth is read as colony formation on solid medium rather than as optical
-density in liquid. Spotting 5 µL of each of three consecutive dilutions onto
-one Omnitray places every construct on the same plate, in the same agar, imaged
-by the same camera, which removes the plate-to-plate and well-to-well variation
-that otherwise dominates small differences in growth rate. The plate is
-incubated and imaged continuously for 30 hours, so that both the final colony
-count and the time at which colonies appear are available for the ranking.
-
-The drop plate format used here is the one described by Herigstad et al.
-(2001), in which a small volume of each dilution is deposited on the agar
-surface instead of a full spread plate. It uses far less medium and far fewer
-plates than spread plating, at the cost of a narrower countable range per spot,
-which is why three consecutive dilutions are always plated.
-
-#### Attributions
-
-The drop plate format and the guidance on countable spots are taken from
-Herigstad et al. (2001). The framing of plasmid maintenance as a measurable
-fitness cost follows San Millan & MacLean (2017).
-
-The imaging and incubation conditions are those of the Reshape Biotech imaging
-incubator used in the laboratory (Reshape Biotech, n.d.).
-
-#### Materials
-
-**Strains**
-
-| Item | Specification and quantity |
-|---|---|
-| *E. coli* carrying each BSH construct | One cryostock per construct; eight constructs fit one Omnitray layout |
-| *E. coli* carrying the empty backbone, and untransformed *E. coli* | The construct-free references against which the fitness cost is expressed |
-
-**Reagents**
-
-| Item | Specification and quantity |
-|---|---|
-| LB broth | 5 mL per overnight culture and per subculture |
-| LB agar with kanamycin | 20 mL per Omnitray |
-| Kanamycin stock solution, 50 mg/mL | Final concentration 50 µg/mL in both broth and agar |
-| LB broth for the dilution series | 90 µL per dilution step; sterile |
-| Ethanol, 70% (v/v) | For disinfecting the bench and the plate surface |
-
-**Consumables and tools**
-
-| Item | Specification and quantity |
-|---|---|
-| Omnitray single-well plates | One per run; the plate the dilutions are spotted on |
-| 96-well microtiter plates, sterile | One per run, for the dilution series |
-| Culture tubes, 15 mL | One per strain for the overnight culture and one for the subculture |
-| Cuvettes for OD₆₀₀ | One per measurement |
-| Multichannel pipette, micropipettes and sterile tips | 0.5–10 µL, 20–200 µL and 100–1000 µL |
-| Reservoirs | For the multichannel pipette |
-
-**Instruments**
-
-| Item | Specification and quantity |
-|---|---|
-| Shaking incubator | 37 °C, 200 rpm |
-| Spectrophotometer | OD₆₀₀ |
-| Imaging incubator (Reshape Biotech) | Timelapse imaging with incubation from 10 to 40 °C; takes Omnitray and microplate formats (Reshape Biotech, n.d.) |
-| Autoclave | For sterilizing media and glassware |
-
-**Software**
-
-| Item | Specification and quantity |
-|---|---|
-| Reshape Biotech analysis software | Colony detection and counting from the timelapse images |
-
-**Personal protective equipment**
-
-| Item | Specification and quantity |
-|---|---|
-| Lab coat | Worn closed at all times |
-| Nitrile gloves | Changed after contact with reagents or cultures |
-| Safety glasses | Required when handling hot liquids and irritant powders |
-
-#### Safety and safety data sheets
-
-Hazard classifications were taken from the supplier safety data sheets (SDS)
-and product pages cited in the table below. The SDS of the exact product and
-lot in use should be consulted before starting, because classifications can
-differ between suppliers and product grades.
-
-The strains handled here are genetically modified micro-organisms and are
-worked with under the containment level approved for the laboratory. Kanamycin
-powder is weighed in a fume hood; the stock solution is handled with gloves.
-
-**Table 1.** Hazard classification and safety data sheets (SDS) of the reagents used.
-
-| Substance | CAS no. | Classification (GHS/CLP) | Precautions | SDS |
-|---|---|---|---|---|
-| Kanamycin sulfate | 25389-94-0 | Danger. H360D: may damage the unborn child (Repr. 1B). | Wear gloves, lab coat and safety glasses. Weigh powder in a fume hood. Not to be handled during pregnancy. | Sigma-Aldrich (n.d.-b) |
-| Ethanol, 70% (v/v) | 64-17-5 | Danger. H225: highly flammable liquid and vapour. H319: causes serious eye irritation. | Keep away from open flames and hot surfaces. | Sigma-Aldrich (n.d.-a) SDS of absolute ethanol |
-| Bacterial strains and transformants | n/a | Biological agents. Transformants are genetically modified micro-organisms (contained use). | Work under the containment level approved for the laboratory. Inactivate all cultures, plates and contaminated consumables by autoclaving. | No SDS: see the institutional biosafety guidelines |
-
-**Waste disposal.** All cultures, plates and contaminated consumables are
-inactivated by autoclaving before disposal. The waste and disposal instructions
-of the laboratory in use apply.
-
-<Callout title="Still to be added">
-
-The exact model of the Reshape Biotech instrument, the catalogue number of the
-Omnitray plates and the identity of the eight BSH constructs in rows A to H
-still need to be added. The photograph of a spotted plate held by the team
-would be a useful illustration here, with a caption identifying the strains,
-the dilutions and the medium; it has to be uploaded through the iGEM uploads
-tool first.
-
-</Callout>
-
-#### Procedure
-
-**Day 0: overnight cultures**
-
-1. Prepare 5 mL of LB broth with kanamycin per strain, and inoculate each from
-   the corresponding cryostock.
-2. Include the construct-free reference strains in the same way, in LB broth
-   without kanamycin for the untransformed strain.
-
-<ProtocolNote kind="critical">
-
-The runs reported in October 2026 were performed without a construct-free
-control. Without it the fitness cost cannot be expressed as a reduction
-relative to unburdened growth, only as a difference between constructs. Every
-future run includes at least one construct-free reference strain.
-
-</ProtocolNote>
-
-3. Incubate overnight at 37 °C with shaking at 200 rpm.
-
-<ProtocolNote>
-
-All strains are started from cryostock rather than from a plate, so that none
-of them has had a different number of generations of prior growth. A difference
-in the starting state of the culture translates directly into an apparent
-difference in fitness.
-
-</ProtocolNote>
-
-**Day 1: subculture to exponential phase**
-
-4. Dilute each overnight culture 1 in 50 into fresh LB broth with kanamycin and
-   incubate at 37 °C with shaking at 200 rpm.
-5. Measure the OD₆₀₀ of each subculture until it reaches or exceeds 0.5.
-
-<ProtocolNote>
-
-A 1 in 50 dilution reaches an OD₆₀₀ of approximately 0.5 in about 3 hours. A 1
-in 100 dilution takes approximately 6 hours and is used when the subculture has
-to be started early in the day.
-
-</ProtocolNote>
-
-<ProtocolNote kind="critical">
-
-All strains are spotted from the same growth phase. Cells taken from stationary
-phase form colonies more slowly than cells taken from exponential phase, and
-that lag is indistinguishable from a fitness cost in the images.
-
-</ProtocolNote>
-
-**Day 1: normalizing to OD₆₀₀ = 0.5**
-
-6. Calculate, for each strain, the volume of subculture and the volume of fresh
-   LB broth needed to reach an OD₆₀₀ of 0.5 (Table 2).
-
-<ProtocolCalculator
-  number={2}
-  title="Normalization to OD₆₀₀ = 0.5 (OD1 × V1 = OD2 × V2)."
- 
-  rows={[
-    { key: "od1", label: "Measured OD₆₀₀ of the subculture (OD1)", value: 0.84, unit: "–", input: true },
-    { key: "od2", label: "Target OD₆₀₀ (OD2)", value: 0.5, unit: "–", input: true },
-    { key: "v2", label: "Final volume of the normalized culture (V2)", value: 1000, unit: "µL", input: true },
-    { key: "v1", label: "Subculture to use (V1)", unit: "µL", decimals: 1, compute: (v) => (v.od2 * v.v2) / v.od1 },
-    { key: "vBroth", label: "Fresh LB broth to add", unit: "µL", decimals: 1, compute: (v) => v.v2 - v.v1 },
-    { key: "dense", label: "Is the subculture dense enough to normalize?", unit: "–", computeText: (v) => (v.od1 >= v.od2 ? "Yes — proceed" : "No — return it to the incubator") },
-  ]}
-/>
-
-7. Prepare the normalized cultures in clean tubes and mix thoroughly.
-
-<ProtocolNote>
-
-The normalization is the step that makes the assay comparative. Every spot on
-the plate then starts from the same cell density, so a difference in the number
-or the size of the colonies reflects the construct and not the inoculum.
-
-</ProtocolNote>
-
-**Day 1: ten-fold dilution series**
-
-8. Pipette 90 µL of sterile LB broth into the wells of a 96-well plate that
-   will hold the dilutions, one row per strain.
-9. Transfer 10 µL of the normalized culture into the first well, mix by
-   pipetting, and carry 10 µL forward into each following well, changing tips
-   at every step (Table 3).
-
-<ProtocolCalculator
-  number={3}
-  title="Ten-fold dilution series."
- 
-  rows={[
-    { key: "vTransfer", label: "Volume transferred per step", value: 10, unit: "µL", input: true },
-    { key: "vDiluent", label: "Medium already in each well", value: 90, unit: "µL", input: true },
-    { key: "steps", label: "Number of steps performed", value: 7, unit: "steps", input: true },
-    { key: "factor", label: "Dilution factor per step", unit: "–", decimals: 1, compute: (v) => (v.vTransfer + v.vDiluent) / v.vTransfer },
-    { key: "dilution", label: "Dilution of the culture after n steps", unit: "–", decimals: 10, compute: (v) => Math.pow(v.factor, -v.steps) },
-    { key: "vWell", label: "Total volume per well before the transfer out", unit: "µL", decimals: 0, compute: (v) => v.vTransfer + v.vDiluent },
-  ]}
-/>
-
-<ProtocolNote kind="critical">
-
-The tips are changed at every step. Carrying cells over on the outside of a tip
-raises the apparent count of every dilution below it and flattens the series,
-which is visible afterwards as a set of spots that do not differ tenfold from
-one another.
-
-</ProtocolNote>
-
-10. Continue the series to 10⁻⁷, so that the 10⁻⁵, 10⁻⁶ and 10⁻⁷ dilutions are
-    available for spotting.
-
-**Day 1: spotting the Omnitray**
-
-11. Pour 20 mL of LB agar with kanamycin per Omnitray and allow the plates to
-    set and dry.
-
-<ProtocolNote>
-
-Twenty millilitres gives a level surface at a depth that does not absorb the
-spot too quickly. A plate that is still wet lets the spots run together; a
-plate that is too dry absorbs them before they spread evenly.
-
-</ProtocolNote>
-
-12. Mark the plate with the layout to be used, so that every spot can be
-    assigned to a strain, a replicate and a dilution (Table 4).
-
-**Table 4.** Omnitray layout used, with eight strains in rows A to H, two
-technical replicates and three dilutions per replicate. The cell gives the
-label of the spot: the row letter followed by the replicate number.
-
-| Row | 10⁻⁷ (rep. 2) | 10⁻⁶ (rep. 2) | 10⁻⁵ (rep. 2) | 10⁻⁷ (rep. 1) | 10⁻⁶ (rep. 1) | 10⁻⁵ (rep. 1) |
-|---|---|---|---|---|---|---|
-| A | A2 | A2 | A2 | A1 | A1 | A1 |
-| B | B2 | B2 | B2 | B1 | B1 | B1 |
-| C | C2 | C2 | C2 | C1 | C1 | C1 |
-| D | D2 | D2 | D2 | D1 | D1 | D1 |
-| E | E2 | E2 | E2 | E1 | E1 | E1 |
-| F | F2 | F2 | F2 | F1 | F1 | F1 |
-| G | G2 | G2 | G2 | G1 | G1 | G1 |
-| H | H2 | H2 | H2 | H1 | H1 | H1 |
-
-<ProtocolNote>
-
-The layout places the two technical replicates of a strain on the same row, as
-two blocks of three dilutions, with the dilutions running from the most dilute
-on the outside to the least dilute towards the middle of each block. Row H is
-reserved for the construct-free reference strain in future runs.
-
-</ProtocolNote>
-
-13. Spot 5 µL of each of the 10⁻⁵, 10⁻⁶ and 10⁻⁷ dilutions onto its assigned
-    position, keeping the pipette perpendicular to the agar and touching the
-    drop to the surface without pressing into it.
-
-<ProtocolNote>
-
-Three consecutive dilutions are always spotted because the countable range of a
-5 µL drop is narrow. At least one of the three normally falls in the range
-where colonies are separate and can be counted (Herigstad et al., 2001).
-
-</ProtocolNote>
-
-14. Allow the spots to dry completely with the lid off, in the flow cabinet,
-    before moving the plate.
-
-<ProtocolNote kind="critical">
-
-A plate moved before the spots have dried lets the drops run across the agar
-and merge, and the run is lost. Drying takes longer on a freshly poured plate
-than on one that has been stored.
-
-</ProtocolNote>
-
-**Day 1 to 2: incubation and imaging**
-
-15. Load the plate into the imaging incubator and run for 30 hours at 37 °C,
-    with the capture interval set so that the appearance of the first colonies
-    is resolved.
-
-<ProtocolNote>
-
-The instrument used supports capture intervals from 10 minutes to 12 hours and
-incubation from 10 to 40 °C, and takes the Omnitray format directly (Reshape
-Biotech, n.d.).
-
-</ProtocolNote>
-
-16. Record the plate identifier, the layout and the run conditions with the
-    image series.
-
-**Counting and ranking**
-
-17. Select, for each spot, the dilution at which the colonies are separate and
-    countable, and count the colonies in that spot.
-
-<ProtocolNote>
-
-Spots in which the colonies have merged into a lawn are recorded as too
-numerous to count and are not used. The next dilution along is used instead.
-
-</ProtocolNote>
-
-18. Calculate the colony-forming units per millilitre of the normalized culture
-    from the count, the spot volume and the dilution factor (Table 5).
-
-<ProtocolCalculator
-  number={5}
-  title="Colony-forming units per millilitre from a spot."
- 
-  rows={[
-    { key: "colonies", label: "Colonies counted in the spot", value: 24, unit: "CFU", input: true },
-    { key: "vSpotUl", label: "Volume spotted", value: 5, unit: "µL", input: true },
-    { key: "exponent", label: "Dilution spotted, as the exponent of 10⁻ˣ", value: 6, unit: "–", input: true },
-    { key: "vSpotMl", label: "Volume spotted", unit: "mL", decimals: 3, compute: (v) => v.vSpotUl / 1000 },
-    { key: "cfu", label: "CFU per mL of the normalized culture", unit: "CFU/mL", decimals: 0, compute: (v) => v.colonies / (v.vSpotMl * Math.pow(10, -v.exponent)) },
-    { key: "countable", label: "Is the spot in the countable range?", unit: "–", computeText: (v) => (v.colonies >= 3 && v.colonies <= 30 ? "Yes — 3 to 30 colonies" : "No — use the next dilution along") },
-  ]}
-/>
-
-19. Average the two technical replicates of each strain.
-20. Express the result of each construct relative to the construct-free
-    reference strain, as a relative colony-forming unit yield and as a relative
-    fitness (Table 6).
-
-<ProtocolCalculator
-  number={6}
-  title="Relative yield, fitness cost and delay."
- 
-  rows={[
-    { key: "cConstruct", label: "CFU/mL of the strain carrying the construct", value: 4.8, unit: "× 10⁹ CFU/mL", input: true },
-    { key: "cReference", label: "CFU/mL of the construct-free reference strain", value: 7.2, unit: "× 10⁹ CFU/mL", input: true },
-    { key: "yield", label: "Relative CFU yield", unit: "–", decimals: 3, compute: (v) => v.cConstruct / v.cReference },
-    { key: "cost", label: "Fitness cost of the construct", unit: "%", decimals: 1, compute: (v) => (1 - v.yield) * 100 },
-    { key: "tConstruct", label: "Time to first detectable colonies, construct", value: 9.5, unit: "h", input: true },
-    { key: "tReference", label: "Time to first detectable colonies, reference", value: 7, unit: "h", input: true },
-    { key: "delay", label: "Delay in the appearance of colonies", unit: "h", decimals: 1, compute: (v) => v.tConstruct - v.tReference },
-  ]}
-/>
-
-21. Read the time at which colonies first become detectable in each spot from
-    the image series, and record it alongside the count.
-
-<ProtocolNote>
-
-The time to detection is the second readout of the assay. Two constructs can
-reach the same final count while one of them takes several hours longer to get
-there, and that delay is a fitness cost that the endpoint count alone does not
-show.
-
-</ProtocolNote>
-
-22. Rank the constructs by relative fitness, from the lowest cost to the
-    highest, and report the ranking together with the time to detection and the
-    number of independent runs it is based on.
-
-<ProtocolNote kind="critical">
-
-The ranking is comparative and holds only within a run. Constructs are compared
-with one another on the same plate, and runs are compared with one another only
-through the construct-free reference they share.
-
-</ProtocolNote>
-
-#### Notes from the bench
-
-This section collects the experience of the team with this protocol: what was
-changed between runs, what went wrong and what is worth knowing before
-starting. Members of the team are encouraged to add their own entries, each
-starting with the month and year.
-
-<ProtocolNote date="October 2026">
-
-The first runs used three dilutions (10⁻⁵, 10⁻⁶ and 10⁻⁷) spotted as 5 µL on
-LB agar with kanamycin in an Omnitray, from cultures normalized to an OD₆₀₀ of
-0.5. The dilution steps were 10 µL into 90 µL of medium.
-
-</ProtocolNote>
-
-<ProtocolNote date="October 2026">
-
-A 1 in 50 subculture dilution reached the working optical density in
-approximately 3 hours, while a 1 in 100 dilution took approximately 6 hours.
-The 1 in 50 dilution is the practical choice when the plate is to be spotted
-the same afternoon.
-
-</ProtocolNote>
-
-<ProtocolNote date="October 2026">
-
-No construct-free control was included in the first runs. This is the single
-most important addition for the next run, because the fitness cost can only be
-expressed relative to a strain that does not carry a construct.
-
-</ProtocolNote>
-
-<ProtocolNote date="October 2026">
-
-The RESHAPE runs were 30 hours at 37 °C. Whether 30 hours is long enough for
-the slowest constructs to reach a countable spot has not yet been checked
-against the image series.
-
-</ProtocolNote>
-
-<ProtocolCalculations>
-
-This section explains the calculations used in this protocol. The symbols are
-defined for each equation, and the worked example uses the values printed in
-the corresponding table.
-
-**Normalization to OD₆₀₀ = 0.5**
-
-OD1 × V1 = OD2 × V2 → V1 = (OD2 × V2) / OD1
-
-in which:
-
-- OD1 = measured OD₆₀₀ of the subculture
-- V1 = volume of subculture to use (µL)
-- OD2 = target OD₆₀₀, being 0.5
-- V2 = final volume of the normalized culture (µL)
-
-The optical density is treated as proportional to the cell density over the
-range used here, so the relation is the same dilution relation as
-C1 × V1 = C2 × V2. The volume of broth to add is V2 − V1. The subculture must
-be above the target density for the normalization to be possible; a culture
-below OD₆₀₀ 0.5 is returned to the incubator rather than concentrated.
-
-**Worked example.** For a subculture at OD₆₀₀ 0.84 and a final volume of
-1000 µL: V1 = (0.5 × 1000) / 0.84 = 595.2 µL of subculture, made up with
-1000 − 595.2 = 404.8 µL of fresh LB broth.
-
-**Ten-fold dilution series**
-
-*f* = (*V*transfer + *V*diluent) / *V*transfer  and  *d*n = *f*^(−*n*)
-
-in which:
-
-- *f* = dilution factor per step
-- *V*transfer = volume carried into the next well (µL)
-- *V*diluent = volume of medium already in that well (µL)
-- *n* = number of steps performed
-- *d*n = dilution of the culture after *n* steps
-
-Transferring 10 µL into 90 µL gives a total of 100 µL and therefore a ten-fold
-dilution at every step, so that the exponent counts the steps directly. Tips
-are changed at every step, because cells carried on the outside of a tip raise
-the count of every dilution below it.
-
-**Worked example.** With 10 µL transferred into 90 µL: *f* = (10 + 90) / 10 =
-10. After 7 steps the dilution is 10⁻⁷, and the three dilutions spotted (10⁻⁵,
-10⁻⁶ and 10⁻⁷) are the products of 5, 6 and 7 steps.
-
-**Colony-forming units per millilitre from a spot**
-
-*C* = *N* / (*V*spot × *d*n)
-
-in which:
-
-- *C* = colony-forming units per millilitre of the normalized culture (CFU/mL)
-- *N* = number of colonies counted in the spot (CFU)
-- *V*spot = volume spotted, in millilitres
-- *d*n = dilution of the culture that was spotted, as a fraction
-
-The spot volume is converted from microlitres to millilitres before use: 5 µL
-is 0.005 mL. A drop plate spot is counted when it holds roughly 3 to 30
-colonies; above that the colonies touch and the count is an underestimate; a
-spot that has merged into a lawn is recorded as too numerous to count and the
-next dilution along is used instead. Spotting three consecutive dilutions makes
-it likely that at least one of them falls in the countable range (Herigstad et
-al., 2001).
-
-**Worked example.** For 24 colonies in the 10⁻⁶ spot of 5 µL: *C* =
-24 / (0.005 × 10⁻⁶) = 4.80 × 10⁹ CFU/mL of the normalized culture.
-
-**Relative yield, fitness cost and delay**
-
-*Y* = *C*construct / *C*reference · cost = (1 − *Y*) × 100 · Δ*t* = *t*construct − *t*reference
-
-in which:
-
-- *Y* = colony-forming unit yield of the construct relative to the construct-free reference
-- *C*construct = CFU/mL of the strain carrying the construct
-- *C*reference = CFU/mL of the construct-free reference strain
-- cost = fitness cost of the construct, as a percentage
-- *t*construct = time at which colonies first become detectable for the construct (h)
-- *t*reference = the same time for the construct-free reference (h)
-- Δ*t* = delay in the appearance of colonies (h)
-
-Both strains start from the same optical density, so a lower yield means that
-fewer of the cells spotted went on to form a colony in the time available,
-which is the fitness cost expressed as a count. The delay is reported alongside
-it because two constructs can reach the same final count with several hours
-between them. Both quantities are comparative and are only meaningful against a
-reference on the same plate; the constructs are then ranked from the lowest
-cost to the highest.
-
-**Worked example.** For a construct at 4.80 × 10⁹ CFU/mL against a
-construct-free reference at 7.20 × 10⁹ CFU/mL: *Y* =
-4.80 × 10⁹ / 7.20 × 10⁹ = 0.667, so the cost is (1 − 0.667) × 100 = 33.3%.
-With colonies first detected at 9.5 h for the construct and 7.0 h for the
-reference, Δ*t* = 2.5 h.
-
-</ProtocolCalculations>
-
-#### References
-
-- Herigstad, B., Hamilton, M., & Heersink, J. (2001). How to optimize the drop plate method for enumerating bacteria. *Journal of Microbiological Methods, 44*(2), 121–129. https://doi.org/10.1016/S0167-7012(00)00241-4
-- Reshape Biotech. (n.d.). *High-throughput imaging device* [Product information]. Retrieved October 21, 2026, from https://reshapebiotech.com/product/high-throughput-imaging-device
-- San Millan, A., & MacLean, R. C. (2017). Fitness costs of plasmids: A limit to plasmid transmission. *Microbiology Spectrum, 5*(5). https://doi.org/10.1128/microbiolspec.MTBP-0016-2017
-- Sigma-Aldrich. (n.d.-a). *Ethanol absolute for analysis EMSURE* (Product No. 1.00983) [Safety data sheet]. Retrieved October 11, 2026, from https://www.sigmaaldrich.com/BE/en/sds/mm/100983
-- Sigma-Aldrich. (n.d.-b). *Kanamycin sulfate from Streptomyces kanamyceticus* (Product No. K1377) [Safety data sheet]. Retrieved October 11, 2026, from https://www.sigmaaldrich.com/BE/en/sds/sigma/k1377
 
 </ExpandableText>
 
