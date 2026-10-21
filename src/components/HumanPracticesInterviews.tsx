@@ -531,19 +531,22 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
   return (
     <>
       {flat.length > 0 && (
-      <div className="segmented-selector-bar hp-view-toggle" role="group" aria-label="Interview layout">
-        {(["carousel", "list"] as const).map((option) => (
-          <button
-            key={option}
-            type="button"
-            aria-pressed={view === option}
-            className={`segmented-selector-segment${view === option ? " active" : ""}`}
-            onClick={() => changeView(option)}
-          >
-            {option === "carousel" ? "Carousel" : "List"}
-          </button>
-        ))}
-      </div>
+        <div className="hp-view-toggle-row">
+          <div className="segmented-selector-bar hp-view-toggle" role="group" aria-label="Interview layout">
+            {(["carousel", "list"] as const).map((option) => (
+              <button
+                key={option}
+                type="button"
+                aria-pressed={view === option}
+                className={`segmented-selector-segment${view === option ? " active" : ""}`}
+                onClick={() => changeView(option)}
+              >
+                {option === "carousel" ? "Carousel" : "List"}
+              </button>
+            ))}
+          </div>
+          <p className="hp-view-toggle-hint">Click here to present the interviews as a list.</p>
+        </div>
       )}
 
       {sections.map((section) =>

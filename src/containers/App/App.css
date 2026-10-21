@@ -2862,6 +2862,28 @@ main:focus {
   --content-section-bg: color-mix(in srgb, var(--color-body-bg) 88%, #fff);
 }
 
+/* Edited 2026-10-21 (team request): the same opt-out as above, but keeping
+   the second, darker tint for every section instead of the lighter one —
+   <span data-uniform-sections="dark" hidden />. Values repeat the
+   :nth-of-type(even) rule's. The trailing :nth-of-type(n) matches every
+   section and is there only to carry the same weight as the lighter rule
+   above, which would otherwise win on the even ones. */
+:has(> [data-uniform-sections="dark"]) > .content-section:nth-of-type(n) {
+  --content-section-bg: color-mix(
+    in srgb,
+    var(--color-body-bg) 45%,
+    color-mix(in srgb, var(--color-interactive) 18%, #fff)
+  );
+}
+
+[data-theme="dark"] :has(> [data-uniform-sections="dark"]) > .content-section:nth-of-type(n) {
+  --content-section-bg: color-mix(
+    in srgb,
+    var(--color-body-bg) 80%,
+    color-mix(in srgb, var(--color-interactive) 14%, #000)
+  );
+}
+
 .content-section:first-child {
   margin-top: 0;
 }
@@ -10087,6 +10109,7 @@ body:not(.home-fullscreen) .home-hero {
   margin: 0 0 0.5rem;
   font-size: 1.15rem;
   font-weight: 700;
+  color: inherit;
 }
 
 .hp-section-intro > :last-child {
@@ -10730,8 +10753,14 @@ body:not(.home-fullscreen) .home-hero {
 }
 
 .hp-section-context {
-  margin-top: 1.25rem;
+  margin-top: 1.75rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid rgba(51, 40, 63, 0.18);
   opacity: 0.9;
+}
+
+[data-theme="dark"] .hp-section-context {
+  border-top-color: rgba(255, 255, 255, 0.16);
 }
 
 .hp-section-context :last-child {
@@ -10741,9 +10770,24 @@ body:not(.home-fullscreen) .home-hero {
 /* Generated with Claude Opus 5.5 (Anthropic), 2026-10-15
    Purpose: Carousel/List toggle above the interviews, and the list view —
    one row per interviewee with a thumbnail, name, role and summary. */
+.hp-view-toggle-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.9rem;
+  margin: 1.5rem 0 0;
+}
+
 .hp-view-toggle {
   max-width: 18rem;
-  margin: 1.5rem 0 0;
+  margin: 0;
+}
+
+.page-body .page-shell-content p.hp-view-toggle-hint {
+  margin: 0;
+  font-size: 0.85rem;
+  text-align: left;
+  opacity: 0.75;
 }
 
 .hp-list {

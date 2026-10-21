@@ -99,7 +99,7 @@ const Pages: (Page | Folder)[] = [
         title: "Project Description",
         path: "/description",
         component: Description,
-        lead: "What PMOS is, how it is diagnosed, and why we went looking for its roots in the gut.",
+        lead: "Get to know the science behind EMPOWER",
         icon: LightbulbIcon,
       },
       {
