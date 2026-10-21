@@ -5,6 +5,7 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
 import { SectionProgress } from "./SectionProgress";
+import { RESTORING_ATTR, useScrollMemory } from "./useScrollMemory";
 
 // Generated with Claude Sonnet 5 (Anthropic), 2026-09-03
 // Purpose: a [^1] citation's target sits inside a collapsed <details>
@@ -30,6 +31,9 @@ export function PageShell({
   end?: ReactNode;
 }) {
   const contentRef = useRef<HTMLDivElement>(null);
+  // Back/forward puts the reader where they were (see useScrollMemory). First,
+  // so a return is under way before the #hash jump below decides anything.
+  useScrollMemory();
   // Both routes render a PageShell, so React keeps this component mounted
   // across a navigation: without the route in the effect's dependencies, a
   // link to another page's section would never run the jump below.
@@ -53,6 +57,13 @@ export function PageShell({
     if (!hash && navigationType !== "POP") {
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }
+    // Edited with Claude Opus 5.5 (Anthropic), 2026-10-21 (team request: never
+    // stuck on a page after following a link): a popup or the search box
+    // stops the page scrolling while it is open (body overflow: hidden), and
+    // a link followed from inside one could leave that behind. A new page
+    // starts with nothing open, so the lock is cleared.
+    document.body.style.removeProperty("overflow");
+    document.body.style.removeProperty("padding-right");
     // Only on a change of page: following a #link within one must not jump.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
@@ -71,7 +82,19 @@ export function PageShell({
     // after the navigation, and the heading ids are assigned once it is (see
     // SectionProgress). So the jump is made here, after that first paint.
     let jump = 0;
-    if (hash) {
+    // Edited with Claude Opus 5.5 (Anthropic), 2026-10-21 (team request: never
+    // stuck): the repeated jump below gives up as soon as the reader scrolls
+    // or touches the page, so it never pulls them back while they read; and
+    // a return with the back button (useScrollMemory) takes precedence.
+    let readerMoved = false;
+    const onReader = () => {
+      readerMoved = true;
+      clearTimeout(jump);
+    };
+    if (hash && !document.documentElement.hasAttribute(RESTORING_ATTR)) {
+      window.addEventListener("wheel", onReader, { passive: true });
+      window.addEventListener("touchstart", onReader, { passive: true });
+      window.addEventListener("keydown", onReader);
       const id = hash.slice(1);
       // Two things make a single jump unreliable on these pages: the heading
       // ids are handed out by SectionProgress once the page has rendered,
@@ -83,6 +106,7 @@ export function PageShell({
       // again, so a repeated smooth jump never arrives anywhere.
       let tries = 0;
       const scrollToHash = () => {
+        if (readerMoved) return;
         const target = document.getElementById(id);
         target?.scrollIntoView({ block: "start", behavior: "instant" });
         const landed = target && target.getClientRects().length > 0 && Math.abs(target.getBoundingClientRect().top) < 120;
@@ -102,6 +126,9 @@ export function PageShell({
     container.addEventListener("click", onClick);
     return () => {
       clearTimeout(jump);
+      window.removeEventListener("wheel", onReader);
+      window.removeEventListener("touchstart", onReader);
+      window.removeEventListener("keydown", onReader);
       container.removeEventListener("click", onClick);
     };
   }, [pathname, hash]);
