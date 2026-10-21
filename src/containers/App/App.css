@@ -19336,3 +19336,10 @@ img.visual-abstract-img {
 /* Table B1 sits on a pink card, so its header picks up the card colour. */
 .measure-table-card .measure-table th { background: #f1c3d4; color: #33283f; }
 [data-theme="dark"] .measure-table-card .measure-table th { background: #7a4a5f; color: #fff; }
+
+/* Hint under the Therapeutics "Introduction" heading (results.mdx), added with Claude Sonnet 5.5 (Anthropic), 2026-10-21. */
+.therapeutics-tap-hint {
+  margin: -0.25rem 0 0.75rem;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
