@@ -3,9 +3,9 @@
 // sections (e.g. "Students & Researchers", "Clinicians"), each rendered as
 // its own bordered card (title + carousel) so sections read as clearly
 // separate blocks, with a context/overview blurb below the card. The
-// carousel auto-scrolls continuously, same infinite-marquee technique as the
-// footer's SponsorCarousel (duplicate the tiles, animate the track by
-// exactly -50%, pause on hover so a moving target can still be clicked).
+// carousel drifts continuously and stops on hover, where it can be scrolled
+// or dragged by hand (useScrollMarquee, shared with the footer's
+// SponsorCarousel).
 // Clicking a person opens a shared modal with their photo/role on the left
 // and the full interview write-up on the right (same click-to-open-modal
 // convention as TeamMembers.tsx and EventsTimeline.tsx elsewhere in this
@@ -14,6 +14,7 @@
 // in its original relative order.
 import { Children, ReactElement, ReactNode, isValidElement, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { useScrollMarquee } from "./useScrollMarquee";
 
 interface IntervieweeProps {
   name: string;
@@ -200,49 +201,47 @@ interface HPCarouselProps {
   title: string;
   interviewees: FlatInterviewee[];
   featuredIndex: number;
+  paused: boolean;
   onOpen: (index: number) => void;
 }
 
-// Infinite-scrolling row of interviewee tiles — same duplicate-the-track
-// technique as SponsorCarousel.tsx, but tiles stay real <button>s (not
-// links) so clicking one still opens that person's modal.
-function HPCarousel({ title, interviewees, featuredIndex, onOpen }: HPCarouselProps) {
+// The tiles are repeated this many times so the loop never runs out (see
+// useScrollMarquee).
+const CAROUSEL_COPIES = 3;
+
+// Infinite-scrolling row of interviewee tiles. Edited with Claude Opus 5.5
+// (Anthropic), 2026-10-21: it is now a real scroller driven by
+// useScrollMarquee (shared with the footer's SponsorCarousel) instead of a
+// CSS animation, so hovering it stops the drift and lets the reader scroll
+// or drag it by hand. Tiles stay real <button>s (not links) so clicking one
+// still opens that person's modal.
+function HPCarousel({ title, interviewees, featuredIndex, paused, onOpen }: HPCarouselProps) {
   const duration = Math.max(MIN_CAROUSEL_SECONDS, interviewees.length * SECONDS_PER_TILE);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  useScrollMarquee(scrollerRef, { secondsPerLoop: duration, copies: CAROUSEL_COPIES, paused });
 
   return (
-    <div
-      className="hp-carousel"
-      style={{ "--hp-carousel-duration": `${duration}s` } as React.CSSProperties}
-    >
+    <div className="hp-carousel" ref={scrollerRef}>
       <div className="hp-carousel-track" role="list" aria-label={`${title} — people interviewed`}>
-        {interviewees.map((person) => (
-          <button
-            key={person.globalIndex}
-            type="button"
-            role="listitem"
-            className={`hp-carousel-item${pairClass(person)}${person.globalIndex === featuredIndex ? " is-featured" : ""}`}
-            onClick={() => onOpen(person.globalIndex)}
-          >
-            <span className={`hp-carousel-photo${pairClass(person)}`}>{carouselPhoto(person)}</span>
-            <span className="hp-carousel-name">{displayName(person)}</span>
-          </button>
-        ))}
-        {interviewees.map((person) => (
-          // The loop's second copy: hidden from screen readers and the tab
-          // order (the first copy already covers them), but still clickable —
-          // about half the time the tile under the mouse is one of these.
-          <button
-            key={`${person.globalIndex}-dup`}
-            type="button"
-            tabIndex={-1}
-            className={`hp-carousel-item${pairClass(person)}${person.globalIndex === featuredIndex ? " is-featured" : ""}`}
-            aria-hidden="true"
-            onClick={() => onOpen(person.globalIndex)}
-          >
-            <span className={`hp-carousel-photo${pairClass(person)}`}>{carouselPhoto(person)}</span>
-            <span className="hp-carousel-name">{displayName(person)}</span>
-          </button>
-        ))}
+        {Array.from({ length: CAROUSEL_COPIES }, (_, copy) =>
+          interviewees.map((person) => (
+            // Only the first copy is announced and tabbable; the repeats are
+            // hidden from screen readers and the tab order but still
+            // clickable, since they are often the tiles under the mouse.
+            <button
+              key={`${person.globalIndex}-${copy}`}
+              type="button"
+              role={copy === 0 ? "listitem" : undefined}
+              tabIndex={copy === 0 ? undefined : -1}
+              aria-hidden={copy === 0 ? undefined : true}
+              className={`hp-carousel-item${pairClass(person)}${person.globalIndex === featuredIndex ? " is-featured" : ""}`}
+              onClick={() => onOpen(person.globalIndex)}
+            >
+              <span className={`hp-carousel-photo${pairClass(person)}`}>{carouselPhoto(person)}</span>
+              <span className="hp-carousel-name">{displayName(person)}</span>
+            </button>
+          )),
+        )}
       </div>
     </div>
   );
@@ -435,6 +434,7 @@ function HPSectionCard({ section, view, paused, onOpen }: HPSectionCardProps) {
           title={section.title}
           interviewees={section.interviewees}
           featuredIndex={featured?.globalIndex ?? -1}
+          paused={paused}
           onOpen={onOpen}
         />
       )}
