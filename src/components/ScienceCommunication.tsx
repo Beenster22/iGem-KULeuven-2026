@@ -317,9 +317,61 @@ interface PublicationProps {
   label: string;
   /** Screenshot of the article (uploaded via the iGEM uploads tool). */
   image?: string;
+  /** Pixels to trim off the image's edges, in its own pixel size, as
+   * [top, right, bottom, left] — for a screenshot with a background border
+   * around the page (the Flair cover). */
+  crop?: [number, number, number, number];
   href: string;
   linkLabel: string;
   children: ReactNode;
+}
+
+// An image with optional edges trimmed off. Once the image has loaded (so its
+// pixel size is known), the frame takes the trimmed shape and the image is
+// scaled up and shifted inside it so exactly the trimmed area shows, at any
+// width.
+function CroppedImage({
+  src,
+  alt,
+  crop,
+}: {
+  src: string;
+  alt: string;
+  crop?: [number, number, number, number];
+}) {
+  const [size, setSize] = useState<[number, number] | null>(null);
+  const [top, right, bottom, left] = crop ?? [0, 0, 0, 0];
+  const cropped = crop && size;
+  const w = size ? size[0] - left - right : 0;
+  const h = size ? size[1] - top - bottom : 0;
+
+  return (
+    <span
+      className="cropped-image"
+      style={cropped ? { aspectRatio: `${w} / ${h}` } : undefined}
+    >
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        onLoad={(e) =>
+          setSize([e.currentTarget.naturalWidth, e.currentTarget.naturalHeight])
+        }
+        style={
+          cropped
+            ? {
+                position: "absolute",
+                width: `${(size[0] / w) * 100}%`,
+                height: "auto",
+                left: `${(-left / w) * 100}%`,
+                top: `${(-top / h) * 100}%`,
+                maxWidth: "none",
+              }
+            : undefined
+        }
+      />
+    </span>
+  );
 }
 
 // A labeled slot read by PublicationShowcase; never rendered on its own.
@@ -359,7 +411,12 @@ export function PublicationShowcase({ children }: { children: ReactNode }) {
             rel="noopener noreferrer"
           >
             {pub.image ? (
-              <img src={pub.image} alt={`${pub.label} article`} loading="lazy" />
+              <CroppedImage
+                key={pub.image}
+                src={pub.image}
+                alt={`${pub.label} article`}
+                crop={pub.crop}
+              />
             ) : (
               <span className="pub-showcase-placeholder">
                 <strong>{pub.label}</strong>
