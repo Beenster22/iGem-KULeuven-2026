@@ -14643,12 +14643,12 @@ a.protocol-download:hover {
 
 .strain-panel-table th:nth-child(2),
 .strain-panel-table td:nth-child(2) {
-  width: 10%;
+  width: 15%;
 }
 
 .strain-panel-table th:nth-child(3),
 .strain-panel-table td:nth-child(3) {
-  width: 10%;
+  width: 9%;
 }
 
 .strain-panel-table th:nth-child(4),
@@ -14663,12 +14663,12 @@ a.protocol-download:hover {
 
 .strain-panel-table th:nth-child(6),
 .strain-panel-table td:nth-child(6) {
-  width: 16%;
+  width: 15%;
 }
 
 .strain-panel-table th:nth-child(7),
 .strain-panel-table td:nth-child(7) {
-  width: 27%;
+  width: 25%;
 }
 
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
