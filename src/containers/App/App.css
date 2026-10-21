@@ -15366,15 +15366,15 @@ a.protocol-download:hover {
   padding-left: 1.9rem;
 }
 
+/* Edited with Claude Opus 5.5 (Anthropic), 2026-10-21 (team request: the
+   table should read in the same font as the text around it): body size,
+   line height and weight instead of the smaller 0.92rem / 1.55 and a
+   semibold left column. */
 .page-body .page-shell-content .integration-summary-row p {
   margin: 0;
-  font-size: 0.92rem;
-  line-height: 1.55;
+  font-size: 1rem;
+  line-height: 1.75;
   text-align: left;
-}
-
-.integration-summary-learned {
-  font-weight: 600;
 }
 
 .integration-summary-impact {
