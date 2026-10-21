@@ -30,13 +30,6 @@ const STAGE_DURATION_MS = 1900;
 // same way LogoArt below references the existing logo asset.
 // ---------------------------------------------------------------------
 
-const BODY_ART_SRC =
-  "https://static.igem.wiki/teams/6299/wiki/animations/femalefigure.avif";
-
-function BodyArt() {
-  return <img src={BODY_ART_SRC} alt="" role="presentation" />;
-}
-
 function GutArt() {
   return (
     <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="presentation">
@@ -117,7 +110,6 @@ function LogoArt() {
 }
 
 const STAGES: Stage[] = [
-  { key: "body", alt: "the human body", direction: "in", focal: { x: 50, y: 61 }, Art: BodyArt },
   { key: "gut", alt: "the gut", direction: "in", focal: { x: 55, y: 50 }, Art: GutArt },
   { key: "microbiome", alt: "the gut microbiome", direction: "in", focal: { x: 50, y: 50 }, Art: MicrobiomeArt },
   { key: "bacteria", alt: "a single bacterium", direction: "in", focal: { x: 50, y: 50 }, Art: BacteriaArt },

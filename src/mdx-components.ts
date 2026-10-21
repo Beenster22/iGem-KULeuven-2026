@@ -73,6 +73,7 @@ import { ZoomableImage } from "./components/ZoomableImage";
 import { ElleSays } from "./components/ElleSays";
 import { FundingGapIllustration } from "./components/FundingGapIllustration";
 import { ResearchVolumeChart } from "./components/ResearchVolumeChart";
+import { SurveyAttitudesChart, SurveyWillingnessChart } from "./components/SurveyCharts";
 import { FundingInfluences } from "./components/FundingInfluences";
 import { GapReasons, GapReason } from "./components/GapReasons";
 import { PatientJourney, JourneyStep } from "./components/PatientJourney";
@@ -206,6 +207,8 @@ export const mdxComponents = {
   // Generated with Claude Opus 5.5 (Anthropic), 2026-10-21: Figures 1–3 of
   // the Legislators & Advocates section, redrawn in the site's style.
   ResearchVolumeChart,
+  SurveyAttitudesChart,
+  SurveyWillingnessChart,
   FundingInfluences,
   // Generated with Claude Opus 5.5 (Anthropic), 2026-10-21: the numbered
   // "Why the gap exists" cards.

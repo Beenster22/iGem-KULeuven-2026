@@ -23,7 +23,6 @@
 import {
   Children,
   cloneElement,
-  createContext,
   isValidElement,
   useContext,
   useState,
@@ -31,13 +30,7 @@ import {
   type ReactElement,
   type ReactNode,
 } from "react";
-
-/** Given by ResultsPipelines: the tabs then switch the page's own pipeline. */
-export const PipelineContext = createContext<{
-  labels: string[];
-  index: number;
-  choose: (index: number) => void;
-} | null>(null);
+import { PipelineContext } from "./pipelineContext";
 
 interface SuccessCardProps {
   /** Slug of the heading to jump to, without the leading "#". */

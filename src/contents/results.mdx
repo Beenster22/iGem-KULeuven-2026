@@ -106,7 +106,9 @@
 
 <ResultSection>
 
-### Selecting a _P. vulgatus_ strain panel
+### Selecting a _Phocaeicola vulgatus_ strain panel
+
+{/* Updated with Claude Sonnet 5.5 (Anthropic), 2026-10-21, to match the team's document "Toolkit - section 1 - Strain selection"; wording, origins and the bsh loci table follow the document, the strain text now sits in a dropdown. */}
 
 <div className="results-standfirst">
   Six strains: the type strain <em>P. vulgatus</em> DSM1447 from faecal origin,
@@ -117,11 +119,11 @@
 
 <KeyTakeaways>
   <Takeaway>
-    6 strains from two origins: five from human faecal origin, one clinical
+    6 strains from two origins: five from human fecal origin, one clinical
     isolate from a retroperitoneal abscess.
   </Takeaway>
   <Takeaway>
-    3 BSH loci in the laboratory strain: DSM 1447 carries three choloylglycine
+    3 _bsh_ loci in the laboratory strain: DSM1447 carries three choloylglycine
     hydrolase loci with activity confirmed in vitro and in vivo.
   </Takeaway>
   <Takeaway>
@@ -131,17 +133,13 @@
   </Takeaway>
 </KeyTakeaways>
 
-#### Strain selection
+<ExpandableText title="Strain selection" tocIgnore>
 
-For our experiments, we selected six _Phocaeicola vulgatus_ strains spanning different isolation sources. Most strains were from faecal origin, to assess variation within faecal isolates on a strain level.
+For our experiments, we selected six _Phocaeicola vulgatus_ strains spanning different isolation sources. Most strains were from fecal origin, to assess variation within fecal isolates on a strain level. The type strain is used as a reference strain, as it is the only member with a complete genome, documented _bsh_ loci and established genetic tools. This way, _bsh_ gene content from the other strains can be compared against it to reveal whether conserved loci are suitable CRISPR replacement targets or whether strain-variable BSH paralogs exist.
 
-Five strains are of faecal origin: the laboratory strain DSM 1447, also known as ATCC 8482, together with the gut isolates DSM 108222 (H4_2), DSM 108228 (H5_1), DSM 108234 (H6_5) and RCC1806. RCC1806 is a faecal isolate obtained from the laboratory of <Link to="/attributions">Jeroen Raes</Link>. DSM 3289 (WAL 1887) was included as a clinical isolate recovered from a retroperitoneal abscess. All DSM strains were obtained from [DSMZ](https://www.dsmz.de/)[^strain-dsmz].
+Five strains are of fecal origin: the laboratory strain DSM1447, also known as ATCC8482, together with the gut isolates DSM108222 (H4_2), DSM108228 (H5_1), DSM108234 (H6_5) and RCC1806. RCC1806 is a fecal isolate obtained from the laboratory of <Link to="/attributions">Jeroen Raes</Link>. DSM3289 (WAL1887) was included as a clinical isolate recovered from a retroperitoneal abscess. All DSM strains were obtained from [DSMZ](https://www.dsmz.de/)[^strain-dsmz].
 
-<ProtocolNote kind="important">
-
-The type strain is used as a reference strain, as it is the only member with a complete genome, documented BSH loci and established genetic tools. This way, BSH gene content from the other strains can be compared against it to reveal whether conserved loci are suitable CRISPR replacement targets or whether strain-variable BSH paralogs exist.
-
-</ProtocolNote>
+</ExpandableText>
 
 #### The panel
 
@@ -164,7 +162,7 @@ The type strain is used as a reference strain, as it is the only member with a c
         so its row is marked rather than left to be picked out by eye. */}
     <tr className="table-row-highlight">
       <td>DSM 1447 / ATCC 8482 (type strain)</td>
-      <td>Faeces</td>
+      <td>Human feces</td>
       <td>Complete</td>
       <td>
         <a
@@ -179,13 +177,13 @@ The type strain is used as a reference strain, as it is the only member with a c
       <td>Confirmed GDCA, TUDCA</td>
       <td className="text-start">
         Measured: susceptible to Tet, Cm and Met (IC<sub>90%</sub> 1–4 mg/L);
-        Amp 4 mg/L, above the EUCAST anaerobe breakpoint. No inhibition by Gm or
+        Amp 4 mg/L, above the EUCAST breakpoint. No inhibition by Gm or
         Kan.
       </td>
     </tr>
     <tr>
       <td>DSM 108222 (H4_2)</td>
-      <td>Faeces (UK)</td>
+      <td>Human feces (UK)</td>
       <td>Shotgun</td>
       <td>
         <a
@@ -199,13 +197,13 @@ The type strain is used as a reference strain, as it is the only member with a c
       <td>Forster et al. 2019[^strain-forster]</td>
       <td>No data</td>
       <td className="text-start">
-        Predicted: <em>tetQ</em> (tetracycline) and <em>cepA</em> from the
-        genome. Not yet measured.
+        Predicted: <em>tetQ</em> (tetracycline) and <em>cepA</em> from genome.
+        Not yet measured.
       </td>
     </tr>
     <tr>
       <td>DSM 108228 (H5_1)</td>
-      <td>Faeces</td>
+      <td>Human feces</td>
       <td>Draft</td>
       <td>
         <a
@@ -222,7 +220,7 @@ The type strain is used as a reference strain, as it is the only member with a c
     </tr>
     <tr>
       <td>DSM 108234 (H6_5)</td>
-      <td>Faeces (UK)</td>
+      <td>Human feces (UK)</td>
       <td>Draft</td>
       <td>
         <a
@@ -239,7 +237,7 @@ The type strain is used as a reference strain, as it is the only member with a c
     </tr>
     <tr>
       <td>DSM 3289 / ATCC 29327 / WAL 1887</td>
-      <td>Retroperitoneal abscess</td>
+      <td>Human retroperitoneal abscess</td>
       <td>None</td>
       <td>–</td>
       <td>Nuding et al. 2009[^strain-nuding]</td>
@@ -247,15 +245,15 @@ The type strain is used as a reference strain, as it is the only member with a c
       <td>/</td>
     </tr>
     <tr>
-      <td>RCC1806</td>
-      <td>Faeces (Raes lab)</td>
+      <td>RCC1806 (direct fecal isolate)</td>
+      <td>Human feces (Raes lab)</td>
       <td>None</td>
       <td>–</td>
       <td>Unpublished</td>
       <td>No data</td>
       <td className="text-start">
-        Measured: Tet 1, Cm 2 and Met 4 mg/L; Amp 64 and Ery 256 mg/L; Gm 256
-        mg/L; no inhibition by Kan.
+        Measured: Tet 1, Cm 2 and Met 4 mg/L, Amp 64 and Ery 256 mg/L, Gm 256
+        mg/L, no inhibition by Kan.
       </td>
     </tr>
   </tbody>
@@ -264,26 +262,25 @@ The type strain is used as a reference strain, as it is the only member with a c
 </div>
 
 <div className="figure-caption">
-  Table 1. Identity, isolation source, genome availability and prior
-  characterisation for the six strains. All DSM strains are classified BSL1
-  under German regulations, and all are obligate anaerobes grown at 37 °C.
-  Susceptibility marked <em>Measured</em> is our own IC<sub>90%</sub> data from
+  Table 1. Identity, isolation source and genome availability for the six
+  strains, with culture conditions and prior characterization. All DSM strains
+  are classified BSL1 under German regulations, and all strains are obligate
+  anaerobes grown at 37 °C. Susceptibility marked <em>Measured</em> is our own IC<sub>90%</sub> data from
   the MIC assay; <em>Predicted</em> is inferred from resistance genes in the
   genome and has not been tested.
 </div>
 
 #### BSH annotation status
 
-Only the type strain has characterised BSH loci. Its genome carries three choloylglycine hydrolase (_cgh_/_bsh_) genes, with activity confirmed both in vitro and in vivo. These serve as the query set for annotating the remaining strains.
+Only the type strain has characterized _bsh_ loci. Its genome carries three choloylglycine hydrolase (_cgh_/_bsh_) genes, with activity confirmed both in vitro and in vivo. These serve as the query set for annotating the remaining strains.
 
-<ExpandableText title="BSH loci in DSM 1447 and how the other strains were annotated" tocIgnore>
+<ExpandableText title="bsh loci in DSM1447 and how the other strains were annotated" tocIgnore>
 
 | Locus tag   | Role                                             |
 | ----------- | ------------------------------------------------ |
 | BVU_RS09890 | Choloylglycine hydrolase locus                   |
 | BVU_RS12045 | Choloylglycine hydrolase locus                   |
 | BVU_RS20465 | Choloylglycine hydrolase locus                   |
-| BVU_RS13575 | BSH coding sequence used as the annotation query |
 
 </ExpandableText>
 
@@ -1307,26 +1304,21 @@ literature suggests is a credible alternative[^growth-gibbons].
 
 ### Antibiotic susceptibility of _P. vulgatus_
 
+{/* Updated with Claude Sonnet 5.5 (Anthropic), 2026-10-21, to match the team's document "Toolkit - section 4 - MIC"; kept the existing heading so the /results#antibiotic-susceptibility-of-p-vulgatus links keep working; methods and conclusion from the earlier write-up were kept as dropdowns. */}
+
 <div className="results-standfirst">
   Minimum inhibitory concentrations (MIC) for nine antibiotics across two{" "}
   <em>P. vulgatus</em> strains, to find reliable selection markers we could use
   downstream in our project.
 </div>
 
-The MIC assay is part of the toolkit development, which has the aim of facilitating research with
-_Phocaeicola vulgatus_. The goal of the MIC assay is to determine which antibiotics are most effective at
-inhibiting growth of _P. vulgatus_ DSM1447/ATCC8482 and fecal strain _P. vulgatus_ RCC1806. In the
-therapeutics pipeline, the most effective antibiotic would serve to inhibit _P. vulgatus_ carrying the CRISPR
-construct in the case of uncontrolled growth.
+The MIC assay is part of the toolkit development, which has the aim of facilitating research with _Phocaeicola vulgatus_. The goal of the MIC assay is to determine which antibiotics are most effective at inhibiting growth of _P. vulgatus_ DSM1447/ATCC8482 and fecal strain _P. vulgatus_ RCC1806. In the therapeutics pipeline, the most effective antibiotic would serve to inhibit _P. vulgatus_ carrying the CRISPR construct in the case of uncontrolled growth.
 
 <ExpandableText title="Do you know what EUCAST is?" tocIgnore>
 
-EUCAST stands for the European Committee on Antimicrobial Susceptibility Testing. It is a scientific committee
-jointly organized by the European Society for Clinical Microbiology and Infectious Diseases (ESCMID), the
-European Centre for Disease Prevention and Control (ECDC), and European national breakpoint committees.
+EUCAST stands for the European Committee on Antimicrobial Susceptibility Testing. It is a scientific committee and jointly organized by the European Society for Clinical Microbiology and Infectious Diseases (ESCMID), the European Centre for Disease Prevention and Control (ECDC), and European national breakpoint committees.
 
-What do they do? They set rules for testing antibiotics. They decide the exact dose needed to kill different
-bacteria and fungi, helping doctors choose the right medicine to treat infections successfully.
+What do they do? They set different rules for testing antibiotics. They decide the exact dose needed to kill different bacteria and fungi, helping doctors choose the right medicine to treat infections successfully.
 
 </ExpandableText>
 
@@ -1338,9 +1330,9 @@ bacteria and fungi, helping doctors choose the right medicine to treat infection
     effective antibiotics against <em>P. vulgatus</em> DSM1447 and RCC1806.
   </Takeaway>
   <Takeaway>
-    4 mg/L: both strains sit at the EUCAST breakpoint of 4 mg/L for
-    metronidazole, where a therapeutic is likely to succeed. It is the only
-    compound here with usable clinical guidance.
+    4 mg/L: both strains sit at the EUCAST breakpoint of 4 mg/L, where a
+    therapeutic is likely to succeed. The only compound here with usable
+    clinical guidance.
   </Takeaway>
   <Takeaway>
     Ampicillin and erythromycin: both vary widely between strains, and EUCAST
@@ -1348,7 +1340,7 @@ bacteria and fungi, helping doctors choose the right medicine to treat infection
   </Takeaway>
 </KeyTakeaways>
 
-#### Materials and methods
+<ExpandableText title="Materials and methods" tocIgnore>
 
 _P. vulgatus_ DSM1447 was obtained from the research group Molecular Biotechnology of Plants and
 Micro-organisms from KU Leuven by <Link to="/human-practices#matthew-herdman">Matt Herdman</Link>. The clinical isolate _P. vulgatus_ RCC1806 was obtained from
@@ -1367,60 +1359,53 @@ as the quantitative measure[^mic-veiga] and taken as the consensus across repeat
 Full plate layouts, dilution ranges and run-by-run records are in the <Link to="/notebook">Notebook</Link>
 (entries MIC-01 to MIC-04).
 
-#### Results
+</ExpandableText>
 
-The antibiotic with the lowest IC<sub>90%</sub> is the most effective against _P. vulgatus_ and can be used in
-the pipeline to inhibit growth if needed. Tetracycline was most effective, followed by chloramphenicol and
-metronidazole (Figure 1). Ampicillin and erythromycin showed more variable results between the two strains.
-Gentamicin and kanamycin did not inhibit _P. vulgatus_ within the tested range, except for RCC1806, which had
-a IC<sub>90%</sub> of 256 mg/L for gentamicin.
+The antibiotic with the lowest IC<sub>90%</sub> is the most effective and can be used in the pipeline to inhibit growth if needed. Tetracycline was most effective, followed by chloramphenicol and metronidazole (Figure 1). Ampicillin and erythromycin showed more variable results between the two strains. Gentamicin and kanamycin did not inhibit _P. vulgatus_ within the tested range, except for RCC1806, which had a IC<sub>90%</sub> of 256 mg/L for gentamicin.
 
-While tetracycline had the lowest IC<sub>90%</sub>, the range spanned several orders of two for _P. vulgatus_
-DSM1447, and there was only one replicate for RCC1806. In some dilutions, wells with a lower antibiotic
-concentration reached above 90% inhibition, while wells with the highest concentration in a dilution sometimes
-had values of 88% or 89%. These replicates, including the replicates of tetracycline, were discarded at a
-cutoff of 90%.
+While tetracycline had the lowest IC<sub>90%</sub>, the range spanned several orders of two for _P. vulgatus_ DSM1447, and there was only one replicate for RCC1806. In some dilutions, wells with a lower antibiotic concentration reached above 90% inhibition, while wells with the highest concentration in a dilution sometimes had values of 88% or 89%. These replicates, including the replicates of tetracycline, were discarded at a cutoff of 90%.
 
-Repeating the analysis at an 85% cutoff gives a more nuanced figure (Figure 2), which justifies the choice of
-tetracycline, metronidazole, and chloramphenicol as the most effective antibiotics for both strains.
+Repeating the analysis at an 85% cutoff gives a more nuanced figure (Figure 2), which justifies the choice of tetracycline, metronidazole, and chloramphenicol as the most effective antibiotics for both strains.
 
 <MicChart />
 
 <div className="figure-caption">
   Figure 1 (IC<sub>90%</sub> tab). IC<sub>90%</sub> of <em>P. vulgatus</em>{" "}
-  DSM1447 and RCC1806 in response to different antibiotics. Each dot represents
-  one replicate. The striped bars indicate that no IC<sub>90%</sub> was found
-  for the antibiotic, as there was still growth at the highest concentration of
-  the dilution series. Kruskal–Wallis and Dunn’s post hoc test was performed to
-  compare IC<sub>90%</sub> of different antibiotics within a strain. \* = p &lt;
-  0.05, Amp = ampicillin, Cm = chloramphenicol, Ery = erythromycin, Met =
-  metronidazole, Tet = tetracycline, Spc = spectinomycin, Gm = gentamicin, Stat
-  = statin (simvastatin), Kan = kanamycin.
+  DSM1447 and RCC1806 in response to different antibiotics. Each dot is one
+  replicate. Striped bars indicate that no IC<sub>90%</sub> was found, as growth
+  continued at the highest concentration of the dilution series.
+  Kruskal–Wallis and Dunn’s post hoc test was performed to compare
+  IC<sub>90%</sub> of different antibiotics within a strain. \* = p &lt; 0.05.
 </div>
 
 <div className="figure-caption">
-  Figure 2 (IC<sub>85%</sub> tab). IC<sub>90%</sub> of <em>P. vulgatus</em>{" "}
-  DSM1447 and RCC1806 in response to different antibiotics, at a cutoff value of
-  85%. Each dot represents one replicate. The striped bars indicate that no IC
-  <sub>90%</sub> was found for the antibiotic, as there was still growth at the
-  highest concentration of the dilution series. Kruskal–Wallis and Dunn’s post
-  hoc test was performed to compare IC<sub>90%</sub> of different antibiotics
-  within a strain. \* = p &lt; 0.05, \*\* = p &lt; 0.01, Amp = ampicillin, Cm =
-  chloramphenicol, Ery = erythromycin, Met = metronidazole, Tet = tetracycline,
-  Spc = spectinomycin, Gm = gentamicin, Stat = statin (simvastatin), Kan =
-  kanamycin.
+  Figure 2 (IC<sub>85%</sub> tab). IC<sub>85%</sub> of <em>P. vulgatus</em>{" "}
+  DSM1447 and RCC1806 in response to different antibiotics, at a cutoff of 85%.
+  Each dot is one replicate. Striped bars indicate that no IC<sub>85%</sub> was
+  found, as growth continued at the highest concentration of the dilution
+  series. Kruskal–Wallis and Dunn’s post hoc test was performed to compare
+  IC<sub>85%</sub> of different antibiotics within a strain. \* = p &lt; 0.05,
+  \*\* = p &lt; 0.01.
 </div>
 
-#### Discussion
+<ExpandableText title="Antibiotic abbreviations used in both figures" tocIgnore>
+
+| Abbreviation | Antibiotic    | Abbreviation | Antibiotic           | Abbreviation | Antibiotic    |
+| ------------ | ------------- | ------------ | -------------------- | ------------ | ------------- |
+| Amp          | ampicillin    | Cm           | chloramphenicol      | Ery          | erythromycin  |
+| Met          | metronidazole | Tet          | tetracycline         | Spc          | spectinomycin |
+| Gm           | gentamicin    | Stat         | statin (simvastatin) | Kan          | kanamycin     |
+
+</ExpandableText>
+
+<ExpandableText title="Comparison with literature" tocIgnore>
 
 <div className="figure-caption">
   Table 1. Comparison with literature. – No MIC values were found, either
   experimentally or in literature. \* Literature reported MIC50 or MIC90 values
-  for clinical or intestinal isolates, not for
-  <em>P. vulgatus</em> DSM1447, excepting source d. Brackets indicate the range
-  of the found MICs. \*\* S = susceptible, a therapeutic is likely to be
-  successful when using this concentration[^mic-eucast-bp]. The numbers found in
-  literature were found after a thorough literature search.
+  for clinical isolates, not for <em>P. vulgatus</em> DSM1447, excepting source
+  d. Brackets indicate the range of the found MICs. \*\* S = susceptible, a
+  therapeutic is likely to be successful when using this concentration[^mic-eucast-bp].
 </div>
 
 <div className="table-responsive table-responsive-rounded my-3">
@@ -1534,31 +1519,41 @@ tetracycline, metronidazole, and chloramphenicol as the most effective antibioti
   <sup>d</sup> From Escalante et al. (2024)[^mic-escalante]
 </div>
 
-Ampicillin is a β-lactam antibiotic, and β-lactamases have been reported to be present in _P. vulgatus_, so
-resistance was expected[^mic-mahmood][^mic-parker][^mic-sabunwala]. In contrast, the MIC of DSM1447 is 4 mg/L
-(1-32 mg/L), and the MIC of RCC1806 is 64 mg/L. Similar results have been reported (Table 1). Possibly,
-β-lactamases are not present or not as actively expressed in these strains than in the resistant clinical
-isolates. EUCAST advises not to use ampicillin for anaerobic bacteria when the MIC is higher than
-0.5 mg/L[^mic-eucast-nobp]. This advice, combined with the variability in IC<sub>90%</sub> between DSM1447 and
-RCC1806, means that ampicillin will no longer be considered as an effective antibiotic against _P. vulgatus_
-DSM1447 and RCC1806.
+</ExpandableText>
 
-**For both strains the IC<sub>90%</sub> of metronidazole is at the breakpoint of 4 mg/L, indicating that
-metronidazole is most likely an effective therapeutical antibiotic**[^mic-eucast-bp]. A recent meta-analysis
-confirms resistance against metronidazole remains low[^mic-markowska]. No breakpoints or other advice
-concerning tetracycline, chloramphenicol, or erythromycin are available for _P. vulgatus_.
+<ExpandableText title="Ampicillin" tocIgnore>
 
-Gentamycin and kanamycin uptake are dependent on the proton motive force, and so indirectly on oxygen, and
-were thus not predicted to have an adverse effect on growth[^mic-krause][^mic-webster], and this is indeed
-confirmed by our results.
+As a β-lactam, and with β-lactamases reported in _P. vulgatus_, resistance was expected[^mic-mahmood][^mic-parker][^mic-sabunwala]. Instead, the MIC is 4 mg/L (1–32) for DSM1447 and 64 mg/L for RCC1806, in line with earlier reports (Table 1). Possibly, β-lactamases are absent or less actively expressed in these strains than in the resistant clinical isolates. EUCAST advises against ampicillin for anaerobic bacteria when the MIC is higher than 0.5 mg/L[^mic-eucast-nobp], which together with the variability between strains, rules out the use of ampicillin as an effective antibiotic against _P. vulgatus_ DSM1447 and RCC1806.
 
-#### Conclusion
+</ExpandableText>
+
+<ExpandableText title="Metronidazole" tocIgnore>
+
+For both strains the IC<sub>90%</sub> sits at the breakpoint of 4 mg/L, indicating that it is most likely an effective therapeutical antibiotic[^mic-eucast-bp]. A recent meta-analysis confirms resistance against metronidazole remains low[^mic-markowska].
+
+</ExpandableText>
+
+<ExpandableText title="Tetracycline, chloramphenicol and erythromycin" tocIgnore>
+
+No breakpoints or other clinical guidance are available for _P. vulgatus_, so these rest on the measured values alone.
+
+</ExpandableText>
+
+<ExpandableText title="Gentamicin and kanamycin" tocIgnore>
+
+Uptake depends on the proton motive force, and so indirectly on oxygen, so no adverse effect on growth was predicted[^mic-krause][^mic-webster]. This is indeed confirmed by our results.
+
+</ExpandableText>
+
+<ExpandableText title="Conclusion" tocIgnore>
 
 Tetracycline, chloramphenicol, and metronidazole were found to be the most effective antibiotics against
 _P. vulgatus_ DSM1447 and RCC1806. As the EUCAST specifically recommends the use of metronidazole when the MIC
 is below 4 mg/L, this antibiotic is most recommended when working with _P. vulgatus_. Ampicillin and
 erythromycin are less encouraged, given the variability between the strains and a negative advice against
 ampicillin by EUCAST.
+
+</ExpandableText>
 
 </ResultSection>
 
@@ -1568,36 +1563,53 @@ ampicillin by EUCAST.
 
 ### Conjugation into _P. vulgatus_
 
+{/* Updated with Claude Sonnet 5.5 (Anthropic), 2026-10-21, to match the team's document "Toolkit - part 5 - Conjugation analysis"; figures renumbered 1-5 in reading order, cycles moved into dropdowns. */}
+
 <div className="results-standfirst">
-  Conjugation efficiency into six <em>P. vulgatus</em> strains, tested over three
+  Testing conjugation efficiency into six <em>P. vulgatus</em> strains in three
   DBTL cycles.
 </div>
+
+Our goal is to target the most active bile salt hydrolase (BSH) via CRISPRi. This CRISPR construct of course needs to be present in _P. vulgatus_. One method to achieve this is by conjugation: _E. coli_ S17-1 λpir would conjugate the CRISPR plasmid to _P. vulgatus_, which would then integrate into the genome and express the CRISPR system. Conjugation efficiency was determined, and is part of the toolkit development.
+
+<ExpandableText title="The three conjugations" tocIgnore>
+
+To investigate this part of the therapeutics pipeline, multiple conjugations were performed:
+
+- _E. coli_ S17-1 λpir to _P. vulgatus_ DSM1447: a preliminary conjugation to assess efficiency of a conjugation into _P. vulgatus_ and, if needed, to optimize it.
+- _E. coli_ S17-1 λpir to _P. vulgatus_ RCC1806, DSM108222, 3289, 108234, and 108228 to assess efficiency of a conjugation into clinical (fecal) isolates.
+- _E. coli_ S17-1 λpir to _P. vulgatus_ RCC1806, DSM1447, 108222, 3289, 108234, 108228 to assess efficiency of a conjugation into clinical isolates and to compare with DSM1447 conjugation efficiency.
+
+As the CRISPR construct was not yet developed, pNBU2 was selected as the plasmid for conjugation. Three conjugation cycles were run: a pilot into the type strain, an extension to the clinical isolates, and a final conjugation for all six strains.
+
+</ExpandableText>
 
 #### Major takeaways
 
 <KeyTakeaways>
   <Takeaway>
-    DSM1447 and RCC1806 yielded the most colonies after conjugation, at more than
-    10⁷ CFU/mL.
+    <em>P. vulgatus</em> DSM1447/ATCC8482 and RCC1806 yielded the most colonies
+    after conjugation, with concentrations greater than 10⁷ CFU/mL.
   </Takeaway>
   <Takeaway>
-    DSM108228, DSM108222 and DSM3289 were less efficient, between 10⁴ and 10⁷
-    CFU/mL; DSM108234 was the least efficient, below 10⁴ CFU/mL.
+    <em>P. vulgatus</em> DSM108228, 108222 and 3289 were less efficient, with
+    concentrations between 10⁴ and 10⁷ CFU/mL.
   </Takeaway>
   <Takeaway>
-    Fluorescence microscopy gave no clear result, possibly because
-    autofluorescence interfered with KOFP-7, and the execution of the experiment
-    also went poorly.
+    <em>P. vulgatus</em> DSM108234 was the least efficient, with a concentration
+    of less than 10⁴ CFU/mL.
   </Takeaway>
   <Takeaway>
-    These efficiencies must be read with the erythromycin caveat below: some
-    counted colonies may be false positives.
+    Fluorescence microscopy did not give clear results, possibly due to
+    autofluorescence interfering with KOFP-7 fluorescence. Execution of the
+    experiment also went poorly.
+  </Takeaway>
+  <Takeaway>
+    Possible false positives: unconjugated strains could still grow on the
+    selection plates, so the efficiencies must be interpreted extremely
+    cautiously.
   </Takeaway>
 </KeyTakeaways>
-
-#### Introduction
-
-Our goal is to target the most active bile salt hydrolase (BSH) via CRISPRi, which requires the CRISPR construct to be present in _P. vulgatus_. One method is conjugation: _E. coli_ S17-1 λpir transfers the CRISPR plasmid to _P. vulgatus_, where it integrates into the genome and expresses the CRISPR system. As the CRISPR construct was not yet developed, pNBU2 was used as the plasmid for conjugation. Three cycles were run: a pilot into the type strain, an extension to the clinical isolates, and a final conjugation for all six strains.
 
 <ExpandableText title="The pNBU2 construct" tocIgnore>
 
@@ -1611,15 +1623,13 @@ Our goal is to target the most active bile salt hydrolase (BSH) via CRISPRi, whi
   </div>
 </figure>
 
-pNBU2 is a suicide plasmid in _Bacteroides_: it cannot replicate, so a colony that survives erythromycin selection should be one in which the plasmid integrated[^conj-wang].
+pNBU2 is a suicide plasmid in _Bacteroides_. It cannot replicate, so a colony that survives erythromycin selection should be one in which the plasmid integrated[^conj-wang].
 
 </ExpandableText>
 
-#### Results
+<ExpandableText title="Cycle 1: the pilot conjugation into DSM1447" tocIgnore>
 
-##### The pilot conjugation into DSM1447
-
-The first conjugation transferred pNBU2 from _E. coli_ S17-1 λpir into _P. vulgatus_ DSM1447. Colonies grew on mGAM + Gm + Ery, and amplification of a ParB-like gene (BVU_RS10845) confirmed that they were _P. vulgatus_. An _E. coli_ S17-1 λpir colony served as the negative control. Single colonies were only resolvable at 10⁻⁵ to 10⁻⁸, so the next cycle used only these dilutions.
+The first conjugation transferred pNBU2 from _E. coli_ S17-1 λpir into _P. vulgatus_ DSM1447. Colonies grew on mGAM + Gm + Ery, and amplification of a ParB-like gene (BVU_RS10845) confirmed the colonies were _P. vulgatus_ (Figure 2). An _E. coli_ S17-1 λpir colony served as the negative control. Single colonies were only resolvable at 10⁻⁵ to 10⁻⁸, so the next DBTL cycle used only these dilutions.
 
 <figure>
   <ZoomableImage
@@ -1631,9 +1641,11 @@ The first conjugation transferred pNBU2 from _E. coli_ S17-1 λpir into _P. vulg
   </div>
 </figure>
 
-##### Extending to the clinical isolates
+</ExpandableText>
 
-Conjugation into RCC1806, DSM3289 and DSM108222 was successful, while no colonies appeared for DSM108234 and DSM108228. They may simply have been diluted too much, so the next cycle plated every dilution from 10⁻¹ to 10⁻⁸.
+<ExpandableText title="Cycle 2: extending to RCC1806, DSM108222, DSM108234, DSM108228 and DSM3289" tocIgnore>
+
+The conjugation to _P. vulgatus_ RCC1806, DSM3289 and 108222 was successful, while DSM108234 and DSM108228 colonies did not appear on the plates (Figure 3). It could be that the colonies were simply diluted too much, and thus they did not appear on the plates. This was further investigated in the next cycle: all dilutions, ranging from 10⁻¹ to 10⁻⁸, were plated out again.
 
 <figure>
   <ZoomableImage
@@ -1641,13 +1653,15 @@ Conjugation into RCC1806, DSM3289 and DSM108222 was successful, while no colonie
     alt="Plates from the conjugation into the clinical isolates."
   />
   <div className="figure-caption">
-    Figure 2b. Conjugation from <em>E. coli</em> to <em>P. vulgatus</em> RCC1806, DSM108222, 108234, 108228, and 3289. A) 1806 B) Top: 108228, bottom: 3289 C) Top: 108234, bottom: 108222. All dilutions are 10⁻⁵–10⁻⁸.
+    Figure 3. Conjugation from <em>E. coli</em> to <em>P. vulgatus</em> RCC1806, DSM108222, 108234, 108228, and 3289. A) 1806 B) Top: 108228, bottom: 3289 C) Top: 108234, bottom: 108222. All dilutions are 10⁻⁵–10⁻⁸.
   </div>
 </figure>
 
-##### Conjugation into all six strains
+</ExpandableText>
 
-All conjugations were successful. Differences between strains are visible by eye, for instance RCC1806 shows more colonies than DSM108234, and efficiency can be quantified as average colony forming units (CFU) per mL.
+<ExpandableText title="Cycle 3: conjugation into all six strains" tocIgnore>
+
+All conjugations were successful (Figure 4, supplementary information). Differences between the efficiencies of the strains can already be observed visually: for example, RCC1806 (Figure 4, C1) shows more colonies than 108234 (Figure 4, E1). Moreover, conjugation efficiencies can be determined quantitatively by calculating the average colony forming units (CFU) per mL (Figure 5).
 
 <figure>
   <ZoomableImage
@@ -1655,11 +1669,13 @@ All conjugations were successful. Differences between strains are visible by eye
     alt="Plates of the conjugation into all six strains and the 16S rDNA PCR gel."
   />
   <div className="figure-caption">
-    Figure 3. Conjugation from <em>E. coli</em> to <em>P. vulgatus</em> DSM1447, RCC1806, DSM108222, 108234, 108228, and 3289. A-E1) 108228, DSM1447, RCC1806, 108222, 108234 10⁻¹–10⁻⁴ A-E2) 108228, 1447, 1806, 108222, 108234 10⁻⁵–10⁻⁸ A3) 3289 10⁻¹–10⁻⁴ B3) 3289 10⁻⁵–10⁻⁸ D3) Negative control: unconjugated <em>P. vulgatus</em> strains. E3) Negative control: <em>E. coli</em> S17-1 λpir without pNBU2. Taken with Reshape. F) Gel electrophoresis of 16S rDNA PCR products.
+    Figure 4. Conjugation from <em>E. coli</em> to <em>P. vulgatus</em> DSM1447, RCC1806, DSM108222, 108234, 108228, and 3289. A-E1) 108228, DSM1447, RCC1806, 108222, 108234 10⁻¹–10⁻⁴ A-E2) 108228, 1447, 1806, 108222, 108234 10⁻⁵–10⁻⁸ A3) 3289 10⁻¹–10⁻⁴ B3) 3289 10⁻⁵–10⁻⁸ D3) Negative control: unconjugated <em>P. vulgatus</em> strains. E3) Negative control: <em>E. coli</em> S17-1 λpir without pNBU2. Taken with Reshape. F) Gel electrophoresis of 16S rDNA PCR products.
   </div>
 </figure>
 
-**Efficiency spans five orders of magnitude.** DSM1447 and RCC1806 conjugate most efficiently, generating the most colonies. DSM108228, DSM108222, DSM3289 and DSM108234 are less efficient, in that order.
+</ExpandableText>
+
+**Efficiency spans five orders of magnitude.** _P. vulgatus_ DSM1447 and RCC1806 can be conjugated most efficiently: after conjugation, they generate the most colonies compared to the other _P. vulgatus_ strains. DSM108228, DSM108222, DSM3289 and DSM108234 have lower conjugation efficiencies (in that order).
 
 <figure>
   <ZoomableImage
@@ -1667,29 +1683,29 @@ All conjugations were successful. Differences between strains are visible by eye
     alt="Conjugation efficiency per P. vulgatus strain in CFU/mL on a logarithmic axis."
   />
   <div className="figure-caption">
-    Figure 4. Conjugation efficiencies of the strains (CFU/mL). Note: the lines represent the standard deviation. As there was considerable variability between dilutions for DSM1447 and RCC1806, their standard deviations are large. It might seem that the standard deviations are not equally large in both directions, but this apparent difference is only due to the logarithmic y-axis. The large standard deviations of DSM1447 and RCC1806 make that effect visually more pronounced.
+    Figure 5. Conjugation efficiencies of the strains (CFU/mL). Note: the lines represent the standard deviation. As there was considerable variability between dilutions for DSM1447 and RCC1806, their standard deviations are large. It might seem that the standard deviations are not equally large in both directions, but this apparent difference is only due to the logarithmic y-axis. The large standard deviations of DSM1447 and RCC1806 make that effect visually more pronounced.
   </div>
 </figure>
 
 <Callout title="Important: the selection plates may have let false positives through" kind="warning" raised>
 
-Our MIC data, which became available after these cycles were run, exposed an error in the design. The plates carried 25 µg/mL erythromycin, while RCC1806 has an IC<sub>90%</sub> of 256 µg/mL and DSM1447 has an IC<sub>90%</sub> of 4 µg/mL. RCC1806 can therefore grow on the selection plates without ever receiving the pNBU2 plasmid, so colonies counted as transconjugants may include false positives.
+Our MIC data, which became available after these cycles were run, exposed an error in the design. The plates carried 25 µg/mL erythromycin, while RCC1806 has an IC<sub>90%</sub> of 256 µg/mL and DSM1447 has an IC<sub>90%</sub> of 4 µg/mL. The RCC1806 strain can therefore grow on the selection plates without ever receiving the pNBU2 plasmid. Colonies counted as transconjugants may include false positives.
 
-Antibiotic susceptibility was not tested for the other strains, but they may have a similar IC<sub>90%</sub>. To verify the plasmid, and so the false positives, integration should have been checked. We did not do this, because pNBU2 is a suicide plasmid: we assumed _P. vulgatus_ could not grow on mGAM + Gm + Ery without it. The MIC data show this assumption is wrong for RCC1806, and possibly for the other clinical isolates too.
+Antibiotic susceptibility was not tested for the other strains, but it is possible that they have a similar IC<sub>90%</sub>. To verify the presence of the plasmid, and as such the presence of false positive colonies, integration should have been checked. We did not do this, as it is a suicide plasmid. We assumed _P. vulgatus_ could not grow on mGAM + Gm + Ery without containing the plasmid, which the MIC data now show to be a wrong assumption for RCC1806, and possibly for the other clinical isolates too.
 
-**Treat the conjugation efficiencies above with extreme caution.** Future work should check integration, or at least determine erythromycin susceptibility for every strain and use a concentration above the MIC on the plates.
+**Recommendation for future researchers:** check integration, or at least test erythromycin susceptibility for all _P. vulgatus_ strains and use a higher concentration than the MIC on the plates. The conjugation efficiencies should thus be interpreted extremely cautiously, and the experiment repeated once erythromycin susceptibility has been determined for all strains.
 
 </Callout>
 
-<ExpandableText title="Supplementary information" tocIgnore>
+<ExpandableText title="Supplementary information: strains and verification" tocIgnore>
 
 **Donor.** _E. coli_ S17-1 λpir[^conj-simon].
 
-**Recipients.** _P. vulgatus_ DSM1447 as the type strain, the isolates RCC1806, DSM108222, DSM108234 and DSM108228 (all human faeces) and DSM3289 (retroperitoneal abscess). RCC1806 is a faecal isolate from the Raes lab, obtained via Ruben Vazquez Uribe.
+**Recipients.** _P. vulgatus_ DSM1447 as the type strain, plus the isolates RCC1806, DSM108222, DSM108234 and DSM108228 (all human feces) and DSM3289 (retroperitoneal abscess)[^conj-dsmz]. RCC1806 is a fecal isolate and was obtained from the Raes lab of Bioinformatics and (Eco-)Systems Biology, via Ruben Vazquez Uribe.
 
-**Conjugation.** Donor and recipients were grown overnight in LB or mGAM respectively, mixed, and plated on mGAM + gentamicin (200 µg/mL) + erythromycin (25 µg/mL). Erythromycin selected for cells carrying the plasmid via ermG; gentamicin counter-selected against _E. coli_[^conj-elkhoury].
+**Conjugation.** Donor and recipients were grown overnight in LB or mGAM respectively, mixed, and plated on mGAM + gentamicin (200 µg/mL) + erythromycin (25 µg/mL). Erythromycin selected for cells harboring the plasmid via ermG; gentamicin counter-selected against _E. coli_[^conj-elkhoury].
 
-**Verification.** A ParB-like gene (BVU_RS10845) was amplified to confirm DSM1447, and the 16S rDNA was amplified, sequenced by Sanger sequencing and blasted to confirm the clinical isolates (primers in Table 1). Integration of pNBU2 was not verified by PCR, see the caveat above.
+**Verification.** Growth on plates when selecting with gentamicin and erythromycin is a strong indication that the colonies are conjugated _P. vulgatus_ and not _E. coli_, but additional verification by PCR was performed. A ParB-like gene (BVU_RS10845) was amplified and run on gel to confirm the presence of _P. vulgatus_ DSM1447, while the gene for 16S rDNA was amplified, sequenced, and blasted to confirm the presence of the clinical isolates[^conj-ncbi-16s][^conj-ncbi-parb]. The integration of pNBU2 was not verified by PCR, as pNBU2 is a suicide plasmid in _Bacteroides_ — see the caveat above for why this was an error.
 
 <div className="table-responsive table-responsive-rounded my-3">
 
@@ -1724,9 +1740,22 @@ Antibiotic susceptibility was not tested for the other strains, but they may hav
 
 </ExpandableText>
 
+<ExpandableText title="Supplementary information: 16S rDNA sequencing" tocIgnore>
+
+Sanger sequencing was used to sequence the 16S rDNA fragments:
+
+- 203 & 204: forward and reverse reads of strain DSM108228
+- 205 & 206: forward and reverse reads of strain DSM1447
+- 207 & 208: forward and reverse reads of strain DSM3289
+- 209 & 210: forward and reverse reads of strain DSM108222
+- 211 & 212: forward and reverse reads of strain RCC1806
+- 213 & 214: forward and reverse reads of strain DSM108234
+
+</ExpandableText>
+
 #### DBTL cycles
 
-Three DBTL cycles were performed of the conjugation, and two of the fluorescence microscopy used to detect the plasmid through KOFP-7 expression. See the full <Link to="/engineering#fluorescence-microscopy-conjugation">DBTL cycles</Link> on our Engineering Success page.
+Three DBTL cycles were performed of the conjugation with _P. vulgatus_ (see above). Two DBTL cycles were performed of the fluorescence microscopy used to determine the presence of the pNBU2 plasmid in the cells, via KOFP-7 expression[^conj-kofp7]. See the full <Link to="/engineering#fluorescence-microscopy-conjugation">DBTL cycles</Link> on our Engineering Success page.
 
 </ResultSection>
 
@@ -1873,56 +1902,149 @@ Placeholder — what the library gives a future team.
 
 ### Screening BSH activity on bile salt plates
 
+{/* Updated with Claude Sonnet 5.5 (Anthropic), 2026-10-21, to match the team's document "Therapeutics - part 1 - section 3a - BS ASSAY"; replaces the placeholders. */}
+
 <div className="results-standfirst">
-  Placeholder — one line on what the plate assay tests and why it comes first.
+  A standardized method for pouring conjugated bile salt plates, and the halo
+  screen of 14 BSH constructs that followed.
 </div>
 
-Placeholder — the reaction the assay reads out, and what a positive plate looks
-like.
+The halo assay is the standard plate method for detecting bile salt hydrolase activity, used in the literature as the first screen before ninhydrin or LC–MS[^bsh-jones].
+
+The principle is simple. A construct expressing an active BSH deconjugates the bile salt in the surrounding agar. The freed bile acid is insoluble and precipitates, producing a visible white halo around the colony. The diameter of that halo gives an estimate of relative enzyme activity.
+
+{/* The team's Word document leaves this figure open (a bare "FIGURE" marker) — delete the slot once the reaction schematic exists. */}
+
+<FigureSlot label="Figure">
+  The BSH reaction in the agar: conjugated bile acids in, deconjugated bile
+  acids out.
+</FigureSlot>
+
+A white halo cannot be read on a cloudy plate. Before any construct could be scored we therefore had to establish how to pour even bile salt plates and confirm that _E. coli_ grows on them.
 
 #### Major takeaways
 
 <KeyTakeaways>
   <Takeaway>
-    Placeholder — what "salt → LB" shows (name this takeaway).
+    Salt, then LB: the preparation standard was determined. Bile salt is added
+    directly to the well, followed by LB with CaCl₂, to avoid precipitation.
   </Takeaway>
   <Takeaway>
-    Placeholder — what "H₂O" shows (name this takeaway).
+    H₂O: water is the working solvent. DMSO is unusable, as it precipitates the
+    medium and makes it unusable for plate pouring.
   </Takeaway>
   <Takeaway>
-    Placeholder — what "100 mg/mL" shows (name this takeaway).
+    100 mg/mL: TUDCA dissolves in water at this concentration, GUDCA does not.
+    Neither heating nor vortexing helped, and a few drops of 5 M NaOH were
+    needed.
   </Takeaway>
   <Takeaway>
-    Placeholder — what "14/14" shows (name this takeaway).
+    14 / 14: no bile salt is inhibitory. Every construct grew on every GUDCA and
+    TUDCA plate up to 1.5% (w/v), so the plating layout works and tolerance is
+    not the limiting factor.
   </Takeaway>
   <Takeaway>
-    Placeholder — what "✗" shows (name this takeaway).
+    No halo, no signal: BSH-expressing colonies were indistinguishable from the
+    sfGFP control. The drops are dense and the surrounding agar stays turbid.
   </Takeaway>
   <Takeaway>
-    Placeholder — what "LC–MS" shows (name this takeaway).
+    LC–MS, a shift towards a quantitative method: the negative plate result is
+    what motivated the LC–MS deconjugation assay.
   </Takeaway>
 </KeyTakeaways>
 
-##### In the agar
+<ExpandableText title="Assay development: water, and bile salt before the medium" tocIgnore>
 
-{/* The sketch shows the small BSH reaction panel here. The scrolling version of it, <BshStreamAnimation />, is not used on this page: it brings its own headings, which would end up in the page index between the results. */}
+Two pilots established the plate preparation standard.
 
-<FigureSlot label="Figure 1">
-  The BSH reaction in the agar: conjugated bile acids in, deconjugated bile
-  acids out.
-</FigureSlot>
+- Can bile salts be dissolved or poured at all, and could a correct pouring method reduce precipitation? Bile salt is added directly to the well first, followed by LB with CaCl₂, which avoids the precipitation that made earlier plates unreadable.
+- In which solvent should it be dissolved? Water is the working solvent: DMSO precipitates the medium and is unusable.
 
-##### On the plate
+<div className="table-responsive table-responsive-rounded my-3">
 
-<FigureSlot label="Figure 2">
-  The two plates side by side: active BSH with its opaque halo, and the sfGFP
-  control with no halo.
-</FigureSlot>
+<table className="table table-bordered align-middle text-center">
+  <thead>
+    <tr>
+      <th>Solvent</th>
+      <th>0.5%</th>
+      <th>1.0%</th>
+      <th>1.5%</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>dH₂O</td>
+      <td>Growth</td>
+      <td>Growth</td>
+      <td>Growth</td>
+    </tr>
+    <tr>
+      <td>DMSO</td>
+      <td>Growth</td>
+      <td>No growth</td>
+      <td>No growth</td>
+    </tr>
+  </tbody>
+</table>
 
-#### Results
+</div>
 
-Placeholder — the plate screening results (the rest of this section follows the
-Word document).
+<div className="figure-caption">
+  Table 1. Growth of BSH3 and BSH11 in <em>E. coli</em> DH5α on bile salt mixture plates, by solvent and concentration (w/v). Water supports growth at every concentration tested; DMSO fails above 0.5%.
+</div>
+
+</ExpandableText>
+
+<ExpandableText title="GUDCA will not dissolve in water at the working concentration" tocIgnore>
+
+With the solvent and pouring order settled, the two substrates of interest were tested in the same format: six-well plates of GUDCA and TUDCA with BSH3 and BSH11 at 0.5, 1.0 and 1.5% (w/v), prepared from 100 mg/mL stocks in dH₂O so the results stay comparable with the mixture experiment above.
+
+TUDCA dissolved as intended. GUDCA did not: neither heating nor vortexing brought it into solution at 100 mg/mL, and a few drops of 5 M NaOH were needed. The resulting stock sits at a higher pH than intended, and the plates were poured from it anyway to see what came out. All plates gave growth except 1.5% GUDCA.
+
+</ExpandableText>
+
+<ExpandableText title="The halo assay: 14 BSH constructs and an sfGFP control" tocIgnore>
+
+The full screen followed: 14 BSH constructs and an sfGFP control, drop-plated on LB + CaCl₂ + Kan containing GUDCA or TUDCA at 0.5, 1.0 and 1.5% (w/v), with a no-bile-salt control plate. Colony formation was followed with a time-lapse colony imaging system.
+
+BSH3 is the one construct of the fifteen not included here. Plate capacity was limited, and a no-BSH negative control was the more valuable use of the slot. sfGFP took the C1 position in the first construct set. BSH3 had already been plated extensively on GUDCA and TUDCA during the pilot runs, so it was the construct whose plating behavior was best characterized and therefore the least costly to leave out.
+
+{/* Image extracted from the team's Word document; it has to be uploaded to static.igem.wiki under this name (see the team's uploads tool) before it shows. */}
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/bsh-plate-screen.avif"
+    alt="BSH bile salt plate screen in E. coli DH5α: wells of GUDCA and TUDCA at three concentrations, each with four constructs as drops, none showing a clearing halo."
+  />
+  <div className="figure-caption">
+    Figure 1. BSH bile salt plate screen in <em>E. coli</em> DH5α. Each well carries four constructs as 5 µL drops of a 16 h overnight culture, in the 2×2 order given in the row label. Every condition was plated in duplicate wells, one of each pair is shown. A clearing halo around a drop would indicate deconjugation, growth without a halo indicates tolerance only. sfGFP is the no-BSH control and appears in two rows. Figure overview put together with Claude AI.
+  </div>
+</figure>
+
+</ExpandableText>
+
+<ExpandableText title="Discussion" tocIgnore>
+
+Two things could be determined from our work:
+
+- The plate method itself was established. A standardized procedure now exists for pouring conjugated bile salt media.
+- The halo assay returned nothing usable. BSH constructs did not differ from the control on any plate, at any concentration, with either substrate.
+
+The negative result was informative nonetheless: the constructs grew, the layout worked, and the control behaved as a control should. What the assay could not do is resolve deconjugation against a turbid background. That sent the screen to a quantitative and more sensitive method, the LC–MS assay.
+
+</ExpandableText>
+
+<ExpandableText title="Learn more: why the halo did not appear" tocIgnore>
+
+The halo assay assumes that an active BSH deconjugates the bile salt in the surrounding agar, precipitating the free bile acid into a visible white ring. The method is well established and was used in many papers as the plate screen preceding ninhydrin or LC–MS detection[^bsh-jones], so the expectation was reasonable.
+
+When we observe the imaging results closely, turbidity around the TUDCA plates is more visible than around the GUDCA plates in general, and no halo was seen around the control medium. But where halo or turbidity formations did appear on the salt media, comparing the BSH strains against the control strains leaves the picture essentially unchanged. The constructs produced no additional precipitation.
+
+Several explanations are compatible with this. The drops are dense enough that any local clearing is masked by the colony itself. Or the free bile acids released from GUDCA and TUDCA (both ursodeoxycholic acid conjugates) may simply be too soluble at the pH used to precipitate visibly.
+
+**Future perspective:** we proceeded with the next experiments (BSA 06 and 07), as the plate assay did not meet our expectations. For a more precise and quantitative analysis we applied LC–MS to liquid cultures of bile salt media with BSH constructs.
+
+</ExpandableText>
 
 </ResultSection>
 
@@ -2029,6 +2151,8 @@ Placeholder — what a next team should do with this.
 
 ### CRISPR construct design
 
+{/* Updated with Claude Sonnet 5.5 (Anthropic), 2026-10-21, to match the team's document "Therapeutics - part 2 - section 6 - CRISPR"; sections moved into dropdowns; the four takeaways are summaries of the document's own statements. */}
+
 {/* The team's own "Construct Planning FINAL" document, transferred as written; only typography was adjusted (species names in italics, R6K γ ori, en dashes) and the document's own headings were kept as the structure below. */}
 {/* TODO(team): the document's unresolved comments are not carried onto the page — the open ones are flagged with TODO comments where they apply. */}
 {/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: dropped the standfirst teaser and the "Executive summary" label (team feedback: duplicated the paragraph below without adding anything) and moved the plasmid map down to sit beside its own legend instead of beside this text. */}
@@ -2043,7 +2167,29 @@ arms flanking our BSH of interest to insert it into the genome after double
 strand break induction. The intended effect is a restored bile salt pool for
 balanced immune and metabolic modulation.
 
-#### Construct components
+#### Major takeaways
+
+<KeyTakeaways>
+  <Takeaway>
+    The gRNA guides Cas9 to the native BSH, which is replaced by a homolog of
+    different substrate preference, so the bile salts with the strongest TGR5
+    affinity remain.
+  </Takeaway>
+  <Takeaway>
+    The plasmid backbone does not integrate, so it can be cured, leaving a
+    scarless gene replacement.
+  </Takeaway>
+  <Takeaway>
+    Four validation steps are planned: junction PCR, Cas9 expression, BSH
+    activity and stability. The system has not yet been tested in vivo.
+  </Takeaway>
+  <Takeaway>
+    Still open: the BSH variant, 4–5 gRNA spacers, the homology arms and the
+    strength of the native HDR system.
+  </Takeaway>
+</KeyTakeaways>
+
+<ExpandableText title="Construct components" tocIgnore>
 
 {/* Row shading matches the component's colour on the map above. The map sits large on the left with its own legend condensed beside it (team feedback), rather than a full-width table below a small map. */}
 
@@ -2156,7 +2302,9 @@ balanced immune and metabolic modulation.
 
 </div>
 
-#### Integration strategy
+</ExpandableText>
+
+<ExpandableText title="Integration strategy" tocIgnore>
 
 {/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-20: swapped in the team's corrected figure (crispr-img.avif); its own numbered circles are now the clickable steps. */}
 {/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: the five steps became numbered pins on the biorender figure itself instead of a card row below it (team feedback: wanted the figure and its step-by-step explanation to work as one interactive piece, defaulting to step 1 with Previous/Next to move through the rest), and the "Note" callout was cut down to a small asterisked line since it is a caveat, not a result. */}
@@ -2211,7 +2359,9 @@ using the native RecA homology directed repair (HDR) system in _P. vulgatus_.
 
 </div>
 
-#### Validation plan
+</ExpandableText>
+
+<ExpandableText title="Validation plan" tocIgnore>
 
 {/* The same four steps as the validation plan on the entrepreneurship page — keep the two in sync. */}
 {/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: the four key-takeaway cards (a bare "1"-"4") became dropdowns, chronological top to bottom with a bigger title, matching the protocol write-ups on the Protocols page (team feedback: the numbers read too large/heavy for what they were). */}
@@ -2257,7 +2407,9 @@ For additional information about risk and safety see the <Link to="/safety-and-s
 
 </div>
 
-#### Data gaps and future iterations
+</ExpandableText>
+
+<ExpandableText title="Data gaps and future iterations" tocIgnore>
 
 {/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-18: boxed in a subsection-panel like the other CRISPR subsections, team feedback. */}
 
@@ -2281,6 +2433,17 @@ For additional information about risk and safety see the <Link to="/safety-and-s
 </div>
 
 </div>
+
+</ExpandableText>
+
+<ExpandableText title="References" tocIgnore>
+
+- Feng, J., Qian, Y., Zhou, Z., Ertmer, S., Vivas, E. I., Lan, F., Hamilton, J. J., Rey, F. E., Anantharaman, K., & Venturelli, O. S. (2022). Polysaccharide utilization loci in _Bacteroides_ determine population fitness and community-level interactions. Cell Host & Microbe, 30(2), 200–215.e12. [https://doi.org/10.1016/j.chom.2021.12.006](https://doi.org/10.1016/j.chom.2021.12.006)
+- CRISPR-Cas-based genome editing for human gut commensals. ACS Synthetic Biology, 11(1), 464. [Article page](https://pubs.acs.org/asbcd6/article-abstract/11/1/464/1497030/CRISPR-Cas-Based-Genome-Editing-for-Human-Gut)
+- UniProt proteome UP000002861: [https://www.uniprot.org/proteomes/UP000002861](https://www.uniprot.org/proteomes/UP000002861)
+- Addgene plasmid 117119: [https://www.addgene.org/117119/](https://www.addgene.org/117119/)
+
+</ExpandableText>
 
 <ResourceDownload
   href="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/therapeutic-part-2-section-6-crispr-branded.pdf"
@@ -2343,6 +2506,11 @@ For additional information about risk and safety see the <Link to="/safety-and-s
 [^growth-wc]: Wilkins, T. D., & Chalgren, S. (1976). Medium for use in antibiotic susceptibility testing of anaerobic bacteria. Antimicrobial Agents and Chemotherapy, 10(6), 926–928. https://doi.org/10.1128/AAC.10.6.926
 
 [^growth-gibbons]: Gibbons, R. J., & Macdonald, J. B. (1960). Hemin and vitamin K compounds as required factors for the cultivation of certain strains of _Bacteroides melaninogenicus_. Journal of Bacteriology, 80(2), 164–170.
+[^conj-dsmz]: Leibniz Institute DSMZ. (2026). DSMZ - Leibniz Institute DSMZ. https://www.dsmz.de/dsmz
+[^conj-ncbi-16s]: National Center for Biotechnology Information. (2022). _Phocaeicola vulgatus_ ATCC 8482 16S ribosomal RNA, partial sequence [Data set]. NCBI Nucleotide Database (444304091). http://www.ncbi.nlm.nih.gov/nuccore/NR_074515.1
+[^conj-ncbi-parb]: National Center for Biotechnology Information. (2026). BVU_RS10845 ParB/RepB/Spo0J family partition protein [_Phocaeicola vulgatus_ ATCC 8482] - Gene - NCBI. https://www.ncbi.nlm.nih.gov/gene/5303114
+[^conj-kofp7]: Lambert, T. (n.d.). KOFP-7 at FPbase. FPbase. Retrieved 11 October 2026, from https://www.fpbase.org/protein/kofp-7/
+[^bsh-jones]: Jones, B. V., Begley, M., Hill, C., Gahan, C. G. M., & Marchesi, J. R. (2008). Functional and comparative metagenomic analysis of bile salt hydrolase activity in the human gut microbiome. Proceedings of the National Academy of Sciences, 105(36), 13580–13585. https://doi.org/10.1073/pnas.0804437105
 [^conj-wang]: Wang, J., Shoemaker, N. B., Wang, G.-R., & Salyers, A. A. (2000). Characterization of a Bacteroides mobilizable transposon, NBU2, which carries a functional lincomycin resistance gene. Journal of Bacteriology, 182(12), 3559–3571. https://doi.org/10.1128/JB.182.12.3559-3571.2000
 [^conj-simon]: Simon, R., Priefer, U., & Pühler, A. (1983). A broad host range mobilization system for in vivo genetic engineering: Transposon mutagenesis in Gram negative bacteria. Bio/Technology, 1(9), 784–791. https://doi.org/10.1038/nbt1183-784
 [^conj-neb]: New England Biolabs. (n.d.). 1 kb Plus DNA Ladder | NEB. Retrieved 3 October 2026, from https://www.neb.com/en/products/n3200-1-kb-plus-dna-ladder
