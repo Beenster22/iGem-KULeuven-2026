@@ -862,8 +862,6 @@ export function Tgr5ZoomSection() {
   const prefersReducedMotion = useReducedMotion();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  const step = usePinnedStep(wrapperRef, 2);
-  const shown = prefersReducedMotion ? 2 : step + 1;
   // The receptor on the screen above flies down and becomes this one.
   useReceptorZoom({
     stageRef,
@@ -876,23 +874,21 @@ export function Tgr5ZoomSection() {
     <div
       className={prefersReducedMotion ? undefined : "home-snap-pin"}
       ref={wrapperRef}
-      style={{ "--snap-steps": 2 } as CSSProperties}
+      style={{ "--snap-steps": 1 } as CSSProperties}
     >
-      {!prefersReducedMotion && <SnapSteps steps={2} />}
+      {!prefersReducedMotion && <SnapSteps steps={1} />}
       <div
         ref={stageRef}
         className={`tgr5-zoom${prefersReducedMotion ? " tgr5-zoom--static" : " home-snap-stage"}`}
       >
-        {/* Edited 2026-10-21 (team request): one sentence, no "…", its
-            second half coming in on the second step in its place, so the
-            sentence keeps one left edge. */}
+        {/* Edited 2026-10-21 (team request): one sentence, no "…", and all
+            of it at once — its second half used to wait for a second
+            scroll, which split one sentence over two screens. */}
         <div className="tgr5-zoom-words">
-          <p className={`tgr5-zoom-line${shown >= 1 ? " tgr5-zoom-line--shown" : ""}`}>
+          <p className="tgr5-zoom-line tgr5-zoom-line--shown">
             TGR5 is one of the <strong>most potent</strong> bile acid
             receptors,{" "}
-            <span
-              className={`tgr5-zoom-more${shown >= 2 ? " tgr5-zoom-more--shown" : ""}`}
-            >
+            <span className="tgr5-zoom-more tgr5-zoom-more--shown">
               involved in <strong>various different pathways</strong>
             </span>
           </p>
