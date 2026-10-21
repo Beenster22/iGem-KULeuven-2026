@@ -7,8 +7,14 @@ import { lazy, type ComponentType, type LazyExoticComponent } from "react";
 
 export type PageComponent = LazyExoticComponent<ComponentType> & { file: string };
 
-const page = (file: string, load: () => Promise<{ default: ComponentType }>): PageComponent =>
-  Object.assign(lazy(load), { file });
+// Every loader, so preloadPages() can fetch the chunks the visitor hasn't
+// opened yet.
+const loaders: Array<() => Promise<unknown>> = [];
+
+const page = (file: string, load: () => Promise<{ default: ComponentType }>): PageComponent => {
+  loaders.push(load);
+  return Object.assign(lazy(load), { file });
+};
 
 export const Home = page("home", () => import("./home.mdx"));
 // Team
@@ -36,3 +42,26 @@ export const ScienceCommunication = page("science-communication", () => import("
 export const Entrepreneurship = page("entrepreneurship", () => import("./entrepreneurship.mdx"));
 // Prizes and Medals / Judging Form
 export const Awards = page("awards", () => import("./awards.mdx"));
+
+// Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-21
+// Purpose: once the first page has loaded and the browser is idle, fetch the
+// other page chunks one at a time in the background, so moving between pages
+// is instant and a chunk that has gone stale after a redeploy is hit less
+// often. Skipped in dev (it would compile every page) and on data-saver
+// connections. A failed fetch is ignored: the page is requested again, with
+// PageErrorBoundary as the fallback, when the visitor opens it.
+export function preloadPages() {
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+  if (!import.meta.env.PROD || connection?.saveData) return;
+  const idle: (cb: () => void) => void =
+    "requestIdleCallback" in window
+      ? (cb) => window.requestIdleCallback(cb, { timeout: 5000 })
+      : (cb) => setTimeout(cb, 2000);
+  const queue = [...loaders];
+  const next = () => {
+    const load = queue.shift();
+    if (!load) return;
+    load().catch(() => {}).finally(() => idle(next));
+  };
+  idle(next);
+}

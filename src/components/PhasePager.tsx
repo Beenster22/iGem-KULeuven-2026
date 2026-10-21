@@ -14,6 +14,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
+import { RESTORING_ATTR } from "./useScrollMemory";
 
 interface Slot {
   slot: HTMLElement;
@@ -81,7 +82,11 @@ export function PhasePager({
       const target = hash ? document.getElementById(hash) : null;
       if (target) {
         reveal(hash);
-        target.scrollIntoView({ block: "start", behavior: "instant" });
+        // A return with the back button puts the reader back where they
+        // were instead (useScrollMemory), so the jump to the #hash waits out.
+        if (!document.documentElement.hasAttribute(RESTORING_ATTR)) {
+          target.scrollIntoView({ block: "start", behavior: "instant" });
+        }
       } else if (hash && tries++ < 120) {
         frame = window.setTimeout(revealHash, 16);
       }
@@ -116,7 +121,8 @@ export function PhasePager({
     show(index);
     const section = sectionsRef.current[index];
     const heading = section?.querySelector("h2");
-    if (heading?.id) history.replaceState(null, "", `#${heading.id}`);
+    // history.state kept for useScrollMemory (the router's key for this visit).
+    if (heading?.id) history.replaceState(history.state, "", `#${heading.id}`);
     section?.scrollIntoView({ block: "start" });
   }
 

@@ -22,7 +22,7 @@ What this adds up to is not one successful construct, but a documented, reusable
 
 <DBTLStage stage="design">
 
-In order to work with a non-model organism and engineer it, our first priority was establishing reproducible, measurable growth as without that, no downstream genetic work would be possible. Based on advice from our instructor <Link to="/human-practices#matthew-herdman">Mattew Herdman</Link> and our PI <Link to="/human-practices#ruben-vazquez-uribe">Ruben Vazquez-Uribe</Link>, we designed a pilot experiment comparing four different media chosen to span the range from rich and undefined (mGAM, BHI) to lean and defined (MM), with WC as a middle ground. We used the type strain DSM 1447, since it is commercially available and well-characterized, so that our results could be cross-checked against the literature.
+In order to work with a non-model organism and engineer it, our first priority was establishing reproducible, measurable growth as without that, no downstream genetic work would be possible. Based on advice from our instructor <Link to="/human-practices#matthew-herdman">Matthew Herdman</Link> and our PI <Link to="/human-practices#ruben-vazquez-uribe">Ruben Vazquez-Uribe</Link>, we designed a pilot experiment comparing four different media chosen to span the range from rich and undefined (mGAM, BHI) to lean and defined (MM), with WC as a middle ground. We used the type strain DSM 1447, since it is commercially available and well-characterized, so that our results could be cross-checked against the literature.
 
 </DBTLStage>
 
@@ -178,7 +178,7 @@ We learned that preculture state is the single largest source of plate-to-plate 
 
 <DBTLStage stage="design">
 
-Our final goal was to optimize the growth yield of DSM1447 in our minimal media. We used the literature[^tramontano] and advice of our PI Ruben to identify three candidate supplements: soluble starch (carbon source), vitamin K (growth factor) and a pH adjustment to 7.2 and tested all eight combinations in a full 2³-factorial design, to understand their influences and interactions.
+Our final goal was to optimize the growth yield of DSM1447 in our minimal media. We used the literature[^tramontano] and advice of our PI <Link to="/human-practices#ruben-vazquez-uribe">Ruben</Link> to identify three candidate supplements: soluble starch (carbon source), vitamin K (growth factor) and a pH adjustment to 7.2 and tested all eight combinations in a full 2³-factorial design, to understand their influences and interactions.
 
 </DBTLStage>
 
@@ -278,7 +278,7 @@ This experiment gave us no MIC values but we learned that the literature ranges 
 
 <DBTLStage stage="design">
 
-For our next iteration, we lowered every starting concentration by up to three two-fold steps. Two additions came out of conversations rather than the data: our instructor Matt supplied gentamicin, the aminoglycoside used clinically to clear gut microbes. Additionally, our PI, Ruben, advised us to include simvastatin (a statin) in the MIC assay, as this has been reported to inhibit *P. vulgatus* DSM1447[^escalante]. We also included the fecal strain RCC1806, since a toolkit for *P. vulgatus* should not rest on the type strain alone.
+For our next iteration, we lowered every starting concentration by up to three two-fold steps. Two additions came out of conversations rather than the data: our instructor Matt supplied gentamicin, the aminoglycoside used clinically to clear gut microbes. Additionally, our PI, <Link to="/human-practices#ruben-vazquez-uribe">Ruben</Link>, advised us to include simvastatin (a statin) in the MIC assay, as this has been reported to inhibit *P. vulgatus* DSM1447[^escalante]. We also included the fecal strain RCC1806, since a toolkit for *P. vulgatus* should not rest on the type strain alone.
 
 </DBTLStage>
 
@@ -743,7 +743,7 @@ Five constitutive promoters were chosen from literature: Bfp1E6 (Bfp), BT1311 (B
 
 <DBTLStage stage="build">
 
-Promoter, RBS, reporter CDS, and Terminator were ordered as assembled gBlocks, assembled using Gibson assembly, and transformed into *E. coli* S17 λ pir. Conjugation was used to transfer the plasmid into *P. vulgatus* to test expression in the host of interest. A 96-well plate was built to include 3 wells of each replicate in mGAM media, for reproducibility, and a well containing mGAM media without cells was used to understand background intensities. The plate was a polyacrylamide black 96wp with a transparent F-bottom, a plate typical for fluorescent measurments. The outer wells contained water to mitigate the effect of evaporation on our samples.
+Promoter, RBS, reporter CDS, and Terminator were ordered as assembled gBlocks, assembled using Gibson assembly, and transformed into *E. coli* S17-1 λ pir. Conjugation was used to transfer the plasmid into *P. vulgatus* to test expression in the host of interest. A 96-well plate was built to include 3 wells of each replicate in mGAM media, for reproducibility, and a well containing mGAM media without cells was used to understand background intensities. The plate was a polyacrylamide black 96wp with a transparent F-bottom, a plate typical for fluorescent measurments. The outer wells contained water to mitigate the effect of evaporation on our samples.
 
 <div className="figure-panel">
 
@@ -767,7 +767,7 @@ Promoter, RBS, reporter CDS, and Terminator were ordered as assembled gBlocks, a
 
 <DBTLStage stage="test">
 
-Measurements were taken every 50 mins for a total of around 4 hours. Delays occurred due to learning curves associated with usage of the Clariostar instrument including finding a fitting gain to use for each fluorescence. mGAM ans mGAM-grown *P. vulgatus* DSM1447 were used to normalize fluorescence to account for medium autofluorescence and cell density respectively, and LB was used to normalize for the positive control GFP expressing *E. coli*. Only the mCherry, GFP, and KOFP-7 were tested because the system in the lab did not have bioluminescent capacity for the NanoLuc.
+Measurements were taken every 50 mins for a total of around 4 hours. Delays occurred due to learning curves associated with usage of the Clariostar instrument including finding a fitting gain to use for each fluorescence. mGAM and mGAM-grown *P. vulgatus* DSM1447 were used to normalize fluorescence to account for medium autofluorescence and cell density respectively, and LB was used to normalize for the positive control GFP expressing *E. coli*. Only the mCherry, GFP, and KOFP-7 were tested because the system in the lab did not have bioluminescent capacity for the NanoLuc.
 
 </DBTLStage>
 
@@ -855,7 +855,7 @@ To combat this in future experiments, we recommend using a minimal media with le
 
 <DBTLStage stage="design">
 
-Initially, we planned to test and evaluate BSH activity with a halo assay, where deconjugated bile salts would precipitate on the medium and form a ‘halo’ ring around the colony. Our designed included transforming *E.coli* DH5α with a plasmid constitutively expressing a BSH variant and growing them on agar plates supplemented with bile salts. Not only are these bile salts difficult to obtain but with no protocol to follow, we were unsure of how to best dissolve them. To solve this, our goals were (1) to figure out in which order the medium components must be assembled for the agar to pour cleanly, (2) whether the bile salts should be dissolved in DMSO or dH₂O, and (3) understand optimal concentrations of bile salt substrates.
+Initially, we planned to test and evaluate BSH activity with a halo assay, where deconjugated bile salts would precipitate on the medium and form a ‘halo’ ring around the colony. Our designed included transforming *E. coli* DH5α with a plasmid constitutively expressing a BSH variant and growing them on agar plates supplemented with bile salts. Not only are these bile salts difficult to obtain but with no protocol to follow, we were unsure of how to best dissolve them. To solve this, our goals were (1) to figure out in which order the medium components must be assembled for the agar to pour cleanly, (2) whether the bile salts should be dissolved in DMSO or dH₂O, and (3) understand optimal concentrations of bile salt substrates.
 
 </DBTLStage>
 
@@ -988,7 +988,7 @@ TUDCA dissolved without difficulty at 100 mg/mL and supported growth. However, G
 
 <DBTLStage stage="learn">
 
-With many bile salts precipitated, the need for a different solvent or a pH-adjusted buffer that increases solubility and mitigates pH is the biggest roadblock. Because the bile salts are difficult to obtain, future optimization of the Halo assay for this bile salt range was not continued in our wetlab timeline. Water was not a suitable solvent for those salts. That is why DMSO was the solvent used for the bile salts in the <Link to="/protocols#lc-ms-quantification-of-bile-acid-deconjugation">liquid assays for LC-MS</Link> at the advice of PI Ruben Vazquez-Uribe.
+With many bile salts precipitated, the need for a different solvent or a pH-adjusted buffer that increases solubility and mitigates pH is the biggest roadblock. Because the bile salts are difficult to obtain, future optimization of the Halo assay for this bile salt range was not continued in our wetlab timeline. Water was not a suitable solvent for those salts. That is why DMSO was the solvent used for the bile salts in the <Link to="/protocols#lc-ms-quantification-of-bile-acid-deconjugation">liquid assays for LC-MS</Link> at the advice of PI <Link to="/human-practices#ruben-vazquez-uribe">Ruben Vazquez-Uribe</Link>.
 
 Continuing forward with TUDCA and GUDCA only was the logical option as these had the greatest stock amounts. For these, the formulation was settled: bile salt first, CaCl<sub>2</sub> already in the LB, dH₂O as solvent, and 2.5µL of 10<sup>−6</sup> as the working dilution. We also learned that the NaOH-raised pH of the GUDCA stock, affecting both bacterial growth and bile salt chemistry. This is another control we planned to optimize futher.
 
@@ -1249,7 +1249,7 @@ The BreR system is patented and hard to obtain, so the design was changed. The u
 - Codon harmonization of the BreR sequence to the host. This changes the DNA but may not remove any patent coverage, because a patent can cover the protein itself. An intellectual property check is needed before this is revisited. The team's <Link to="/dry-lab">dry-lab codon optimization and harmonization tool</Link> could be used for this.
 - Using a second BSH to change deconjugating activity. This idea was carried into Cycle 3.
 
-With BreR removed, the dynamic requirement was also dropped, and the design became constitutive. PI Ruben's advice to keep the change narrow strengthened the idea of alternative BSH expression. Because of this discussion, we decided against simply knocking out the native BSH. The team's rationale is that replacing the enzyme, rather than deleting it, keeps the change smaller. This is a new hypothesis to test.
+With BreR removed, the dynamic requirement was also dropped, and the design became constitutive. PI <Link to="/human-practices#ruben-vazquez-uribe">Ruben</Link>'s advice to keep the change narrow strengthened the idea of alternative BSH expression. Because of this discussion, we decided against simply knocking out the native BSH. The team's rationale is that replacing the enzyme, rather than deleting it, keeps the change smaller. This is a new hypothesis to test.
 
 </DBTLStage>
 

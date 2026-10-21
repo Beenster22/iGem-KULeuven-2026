@@ -31,9 +31,16 @@ export function textOf(node: ReactNode): string {
 }
 
 /**
- * Slugs of every heading in a subtree. Headings nested inside other
- * components (an <ExpandableText>, say) count too: their content is still
- * part of this panel, and MDX leaves them in the element tree as children.
+ * Slugs of every heading in a subtree, plus every explicit `id` written on an
+ * element there. Headings nested inside other components (an
+ * <ExpandableText>, say) count too: their content is still part of this
+ * panel, and MDX leaves them in the element tree as children.
+ *
+ * Edited with Claude Opus 5 (Anthropic), 2026-10-21 (team request: a link
+ * must land on the exact table or figure it names): ids are collected as
+ * well as headings, so a link to an anchor such as #table-growth-params
+ * opens the panel or pipeline section that holds it, instead of being
+ * ignored because it is not a heading.
  */
 export function headingSlugs(node: ReactNode, found: string[] = []): string[] {
   if (Array.isArray(node)) {
@@ -46,6 +53,8 @@ export function headingSlugs(node: ReactNode, found: string[] = []): string[] {
     const text = textOf((node.props as { children?: ReactNode }).children);
     if (text) found.push(stringToSlug(text));
   }
+  const id = (node.props as { id?: unknown }).id;
+  if (typeof id === "string" && id) found.push(id);
   // A dropdown's title is rendered as a heading too (see ExpandableText), but
   // it is a prop, not a child, so it has to be read from there.
   const title = (node.props as { title?: ReactNode }).title;
