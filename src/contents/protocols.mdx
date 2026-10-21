@@ -8689,6 +8689,236 @@ dilution: 100 × (10 / 100) = 10.0 µL of stock and 90.0 µL of MQ water.
 
 </ExpandableText>
 
+<ExpandableText title="Fluorescence Microscopy">
+
+<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/fluorescence-microscopy-2.pdf" />
+
+#### Introduction
+
+This protocol describes the preparation of *Phocaeicola vulgatus* cells for
+fluorescence microscopy on agarose pads, used to check the expression of
+fluorescent reporters from the pNBU2 constructs at the single-cell level.
+
+Imaging is performed on an inverted microscope with oil immersion, using phase
+contrast for morphological clarity alongside the fluorescence channels.
+
+#### Materials
+
+**Reagents**
+
+| Item | Specification and quantity |
+|---|---|
+| Overnight cultures of the strains to be imaged | 1 mL per sample |
+| Phosphate-buffered saline (PBS), 1×, sterile | Approximately 4 mL per sample (three washes and the final resuspension) |
+| Agarose | 0.075 g for 5 mL of a 1.5% solution |
+| Vaseline, lanolin and paraffin | Mixed in equal parts to seal the coverslip |
+| Immersion oil | For the objective |
+
+**Consumables and tools**
+
+| Item | Specification and quantity |
+|---|---|
+| Microscope slides and coverslips | One each per sample |
+| Microcentrifuge tubes, 1.5 mL | One per sample |
+| Micropipettes and tips | 20–200 µL and 100–1000 µL |
+
+**Instruments**
+
+| Item | Specification and quantity |
+|---|---|
+| Inverted fluorescence microscope with phase contrast and oil immersion objective | With the filter sets matching the reporters in use |
+| Microcentrifuge | 5000 × g |
+| Heating block or microwave | For dissolving the agarose |
+| Precision balance | Readability 0.001 g |
+
+**Personal protective equipment**
+
+| Item | Specification and quantity |
+|---|---|
+| Lab coat | Worn closed at all times |
+| Nitrile gloves | Changed after contact with reagents or cultures |
+| Safety glasses | Required when handling hot liquids and irritant powders |
+
+#### Safety and safety data sheets
+
+Hazard classifications were taken from the supplier safety data sheets (SDS)
+and product pages cited in the table below. The SDS of the exact product and
+lot in use should be consulted before starting, because classifications can
+differ between suppliers and product grades.
+
+Molten agarose can cause burns. The sealing mixture is heated before use and is
+handled with care.
+
+**Table 1.** Hazard classification and safety data sheets (SDS) of the reagents used.
+
+| Substance | CAS no. | Classification (GHS/CLP) | Precautions | SDS |
+|---|---|---|---|---|
+| Bacterial strains and transformants | n/a | Biological agents. Transformants are genetically modified micro-organisms (contained use). | Work under the containment level approved for the laboratory. Inactivate all cultures, plates and contaminated consumables by autoclaving. | No SDS: see the institutional biosafety guidelines |
+| Agarose | 9012-36-6 | Not classified as hazardous. | Molten agarose can superheat and boil over: wear thermal gloves and safety glasses. | Thermo Fisher Scientific (n.d.) Product page; SDS under "Documents" |
+
+**Waste disposal.** All cultures, plates and contaminated consumables are
+inactivated by autoclaving before disposal. The waste and disposal instructions
+of the laboratory in use apply.
+
+#### Procedure
+
+**Preparing the cells**
+
+1. Determine the volume of culture required to obtain the intended optical
+   density after resuspension (Table 2).
+
+<ProtocolNote>
+
+As a guide, 1 mL of culture at an OD₆₀₀ of 0.5 is resuspended in 1 mL of 1×
+PBS.
+
+</ProtocolNote>
+
+<ProtocolCalculator
+  number={2}
+  title="Resuspension of the cells to a defined OD₆₀₀."
+ 
+  rows={[
+    { key: "od1", label: "Measured OD₆₀₀ of the culture", value: 1, unit: "–", input: true },
+    { key: "od2", label: "Target OD₆₀₀ after resuspension", value: 0.5, unit: "–", input: true },
+    { key: "vFinal", label: "Final volume in PBS", value: 1000, unit: "µL", input: true },
+    { key: "vCulture", label: "Culture to pellet", unit: "µL", decimals: 0, compute: (v) => (v.od2 * v.vFinal) / v.od1 },
+    { key: "washes", label: "Number of PBS washes", value: 3, unit: "washes", input: true },
+    { key: "vPBS", label: "PBS required per sample", unit: "µL", decimals: 0, compute: (v) => v.vFinal * (v.washes + 1) },
+  ]}
+/>
+
+2. Pellet the cells by centrifugation at 5000 × g for 5 minutes.
+3. Discard the supernatant and resuspend the pellet in 1 mL of 1× PBS.
+4. Repeat steps 2 and 3 twice more, for three washes in total.
+
+**Preparing the agarose pads**
+
+5. Prepare a 1.5% (w/v) agarose solution in 1× PBS (Table 3) and dissolve it
+   completely.
+
+<ProtocolCalculator
+  number={3}
+  title="Agarose pad."
+ 
+  rows={[
+    { key: "percent", label: "Agarose percentage (w/v)", value: 1.5, unit: "%", input: true },
+    { key: "vSolution", label: "Volume of agarose solution to prepare", value: 5, unit: "mL", input: true },
+    { key: "mass", label: "Agarose to weigh", unit: "g", decimals: 3, compute: (v) => (v.percent * v.vSolution) / 100 },
+    { key: "vPerSlide", label: "Volume applied per slide", value: 350, unit: "µL", input: true },
+    { key: "nSlides", label: "Number of slides from this volume", unit: "slides", decimals: 0, compute: (v) => Math.floor((v.vSolution * 1000) / v.vPerSlide) },
+  ]}
+/>
+
+6. Apply 300 to 400 µL of the agarose solution to a microscope slide and let it
+   dry, so that the cells adhere.
+
+<ProtocolNote>
+
+The agarose layer is also what makes autofocus work: the autofocus and
+perfect-focus systems detect a change in refraction, and the agarose produces
+the shift that marks where the sample begins.
+
+</ProtocolNote>
+
+7. Drop the washed cell suspension onto the agarose pad.
+8. Seal the slide and coverslip with a mixture of vaseline, lanolin and
+   paraffin.
+
+**Imaging**
+
+9. Image the cells on the inverted microscope with oil immersion, using phase
+   contrast for morphological clarity alongside the fluorescence channels.
+
+<ProtocolNote>
+
+Slides and plates require different illumination settings; slides need more
+focused light.
+
+</ProtocolNote>
+
+10. Save the images in the project folder for the experiment, with the date and
+    the strain in the file name.
+
+#### Notes from the bench
+
+This section collects the experience of the team with this protocol: what was
+changed between runs, what went wrong and what is worth knowing before
+starting. Members of the team are encouraged to add their own entries, each
+starting with the month and year.
+
+<ProtocolNote date="August 2026">
+
+In the session of 20 August 2026, overnight cultures were prepared the day
+before for six colonies per combination: *P. vulgatus* DSM1447 with pNBU2,
+DSM1447 without plasmid, and DSM1447 with pNBU2 induced with 10 mM rhamnose,
+each in 1 mL of mGAM.
+
+</ProtocolNote>
+
+<ProtocolNote date="August 2026">
+
+No fluorescence could be observed in that session and some cells had died. KOFP
+appears cyan under the microscope.
+
+</ProtocolNote>
+
+<ProtocolNote date="October 2026">
+
+The images of that session are stored in the team SharePoint folder for
+fluorescence microscopy. They can be linked here if they are published.
+
+</ProtocolNote>
+
+<ProtocolCalculations>
+
+This section explains the calculations used in this protocol. The symbols are
+defined for each equation, and the worked example uses the values printed in
+the corresponding table.
+
+**Resuspension of the cells to a defined optical density**
+
+V1 = (OD2 × V2) / OD1  and  *V*pbs = V2 × (*w* + 1)
+
+in which:
+
+- V1 = volume of culture to pellet (µL)
+- OD1 = measured OD₆₀₀ of the culture
+- OD2 = required OD₆₀₀ after resuspension
+- V2 = final volume in PBS (µL)
+- *w* = number of washes
+- *V*pbs = total PBS required per sample (µL)
+
+Each wash uses one final volume of PBS, and the final resuspension uses one
+more, hence the factor (*w* + 1).
+
+**Worked example.** To obtain 1000 µL at an OD₆₀₀ of 0.5 from a culture at
+OD₆₀₀ 1.0: V1 = (0.5 × 1000) / 1.0 = 500 µL of culture. With three washes,
+1000 × 4 = 4000 µL of PBS is required per sample.
+
+**Agarose for the pads**
+
+*m* = (*p* × *V*) / 100  and  *n* = *V* × 1000 / *V*s
+
+in which:
+
+- *m* = mass of agarose to weigh (g)
+- *p* = agarose percentage (% w/v)
+- *V* = volume of agarose solution (mL)
+- *V*s = volume applied per slide (µL)
+- *n* = number of slides
+
+**Worked example.** For 5 mL of 1.5% agarose: *m* = (1.5 × 5) / 100 = 0.075 g.
+At 350 µL per slide this gives 5000 / 350 = 14 slides.
+
+</ProtocolCalculations>
+
+#### References
+
+- Thermo Fisher Scientific. (n.d.). *UltraPure low melting point agarose* (Catalog No. 16520050) [Product information]. Retrieved October 6, 2026, from https://www.thermofisher.com/order/catalog/product/16520050
+
+</ExpandableText>
+
 ### Reporter Characterization
 
 <ExpandableText title="Rhamnose Induction and Medium Optimization">
@@ -9331,13 +9561,6 @@ differ between suppliers and product grades.
 inactivated by autoclaving before disposal. The waste and disposal instructions
 of the laboratory in use apply.
 
-<Callout title="Still to be added">
-
-The supplier and catalogue numbers of the plates, the antibiotics and the
-Nano-Glo kit still need to be added.
-
-</Callout>
-
 #### Procedure
 
 **Planning the plate**
@@ -9632,236 +9855,6 @@ corrected OD is 0.45 − 0.05 = 0.400. Blank-corrected: (45,000 − 1200) / 0.40
 - FPbase. (n.d.-c). *Superfolder GFP*. Retrieved October 11, 2026, from https://www.fpbase.org/protein/superfolder-gfp/
 - Promega. (n.d.). *Nano-Glo luciferase assay system* (Technical Manual TM369). Retrieved October 11, 2026, from https://www.promega.com/-/media/files/resources/protocols/technical-manuals/101/nanoglo-luciferase-assay-system-protocol.pdf
 - Sigma-Aldrich. (n.d.). *Kanamycin sulfate from Streptomyces kanamyceticus* (Product No. K1377) [Safety data sheet]. Retrieved October 11, 2026, from https://www.sigmaaldrich.com/BE/en/sds/sigma/k1377
-
-</ExpandableText>
-
-<ExpandableText title="Fluorescence Microscopy">
-
-<ProtocolDownloads pdf="https://static.igem.wiki/teams/6299/wiki/wet-lab/protocols/fluorescence-microscopy-2.pdf" />
-
-#### Introduction
-
-This protocol describes the preparation of *Phocaeicola vulgatus* cells for
-fluorescence microscopy on agarose pads, used to check the expression of
-fluorescent reporters from the pNBU2 constructs at the single-cell level.
-
-Imaging is performed on an inverted microscope with oil immersion, using phase
-contrast for morphological clarity alongside the fluorescence channels.
-
-#### Materials
-
-**Reagents**
-
-| Item | Specification and quantity |
-|---|---|
-| Overnight cultures of the strains to be imaged | 1 mL per sample |
-| Phosphate-buffered saline (PBS), 1×, sterile | Approximately 4 mL per sample (three washes and the final resuspension) |
-| Agarose | 0.075 g for 5 mL of a 1.5% solution |
-| Vaseline, lanolin and paraffin | Mixed in equal parts to seal the coverslip |
-| Immersion oil | For the objective |
-
-**Consumables and tools**
-
-| Item | Specification and quantity |
-|---|---|
-| Microscope slides and coverslips | One each per sample |
-| Microcentrifuge tubes, 1.5 mL | One per sample |
-| Micropipettes and tips | 20–200 µL and 100–1000 µL |
-
-**Instruments**
-
-| Item | Specification and quantity |
-|---|---|
-| Inverted fluorescence microscope with phase contrast and oil immersion objective | With the filter sets matching the reporters in use |
-| Microcentrifuge | 5000 × g |
-| Heating block or microwave | For dissolving the agarose |
-| Precision balance | Readability 0.001 g |
-
-**Personal protective equipment**
-
-| Item | Specification and quantity |
-|---|---|
-| Lab coat | Worn closed at all times |
-| Nitrile gloves | Changed after contact with reagents or cultures |
-| Safety glasses | Required when handling hot liquids and irritant powders |
-
-#### Safety and safety data sheets
-
-Hazard classifications were taken from the supplier safety data sheets (SDS)
-and product pages cited in the table below. The SDS of the exact product and
-lot in use should be consulted before starting, because classifications can
-differ between suppliers and product grades.
-
-Molten agarose can cause burns. The sealing mixture is heated before use and is
-handled with care.
-
-**Table 1.** Hazard classification and safety data sheets (SDS) of the reagents used.
-
-| Substance | CAS no. | Classification (GHS/CLP) | Precautions | SDS |
-|---|---|---|---|---|
-| Bacterial strains and transformants | n/a | Biological agents. Transformants are genetically modified micro-organisms (contained use). | Work under the containment level approved for the laboratory. Inactivate all cultures, plates and contaminated consumables by autoclaving. | No SDS: see the institutional biosafety guidelines |
-| Agarose | 9012-36-6 | Not classified as hazardous. | Molten agarose can superheat and boil over: wear thermal gloves and safety glasses. | Thermo Fisher Scientific (n.d.) Product page; SDS under "Documents" |
-
-**Waste disposal.** All cultures, plates and contaminated consumables are
-inactivated by autoclaving before disposal. The waste and disposal instructions
-of the laboratory in use apply.
-
-#### Procedure
-
-**Preparing the cells**
-
-1. Determine the volume of culture required to obtain the intended optical
-   density after resuspension (Table 2).
-
-<ProtocolNote>
-
-As a guide, 1 mL of culture at an OD₆₀₀ of 0.5 is resuspended in 1 mL of 1×
-PBS.
-
-</ProtocolNote>
-
-<ProtocolCalculator
-  number={2}
-  title="Resuspension of the cells to a defined OD₆₀₀."
- 
-  rows={[
-    { key: "od1", label: "Measured OD₆₀₀ of the culture", value: 1, unit: "–", input: true },
-    { key: "od2", label: "Target OD₆₀₀ after resuspension", value: 0.5, unit: "–", input: true },
-    { key: "vFinal", label: "Final volume in PBS", value: 1000, unit: "µL", input: true },
-    { key: "vCulture", label: "Culture to pellet", unit: "µL", decimals: 0, compute: (v) => (v.od2 * v.vFinal) / v.od1 },
-    { key: "washes", label: "Number of PBS washes", value: 3, unit: "washes", input: true },
-    { key: "vPBS", label: "PBS required per sample", unit: "µL", decimals: 0, compute: (v) => v.vFinal * (v.washes + 1) },
-  ]}
-/>
-
-2. Pellet the cells by centrifugation at 5000 × g for 5 minutes.
-3. Discard the supernatant and resuspend the pellet in 1 mL of 1× PBS.
-4. Repeat steps 2 and 3 twice more, for three washes in total.
-
-**Preparing the agarose pads**
-
-5. Prepare a 1.5% (w/v) agarose solution in 1× PBS (Table 3) and dissolve it
-   completely.
-
-<ProtocolCalculator
-  number={3}
-  title="Agarose pad."
- 
-  rows={[
-    { key: "percent", label: "Agarose percentage (w/v)", value: 1.5, unit: "%", input: true },
-    { key: "vSolution", label: "Volume of agarose solution to prepare", value: 5, unit: "mL", input: true },
-    { key: "mass", label: "Agarose to weigh", unit: "g", decimals: 3, compute: (v) => (v.percent * v.vSolution) / 100 },
-    { key: "vPerSlide", label: "Volume applied per slide", value: 350, unit: "µL", input: true },
-    { key: "nSlides", label: "Number of slides from this volume", unit: "slides", decimals: 0, compute: (v) => Math.floor((v.vSolution * 1000) / v.vPerSlide) },
-  ]}
-/>
-
-6. Apply 300 to 400 µL of the agarose solution to a microscope slide and let it
-   dry, so that the cells adhere.
-
-<ProtocolNote>
-
-The agarose layer is also what makes autofocus work: the autofocus and
-perfect-focus systems detect a change in refraction, and the agarose produces
-the shift that marks where the sample begins.
-
-</ProtocolNote>
-
-7. Drop the washed cell suspension onto the agarose pad.
-8. Seal the slide and coverslip with a mixture of vaseline, lanolin and
-   paraffin.
-
-**Imaging**
-
-9. Image the cells on the inverted microscope with oil immersion, using phase
-   contrast for morphological clarity alongside the fluorescence channels.
-
-<ProtocolNote>
-
-Slides and plates require different illumination settings; slides need more
-focused light.
-
-</ProtocolNote>
-
-10. Save the images in the project folder for the experiment, with the date and
-    the strain in the file name.
-
-#### Notes from the bench
-
-This section collects the experience of the team with this protocol: what was
-changed between runs, what went wrong and what is worth knowing before
-starting. Members of the team are encouraged to add their own entries, each
-starting with the month and year.
-
-<ProtocolNote date="August 2026">
-
-In the session of 20 August 2026, overnight cultures were prepared the day
-before for six colonies per combination: *P. vulgatus* DSM1447 with pNBU2,
-DSM1447 without plasmid, and DSM1447 with pNBU2 induced with 10 mM rhamnose,
-each in 1 mL of mGAM.
-
-</ProtocolNote>
-
-<ProtocolNote date="August 2026">
-
-No fluorescence could be observed in that session and some cells had died. KOFP
-appears cyan under the microscope.
-
-</ProtocolNote>
-
-<ProtocolNote date="October 2026">
-
-The images of that session are stored in the team SharePoint folder for
-fluorescence microscopy. They can be linked here if they are published.
-
-</ProtocolNote>
-
-<ProtocolCalculations>
-
-This section explains the calculations used in this protocol. The symbols are
-defined for each equation, and the worked example uses the values printed in
-the corresponding table.
-
-**Resuspension of the cells to a defined optical density**
-
-V1 = (OD2 × V2) / OD1  and  *V*pbs = V2 × (*w* + 1)
-
-in which:
-
-- V1 = volume of culture to pellet (µL)
-- OD1 = measured OD₆₀₀ of the culture
-- OD2 = required OD₆₀₀ after resuspension
-- V2 = final volume in PBS (µL)
-- *w* = number of washes
-- *V*pbs = total PBS required per sample (µL)
-
-Each wash uses one final volume of PBS, and the final resuspension uses one
-more, hence the factor (*w* + 1).
-
-**Worked example.** To obtain 1000 µL at an OD₆₀₀ of 0.5 from a culture at
-OD₆₀₀ 1.0: V1 = (0.5 × 1000) / 1.0 = 500 µL of culture. With three washes,
-1000 × 4 = 4000 µL of PBS is required per sample.
-
-**Agarose for the pads**
-
-*m* = (*p* × *V*) / 100  and  *n* = *V* × 1000 / *V*s
-
-in which:
-
-- *m* = mass of agarose to weigh (g)
-- *p* = agarose percentage (% w/v)
-- *V* = volume of agarose solution (mL)
-- *V*s = volume applied per slide (µL)
-- *n* = number of slides
-
-**Worked example.** For 5 mL of 1.5% agarose: *m* = (1.5 × 5) / 100 = 0.075 g.
-At 350 µL per slide this gives 5000 / 350 = 14 slides.
-
-</ProtocolCalculations>
-
-#### References
-
-- Thermo Fisher Scientific. (n.d.). *UltraPure low melting point agarose* (Catalog No. 16520050) [Product information]. Retrieved October 6, 2026, from https://www.thermofisher.com/order/catalog/product/16520050
 
 </ExpandableText>
 
