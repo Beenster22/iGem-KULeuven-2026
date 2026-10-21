@@ -767,6 +767,28 @@ main:focus {
   border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-21 (team request: on a
+   phone the open menu could not be scrolled, so nothing past Dry Lab under
+   Lab could be reached): below laptop width the menu opens inside the
+   navbar, which is fixed to the screen, so a long list ran off the bottom
+   with no way down to it. The navbar now stops at the screen's height and
+   scrolls within itself, without carrying the page behind it along. */
+@media (max-width: 991.98px) {
+  .navbar-empower {
+    max-height: 100vh;
+    max-height: 100dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* The round back-to-top button would sit over the bottom of the open
+     menu (Parts, under Lab), so it steps aside while the menu is open. */
+  body:has(.navbar-empower .navbar-collapse.show) .back-to-top {
+    display: none;
+  }
+}
+
 /* READING PROGRESS BAR
    Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-20 (team request): a
    page-level "how much is left", pinned directly under the fixed 64px
