@@ -442,65 +442,136 @@ export function PublicationShowcase({ children }: { children: ReactNode }) {
 /* App phone mockup                                                    */
 /* ------------------------------------------------------------------ */
 
+interface AppScreenProps {
+  /** Screenshot of the screen, uploaded via the iGEM uploads tool. */
+  image: string;
+  /** Heading of the description shown next to the phone. */
+  title: string;
+  /** The description itself. */
+  children?: ReactNode;
+}
+
+// One screen of the app inside <PhoneShowcase>. Renders nothing itself; the
+// showcase reads its props.
+export function AppScreen(_props: AppScreenProps) {
+  return null;
+}
+
 interface PhoneShowcaseProps {
   /** A web build of the app to embed live inside the phone. */
   src?: string;
-  /** Otherwise: screenshots of the app's screens, tapped through in order. */
-  screens?: string[];
   title?: string;
+  /** Otherwise: <AppScreen> entries, scrolled through in order. */
+  children?: ReactNode;
 }
 
-// A phone frame showing the app: live (src), as tap-through screenshots
-// (screens), or a placeholder until either is available.
-export function PhoneShowcase({ src, screens = [], title = "Our app" }: PhoneShowcaseProps) {
-  const [screen, setScreen] = useState(0);
-  const count = screens.length;
-
+function PhoneFrame({ children }: { children: ReactNode }) {
   return (
-    <div className="phone-showcase">
-      <div className="phone-frame">
-        <div className="phone-notch" aria-hidden="true" />
-        <div className="phone-screen">
+    <div className="phone-frame">
+      <div className="phone-notch" aria-hidden="true" />
+      <div className="phone-screen">{children}</div>
+    </div>
+  );
+}
+
+// A phone frame showing the app: live (src), as screenshots (<AppScreen>
+// children), or a placeholder until either is available.
+// Edited with Claude Opus 5.5 (Anthropic), 2026-10-21 (team request): each
+// screenshot comes with a description on the right of the phone. The reader
+// goes through them left to right with the arrows under the phone (or the
+// dots, the keyboard's arrow keys, or a swipe across the phone).
+export function PhoneShowcase({ src, title = "Our app", children }: PhoneShowcaseProps) {
+  const screens = slotProps<AppScreenProps>(children);
+  const count = screens.length;
+  const [active, setActive] = useState(0);
+  const swipeStart = useRef<number | null>(null);
+  const go = (delta: number) => setActive((active + delta + count) % count);
+
+  if (src || screens.length === 0) {
+    return (
+      <div className="phone-showcase">
+        <PhoneFrame>
           {src ? (
             <iframe src={src} title={title} />
-          ) : count > 0 ? (
-            <button
-              type="button"
-              className="phone-screen-tap"
-              onClick={() => setScreen((screen + 1) % count)}
-              aria-label="Next screen"
-            >
-              <img src={screens[screen]} alt={`${title} — screen ${screen + 1} of ${count}`} />
-            </button>
           ) : (
             <div className="phone-placeholder">
               <strong>{title}</strong>
               <span>App preview coming soon</span>
             </div>
           )}
-        </div>
+        </PhoneFrame>
       </div>
-      {!src && count > 1 && (
+    );
+  }
+
+  return (
+    <div
+      className="phone-showcase-screens"
+      role="group"
+      aria-roledescription="carousel"
+      aria-label={title}
+      onKeyDown={(event) => {
+        if (event.key === "ArrowLeft") go(-1);
+        else if (event.key === "ArrowRight") go(1);
+      }}
+    >
+      <div className="phone-showcase-device">
+        <div
+          onTouchStart={(event) => {
+            swipeStart.current = event.touches[0].clientX;
+          }}
+          onTouchEnd={(event) => {
+            if (swipeStart.current === null) return;
+            const dx = event.changedTouches[0].clientX - swipeStart.current;
+            swipeStart.current = null;
+            if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
+          }}
+        >
+          <PhoneFrame>
+            {screens.map((screen, i) => (
+              <img
+                key={screen.image}
+                className={i === active ? "is-active" : undefined}
+                src={screen.image}
+                alt={`${title}: ${screen.title}`}
+                aria-hidden={i !== active}
+              />
+            ))}
+          </PhoneFrame>
+        </div>
         <div className="phone-controls">
-          <button
-            type="button"
-            onClick={() => setScreen((screen - 1 + count) % count)}
-            aria-label="Previous screen"
-          >
+          <button type="button" onClick={() => go(-1)} aria-label="Previous screen">
             ‹
           </button>
-          <span>
-            {screen + 1} / {count}
-          </span>
-          <button
-            type="button"
-            onClick={() => setScreen((screen + 1) % count)}
-            aria-label="Next screen"
-          >
+          <div className="phone-dots">
+            {screens.map((screen, i) => (
+              <button
+                key={screen.image}
+                type="button"
+                className={i === active ? "is-active" : undefined}
+                onClick={() => setActive(i)}
+                aria-label={`Screen ${i + 1} of ${count}: ${screen.title}`}
+                aria-current={i === active}
+              />
+            ))}
+          </div>
+          <button type="button" onClick={() => go(1)} aria-label="Next screen">
             ›
           </button>
         </div>
-      )}
+      </div>
+      <div className="phone-caption-stack" aria-live="polite">
+        {screens.map((screen, i) => (
+          <div
+            key={screen.image}
+            className={`phone-caption${i === active ? " is-active" : ""}`}
+            aria-hidden={i !== active}
+          >
+            <h4>{screen.title}</h4>
+            {screen.children}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
