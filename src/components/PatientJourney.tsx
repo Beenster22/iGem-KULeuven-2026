@@ -1,15 +1,18 @@
 // Generated with Claude Opus 5.5 (Anthropic), 2026-10-21
 // Purpose: the "What did we learn?" part of the Patients section on the Human
-// Practices page, drawn from the team's sketch as a journey path: initial
-// symptoms → diagnostic journey → doctors → treatments, with expenses
-// branching off the last step. Clicking a step flips its card over and opens
-// that step's write-up in the panel under the path; clicking it again flips
-// it back. One step is open at a time.
+// Practices page. Edited with Claude Opus 5.5 (Anthropic), 2026-10-21 (team
+// request, after a "skills development timeline" picture): the steps of the
+// patient journey are a staircase of rising blocks — initial symptoms,
+// diagnostic journey, doctors, treatments, expenses. Clicking a step lifts
+// it, the woman walks over to stand on it, and its write-up opens in a box
+// underneath; clicking it again closes it and she goes back to the first
+// step. One step is open at a time.
 //
-// Usage (MDX): <PatientJourney> with five <JourneyStep title icon> children,
-// in path order. Like <Interviewee>, a step is never rendered itself — the
-// parent reads its props.
-import { Children, ReactElement, ReactNode, isValidElement, useId, useState } from "react";
+// Usage (MDX): <PatientJourney> with <JourneyStep title icon> children, in
+// order. Like <Interviewee>, a step is never rendered itself — the parent
+// reads its props.
+import { CSSProperties, Children, ReactElement, ReactNode, isValidElement, useId, useState } from "react";
+import { Woman } from "./FundingGapIllustration";
 
 type JourneyIcon = "symptoms" | "diagnosis" | "doctor" | "treatment" | "expenses";
 
@@ -73,33 +76,43 @@ export function PatientJourney({ children }: { children: ReactNode }) {
 
   return (
     <div className="patient-journey">
-      <ol className="patient-journey-path">
+      <div className="patient-journey-stage">
+      <ol className={`patient-journey-stairs${open !== null ? " has-open" : ""}`}>
         {steps.map((step, i) => {
           const isOpen = open === i;
           return (
-            <li key={step.title} className={`patient-journey-step patient-journey-step--${i + 1}${isOpen ? " is-open" : ""}`}>
+            <li
+              key={step.title}
+              className={`patient-journey-step${isOpen ? " is-open" : ""}`}
+              style={{ "--pj-step": i } as CSSProperties}
+            >
               <button
                 type="button"
-                className="patient-journey-card"
+                className="patient-journey-block"
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => setOpen(isOpen ? null : i)}
               >
-                <span className="patient-journey-face patient-journey-face--front">
-                  <svg className="patient-journey-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    {ICONS[step.icon]}
-                  </svg>
-                  <span className="patient-journey-title">{step.title}</span>
-                </span>
-                <span className="patient-journey-face patient-journey-face--back" aria-hidden="true">
-                  <span className="patient-journey-title">{step.title}</span>
-                  <span className="patient-journey-hint">Read below ↓</span>
-                </span>
+                <svg className="patient-journey-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  {ICONS[step.icon]}
+                </svg>
+                <span className="patient-journey-title">{step.title}</span>
               </button>
             </li>
           );
         })}
       </ol>
+      {/* The woman climbing the stairs: she stands on the open step (the
+          first one while none is open) and walks over when another opens. */}
+      <svg
+        className={`patient-journey-climber${open !== null ? " is-lifted" : ""}`}
+        style={{ "--pj-at": open ?? 0 } as CSSProperties}
+        viewBox="-22 18 44 114"
+        aria-hidden="true"
+      >
+        <Woman x={0} scale={1} hair="ponytail" />
+      </svg>
+      </div>
 
       <div id={panelId} className={`patient-journey-panel${active ? " is-open" : ""}`} aria-live="polite">
         {active ? (

@@ -32,7 +32,7 @@ interface StepInfo {
 
 const STEPS: StepInfo[] = [
   { name: "listen", label: "Listen", angle: 60 },
-  { name: "analyse", label: "Analyse", angle: -60 },
+  { name: "analyse", label: "Analyze", angle: -60 },
   { name: "implement", label: "Implement", angle: -180 },
 ];
 

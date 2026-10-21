@@ -18,7 +18,7 @@ interface WomanProps {
 // One silhouette in its own frame: feet on y = 0, about 100 tall, centred on
 // x = 0, facing right towards the gap (mirrored, so the ponytail swings out
 // behind on the left).
-function Woman({ x, scale, hair, trousers = false }: WomanProps) {
+export function Woman({ x, scale, hair, trousers = false }: WomanProps) {
   return (
     <g transform={`translate(${x} 130) scale(${-scale} ${scale})`}>
       <circle cx={0} cy={-86} r={9} />
