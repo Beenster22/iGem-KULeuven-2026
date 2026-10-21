@@ -16363,10 +16363,13 @@ a.protocol-download:hover {
   right: -14px;
 }
 
-.ig-carousel-follow {
+/* Hint under the post carousel pointing at the prev/next arrows. The long
+   selector is only there to out-rank the page-wide justify rule on <p>. */
+.page-body .page-shell-content p.ig-carousel-hint {
   text-align: center;
   margin: 0.5rem 0 0;
-  font-weight: 600;
+  font-size: 0.9rem;
+  opacity: 0.75;
 }
 
 .pub-showcase {
