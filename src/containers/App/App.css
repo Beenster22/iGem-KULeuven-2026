@@ -5380,10 +5380,11 @@ body:not(.home-fullscreen) .home-hero {
   background-position: 22% 0px, 29% 700px, 52% 1300px, 59% 400px, 81% 1000px;
 }
 
-/* Each item rides a mover (MicrobeBackdrop.tsx) that carries it down the
-   screen as the page is scrolled (team request, 2026-10-20: the passage
-   through the gut), the nearer ones (--depth) faster and larger, and
-   wraps it round: out at the bottom of the screen, back in above the top.
+/* Each item rides a mover (MicrobeBackdrop.tsx) that carries it up the
+   screen as the page is scrolled down (team request, 2026-10-21 — it is
+   the reader who travels down the gut, so the bacteria they pass go by
+   the other way), the nearer ones (--depth) faster and larger, and wraps
+   it round: out at the top of the screen, back in below the bottom.
    Going back up runs it all backwards. They stay sharp as they move (team
    request: not blurry or faded); the swooshes carry the speed. */
 .microbe-backdrop-mover {
@@ -5394,7 +5395,7 @@ body:not(.home-fullscreen) .home-hero {
       0,
       calc(
         mod(
-            var(--y0, 0) * (100vh + var(--wrap-gap)) +
+            var(--y0, 0) * (100vh + var(--wrap-gap)) -
               var(--sweep, 0) * 1px * (0.35 + var(--depth, 0.6) * 0.65),
             100vh + var(--wrap-gap)
           ) -
@@ -15481,8 +15482,17 @@ a.protocol-download:hover {
   }
 }
 
-.results-pipelines > .success-cards {
-  margin-top: 0.25rem;
+/* Edited 2026-10-21 (team request: not so much purple space above the box):
+   the box is a child of .results-top, so the old `.results-pipelines >`
+   selector never reached it and it kept its 2rem top margin on top of the
+   page's own padding (1.5rem) and the row's margin (1.5rem). The block now
+   sits tight under the page header. */
+.results-pipelines .results-top {
+  margin-top: -1.25rem;
+}
+
+.results-pipelines .results-top > .success-cards {
+  margin-top: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

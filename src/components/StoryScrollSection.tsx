@@ -55,9 +55,10 @@ interface StoryStep {
     | "gut";
   art?: "clock";
   // How many of the reader's scroll stops this screen holds for. One
-  // unless said otherwise; the office holds for two, so it takes two
-  // scrolls to get from the doctor and patient on to the gut (team
-  // request, 2026-10-20).
+  // unless said otherwise. (The office held for two, so it took two
+  // scrolls to get from the doctor and patient on to the gut; back to one
+  // on 2026-10-21, team request. Nothing sets this now — it is left here
+  // because any screen may want it again.)
   holds?: number;
   lines: ReactNode[];
   // The screen's second sentence (the pair layouts).
@@ -104,7 +105,6 @@ const STEPS: StoryStep[] = [
   {
     id: "diagnosis",
     position: "office",
-    holds: 2,
     lines: [
       <>
         <strong>Diagnosis takes quite a while</strong> because PMOS manifests
