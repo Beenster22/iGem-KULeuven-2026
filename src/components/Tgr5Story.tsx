@@ -943,6 +943,29 @@ const IMPAIRED_ACIDS = [
   dy: IMPAIRED_DOCK.y - home.y,
 }));
 
+// The loose ones (team request, 2026-10-21): the deconjugated acids, the
+// yellow of the upper stream and the light purple of the lower, with no
+// tag left on them. They are here for the same reason the others are, and
+// they drift towards the receptor as if to bind — but a deconjugated acid
+// has nothing left to bind with, so they never reach it and never dock.
+// No dive, and no cross either: nothing turns them away, they simply go
+// on floating. LEAN is how far towards the receptor a drift carries them,
+// as a share of the way there.
+const IMPAIRED_LEAN = 0.22;
+const IMPAIRED_LOOSE = [
+  { x: 160, y: 188, stream: 0 },
+  { x: 318, y: 66, stream: 1 },
+  { x: 445, y: 205, stream: 0 },
+  { x: 592, y: 68, stream: 0 },
+  { x: 712, y: 202, stream: 1 },
+  { x: 862, y: 162, stream: 1 },
+].map((home, i) => ({
+  ...home,
+  i,
+  lx: Math.round((IMPAIRED_DOCK.x - home.x) * IMPAIRED_LEAN),
+  ly: Math.round((IMPAIRED_DOCK.y - home.y) * IMPAIRED_LEAN),
+}));
+
 function Tgr5ImpairedFigure() {
   return (
     <svg
@@ -950,7 +973,7 @@ function Tgr5ImpairedFigure() {
       viewBox={`0 0 ${IMPAIRED_W} ${IMPAIRED_H}`}
       preserveAspectRatio="xMidYMid meet"
       role="img"
-      aria-label="Illustration: bile acids float above a TGR5 receptor and go down to it one at a time, each refused by a red cross."
+      aria-label="Illustration: bile acids float above a TGR5 receptor and go down to it one at a time, each refused by a red cross, while deconjugated ones drift towards it without ever reaching it."
     >
       <g
         transform={`translate(${IMPAIRED_CENTRE.x} ${IMPAIRED_CENTRE.y}) scale(${IMPAIRED_RECEPTOR_SCALE})`}
@@ -995,6 +1018,27 @@ function Tgr5ImpairedFigure() {
           >
             <line x1={-13} y1={-13} x2={13} y2={13} />
             <line x1={13} y1={-13} x2={-13} y2={13} />
+          </g>
+        </g>
+      ))}
+      {IMPAIRED_LOOSE.map((acid) => (
+        <g key={`loose-${acid.i}`} transform={`translate(${acid.x} ${acid.y})`}>
+          <g
+            className="tgr5-impaired-wander"
+            style={
+              {
+                "--lx": acid.lx,
+                "--ly": acid.ly,
+                "--i": acid.i,
+              } as CSSProperties
+            }
+          >
+            <g
+              className={`bsh-molecule--${acid.stream}`}
+              transform={`scale(${ACID_SCALE})`}
+            >
+              <AcidShape conjugated={false} />
+            </g>
           </g>
         </g>
       ))}
