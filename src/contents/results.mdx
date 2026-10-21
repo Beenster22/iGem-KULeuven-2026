@@ -1777,12 +1777,25 @@ Three DBTL cycles were performed of the conjugation with _P. vulgatus_ (see abov
 
 ### A characterized promoter library for _P. vulgatus_
 
+{/* Written up with Claude Sonnet 5.5 (Anthropic), 2026-10-21, from the team's document "promoter-screen-refined"; the numbers, tables and figures are the team's, only wording, numbering and references were homogenized. */}
+{/* TODO: the introduction cites Claassens et al. (2022) in the team's document without a DOI, so it is left out here until the reference is confirmed. */}
+
 <div className="results-standfirst">
-  Placeholder — one line on what the library is and what it is for.
+  Twenty promoter–reporter constructs, five promoters times four reporters:
+  NanoLuc ranks the promoters, the fluorescent reporters do not.
 </div>
 
-Placeholder — why a promoter library was needed for _P. vulgatus_ and what this
-section reports.
+_Phocaeicola vulgatus_ requires promoters of known strength to tune gene expression levels, and almost none have been characterized in this organism. The available _Bacteroides_ toolkit has been built predominantly in _B. thetaiotaomicron_[^promlib-lim], leaving _P. vulgatus_ without a validated constitutive expression library. To fill this gap, a library of promoter–reporter constructs was assembled in the pNBU2 integrative backbone, introduced into _P. vulgatus_ DSM1447 by conjugation, and characterized to measure the output of each construct combination.
+
+Five constitutive promoters were chosen from the literature: Bfp1E6[^promlib-whitaker], BT1311[^promlib-mimee], PBT4001[^promlib-mastro], cfxA[^promlib-taketani] and PAM3[^promlib-taketani]. Each was paired with four reporters (GFP, mCherry, KOFP-7 and NanoLuc), giving a full factorial design of twenty constructs, so that a promoter could be compared across multiple emission spectra.
+
+<Callout title="What this page reports">
+
+Here you find how strongly each promoter drives each reporter in _P. vulgatus_. The library is the set of twenty promoter–reporter constructs. How the assay was designed (plate layout, controls, reporters) and how the raw readings were processed into the numbers shown here (OD600 correction, subtraction of the wild-type reference, detection limits) is described on our Best Measurement page.
+
+<Link to="/measurement" className="btn-empower">Read how we measured</Link>
+
+</Callout>
 
 <ElleSays mood="smile" size="sm" glass side="right">
 
@@ -1794,32 +1807,131 @@ Curious how we measured all this? Have a look at our <Link to="/measurement">mea
 
 <KeyTakeaways>
   <Takeaway>
-    Placeholder — CFX is the strongest promoter, at 1,292× over background.
+    cfxA is the strongest promoter, driving NanoLuc to 6.7 × 10⁷ a.u. per OD600:
+    1,292× the medium blank and the highest output in the library.
   </Takeaway>
   <Takeaway>
-    Placeholder — BFP is a usable second choice, at 80× over background.
+    Bfp1E6 is a quantifiable second at 4.0 × 10⁶ a.u. per OD600 (90× blank, CV
+    5.2%), 16.8× weaker than cfxA and well above the LOQ. Together the two give
+    a calibrated strong/moderate scale for tuning expression.
   </Takeaway>
   <Takeaway>
-    Placeholder — the full 20/20 promoter library was assembled.
+    BT1311 and PBT4001 are indistinguishable from background (about 2× and 1.1×
+    blank, below the LOD of 1.73 × 10⁵), so neither drives useful expression in
+    this host.
   </Takeaway>
   <Takeaway>
-    Placeholder — BT and PBT both read 1.1×, no different from the blank.
-  </Takeaway>
-  <Takeaway>
-    Placeholder — only 1 of 13 fluorescent constructs gave a usable reading.
+    Fluorescence failed in mGAM, with one exception: 12 of 13 constructs read at
+    or below background because broth autofluorescence saturates the detector
+    under auto-gain, and only Bfp1E6–mCherry rose above its LOD.
   </Takeaway>
 </KeyTakeaways>
 
+Specific output was normalized per OD600 and referenced to the wild-type strain, giving a zero-baseline in which the detection limit is defined from blank-well statistics. NanoLuc delivered a clear, tiered ranking; the fluorescent channels failed systematically because mGAM autofluorescence saturates the detector under automatic gain adjustment.
+
 #### The library
 
-<FigureSlot label="Table 1">
-  Every promoter in the library: name, origin, construct, and whether it was
-  assembled and measured.
-</FigureSlot>
+All twenty Gibson assemblies were transformed into _E. coli_ S17-1 λpir, though transformation efficiency was low enough to need <GlossaryTerm hover definition="Not every transformation worked at the same time and several had to be repeated, so we kept an overview of each confirmation along the way. You can find it in our Notebook!">three rounds of heat shock</GlossaryTerm>. Fifteen constructs were then confirmed by colony PCR in conjugated DSM1447. Fourteen of these were measured; construct 13 was confirmed but not measured. Three more constructs (5, 6 and 9) gave no gBlock band but were measured anyway, so seventeen constructs were carried into the reporter assay.
 
-<Callout title="Important note">
+<Link to="/notebook#notebook-prm-promoter-library-screening" className="btn-empower">Notebook: promoter library</Link>{" "}
+<Link to="/protocols#chemical-transformation" className="btn-empower">Heat shock protocol</Link>
 
-Placeholder — the caveat the reader needs before reading the numbers below.
+<div className="figure-caption">
+  Table 1. The assay. Promoters are referred to below by their short name; the
+  full designation is given once here.
+</div>
+
+<div className="table-responsive table-responsive-rounded my-3">
+
+<table className="table table-bordered align-middle text-center">
+  <thead>
+    <tr>
+      <th>Strain</th>
+      <th>Promoters</th>
+      <th>Reporters</th>
+      <th>Replicates</th>
+      <th>Positive control</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><em>P. vulgatus</em> DSM1447</td>
+      <td>PBT4001, PBT1311, PPAM3, PcfxA, PBfP1E6</td>
+      <td>GFP, mCherry, KOFP-7, NanoLuc</td>
+      <td>Triplicates</td>
+      <td><em>E. coli</em> DH5α + GFP</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+<div className="figure-caption">
+  Table 2. All promoter–reporter constructs, numbered 1–20 in brackets.
+  Purple cells (<em>No signal expected</em>) are constructs 5, 6 and 9: no
+  gBlock band was found in conjugated DSM1447, but they were measured anyway, so
+  any reading from them is expected to be background. Grey cells were not
+  measured.
+</div>
+
+<div className="table-responsive table-responsive-rounded my-3">
+
+<table className="table table-bordered align-middle text-center">
+  <thead>
+    <tr>
+      <th>Promoter</th>
+      <th>GFP</th>
+      <th>KOFP-7</th>
+      <th>mCherry</th>
+      <th>NanoLuc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Bfp1E6</td>
+      <td>Measured (1)</td>
+      <td>Measured (2)</td>
+      <td>Measured (3)</td>
+      <td>Measured (4)</td>
+    </tr>
+    <tr>
+      <td>BT1311</td>
+      <td style={{ background: "rgba(124, 58, 237, 0.18)" }}>No signal expected (5)</td>
+      <td style={{ background: "rgba(124, 58, 237, 0.18)" }}>No signal expected (6)</td>
+      <td>Measured (7)</td>
+      <td>Measured (8)</td>
+    </tr>
+    <tr>
+      <td>PBT4001</td>
+      <td style={{ background: "rgba(124, 58, 237, 0.18)" }}>No signal expected (9)</td>
+      <td>Measured (10)</td>
+      <td>Measured (11)</td>
+      <td>Measured (12)</td>
+    </tr>
+    <tr>
+      <td>cfxA</td>
+      <td style={{ background: "rgba(128, 128, 128, 0.22)" }}>Not measured (13)</td>
+      <td>Measured (14)</td>
+      <td>Measured (15)</td>
+      <td>Measured (16)</td>
+    </tr>
+    <tr>
+      <td>PAM3</td>
+      <td style={{ background: "rgba(128, 128, 128, 0.22)" }}>Not measured (17)</td>
+      <td>Measured (18)</td>
+      <td>Measured (19)</td>
+      <td style={{ background: "rgba(128, 128, 128, 0.22)" }}>Not measured (20)</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+<Callout title="Important note" kind="warning" raised>
+
+The route from gBlock to assembled plasmid, to _E. coli_ S17-1 λpir and finally into _P. vulgatus_ DSM1447 had several steps, so not every construct reached the target host. Constructs 17 and 20 were not measured: for 17 the conjugation did not work, and for 20 no band was visible for the presence of the gBlock in _P. vulgatus_. Construct 13 was not measured either, because of a mistake in transferring tubes, although its gBlock was detected. Constructs 5, 6 and 9 gave no gBlock band in the last phase and were not expected to give any signal. They were measured regardless.
+
+<Link to="/notebook#notebook-prm-promoter-library-screening" className="btn-empower">See the overview in the Notebook</Link>
 
 </Callout>
 
@@ -1831,50 +1943,236 @@ Placeholder — the caveat the reader needs before reading the numbers below.
 
 ##### NanoLuc-based promoter separation
 
-Placeholder — what the NanoLuc read-out shows about how far apart the promoters
-sit.
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/promoter-fig1-nanoluc-log.png"
+    alt="Specific NanoLuc output per construct on a logarithmic axis, wild-type referenced."
+  />
+  <div className="figure-caption">
+    Figure 1. Specific NanoLuc output, wild-type referenced, on a logarithmic
+    axis; n = 3 wells per construct. Bars left of the dashed line are upper
+    bounds, not values. Figure labels abbreviate the promoters to Cfx, BfP, BT
+    and PBT.
+  </div>
+</figure>
 
-<FigureSlot label="Figure 1">NanoLuc output per promoter.</FigureSlot>
+<div className="figure-caption">
+  Table 3. NanoLuc results. Fold values are raw construct luminescence divided
+  by the raw medium-plus-substrate blank. PAM3 is absent because the
+  PAM3–NanoLuc construct did not reach the assay.
+</div>
 
-<FigureSlot label="Table 2">
-  The same values, with fold-change over the blank.
-</FigureSlot>
+<div className="table-responsive table-responsive-rounded my-3">
+
+<table className="table table-bordered align-middle text-center">
+  <thead>
+    <tr>
+      <th>Construct</th>
+      <th>Mean ± SD (a.u. per OD600)</th>
+      <th>CV</th>
+      <th>× background</th>
+      <th>Verdict</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>cfxA–NanoLuc</td>
+      <td>6.72 × 10⁷ ± 1.50 × 10⁷</td>
+      <td>22%</td>
+      <td>1,292</td>
+      <td>&gt; LOQ, quantifiable</td>
+    </tr>
+    <tr>
+      <td>Bfp1E6–NanoLuc</td>
+      <td>4.01 × 10⁶ ± 2.08 × 10⁵</td>
+      <td>5.2%</td>
+      <td>89.6</td>
+      <td>&gt; LOQ, quantifiable</td>
+    </tr>
+    <tr>
+      <td>BT1311–NanoLuc</td>
+      <td>7.99 × 10⁴ ± 8.13 × 10⁴</td>
+      <td>102%</td>
+      <td>2.06</td>
+      <td>&lt; LOD, upper bound</td>
+    </tr>
+    <tr>
+      <td>PBT4001–NanoLuc</td>
+      <td>3.69 × 10⁴ ± 8.95 × 10³</td>
+      <td>24%</td>
+      <td>1.06</td>
+      <td>&lt; LOD, upper bound</td>
+    </tr>
+    <tr>
+      <td>mGAM + substrate</td>
+      <td>7.08 × 10⁴ raw RLU</td>
+      <td>—</td>
+      <td>1.00</td>
+      <td>background</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/promoter-fig2-nanoluc-lod.png"
+    alt="Specific NanoLuc output for four promoters in P. vulgatus DSM1447 on a log10 axis, with the limit of detection marked."
+  />
+  <div className="figure-caption">
+    Figure 2. Specific NanoLuc output (a.u. per OD600, wild-type referenced) for
+    four promoters in <em>P. vulgatus</em> DSM1447, on a log₁₀ axis. The dashed
+    line marks the limit of detection (LOD = 1.73 × 10⁵ a.u. per OD). Green bars
+    (cfxA, Bfp1E6) exceed the LOQ; purple bars (BT1311, PBT4001) are upper
+    bounds. Error bars represent ± 1 SD; n = 3 wells per construct.
+  </div>
+</figure>
+
+<div className="figure-caption">
+  Table 4. The decisive comparison: one promoter, four reporters, one plate
+  (a.u. per OD600, wild-type referenced). Negative values are real: those
+  constructs fluoresce marginally less than the wild-type reference.
+</div>
+
+<div className="table-responsive table-responsive-rounded my-3">
+
+<table className="table table-bordered align-middle text-center">
+  <thead>
+    <tr>
+      <th>Promoter</th>
+      <th>NanoLuc</th>
+      <th>mCherry</th>
+      <th>GFP</th>
+      <th>KOFP-7</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Bfp1E6</td>
+      <td>4.01 × 10⁶</td>
+      <td>3,411</td>
+      <td>−729</td>
+      <td>−742</td>
+    </tr>
+    <tr>
+      <td>cfxA</td>
+      <td>6.72 × 10⁷</td>
+      <td>−497</td>
+      <td>not on plate</td>
+      <td>−2,004</td>
+    </tr>
+    <tr>
+      <td>BT1311</td>
+      <td>7.99 × 10⁴</td>
+      <td>−700</td>
+      <td>−212</td>
+      <td>−232</td>
+    </tr>
+    <tr>
+      <td>PBT4001</td>
+      <td>3.69 × 10⁴</td>
+      <td>−723</td>
+      <td>10</td>
+      <td>−1,001</td>
+    </tr>
+    <tr>
+      <td>PAM3</td>
+      <td>not on plate</td>
+      <td>−1,025</td>
+      <td>not on plate</td>
+      <td>−1,662</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+Bfp1E6 is transcriptionally active beyond argument: 4.01 × 10⁶ a.u. per OD600 by luminescence, ninety-fold over background, with a 5.2% coefficient of variation. The same promoter in the same host on the same plate reads −729 in GFP and −742 in KOFP-7, below the detection limit in both. A promoter cannot be simultaneously strong and silent, so the fluorescent channels were not accurately measuring promoter strength.
 
 </SectionItem>
 
-<SectionItem label="Fluorescence: GFP, mCherry, …">
+<SectionItem label="Fluorescence: GFP, mCherry, KOFP-7">
 
-##### Fluorescent reporters read at background
+##### Fluorescent reporters read at background, with one exception
 
-Placeholder — the fluorescent reporters sat at background, with one exception.
+Twelve of the thirteen fluorescent constructs fail to separate from zero in the GFP, mCherry or KOFP-7 channel once measured against wild-type DSM1447 and normalized to OD. Most read slightly negative, meaning they fluoresce marginally less than the wild-type reference.
 
-{/* The three reporters as a selector: one figure per reporter. */}
+Bfp1E6–mCherry is the exception. It reads +3,411 ± 497 a.u. per OD600 above wild-type DSM1447 (CV 14.6%), above the mCherry LOD (1,071) but below the LOQ (3,569): detectable but not fully quantifiable. It is the only fluorescent construct to read above the mGAM medium blank.
+
+An important discordance remains unresolved. cfxA is the strongest promoter by NanoLuc (1,292× blank), yet cfxA–mCherry reads −497 a.u. per OD600 (below LOD), while Bfp1E6, the second strongest, gives the only positive mCherry reading. If mCherry output followed promoter strength, cfxA–mCherry should be the brightest construct on the plate. The discordance is reported as provisional: either Bfp1E6–mCherry is an artefact, or mCherry output does not scale with transcription in this host context. A repeat with fixed gain settings will resolve this.
 
 <SegmentedSelector>
 
 <SectionItem label="GFP">
 
-<FigureSlot label="Figure 1">GFP output per promoter.</FigureSlot>
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/promoter-fig3a-gfp.png"
+    alt="Specific GFP fluorescence per OD for each construct, measured against wild-type DSM1447."
+  />
+  <div className="figure-caption">
+    Figure 3A. GFP: specific fluorescence per OD, each construct measured
+    against wild-type DSM1447. Points are individual replicates; bars give the
+    mean and spread. No construct separates from zero. The <em>E. coli</em> +
+    GFP positive control lies off-scale right at +70,936 ± 1,760 a.u. per OD
+    (CV 2.5%), confirming that the optics, filters and normalization work, and
+    one Bfp1E6–GFP replicate lies off-scale left, below −108k.
+  </div>
+</figure>
 
 </SectionItem>
 
 <SectionItem label="mCherry">
 
-<FigureSlot label="Figure 1">mCherry output per promoter.</FigureSlot>
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/promoter-fig3b-mcherry.png"
+    alt="Specific mCherry fluorescence per OD for each construct, measured against wild-type DSM1447."
+  />
+  <div className="figure-caption">
+    Figure 3B. mCherry: specific fluorescence per OD, each construct measured
+    against wild-type DSM1447. Bfp1E6–mCherry is the only construct above the
+    mCherry LOD (dashed line); cfxA–mCherry reads −497, below the LOD and the
+    opposite of the NanoLuc ranking.
+  </div>
+</figure>
 
 </SectionItem>
 
-<SectionItem label="KOFP2">
+<SectionItem label="KOFP-7">
 
-<FigureSlot label="Figure 1">KOFP2 output per promoter.</FigureSlot>
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/promoter-fig3c-kofp7.png"
+    alt="Specific KOFP-7 fluorescence per OD for each construct, measured against wild-type DSM1447."
+  />
+  <div className="figure-caption">
+    Figure 3C. KOFP-7: specific fluorescence per OD, each construct measured
+    against wild-type DSM1447. No construct separates from zero.
+  </div>
+</figure>
 
 </SectionItem>
 
 </SegmentedSelector>
 
-<ExpandableText title="Why the fluorescent reporters stayed at background" tocIgnore>
+<ExpandableText title="Raw fluorescence across all three channels" tocIgnore>
 
-Placeholder — the longer explanation behind the figures above.
+The same plate before normalization. Every DSM1447 construct sits on top of the medium blank in all three channels; only the _E. coli_ + GFP control in the GFP channel, and the mCherry constructs against their own lower blank, move off it at all.
+
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/promoter-fig4-raw-fluorescence.png"
+    alt="Raw fluorescence by construct and channel, with the DSM1447 strain, LB blank and mGAM blank marked."
+  />
+  <div className="figure-caption">
+    Figure 4. Raw fluorescence by construct and channel, with the DSM1447
+    strain, LB blank and mGAM blank marked. Coloured points are the construct
+    carrying that channel's reporter; grey points are the same wells read in the
+    other channels.
+  </div>
+</figure>
 
 </ExpandableText>
 
@@ -1884,15 +2182,27 @@ Placeholder — the longer explanation behind the figures above.
 
 #### Growth over the whole library
 
-Placeholder — whether carrying a construct cost the strain anything in growth.
+All DSM1447 constructs reached OD600 between roughly 1.2 and 2.7, close to the wild-type DSM1447 reference, so the absence of fluorescence is not explained by cultures failing to grow. The _E. coli_ control grew to a much lower OD in LB, as expected for a different organism and medium, and still produced the only strong GFP signal on the plate.
 
-<FigureSlot label="Figure 3">
-  Growth curves across the whole library.
-</FigureSlot>
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/promoter-fig5-growth.png"
+    alt="OD600 at the time of measurement for every construct, coloured by reporter."
+  />
+  <div className="figure-caption">
+    Figure 5. OD600 at the time of measurement for every construct, coloured by
+    reporter. The dashed line marks the wild-type DSM1447 reference, the solid
+    and dotted lines the mGAM and LB blanks. Growth is the same across the
+    DSM1447 constructs, so it does not account for the differences in reporter
+    output.
+  </div>
+</figure>
 
 #### Conclusion
 
-Placeholder — what the library gives a future team.
+This screen yields one usable output and one clear limitation. NanoLuc resolved the four promoters into a quantitative ranking: cfxA and Bfp1E6 both sit above the limit of quantification and are separated by 16.8×, giving a strong and a moderate promoter for tuning expression in _P. vulgatus_, while BT1311 and PBT4001 fall below the limit of detection and are most likely genuinely weak in this host. NanoLuc can make that call because those same two also read at background in the one channel that works. The fluorescent reporters, by contrast, were almost entirely uninformative: GFP read below the LOD for every construct, KOFP-7 was unmeasurable (its mGAM blank of 264,963 exceeds the 260,000 reliability ceiling), and mCherry separated from background only for Bfp1E6–mCherry, which cleared its LOD but not its LOQ.
+
+**That failure is a property of the channel–medium combination, not of the promoters or the instrument.** _P. vulgatus_ is grown in mGAM, a rich broth whose broadband autofluorescence dominates the plate; under automatic gain the reader sets the PMT voltage from the medium rather than the cells, consuming 61% of the GFP range, 11% of mCherry and 102% of KOFP-7 before any reporter contributes. NanoLuc escapes this because it needs no excitation and the medium emits no background luminescence. Two controls show this is the mechanism rather than anoxic chromophore maturation: the aerobic _E. coli_ + GFP control returned +70,936 a.u. per OD600, so the optics and reporters work when autofluorescence is absent; and Bfp1E6 is detected in both NanoLuc and mCherry yet silent in GFP and KOFP-7 in the same cells, and a promoter cannot be simultaneously active and silent. The immediate next step follows directly: repeat Bfp1E6–mCherry and cfxA–mCherry under fixed gain set on the medium blank, with a parallel read in minimal medium, which should recover fluorescent detection and cross-validate the NanoLuc ranking across two orthogonal detection principles.
 
 </ResultSection>
 
@@ -2813,3 +3123,13 @@ For additional information about risk and safety see the <Link to="/safety-and-s
 [^growth-keitel2023]: Keitel, L., Braun, K., Finger, M., et al. (2023). Carbon dioxide and trace oxygen concentrations impact growth and product formation of the gut bacterium _Phocaeicola vulgatus_. BMC Microbiology, 23, 391. https://doi.org/10.1186/s12866-023-03127-x
 
 </PageLayout>
+
+[^promlib-lim]: Lim, B., Zimmermann, M., Barry, N. A., & Goodman, A. L. (2017). Engineered regulatory systems modulate gene expression of human commensals in the gut. Cell, 169(3), 547–558. https://doi.org/10.1016/j.cell.2017.03.045
+
+[^promlib-whitaker]: Whitaker, W. R., Shepherd, E. S., & Sonnenburg, J. L. (2017). Tunable expression tools enable single-cell strain distinction in the gut microbiome. Cell, 169(3), 538–546. https://doi.org/10.1016/j.cell.2017.03.041
+
+[^promlib-mimee]: Mimee, M., Tucker, A. C., Voigt, C. A., & Lu, T. K. (2015). Programming a human commensal bacterium, _Bacteroides thetaiotaomicron_, to sense and respond to stimuli in the murine gut microbiota. Cell Systems, 1(1), 62–71. https://doi.org/10.1016/j.cels.2015.06.001
+
+[^promlib-mastro]: Mastropaolo, M. D., Thorson, M. L., & Stevens, A. M. (2009). Comparison of _Bacteroides thetaiotaomicron_ and _Escherichia coli_ 16S rRNA gene expression signals. Microbiology, 155(8), 2683–2693. https://doi.org/10.1099/mic.0.027748-0
+
+[^promlib-taketani]: Taketani, M., Zhang, J., Zhang, S., Triassi, A. J., Huang, Y.-J., Griffith, L. G., & Voigt, C. A. (2020). Genetic circuit design automation for the gut resident species _Bacteroides thetaiotaomicron_. Nature Biotechnology, 38(8), 962–969. https://doi.org/10.1038/s41587-020-0468-5
