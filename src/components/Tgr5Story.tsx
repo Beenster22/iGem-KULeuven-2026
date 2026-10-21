@@ -858,6 +858,61 @@ function Tgr5ReceptorCloseUp() {
   );
 }
 
+// Generated with Claude Opus 5.5 (Anthropic), 2026-10-21 (team request: the
+// bile acids float around the page): the pool's mix drifting right across the close-up screen behind the
+// sentence, each coming in at the left or right edge and going out at the
+// other, bobbing and turning as it goes. Spread through their loops from
+// the start, so the screen is never empty.
+const DRIFT_ACIDS = Array.from({ length: 12 }, (_, i) => {
+  const r = (k: number) => seededValue(i * 19 + k + 1300);
+  return {
+    conjugated: i % 2 === 0,
+    kind: (Math.floor(i / 2) % 2) as AcidKind,
+    fromLeft: i % 3 !== 1,
+    top: 6 + ((i * 37) % 88),
+    time: 24 + r(1) * 14,
+    delay: -r(2) * 38,
+    bobTime: 4 + r(3) * 3,
+    bobDelay: -r(4) * 6,
+    spin: 8 + r(5) * 16,
+  };
+});
+
+function DriftingAcids() {
+  return (
+    <div className="tgr5-zoom-drift" aria-hidden="true">
+      {DRIFT_ACIDS.map((acid, i) => (
+        <span
+          key={i}
+          className={`tgr5-drift-acid${acid.fromLeft ? "" : " tgr5-drift-acid--from-right"}`}
+          style={
+            {
+              top: `${acid.top}%`,
+              "--drift-time": `${acid.time.toFixed(1)}s`,
+              "--drift-delay": `${acid.delay.toFixed(1)}s`,
+            } as CSSProperties
+          }
+        >
+          <span
+            className="tgr5-drift-bob"
+            style={
+              {
+                "--bob-time": `${acid.bobTime.toFixed(1)}s`,
+                "--bob-delay": `${acid.bobDelay.toFixed(1)}s`,
+                "--spin": `${acid.spin.toFixed(0)}deg`,
+              } as CSSProperties
+            }
+          >
+            <svg viewBox="-34 -14 48 28" className={`bsh-molecule--${acid.kind}`}>
+              <AcidShape conjugated={acid.conjugated} />
+            </svg>
+          </span>
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export function Tgr5ZoomSection() {
   const prefersReducedMotion = useReducedMotion();
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -884,6 +939,7 @@ export function Tgr5ZoomSection() {
         {/* Edited 2026-10-21 (team request): one sentence, no "…", and all
             of it at once — its second half used to wait for a second
             scroll, which split one sentence over two screens. */}
+        {!prefersReducedMotion && <DriftingAcids />}
         <div className="tgr5-zoom-words">
           <p className="tgr5-zoom-line tgr5-zoom-line--shown">
             TGR5 is one of the <strong>most potent</strong> bile acid

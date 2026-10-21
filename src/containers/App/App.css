@@ -3360,7 +3360,10 @@ a.tab-switcher-btn.active:hover {
    rests at the right-hand side and points across at its paragraph. */
 .wheel-selector--side {
   flex-direction: row;
-  align-items: center;
+  /* Top-aligned, so the wheel stays put while the paragraph beside it grows or
+     shrinks as another section is picked, rather than reserving the height of
+     the longest section as empty space. */
+  align-items: flex-start;
   gap: 2rem;
   /* The wheel and its paragraph are centred in the column as a pair, so the
      wheel sits towards the middle of the page instead of hard against the
@@ -5005,37 +5008,6 @@ body.home-fullscreen {
     width: 100cqw;
     height: calc(100cqw / var(--home-hero-aspect));
   }
-}
-
-.home-hero-layer {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  will-change: transform, opacity;
-}
-
-.home-hero-layer svg,
-.home-hero-layer > img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-}
-
-.home-hero-logo-stage {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-.home-hero-logo-stage img {
-  width: min(40vmin, 320px);
-  height: min(40vmin, 320px);
-  object-fit: contain;
 }
 
 /* PMOS OVERVIEW (stat counter + globe)
@@ -8425,13 +8397,19 @@ body:not(.home-fullscreen) .home-hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
-  gap: clamp(1.5rem, 5vw, 4rem);
+  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-21 (team request: the
+     sentence a little closer to the receptor, more central): the sentence
+     sits against the middle and the drawing just right of it, with a
+     narrower gap, instead of each centred in its own half of the screen. */
+  gap: clamp(1rem, 2.5vw, 2rem);
   min-height: 100vh;
   min-height: 100svh;
   padding: calc(var(--home-nav-h) + 2rem) 0 calc(var(--home-wave-h) + 2rem);
 }
 
 .tgr5-zoom-words {
+  justify-self: end;
+  max-width: 24em;
   display: flex;
   flex-direction: column;
   gap: clamp(1rem, 3vh, 2rem);
@@ -8453,6 +8431,12 @@ body:not(.home-fullscreen) .home-hero {
   translate: 0 0;
 }
 
+/* Lines run to the column's edge (balanced lines left a strip of empty box
+   on the right, between the words and the receptor). */
+.tgr5-zoom-words .tgr5-zoom-line {
+  text-wrap: pretty;
+}
+
 /* Edited 2026-10-21 (team request: one sentence, aligned): the second half
    of the sentence fades in where it already sits, so nothing moves and the
    sentence keeps one left edge. (It used to be a second line, set in.) */
@@ -8470,13 +8454,81 @@ body:not(.home-fullscreen) .home-hero {
    the whole drawing as well would move it twice. */
 .tgr5-zoom-art {
   display: grid;
-  place-items: center;
+  place-items: center start;
 }
 
 .tgr5-zoom-svg {
   display: block;
   width: min(100%, 26rem);
   max-height: 60vh;
+  /* The drawing's frame leaves room around the receptor; pull it left so
+     the receptor itself, not that empty margin, sits by the sentence. */
+  margin-left: -14%;
+}
+
+/* The pool's bile acids drifting across the whole close-up screen
+   (DriftingAcids in Tgr5Story.tsx): a full-width layer behind the sentence
+   and the drawing, each acid crossing from one edge to the other on a
+   long loop while it bobs and turns. Faint, so the sentence stays easy to
+   read over them. */
+.tgr5-zoom-drift {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.tgr5-zoom-words,
+.tgr5-zoom-art {
+  position: relative;
+  z-index: 1;
+}
+
+.tgr5-drift-acid {
+  position: absolute;
+  left: 0;
+  width: 2.6rem;
+  animation: tgr5-drift-across var(--drift-time) linear var(--drift-delay) infinite;
+}
+
+.tgr5-drift-acid--from-right {
+  animation-direction: reverse;
+}
+
+@keyframes tgr5-drift-across {
+  from {
+    translate: -4rem 0;
+  }
+  to {
+    translate: calc(100vw + 4rem) 0;
+  }
+}
+
+.tgr5-drift-bob {
+  display: block;
+  animation: tgr5-drift-bob var(--bob-time) ease-in-out var(--bob-delay) infinite alternate;
+}
+
+@keyframes tgr5-drift-bob {
+  from {
+    translate: 0 -0.9rem;
+    rotate: calc(var(--spin) * -1);
+  }
+  to {
+    translate: 0 0.9rem;
+    rotate: var(--spin);
+  }
+}
+
+.tgr5-drift-bob svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -8495,13 +8547,19 @@ body:not(.home-fullscreen) .home-hero {
     gap: 1.5rem;
   }
 
+  .tgr5-zoom-words {
+    justify-self: stretch;
+  }
+
   .tgr5-zoom-art {
     order: -1;
+    place-items: center;
   }
 
   .tgr5-zoom-svg {
     width: min(100%, 17rem);
     max-height: 38vh;
+    margin-left: 0;
   }
 }
 
@@ -10081,6 +10139,35 @@ body:not(.home-fullscreen) .home-hero {
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--color-accent);
+}
+
+/* Generated with Claude Opus 5.5 (Anthropic), 2026-10-21 (team request): the
+   "no picture" silhouette shown for interviewees without a photo
+   (NoPhoto in HumanPracticesInterviews.tsx). It fills the tile and is drawn
+   through #hp-no-photo-tint, which keeps only the figure and paints it with
+   the ink below: the palette's plum on the light lavender tiles, lavender
+   on the dark plum ones. */
+.hp-no-photo-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.hp-no-photo-ink {
+  flood-color: #33283f;
+}
+
+[data-theme="dark"] .hp-no-photo-ink {
+  flood-color: #c9bde8;
+}
+
+img.hp-no-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: url(#hp-no-photo-tint);
 }
 
 .hp-carousel-name {
@@ -14528,12 +14615,12 @@ a.protocol-download:hover {
 
 .strain-panel-table th:nth-child(2),
 .strain-panel-table td:nth-child(2) {
-  width: 10%;
+  width: 15%;
 }
 
 .strain-panel-table th:nth-child(3),
 .strain-panel-table td:nth-child(3) {
-  width: 10%;
+  width: 9%;
 }
 
 .strain-panel-table th:nth-child(4),
@@ -14548,12 +14635,12 @@ a.protocol-download:hover {
 
 .strain-panel-table th:nth-child(6),
 .strain-panel-table td:nth-child(6) {
-  width: 16%;
+  width: 15%;
 }
 
 .strain-panel-table th:nth-child(7),
 .strain-panel-table td:nth-child(7) {
-  width: 27%;
+  width: 25%;
 }
 
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
@@ -15955,6 +16042,50 @@ a.protocol-download:hover {
 
 /* The step's write-up, in the same box as the section it sits in
    (.content-section), a shade lighter as it is inside one. */
+/* Previous / next arrows either side of the open step's panel. */
+.therapeutics-overview-stage {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.therapeutics-overview-arrow {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-interactive);
+  color: #fff;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.therapeutics-overview-arrow:hover:not(:disabled),
+.therapeutics-overview-arrow:focus-visible {
+  transform: scale(1.1);
+}
+
+.therapeutics-overview-arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+@media (max-width: 600px) {
+  .therapeutics-overview-stage {
+    gap: 0.35rem;
+  }
+
+  .therapeutics-overview-arrow {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
 .therapeutics-overview-panel {
   padding: 2rem 2.25rem;
   border-radius: 1.25rem;
@@ -16087,9 +16218,15 @@ a.protocol-download:hover {
 }
 
 .success-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 0.5rem;
+}
+
+.success-cards-grid > .success-card {
+  flex: 0 1 auto;
+  max-width: 100%;
 }
 
 .success-cards-grid[hidden] {
@@ -16145,15 +16282,9 @@ a.protocol-download:hover {
   color: #23868b;
 }
 
-@media (max-width: 900px) {
-  .success-cards-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 480px) {
-  .success-cards-grid {
-    grid-template-columns: minmax(0, 1fr);
+  .success-cards-grid > .success-card {
+    flex: 1 1 100%;
   }
 }
 
@@ -18747,6 +18878,276 @@ a.protocol-download:hover {
   .value-card-chevron {
     transition: none;
   }
+}
+
+/* SURVEY TABLE
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-21
+   Purpose: Table 1 of the public survey (human-practices.mdx) laid out like
+   the team's Word document: rules above and below, each group (Gender, Age,
+   ...) with its rows indented underneath in alternating lilac / teal bands. */
+.survey-table {
+  width: 100%;
+  max-width: 44rem;
+  margin: 1.5rem auto 0.5rem;
+  border-collapse: collapse;
+  border-top: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  font-size: 0.8rem;
+  line-height: 1.25;
+}
+
+.survey-table th,
+.survey-table td {
+  padding: 0.15rem 0.75rem;
+  border: 0;
+  background: transparent;
+}
+
+.survey-table td:first-child {
+  padding-left: 1.75rem;
+}
+
+.survey-table td:last-child {
+  white-space: nowrap;
+}
+
+.survey-table .survey-group th {
+  font-weight: 600;
+  text-align: left;
+  padding-top: 0.3rem;
+}
+
+.survey-table + .figure-caption {
+  text-align: center;
+}
+
+/* Alternating group bands in the site palette: brand lilac (--color-accent)
+   and brand teal (--color-interactive) tints. */
+.survey-table .survey-group--0 > * {
+  background-color: color-mix(in srgb, var(--color-accent) 45%, transparent);
+}
+
+.survey-table .survey-group--1 > * {
+  background-color: color-mix(in srgb, var(--color-interactive) 16%, transparent);
+}
+
+/* Survey figures (human-practices.mdx): wider than the 46rem default cap so
+   the small chart text stays readable inline; click still opens the
+   fullscreen view on a white card (onLightBackground). */
+.zoomable-image-trigger img.survey-figure {
+  max-width: min(100%, 72rem);
+  padding: 0.75rem;
+}
+
+
+/* SURVEY CHARTS
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-21
+   Purpose: Figures 1 and 2 of the Public survey (SurveyCharts.tsx). Rose =
+   disagree, lilac = neutral, teal = agree; the two groups in Figure 2 are
+   lilac and teal. Text uses currentColor so both themes work. */
+.survey-chart {
+  --sv-disagree: #e8a3bb;
+  --sv-neutral: #c9bde8;
+  --sv-agree: var(--color-interactive);
+  --sv-ink: #33283f;
+  font-size: 0.9rem;
+}
+
+.survey-chart-legend,
+.survey-panel-groups {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem 1.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.survey-chart-legend {
+  margin-bottom: 1rem;
+}
+
+.survey-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.survey-key::before {
+  content: "";
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 0.2rem;
+}
+
+.survey-key--disagree::before { background: var(--sv-disagree); }
+.survey-key--neutral::before,
+.survey-key--a::before { background: var(--sv-neutral); }
+.survey-key--agree::before,
+.survey-key--b::before { background: var(--sv-agree); }
+
+.survey-stack-list {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.survey-stack-row {
+  display: grid;
+  grid-template-columns: minmax(8rem, 15rem) 1fr;
+  align-items: center;
+  gap: 1rem;
+}
+
+.survey-stack-label {
+  text-align: right;
+  line-height: 1.25;
+}
+
+.survey-stack-bar {
+  display: flex;
+  height: 2.4rem;
+  gap: 2px;
+}
+
+.survey-stack-seg {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--sv-ink);
+  outline-offset: 2px;
+  transition: filter 0.15s;
+}
+
+.survey-stack-seg:first-child { border-radius: 0.3rem 0 0 0.3rem; }
+.survey-stack-seg:last-child { border-radius: 0 0.3rem 0.3rem 0; }
+.survey-stack-seg:only-child { border-radius: 0.3rem; }
+.survey-stack-seg--disagree { background: var(--sv-disagree); }
+.survey-stack-seg--neutral { background: var(--sv-neutral); }
+.survey-stack-seg--agree { background: var(--sv-agree); color: #fff; }
+
+.survey-stack-seg:hover,
+.survey-stack-seg:focus-visible {
+  filter: brightness(0.92);
+  z-index: 2;
+}
+
+.survey-stack-seg::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 0.4rem);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 17rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 0.5rem;
+  background: #33283f;
+  color: #eaf4f5;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: left;
+  white-space: pre-line;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s;
+}
+
+[data-theme="dark"] .survey-stack-seg::after {
+  background: #eaf4f5;
+  color: #33283f;
+}
+
+.survey-stack-seg:hover::after,
+.survey-stack-seg:focus-visible::after {
+  opacity: 1;
+  z-index: 5;
+}
+
+.survey-panels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem 1.25rem;
+}
+
+.survey-panel {
+  margin: 0;
+}
+
+.survey-panel-head {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.85rem;
+  color: inherit;
+  opacity: 1;
+}
+
+.survey-panel-head strong {
+  font-size: 0.95rem;
+}
+
+.survey-panel-groups {
+  justify-content: flex-start;
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
+.survey-panel svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.survey-grid { stroke: currentColor; stroke-opacity: 0.12; }
+.survey-baseline { stroke: currentColor; stroke-opacity: 0.5; }
+
+.survey-tick,
+.survey-value {
+  fill: currentColor;
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+.survey-axis-title {
+  fill: currentColor;
+  font-size: 10px;
+}
+
+.survey-bar--a { fill: var(--sv-neutral); }
+.survey-bar--b { fill: var(--sv-agree); }
+.survey-hover { fill: currentColor; opacity: 0; }
+.survey-group:hover .survey-hover { opacity: 0.07; }
+.survey-group:hover .survey-category { opacity: 1; font-weight: 700; }
+.survey-bar:hover { filter: brightness(0.9); }
+
+@media (max-width: 767.98px) {
+  .survey-panels {
+    grid-template-columns: 1fr;
+  }
+
+  .survey-stack-row {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+
+  .survey-stack-label {
+    text-align: left;
+  }
+}
+
+/* Survey figure cards: less side padding so the charts use more of the
+   column width (Figure 1 and Figure 2). */
+.figure-panel.survey-wide {
+  padding-inline: 0.75rem;
 }
 
 /* PULL QUOTES (Human Practices)

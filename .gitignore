@@ -34,3 +34,6 @@ dist-ssr
 
 # Local draft documents
 brand-identity-draft.docx
+
+# Images go to static.igem.wiki, never into the repo (GitLab rejects binaries)
+wiki-uploads-pending/

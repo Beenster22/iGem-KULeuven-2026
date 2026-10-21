@@ -230,6 +230,21 @@ const STEPS: Step[] = [
   },
 ];
 
+function ArrowIcon({ direction }: { direction: "left" | "right" }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" width="22" height="22">
+      <path
+        d={direction === "left" ? "M15 5l-7 7 7 7" : "M9 5l7 7-7 7"}
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+    </svg>
+  );
+}
+
 export function TherapeuticsOverview() {
   const [openStep, setOpenStep] = useState<number | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -272,6 +287,15 @@ export function TherapeuticsOverview() {
   };
 
   const active = STEPS.find((step) => step.n === openStep);
+  // The arrows beside the panel step through the steps that have a write-up,
+  // so the reader need not go back up to the figure to pick the next number.
+  const withPanel = STEPS.filter((step) => step.body);
+  const activeIndex = withPanel.findIndex((step) => step.n === openStep);
+  const previous = activeIndex > 0 ? withPanel[activeIndex - 1] : undefined;
+  const next =
+    activeIndex >= 0 && activeIndex < withPanel.length - 1
+      ? withPanel[activeIndex + 1]
+      : undefined;
 
   return (
     <div className="therapeutics-overview">
@@ -304,14 +328,34 @@ export function TherapeuticsOverview() {
       </div>
 
       {active?.body && (
-        <div className="therapeutics-overview-panel" ref={panelRef}>
-          <h4 data-toc-ignore="true">
-            <span className="therapeutics-overview-panel-number" aria-hidden="true">
-              {active.n}
-            </span>
-            {active.title}
-          </h4>
-          {active.body}
+        <div className="therapeutics-overview-stage">
+          <button
+            type="button"
+            className="therapeutics-overview-arrow"
+            aria-label={previous ? `Previous step: ${previous.title}` : "Previous step"}
+            disabled={!previous}
+            onClick={() => previous && open(previous)}
+          >
+            <ArrowIcon direction="left" />
+          </button>
+          <div className="therapeutics-overview-panel" ref={panelRef}>
+            <h4 data-toc-ignore="true">
+              <span className="therapeutics-overview-panel-number" aria-hidden="true">
+                {active.n}
+              </span>
+              {active.title}
+            </h4>
+            {active.body}
+          </div>
+          <button
+            type="button"
+            className="therapeutics-overview-arrow"
+            aria-label={next ? `Next step: ${next.title}` : "Next step"}
+            disabled={!next}
+            onClick={() => next && open(next)}
+          >
+            <ArrowIcon direction="right" />
+          </button>
         </div>
       )}
     </div>

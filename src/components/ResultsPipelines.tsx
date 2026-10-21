@@ -46,7 +46,7 @@ import { extractLabeledChildren } from "../utils/extractLabeledChildren";
 import { stringToSlug } from "../utils/stringToSlug";
 import { headingSlugs, textOf } from "./useHashPanel";
 import { ResultSection } from "./ResultsKit";
-import { PipelineContext } from "./SuccessCards";
+import { PipelineContext } from "./pipelineContext";
 
 interface Section {
   title: ReactNode;
