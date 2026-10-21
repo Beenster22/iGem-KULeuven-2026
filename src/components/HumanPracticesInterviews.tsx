@@ -483,6 +483,12 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [view, setView] = useState<HPView>(readStoredView);
   const modalRef = useRef<HTMLDivElement | null>(null);
+  // Added with Claude Sonnet 5.5 (Anthropic), 2026-10-21: an invisible anchor
+  // inside this block, used only to find the enclosing PhasePager phase (see
+  // the hash-opening effect below) — the page has several
+  // <HumanPracticesInterviews> blocks, one per phase, so there is no single
+  // heading id that fits them all.
+  const markerRef = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
     const onViewChange = (event: Event) => setView((event as CustomEvent<HPView>).detail);
@@ -517,15 +523,16 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
       // not leave the reader at the top of the page. The interviews sit in a
       // section the page shows one at a time (PhasePager), so that section is
       // revealed first; headings get their ids a moment after the page renders.
-      const id = "feedback-cycle-and-interviews";
+      // The enclosing phase's heading is found via the marker rather than a
+      // fixed id, since this component is used once per phase.
       let tries = 0;
       const park = () => {
-        const heading = document.getElementById(id);
-        if (!heading) {
+        const heading = markerRef.current?.closest(".content-section")?.querySelector("h2[id]");
+        if (!heading?.id) {
           if (tries++ < 120) window.setTimeout(park, 16);
           return;
         }
-        window.dispatchEvent(new CustomEvent("reveal-section", { detail: id }));
+        window.dispatchEvent(new CustomEvent("reveal-section", { detail: heading.id }));
         heading.scrollIntoView({ block: "start", behavior: "instant" });
       };
       park();
@@ -561,6 +568,7 @@ export function HumanPracticesInterviews({ children }: HumanPracticesInterviewsP
 
   return (
     <>
+      <span ref={markerRef} hidden aria-hidden="true" />
       <NoPhotoTint />
       {flat.length > 0 && (
         <div className="hp-view-toggle-row">
