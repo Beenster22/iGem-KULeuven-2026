@@ -6,6 +6,7 @@
 // of the iGEM competition itself ("igem"); that is also the order of the
 // footer carousel.
 // Updated with Claude Opus 5.5 (Anthropic), 2026-10-06: sponsor tiers.
+// Updated with Claude Sonnet 5.5 (Anthropic), 2026-10-21: Merck logos.
 export type SponsorTier = "gold" | "silver" | "bronze" | "igem";
 
 export interface Sponsor {
@@ -60,6 +61,8 @@ export const SPONSORS: Sponsor[] = [
   },
   {
     name: "Merck nv/sa, Medical Department Fertility",
+    src: "https://static.igem.wiki/teams/6299/wiki/sponsors/merck-silver.avif",
+    href: "https://www.merckgroup.com/en/expertise/fertility.html",
     tier: "silver",
   },
   {
@@ -71,6 +74,8 @@ export const SPONSORS: Sponsor[] = [
   },
   {
     name: "Merck Life Science",
+    src: "https://static.igem.wiki/teams/6299/wiki/sponsors/merck-bronze.avif",
+    href: "https://www.merckgroup.com/en/expertise/life-science.html",
     tier: "bronze",
   },
   {
