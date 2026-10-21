@@ -260,7 +260,8 @@ export function ResultsPipelines({
   function go(index: number) {
     setSectionIndex(index);
     const slug = pipeline.sections[index].slug;
-    history.replaceState(null, "", `#${slug}`);
+    // history.state kept for useScrollMemory (the router's key for this visit).
+    history.replaceState(history.state, "", `#${slug}`);
     // The new section is shown once this render commits.
     window.requestAnimationFrame(() => {
       document.getElementById(slug)?.scrollIntoView({ block: "start" });

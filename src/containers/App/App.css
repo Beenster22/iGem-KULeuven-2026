@@ -11022,7 +11022,11 @@ img.hp-no-photo {
   position: relative;
   width: min(900px, 100%);
   max-height: calc(100vh - 4rem);
+  /* Phone browsers count the hidden address bar in 100vh, which pushes the
+     popup's bottom off screen; dvh follows the visible area. */
+  max-height: calc(100dvh - 4rem);
   overflow-y: auto;
+  overscroll-behavior: contain;
   background-color: var(--color-page-bg);
   border-radius: 1.25rem;
   padding: 2.5rem;
