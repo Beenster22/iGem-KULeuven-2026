@@ -438,8 +438,7 @@ export function ElleTour() {
               asked for. This turns the picture's own brightness into
               transparency — the near-black becomes nothing, she becomes
               solid — and fills what is left with one flat colour (team
-              request, 2026-10-20). TODO(team): a cut-out of her with real
-              transparency would let all of this go. */}
+              request, 2026-10-20). */}
           <svg className="elle-tour-ink" aria-hidden="true">
             <filter
               id={inkId}
