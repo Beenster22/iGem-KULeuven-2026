@@ -1,6 +1,6 @@
 // Generated with Claude Opus 5.5 (Anthropic), 2026-10-18
-// Purpose: the curve the home page's automatic glides follow (the globe drop
-// in PmosEffectsSection.tsx and Elle's tour in ElleTour.tsx), so a page that
+// Purpose: the curve the home page's glides follow (the wheel's glide from screen
+// to screen in HomeSnapScroll.tsx and the tour's flights), so a page that
 // is already being scrolled carries on at its own speed and eases to a stop
 // instead of stopping dead and starting again.
 
@@ -20,16 +20,6 @@ export function glideStartRate(velocity: number, distance: number, duration: num
   return Math.min(MAX_START_RATE, (velocity * duration) / distance);
 }
 
-// Added with Claude Opus 5.5 (Anthropic), 2026-10-20: while one of these
-// glides is moving the page it marks the page busy until the given time
-// (performance.now()), and the eased wheel scrolling (useSmoothWheel in
-// HomeSnapScroll.tsx) keeps out of its way until then.
-let busyUntil = 0;
-
-export function markScrollBusy(until: number) {
-  busyUntil = Math.max(busyUntil, until);
-}
-
-export function scrollBusy() {
-  return performance.now() < busyUntil;
-}
+// (Edited 2026-10-21: the "page busy" marker that held the wheel back while
+// one of these glides ran is gone — team request: nobody is ever locked in
+// an animation.)
