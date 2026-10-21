@@ -633,7 +633,7 @@ higher-performing media.
 WC contains 5 mg L⁻¹ hemin, whereas mGAM and MM contain 10 mg L⁻¹; BHI
 contains no added hemin. Hemin supplies haem for haem-containing proteins
 involved in electron transport. Hemin supplementation has been shown to
-improve _B. vulgatus_ growth[^growth-lee]. Its importance may relate to
+improve _P. vulgatus_ growth[^growth-lee]. Its importance may relate to
 haem-dependent electron transport: in the related species _B. fragilis_,
 hemin was required for functional fumarate reduction and substantially
 increased growth rate and biomass yield[^growth-macy].
@@ -645,7 +645,7 @@ increased growth rate and biomass yield[^growth-macy].
 mGAM contains vitamin K₁ (5 mg L⁻¹), whereas WC contains menadione
 (0.5 mg L⁻¹); neither BHI nor MM contains an explicit vitamin K supplement.
 These compounds are relevant because vitamin K₂ helps bacteria transfer
-electrons to produce energy. However, _B. vulgatus_ can produce its own
+electrons to produce energy. However, _P. vulgatus_ can produce its own
 vitamin K₂, and adding certain vitamin K compounds did not improve its growth
 under the conditions tested[^growth-fenn]. Vitamin K₁ itself was not tested
 there, so whether it improves growth in our medium needed to be determined
@@ -656,7 +656,7 @@ experimentally.
 <ExpandableText title="Starch" tocIgnore>
 
 Only mGAM contains soluble starch, at 5 g L⁻¹. Starch has been shown to
-support rapid growth and high bacterial yields in tested _B. vulgatus_
+support rapid growth and high bacterial yields in tested _P. vulgatus_
 strains, which also produced more starch-digesting enzymes when grown on
 starch than on glucose[^growth-mccarthy]. Starch may therefore improve growth
 in mGAM by providing an additional source of carbon and energy.
@@ -666,11 +666,11 @@ in mGAM by providing an additional source of carbon and energy.
 <ExpandableText title="Glucose and complex nutrients" tocIgnore>
 
 Glucose concentrations are 2.0 g L⁻¹ in BHI, 1.0 in WC, 0.5 in mGAM and 0.2 in
-MM. Glucose provides carbon and energy for _B. vulgatus_, which has been
+MM. Glucose provides carbon and energy for _P. vulgatus_, which has been
 successfully cultivated in a defined medium using glucose as its main carbon
 source[^growth-keitel2024]. These differences may therefore affect growth,
 but more glucose does not mean better growth — other nutrients must also be
-considered, particularly starch in mGAM, which _B. vulgatus_ can use as an
+considered, particularly starch in mGAM, which _P. vulgatus_ can use as an
 additional carbon source[^growth-mccarthy].
 
 </ExpandableText>
@@ -707,7 +707,7 @@ their contributions.
 mGAM was the clear winner: it grew fastest and reached a final OD of about
 0.41, against only 0.13 in WC. It is hard to attribute this to a single
 component. However, starch (both amylose and amylopectin) is a likely factor,
-since it is known to give rapid growth and high yields in _B. vulgatus_[^growth-mccarthy].
+since it is known to give rapid growth and high yields in _P. vulgatus_[^growth-mccarthy].
 Hemin may also have helped[^growth-lee], and the reducing agents would have
 kept conditions properly anaerobic, though this experiment cannot separate out
 what each ingredient contributed. Even so, mGAM's advantage was big enough to
@@ -719,13 +719,13 @@ at a time.
 #### Results
 
 Growth curves across the five iterations are shown in Figure 1 (panels
-A–E); the fitted parameters for every condition are in Table 2.
+[A](#fig-growth-a)–[E](#fig-growth-e)); the fitted parameters for every condition are in Table 2.
 
 <div className="figure-panel">
 
 <div className="figure-grid">
 
-<figure>
+<figure id="fig-growth-a" style={{ scrollMarginTop: "5rem" }}>
   <ZoomableImage
     src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-a-2.avif"
     alt="OD growth curves, Pilot — DSM 1447 in BHI, WC, MM and mGAM over 24 h."
@@ -735,7 +735,7 @@ A–E); the fitted parameters for every condition are in Table 2.
   </div>
 </figure>
 
-<figure>
+<figure id="fig-growth-b" style={{ scrollMarginTop: "5rem" }}>
   <ZoomableImage
     src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-b-2.avif"
     alt="OD growth curves, Pilot continuation — the same plate, read for a further 24 h."
@@ -745,7 +745,7 @@ A–E); the fitted parameters for every condition are in Table 2.
   </div>
 </figure>
 
-<figure>
+<figure id="fig-growth-c" style={{ scrollMarginTop: "5rem" }}>
   <ZoomableImage
     src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/c2.avif"
     alt="OD growth curves, Strain effect — DSM 1447 and RCC 1806 in BHI, WC, MM and mGAM over 48 h."
@@ -756,7 +756,7 @@ A–E); the fitted parameters for every condition are in Table 2.
   </div>
 </figure>
 
-<figure>
+<figure id="fig-growth-d" style={{ scrollMarginTop: "5rem" }}>
   <ZoomableImage
     src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-d-2.avif"
     alt="OD growth curves, Lag reduction — both strains inoculated from fresh plate colonies, plus BHI at increased cell density."
@@ -767,7 +767,7 @@ A–E); the fitted parameters for every condition are in Table 2.
   </div>
 </figure>
 
-<figure>
+<figure id="fig-growth-e" style={{ scrollMarginTop: "5rem" }}>
   <ZoomableImage
     src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-e-2.avif"
     alt="OD growth curves, Full-factorial design — MM with every combination of starch, vitamin K1 and pH adjustment, against the mGAM reference."
@@ -1207,7 +1207,7 @@ are best read alongside the ΔOD value rather than on their own.
 
 <ExpandableText title="Discussion" tocIgnore>
 
-**Experiment 1: Pilot.** The first pilot established that medium choice
+**Experiment 1: Pilot** ([Figure 1A](#fig-growth-a)). The first pilot established that medium choice
 mattered more than any other variable we tested. mGAM supported growth in
 every well, reaching 0.40 OD above background with a doubling time of
 ~46 min, the fastest condition we recorded. This fits its reputation as a
@@ -1220,7 +1220,7 @@ than final biomass. Unsupplemented BHI and MM did not grow within the 24 h
 window (+0.010 OD, marginal), but as the second pilot day showed, that
 result reflects the assay length rather than a permanent failure.
 
-**Experiment 2: Pilot continuation.** The second day changed how we read MM.
+**Experiment 2: Pilot continuation** ([Figure 1B](#fig-growth-b)). The second day changed how we read MM.
 Its lag of ≈ 7 h into Day 2 means growth began roughly 31 h after
 inoculation, and once started it gained +0.048 OD. A standard 24 h assay
 would have scored it as a failure, which is why every later plate was run
@@ -1230,7 +1230,7 @@ and BHI stayed flat, as in Experiment 1. The result also shows that the lag
 values from the GP fit are measured from the start of each day's read, not
 from inoculation, so lags must be compared with that in mind.
 
-**Experiment 3: Strain dependency.** This was the first place where the
+**Experiment 3: Strain dependency** ([Figure 1C](#fig-growth-c)). This was the first place where the
 faecal isolate (RCC 1806) and the type strain (DSM 1447) behaved
 differently. The isolate reached higher densities in every medium, in
 places threefold, but it started consistently later: in mGAM the type
@@ -1247,7 +1247,7 @@ so we treat it as unreliable. Its 41.9 ± 1.1 h lag is
 the latest in the study and fits the slow, inconsistent behaviour this
 medium showed throughout.
 
-**Experiment 4: Reducing lag times.** On <Link to="/human-practices#laurie-comstock">Laurie Comstock's</Link> advice that most
+**Experiment 4: Reducing lag times** ([Figure 1D](#fig-growth-d)). On <Link to="/human-practices#laurie-comstock">Laurie Comstock's</Link> advice that most
 of an overnight culture was dead by the time it is subcultured, we inoculated
 both strains in the morning from colonies on a fresh plate. This cut the
 isolate's mGAM lag from 24.2 h to 6.0 h, a four-fold reduction, while the
@@ -1269,7 +1269,7 @@ artefact of the disturbance rather than growth. BHI run at increased cell
 density supported no growth at all, which supports our conclusion that
 supplemented BHI is needed to sustain _P. vulgatus_.
 
-**Experiment 5: Full factorial study.** Soluble starch, vitamin K and a pH
+**Experiment 5: Full factorial study** ([Figure 1E](#fig-growth-e)). Soluble starch, vitamin K and a pH
 adjustment to 7.2 were tested in all eight combinations of a 2³ factorial in
 the LB-based minimal medium, with six wells per condition over 48 h. Vitamin
 K was chosen because many _Bacteroides_ and related species cannot
