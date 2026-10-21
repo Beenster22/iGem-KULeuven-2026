@@ -16178,10 +16178,17 @@ a.protocol-download:hover {
   background: var(--color-page-bg);
   color: var(--color-text);
   border-radius: 14px;
+  /* Edited 2026-10-21 (team request): an outline all the way round, so each
+     post reads as its own card on either theme. */
+  border: 2px solid rgba(51, 40, 63, 0.35);
   overflow: hidden;
   box-shadow: 0 6px 18px rgba(51, 40, 63, 0.18);
   display: flex;
   flex-direction: column;
+}
+
+[data-theme="dark"] .ig-post {
+  border-color: rgba(201, 189, 232, 0.5);
 }
 
 .ig-post-header {
@@ -16626,13 +16633,147 @@ a.protocol-download:hover {
   gap: 0.75rem;
 }
 
+/* Edited 2026-10-21 (team request: on a full-screen window the arrows fell
+   off the bottom): also capped by the window's height, so the whole phone
+   and its arrows fit on screen at once — the height left after the navbar
+   (5rem), the arrows and dots (about 3rem) and some breathing room (3rem),
+   turned into a width by the phone's 9:19 shape. */
 .phone-showcase-device .phone-frame {
-  width: min(280px, 70vw);
+  width: min(280px, 70vw, calc((100svh - 11rem) * 9 / 19));
   touch-action: pan-y;
 }
 
 .phone-showcase-device .phone-screen {
   position: relative;
+}
+
+/* Edited 2026-10-21 (team request): the screen opens large when clicked
+   (PhoneShowcase's dialog, .phone-zoom below). */
+.phone-zoom-trigger {
+  cursor: zoom-in;
+  border-radius: 42px;
+}
+
+.phone-zoom-trigger:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+/* The enlarged screen: on the same dark backdrop as the zoomable figures
+   elsewhere on the wiki (.zoomable-image-dialog), as tall as the window
+   allows, with an arrow either side and the screen's name underneath. */
+.phone-zoom {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 1rem;
+  border: 0;
+  background-color: rgba(20, 15, 26, 0.92);
+  color: #eaf4f5;
+}
+
+.phone-zoom[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.75rem, 3vw, 2.5rem);
+}
+
+.phone-zoom::backdrop {
+  background: transparent;
+}
+
+.phone-zoom-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  min-width: 0;
+  max-height: 100%;
+}
+
+.phone-zoom-figure img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(100vh - 6rem);
+  max-height: calc(100svh - 6rem);
+  border-radius: 1.25rem;
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.5);
+}
+
+.phone-zoom-figure figcaption {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  font-weight: 600;
+}
+
+.phone-zoom-figure figcaption span {
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.phone-zoom-arrow,
+.phone-zoom-close {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: #c9bde8;
+  color: #33283f;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.phone-zoom-arrow {
+  width: 48px;
+  height: 48px;
+  font-size: 1.8rem;
+  padding-bottom: 0.15em;
+}
+
+.phone-zoom-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  font-size: 1.6rem;
+}
+
+.phone-zoom-arrow:focus-visible,
+.phone-zoom-close:focus-visible {
+  outline: 3px solid #eaf4f5;
+  outline-offset: 3px;
+}
+
+/* Phones: the arrows sit over the picture's lower corners instead of
+   taking width from it. */
+@media (max-width: 640px) {
+  .phone-zoom[open] {
+    padding: 3.5rem 0.75rem 1rem;
+  }
+
+  .phone-zoom-arrow {
+    position: absolute;
+    bottom: 3.5rem;
+    z-index: 1;
+  }
+
+  .phone-zoom-arrow--prev {
+    left: 1rem;
+  }
+
+  .phone-zoom-arrow--next {
+    right: 1rem;
+  }
 }
 
 .phone-showcase-device .phone-screen img {
