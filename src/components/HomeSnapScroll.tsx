@@ -37,7 +37,7 @@ export function HomeSnapScroll() {
   }, [prefersReducedMotion]);
 
   useBackdropApproach(!!prefersReducedMotion);
-  useWheelPaging(!!prefersReducedMotion);
+  usePaging(!!prefersReducedMotion);
 
   // The background of bacteria and swooshes behind every band (edited
   // 2026-10-21: one layer for the whole page instead of one per band).
@@ -81,6 +81,16 @@ const GLIDE_MAX_MS = 1050;
 // a scroll of its own.
 const SCROLL_GAP_MS = 300;
 const MIN_PUSH = 4;
+// How much bigger than the push before it a push has to be to count as the
+// reader's hand again rather than the tail of the last swipe, and the
+// smallest push that may count (so the jitter at the very end of a
+// touchpad's coasting never does).
+const RE_PUSH = 1.5;
+const MIN_RE_PUSH = 8;
+// Edited 2026-10-21 (team request: one swipe to a section on a touch
+// screen too). How far a finger has to travel for a swipe to move the page
+// on a section.
+const SWIPE_PX = 24;
 // Stops closer than this to where the page is count as where it is.
 const NEAR_PX = 6;
 
@@ -105,16 +115,17 @@ function scrollsItself(start: EventTarget | null, deltaY: number) {
   return false;
 }
 
-function useWheelPaging(skip: boolean) {
+function usePaging(skip: boolean) {
   useEffect(() => {
-    if (skip || !window.matchMedia("(hover: hover) and (pointer: fine)").matches)
-      return;
+    if (skip) return;
     let frame: number | null = null;
     let gliding = false;
     let lastWheel = 0;
     // The current scroll's direction, and whether it has moved the page.
     let lastSign = 0;
     let acted = true;
+    // The size of the last push, to tell a fresh one from a tail (below).
+    let lastPush = 0;
     // Where the current glide is heading.
     let target = 0;
 
@@ -184,6 +195,13 @@ function useWheelPaging(skip: boolean) {
       const push =
         Math.abs(event.deltaY) *
         (event.deltaMode === 1 ? 40 : event.deltaMode === 2 ? window.innerHeight : 1);
+      // A touchpad's coasting only ever dies away, so a push bigger than
+      // the one before it is the reader's hand again, not the tail of the
+      // last swipe: that is a scroll of its own, and moves on a section.
+      if (acted && push > lastPush * RE_PUSH && push >= MIN_RE_PUSH) {
+        acted = false;
+      }
+      lastPush = push;
       if (acted || push < MIN_PUSH) return;
       acted = true;
       // Already gliding that way: one scroll, one section.
@@ -191,9 +209,52 @@ function useWheelPaging(skip: boolean) {
       go(sign);
     };
 
+    // TOUCH SCREENS
+    // The browser's own scrolling carries a swipe on for as long as its
+    // momentum lasts, which is most of a section on a short page and
+    // several on this one, so a swipe is taken over here the same way a
+    // turn of the wheel is: the page does not follow the finger, it moves
+    // on one section when the finger lifts. A swipe inside something that
+    // scrolls on its own (a table, a long caption) is left alone.
+    let touchFrom = 0;
+    let touchAt = 0;
+    let swiping = false;
+
+    const onTouchStart = (event: TouchEvent) => {
+      swiping = event.touches.length === 1;
+      if (!swiping) return;
+      touchFrom = touchAt = event.touches[0].clientY;
+    };
+
+    const onTouchMove = (event: TouchEvent) => {
+      if (!swiping || event.touches.length !== 1) return;
+      touchAt = event.touches[0].clientY;
+      const moved = touchFrom - touchAt;
+      if (scrollsItself(event.target, moved)) {
+        swiping = false;
+        return;
+      }
+      if (event.cancelable) event.preventDefault();
+    };
+
+    const onTouchEnd = () => {
+      if (!swiping) return;
+      swiping = false;
+      const moved = touchFrom - touchAt;
+      if (Math.abs(moved) >= SWIPE_PX) go(Math.sign(moved));
+    };
+
     window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("touchcancel", onTouchEnd, { passive: true });
     return () => {
       window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("touchcancel", onTouchEnd);
       if (frame !== null) cancelAnimationFrame(frame);
     };
   }, [skip]);
