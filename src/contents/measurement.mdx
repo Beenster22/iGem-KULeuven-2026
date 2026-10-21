@@ -42,13 +42,13 @@ Below is the flow of the measurements supporting our genetic toolkit:
 
 In *E. coli*, a wrong number gets caught by the literature. *P. vulgatus* DSM 1447 work can be more error-prone because of the gap in literature. Remove the literature as a safety net and one check remains: **the measurements have to audit each other**.
 
-## Growth and medium selection
+## 1. Growth and medium selection
 
 mGAM gave the highest biomass and the shortest lag for both strains, with a doubling time of 46 ± 0.3 min for the type strain. That result is what commits every later assay in this project to a dark, strongly autofluorescent broth.
 
 **Protocols:** <Link to="/protocols#medium-comparison-growth-assay">Medium Comparison Growth Assay</Link> · <Link to="/protocols#preparation-of-mgam-broth-and-agar-plates">Preparation of mGAM Broth and Agar Plates</Link> · <Link to="/protocols#p-vulgatus-anaerobic-culture-and-chamber-handling"><em>P. vulgatus</em> Anaerobic Culture and Chamber Handling</Link>
 
-**Table A1.** Headline growth parameters. Inter-well SD below 0.005 for the mGAM conditions. † marks conditions at or below the marginal-quality threshold.
+**Table 1.1.** Headline growth parameters. Inter-well SD below 0.005 for the mGAM conditions. † marks conditions at or below the marginal-quality threshold.
 
 <div className="measure-table">
 
@@ -163,7 +163,7 @@ No pathlength correction was applied and no OD-to-CFU calibration exists for DSM
 - **Cross-plate anchor** — mGAM on all five plates, reproducing within ΔOD 0.40–0.49 on four of them.
 - **Reported uncertainty** — the posterior standard deviation returned by the Gaussian process, read alongside ΔOD rather than on its own.
 
-Because biological replication exists here, the doubling times in Table A1 are reproducibility claims and not merely precision claims. That distinction is stated explicitly because it does not hold everywhere in this document: Section D rests on technical replicates alone and says so.
+Because biological replication exists here, the doubling times in Table 1.1 are reproducibility claims and not merely precision claims. That distinction is stated explicitly because it does not hold everywhere in this document: Section 4 rests on technical replicates alone and says so.
 
 </ExpandableText>
 
@@ -175,7 +175,7 @@ Because biological replication exists here, the doubling times in Table A1 are r
 | **Limitation** | **What the data still permits** | **Mitigation** |
 |---|---|---|
 | No pathlength correction | µ, t<sub>d  </sub>and λ unaffected; ΔOD valid for ranking within this series | Which parameters transfer is stated in Q1. Pathlength correction is a software setting on future runs. |
-| No OD-to-CFU calibration | Comparisons internally consistent; rates unaffected, since they depend on OD ratios | A plate-count series against OD converts the axis to cells. The same gap limits Section D. |
+| No OD-to-CFU calibration | Comparisons internally consistent; rates unaffected, since they depend on OD ratios | A plate-count series against OD converts the axis to cells. The same gap limits Section 4. |
 | Panel D read at OD630 | Within-panel rankings, which share the wavelength | Its absolute ODs are excluded from every cross-panel comparison; the ranking assumption is flagged as an assumption. |
 | Measurement windows differ (24, 42, 48 h) | Each run internally | An early flat MM trace at 24 h proved a window artifact, which is why later runs ran to at least 42 h. |
 | Two strains only | That the mGAM result is not an artifact of one stock | Stated as the scope it is; a third isolate is a cheap addition to an existing plate. |
@@ -195,7 +195,7 @@ Because biological replication exists here, the doubling times in Table A1 are r
 
 </ExpandableText>
 
-## Antibiotic susceptibility
+## 2. Antibiotic susceptibility
 
 A selection plate is a measurement instrument, and its calibration is the inhibitory concentration. Nine antibiotics, two strains, reported as IC90 in **mg/L** (the unit EUCAST and the clinical literature use) so the numbers can be read against published values and not only against each other. The same data answers two questions at once: what we can select on, and what would stop an engineered *P. vulgatus* if its growth ever escaped control. It also found a ceiling in its own readout, treated in Q4.
 
@@ -203,7 +203,7 @@ A selection plate is a measurement instrument, and its calibration is the inhibi
 
 <div className="measure-table-card">
 
-**Table B1.** IC90 in mg/L at the pre-defined 90 % cutoff, with the planned 85 % analysis alongside. A horizontal line indicates that the IC value was higher than 1024 mg/L and the growth was still not inhibited at this concentration. As the measurement did not exceed this concentration, no fixed value can be given for the fixed IC.
+**Table 2.1.** IC90 in mg/L at the pre-defined 90 % cutoff, with the planned 85 % analysis alongside. A horizontal line indicates that the IC value was higher than 1024 mg/L and the growth was still not inhibited at this concentration. As the measurement did not exceed this concentration, no fixed value can be given for the fixed IC.
 
 <div className="measure-table">
 
@@ -345,7 +345,7 @@ Every term on the right is measured, so the ceiling is computable rather than es
 | No quality-control reference strain with published inhibitory values | Internal consistency and the correct unit | A reference anaerobe with published values on a single plate would anchor the panel externally. |
 | Wells treated as independent by Kruskal–Wallis and Dunn | A descriptive ranking of compounds | A mixed-effects model with plate as a random effect would use the same data and support inference. |
 | One endpoint, 48 h, OD630 | A defined, uniform endpoint across every compound and both strains | Stated as a fixed condition rather than implied to be time-independent. |
-| Two strains | That the erythromycin difference between them is a real strain difference | Scope stated. The difference found was large enough to matter and was acted on in Section C. |
+| Two strains | That the erythromycin difference between them is a real strain difference | Scope stated. The difference found was large enough to matter and was acted on in Section 3. |
 
 </div>
 
@@ -362,7 +362,7 @@ Every term on the right is measured, so the ceiling is computable rather than es
 
 </ExpandableText>
 
-## Conjugation
+## 3. Conjugation
 
 Transformation is inefficient in *P. vulgatus*, so conjugation is the delivery route the toolkit rests on[ref: Ichimura, M., Nakayama-Imaohji, H., Wakimoto, S., Morita, H., Hayashi, T., & Kuwahara, T. (2010). Efficient electrotransformation of Bacteroides fragilis. Applied and Environmental Microbiology, 76(10), 3325–3332. https://doi.org/10.1128/AEM.02420-09]. We tested the protocol against six strains and counted the CFUs/mL, which gives a range of expected yields across the species, widening its applicability.
 
@@ -370,7 +370,7 @@ Transformation is inefficient in *P. vulgatus*, so conjugation is the delivery r
 
 Transconjugant titers span roughly **300,000-fold** between the best and worst strain. Six of the seven dilution series pass their own internal consistency check within 1.6-fold; the seventh fails it by 2,951-fold.
 
-**Table C1.** Colony counts across the ten-fold dilution series, 50 µL plated per dilution on mGAM + 200 µg/mL gentamicin + 25 µg/mL erythromycin. Plates marked +, ++ and +++ were too dense to count.
+**Table 3.1.** Colony counts across the ten-fold dilution series, 50 µL plated per dilution on mGAM + 200 µg/mL gentamicin + 25 µg/mL erythromycin. Plates marked +, ++ and +++ were too dense to count.
 
 <div className="measure-table">
 
@@ -388,7 +388,7 @@ Transconjugant titers span roughly **300,000-fold** between the best and worst s
 
 </div>
 
-**Table C2.** Titer back-calculated independently from each countable dilution. A valid series gives one number at every dilution; spread is the ratio of the largest to the smallest estimate within a strain.
+**Table 3.2.** Titer back-calculated independently from each countable dilution. A valid series gives one number at every dilution; spread is the ratio of the largest to the smallest estimate within a strain.
 
 <div className="measure-table">
 
@@ -478,9 +478,9 @@ The reported quantity is the **titer of transconjugants in the resuspended matin
 <ExpandableText title="Q4 · How was it calibrated, and what are the limits?">
 
 
-**The dilution series is its own calibration.** If the suspension is uniform and the dilutions were made correctly, the titer back-calculated from every countable dilution must be the same number. Disagreement is evidence that something other than transconjugants is being counted. This costs nothing beyond plates already poured, and it is what identified the one unusable series in our data (Table C2).
+**The dilution series is its own calibration.** If the suspension is uniform and the dilutions were made correctly, the titer back-calculated from every countable dilution must be the same number. Disagreement is evidence that something other than transconjugants is being counted. This costs nothing beyond plates already poured, and it is what identified the one unusable series in our data (Table 3.2).
 
-**The selection concentration is not calibrated for every strain.** Plates carried 25 µg/mL erythromycin. Section B measured what that does to each recipient, and the answer is not uniform.
+**The selection concentration is not calibrated for every strain.** Plates carried 25 µg/mL erythromycin. Section 2 measured what that does to each recipient, and the answer is not uniform.
 
 - **DSM 1447** is inhibited far below the plate concentration, so its colonies cannot be unconjugated recipient. Its count stands.
 - **RCC 1806** tolerates roughly [256 mg/L] an order of magnitude above the plate concentration. Unconjugated RCC 1806 can grow on these plates, so its count is an upper bound, not a titer — and it is currently the highest-ranked strain.
@@ -534,13 +534,13 @@ It was a mistake to assume at the outset that unconjugated *P. vulgatus* could n
 
 </ExpandableText>
 
-## Promoter–reporter screen
+## 4. Promoter–reporter screen
 
 We ranked constitutive promoter strength in *Phocaeicola vulgatus* DSM 1447 by luminescence. In the same wells, on the same plate, in the same run, we measured three fluorescent channels and address its caveats. Two promoters are quantifiable and 16.8-fold apart; the brightest sits 1,292-fold above the medium background. Of thirteen fluorescent constructs, one clears its detection limit. That contrast is not a failed experiment: it is the measurement. Because every non-detection is reported as a bound rather than a zero, the nulls are results another team can test against.
 
 **Protocols:** <Link to="/protocols#promoter-reporter-screen">Promoter-Reporter Screen</Link> · <Link to="/protocols#plate-reader-sample-preparation">Plate Reader Sample Preparation</Link>
 
-**Table D1.** The assay. Promoters are referred to below by their short name; the full designation is given once here.
+**Table 4.1.** The assay. Promoters are referred to below by their short name; the full designation is given once here.
 
 <div className="measure-table">
 
@@ -569,7 +569,7 @@ We ranked constitutive promoter strength in *Phocaeicola vulgatus* DSM 1447 by l
 
 </div>
 
-**Table D2.** NanoLuc results. Fold values are raw construct luminescence divided by raw medium-plus-substrate blank.
+**Table 4.2.** NanoLuc results. Fold values are raw construct luminescence divided by raw medium-plus-substrate blank.
 
 <div className="measure-table">
 
@@ -583,7 +583,7 @@ We ranked constitutive promoter strength in *Phocaeicola vulgatus* DSM 1447 by l
 
 </div>
 
-**Table D3.** The decisive comparison: one promoter, four reporters, one plate. Negative values are real and are explained in Q4.
+**Table 4.3.** The decisive comparison: one promoter, four reporters, one plate. Negative values are real and are explained in Q4.
 
 <div className="measure-table">
 
@@ -708,7 +708,7 @@ The conventional multipliers are three standard deviations of the blank for LOD 
 <ExpandableText title="Q5 · How many replicates, and of what kind?">
 
 
-Each construct is three wells seeded from one overnight culture; each control is two. These are **technical replicates**. The standard deviations quoted throughout are the spread among wells of the same culture, so they measure pipetting, seeding and reading precision. A standard deviation across wells of one culture bounds the within-plate precision of the assay. It says nothing about whether a separate colony grown on a separate day would give the same number. **So we report precision and we do not report reproducibility** unlike Section A, where independent plates on separate days do support a reproducibility claim.
+Each construct is three wells seeded from one overnight culture; each control is two. These are **technical replicates**. The standard deviations quoted throughout are the spread among wells of the same culture, so they measure pipetting, seeding and reading precision. A standard deviation across wells of one culture bounds the within-plate precision of the assay. It says nothing about whether a separate colony grown on a separate day would give the same number. **So we report precision and we do not report reproducibility** unlike Section 1, where independent plates on separate days do support a reproducibility claim.
 
 The protocol specifies three separate colonies per construct; this plate was not run that way, and the 102 % coefficient of variation on BT–NanoLuc shows that even well-to-well variation can be severe at low signal. **Precision where there was range:** coefficients of variation of 2.5 %, 5.2 %, 14.6 % and 22 % for the four constructs that clear detection. Large replicate spreads appear only below the detection limit, which is what a detection limit predicts.
 
@@ -727,7 +727,7 @@ The protocol specifies three separate colonies per construct; this plate was not
 | No fluorophore or particle standard | Units relative but bounded: a detection limit per channel, every non-detection an upper bound | A fluorescein series and microspheres would give absolute units; both are single-afternoon additions. |
 | The NanoLuc LOD rests on four degrees of freedom | The raw 1,292-fold ratio uses no normalization and reaches the same verdict | Both statements reported side by side. A lysate dilution series would establish linear range directly. |
 | Positive control at corrected OD 0.136–0.150 | A stable normalization with CV 2.5 % | Seeding the control to the same target density as the samples removes the thin denominator. |
-| OD600 is not a cell count | Internally consistent comparisons within a plate | A plate-count series against OD, the same gap as Section A. |
+| OD600 is not a cell count | Internally consistent comparisons within a plate | A plate-count series against OD, the same gap as Section 1. |
 | One plate, endpoint only | A defined condition met identically by every construct | Parallel plates sampled at fixed timepoints approximate kinetics with the equipment available. |
 
 </div>
