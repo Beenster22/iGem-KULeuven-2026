@@ -184,7 +184,7 @@ export function DBTLCycles({ children }: { children: ReactNode }) {
         <div className="dbtl-main">
           {/* A fixed-height box that scrolls inside itself (keyed so it starts at the top for each stage), so a stage with many
               figures never pushes the page around or moves the wheel. */}
-          <div key={`${index}-${stage}`} className="dbtl-box" tabIndex={0} role="region" aria-label={`${label} stage`}>
+          <div key={`${index}-${stage}`} className={`dbtl-box dbtl-box-${stage}`} tabIndex={0} role="region" aria-label={`${label} stage`}>
             <div className="dbtl-box-inner">
               <div className="dbtl-box-label">{label}:</div>
               <div className="dbtl-box-text">{current?.props.children}</div>

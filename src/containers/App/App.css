@@ -17583,3 +17583,24 @@ a.protocol-download:hover {
     margin: 0 0 1rem;
   }
 }
+
+/* Edited with Claude Sonnet 5.5 (Anthropic), 2026-10-21 (team request): the
+   explanation box takes a soft tint of the stage selected on the wheel, with
+   the stage's brand colour as its border: Design dark purple, Build teal,
+   Test light pink, Learn light purple. The text stays dark purple. */
+.dbtl-box-design {
+  background: #ebe7ef;
+  border-color: #33283f;
+}
+.dbtl-box-build {
+  background: #dff1f2;
+  border-color: #2fa4a9;
+}
+.dbtl-box-test {
+  background: #fcf0f5;
+  border-color: #f1c3d4;
+}
+.dbtl-box-learn {
+  background: #f0ecf9;
+  border-color: #c9bde8;
+}
