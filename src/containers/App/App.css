@@ -3360,7 +3360,10 @@ a.tab-switcher-btn.active:hover {
    rests at the right-hand side and points across at its paragraph. */
 .wheel-selector--side {
   flex-direction: row;
-  align-items: center;
+  /* Top-aligned, so the wheel stays put while the paragraph beside it grows or
+     shrinks as another section is picked, rather than reserving the height of
+     the longest section as empty space. */
+  align-items: flex-start;
   gap: 2rem;
   /* The wheel and its paragraph are centred in the column as a pair, so the
      wheel sits towards the middle of the page instead of hard against the
@@ -5005,37 +5008,6 @@ body.home-fullscreen {
     width: 100cqw;
     height: calc(100cqw / var(--home-hero-aspect));
   }
-}
-
-.home-hero-layer {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  will-change: transform, opacity;
-}
-
-.home-hero-layer svg,
-.home-hero-layer > img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-}
-
-.home-hero-logo-stage {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-.home-hero-logo-stage img {
-  width: min(40vmin, 320px);
-  height: min(40vmin, 320px);
-  object-fit: contain;
 }
 
 /* PMOS OVERVIEW (stat counter + globe)
@@ -9572,6 +9544,17 @@ body:not(.home-fullscreen) .home-hero {
   min-height: 600px;
   opacity: 0.6;
   color: #33283f;
+}
+
+/* Conjugation titer chart (ConjugationTiterChart.tsx)
+   Generated with Claude Sonnet 5.5 (Anthropic), 2026-10-21 */
+.conjugation-titer-chart {
+  width: 100%;
+  min-height: 420px;
+  margin: 1.5rem 0;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  overflow: hidden;
 }
 
 /* TEAM MEMBERS
@@ -14643,12 +14626,12 @@ a.protocol-download:hover {
 
 .strain-panel-table th:nth-child(2),
 .strain-panel-table td:nth-child(2) {
-  width: 10%;
+  width: 15%;
 }
 
 .strain-panel-table th:nth-child(3),
 .strain-panel-table td:nth-child(3) {
-  width: 10%;
+  width: 9%;
 }
 
 .strain-panel-table th:nth-child(4),
@@ -14663,12 +14646,12 @@ a.protocol-download:hover {
 
 .strain-panel-table th:nth-child(6),
 .strain-panel-table td:nth-child(6) {
-  width: 16%;
+  width: 15%;
 }
 
 .strain-panel-table th:nth-child(7),
 .strain-panel-table td:nth-child(7) {
-  width: 27%;
+  width: 25%;
 }
 
 /* Generated with Claude Sonnet 5 (Anthropic), 2026-10-18
@@ -16070,6 +16053,50 @@ a.protocol-download:hover {
 
 /* The step's write-up, in the same box as the section it sits in
    (.content-section), a shade lighter as it is inside one. */
+/* Previous / next arrows either side of the open step's panel. */
+.therapeutics-overview-stage {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.therapeutics-overview-arrow {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-interactive);
+  color: #fff;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.therapeutics-overview-arrow:hover:not(:disabled),
+.therapeutics-overview-arrow:focus-visible {
+  transform: scale(1.1);
+}
+
+.therapeutics-overview-arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+@media (max-width: 600px) {
+  .therapeutics-overview-stage {
+    gap: 0.35rem;
+  }
+
+  .therapeutics-overview-arrow {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
 .therapeutics-overview-panel {
   padding: 2rem 2.25rem;
   border-radius: 1.25rem;
@@ -16202,9 +16229,15 @@ a.protocol-download:hover {
 }
 
 .success-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 0.5rem;
+}
+
+.success-cards-grid > .success-card {
+  flex: 0 1 auto;
+  max-width: 100%;
 }
 
 .success-cards-grid[hidden] {
@@ -16260,15 +16293,9 @@ a.protocol-download:hover {
   color: #23868b;
 }
 
-@media (max-width: 900px) {
-  .success-cards-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 480px) {
-  .success-cards-grid {
-    grid-template-columns: minmax(0, 1fr);
+  .success-cards-grid > .success-card {
+    flex: 1 1 100%;
   }
 }
 
@@ -18934,6 +18961,13 @@ a.protocol-download:hover {
   --sv-neutral: #c9bde8;
   --sv-agree: var(--color-interactive);
   --sv-ink: #33283f;
+  /* Figure 1: colour-blind-safe diverging ramp (orange → grey → blue),
+     strongly disagree → strongly agree; steps also differ in lightness. */
+  --sv-lv0: #b35806;
+  --sv-lv1: #f1a340;
+  --sv-lv2: #d9d9d9;
+  --sv-lv3: #67a9cf;
+  --sv-lv4: #2166ac;
   font-size: 0.9rem;
 }
 
@@ -18964,6 +18998,11 @@ a.protocol-download:hover {
   border-radius: 0.2rem;
 }
 
+.survey-key--lv0::before { background: var(--sv-lv0); }
+.survey-key--lv1::before { background: var(--sv-lv1); }
+.survey-key--lv2::before { background: var(--sv-lv2); }
+.survey-key--lv3::before { background: var(--sv-lv3); }
+.survey-key--lv4::before { background: var(--sv-lv4); }
 .survey-key--disagree::before { background: var(--sv-disagree); }
 .survey-key--neutral::before,
 .survey-key--a::before { background: var(--sv-neutral); }
@@ -19012,6 +19051,11 @@ a.protocol-download:hover {
 .survey-stack-seg:first-child { border-radius: 0.3rem 0 0 0.3rem; }
 .survey-stack-seg:last-child { border-radius: 0 0.3rem 0.3rem 0; }
 .survey-stack-seg:only-child { border-radius: 0.3rem; }
+.survey-stack-seg--lv0 { background: var(--sv-lv0); color: #fff; }
+.survey-stack-seg--lv1 { background: var(--sv-lv1); }
+.survey-stack-seg--lv2 { background: var(--sv-lv2); }
+.survey-stack-seg--lv3 { background: var(--sv-lv3); }
+.survey-stack-seg--lv4 { background: var(--sv-lv4); color: #fff; }
 .survey-stack-seg--disagree { background: var(--sv-disagree); }
 .survey-stack-seg--neutral { background: var(--sv-neutral); }
 .survey-stack-seg--agree { background: var(--sv-agree); color: #fff; }
@@ -19169,4 +19213,13 @@ a.protocol-download:hover {
   .page-body:not(.page-body--home) .page-shell-content blockquote p {
     font-size: 1.1rem;
   }
+}
+
+/* Description page visual abstract: trims the empty margin above and below the
+   figure in the inline thumbnail (the fullscreen view still shows it whole). */
+img.visual-abstract-img {
+  width: 100%;
+  aspect-ratio: 1600 / 840;
+  object-fit: cover;
+  object-position: 50% 56%;
 }
