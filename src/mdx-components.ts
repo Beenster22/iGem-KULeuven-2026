@@ -51,6 +51,7 @@ import { Medal } from "./components/Medal";
 import { PrizeStar } from "./components/PrizeStar";
 import { PhasePager } from "./components/PhasePager";
 import { IntegrationSummary, IntegrationPoint } from "./components/IntegrationSummary";
+import { ValueCards, ValueCard } from "./components/ValueCards";
 import { TwoGutsSection } from "./components/TwoGutsSection";
 import {
   StoryScrollSection,
@@ -114,6 +115,7 @@ import {
   PublicationShowcase,
   Publication,
   PhoneShowcase,
+  AppScreen,
   VideoSlot,
 } from "./components/ScienceCommunication";
 import { Link } from "react-router-dom";
@@ -164,6 +166,8 @@ export const mdxComponents = {
   PhasePager,
   IntegrationSummary,
   IntegrationPoint,
+  ValueCards,
+  ValueCard,
   TwoGutsSection,
   StoryScrollSection,
   StoryStatement,
@@ -227,6 +231,7 @@ export const mdxComponents = {
   PublicationShowcase,
   Publication,
   PhoneShowcase,
+  AppScreen,
   VideoSlot,
   SectionItem,
   WheelSelector,
