@@ -146,7 +146,7 @@ The GP fits to ln(OD/OD₀), where OD₀ is the first blank-corrected reading fo
 
 No pathlength correction was applied and no OD-to-CFU calibration exists for DSM 1447, so optical density is a biomass proxy on our own scale. The rate parameters are unaffected, for the reason given in Q1.
 
-- **† marginal** — conditions with ΔOD at or below [0.03 or 0.05 — fix]. At that level the growth signal is close to the noise of the measurement, so the fitted parameters are unreliable however confident the fit looks.
+- **† marginal** — conditions with ΔOD at or below 0.03. At that level the growth signal is close to the noise of the measurement, so the fitted parameters are unreliable however confident the fit looks.
 - **‡ not fitted** — conditions the package could not fit, because they contained three or fewer distinct optical densities.
 
 **The trap these exist to catch.** A tight standard deviation describes the model’s confidence in its own fit, not whether the fit reflects real growth. A GP returns a numeric fit for almost any input, including smooth noise, and reports it with a small posterior. For † rows the error bars must be read alongside the ΔOD value rather than on their own.
@@ -760,22 +760,5 @@ Our output is not only ranking promoters and characterizing reporters. It is the
   calibration steps behind each measurement.
 - <Link to="/notebook">Notebook</Link> — the dated entries recording each measurement
   run as it happened.
-
----
-
-<Callout title="Best Measurement Award">
-
-Measurements are how you show that a system, physical or computational, behaves as
-expected, that data are reliable, and that a result actually matters. Strong
-contenders pick meaningful targets to measure, capture them precisely through
-experimental or computational methods, and report results clearly with appropriate
-units or metrics.
-
----
-
-Visit the [Special Awards page](https://competition.igem.org/judging/awards/special) for more
-information.
-
-</Callout>
 
 </PageLayout>
