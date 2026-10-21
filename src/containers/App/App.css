@@ -7537,7 +7537,10 @@ body:not(.home-fullscreen) .home-hero {
   overflow: hidden;
   border: 0.35rem solid var(--color-interactive);
   border-radius: 50%;
-  background: #221b2b;
+  /* Edited with Claude Opus 5.5 (Anthropic), 2026-10-21 (team request): the
+     same colour as the screen below, where this glass becomes the circle of
+     bacteria, instead of a darker plum (#221b2b). */
+  background: var(--color-home-band);
   box-shadow:
     0 0.6rem 1.4rem rgba(0, 0, 0, 0.35),
     inset 0 0 1.2rem rgba(0, 0, 0, 0.45);
