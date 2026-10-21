@@ -11,8 +11,10 @@
 // "Main key takeaways" design): one lavender box with a Toolkit / Therapeutics
 // pill switch and, under it, a numbered chip per success. A <SuccessCard>
 // with a `group` ("Toolkit", "Therapeutics") shows under that tab; without
-// any groups the chips simply sit in one row. The tabs only choose which
-// chips are shown — they do not switch the page's own pipeline.
+// any groups the chips simply sit in one row. On the results page the tabs
+// are the page's Toolkit / Therapeutics switch (see ResultsPipelines, which
+// gives them the pipelines through PipelineContext); elsewhere they only
+// choose which chips are shown.
 //
 // The chips link by heading slug (the same slugs SectionProgress assigns to
 // the headings of a page, see utils/stringToSlug), so a chip's `to` is just
@@ -21,12 +23,21 @@
 import {
   Children,
   cloneElement,
+  createContext,
   isValidElement,
+  useContext,
   useState,
   type MouseEvent,
   type ReactElement,
   type ReactNode,
 } from "react";
+
+/** Given by ResultsPipelines: the tabs then switch the page's own pipeline. */
+export const PipelineContext = createContext<{
+  labels: string[];
+  index: number;
+  choose: (index: number) => void;
+} | null>(null);
 
 interface SuccessCardProps {
   /** Slug of the heading to jump to, without the leading "#". */
@@ -83,12 +94,17 @@ export function SuccessCards({ children }: { children: ReactNode }) {
   const cards = Children.toArray(children).filter((child): child is ReactElement<SuccessCardProps> =>
     isValidElement(child),
   );
-  const groups: string[] = [];
+  const pipelines = useContext(PipelineContext);
+  const groups: string[] = pipelines ? [...pipelines.labels] : [];
   cards.forEach((card) => {
     const group = card.props.group ?? "";
     if (!groups.includes(group)) groups.push(group);
   });
-  const [active, setActive] = useState(0);
+  const [localActive, setLocalActive] = useState(0);
+  // Inside ResultsPipelines the tabs are the page's Toolkit / Therapeutics
+  // switch; on their own they only choose which chips show.
+  const active = pipelines ? pipelines.index : localActive;
+  const setActive = (index: number) => (pipelines ? pipelines.choose(index) : setLocalActive(index));
   const tabbed = groups.length > 1;
 
   return (

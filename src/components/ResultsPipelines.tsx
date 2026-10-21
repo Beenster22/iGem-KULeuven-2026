@@ -46,6 +46,7 @@ import { extractLabeledChildren } from "../utils/extractLabeledChildren";
 import { stringToSlug } from "../utils/stringToSlug";
 import { headingSlugs, textOf } from "./useHashPanel";
 import { ResultSection } from "./ResultsKit";
+import { PipelineContext } from "./SuccessCards";
 
 interface Section {
   title: ReactNode;
@@ -129,7 +130,6 @@ export function ResultsPipelines({
   const [sectionIndex, setSectionIndex] = useState(0);
   const { hash } = useLocation();
   const rootRef = useRef<HTMLDivElement>(null);
-  const barRef = useRef<HTMLDivElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
 
   const pipeline = pipelines[pipelineIndex];
@@ -149,9 +149,7 @@ export function ResultsPipelines({
         ".segmented-selector-content",
       );
       if (!content) return;
-      const barH = barRef.current?.offsetHeight ?? 0;
-      const top =
-        content.getBoundingClientRect().top + window.scrollY - 5 * 16 - barH;
+      const top = content.getBoundingClientRect().top + window.scrollY - 5 * 16;
       if (window.scrollY > top) window.scrollTo({ top, behavior: "instant" });
     };
     scrollToStart();
@@ -215,7 +213,7 @@ export function ResultsPipelines({
     const measure = () => {
       // The top block breaks out of the content column to the full width of
       // the screen, so the rail's column does not leave a gap beside it.
-      for (const block of [barRef.current, topRef.current]) {
+      for (const block of [topRef.current]) {
         if (!block) continue;
         block.style.marginLeft = "0";
         block.style.width = "auto";
@@ -223,11 +221,6 @@ export function ResultsPipelines({
         block.style.marginLeft = `${-left}px`;
         block.style.width = `${document.documentElement.clientWidth}px`;
       }
-      // The page index sticks below the pinned switch.
-      document.documentElement.style.setProperty(
-        "--results-bar-h",
-        `${barRef.current?.offsetHeight ?? 0}px`,
-      );
       const rail = document.querySelector(".section-progress");
       if (!topRef.current || !rail) return;
       // 32px of air between the success cards and the rail.
@@ -254,7 +247,6 @@ export function ResultsPipelines({
       timers.forEach(window.clearTimeout);
       window.removeEventListener("resize", measure);
       document.documentElement.style.removeProperty("--results-toc-offset");
-      document.documentElement.style.removeProperty("--results-bar-h");
     };
   }, [pipelineIndex]);
 
@@ -285,25 +277,17 @@ export function ResultsPipelines({
       className="results-pipelines segmented-selector segmented-selector--pipeline"
       data-active-index={pipelineIndex}
     >
-      <div ref={barRef} className="results-bar">
-        <div className="segmented-selector-bar" role="tablist">
-          {pipelines.map((candidate, index) => (
-            <button
-              key={candidate.label}
-              type="button"
-              role="tab"
-              aria-selected={index === pipelineIndex}
-              className={`segmented-selector-segment segmented-selector-segment--${index}${index === pipelineIndex ? " active" : ""}`}
-              onClick={() => choosePipeline(index)}
-            >
-              {candidate.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
+      {/* The pipeline switch lives in the success cards' own tabs (SuccessCards). */}
       <div ref={topRef} className="results-top">
-        {highlights}
+        <PipelineContext.Provider
+          value={{
+            labels: pipelines.map((candidate) => candidate.label),
+            index: pipelineIndex,
+            choose: choosePipeline,
+          }}
+        >
+          {highlights}
+        </PipelineContext.Provider>
       </div>
 
       <div className="segmented-selector-content">
