@@ -803,7 +803,7 @@ For funding, she explained that society splits into idealists and finance-minded
 
 <Interviewee name="Dr. Danko Relic" slug="danko-relic" role="Executive Director, APHEA; Member, European Economic and Social Committee" date="21 September 2026" basedIn="Brussels, Belgium & Zagreb, Croatia" image="https://static.igem.wiki/teams/6299/wiki/ihp/stakeholder-pictures/danko-relic.avif">
 
-**Why did we reach out to them?** — Dr. Danko Relic, who is a physician, Executive Director of APHEA (Agency for Public Health Education and Accreditation) and member of the EESC, was referred to us by Juliane Marie Neiiendam. We reached out to get a public health perspective on PMOS.
+**Why did we reach out to them?** — Dr. Danko Relic, who is a physician, Executive Director of APHEA (Agency for Public Health Education and Accreditation) and member of the EESC, was referred to us by <Link to="/human-practices#juliane-marie-neiiendam">Juliane Marie Neiiendam</Link>. We reached out to get a public health perspective on PMOS.
 
 **What did we learn?** — Dr. Relic was familiar with the EU Gender Equality Plan but not involved in creating it. He said women’s health has been understudied because medicine has historically focused on the male body, not because of funding. Women are underrepresented in research, for example in menopause and endometriosis. Therefore, he suggested two priorities for women’s health: dedicated funding and appropriate representation of women’s anatomy.
 On public health, he said prevention should be its main pillar, but it is invisible when it works and only noticed when it fails, as during COVID-19. Coordination between countries and data exchange improved after COVID, but health has dropped from the top of the EU agenda since the war in Ukraine. Overall, he considers the EU system thorough because it takes into account all 27 countries and a wide range of perspectives, and he rated its social rights and insurance as the best in the world. He contrasted this with the US, where public health degrees are no longer recognized.
@@ -835,13 +835,7 @@ Following <Link to="/human-practices#ricardo-azziz">Prof. Azziz</Link>’s recom
 
 <div className="figure-panel">
 
-<figure>
-  <ZoomableImage
-    src="https://static.igem.wiki/teams/6299/wiki/ihp/us-and-europe-literature-ihp.avif"
-    className="wide-figure"
-    alt="Bar chart of PubMed papers on PMOS and SLE for each of the 43 European countries and the United States"
-  />
-</figure>
+<ResearchVolumeChart includeUs />
 
 <div className="figure-caption">**Figure 1.** Number of PubMed papers on PMOS and SLE by country, between 1900 to 2026. SLE papers outnumber PMOS papers in 35 of the 43 European countries (81%) and in the United States. The reverse holds in Serbia, Finland, Slovenia and Estonia[^fund-pubmed].</div>
 
@@ -849,13 +843,7 @@ Following <Link to="/human-practices#ricardo-azziz">Prof. Azziz</Link>’s recom
 
 <div className="figure-panel">
 
-<figure>
-  <ZoomableImage
-    src="https://static.igem.wiki/teams/6299/wiki/ihp/europe-literature-pmos-vs-sle.avif"
-    className="wide-figure"
-    alt="Bar chart of PubMed papers on PMOS and SLE across the 43 European countries"
-  />
-</figure>
+<ResearchVolumeChart />
 
 <div className="figure-caption">**Figure 2.** Number of PubMed papers on PMOS and SLE across the 43 European countries. Added together, the countries account for 26,213 SLE papers against 9,662 PMOS papers, SLE papers account for 2.7 times as many papers as PMOS. In the UK it's 2011 papers on PMOS against 4620 on SLE. France follows, with 522 on PMOS and 2699 on SLE. Whereafter, Germany reaches 497 on PMOS against 2796 on SLE[^fund-pubmed].</div>
 
@@ -863,7 +851,7 @@ Following <Link to="/human-practices#ricardo-azziz">Prof. Azziz</Link>’s recom
 
 <ExpandableText title="How we did this analysis">
 
-Figure 1 compares the number of PubMed papers on PMOS and SLE for each of the 43 European countries and the United States. Both conditions were searched with the same method: a Title/Abstract search combined (using OR) with a MeSH Major Topic search, adding "OR" with an affiliation for the country[^fund-pubmed]. The United States is so far ahead of every other country that it compresses the bars for Europe, which makes the country-level differences hard to read. Figure 2 shows Europe on its own. The pattern holds even among Europe's largest research nations: Germany has 2,796 SLE papers against 479 on PMOS, France 2,699 against 533, and the United Kingdom 4,620 against 2,011.
+Figure 1 compares the number of PubMed papers on PMOS and SLE for each of the 43 European countries and the United States. Both conditions were searched with the same method: a Title/Abstract search combined (using OR) with a MeSH Major Topic search, adding "OR" with an affiliation for the country[^fund-pubmed]. The United States is so far ahead of every other country that it compresses the bars for Europe, which makes the country-level differences hard to read. Figure 2 shows Europe on its own. The pattern holds even among Europe's largest research nations: Germany has 2,796 SLE papers against 497 on PMOS, France 2,699 against 522, and the United Kingdom 4,620 against 2,011.
 
 To test whether this difference is statistically meaningful, we used the Wilcoxon signed-rank test, which is the standard non-parametric alternative to a paired t-test. It suits this data for two reasons. First, each country provides one PMOS count and one SLE count, so the values are naturally paired. Second, the counts are strongly skewed, ranging from zero to several thousand with the United Kingdom as a clear outlier, which rules out a test that assumes a normal distribution. We ran the test in RStudio on the paired counts of the 43 countries and found that PMOS and SLE differ significantly across the European countries (p = 2.472 × 10<sup>−6</sup>). Adding the United States as a 44th pair made the result stronger, lowering the p-value to 1.541 × 10<sup>−6</sup>.
 
@@ -875,9 +863,27 @@ In conclusion the gap exists not only in the funding, but also in the research.
 
 #### Why the gap exists
 
-1. The first reason is structure. PMOS affects metabolism, reproduction and mental health, but it was first described as a reproductive condition, and most funders still see it that way[^fund-azziz]. The reproductive institute NICHD still supplied 44.8% of PMOS funding in 2016–2022 (down from 68.4%), while institutes focused on metabolism, cardiovascular disease and mental health have shown limited interest[^fund-brakta][^fund-tilton].
-2. Prof. Azziz explained that the second issue is the pipeline. Essentially, very few fundamental scientists work on PMOS. The field is mostly clinicians and translational researchers, and the number of young investigators entering stays consistently low[^fund-azziz]. Fewer researchers mean fewer grant applications, and less funding pushes researchers into other fields, a self-reinforcing cycle of underinvestment[^fund-brakta][^fund-tilton][^fund-azziz]. Finally, this leads to underdiagnosing and insufficient treatment options.
-3. Stigma compounds funding disparities for conditions that mainly affect women[^fund-nature]. For patients, this shows up as delay: late diagnosis, under-diagnosis and normalised symptoms all reduce the urgency felt by funders[^fund-tilton]. RA and SLE, by contrast, benefited from mature advocacy networks[^fund-tilton].
+<GapReasons>
+
+<GapReason title="Structure" icon="structure">
+
+The first reason is structure. PMOS affects metabolism, reproduction and mental health, but it was first described as a reproductive condition, and most funders still see it that way[^fund-azziz]. The reproductive institute NICHD still supplied 44.8% of PMOS funding in 2016–2022 (down from 68.4%), while institutes focused on metabolism, cardiovascular disease and mental health have shown limited interest[^fund-brakta][^fund-tilton].
+
+</GapReason>
+
+<GapReason title="Pipeline" icon="pipeline">
+
+Prof. Azziz explained that the second issue is the pipeline. Essentially, very few fundamental scientists work on PMOS. The field is mostly clinicians and translational researchers, and the number of young investigators entering stays consistently low[^fund-azziz]. Fewer researchers mean fewer grant applications, and less funding pushes researchers into other fields, a self-reinforcing cycle of underinvestment[^fund-brakta][^fund-tilton][^fund-azziz]. Finally, this leads to underdiagnosing and insufficient treatment options.
+
+</GapReason>
+
+<GapReason title="Stigma" icon="stigma">
+
+Stigma compounds funding disparities for conditions that mainly affect women[^fund-nature]. For patients, this shows up as delay: late diagnosis, under-diagnosis and normalised symptoms all reduce the urgency felt by funders[^fund-tilton]. RA and SLE, by contrast, benefited from mature advocacy networks[^fund-tilton].
+
+</GapReason>
+
+</GapReasons>
 
 {/* TODO: add the underinvestment cycle figure here (marked in the IHP doc). */}
 
@@ -885,7 +891,7 @@ In conclusion the gap exists not only in the funding, but also in the research.
 
 The PMOS funding gap is a symptom of a wider pattern. <Link to="/human-practices#danko-relic">Dr. Relic</Link> told us that medical training is still built around a default patient: a man of 70 kg and 175 cm. Women’s conditions are treated as niche, even though women make up more than half the population[^fund-nature][^fund-neiiendam].
 
-> “You can’t talk about gender equality without talking about women’s health.” – Juliane Marie Neiiendam
+> “You can’t talk about gender equality without talking about women’s health.” – <Link to="/human-practices#juliane-marie-neiiendam">Juliane Marie Neiiendam</Link>
 
 #### What is being done
 
@@ -897,13 +903,9 @@ Finally, funding can be dramatically redirected through legislative regulations.
 
 <div className="figure-panel">
 
-<figure>
-  <ZoomableImage
-    src="https://static.igem.wiki/teams/6299/wiki/ihp/funding-for-pmos-neg-vs-positive-influences.avif"
-    className="wide-figure"
-    alt="Diagram of influences on funding for PMOS: research, advocacy, education & awareness, and legislation push it up; stigma & misogyny, pipeline issues, and targeted funding & structure hold it back"
-  />
-</figure>
+<FundingInfluences />
+
+<div className="figure-caption">**Figure 3.** Positive and negative influences on funding for PMOS.</div>
 
 </div>
 
@@ -915,7 +917,7 @@ Another big component is <Link to="/science-communication">science communication
 
 #### Conclusion
 
-Through our conversations with legislators, doctors and industry experts we have learned that the funding gap in PMOS and women’s health remains, driven by structure, a thin research pipeline and limited visibility. Funding has grown alongside advocacy, but the gap is far from closed[^fund-tilton]. It requires funding that attracts investigators, awareness among patients and young scientists, Ms. Neiiendam said: “People are much more aware of the gap than they were 5 years ago, but its going to take about 5 more to see a visible shift.”
+Through our conversations with legislators, doctors and industry experts we have learned that the funding gap in PMOS and women’s health remains, driven by structure, a thin research pipeline and limited visibility. Funding has grown alongside advocacy, but the gap is far from closed[^fund-tilton]. It requires funding that attracts investigators, awareness among patients and young scientists, <Link to="/human-practices#juliane-marie-neiiendam">Ms. Neiiendam</Link> said: “People are much more aware of the gap than they were 5 years ago, but its going to take about 5 more to see a visible shift.”
 
 [^fund-nature]: Funding research on women's health [Editorial]. Nature Reviews Bioengineering 2, 797–798 (2024). https://www.nature.com/articles/s44222-024-00253-7
 [^fund-brakta]: Brakta S, Lizneva D, Mykhalchenko K, Imam A, Walker W, Diamond MP, Azziz R. Perspectives on polycystic ovary syndrome: is polycystic ovary syndrome research underfunded? J Clin Endocrinol Metab 102(12):4421–4427 (2017). https://doi.org/10.1210/jc.2017-01415
