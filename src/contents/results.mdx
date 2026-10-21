@@ -633,7 +633,7 @@ higher-performing media.
 WC contains 5 mg L⁻¹ hemin, whereas mGAM and MM contain 10 mg L⁻¹; BHI
 contains no added hemin. Hemin supplies haem for haem-containing proteins
 involved in electron transport. Hemin supplementation has been shown to
-improve _B. vulgatus_ growth[^growth-lee]. Its importance may relate to
+improve _P. vulgatus_ growth[^growth-lee]. Its importance may relate to
 haem-dependent electron transport: in the related species _B. fragilis_,
 hemin was required for functional fumarate reduction and substantially
 increased growth rate and biomass yield[^growth-macy].
@@ -645,7 +645,7 @@ increased growth rate and biomass yield[^growth-macy].
 mGAM contains vitamin K₁ (5 mg L⁻¹), whereas WC contains menadione
 (0.5 mg L⁻¹); neither BHI nor MM contains an explicit vitamin K supplement.
 These compounds are relevant because vitamin K₂ helps bacteria transfer
-electrons to produce energy. However, _B. vulgatus_ can produce its own
+electrons to produce energy. However, _P. vulgatus_ can produce its own
 vitamin K₂, and adding certain vitamin K compounds did not improve its growth
 under the conditions tested[^growth-fenn]. Vitamin K₁ itself was not tested
 there, so whether it improves growth in our medium needed to be determined
@@ -656,7 +656,7 @@ experimentally.
 <ExpandableText title="Starch" tocIgnore>
 
 Only mGAM contains soluble starch, at 5 g L⁻¹. Starch has been shown to
-support rapid growth and high bacterial yields in tested _B. vulgatus_
+support rapid growth and high bacterial yields in tested _P. vulgatus_
 strains, which also produced more starch-digesting enzymes when grown on
 starch than on glucose[^growth-mccarthy]. Starch may therefore improve growth
 in mGAM by providing an additional source of carbon and energy.
@@ -666,11 +666,11 @@ in mGAM by providing an additional source of carbon and energy.
 <ExpandableText title="Glucose and complex nutrients" tocIgnore>
 
 Glucose concentrations are 2.0 g L⁻¹ in BHI, 1.0 in WC, 0.5 in mGAM and 0.2 in
-MM. Glucose provides carbon and energy for _B. vulgatus_, which has been
+MM. Glucose provides carbon and energy for _P. vulgatus_, which has been
 successfully cultivated in a defined medium using glucose as its main carbon
 source[^growth-keitel2024]. These differences may therefore affect growth,
 but more glucose does not mean better growth — other nutrients must also be
-considered, particularly starch in mGAM, which _B. vulgatus_ can use as an
+considered, particularly starch in mGAM, which _P. vulgatus_ can use as an
 additional carbon source[^growth-mccarthy].
 
 </ExpandableText>
@@ -707,7 +707,7 @@ their contributions.
 mGAM was the clear winner: it grew fastest and reached a final OD of about
 0.41, against only 0.13 in WC. It is hard to attribute this to a single
 component. However, starch (both amylose and amylopectin) is a likely factor,
-since it is known to give rapid growth and high yields in _B. vulgatus_[^growth-mccarthy].
+since it is known to give rapid growth and high yields in _P. vulgatus_[^growth-mccarthy].
 Hemin may also have helped[^growth-lee], and the reducing agents would have
 kept conditions properly anaerobic, though this experiment cannot separate out
 what each ingredient contributed. Even so, mGAM's advantage was big enough to
@@ -719,13 +719,13 @@ at a time.
 #### Results
 
 Growth curves across the five iterations are shown in Figure 1 (panels
-A–E); the fitted parameters for every condition are in Table 2.
+[A](#fig-growth-a)–[E](#fig-growth-e)); the fitted parameters for every condition are in Table 2.
 
 <div className="figure-panel">
 
 <div className="figure-grid">
 
-<figure>
+<figure id="fig-growth-a" style={{ scrollMarginTop: "5rem" }}>
   <ZoomableImage
     src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-a-2.avif"
     alt="OD growth curves, Pilot — DSM 1447 in BHI, WC, MM and mGAM over 24 h."
@@ -735,7 +735,7 @@ A–E); the fitted parameters for every condition are in Table 2.
   </div>
 </figure>
 
-<figure>
+<figure id="fig-growth-b" style={{ scrollMarginTop: "5rem" }}>
   <ZoomableImage
     src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-b-2.avif"
     alt="OD growth curves, Pilot continuation — the same plate, read for a further 24 h."
@@ -745,7 +745,7 @@ A–E); the fitted parameters for every condition are in Table 2.
   </div>
 </figure>
 
-<figure>
+<figure id="fig-growth-c" style={{ scrollMarginTop: "5rem" }}>
   <ZoomableImage
     src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/c2.avif"
     alt="OD growth curves, Strain effect — DSM 1447 and RCC 1806 in BHI, WC, MM and mGAM over 48 h."
@@ -756,7 +756,7 @@ A–E); the fitted parameters for every condition are in Table 2.
   </div>
 </figure>
 
-<figure>
+<figure id="fig-growth-d" style={{ scrollMarginTop: "5rem" }}>
   <ZoomableImage
     src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-d-2.avif"
     alt="OD growth curves, Lag reduction — both strains inoculated from fresh plate colonies, plus BHI at increased cell density."
@@ -767,7 +767,7 @@ A–E); the fitted parameters for every condition are in Table 2.
   </div>
 </figure>
 
-<figure>
+<figure id="fig-growth-e" style={{ scrollMarginTop: "5rem" }}>
   <ZoomableImage
     src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/panel-e-2.avif"
     alt="OD growth curves, Full-factorial design — MM with every combination of starch, vitamin K1 and pH adjustment, against the mGAM reference."
@@ -1207,7 +1207,7 @@ are best read alongside the ΔOD value rather than on their own.
 
 <ExpandableText title="Discussion" tocIgnore>
 
-**Experiment 1: Pilot.** The first pilot established that medium choice
+**Experiment 1: Pilot** ([Figure 1A](#fig-growth-a)). The first pilot established that medium choice
 mattered more than any other variable we tested. mGAM supported growth in
 every well, reaching 0.40 OD above background with a doubling time of
 ~46 min, the fastest condition we recorded. This fits its reputation as a
@@ -1220,7 +1220,7 @@ than final biomass. Unsupplemented BHI and MM did not grow within the 24 h
 window (+0.010 OD, marginal), but as the second pilot day showed, that
 result reflects the assay length rather than a permanent failure.
 
-**Experiment 2: Pilot continuation.** The second day changed how we read MM.
+**Experiment 2: Pilot continuation** ([Figure 1B](#fig-growth-b)). The second day changed how we read MM.
 Its lag of ≈ 7 h into Day 2 means growth began roughly 31 h after
 inoculation, and once started it gained +0.048 OD. A standard 24 h assay
 would have scored it as a failure, which is why every later plate was run
@@ -1230,7 +1230,7 @@ and BHI stayed flat, as in Experiment 1. The result also shows that the lag
 values from the GP fit are measured from the start of each day's read, not
 from inoculation, so lags must be compared with that in mind.
 
-**Experiment 3: Strain dependency.** This was the first place where the
+**Experiment 3: Strain dependency** ([Figure 1C](#fig-growth-c)). This was the first place where the
 faecal isolate (RCC 1806) and the type strain (DSM 1447) behaved
 differently. The isolate reached higher densities in every medium, in
 places threefold, but it started consistently later: in mGAM the type
@@ -1247,7 +1247,7 @@ so we treat it as unreliable. Its 41.9 ± 1.1 h lag is
 the latest in the study and fits the slow, inconsistent behaviour this
 medium showed throughout.
 
-**Experiment 4: Reducing lag times.** On <Link to="/human-practices#laurie-comstock">Laurie Comstock's</Link> advice that most
+**Experiment 4: Reducing lag times** ([Figure 1D](#fig-growth-d)). On <Link to="/human-practices#laurie-comstock">Laurie Comstock's</Link> advice that most
 of an overnight culture was dead by the time it is subcultured, we inoculated
 both strains in the morning from colonies on a fresh plate. This cut the
 isolate's mGAM lag from 24.2 h to 6.0 h, a four-fold reduction, while the
@@ -1269,7 +1269,7 @@ artefact of the disturbance rather than growth. BHI run at increased cell
 density supported no growth at all, which supports our conclusion that
 supplemented BHI is needed to sustain _P. vulgatus_.
 
-**Experiment 5: Full factorial study.** Soluble starch, vitamin K and a pH
+**Experiment 5: Full factorial study** ([Figure 1E](#fig-growth-e)). Soluble starch, vitamin K and a pH
 adjustment to 7.2 were tested in all eight combinations of a 2³ factorial in
 the LB-based minimal medium, with six wells per condition over 48 h. Vitamin
 K was chosen because many _Bacteroides_ and related species cannot
@@ -2048,98 +2048,183 @@ We proceeded with the next experiments (BSA-06 and BSA-07) as the plate assay di
 
 ### Bile salt deconjugation by 15 bile salt hydrolases
 
+{/* Written up with Claude Sonnet 5.5 (Anthropic), 2026-10-21, from the team's document "Therapeutics - part 1 - section 4 - LCMS"; the three figure files still need uploading via the uploads tool, the src paths below are the intended names. */}
+
 <div className="results-standfirst">
-  Placeholder — one line on which hydrolases were tested and on what substrates.
+  LC–MS quantification of GUDCA and TUDCA deconjugation by 15 BSHs expressed in{" "}
+  <em>E. coli</em> DH5α, tested against the binding affinities predicted by
+  molecular docking.
 </div>
 
-Placeholder — the 15 candidates, where they came from, and how activity was
-measured.
+To test the dry lab predictions, we measured enzyme activity directly. We expressed 15 different BSHs in _Escherichia coli_ DH5α and used LC–MS to quantify the GUDCA and TUDCA deconjugation ratios, which we then compared with the docking results. The full method is on our <Link to="/protocols">protocol page</Link>.
 
 #### Major takeaways
 
 <KeyTakeaways>
   <Takeaway>
-    Placeholder — 5 of the 15 hydrolases tested were active.
+    Only 5 of the 15 BSHs show measurable deconjugation activity: BSH1, BSH3,
+    BSH5, BSH6 and BSH15.
   </Takeaway>
   <Takeaway>
-    Placeholder — GUDCA was the easier substrate, with &gt;96% deconjugation.
+    GUDCA is deconjugated far more than TUDCA. BSH1, BSH3, BSH5, BSH6 and BSH15
+    all exceed 96% deconjugation of GUDCA at 0.1%, whereas only BSH1 (82%) and
+    BSH3 (68%) convert a comparable share of TUDCA.
   </Takeaway>
   <Takeaway>
-    Placeholder — two hydrolases are GUDCA-specific, with &lt;6% activity on
-    the other substrate.
+    BSH5 and BSH6 are effectively GUDCA-specific, showing &lt;6% activity
+    toward TUDCA.
   </Takeaway>
   <Takeaway>
-    Placeholder — three genes acted on both substrates.
+    BSH1, BSH3 and BSH15 are the only genes active on both substrates, and they
+    are also the only ones exceeding 80% deconjugation of the mixed GUDCA +
+    TUDCA pool at 0.5%.
   </Takeaway>
   <Takeaway>
-    Placeholder — docking scores did not predict the observed activity.
+    Molecular docking did not predict the observed activity.
   </Takeaway>
   <Takeaway>
-    Placeholder — the catalytic residue is a cysteine.
+    Sequencing confirmed the essential catalytic cysteine in all 15 constructs,
+    so inactivity is not loss of that residue.
   </Takeaway>
 </KeyTakeaways>
 
-<ExpandableText title="Deconjugation per condition" tocIgnore>
+<ExpandableText title="How are bile salts deconjugated?" tocIgnore>
 
-Placeholder — short lead-in to the figures below.
+Bile salt hydrolases cleave the amide bond that links a bile acid core to its conjugated amino acid, releasing the unconjugated acid. The two substrates used here share the same ursodeoxycholic acid core but differ in that amino acid, which is what makes them a useful pair for probing specificity.
 
-{/* One figure per substrate condition; the reader picks the condition. */}
+| Term    | Meaning                                                                 |
+| ------- | ----------------------------------------------------------------------- |
+| GUDCA   | Glycoursodeoxycholic acid, glycine-conjugated                           |
+| TUDCA   | Tauroursodeoxycholic acid, taurine-conjugated                           |
+| Readout | Loss of the conjugated species, quantified by LC–MS, as % deconjugation |
+
+</ExpandableText>
+
+#### Results
 
 <SegmentedSelector>
 
 <SectionItem label="GUDCA 0.1%">
 
-<FigureSlot label="Figure 1">
-  Deconjugation per hydrolase, GUDCA 0.1%.
-</FigureSlot>
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/lcms-gudca.png"
+    alt="Bar chart of the percentage of GUDCA deconjugated at 0.1% by each of the 15 BSH constructs and the sfGFP control; BSH1, BSH3, BSH5, BSH6 and BSH15 are close to 100%."
+  />
+  <div className="figure-caption">
+    Figure 1. Five effective genes for GUDCA deconjugation. BSH1, BSH3, BSH5, BSH6 and BSH15 deconjugated GUDCA almost completely (96–100%), with only BSH7 (11.4%) and BSH14 (14.2%) showing marginal activity and the rest at control level.
+  </div>
+</figure>
 
 </SectionItem>
 
 <SectionItem label="TUDCA 0.1%">
 
-<FigureSlot label="Figure 1">
-  Deconjugation per hydrolase, TUDCA 0.1%.
-</FigureSlot>
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/lcms-tudca.png"
+    alt="Bar chart of the percentage of TUDCA deconjugated at 0.1% by each of the 15 BSH constructs and the sfGFP control; BSH1 and BSH3 are highest, followed by BSH15 and BSH11."
+  />
+  <div className="figure-caption">
+    Figure 2. Less favored TUDCA deconjugation. TUDCA was deconjugated far less: only BSH1 (82.4%) and BSH3 (67.9%) converted a mentionable fraction, followed by BSH15 (42.0%) and BSH11 (21.0%).
+  </div>
+</figure>
 
 </SectionItem>
 
 <SectionItem label="GUDCA + TUDCA 0.5%">
 
-<FigureSlot label="Figure 1">
-  Deconjugation per hydrolase, GUDCA + TUDCA 0.5%.
-</FigureSlot>
+<figure>
+  <ZoomableImage
+    src="https://static.igem.wiki/teams/6299/wiki/wet-lab/results/lcms-gudca-tudca-mix.png"
+    alt="Bar chart of the percentage of a mixed GUDCA and TUDCA pool deconjugated at 0.5% by each of the 15 BSH constructs and the sfGFP control; BSH1, BSH3 and BSH15 exceed 80%, BSH5 and BSH6 plateau near 35%."
+  />
+  <div className="figure-caption">
+    Figure 3. A mixed scenario separating dual-substrate from specific genes. When GUDCA and TUDCA were combined (0.5%) we see the same ranking.
+  </div>
+</figure>
+
+As a mix was used, a gene acting on only one substrate cannot exceed roughly half of the pool, which can be seen with the GUDCA-specific BSH5 and BSH6, which plateau near 35%. Only BSH1, BSH3 and BSH15 exceed that ceiling (&gt;83%), which means that they act on both substrates.
 
 </SectionItem>
 
 </SegmentedSelector>
 
-Placeholder — the text that goes with the figure the reader has selected.
+#### Predicted binding affinity does not track observed activity
+
+Molecular docking was, in most cases, not a reliable predictor of deconjugation activity (Table 1). BSH2, BSH14 and BSH4 were all predicted to bind both substrates strongly yet were (nearly) inactive, while BSH8 and BSH11 were predicted to bind weakly but showed measurable activity. Only for BSH1 and BSH3 did high predicted affinity coincide with high observed deconjugation. Sequencing confirmed that the essential catalytic cysteine was intact in all BSHs. The docking heat map itself lives on the <Link to="/dry-lab#2-2-bsh-bile-salt-interaction-using-autodock-vina">dry lab</Link> page.
+
+<div className="table-responsive table-responsive-rounded table-responsive-sticky-head my-3">
+
+<table className="table table-bordered align-middle text-center">
+  <thead>
+    <tr>
+      <th>Gene</th>
+      <th>Expected GUDCA deconjugation (binding affinity)</th>
+      <th>Expected TUDCA deconjugation (binding affinity)</th>
+      <th>Observed GUDCA deconjugation</th>
+      <th>Observed TUDCA deconjugation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr className="table-row-highlight"><td>BSH1</td><td>High</td><td>Moderate</td><td>++</td><td>++</td></tr>
+    <tr><td>BSH2</td><td>Very high</td><td>Very high</td><td>−−</td><td>−−</td></tr>
+    <tr className="table-row-highlight"><td>BSH3</td><td>High</td><td>High</td><td>++</td><td>+</td></tr>
+    <tr><td>BSH4</td><td>High</td><td>High</td><td>−−</td><td>−−</td></tr>
+    <tr className="table-row-highlight"><td>BSH5</td><td>High</td><td>High</td><td>++</td><td>−−</td></tr>
+    <tr className="table-row-highlight"><td>BSH6</td><td>High</td><td>High</td><td>++</td><td>−−</td></tr>
+    <tr><td>BSH7</td><td>Moderate</td><td>Moderate</td><td>−−</td><td>−−</td></tr>
+    <tr><td>BSH8</td><td>Low</td><td>Moderate</td><td>−−</td><td>−−</td></tr>
+    <tr><td>BSH9</td><td>Moderate</td><td>Moderate</td><td>−−</td><td>−−</td></tr>
+    <tr><td>BSH10</td><td>Moderate</td><td>Moderate</td><td>−−</td><td>−−</td></tr>
+    <tr><td>BSH11</td><td>Moderate</td><td>High</td><td>−−</td><td>−−</td></tr>
+    <tr><td>BSH12</td><td>Low</td><td>Low</td><td>n.d.</td><td>n.d.</td></tr>
+    <tr><td>BSH13</td><td>Moderate</td><td>Moderate</td><td>−−</td><td>−−</td></tr>
+    <tr><td>BSH14</td><td>Very high</td><td>Very high</td><td>−−</td><td>−−</td></tr>
+    <tr className="table-row-highlight"><td>BSH15</td><td>High</td><td>High</td><td>++</td><td>−</td></tr>
+  </tbody>
+</table>
+
+</div>
+
+<div className="figure-caption">
+  Table 1. Overview of the predicted and observed deconjugation activity of GUDCA and TUDCA for each BSH gene. Highlighted rows are the five genes with measurable activity.
+</div>
+
+<ExpandableText title="How the affinity and activity classes were assigned" tocIgnore>
+
+Expected deconjugation comes from the docking binding affinity; observed deconjugation was measured with both substrates supplied separately at 0.1 % (Fig. 1 and Fig. 2).
+
+| Class     | Definition                               |
+| --------- | ---------------------------------------- |
+| Very high | Binding affinity below −10 kcal/mol      |
+| High      | Between −8 and −10 kcal/mol              |
+| Moderate  | Between −6 and −8 kcal/mol               |
+| Low       | Above −5 kcal/mol                        |
+| ++        | Deconjugation activity greater than 75 % |
+| +         | Between 50 % and 75 %                    |
+| +/−       | Between 45 % and 55 %                    |
+| −         | Between 25 % and 45 %                    |
+| −−        | Below 25 %                               |
+| n.d.      | Not determined                           |
 
 </ExpandableText>
 
-#### Predicted affinity does not track observed activity
+The most surprising outcome here is how few of the fifteen BSHs are active at all:
 
-Placeholder — docking scores against measured deconjugation. The docking heat
-map itself lives on the <Link to="/dry-lab#2-2-bsh-bile-salt-interaction-using-autodock-vina">dry lab</Link> page.
-
-<FigureSlot label="Table 1">
-  Predicted affinity next to measured activity, per hydrolase.
-</FigureSlot>
-
-<ExpandableText title="Sequence and structure of the active hydrolases" tocIgnore>
-
-Placeholder — the catalytic residue and whatever else the active hydrolases
-have in common.
-
-</ExpandableText>
+- Only BSH1, BSH3 and BSH15 deconjugate both GUDCA and TUDCA.
+- BSH5 and BSH6 are effectively GUDCA-specific.
+- The majority of the panel shows no activity above the sfGFP control under either condition.
 
 #### Conclusions
 
-Placeholder — what the 15-hydrolase screen settled.
+Substrate preference is clearly uneven, with GUDCA being deconjugated far more than TUDCA by every active gene, which is consistent with the glycine-conjugated bile salt being the more accessible substrate for these enzymes.
+
+Furthermore, since no correlation was found between the binding affinities and the deconjugation activity, we expect that there are other factors that play a role in BSH activity, such as catalytic rate or differences in expression level.
 
 #### Future prospects
 
-Placeholder — what a next team should do with this.
+All strains that were used in the assay have an intact catalytic cysteine, so the next step is to find out whether the differences come from how much enzyme is made or how well it works. Measuring BSH protein levels in each strain would show if the inactive genes were simply expressed at low levels, or whether their enzymes are genuinely poor at converting these two substrates.
 
 </ResultSection>
 

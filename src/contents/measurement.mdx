@@ -8,9 +8,9 @@
 
 <span data-toc-collapsible hidden />
 
-The organism we chose lacked measurement literature. Phocaeicola vulgatus DSM 1447 is a human gut commensal with known metabolic relevance but almost no published genetic toolkit: no validated promoters, no conjugation protocol with documented efficiency, no growth standards for non-standard media. That absence is the reason this page exists.
+The organism we chose lacked measurement literature. *Phocaeicola vulgatus* DSM 1447 is a human gut commensal with known metabolic relevance but almost no published genetic toolkit: no validated promoters, no conjugation protocol with documented efficiency, no growth standards for non-standard media. That absence is the reason this page exists.
 
-When a toolkit is being built from limited to no literature-based information, measurement is not a support activity. It is the primary one. Every number we report here was earned against an organism that did not come with a manual, and the value of reporting it, including the detection limits, the failure modes, and the protocols that did not survive, is that the next team working in Bacteroides does not have to earn the same number twice.
+When a toolkit is being built from limited to no literature-based information, measurement is not a support activity. It is the primary one. Every number we report here was earned against an organism that did not come with a manual, and the value of reporting it, including the detection limits, the failure modes, and the protocols that did not survive, is that the next team working in *Bacteroides* does not have to earn the same number twice.
 
 Science advances most reliably not through individual breakthroughs but through the quiet accumulation of reproducible, transparent work. We learned more from the experiments that revealed their own limits than from the ones that simply produced a result. Those lessons are in this page too, deliberately. Transparency about what a measurement cannot do is what makes it trustworthy for the teams who inherit it.
 
@@ -318,7 +318,7 @@ Every term on the right is measured, so the ceiling is computable rather than es
 
 ## Conjugation
 
-Transformation is inefficient in *P. vulgatus*, so conjugation is the delivery route the toolkit rests on. We tested the protocol against six strains and counted the CFUs/mL, which gives a range of expected yields across the species widening its applicability.
+Transformation is inefficient in *P. vulgatus*, so conjugation is the delivery route the toolkit rests on[ref: Ichimura, M., Nakayama-Imaohji, H., Wakimoto, S., Morita, H., Hayashi, T., & Kuwahara, T. (2010). Efficient electrotransformation of Bacteroides fragilis. Applied and Environmental Microbiology, 76(10), 3325–3332. https://doi.org/10.1128/AEM.02420-09]. We tested the protocol against six strains and counted the CFUs/mL, which gives a range of expected yields across the species, widening its applicability.
 
 **Protocols:** <Link to="/protocols#conjugation-of-pnbu2-plasmids-into-p-vulgatus">Conjugation of pNBU2 Plasmids into <em>P. vulgatus</em></Link> · <Link to="/protocols#dilution-series-protocol">Dilution Series Protocol</Link> · <Link to="/protocols#parb-colony-pcr">ParB Colony PCR</Link>
 
@@ -338,7 +338,7 @@ Transconjugant titers span roughly **300,000-fold** between the best and worst s
 | DSM 108234 | 29 | 3 | 0 | 0 | 0 | 0 | 0 | 0 |
 | DSM 3289 | + | 87 | 8 | 0 | 0 | 0 | 0 | 0 |
 | Unconjugated recipient | 0 | — | — | — | — | — | — | — |
-| S17 λ pir alone | 0 | — | — | — | — | — | — | — |
+| S17-1 λpir alone | 0 | — | — | — | — | — | — | — |
 
 </div>
 
@@ -391,7 +391,7 @@ The reported quantity is the **titer of transconjugants in the resuspended matin
 <div className="eq-row"><span className="eq-lhs">CFU/mL</span><span className="eq-eq">=</span><span className="eq-rhs"><span className="eq-frac"><span>colonies counted</span><span>volume plated (mL)</span></span> × <span className="eq-frac"><span>1</span><span>dilution factor</span></span></span></div>
 </div>
 <dl className="eq-legend">
-<dt>volume plated</dt><dd>0.05 mL (50 µL per dilution)</dd>
+<dt>volume plated</dt><dd>0.050 mL (50 µL per dilution)</dd>
 <dt>dilution factor</dt><dd>10<sup>−<i>k</i></sup> for the plate counted</dd>
 </dl>
 </div>
@@ -408,7 +408,7 @@ The reported quantity is the **titer of transconjugants in the resuspended matin
 | Gentamicin, 200 µg/mL in plates | Counter-selects the *E. coli* donor | Works; DSM 1447 is insensitive at this level |
 | Erythromycin, 25 µg/mL in plates | Selects for the pNBU2 EryR cassette (*ermG*) | Insufficient for RCC 1806 — see Q4 |
 | Unconjugated recipient on selective plates | Excludes recipient breakthrough | 0 colonies |
-| *E. coli* S17 λpir without pNBU2 | Excludes donor breakthrough | 0 colonies |
+| *E. coli* S17-1 λpir without pNBU2 | Excludes donor breakthrough | 0 colonies |
 | 16S rDNA sequencing and BLAST | Confirms colonies are *P. vulgatus*, not *E. coli* | Blasting confirmed the presence of the *P. vulgatus* strains on species level |
 | Plasmid integration PCR | Would confirm pNBU2 integrated at its target site | NOT PERFORMED |
 
@@ -418,7 +418,7 @@ The reported quantity is the **titer of transconjugants in the resuspended matin
 
 **Why the negative controls are not sufficient alone.** Unconjugated recipient plated at 10⁻¹ gave zero colonies, which tests breakthrough at that density. The mating lawns were plated from a much denser suspension, so a low rate of breakthrough would appear in the samples while remaining invisible in a control plated at one dilution. The negative controls bound the problem; they do not eliminate it.
 
-**A failed control, reported.** An earlier attempt used ParB primers to confirm species identity. Only DSM 1447 amplified. The primers had been designed against a ParB-like gene specific to 1447, so they cannot anneal to the other templates and the absence of a band says nothing about whether those colonies are *P. vulgatus*. The root cause sits one step earlier: the candidate sequence was checked in silico against only two genomes — DSM 1447 and *E. coli* DH5α. A search including the other five recipients would have shown the gene missing before any primers were ordered.
+**A failed control, reported.** An earlier attempt used ParB primers to confirm species identity. Only DSM 1447 amplified. The primers had been designed against a ParB-like gene specific to 1447, so they cannot anneal to the other templates and the absence of a band says nothing about whether those colonies are *P. vulgatus*. The root cause sits one step earlier: the candidate sequence was checked *in silico* against only two genomes — DSM 1447 and *E. coli* DH5α. A search including the other five recipients would have shown the gene missing before any primers were ordered.
 
 ### Q4 · How was it calibrated, and what are the limits?
 
@@ -427,7 +427,7 @@ The reported quantity is the **titer of transconjugants in the resuspended matin
 **The selection concentration is not calibrated for every strain.** Plates carried 25 µg/mL erythromycin. Section B measured what that does to each recipient, and the answer is not uniform.
 
 - **DSM 1447** is inhibited far below the plate concentration, so its colonies cannot be unconjugated recipient. Its count stands.
-- **RCC 1806** tolerates roughly [256 mg/L], an order of magnitude above the plate concentration. Unconjugated RCC 1806 can grow on these plates, so its count is an upper bound, not a titer — and it is currently the highest-ranked strain.
+- **RCC 1806** tolerates roughly [256 mg/L] an order of magnitude above the plate concentration. Unconjugated RCC 1806 can grow on these plates, so its count is an upper bound, not a titer — and it is currently the highest-ranked strain.
 - **The remaining four DSM strains** have not been checked against 25 µg/mL. Each one’s IC90 needs comparing to the plate concentration before its count is reported as a titer.
 
 It was a mistake to assume at the outset that unconjugated *P. vulgatus* could not grow on the selection plates. The correction is stated per strain rather than as a blanket caveat, because a blanket caveat would wrongly discount DSM 1447 along with RCC 1806.
@@ -462,8 +462,8 @@ It was a mistake to assume at the outset that unconjugated *P. vulgatus* could n
 ### Q7 · What does this give another team?
 
 - **Count several dilutions and check they agree.** The back-calculated titer must be constant across the series. It costs nothing, needs no extra plates, and is the only thing that caught our worst data point.
-- **Plate further than you think you need to.** A strain that conjugates poorly is invisible if you only plate the dilutions that worked for your best strain — and you will mistake it for a protocol failure.
-- **Check your selection concentration against your recipient’s inhibitory concentration.** A selection plate only selects if the antibiotic actually inhibits what you are selecting against. Ours did not, for one strain in six.
+- **Plate further than you think you need to.** A strain that conjugates poorly is invisible if you only plate the dilutions that worked for your best strain, and you will mistake it for a protocol failure.
+- **Check your selection concentration against your recipient’s inhibitory concentration.** A selection plate only selects if the antibiotic actually inhibits what you are selecting against. Ours did not, for one strain of the six.
 - **Validate primers against every template you will use them on.** A negative band from a primer that cannot anneal is not information.
 - **Expect the spread.** Across six strains of one species, yields differed by five orders of magnitude. A conjugation protocol validated on one strain is not validated for the species.
 
