@@ -54,6 +54,8 @@ export function MicrobeBackdrop() {
     const place = {
       "--y0": top.toFixed(4),
       [side]: `${inset.toFixed(2)}%`,
+      // Kept for phones, which hug the edge instead (see App.css).
+      "--inset": inset.toFixed(2),
       "--depth": (0.4 + seededValue(s + 9) * 0.6).toFixed(2),
     } as React.CSSProperties;
     // Its own turn and slow float, on the item itself.
@@ -86,7 +88,7 @@ export function MicrobeBackdrop() {
       );
     }
     return (
-      <span key={i} className="microbe-backdrop-mover" style={place}>
+      <span key={i} className={`microbe-backdrop-mover microbe-backdrop-mover--${side}`} style={place}>
         {icon}
       </span>
     );

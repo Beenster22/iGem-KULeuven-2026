@@ -5496,12 +5496,28 @@ body:not(.home-fullscreen) .home-hero {
   }
 }
 
-/* Below ~laptop width the content fills the page, so the margins the
-   bacteria keep to don't exist — leave them out rather than clutter the
-   words (the swooshes stay). */
+/* Below ~laptop width the content fills the page, so there are no margins
+   for the bacteria to keep to. Edited with Claude Opus 5.5 (Anthropic),
+   2026-10-21 (team request: the bacteria down the sides on phones too):
+   instead of leaving them out, they shrink and hug the very edges of the
+   screen, about half off it, so they peek in along both sides without
+   sitting on the words. (--inset is each one's place in from its edge on a
+   wide screen; here it only spreads them a few pixels apart.) */
 @media (max-width: 991.98px) {
-  .microbe-backdrop-mover {
-    display: none;
+  .microbe-backdrop-mover--left {
+    left: calc(var(--inset, 6) * 0.25px - 16px) !important;
+  }
+
+  .microbe-backdrop-mover--right {
+    right: calc(var(--inset, 6) * 0.25px - 16px) !important;
+  }
+
+  .microbe-backdrop-item {
+    width: 34px;
+  }
+
+  .microbe-backdrop-item--hex {
+    width: 16px;
   }
 }
 
