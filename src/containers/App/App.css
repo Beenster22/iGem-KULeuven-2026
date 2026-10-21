@@ -18748,3 +18748,40 @@ a.protocol-download:hover {
     transition: none;
   }
 }
+
+/* PULL QUOTES (Human Practices)
+   Generated with Claude Opus 5 (Anthropic), 2026-10-21
+   Purpose: the interview quotes on the IHP page are written as plain
+   markdown blockquotes and had no styling of their own, so they read at body
+   size and ran into the surrounding text. They are the voices the page is
+   built around, so they get room to breathe and a larger size. The long
+   selector on the <p> is only there to out-rank the page-wide
+   "text-align: justify" rule on paragraphs. */
+.page-body:not(.page-body--home) .page-shell-content blockquote {
+  margin: 3rem 0;
+  padding: 0.25rem 0 0.25rem 1.75rem;
+  border-left: 4px solid var(--color-interactive);
+}
+
+.page-body:not(.page-body--home) .page-shell-content blockquote p {
+  margin: 0;
+  font-size: 1.3rem;
+  line-height: 1.55;
+  font-weight: 600;
+  text-align: left;
+}
+
+.page-body:not(.page-body--home) .page-shell-content blockquote p + p {
+  margin-top: 0.75rem;
+}
+
+@media (max-width: 575.98px) {
+  .page-body:not(.page-body--home) .page-shell-content blockquote {
+    margin: 2rem 0;
+    padding-left: 1.1rem;
+  }
+
+  .page-body:not(.page-body--home) .page-shell-content blockquote p {
+    font-size: 1.1rem;
+  }
+}
