@@ -26,6 +26,38 @@ function slotProps<P>(children: ReactNode): P[] {
     .map((child) => child.props);
 }
 
+/* ------------------------------------------------------------------ */
+/* Section buttons                                                     */
+/* ------------------------------------------------------------------ */
+
+// Edited 2026-10-21 (team request): the page is read one section at a time
+// (PhasePager), and these pill buttons — the look the tabs had — jump to a
+// section's own page, the same as its entry in the left-hand menu. They are
+// plain #links to the section headings: PhasePager reveals the section a
+// #link points into before the browser jumps to it.
+export function SectionPills({
+  sections,
+  current,
+}: {
+  sections: string[];
+  current?: string;
+}) {
+  return (
+    <nav className="tab-switcher section-pills" aria-label="Sections">
+      {sections.map((label) => (
+        <a
+          key={label}
+          href={`#${stringToSlug(label)}`}
+          className={`tab-switcher-btn${label === current ? " active" : ""}`}
+          aria-current={label === current ? "true" : undefined}
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+  );
+}
+
 const INSTAGRAM_HANDLE = "igemkuleuven";
 const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;
 // The iGEM KU Leuven logo, as on our Instagram profile.

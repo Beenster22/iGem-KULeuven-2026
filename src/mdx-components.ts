@@ -116,6 +116,7 @@ import {
   Publication,
   PhoneShowcase,
   AppScreen,
+  SectionPills,
   VideoSlot,
 } from "./components/ScienceCommunication";
 import { Link } from "react-router-dom";
@@ -232,6 +233,7 @@ export const mdxComponents = {
   Publication,
   PhoneShowcase,
   AppScreen,
+  SectionPills,
   VideoSlot,
   SectionItem,
   WheelSelector,

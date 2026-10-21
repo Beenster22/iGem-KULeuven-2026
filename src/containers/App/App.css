@@ -3192,6 +3192,30 @@ main:focus {
   margin-top: 2rem;
 }
 
+/* Edited 2026-10-21 (team request): the same pill buttons as links, one row
+   at the top of each section of a page read one section at a time
+   (SectionPills, ScienceCommunication.tsx). */
+.section-pills {
+  margin: 1.25rem 0 2rem;
+}
+
+a.tab-switcher-btn {
+  text-decoration: none;
+  text-align: center;
+}
+
+a.tab-switcher-btn:hover {
+  color: var(--color-text);
+}
+
+a.tab-switcher-btn.active:hover {
+  color: #eaf4f5;
+}
+
+[data-theme="dark"] a.tab-switcher-btn.active:hover {
+  color: #33283f;
+}
+
 @media (max-width: 576px) {
   .tab-switcher-btn {
     font-size: 1rem;

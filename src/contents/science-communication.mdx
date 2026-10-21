@@ -21,30 +21,33 @@
   there).
 */}
 
+export const sections = ["Events & Booths","Digital Science Communication","Publications","App","Collaborations"];
+
 <PageLayout>
 
 <span data-toc-collapsible hidden />
+
+{/* Read one section at a time: Introduction first, then each section on its
+    own page, reached from the pill buttons, the left-hand menu or the
+    Previous / Next buttons at the bottom of each (see PhasePager.tsx). */}
+<PhasePager nextPage={{ to: "/entrepreneurship", label: "Entrepreneurship" }} />
 
 ## Introduction
 
 Science communication is another part of our **patient and public involvement**, documented in our <Link to="/human-practices#introduction">values</Link>. We focused our engagement on three audiences: (young) students, patients and the wider public. At a range of events and information booths, we set out to inspire, raise awareness and teach people about iGEM and our project, EMPOWER. Beyond these in-person activities, we shared our journey on Instagram and LinkedIn. We also had the opportunity to publish articles on the ISALA project's blog and in Flair magazine. To support the community in a more lasting way, we also developed an app made for the wider public, not only for people with PMOS. Finally, we collaborated with other iGEM teams to highlight the importance of community within iGEM and to show that science communication can be entertaining too.
 
-{/* listInIndex: every tab is listed in the left-hand index (each starts
-    with a heading only the index and screen readers see, since the tab
-    button already names it), and a click there opens that tab. */}
-<TabbedSections listInIndex>
+<SectionPills sections={sections} />
 
-<TabSection label="Events & Booths">
+## Events & Booths
 
-<h2 className="visually-hidden">Events &amp; Booths</h2>
+<SectionPills sections={sections} current="Events & Booths" />
 
 We took part in a wide range of events, from job fairs where we ran our own booth to educational workshops and iGEM meetups across Europe. A full overview can be found on our <Link to="/events">Events page</Link>.
 
-</TabSection>
 
-<TabSection label="Digital Science Communication">
+## Digital Science Communication
 
-<h2 className="visually-hidden">Digital Science Communication</h2>
+<SectionPills sections={sections} current="Digital Science Communication" />
 
 On Instagram and LinkedIn, we put a spotlight on PMOS. We started with the basics: what PMOS is, how it affects the body, and how our project EMPOWER aims to help. From there, our symptom spotlight series explored the symptoms one by one, and we shared where to find help and further resources. Based on the recommendations we received from <Link to="/human-practices#sarah-noelmans">Sarah Noelmans</Link>, we highlighted the role of diet in managing PMOS by sharing a PMOS-friendly meal. We also raised awareness of the striking funding gap in PMOS research, showing how little attention the condition receives compared to how many people it affects.
 
@@ -208,11 +211,10 @@ On Instagram and LinkedIn, we put a spotlight on PMOS. We started with the basic
   />
 </InstagramCarousel>
 
-</TabSection>
 
-<TabSection label="Publications">
+## Publications
 
-<h2 className="visually-hidden">Publications</h2>
+<SectionPills sections={sections} current="Publications" />
 
 <PublicationShowcase>
 
@@ -230,11 +232,10 @@ We also had the opportunity to publish an article in Flair, a popular Belgian wo
 
 </PublicationShowcase>
 
-</TabSection>
 
-<TabSection label="App">
+## App
 
-<h2 className="visually-hidden">App</h2>
+<SectionPills sections={sections} current="App" />
 
 During our patient interviews, most women told us they felt they did not have enough educational resources provided by their doctor. In addition, they felt like they had to really get to know their body on their own by tracking nutrition, lifestyle, symptoms and treatment. To support all women beyond our engagement, posts and articles, we created an app that brings everything they need together in one place. The app is made for the wider public, not just for PMOS patients. A built-in personalized period tracker helps users follow their cycle and spot irregularities. Alongside it, the app offers practical tips for daily life, short courses that explain PMOS step by step, and a collection of trusted resources for further support. Users can also learn about EMPOWER and how our research aims to improve the lives of people with PMOS in the future. Check out the app below.
 
@@ -262,18 +263,15 @@ During our patient interviews, most women told us they felt they did not have en
   </AppScreen>
 </PhoneShowcase>
 
-</TabSection>
 
-<TabSection label="Collaborations">
+## Collaborations
 
-<h2 className="visually-hidden">Collaborations</h2>
+<SectionPills sections={sections} current="Collaborations" />
 
 Together with iGEM Málaga, iGEM VUB Brussels, iGEM Leiden, iGEM Lund and iGEM Eindhoven, we created a joint video to show that iGEM is about far more than a science project. Behind every team are students who learn from one another, share their struggles and successes, and support each other throughout the season. Although each of our six projects tackles a different challenge, we all work towards the same goal: using synthetic biology to build a better future.
 
 <VideoSlot title="Joint iGEM teams video" embedSrc="https://video.igem.org/videos/embed/w8iP56Ww1bJDs8fg5wDJ9q" />
 
-</TabSection>
 
-</TabbedSections>
 
 </PageLayout>
