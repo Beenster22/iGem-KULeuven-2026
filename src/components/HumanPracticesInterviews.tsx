@@ -55,6 +55,10 @@ export function Interviewee(_props: IntervieweeProps) {
 interface HPIntroProps {
   /** Small label above the text; defaults to "Introduction". */
   label?: string;
+  /** Render the label as a real <h3> so the left-hand index lists it.
+   *  Off by default — six identical "Introduction" rows would only add
+   *  noise — so a section opts in with <HPIntro toc>. */
+  toc?: boolean;
   children: ReactNode;
 }
 
@@ -94,7 +98,7 @@ interface FlatInterviewee {
 interface Section {
   title: string;
   showTitle: boolean;
-  intro?: { label?: string; content: ReactNode };
+  intro?: { label?: string; toc?: boolean; content: ReactNode };
   interviewees: FlatInterviewee[];
   context: ReactNode[];
 }
@@ -112,7 +116,7 @@ function extractSections(children: ReactNode): Section[] {
       let intro: Section["intro"];
       Children.forEach(sectionChild.props.children, (child) => {
         if (isValidElement<HPIntroProps>(child) && child.type === HPIntro) {
-          intro = { label: child.props.label, content: child.props.children };
+          intro = { label: child.props.label, toc: child.props.toc, content: child.props.children };
         } else if (isValidElement<IntervieweeProps>(child) && child.type === Interviewee) {
           interviewees.push({
             globalIndex: counter++,
@@ -415,9 +419,14 @@ function HPList({ interviewees, onOpen }: HPListProps) {
 
 function HPIntroBlock({ intro }: { intro: Section["intro"] }) {
   if (!intro) return null;
+  const label = intro.label ?? "Introduction";
   return (
     <div className="hp-section-intro">
-      <p className="hp-section-intro-label">{intro.label ?? "Introduction"}</p>
+      {intro.toc ? (
+        <h3 className="hp-section-intro-label">{label}</h3>
+      ) : (
+        <p className="hp-section-intro-label">{label}</p>
+      )}
       {intro.content}
     </div>
   );
