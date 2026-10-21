@@ -720,7 +720,7 @@ We submitted the survey to the Privacy and Ethical Review Committee (PRET) on th
 
 <HPSection title="Patients" showTitle={false}>
 
-<HPIntro>
+<HPIntro toc>
 
 As a female-dominated team, it was indispensable from the start to meaningfully integrate women with PMOS and their perspective into EMPOWER to make them feel heard and seen. This mission felt personal. Through the interviews we wanted to:
 
@@ -741,7 +741,7 @@ Our timeframe to conduct these interviews was limited due to long and tedious pr
 
 > “Sometimes I wait 6 months to get my period and every month it’s an anxious anticipation. Then when I actually get it, I feel so relieved.”
 
-#### What did we learn?
+### What did we learn?
 
 <PatientJourney>
 
@@ -795,7 +795,7 @@ Several patients thought the recent name change from polycystic ovary syndrome (
 
 When asked whether they would consider an engineered LBP like ours, no one rejected the idea, and most were open to trying it. In return, they needed to be able to trust it. That meant approval by regulators, a doctor who could explain how it works, what the side effects are, and how it would help. A capsule was the clear favorite and most were happy to take it daily, though some would prefer something less frequent. Those who talked about prices suggested around €10–30 a month, ideally covered by insurance.
 
-#### Summary
+### Summary
 
 One of the aims of getting a patient perspective was to get an idea on the above-mentioned subjects. However, beyond the implementation into the project we wanted to give the women experiencing PMOS the option to be heard. Some even said themselves that explaining this condition can be overwhelming and is often met with stigma, cliches or miseducation. We simply wanted to be there to listen and to integrate what we can to help address these challenges.
 
@@ -825,7 +825,7 @@ We hope that we can meaningfully convey their feelings, worries and burdens, and
 
 See how this shaped our <Link to="/entrepreneurship#1-2-market-and-target-group">target group</Link> and our <Link to="/science-communication">science communication</Link>.
 
-<ExpandableText title="What was the ethical application process?" tocIgnore>
+<ExpandableText title="What was the ethical application process?">
 
 <Link to="/human-practices#sharon-lie-fong">Dr. Sharon Lie Fong</Link> offered to put us in touch with patients she treats at the PMOS clinic of UZ Leuven. To comply with ethical guidelines and privacy protection laws, we needed approval from the Ethics Committee Research (EC) of UZ/KU Leuven. We compiled a detailed protocol for a prospective interview study with the help of our Principal Investigator Prof. Pinheiro, that documented the study objectives, inclusion and exclusion criteria, as well as study and recruitment procedures. We also drafted informed consent forms in Dutch, French and English.
 
@@ -956,7 +956,7 @@ Following <Link to="/human-practices#ricardo-azziz">Prof. Azziz</Link>’s recom
 
 <ExpandableText title="How we did this analysis">
 
-Figure 1 compares the number of PubMed papers on PMOS and SLE for each of the 43 European countries and the United States. Both conditions were searched with the same method: a Title/Abstract search combined (using OR) with a MeSH Major Topic search, adding "OR" with an affiliation for the country[^fund-pubmed]. The United States is so far ahead of every other country that it compresses the bars for Europe, which makes the country-level differences hard to read. Figure 2 shows Europe on its own. The pattern holds even among Europe's largest research nations: Germany has 2,796 SLE papers against 497 on PMOS, France 2,699 against 522, and the United Kingdom 4,620 against 2,011.
+Figure 1 compares the number of PubMed papers on PMOS and SLE for each of the 43 European countries and the United States. Both conditions were searched with the same method: a Title/Abstract search combined (using OR) with a MeSH Major Topic search, adding "OR" with an affiliation for the country[^fund-pubmed]. The United States is so far ahead of every other country that it compresses the bars for Europe, which makes the country-level differences difficult to view the results. Figure 2 shows Europe on its own. The pattern holds even among Europe's largest research nations: Germany has 2,796 SLE papers against 497 on PMOS, France 2,699 against 522, and the United Kingdom 4,620 against 2,011.
 
 To test whether this difference is statistically meaningful, we used the Wilcoxon signed-rank test, which is the standard non-parametric alternative to a paired t-test. It suits this data for two reasons. First, each country provides one PMOS count and one SLE count, so the values are naturally paired. Second, the counts are strongly skewed, ranging from zero to several thousand with the United Kingdom as a clear outlier, which rules out a test that assumes a normal distribution. We ran the test in RStudio on the paired counts of the 43 countries and found that PMOS and SLE differ significantly across the European countries (p = 2.472 × 10<sup>−6</sup>). Adding the United States as a 44th pair made the result stronger, lowering the p-value to 1.541 × 10<sup>−6</sup>.
 
