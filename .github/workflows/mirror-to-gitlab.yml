@@ -5,12 +5,29 @@ on:
     branches: [main]
   workflow_dispatch:
 
+concurrency:
+  group: mirror-to-gitlab
+  cancel-in-progress: false
+
 jobs:
   mirror:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-      - name: Push main to GitLab
-        run: git push --force https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.igem.org/2026/kuleuven.git HEAD:main
+          fetch-depth: 1
+      # GitLab rejects binaries in any pushed commit, so we don't mirror GitHub's
+      # history. We push the current files as one new commit on top of GitLab's main.
+      - name: Push snapshot of main to GitLab
+        env:
+          GITLAB_URL: https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.igem.org/2026/kuleuven.git
+        run: |
+          git fetch "$GITLAB_URL" main:refs/remotes/gitlab/main
+          TREE=$(git rev-parse HEAD^{tree})
+          if [ "$TREE" = "$(git rev-parse gitlab/main^{tree})" ]; then
+            echo "GitLab already up to date"; exit 0
+          fi
+          git config user.name "github-mirror"
+          git config user.email "github-mirror@users.noreply.github.com"
+          SNAP=$(git commit-tree "$TREE" -p gitlab/main -m "Mirror of GitHub main @ ${GITHUB_SHA::7}")
+          git push "$GITLAB_URL" "$SNAP:refs/heads/main"
