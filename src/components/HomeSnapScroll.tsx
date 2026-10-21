@@ -89,7 +89,11 @@ const RE_PUSH = 1.5;
 const MIN_RE_PUSH = 8;
 // How far below the hardest push of the scroll so far it has to fall for
 // the next rise to count as the reader's hand again.
-const DIP = 0.5;
+const DIP = 0.3;
+// How long after the page last moved a rise may count as a scroll of its
+// own. A second swipe is slower in coming than this; a wobble inside one
+// swipe is quicker.
+const ACT_GAP_MS = 450;
 // Edited 2026-10-21 (team request: one swipe to a section on a touch
 // screen too). How far a finger has to travel for a swipe to move the page
 // on a section.
@@ -132,6 +136,7 @@ function usePaging(skip: boolean) {
     let lastPush = 0;
     let peak = 0;
     let dipped = false;
+    let lastActed = -Infinity;
     // Where the current glide is heading.
     let target = 0;
 
@@ -213,7 +218,17 @@ function usePaging(skip: boolean) {
       // come first, or every swipe would count twice.)
       if (push > peak) peak = push;
       if (push < peak * DIP) dipped = true;
-      if (dipped && push > lastPush * RE_PUSH && push >= MIN_RE_PUSH) {
+      // A hand is never this quick: a rise sooner than ACT_GAP_MS after
+      // the page last moved is a wobble in the middle of the swipe that
+      // moved it, not a swipe of its own. (Without this a shaky swipe
+      // moved the page on two sections, the second of them once the first
+      // glide had finished and stopped swallowing it.)
+      if (
+        dipped &&
+        push > lastPush * RE_PUSH &&
+        push >= MIN_RE_PUSH &&
+        now - lastActed > ACT_GAP_MS
+      ) {
         acted = false;
         dipped = false;
         peak = push;
@@ -221,6 +236,7 @@ function usePaging(skip: boolean) {
       lastPush = push;
       if (acted || push < MIN_PUSH) return;
       acted = true;
+      lastActed = now;
       // Already gliding that way: one scroll, one section.
       if (gliding && Math.sign(target - window.scrollY) === sign) return;
       go(sign);
